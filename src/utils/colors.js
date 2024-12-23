@@ -1,0 +1,14 @@
+export const COLORS = {
+  PRIMARY: "#f2940c",
+  SECONDARY: "#2051A0",
+  TRANSPARENT: "transparent",
+  BLACK: "#000000",
+  WHITE: "#ffffff",
+  GREY: "#D7D7D7",
+  DARKGREY: "#808080",
+  PRIMARYOVERLAY: "#f2940c40",
+  SECONDARYOVERLAY: "#2051A050",
+  BLACKOVERLAY: "#00000030",
+  WHITEOVERLAY: "#ffffff49",
+  LIGHTBLUE: "#F3F6F9",
+};

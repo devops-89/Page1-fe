@@ -1,18 +1,18 @@
+import Banner from "@/components/banner";
+import Services from "@/components/services";
+import styles from "@/styles/Home.module.css";
+import { Box, CardActionArea, Divider, Grid2 } from "@mui/material";
 import Head from "next/head";
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+import visa from "@/services/visa.png";
+import exclusive from "@/services/exclusive.png";
+import { COLORS } from "@/utils/colors";
+import Festivals from "@/components/festivals";
+import SubscribeBanner from "@/components/subscribeBanner";
+import Hotel from "@/components/hotels";
+import About from "@/components/aboutus";
+import Testimonials from "@/components/testimonial/testimonials";
+import Faq from "@/components/faq";
 export default function Home() {
   return (
     <>
@@ -22,96 +22,72 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div
-        className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
-      >
-        <main className={styles.main}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js logo"
-            width={180}
-            height={38}
-            priority
-          />
-          <ol>
-            <li>
-              Get started by editing <code>src/pages/index.js</code>.
-            </li>
-            <li>Save and see your changes instantly.</li>
-          </ol>
+      <Box>
+        <Banner />
+        <Box>
+          <Services />
+        </Box>
+        <Box>
+          <About />
+        </Box>
+        {/* <Box sx={{ pt: 10 }}>
+          <Grid2 container>
+            <Grid2 size={6} margin={"auto"} sx={{ p: 2, border: "" }}>
+              <CardActionArea>
+                <Grid2
+                  container
+                  sx={{
+                    border: `2px solid ${COLORS.DARKGREY}`,
+                    pt: 4,
+                    borderRadius: 2,
+                    pb: 4,
+                  }}
+                  spacing={2}
+                >
+                  <Grid2 size={5.5} textAlign={"center"}>
+                    <Image src={visa} width={250} />
+                  </Grid2>
+                  <Grid2
+                    size={1}
+                    textAlign={"center"}
+                    sx={{ position: "relative" }}
+                  >
+                    <Divider
+                      sx={{
+                        borderColor: COLORS.DARKGREY,
+                        margin: "auto",
+                        position: "absolute",
+                        left: "50%",
+                        borderWidth: 1,
+                      }}
+                      orientation="vertical"
+                    />
+                  </Grid2>
 
-          <div className={styles.ctas}>
-            <a
-              className={styles.primary}
-              href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className={styles.logo}
-                src="/vercel.svg"
-                alt="Vercel logomark"
-                width={20}
-                height={20}
-              />
-              Deploy now
-            </a>
-            <a
-              href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.secondary}
-            >
-              Read our docs
-            </a>
-          </div>
-        </main>
-        <footer className={styles.footer}>
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/file.svg"
-              alt="File icon"
-              width={16}
-              height={16}
-            />
-            Learn
-          </a>
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/window.svg"
-              alt="Window icon"
-              width={16}
-              height={16}
-            />
-            Examples
-          </a>
-          <a
-            href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/globe.svg"
-              alt="Globe icon"
-              width={16}
-              height={16}
-            />
-            Go to nextjs.org →
-          </a>
-        </footer>
-      </div>
+                  <Grid2 size={5.5} textAlign={"center"}>
+                    <Image src={exclusive} width={250} />
+                  </Grid2>
+                </Grid2>
+              </CardActionArea>
+            </Grid2>
+          </Grid2>
+        </Box> */}
+        <Box sx={{ pt: 10 }}>
+          <Festivals />
+        </Box>
+        <Box sx={{ pt: 10 }}>
+          <SubscribeBanner />
+        </Box>
+        <Box sx={{ pt: 10 }}>
+          <Hotel />
+        </Box>
+        <Box sx={{ pt: 10 }}>
+          <Testimonials />
+        </Box>
+        <Box sx={{ pt: 10 }}>
+          <Faq />
+        </Box>
+      </Box>
     </>
   );
 }
