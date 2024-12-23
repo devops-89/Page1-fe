@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import TabPanel from "../tabPanel";
 import OnewayForm from "./oneWayForm";
 import RoundTrip from "./roundTripForm";
+import Multiway from "./multiForm";
 
 const FlightForm = () => {
   const tab = [
@@ -93,6 +94,9 @@ const FlightForm = () => {
       </TabPanel>
       <TabPanel value={flightValue} index={1}>
         <RoundTrip />
+      </TabPanel>
+      <TabPanel value={flightValue} index={2}>
+        <Multiway />
       </TabPanel>
     </Box>
   );

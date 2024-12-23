@@ -24,6 +24,12 @@ import user1 from "@/testimonials/img-1.jpg";
 import user2 from "@/testimonials/img-2.jpg";
 import user3 from "@/testimonials/img-3.jpg";
 import user4 from "@/testimonials/img-5.jpg";
+import card1 from "@/visa.svg";
+import card2 from "@/amex.svg";
+import card3 from "@/discover.svg";
+import card4 from "@/master.svg";
+import card5 from "@/stripe.svg";
+import card6 from "@/paypal.svg";
 export const data = {
   headerLinks: [
     {
@@ -287,7 +293,7 @@ export const data = {
       url: "/cabs",
     },
     {
-      label: "Destination Wedding",
+      label: "Wedding",
       url: "/destination-wedding",
     },
     {
@@ -369,6 +375,26 @@ export const data = {
     },
     {
       label: "Indonesia",
+    },
+  ],
+  cards: [
+    {
+      img: card1,
+    },
+    {
+      img: card2,
+    },
+    {
+      img: card3,
+    },
+    {
+      img: card4,
+    },
+    {
+      img: card5,
+    },
+    {
+      img: card6,
     },
   ],
 };
