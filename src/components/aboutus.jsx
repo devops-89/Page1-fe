@@ -10,7 +10,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import about from "@/banner/about.png";
 import Image from "next/image";
 import { nunito } from "@/utils/fonts";
@@ -21,7 +21,8 @@ import {
   ManageAccounts,
   Public,
 } from "@mui/icons-material";
-const About = () => {
+import { useRouter } from "next/router";
+const AboutUs = () => {
   const listAbout = [
     {
       label: "Tailored travel and study-abroad solutions for your journey.",
@@ -33,9 +34,20 @@ const About = () => {
       icon: <ManageAccounts />,
     },
   ];
+
+  const router = useRouter();
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (router.pathname === "/about") {
+      setShow(true);
+    } else {
+      setShow(false);
+    }
+  }, [router.pathname]);
+
   return (
     <div>
-      <Box sx={{ backgroundColor: COLORS.LIGHTBLUE, pt: 8, pb: 8 }}>
+      <Box sx={{ pt: 8, pb: 8 }}>
         <Container>
           <Grid2 container>
             <Grid2 size={6}>
@@ -128,42 +140,68 @@ const About = () => {
                   </ListItem>
                 ))}
               </List>
-              <Button
-                endIcon={
-                  <Box
+              {show ? (
+                <Box>
+                  <Typography
                     sx={{
-                      border: `1px solid ${COLORS.BLACK}`,
-                      fontSize: 10,
-                      borderRadius: "50%",
-                      width: 20,
-                      height: 20,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: COLORS.BLACK,
+                      fontSize: 14,
+                      fontFamily: nunito.style,
+                      fontWeight: 550,
+                      color: COLORS.PRIMARY,
+                      mb: 1,
                     }}
                   >
-                    <ArrowForwardIos sx={{ fontSize: 10 }} />
-                  </Box>
-                }
-                sx={{
-                  fontSize: 12,
-                  p: 1.4,
-                  backgroundColor: "lightGrey",
-                  color: COLORS.BLACK,
-                  borderRadius: 4,
-                  width: 130,
-                  mt: 2,
-                  ":hover": {
-                    backgroundColor: COLORS.PRIMARY,
-                  },
-                  fontFamily: nunito.style,
-                  fontWeight: 600,
-                  textTransform:"capitalize"
-                }}
-              >
-                Learn More
-              </Button>
+                    Our Mission
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 15,
+                      fontFamily: nunito.style,
+                      fontWeight: 500,
+                    }}
+                  >
+                    Our mission is to make travel more accessible, enjoyable,
+                    and hassle-free for everyone. With our range of services
+                  </Typography>
+                </Box>
+              ) : (
+                <Button
+                  endIcon={
+                    <Box
+                      sx={{
+                        border: `1px solid ${COLORS.BLACK}`,
+                        fontSize: 10,
+                        borderRadius: "50%",
+                        width: 20,
+                        height: 20,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: COLORS.BLACK,
+                      }}
+                    >
+                      <ArrowForwardIos sx={{ fontSize: 10 }} />
+                    </Box>
+                  }
+                  sx={{
+                    fontSize: 12,
+                    p: 1.4,
+                    backgroundColor: "lightGrey",
+                    color: COLORS.BLACK,
+                    borderRadius: 4,
+                    width: 130,
+                    mt: 2,
+                    ":hover": {
+                      backgroundColor: COLORS.PRIMARY,
+                    },
+                    fontFamily: nunito.style,
+                    fontWeight: 600,
+                    textTransform: "capitalize",
+                  }}
+                >
+                  Learn More
+                </Button>
+              )}
             </Grid2>
           </Grid2>
         </Container>
@@ -172,4 +210,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default AboutUs;

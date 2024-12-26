@@ -13,15 +13,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  DatePicker,
-  DateRangePicker,
-  LocalizationProvider,
-} from "@mui/x-date-pickers-pro";
+
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import React, { useState } from "react";
 import TravellerSelector from "./travellerSelector";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 const RoundTrip = () => {
   const [anchorEl, setAnchorEl] = useState(null);

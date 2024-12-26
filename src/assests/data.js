@@ -30,6 +30,17 @@ import card3 from "@/discover.svg";
 import card4 from "@/master.svg";
 import card5 from "@/stripe.svg";
 import card6 from "@/paypal.svg";
+import {
+  BarChartOutlined,
+  BeenhereOutlined,
+  CalendarMonthOutlined,
+  HeadphonesOutlined,
+  LocalAtmOutlined,
+  PersonOutlineOutlined,
+  PublicOutlined,
+  TourOutlined,
+} from "@mui/icons-material";
+import { COLORS } from "@/utils/colors";
 export const data = {
   headerLinks: [
     {
@@ -395,6 +406,59 @@ export const data = {
     },
     {
       img: card6,
+    },
+  ],
+
+  choose: [
+    {
+      icon: <BeenhereOutlined sx={{ color: COLORS.WHITE, fontSize: 20 }} />,
+      heading: "Convenience",
+      description:
+        "Plan your entire trip from one platform, saving you time and effort. No more hopping between different websites .",
+    },
+    {
+      icon: <LocalAtmOutlined sx={{ color: COLORS.WHITE, fontSize: 20 }} />,
+      heading: "Best Price Guarantee",
+      description:
+        "We work with trusted travel partners to bring you the best deals, whether you're booking a flight, hotel, or car rental.",
+    },
+    {
+      icon: <HeadphonesOutlined sx={{ color: COLORS.WHITE, fontSize: 20 }} />,
+      heading: "Customer Support",
+      description:
+        "Our dedicated support team is here for you 24/7, ensuring your travel plans go smoothly from start to finish.",
+    },
+    {
+      icon: <TourOutlined sx={{ color: COLORS.WHITE, fontSize: 20 }} />,
+      heading: "Tailored Travel Experiences",
+      description:
+        "Whether you're traveling for business, family vacations, or a solo adventure, we provide options that suit every needs",
+    },
+  ],
+  counterData: [
+    {
+      icon: <PublicOutlined sx={{ color: COLORS.PRIMARY, fontSize: 20 }} />,
+      heading: "Destinations Worldwide",
+      count: 100,
+    },
+    {
+      icon: (
+        <CalendarMonthOutlined sx={{ color: COLORS.PRIMARY, fontSize: 20 }} />
+      ),
+      heading: "Booking Completed",
+      count: 416,
+    },
+    {
+      icon: (
+        <PersonOutlineOutlined sx={{ color: COLORS.PRIMARY, fontSize: 20 }} />
+      ),
+      heading: "Client Globally",
+      count: 450,
+    },
+    {
+      icon: <BarChartOutlined sx={{ color: COLORS.PRIMARY, fontSize: 20 }} />,
+      heading: "Providers Registered",
+      count: 400,
     },
   ],
 };

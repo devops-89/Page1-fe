@@ -20,14 +20,19 @@ const ServicesCard = ({ img, title }) => {
           },
         }}
       >
-        <Image src={img} width={35} />
+        <Image
+          src={img}
+          width={35}
+          style={{ filter: `drop-shadow(0px 0px 10px ${COLORS.SECONDARY})` }}
+        />
+
         <Typography
           sx={{
             color: COLORS.PRIMARY,
             fontFamily: raleway.style,
             fontWeight: 600,
             fontSize: 10,
-            textTransform:"capitalize"
+            textTransform: "capitalize",
           }}
         >
           {title}

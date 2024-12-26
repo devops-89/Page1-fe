@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { data } from "@/assests/data";
+import { COLORS } from "@/utils/colors";
+import { nunito } from "@/utils/fonts";
 import {
   Autocomplete,
   Box,
@@ -6,20 +8,16 @@ import {
   CardActionArea,
   Grid2,
   Popover,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { COLORS } from "@/utils/colors";
-import { nunito } from "@/utils/fonts";
-import { data } from "@/assests/data";
+import { useState } from "react";
 import TravellerSelector from "./travellerSelector";
-import TravellorCounter from "./travellorCounter";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 const Multiway = () => {
-  const [forms, setForms] = useState([1, 2]); // Two forms initially
+  const [forms, setForms] = useState([1, 2]);
   const maxForms = 4;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);

@@ -10,7 +10,7 @@ import { Autoplay } from "swiper/modules";
 const Testimonials = () => {
   return (
     <div>
-      <Box sx={{ backgroundColor: COLORS.LIGHTBLUE, pt: 10, pb: 10 }}>
+      <Box sx={{ pt: 10, pb: 10 }}>
         <Grid2 container>
           <Grid2 size={5} margin={"auto"}>
             <Typography
