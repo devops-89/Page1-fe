@@ -461,4 +461,21 @@ export const data = {
       count: 400,
     },
   ],
+  taxiOptions: [
+    {
+      label: "Hybrid",
+    },
+    {
+      label: "Town",
+    },
+    {
+      label: "SUV",
+    },
+    {
+      label: "Sedan",
+    },
+    {
+      label: "Limousine",
+    },
+  ],
 };

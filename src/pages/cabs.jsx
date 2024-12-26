@@ -19,6 +19,7 @@ import Image from "next/image";
 import cabs1 from "@/cabs/cabs1.jpg";
 import cab2 from "@/cabs/cabs2.jpg";
 import cab3 from "@/cabs/cabs3.jpg";
+import Taxiform from "@/components/taxiform";
 const Cabs = () => {
   const list = [
     {
@@ -111,7 +112,7 @@ const Cabs = () => {
               </Grid2>
             </Grid2>
             <Grid2 size={6}>
-              <Typography 
+              <Typography
                 sx={{
                   textTransform: "capitalize",
                   fontSize: 14,
@@ -184,6 +185,9 @@ const Cabs = () => {
             </Grid2>
           </Grid2>
         </Container>
+        <Box sx={{ pt: 10, pb: 10 }}>
+          <Taxiform />
+        </Box>
       </Box>
     </div>
   );
