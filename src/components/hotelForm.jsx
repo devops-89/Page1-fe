@@ -1,6 +1,6 @@
 import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
-import { nunito } from "@/utils/fonts";
+import { nunito, raleway } from "@/utils/fonts";
 import {
   Autocomplete,
   Box,
@@ -24,10 +24,10 @@ const HotelForm = () => {
   };
   return (
     <Box sx={{ p: 2 }}>
-      <Typography sx={{ fontSize: 14, fontFamily: nunito.style, mb: 2 }}>
+      <Typography sx={{ fontSize: 16, fontFamily: raleway.style, mb: 2 }}>
         Book Hotel - Villas, Apartments & more.
       </Typography>
-      <Grid2 container alignItems={"center"}>
+      <Grid2 container alignItems={"center"}> 
         <Grid2
           size={2.4}
           sx={{
@@ -218,7 +218,7 @@ const HotelForm = () => {
         <Grid2 size={2.4} sx={{ textAlign: "center" }}>
           <Button
             sx={{
-              color: COLORS.PRIMARY,
+              color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
               width: 150,
               p: 2,

@@ -187,7 +187,7 @@ const Multiway = () => {
       <Box>
         <Button
           sx={{
-            color: COLORS.PRIMARY,
+            color: COLORS.WHITE,
             backgroundColor: COLORS.SECONDARY,
             width: 150,
             p: 2,

@@ -118,7 +118,7 @@ const TravellerSelector = ({ anchorEl, setAnchorEl }) => {
         <Button
           sx={{
             backgroundColor: COLORS.SECONDARY,
-            color: COLORS.PRIMARY,
+            color: COLORS.WHITE,
             fontSize: 12,
             fontFamily: nunito.style,
             fontWeight: 600,

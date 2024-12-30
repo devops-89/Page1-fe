@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 
 const TestimonialCard = ({ data, active }) => {
-    console.group("si",active)
   return (
     <div>
       <Card

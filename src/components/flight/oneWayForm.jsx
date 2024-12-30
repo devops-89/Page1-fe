@@ -257,7 +257,7 @@ const OnewayForm = () => {
         <Grid2 size={2.4} textAlign={"center"}>
           <Button
             sx={{
-              color: COLORS.PRIMARY,
+              color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
               width: 150,
               p: 2,

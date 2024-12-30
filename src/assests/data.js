@@ -41,6 +41,10 @@ import {
   TourOutlined,
 } from "@mui/icons-material";
 import { COLORS } from "@/utils/colors";
+import cabService1 from "@/cabs/services-1.png";
+import cabService2 from "@/cabs/services-2.png";
+import cabService3 from "@/cabs/services-3.png";
+import cabService4 from "@/cabs/services-4.png";
 export const data = {
   headerLinks: [
     {
@@ -476,6 +480,90 @@ export const data = {
     },
     {
       label: "Limousine",
+    },
+  ],
+  capacity: [
+    {
+      label: "2 Seater",
+    },
+    {
+      label: "4 Seater",
+    },
+    {
+      label: "5 Seater",
+    },
+    {
+      label: "7 Seater",
+    },
+    {
+      label: "9 Seater",
+    },
+  ],
+  cabServices: [
+    {
+      img: cabService1,
+      heading: "City Transfer",
+      description:
+        "If you want to travel to different cities during your trip then we have got you covered with our city transfer service.",
+    },
+    {
+      img: cabService2,
+      heading: "Booking Offer",
+      description:
+        "Be it a one-way ride or a complete round trip, Page1 Travels has got exclusive deals and discounts for everyone.",
+    },
+    {
+      img: cabService4,
+      heading: "Baggage Transport",
+      description:
+        "Safely transport your baggage on your trips with our affordable and reliable baggage transportation service.",
+    },
+    {
+      img: cabService3,
+      heading: "Airport Transfer",
+      description:
+        "Our airport transfer service ensures that you can conveniently travel from the airport to the city or the other way around.",
+    },
+  ],
+  tourDestination: [
+    {
+      label: "Andaman & Nicobar",
+    },
+    {
+      label: "Australia",
+    },
+    {
+      label: "Bali",
+    },
+    {
+      label: "Chennai",
+    },
+    {
+      label: "Daman & Diu",
+    },
+    {
+      label: "Delhi",
+    },
+    {
+      label: "Dubai",
+    },
+    {
+      label: "Agra",
+    },
+    {
+      label: "France",
+    },
+    {
+      label: "Goa",
+    },
+    {
+      label: "Himachal",
+    },
+    {
+      label: "Hong Kong",
+    },
+    {
+      label: "Istanbul",
     },
   ],
 };

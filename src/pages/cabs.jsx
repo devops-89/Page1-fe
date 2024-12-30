@@ -19,7 +19,9 @@ import Image from "next/image";
 import cabs1 from "@/cabs/cabs1.jpg";
 import cab2 from "@/cabs/cabs2.jpg";
 import cab3 from "@/cabs/cabs3.jpg";
-import Taxiform from "@/components/taxiform";
+import Taxiform from "@/components/cab/taxiform";
+import Services from "@/components/cab/services";
+import Ensures from "@/components/cab/ensures";
 const Cabs = () => {
   const list = [
     {
@@ -187,6 +189,12 @@ const Cabs = () => {
         </Container>
         <Box sx={{ pt: 10, pb: 10 }}>
           <Taxiform />
+        </Box>
+        <Box sx={{ pt: 5, pb: 10 }}>
+          <Services />
+        </Box>
+        <Box sx={{ pt: 5,  }}>
+          <Ensures />
         </Box>
       </Box>
     </div>

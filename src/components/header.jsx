@@ -1,9 +1,10 @@
 import { data } from "@/assests/data";
 import logo from "@/logo/logo.png";
 import { COLORS } from "@/utils/colors";
-import { raleway } from "@/utils/fonts";
+import { nunito, raleway } from "@/utils/fonts";
 import { Person, ShoppingBag } from "@mui/icons-material";
 import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
+import { Truculenta } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -28,6 +29,16 @@ const Header = () => {
   const handleRouter = (path) => {
     router.push(path);
   };
+
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (router.pathname === "/register") {
+      setShow(true);
+    } else {
+      setShow(false);
+    }
+  }, [router]);
   return (
     <Box
       sx={{
@@ -54,11 +65,17 @@ const Header = () => {
               <Typography
                 sx={{
                   fontSize: 16,
-                  fontFamily: raleway.style,
+                  fontFamily: nunito.style,
                   textTransform: "capitalize",
                   fontWeight: 600,
                   color:
-                    router.pathname === val.url ? COLORS.PRIMARY : COLORS.WHITE,
+                    router.pathname === val.url
+                      ? COLORS.PRIMARY
+                      : show
+                      ? isScrolling
+                        ? COLORS.WHITE
+                        : COLORS.BLACK
+                      : COLORS.WHITE,
                   cursor: "pointer",
                   position: "relative",
                   transition: "color 0.3s ease",
@@ -100,6 +117,7 @@ const Header = () => {
                 backgroundColor: COLORS.WHITE,
                 border: `1px solid ${COLORS.WHITE}`,
               }}
+              onClick={() => router.push("/register")}
             >
               <Person sx={{ fontSize: 16, color: COLORS.PRIMARY }} />
             </IconButton>

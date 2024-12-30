@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Box,
+  Button,
   Card,
   Container,
   Grid2,
@@ -14,6 +15,8 @@ import { COLORS } from "@/utils/colors";
 import { loginTextField } from "@/utils/styles";
 import { data } from "@/assests/data";
 import { MuiTelInput } from "mui-tel-input";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 const Taxiform = () => {
   return (
     <Box sx={{ position: "relative" }}>
@@ -26,7 +29,7 @@ const Taxiform = () => {
           backgroundRepeat: "no-repeat",
         }}
       ></Box>
-      <Box sx={{ position: "absolute", width: "100%", top: "40%" }}>
+      <Box sx={{ position: "absolute", width: "100%", top: "5%" }}>
         <Container>
           <Grid2 container>
             <Grid2 size={6}>
@@ -79,14 +82,14 @@ const Taxiform = () => {
                   </Grid2>
                   <Grid2 size={6}>
                     <TextField
-                      label="Start Destination"
+                      label="Pickup Location"
                       sx={{ ...loginTextField }}
                       fullWidth
                     />
                   </Grid2>
                   <Grid2 size={6}>
                     <TextField
-                      label="End Destination"
+                      label="Drop Location"
                       sx={{ ...loginTextField }}
                       fullWidth
                     />
@@ -105,13 +108,63 @@ const Taxiform = () => {
                       fullWidth
                     />
                   </Grid2>
-                  <Grid2 size={12}>
+                  <Grid2 size={6}>
                     <MuiTelInput
                       sx={{ ...loginTextField }}
                       label="Phone Number"
                       fullWidth
                       defaultCountry="IN"
                     />
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <Autocomplete
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Capacity"
+                          sx={{ ...loginTextField }}
+                          fullWidth
+                        />
+                      )}
+                      options={data.capacity}
+                      renderOption={(props, option) => (
+                        <Box {...props} component={"li"}>
+                          <Typography
+                            sx={{
+                              fontSize: 14,
+                              fontWeight: 500,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            {option.label}
+                          </Typography>
+                        </Box>
+                      )}
+                    />
+                  </Grid2>
+                  <Grid2 size={12}>
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                      <DateTimePicker
+                        sx={{ ...loginTextField, width: "100%" }}
+                        disablePast
+                        label="Select Date and Time"
+                      />
+                    </LocalizationProvider>
+                  </Grid2>
+                  <Grid2 size={12}>
+                    <Button
+                      sx={{
+                        fontSize: 12,
+                        fontFamily: nunito.style,
+                        color: COLORS.SECONDARY,
+                        backgroundColor: COLORS.PRIMARY,
+                        width: 200,
+                        p: 1,
+                        fontWeight: 600,
+                      }}
+                    >
+                      Submit
+                    </Button>
                   </Grid2>
                 </Grid2>
               </Card>

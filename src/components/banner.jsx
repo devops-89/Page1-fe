@@ -124,7 +124,7 @@ const Banner = () => {
                 onChange={tabChangeHandler}
                 sx={{
                   "& .Mui-selected": {
-                    color: `${COLORS.PRIMARY} !important`,
+                    color: `${COLORS.WHITE} !important`,
                     backgroundColor: COLORS.SECONDARY,
                   },
                   "& .MuiTabs-indicator": {
@@ -141,7 +141,7 @@ const Banner = () => {
                   },
 
                   "& .MuiTab-root:hover": {
-                    color: `${COLORS.PRIMARY} !important`,
+                    color: `${COLORS.WHITE} !important`,
                     backgroundColor: COLORS.SECONDARY,
                   },
                 }}
