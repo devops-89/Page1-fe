@@ -9,6 +9,7 @@ import Testimonials from "@/components/testimonial/testimonials";
 import { COLORS } from "@/utils/colors";
 import { Box } from "@mui/material";
 import Head from "next/head";
+import { useEffect } from "react";
 export default function Home() {
   return (
     <>
@@ -23,7 +24,7 @@ export default function Home() {
         <Box>
           <Services />
         </Box>
-        <Box sx={{backgroundColor:COLORS.LIGHTBLUE}}>
+        <Box sx={{ backgroundColor: COLORS.LIGHTBLUE }}>
           <AboutUs />
         </Box>
         {/* <Box sx={{ pt: 10 }}>

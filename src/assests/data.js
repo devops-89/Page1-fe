@@ -31,20 +31,37 @@ import card4 from "@/master.svg";
 import card5 from "@/stripe.svg";
 import card6 from "@/paypal.svg";
 import {
+  AttachMoney,
   BarChartOutlined,
   BeenhereOutlined,
+  CalendarMonth,
   CalendarMonthOutlined,
+  Dashboard,
+  Email,
+  Favorite,
   HeadphonesOutlined,
   LocalAtmOutlined,
+  LocationOn,
   PersonOutlineOutlined,
+  Phone,
   PublicOutlined,
+  Reviews,
   TourOutlined,
+  Wallet,
 } from "@mui/icons-material";
 import { COLORS } from "@/utils/colors";
 import cabService1 from "@/cabs/services-1.png";
 import cabService2 from "@/cabs/services-2.png";
 import cabService3 from "@/cabs/services-3.png";
 import cabService4 from "@/cabs/services-4.png";
+import tour1 from "@/tours/jersey.jpg";
+import tour2 from "@/tours/newYor.jpg";
+import tour3 from "@/tours/delaware.jpg";
+import tour4 from "@/tours/california.jpg";
+import tour5 from "@/tours/Losangeles.jpg";
+import tour6 from "@/tours/nevada.jpg";
+import tour7 from "@/tours/virginia.jpg";
+import tour8 from "@/tours/wilmington.jpg";
 export const data = {
   headerLinks: [
     {
@@ -564,6 +581,157 @@ export const data = {
     },
     {
       label: "Istanbul",
+    },
+  ],
+  popoverData: [
+    {
+      label: "Dashboard",
+      url: "/profile/dashboard",
+    },
+    {
+      label: "My Booking",
+      url: "/profile/my-booking",
+    },
+    {
+      label: "My Profile",
+      url: "/profile/my-profile",
+    },
+    {
+      label: "Settings",
+      url: "/profile/settings",
+    },
+    {
+      label: "Logout",
+      url: "/",
+    },
+  ],
+  toursData: [
+    {
+      img: tour1.src,
+      location: "New Jersey",
+      title: "Start in Los Angeles and end in San Francisco",
+      price: "633.00",
+      duration: "full day",
+      rating: 4.5,
+    },
+    {
+      img: tour2.src,
+      location: "New York City",
+      title: "Western Blt From San Francisco",
+      price: "300.00",
+      duration: "5 hours",
+      rating: 4.5,
+    },
+    {
+      img: tour3.src,
+      location: "Delaware",
+      title: "California and the Golden West Summer 2019",
+      price: "1200.00",
+      duration: "5 hours",
+      rating: 3.5,
+    },
+    {
+      img: tour4.src,
+      location: "California",
+      title: "River Cruise Tour on the Seine Eum eu albucius perfecto",
+      price: "900.00",
+      duration: "2 days",
+      rating: 4,
+    },
+    {
+      img: tour5.src,
+      location: "Los Angeles",
+      title: "Cannes and Antibes Night Tour",
+      price: "900.00",
+      duration: "10 Hours",
+      rating: 4,
+    },
+    {
+      img: tour6.src,
+      location: "Nevada",
+      title: "Mont Saint Michel Day Trip: Times Square, Rockefeller",
+      price: "300.00",
+      duration: "5 Hours",
+      rating: 5,
+    },
+    {
+      img: tour7.src,
+      location: "Virginia Beach",
+      title: "Tastes and Sounds of the South 2019",
+      price: "300.00",
+      duration: "5 Hours",
+      rating: 5,
+    },
+    {
+      img: tour8.src,
+      location: "Wilmington",
+      title: "Small-Group Niagara Falls Day Tour from Toronto",
+      price: "1000.00",
+      duration: "4 days",
+      rating: 5,
+    },
+  ],
+
+  contactData: [
+    {
+      icon: <Email />,
+      contactType: "Email Address",
+      contactInfo: "dreamtourinfo@example.com",
+    },
+    {
+      icon: <Phone />,
+      contactType: "Phone Number",
+      contactInfo: "+1 81649 48103",
+    },
+    {
+      icon: <LocationOn />,
+      contactType: "Our Location",
+      contactInfo: "2077 Chicago Avenue Orosi, CA 93647",
+    },
+  ],
+
+  sidebarDashboard: [
+    {
+      heading: "main",
+      links: [
+        {
+          icon: <Dashboard sx={{ fontSize: 14 }} />,
+          label: "Dashboard",
+          url: "/profile/dashboard",
+        },
+        {
+          icon: <CalendarMonth sx={{ fontSize: 14 }} />,
+          label: "My Bookings",
+          url: "/profile/bookings",
+        },
+        {
+          icon: <Reviews sx={{ fontSize: 14 }} />,
+          label: "My Reviews",
+          url: "/profile/reviews",
+        },
+        {
+          icon: <Favorite sx={{ fontSize: 14 }} />,
+          label: "Wishlist",
+          url: "/profile/wishlist",
+        },
+      ],
+    },
+  ],
+  countDataDashboard: [
+    {
+      icon: <CalendarMonth sx={{ fontSize: 30 }} />,
+      number: 80,
+      title: "Total Bookings",
+    },
+    {
+      icon: <AttachMoney sx={{ fontSize: 30 }} />,
+      number: "5.3k",
+      title: "Total Transactions",
+    },
+    {
+      icon: <Wallet sx={{ fontSize: 30 }} />,
+      number: "$5965",
+      title: "Average Value",
     },
   ],
 };

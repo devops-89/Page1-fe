@@ -26,3 +26,16 @@ export const loginSchema = Yup.object({
     .max(20, "Password is Too Long!")
     .required("Please Enter Password"),
 });
+
+export const forgetPasswordSchema = Yup.object({
+  email: Yup.string()
+    .email("Please Enter Valid Email")
+    .required("Please Enter Valid Email"),
+});
+
+export const passwordSchema = Yup.object({
+  password: Yup.string("Please Enter Passwor").min(
+    2,
+    "Password must be 8 characters long"
+  ),
+});

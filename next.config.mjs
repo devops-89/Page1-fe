@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  transpilePackages: ["@mui/x-date-pickers", "mui-tel-input"],
+  reactStrictMode: false,
+  transpilePackages: [
+    "@mui/x-date-pickers",
+    "mui-tel-input",
+    "mui-one-time-password-input",
+  ],
 };
 
 export default nextConfig;

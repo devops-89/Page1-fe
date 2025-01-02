@@ -15,13 +15,14 @@ import Image from "next/image";
 import Testimonials from "@/components/testimonial/testimonials";
 import aboutBg from "@/about-bg.svg";
 import CounterCard from "@/components/counterCard";
+import InnerBanner from "@/components/innerBanner";
 const About = () => {
   return (
     <Box>
       <Head>
         <title>About Us</title>
       </Head>
-      <Box
+      {/* <Box
         sx={{
           backgroundImage: `url(${backgroundImage.src})`,
           height: 200,
@@ -79,8 +80,8 @@ const About = () => {
             </Breadcrumbs>
           </Box>
         </Box>
-      </Box>
-
+      </Box> */}
+      <InnerBanner img={backgroundImage.src} heading={"About Us"} />
       <Box>
         <AboutUs />
       </Box>
@@ -131,7 +132,7 @@ const About = () => {
       </Box>
       <Box sx={{ mt: 10, mb: 10, position: "relative" }}>
         <Box>
-          <Image src={aboutBg} />
+          <Image src={aboutBg} style={{width:"100%"}} />
         </Box>
         <Grid2 container sx={{ position: "absolute", width: "100%", top: -10 }}>
           <Grid2

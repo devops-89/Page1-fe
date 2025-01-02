@@ -1,19 +1,30 @@
+import { removeToast } from "@/redux/reducers/toast";
 import { Alert, Snackbar } from "@mui/material";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const ToastBar = ({ open, message, severity, handleClose }) => {
+const ToastBar = () => {
+  const dispatch = useDispatch();
+
+  const toast = useSelector((state) => state.Toast);
+
+
+  const handleClose = () => {
+    dispatch(removeToast());
+  };
   return (
     <div>
       <Snackbar
-        open={open}
+        open={toast.open}
         onClose={handleClose}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
         }}
+        autoHideDuration={2000}
       >
-        <Alert onClose={handleClose} severity={severity} variant="filled">
-          {message}
+        <Alert onClose={handleClose} severity={toast.severity} variant="filled">
+          {toast.message}
         </Alert>
       </Snackbar>
     </div>

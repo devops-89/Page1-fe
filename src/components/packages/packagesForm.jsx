@@ -102,14 +102,17 @@ const PackageForm = () => {
             />
           </LocalizationProvider>
         </Grid2>
-        <Grid2 size={2.5} sx={{ borderRadius: 0, p: 1.4,textAlign:"center" }}>
+        <Grid2 size={2.5} sx={{ borderRadius: 0, p: 1.4, textAlign: "center" }}>
           <Button
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
               borderRadius: 4,
-              width:120,
-              textAlign:"center"
+              width: 140,
+              textAlign: "center",
+              fontFamily: nunito.style,
+              fontSize: 14,
+              p: 1,
             }}
           >
             Search

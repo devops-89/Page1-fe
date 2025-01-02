@@ -23,15 +23,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import ToastBar from "./toastBar";
 import { TOAST_STATUS } from "@/utils/enum";
+import { useDispatch } from "react-redux";
+import { setToast } from "@/redux/reducers/toast";
 
 const RegistrationForm = () => {
   const router = useRouter();
 
-  const [toast, setToast] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
+  const dispatch = useDispatch();
   const [phone, setPhone] = useState(null);
   const handlePhoneHandler = (newPhone, countryData) => {
     setPhone(newPhone);
@@ -56,19 +54,28 @@ const RegistrationForm = () => {
     authenticationController
       .registerUser(values)
       .then((res) => {
-        console.log("response", res);
+        dispatch(
+          setToast({
+            open: true,
+            message: res.data.message,
+            severity: TOAST_STATUS.SUCCESS,
+          })
+        );
+        localStorage.setItem("reference_id", res.data.data.reference_id);
         setLoading(false);
+        router.push("/verifyOTP");
       })
       .catch((err) => {
-        console.log("err", err);
         let errMessage =
           (err.response && err.response.data.message) || err.message;
-        setToast({
-          ...toast,
-          open: true,
-          message: errMessage,
-          severity: TOAST_STATUS.ERROR,
-        });
+
+        dispatch(
+          setToast({
+            open: true,
+            message: errMessage,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
         setLoading(false);
       });
   };
@@ -80,7 +87,7 @@ const RegistrationForm = () => {
       country_code: "",
       phone_number: "",
       password: "",
-      user_type: "USER  ",
+      user_type: "USER",
     },
     onSubmit: (values) => {
       registerUserApi(values);
@@ -138,7 +145,7 @@ const RegistrationForm = () => {
                 helperText={form.touched.email && form.errors.email}
               />
             </Grid2>
-            <Grid2 size={12}>
+            {/* <Grid2 size={12}>
               <MuiTelInput
                 label="Phone Number"
                 sx={{ ...phonetextField, width: "100%" }}
@@ -149,7 +156,7 @@ const RegistrationForm = () => {
                 error={Boolean(form.errors.phone_number)}
                 helperText={form.errors.phone_number}
               />
-            </Grid2>
+            </Grid2> */}
             <Grid2 size={12}>
               <TextField
                 label="Password*"
@@ -224,12 +231,7 @@ const RegistrationForm = () => {
           </Grid2>
         </form>
       </Box>
-      <ToastBar
-        open={toast.open}
-        message={toast.message}
-        severity={toast.severity}
-        handleClose={() => handleClose({ toast, setToast })}
-      />
+      <ToastBar />
     </div>
   );
 };

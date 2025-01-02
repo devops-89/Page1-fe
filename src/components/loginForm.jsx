@@ -1,12 +1,19 @@
+import { authenticationController } from "@/api/auth";
+import { setToast } from "@/redux/reducers/toast";
+import { setUserDetails } from "@/redux/reducers/user";
 import { COLORS } from "@/utils/colors";
+import { TOAST_STATUS } from "@/utils/enum";
 import { nunito } from "@/utils/fonts";
 import { loginTextField } from "@/utils/styles";
 import { loginSchema } from "@/utils/validationSchema";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
   Divider,
   Grid2,
+  IconButton,
+  InputAdornment,
   InputLabel,
   TextField,
   Typography,
@@ -14,10 +21,46 @@ import {
 import { useFormik } from "formik";
 import { MuiTelInput } from "mui-tel-input";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
+import Loading from "react-loading";
+import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const loginUser = (values) => {
+    setLoading(true);
+    authenticationController
+      .login(values)
+      .then((res) => {
+        localStorage.setItem("access_token", res.data.data.access_token);
+        dispatch(setUserDetails({ ...res.data.data, isAuthenticated: true }));
+        dispatch(
+          setToast({
+            open: true,
+            message: res.data.message,
+            severity: TOAST_STATUS.SUCCESS,
+          })
+        );
+        setLoading(false);
+        router.push("/");
+      })
+      .catch((err) => {
+        let errMessage =
+          (err.response && err.response.data.message) || err.message;
+        dispatch(
+          setToast({
+            open: true,
+            message: errMessage,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+        setLoading(false);
+      });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -26,7 +69,11 @@ const LoginForm = () => {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      console.log("test", values);
+      let body = {
+        identity: values.email,
+        password: values.password,
+      };
+      loginUser(body);
     },
   });
   return (
@@ -61,7 +108,7 @@ const LoginForm = () => {
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
-                label="Email"
+                label="Email*"
                 id="email"
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
@@ -71,8 +118,8 @@ const LoginForm = () => {
 
             <Grid2 size={12}>
               <TextField
-                label="Password"
-                type="password"
+                label="Password*"
+                type={showPassword ? "text" : "password"}
                 sx={{ ...loginTextField, width: "100%" }}
                 id="password"
                 onChange={formik.handleChange}
@@ -80,6 +127,23 @@ const LoginForm = () => {
                   formik.touched.password && Boolean(formik.errors.password)
                 }
                 helperText={formik.touched.password && formik.errors.password}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <VisibilityOutlined />
+                          ) : (
+                            <VisibilityOffOutlined />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
               />
             </Grid2>
             <Grid2 size={12} textAlign={"end"}>
@@ -91,6 +155,7 @@ const LoginForm = () => {
                   color: COLORS.PRIMARY,
                   cursor: "pointer",
                 }}
+                onClick={() => router.push("/forget-password")}
               >
                 {" "}
                 Forgot Password ?
@@ -103,13 +168,23 @@ const LoginForm = () => {
                   fontSize: 14,
 
                   p: 1,
-                  color: COLORS.WHITE,
+                  color: COLORS.BLACK,
                   fontFamily: nunito.style,
                 }}
                 fullWidth
                 type="submit"
+                disabled={loading}
               >
-                Login
+                {loading ? (
+                  <Loading
+                    type="bars"
+                    width={20}
+                    height={20}
+                    color={COLORS.BLACK}
+                  />
+                ) : (
+                  "Login"
+                )}
               </Button>
             </Grid2>
             <Grid2 size={12}>

@@ -5,9 +5,24 @@ const securedApi = axios.create({
   baseURL: APIURL.authenticationUrl,
 });
 
-securedApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("login_token");
+const userSecuredApi = axios.create({
+  baseURL: APIURL.userUrl,
+});
+
+userSecuredApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem("access_token");
   config.headers.accessToken = token;
+  return config;
+});
+
+securedApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem("access_token");
+  config.headers.accessToken = token;
+  return config;
+});
+
+const flightPublicApi = axios.create({
+  baseURL: APIURL.flightUrl,
 });
 
 const publicApi = axios.create({
@@ -17,4 +32,6 @@ const publicApi = axios.create({
 module.exports = {
   securedApi,
   publicApi,
+  userSecuredApi,
+  flightPublicApi,
 };

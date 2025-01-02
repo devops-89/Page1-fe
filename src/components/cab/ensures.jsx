@@ -1,5 +1,6 @@
 import { nunito } from "@/utils/fonts";
 import {
+  Box,
   Container,
   Grid2,
   List,
@@ -44,7 +45,7 @@ const Ensures = () => {
     },
   ];
   return (
-    <div>
+    <Box sx={{ position: "relative" }}>
       <Container>
         <Grid2 container alignItems={"center"} spacing={5}>
           <Grid2 size={6}>
@@ -83,12 +84,12 @@ const Ensures = () => {
               ))}
             </Grid2>
           </Grid2>
-          <Grid2 size={6}>
-            <Image src={taxiBig} />
+          <Grid2 size={6} sx={{ position: "absolute", right: 0 }}>
+            <Image src={taxiBig} className="img-fluid" />
           </Grid2>
         </Grid2>
       </Container>
-    </div>
+    </Box>
   );
 };
 

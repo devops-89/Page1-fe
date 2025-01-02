@@ -22,6 +22,7 @@ import cab3 from "@/cabs/cabs3.jpg";
 import Taxiform from "@/components/cab/taxiform";
 import Services from "@/components/cab/services";
 import Ensures from "@/components/cab/ensures";
+import InnerBanner from "@/components/innerBanner";
 const Cabs = () => {
   const list = [
     {
@@ -36,7 +37,7 @@ const Cabs = () => {
   ];
   return (
     <div>
-      <Box
+      {/* <Box
         sx={{
           backgroundImage: `url(${banner.src})`,
           height: 200,
@@ -64,7 +65,7 @@ const Cabs = () => {
                 fontWeight: 700,
               }}
             >
-              About us{" "}
+              Cabs{" "}
             </Typography>
             <Breadcrumbs
               separator=">"
@@ -94,7 +95,8 @@ const Cabs = () => {
             </Breadcrumbs>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
+      <InnerBanner img={banner.src} heading={"Cabs"} />
       <Box sx={{ pt: 10, pb: 10 }}>
         <Container>
           <Grid2 container spacing={5}>
@@ -193,7 +195,7 @@ const Cabs = () => {
         <Box sx={{ pt: 5, pb: 10 }}>
           <Services />
         </Box>
-        <Box sx={{ pt: 5,  }}>
+        <Box sx={{ pt: 5 }}>
           <Ensures />
         </Box>
       </Box>

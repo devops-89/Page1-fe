@@ -14,13 +14,15 @@ import { nunito } from "@/utils/fonts";
 import PackageForm from "@/components/packages/packagesForm";
 import Packagescard from "@/components/packages/packagesCard";
 import Head from "next/head";
+import { data } from "@/assests/data";
+import InnerBanner from "@/components/innerBanner";
 const Packages = () => {
   return (
     <div>
       <Head>
         <title>Packages</title>
       </Head>
-      <Box
+      {/* <Box
         sx={{
           backgroundImage: `url(${packageBanner.src})`,
           height: 400,
@@ -43,7 +45,9 @@ const Packages = () => {
             <PackageForm />
           </Card>
         </Box>
-      </Box>
+      </Box> */}
+
+      <InnerBanner img={packageBanner.src} heading={"Packages"} />
       <Box sx={{ pt: 10, pb: 10 }}>
         <Container>
           <Stack
@@ -63,10 +67,19 @@ const Packages = () => {
             </Typography>
           </Stack>
 
-          <Grid2 container mt={4}>
-            <Grid2 size={3}>
-              <Packagescard />
-            </Grid2>
+          <Grid2 container mt={4} spacing={3}>
+            {data.toursData.map((val, i) => (
+              <Grid2 size={3} key={i}>
+                <Packagescard
+                  title={val.title}
+                  img={val.img}
+                  location={val.location}
+                  rating={val.rating}
+                  price={val.price}
+                  duration={val.duration}
+                />
+              </Grid2>
+            ))}
           </Grid2>
         </Container>
       </Box>

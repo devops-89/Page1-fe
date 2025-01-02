@@ -1,11 +1,14 @@
-import footer from "@/banner/footer.svg";
-import LoginForm from "@/components/loginForm";
-import logo from "@/logo/logo.png";
 import { COLORS } from "@/utils/colors";
 import { Box, Card, Grid2 } from "@mui/material";
+import React from "react";
+import footer from "@/banner/footer.svg";
+import RegistrationForm from "@/components/registrationForm";
 import Image from "next/image";
+import logo from "@/logo/logo.png";
 import Link from "next/link";
-const Login = () => {
+import LoginForm from "@/components/loginForm";
+import ForgotPasswordForm from "@/components/forgotPasswordForm";
+const ForgotPassword = () => {
   return (
     <Box sx={{ position: "relative" }}>
       <Box
@@ -29,6 +32,8 @@ const Login = () => {
           position: "absolute",
           width: "100%",
           top: "10%",
+          //   transform: "translate(-50%,50%)",
+          //   left: "50%",
         }}
       >
         <Box sx={{ textAlign: "center", mb: 4, mt: 1 }}>
@@ -37,9 +42,9 @@ const Login = () => {
           </Link>
         </Box>
         <Grid2 container>
-          <Grid2 size={4} margin="auto">
+          <Grid2 size={3.5} margin="auto">
             <Card>
-              <LoginForm />
+              <ForgotPasswordForm />
             </Card>
           </Grid2>
         </Grid2>
@@ -48,4 +53,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

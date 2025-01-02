@@ -156,7 +156,7 @@ const Taxiform = () => {
                       sx={{
                         fontSize: 12,
                         fontFamily: nunito.style,
-                        color: COLORS.SECONDARY,
+                        color: COLORS.WHITE,
                         backgroundColor: COLORS.PRIMARY,
                         width: 200,
                         p: 1,

@@ -15,8 +15,11 @@ import {
 
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TravellerSelector from "./travellerSelector";
+import { flightController } from "@/api/flightController";
+import VirtualList from "./fixedSizeList";
+import { customFilter } from "@/utils/regex";
 
 const OnewayForm = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -24,6 +27,27 @@ const OnewayForm = () => {
   const openPopover = (e) => {
     setAnchorEl(e.currentTarget);
   };
+
+  const [airportList, setAirportList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getAllAirport = () => {
+    flightController
+      .getAllAirports()
+      .then((res) => {
+        // console.log("test", res);
+        let response = res.data.data;
+        setAirportList(response);
+        setLoading(false);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+  useEffect(() => {
+    getAllAirport();
+  }, []);
 
   return (
     <div>
@@ -60,8 +84,13 @@ const OnewayForm = () => {
                 }}
               />
             )}
-            options={data.airportData}
-            getOptionLabel={(option) => option.primary}
+            ListboxComponent={VirtualList}
+            loading={loading}
+            filterOptions={customFilter}
+            options={airportList}
+            getOptionLabel={(option) =>
+              `${option.airport_name} (${option.iata_code}) - ${option.city_name}`
+            }
             renderOption={(props, option) => (
               <Box {...props}>
                 <Stack
@@ -80,7 +109,7 @@ const OnewayForm = () => {
                         textAlign: "start",
                       }}
                     >
-                      {option.primary}
+                      {option.city_name}
                     </Typography>
 
                     <Typography
@@ -91,12 +120,13 @@ const OnewayForm = () => {
                         color: COLORS.DARKGREY,
                       }}
                     >
-                      {option.secondary}
+                      {option.airport_name}
                     </Typography>
                   </Box>
                 </Stack>
               </Box>
             )}
+            disableListWrap
           />
         </Grid2>
         <Grid2
@@ -131,8 +161,12 @@ const OnewayForm = () => {
                 }}
               />
             )}
-            options={data.airportData}
-            getOptionLabel={(option) => option.primary}
+            ListboxComponent={VirtualList}
+            filterOptions={customFilter}
+            options={airportList}
+            getOptionLabel={(option) =>
+              `${option.airport_name} (${option.iata_code}) - ${option.city_name}`
+            }
             renderOption={(props, option) => (
               <Box {...props}>
                 <Stack
@@ -151,7 +185,7 @@ const OnewayForm = () => {
                         textAlign: "start",
                       }}
                     >
-                      {option.primary}
+                      {option.city_name}
                     </Typography>
 
                     <Typography
@@ -162,7 +196,7 @@ const OnewayForm = () => {
                         color: COLORS.DARKGREY,
                       }}
                     >
-                      {option.secondary}
+                      {option.airport_name }
                     </Typography>
                   </Box>
                 </Stack>
