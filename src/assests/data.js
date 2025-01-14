@@ -62,6 +62,7 @@ import tour5 from "@/tours/Losangeles.jpg";
 import tour6 from "@/tours/nevada.jpg";
 import tour7 from "@/tours/virginia.jpg";
 import tour8 from "@/tours/wilmington.jpg";
+import { FLIGHT_CLASS, FLIGHT_DETAILS } from "@/utils/enum";
 export const data = {
   headerLinks: [
     {
@@ -99,50 +100,62 @@ export const data = {
     {
       img: flight,
       title: "Flight",
+      url: "/flight-list",
     },
     {
       img: hotels,
       title: "Hotels",
+      url: "/hotels",
     },
     {
       img: helicopter,
       title: "helicopter",
+      url: "/helicopter",
     },
     {
       img: packages,
       title: "holiday packages",
+      url: "/holiday-packages",
     },
     {
       img: cabs,
       title: "cabs",
+      url: "/cabs",
     },
     {
       img: ourHotels,
       title: "Our Hotels",
+      url: "/our-hotels",
     },
     {
       img: wedding,
       title: "Destination Wedding",
+      url: "/destination-wedding",
     },
     {
       img: gift,
       title: "Gift Cards",
+      ur: "/gift-cards",
     },
     {
       img: forex,
       title: "Forex",
+      url: "/forex",
     },
     {
       img: selfDrive,
       title: "Self Drive",
+      ur: "/self-drive",
     },
     {
       img: outStationCabs,
       title: "Outstation Cabs",
+      url: "/outstation-cabs",
     },
     {
       img: activities,
       title: "Activities",
+      url: "/activities",
     },
   ],
   hotelName: [
@@ -732,6 +745,101 @@ export const data = {
       icon: <Wallet sx={{ fontSize: 30 }} />,
       number: "$5965",
       title: "Average Value",
+    },
+  ],
+  flightTab: [
+    {
+      label: FLIGHT_DETAILS.FLIGHT_INFORMATIon,
+    },
+    {
+      label: FLIGHT_DETAILS.FARE_DETAIL,
+    },
+    {
+      label: FLIGHT_DETAILS.BAGGAGE_RULES,
+    },
+    {
+      label: FLIGHT_DETAILS.CANCELLATION_RULES,
+    },
+  ],
+  flightFareHead: [
+    {
+      label: "Base Fare",
+    },
+    {
+      label: "Taxes and Fees",
+    },
+    {
+      label: "Total Fees",
+    },
+  ],
+  fightFareData: [
+    {
+      value1: "$36,500",
+      value2: "$1050",
+      value3: "$37,550",
+    },
+  ],
+  flightBaggageHead: [
+    {
+      label: "Baggage Type",
+    },
+    {
+      label: "Check In",
+    },
+    {
+      label: "Cabin",
+    },
+  ],
+  flightBaggageDetails: [
+    {
+      value1: "Adult",
+      value2: "2PC",
+      value3: "7Kg",
+    },
+  ],
+  flightCancellationHeader: [
+    {
+      label: "Time Frame",
+    },
+    {
+      label: "Air Free + MMT Free",
+    },
+  ],
+  flightCancellationData: [
+    {
+      value1: "0 hours to 24 hours",
+      value2: "Non refundable",
+    },
+    {
+      value1: "24 hours to 365 days",
+      value2: "	$16,325 + $250",
+    },
+  ],
+  FLIGHT_CLASS_DATA: [
+    {
+      label: FLIGHT_CLASS.ALL,
+      value: 1,
+    },
+    {
+      label: FLIGHT_CLASS.ECONOMY,
+      value: 2,
+    },
+
+    {
+      label: FLIGHT_CLASS.PREMIUMECONOMY,
+      value: 3,
+    },
+    {
+      label: FLIGHT_CLASS.BUSINESS,
+      value: 4,
+    },
+    {
+      label: FLIGHT_CLASS.PREMIUMBUSINESS,
+      value: 5,
+    },
+    {
+      label: FLIGHT_CLASS.FIRST,
+      value: 6,
     },
   ],
 };

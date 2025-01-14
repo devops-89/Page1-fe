@@ -1,42 +1,51 @@
+import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
-import { nunito, raleway } from "@/utils/fonts";
+import { nunito } from "@/utils/fonts";
 import {
   Box,
   Button,
   FormControlLabel,
   Grid2,
-  IconButton,
   Radio,
   RadioGroup,
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import TravellorCounter from "./travellorCounter";
 
-const TravellerSelector = ({ anchorEl, setAnchorEl }) => {
+const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
   const [adultValue, setAdultValue] = useState(1);
-  const [childValue, setChildValue] = useState(1);
-  const [infantValue, setInfantValue] = useState(1);
+  const [childValue, setChildValue] = useState(0);
+  const [infantValue, setInfantValue] = useState(0);
+  const adultIncreaseCounter = () => {
+    setState({ ...state, adult: adultValue + 1 });
+    setAdultValue(adultValue + 1);
+  };
+  const adultDecreaseCounter = () => {
+    setState({ ...state, adult: adultValue - 1 });
+    setAdultValue(adultValue - 1);
+  };
+  const childIncreaseCounter = () => {
+    setState({ ...state, child: childValue + 1 });
+    setChildValue(childValue + 1);
+  };
+  const childDecreaseCounter = () => {
+    setState({ ...state, child: childValue - 1 });
+    setChildValue(childValue - 1);
+  };
+  const infantIncreaseCounter = () => {
+    setState({ ...state, infant: infantValue + 1 });
+    setInfantValue(infantValue + 1);
+  };
+  const infantDecreaseCounter = () => {
+    setState({ ...state, infant: infantValue - 1 });
+    setInfantValue(infantValue - 1);
+  };
 
-  const flightClass = [
-    {
-      label: "Economy",
-      value: "Economy",
-    },
-    {
-      label: "Premium Economy",
-      value: "Premium Economy",
-    },
-    {
-      label: "Business",
-      value: "Business",
-    },
-    {
-      label: "First Class",
-      value: "First Class",
-    },
-  ];
+  const flightClassHandler = (e) => {
+    setState({ ...state, cabin_class: e.target.value });
+  };
 
   return (
     <div>
@@ -57,6 +66,8 @@ const TravellerSelector = ({ anchorEl, setAnchorEl }) => {
               heading={"Adults ( 12+ Yrs )"}
               value={adultValue}
               setValue={setAdultValue}
+              onIncrease={adultIncreaseCounter}
+              onDecrease={adultDecreaseCounter}
             />
           </Grid2>
           <Grid2 size={4}>
@@ -64,6 +75,8 @@ const TravellerSelector = ({ anchorEl, setAnchorEl }) => {
               heading={"Childrens ( 2-12 Yrs )"}
               value={childValue}
               setValue={setChildValue}
+              onIncrease={childIncreaseCounter}
+              onDecrease={childDecreaseCounter}
             />
           </Grid2>
           <Grid2 size={4}>
@@ -71,6 +84,8 @@ const TravellerSelector = ({ anchorEl, setAnchorEl }) => {
               heading={"Infants( 0-12 Yrs )"}
               value={infantValue}
               setValue={setInfantValue}
+              onIncrease={infantIncreaseCounter}
+              onDecrease={infantDecreaseCounter}
             />
           </Grid2>
         </Grid2>
@@ -81,14 +96,18 @@ const TravellerSelector = ({ anchorEl, setAnchorEl }) => {
         >
           Travellers
         </Typography>
-        <RadioGroup row>
-          {flightClass.map((val, i) => (
+        <RadioGroup row value={state.cabin_class}>
+          {data.FLIGHT_CLASS_DATA.map((val, i) => (
             <FormControlLabel
               value={val.value}
               control={
-                <Radio defaultChecked={"Economy"} defaultValue={"Economy"} />
+                <Radio
+                  defaultChecked={state.cabin_class}
+                  defaultValue={state.cabin_class}
+                  onChange={flightClassHandler}
+                />
               }
-              label={<Typography sx={{ fontSize: 14 }}>{val.value}</Typography>}
+              label={<Typography sx={{ fontSize: 14 }}>{val.label}</Typography>}
               key={i}
             />
           ))}
@@ -125,6 +144,7 @@ const TravellerSelector = ({ anchorEl, setAnchorEl }) => {
             borderRadius: 6,
             width: 80,
           }}
+          onClick={() => setAnchorEl(null)}
         >
           Apply
         </Button>

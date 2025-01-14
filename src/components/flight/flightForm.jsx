@@ -90,7 +90,7 @@ const FlightForm = () => {
       </Stack>
 
       <TabPanel value={flightValue} index={0}>
-        <OnewayForm />
+        <OnewayForm onSubmit={"jee"} />
       </TabPanel>
       <TabPanel value={flightValue} index={1}>
         <RoundTrip />

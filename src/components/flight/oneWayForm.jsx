@@ -1,4 +1,3 @@
-import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import {
@@ -13,19 +12,74 @@ import {
   Typography,
 } from "@mui/material";
 
+import { flightController } from "@/api/flightController";
+import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
+import { customFilter } from "@/utils/regex";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import moment from "moment";
 import { useEffect, useState } from "react";
-import TravellerSelector from "./travellerSelector";
-import { flightController } from "@/api/flightController";
+import { useDispatch } from "react-redux";
 import VirtualList from "./fixedSizeList";
-import { customFilter } from "@/utils/regex";
+import TravellerSelector from "./travellerSelector";
+import { setToast } from "@/redux/reducers/toast";
+import ToastBar from "../toastBar";
+import { data } from "@/assests/data";
+import Loading from "react-loading";
+import { setFlightDetails } from "@/redux/reducers/flightInformation";
+import { useRouter } from "next/router";
 
-const OnewayForm = () => {
+const OnewayForm = ({ onSubmit }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const openPopover = (e) => {
     setAnchorEl(e.currentTarget);
+  };
+
+  const initialState = {
+    ip_address: "",
+    journey_type: JOURNEY_TYPE.ONEWAY,
+    preferred_time: PREFERRED_TIME.AnyTime,
+    origin: "",
+    destination: "",
+    departure_date: "",
+    cabin_class: 1,
+    adult: 1,
+    child: 0,
+    infant: 0,
+    direct_flight: false,
+    one_stop_flight: false,
+  };
+
+  const [state, setState] = useState(initialState);
+
+  const dispatch = useDispatch();
+  const [origin, setOrigin] = useState(null);
+  const [destination, setDestination] = useState(null);
+  const [departureDate, setDepartureDate] = useState(null);
+  const router = useRouter();
+  const originhandler = (e, newValue) => {
+    setOrigin(newValue);
+    if (newValue) {
+      setState({ ...state, origin: newValue.iata_code });
+    }
+  };
+  const destinationHandler = (e, newValue) => {
+    setDestination(newValue);
+    if (newValue) {
+      setState({ ...state, destination: newValue.iata_code });
+    }
+  };
+
+  const departureDateHandler = (newDate) => {
+    setDepartureDate(newDate);
+    const isValid = moment(newDate).isValid();
+    if (isValid) {
+      setState({
+        ...state,
+        departure_date: moment(newDate._d).format("YYYY-MM-DD"),
+      });
+    }
   };
 
   const [airportList, setAirportList] = useState([]);
@@ -35,7 +89,6 @@ const OnewayForm = () => {
     flightController
       .getAllAirports()
       .then((res) => {
-        // console.log("test", res);
         let response = res.data.data;
         setAirportList(response);
         setLoading(false);
@@ -45,9 +98,73 @@ const OnewayForm = () => {
       });
   };
 
+  const fetchApi = () => {
+    fetch("https://api.ipify.org?format=json")
+      .then((res) => res.json())
+      .then((data) => setState({ ...state, ip_address: data.ip }));
+  };
+
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  const searchFlight = () => {
+    setButtonLoading(true);
+    flightController
+      .searchFlight(state)
+      .then((res) => {
+        // console.log("res", res);
+        let response = res.data.data;
+        dispatch(setFlightDetails({ ...response }));
+        localStorage.setItem("flightData",JSON.stringify(response))
+        setButtonLoading(false);
+        router.push("/flight-list");
+      })
+      .catch((err) => {
+        // console.log("first", err);
+        let errMessage =
+          (err.response && err.response.data.message) || err.message;
+        dispatch(
+          setToast({
+            open: true,
+            message: errMessage,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+        setButtonLoading(false);
+      });
+  };
+
+  const submitHandler = () => {
+    const emptyFields = Object.keys(state).filter(
+      (key) =>
+        state[key] === "" || state[key] === null || state[key] === undefined
+    );
+
+    if (emptyFields.length > 0) {
+      dispatch(
+        setToast({
+          open: true,
+          message: `Please Enter the Required Fields : ${emptyFields}`,
+          severity: TOAST_STATUS.ERROR,
+        })
+      );
+    } else {
+      searchFlight();
+    }
+  };
+
+  const [cabin_class, setCabinClass] = useState("");
   useEffect(() => {
     getAllAirport();
+    fetchApi();
   }, []);
+
+  useEffect(() => {
+    let cabinClass = data.FLIGHT_CLASS_DATA.find(
+      (val) => val.value == state.cabin_class
+    );
+
+    setCabinClass(cabinClass);
+  }, [state.cabin_class]);
 
   return (
     <div>
@@ -84,6 +201,8 @@ const OnewayForm = () => {
                 }}
               />
             )}
+            onChange={originhandler}
+            value={origin}
             ListboxComponent={VirtualList}
             loading={loading}
             filterOptions={customFilter}
@@ -161,8 +280,11 @@ const OnewayForm = () => {
                 }}
               />
             )}
+            onChange={destinationHandler}
+            value={destination}
             ListboxComponent={VirtualList}
             filterOptions={customFilter}
+            loading={loading}
             options={airportList}
             getOptionLabel={(option) =>
               `${option.airport_name} (${option.iata_code}) - ${option.city_name}`
@@ -196,7 +318,7 @@ const OnewayForm = () => {
                         color: COLORS.DARKGREY,
                       }}
                     >
-                      {option.airport_name }
+                      {option.airport_name}
                     </Typography>
                   </Box>
                 </Stack>
@@ -232,6 +354,8 @@ const OnewayForm = () => {
                 },
               }}
               disablePast
+              onChange={departureDateHandler}
+              value={departureDate}
             />
           </LocalizationProvider>
         </Grid2>
@@ -258,11 +382,13 @@ const OnewayForm = () => {
             Travellers and cabin class
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
-            <Typography sx={{ fontSize: 17, fontFamily: nunito.style }}>
-              4 Persons
+            <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+              {state.adult + state.child + state.infant} Persons
             </Typography>
             <Typography fontSize={13} fontFamily={nunito.style}>
-              1 Adult, Economy
+              {state.adult}adult {state.child !== 0 && `,${state.child} child`}{" "}
+              {state.infant !== 0 && `,${state.infant} infant`},{" "}
+              {`${cabin_class.label} Class`}
             </Typography>
           </CardActionArea>
 
@@ -284,7 +410,13 @@ const OnewayForm = () => {
               },
             }}
           >
-            <TravellerSelector anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+            <TravellerSelector
+              anchorEl={anchorEl}
+              setAnchorEl={setAnchorEl}
+              initialState={initialState}
+              state={state}
+              setState={setState}
+            />
           </Popover>
           {/* popover end */}
         </Grid2>
@@ -296,11 +428,22 @@ const OnewayForm = () => {
               width: 150,
               p: 2,
             }}
+            onClick={submitHandler}
           >
-            Search
+            {buttonLoading ? (
+              <Loading
+                type="bars"
+                width={20}
+                height={20}
+                color={COLORS.WHITE}
+              />
+            ) : (
+              "Search"
+            )}
           </Button>
         </Grid2>
       </Grid2>
+      <ToastBar />
     </div>
   );
 };

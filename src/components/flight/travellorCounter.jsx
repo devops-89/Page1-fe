@@ -3,13 +3,21 @@ import { nunito } from "@/utils/fonts";
 import { Add, Remove } from "@mui/icons-material";
 import { IconButton, Stack, TextField, Typography } from "@mui/material";
 
-const TravellorCounter = ({ heading, value, setValue }) => {
-  const increaseCounter = () => {
-    setValue(value + 1);
-  };
-  const decreaseCounter = () => {
-    setValue(value - 1);
-  };
+const TravellorCounter = ({
+  heading,
+  value,
+  setValue,
+  onIncrease,
+  onDecrease,
+}) => {
+  // const increaseCounter = () => {
+  //   setValue(value + 1);
+  //   valueDetector(value + 1);
+  // };
+  // const decreaseCounter = () => {
+  //   setValue(value - 1);
+  //   valueDetector(value - 1);
+  // };
   return (
     <div>
       <Typography
@@ -31,7 +39,7 @@ const TravellorCounter = ({ heading, value, setValue }) => {
             },
             // width
           }}
-          onClick={decreaseCounter}
+          onClick={onDecrease}
           disabled={value === 1}
         >
           <Remove sx={{ fontSize: 20 }} />
@@ -59,7 +67,7 @@ const TravellorCounter = ({ heading, value, setValue }) => {
               backgroundColor: COLORS.GREY,
             },
           }}
-          onClick={increaseCounter}
+          onClick={onIncrease}
         >
           <Add sx={{ fontSize: 20 }} />
         </IconButton>

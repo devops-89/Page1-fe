@@ -2,6 +2,7 @@ import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import Services from "./services";
 
 const InnerBanner = ({ img, heading }) => {
   return (
@@ -65,6 +66,7 @@ const InnerBanner = ({ img, heading }) => {
           </Box>
         </Box>
       </Box>
+      <Services />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import Footer from "./footer";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { authenticationController } from "@/api/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "@/redux/reducers/user";
 const Layout = ({ children }) => {
   const [show, setShow] = useState(false);
@@ -22,17 +22,20 @@ const Layout = ({ children }) => {
       setShow(true);
     }
   }, [router.pathname]);
+  const isAuthenticated = useSelector((state) => state.USER.isAuthenticated);
 
   const getDetails = () => {
-    authenticationController
-      .getUserDetails()
-      .then((res) => {
-        let response = res.data.data;
-        dispatch(setUserDetails({ ...response, isAuthenticated: true }));
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    if (isAuthenticated || localStorage.getItem("access_token")) {
+      authenticationController
+        .getUserDetails()
+        .then((res) => {
+          let response = res.data.data;
+          dispatch(setUserDetails({ ...response, isAuthenticated: true }));
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    }
   };
 
   useEffect(() => {

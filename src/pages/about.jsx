@@ -1,21 +1,18 @@
-import { Box, Breadcrumbs, Container, Grid2, Typography } from "@mui/material";
-import React from "react";
+import aboutBg from "@/about-bg.svg";
+import { data } from "@/assests/data";
 import backgroundImage from "@/banner/about.jpg";
-import { COLORS } from "@/utils/colors";
-import { nunito } from "@/utils/fonts";
-import { Home } from "@mui/icons-material";
-import Head from "next/head";
-import Link from "next/link";
 import AboutUs from "@/components/aboutus";
 import ChooseCard from "@/components/chooseCard";
-import { data } from "@/assests/data";
-import topStars from "@/stars-top.png";
-import bottomStars from "@/stars-bottom.png";
-import Image from "next/image";
-import Testimonials from "@/components/testimonial/testimonials";
-import aboutBg from "@/about-bg.svg";
 import CounterCard from "@/components/counterCard";
 import InnerBanner from "@/components/innerBanner";
+import Testimonials from "@/components/testimonial/testimonials";
+import bottomStars from "@/stars-bottom.png";
+import topStars from "@/stars-top.png";
+import { COLORS } from "@/utils/colors";
+import { nunito } from "@/utils/fonts";
+import { Box, Container, Grid2, Typography } from "@mui/material";
+import Head from "next/head";
+import Image from "next/image";
 const About = () => {
   return (
     <Box>
@@ -132,7 +129,7 @@ const About = () => {
       </Box>
       <Box sx={{ mt: 10, mb: 10, position: "relative" }}>
         <Box>
-          <Image src={aboutBg} style={{width:"100%"}} />
+          <Image src={aboutBg} style={{ width: "100%" }} />
         </Box>
         <Grid2 container sx={{ position: "absolute", width: "100%", top: -10 }}>
           <Grid2

@@ -8,7 +8,6 @@ const ToastBar = () => {
 
   const toast = useSelector((state) => state.Toast);
 
-
   const handleClose = () => {
     dispatch(removeToast());
   };
@@ -22,6 +21,7 @@ const ToastBar = () => {
           horizontal: "right",
         }}
         autoHideDuration={2000}
+        sx={{ zIndex: 99999 }}
       >
         <Alert onClose={handleClose} severity={toast.severity} variant="filled">
           {toast.message}

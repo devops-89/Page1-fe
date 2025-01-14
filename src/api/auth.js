@@ -1,4 +1,4 @@
-import { securedApi, publicApi, userSecuredApi } from "./config";
+import { publicApi, userSecuredApi } from "./config";
 
 export const authenticationController = {
   registerUser: async (data) => {

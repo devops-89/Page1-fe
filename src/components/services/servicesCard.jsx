@@ -4,7 +4,7 @@ import flight from "@/services/flight.png";
 import Image from "next/image";
 import { COLORS } from "@/utils/colors";
 import { raleway } from "@/utils/fonts";
-const ServicesCard = ({ img, title }) => {
+const ServicesCard = ({ img, title, onClick }) => {
   return (
     <div>
       <CardActionArea
@@ -19,6 +19,7 @@ const ServicesCard = ({ img, title }) => {
             transition: "0.5s ease all",
           },
         }}
+        onClick={onClick}
       >
         <Image
           src={img}

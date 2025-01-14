@@ -97,6 +97,7 @@ const Cabs = () => {
         </Box>
       </Box> */}
       <InnerBanner img={banner.src} heading={"Cabs"} />
+      
       <Box sx={{ pt: 10, pb: 10 }}>
         <Container>
           <Grid2 container spacing={5}>
