@@ -2,6 +2,7 @@ import { data } from "@/assests/data";
 import logo from "@/icons/blogzine.svg";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
+import moment from "moment";
 import {
   FlightTakeoff,
   KeyboardArrowDown,
@@ -25,7 +26,8 @@ import TabPanel from "../tabPanel";
 import FlightBox from "./flightBox";
 import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
-import Cancellation from "./cancellationRules";
+
+// import Cancellation from "./cancellationRules";
 import { FARE_TYPE } from "@/utils/enum";
 const FlightListBox = ({ details }) => {
   const [open, setOpen] = useState(false);
@@ -34,11 +36,14 @@ const FlightListBox = ({ details }) => {
     setOpen(!open);
   };
 
+  const [flightDetails,setFlightDetails]=useState(details);
   const [value, setValue] = useState(0);
 
   const tabChangeHandler = (e, newValue) => {
     setValue(newValue);
   };
+
+  console.log(flightDetails);
 
   return (
     <div>
@@ -49,36 +54,37 @@ const FlightListBox = ({ details }) => {
           justifyContent={"space-between"}
         >
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
-            <Image src={details.logo} width={30} />
+            <Image src={flightDetails.AirlineLogo} alt="Image" width={30} height={30} />
             <Typography
               sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
             >
-              {details.airlineName} {`(${details?.flightNumber})`}
+              {flightDetails.departure[0].Airline.AirlineName} {`(${flightDetails?.departure[0].Airline.FlightNumber})`}
             </Typography>
           </Stack>
           <Typography
-            sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
+          
+            sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550}}
           >
-            Travel Class: {details?.travelClass}
+            Travel Class: {flightDetails?.departure[0].CabinClass}
           </Typography>
         </Stack>
         <Grid2 container sx={{ mt: 3 }} spacing={4} alignItems={"center"}>
           <Grid2 size={3}>
             <Typography
-              sx={{ fontSize: 25, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style,  }}
             >
-              {details?.departureDetails?.departureTime}
+              {moment(flightDetails?.departure[0].Origin.DepTime).format("Do MMM YYYY")}
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {details?.departureDetails?.departureAirportCode} -{" "}
-              {details?.departureDetails?.departureTerminal}
+              {flightDetails?.departure[0].Origin.Airport.AirportCode} -{" "}
+              {flightDetails?.departure[0].Origin.Airport.Terminal} Terminal
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {details?.departureDetails?.departureLocation}
+              {flightDetails?.departure[0].Origin.Airport.CityName}
             </Typography>
           </Grid2>
           <Grid2 size={3}>
@@ -90,7 +96,7 @@ const FlightListBox = ({ details }) => {
                 textAlign: "center",
               }}
             >
-              {details?.timeTaken}
+              {moment.duration(flightDetails?.departure[0].Duration,'minutes').asHours().toFixed(2)} Hrs
             </Typography>
             <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
               <Avatar sx={{ backgroundColor: COLORS.PRIMARY }}>
@@ -100,27 +106,27 @@ const FlightListBox = ({ details }) => {
           </Grid2>
           <Grid2 size={3}>
             <Typography
-              sx={{ fontSize: 25, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
             >
-              {details?.arrivalDetails?.arrivalTime}
+              {moment(flightDetails?.departure[0].Destination.ArrTime).format("Do MMM YYYY")}
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {details?.arrivalDetails?.arrivalAirportCode} -{" "}
-              {details?.arrivalDetails?.arrivalTerminal}
+              {flightDetails?.departure[0].Destination.Airport.AirportCode} -{" "}
+              {flightDetails?.departure[0].Destination.Airport.Terminal} Terminal
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {details?.arrivalDetails?.arrivalLocation}
+              {flightDetails?.departure[0].Destination.Airport.CityName}
             </Typography>
           </Grid2>
           <Grid2 size={3} textAlign={"center"}>
             <Typography
               sx={{ fontSize: 25, fontWeight: 900, fontFamily: nunito.style }}
             >
-              {details?.price}
+              {flightDetails?.TotalFare} ₹
             </Typography>
             <Button
               sx={{
@@ -153,20 +159,20 @@ const FlightListBox = ({ details }) => {
                 fontWeight: 500,
               }}
             >
-              Only {details?.seatsLeft} seats left
+              Only {flightDetails?.departure[0].NoOfSeatAvailable} seats left
             </Typography>
             <Typography
               sx={{
                 fontSize: 15,
                 color:
-                  details?.fareType === FARE_TYPE.NONREFUNDABLE
+                  flightDetails?.fareType === FARE_TYPE.NONREFUNDABLE
                     ? COLORS.DANGER
                     : COLORS.SUCCESS,
                 fontFamiy: nunito.style,
                 fontWeight: 500,
               }}
             >
-              {details?.fareType}
+              {flightDetails?.departure[0].FareClassification.Type}
             </Typography>
             <Button
               sx={{
@@ -180,7 +186,7 @@ const FlightListBox = ({ details }) => {
               endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
               onClick={handleOpenFlightDetails}
             >
-              Flight Details
+               Flight Details
             </Button>
           </Stack>
         </Card>
@@ -221,23 +227,23 @@ const FlightListBox = ({ details }) => {
             ))}
           </Tabs>
           <TabPanel index={0} value={value}>
-            <FlightBox data={details} />
+            <FlightBox data={flightDetails} />
           </TabPanel>
           <TabPanel index={1} value={value}>
-            <FareDetails tableData={details?.flightDetails?.fareDetail} />
+            <FareDetails   tableData={flightDetails} />
           </TabPanel>
           <TabPanel index={2} value={value}>
-            <BaggageDetails
-              tableData={details?.flightDetails?.baggageDetails}
+            <BaggageDetails 
+              tableData={flightDetails}
             />
           </TabPanel>
-          <TabPanel index={3} value={value}>
+          {/* <TabPanel index={3} value={value}>
             <Cancellation
-              tableData={details?.flightDetails?.cancellationDetails}
-              departureDetails={details?.departureDetails}
-              arrivalDetails={details?.arrivalDetails}
+              tableData={flightDetails?.flightDetails?.cancellationDetails}
+              departureDetails={flightDetails?.departureDetails}
+              arrivalDetails={flightDetails?.arrivalDetails}
             />
-          </TabPanel>
+          </TabPanel> */}
         </Collapse>
       </Card>
     </div>

@@ -757,19 +757,17 @@ export const data = {
     {
       label: FLIGHT_DETAILS.BAGGAGE_RULES,
     },
-    {
-      label: FLIGHT_DETAILS.CANCELLATION_RULES,
-    },
+   
   ],
   flightFareHead: [
+    // {
+    //   label: "Base Fare",
+    // },
+    // {
+    //   label: "Taxes and Fees",
+    // },
     {
-      label: "Base Fare",
-    },
-    {
-      label: "Taxes and Fees",
-    },
-    {
-      label: "Total Fees",
+      label: "Total Fare"
     },
   ],
   fightFareData: [
@@ -780,19 +778,17 @@ export const data = {
     },
   ],
   flightBaggageHead: [
+    
     {
-      label: "Baggage Type",
+      label: "Baggage",
+     
     },
     {
-      label: "Check In",
-    },
-    {
-      label: "Cabin",
+      label: "Cabin Baggage"
     },
   ],
   flightBaggageDetails: [
     {
-      value1: "Adult",
       value2: "2PC",
       value3: "7Kg",
     },
@@ -818,28 +814,67 @@ export const data = {
   FLIGHT_CLASS_DATA: [
     {
       label: FLIGHT_CLASS.ALL,
-      value: 1,
+      value: "1",
     },
     {
       label: FLIGHT_CLASS.ECONOMY,
-      value: 2,
+      value: "2",
     },
 
     {
       label: FLIGHT_CLASS.PREMIUMECONOMY,
-      value: 3,
+      value: "3",
     },
     {
       label: FLIGHT_CLASS.BUSINESS,
-      value: 4,
+      value: "4",
     },
     {
       label: FLIGHT_CLASS.PREMIUMBUSINESS,
-      value: 5,
+      value: "5",
     },
     {
       label: FLIGHT_CLASS.FIRST,
-      value: 6,
+      value: "6",
     },
   ],
+  flightDetails:{
+      "flightData": {
+        "origin": "New Delhi",
+        "destination": "Bengaluru",
+        "date": "Thursday, Jan 16",
+        "duration": "3h 5m",
+        "airline": "Akasa Air",
+        "flightNumber": "QP 1350",
+        "class": "Economy Saver"
+      },
+      "travelerData": {
+        "Adult": [
+          {
+            "id": 1,
+            "firstMiddleName": "",
+            "lastName": "",
+            "gender": "",
+            "countryCode": "",
+            "mobileNumber": "",
+            "email": "",
+            "requiresWheelchair": false
+          }
+        ],
+        "Child": [],
+        "Infant": []
+      },
+      "fareSummary": [
+        {
+          "label": "Base Fare",
+          "amount": 41186
+        },
+        {
+          "label": "Taxes and Surcharges",
+          "amount": 5004
+        }
+      ]
+    }
+    
+  
 };

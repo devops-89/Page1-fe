@@ -6,8 +6,7 @@ export const TOAST_STATUS = {
 export const FLIGHT_DETAILS = {
   FLIGHT_INFORMATIon: "Flight Information",
   FARE_DETAIL: "Fare Detail",
-  BAGGAGE_RULES: "Baggage Rules",
-  CANCELLATION_RULES: "Cancellation Rules",
+  BAGGAGE_RULES: "Baggage Rules"
 };
 
 export const FARE_TYPE = {

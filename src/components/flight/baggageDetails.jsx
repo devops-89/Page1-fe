@@ -3,22 +3,23 @@ import Image from "next/image";
 import React from "react";
 import logo from "@/icons/blogzine.svg";
 import { nunito } from "@/utils/fonts";
-import CustomTable from "./customTable";
+
 import { data } from "@/assests/data";
+import BaggageTable from "./BaggageTable";
 const BaggageDetails = ({ tableData }) => {
   return (
     <Card sx={{ mt: 2 }}>
       <Stack direction={"row"} alignItems={"center"} spacing={2} sx={{ p: 1 }}>
-        <Image src={logo} width={30} />
+        <Image src={tableData.AirlineLogo} width={30} height={30} alt={tableData.AirlineCode} />
         <Typography
           sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
         >
-          Blogzine Airline (FFR - 5682)
+         {tableData.departure[0].Airline.AirlineName}
         </Typography>
       </Stack>
       <Divider />
       <Box>
-        <CustomTable tableHead={data.flightBaggageHead} tableData={tableData} />
+        <BaggageTable tableHead={data.flightBaggageHead} tableData={tableData} />
         <Typography
           sx={{
             px: 1,

@@ -43,7 +43,7 @@ const OnewayForm = ({ onSubmit }) => {
     origin: "",
     destination: "",
     departure_date: "",
-    cabin_class: 1,
+    cabin_class: "1",
     adult: 1,
     child: 0,
     infant: 0,
@@ -94,7 +94,7 @@ const OnewayForm = ({ onSubmit }) => {
         setLoading(false);
       })
       .catch((err) => {
-        throw err;
+        console.log("err", err);
       });
   };
 
@@ -114,7 +114,7 @@ const OnewayForm = ({ onSubmit }) => {
         // console.log("res", res);
         let response = res.data.data;
         dispatch(setFlightDetails({ ...response }));
-        localStorage.setItem("flightData",JSON.stringify(response))
+        localStorage.setItem("flightData", JSON.stringify(response));
         setButtonLoading(false);
         router.push("/flight-list");
       })
@@ -159,15 +159,18 @@ const OnewayForm = ({ onSubmit }) => {
   }, []);
 
   useEffect(() => {
-    let cabinClass = data.FLIGHT_CLASS_DATA.find(
-      (val) => val.value == state.cabin_class
-    );
+    let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
+      console.log(val.value == state.cabin_class);
+      return val.value == state.cabin_class;
+    });
+    console.log("cabin class", cabinClass);
 
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
 
   return (
     <div>
+      {console.log("cabin class:", cabin_class)};
       <Grid2 container alignItems={"center"}>
         <Grid2
           size={2.4}
