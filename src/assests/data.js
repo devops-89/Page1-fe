@@ -873,6 +873,40 @@ export const data = {
           "label": "Taxes and Surcharges",
           "amount": 5004
         }
+      ],
+      "taxBreakup":[
+        {
+          "key": "K3",
+          "value": 196
+        },
+        {
+          "key": "YQTax",
+          "value": 900
+        },
+        {
+          "key": "YR",
+          "value": 65
+        },
+        {
+          "key": "PSF",
+          "value": 91
+        },
+        {
+          "key": "UDF",
+          "value": 12
+        },
+        {
+          "key": "INTax",
+          "value": 0
+        },
+        {
+          "key": "TransactionFee",
+          "value": 0
+        },
+        {
+          "key": "OtherTaxes",
+          "value": 0
+        }
       ]
     }
     

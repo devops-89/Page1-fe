@@ -4,5 +4,6 @@ export const baseUrl = "https://dev.page1travels.com";
 export const APIURL = {
   authenticationUrl: `${baseUrl}/auth/api/auth`,
   userUrl: `${baseUrl}/user/api/users`,
-  flightUrl: `${baseUrl}/flight/api/flight`,
+  flightUrl: `${baseUrl}/flight/api/`,
+  
 };

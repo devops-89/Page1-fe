@@ -2,6 +2,7 @@ import { data } from "@/assests/data";
 import logo from "@/icons/blogzine.svg";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
+import {useRouter} from "next/router";
 import moment from "moment";
 import {
   FlightTakeoff,
@@ -29,7 +30,12 @@ import BaggageDetails from "./baggageDetails";
 
 // import Cancellation from "./cancellationRules";
 import { FARE_TYPE } from "@/utils/enum";
-const FlightListBox = ({ details }) => {
+
+
+const FlightListBox = ({ details,traceId }) => {
+
+  const router=useRouter();
+
   const [open, setOpen] = useState(false);
 
   const handleOpenFlightDetails = () => {
@@ -43,7 +49,8 @@ const FlightListBox = ({ details }) => {
     setValue(newValue);
   };
 
-  console.log(flightDetails);
+  console.log("flight Deatils:",flightDetails);
+  
 
   return (
     <div>
@@ -137,6 +144,17 @@ const FlightListBox = ({ details }) => {
                 fontFamily: nunito.style,
                 mt: 1,
               }}
+
+              onClick={()=>{
+                   router.push({
+                     pathname:`/flight-list/${flightDetails?.AirlineCode}/view-details`,
+                     query:{
+                      ResultIndex:flightDetails?.ResultIndex,
+                      traceId:traceId
+                       }
+                   })
+                }
+              }
             >
               Book Now
             </Button>
