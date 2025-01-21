@@ -39,17 +39,17 @@ const FlightDetails = () => {
         });
       
     }
-  }, [router.query.ResultIndex, router.query.traceId]);
+  }, []);
 
   useEffect(()=>{
     if(JSON.parse(localStorage.getItem("flightDetails")))
     {
-    
+      setLoading(true)
       setTimeout(()=>{
         setFlightDetails(JSON.parse(localStorage.getItem("flightDetails")));
-      },1000);
+      },3000);
       
-     
+     setLoading(false);
     }
    
   },[]);
@@ -93,7 +93,7 @@ const FlightDetails = () => {
   return (
     <div>
       {
-        (flightDetails) ? (
+        ( flightDetails) ? (
           <Box
             sx={{
               backgroundColor: "#E5EEF4",
