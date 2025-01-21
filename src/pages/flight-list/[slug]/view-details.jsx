@@ -95,7 +95,7 @@ const FlightDetails = () => {
                   <Paper
                     sx={{ padding: 2, backgroundColor: "#F4F4F4", marginBottom: 2 }}
                   >
-                    <Box
+                    {/* <Box
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -153,7 +153,7 @@ const FlightDetails = () => {
                           );
                         })}
                       </Box>
-                    </Box>
+                    </Box> */}
 
                     {/* Card Section start */}
                     <Card sx={{ padding: '20px', marginBottom: "20px" }}>
@@ -244,7 +244,7 @@ const FlightDetails = () => {
 
                 {/* Fare Summary */}
                 <Grid2 size={4}>
-                  <FareSummary />
+                  <FareSummary fareData={flightDetails.Results} />
                 </Grid2>
               </Grid2>
 
