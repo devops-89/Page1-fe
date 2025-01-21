@@ -9,7 +9,7 @@ export const display = Playfair_Display({
   subsets: ["latin"],
 });
 
-export const nunito =Nunito({
+export const nunito = Nunito({
   weight: "variable",
   subsets: ["latin"],
 });

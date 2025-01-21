@@ -11,6 +11,7 @@ import { Box, Card, Container, Grid2, Typography,
   TextField,
   Button, 
   Slider,
+  CircularProgress,
 } from "@mui/material";
 
 import SearchIcon from '@mui/icons-material/Search';
