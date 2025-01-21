@@ -20,6 +20,8 @@ import FlightForm from "@/components/flight/flightForm";
 import FlightListBox from "@/components/flight/flightListBox";
 import { flightData } from "@/assests/flightData";
 import { useSelector } from "react-redux";
+import Loading from "react-loading";
+import { COLORS } from "@/utils/colors";
 const FlightList = () => {
   
   const [flightList, setFlightList] = useState(null);
@@ -28,9 +30,11 @@ const FlightList = () => {
  
   useEffect(() => {
     if (localStorage.getItem("flightData")) {
-      setFlightList(JSON.parse(localStorage.getItem("flightData")));
+      setTimeout(() => {
+        setFlightList(JSON.parse(localStorage.getItem("flightData")));
       setTraceId(JSON.parse(localStorage.getItem("flightData")).trace_id);
-   
+      }, 1500);
+      
     }
   },[]);
 
@@ -151,7 +155,7 @@ const FlightList = () => {
              {/* filter card end */}
             </Grid2>
             <Grid2 size={8}>
-              <Grid2 container spacing={12}>
+              <Grid2 container spacing={6}>
                 {/* {console.log("flightlist segments:",flightList.segments.flightData)} */}
                 {(flightList?.segments?.flightData)?
                 (flightList?.segments?.flightData?.map((val, i) => (
@@ -159,7 +163,13 @@ const FlightList = () => {
                     
                     <FlightListBox details={val} traceId={traceId}  />
                   </Grid2>
-                ))):"Loading"}
+                ))):<Box sx={{width:'100%', display:"flex", justifyContent:"center", marginTop:"50px"}}>
+                <Loading
+                                type="spin"
+                                width={40}
+                                height={40}
+                                color={COLORS.PRIMARY}
+                              /></Box>}
               </Grid2>
             </Grid2>
           </Grid2>
