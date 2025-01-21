@@ -44,7 +44,7 @@ const FareSummary = ({ fareData }) => {
           <ListItemText primary="Base Amount" />
           <Box sx={{ display: "flex", alignItems: "flex-start",justifyContent:"flex-end" }}>
             <Typography variant="body2" >
-            {fareData.Fare.BaseFare}  ₹
+            {fareData?.Fare?.BaseFare}  ₹
             </Typography>
            
           </Box>
@@ -64,14 +64,14 @@ const FareSummary = ({ fareData }) => {
           <ListItemText primary="Taxes and Surcharges" />
           <Box sx={{ display: "flex", alignItems: "flex-start",justifyContent:"flex-end" }}>
             <Typography variant="body2" >
-             {fareData.Fare.Tax} ₹ 
+             {fareData?.Fare?.Tax} ₹ 
             </Typography>
            
           </Box>
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {fareData.Fare.TaxBreakup.map((tax, index) => (
+            {fareData?.Fare?.TaxBreakup?.map((tax, index) => (
               <ListItem
                 key={index}
                 sx={{
@@ -97,7 +97,7 @@ const FareSummary = ({ fareData }) => {
         }}
       >
         <Typography>Total Amount</Typography>
-        <Typography>{fareData.Fare.PublishedFare} ₹</Typography>
+        <Typography>{fareData?.Fare?.PublishedFare} ₹</Typography>
       </Box>
     </Paper>
   );

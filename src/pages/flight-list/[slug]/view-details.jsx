@@ -15,10 +15,13 @@ import pointerImage from '@/../public/images/pointer.png'
 const FlightDetails = () => {
   const [forms, setForms] = useState(data.flightDetails.travelerData || []);
   const [flightDetails, setFlightDetails] = useState(null);
+  const [loading,setLoading]=useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    
     if (router.query.ResultIndex && router.query.traceId) {
+    
       flightController
         .flightDetails({
           result_index: router.query.ResultIndex,
@@ -27,13 +30,29 @@ const FlightDetails = () => {
         })
         .then((response) => {
           console.log("Flight Details:", response.data.data.Response);
-          setFlightDetails(response.data.data.Response);
+          localStorage.setItem("flightDetails",JSON.stringify(response.data.data.Response));
+
+        
         })
         .catch((error) => {
           console.error("Error fetching flight details:", error);
         });
+      
     }
   }, [router.query.ResultIndex, router.query.traceId]);
+
+  useEffect(()=>{
+    if(JSON.parse(localStorage.getItem("flightDetails")))
+    {
+    
+      setTimeout(()=>{
+        setFlightDetails(JSON.parse(localStorage.getItem("flightDetails")));
+      },1000);
+      
+     
+    }
+   
+  },[]);
 
   const handleChange = (type, id, field) => (event) => {
     setForms((prevForms) => ({
@@ -172,36 +191,46 @@ const FlightDetails = () => {
                       </Grid2>
                       <Divider />
 
-                      <Grid2 container spacing={1} sx={{ marginTop: '10px' }}>
-                        {/* Flight Segment 1 */}
-                        <Grid2 size={{ xs: 12 }} sx={{ display: "flex", alignItems: "center", gap: '5px' }}>
-                          <img src="air-india-logo.png" alt="Air India" />
-                          <Typography variant="subtitle1" gutterBottom sx={{ fontFamily: nunito.style, fontWeight: 600 }}>
-                            Air India AI 880
-                          </Typography>
-                        </Grid2>
-                        <Grid2 size={{ xs: 12 }} sx={{ backgroundColor: "#F4F4F4", padding: "15px", borderRadius: '4px' }}>
+  {/* Intermediate flights start */}
+                      <Box>
+                        {flightDetails?.Results?.Segments[0]?.map((segment, index) => {
+                          console.log("segment:", segment);
+                          return (
+                            <>
+                            <Grid2 container spacing={1} sx={{ marginTop: '10px' }}>
+                            {/* Flight Segment 1 */}
+                            <Grid2 size={{ xs: 12 }} sx={{ display: "flex", alignItems: "center", gap: '5px' }}>
+                              <img src="air-india-logo.png" alt="Air India" />
+                              <Typography variant="subtitle1" gutterBottom sx={{ fontFamily: nunito.style, fontWeight: 600 }}>
+                                {segment.Airline.AirlineName} {segment.Airline.AirlineCode} {segment.Airline.FlightNumber}
+                              </Typography>
+                            </Grid2>
+                            <Grid2 size={{ xs: 12 }} sx={{ backgroundColor: "#F4F4F4", padding: "15px", borderRadius: '4px' }}>
+    
+    
+                              <Typography variant="body1" sx={{ fontWeight: 700, fontFamily: nunito.style }}>{moment(segment.Origin.DepTime).format("HH:mm")} - {segment.Origin.Airport.CityName} ({segment.Origin.Airport.AirportCode})</Typography>
+                              <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '65px' }}><img src={pointerImage.src} style={{ width: '16px' }} /> {`${Math.floor(moment.duration(segment.Duration,'minutes').asHours())} hrs : ${moment.duration(segment.Duration,'minutes').minutes()} min`}</Typography>
+                              <Typography variant="body1" sx={{ fontWeight: 700, fontFamily: nunito.style }}>{moment(segment.Destination.ArrTime).format("HH:mm")} - {segment.Destination.Airport.CityName} ({segment.Destination.Airport.AirportCode})</Typography>
+    
+    
+                            </Grid2>
+    
+    
+                            <Grid2 size={{ xs: 12 }} sx={{ display: "flex", gap: "20px", flexWrap: "wrap", backgroundColor: '#FFEDD1', padding: '5px', borderRadius: '4px' }}>
+                              <Typography variant="body2" sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
+                                <strong>Baggage :</strong> {segment.Baggage}
+                              </Typography>
+                              <Typography variant="body2" sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
+                                <strong>Cabin Baggage :</strong> {segment.CabinBaggage}
+                              </Typography>
+                            </Grid2>
+                          </Grid2>
+                          <Divider />
 
-
-                          <Typography variant="body1" sx={{ fontWeight: 700, fontFamily: nunito.style }}>3:20 PM - Varanasi (Airport Name)</Typography>
-                          <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '65px' }}><img src={pointerImage.src} style={{ width: '16px' }} /> (1h:35m)</Typography>
-                          <Typography variant="body1" sx={{ fontWeight: 700, fontFamily: nunito.style }}>4:55 PM - Delhi (Airport Name)</Typography>
-
-
-                        </Grid2>
-
-
-                        <Grid2 size={{ xs: 12 }} sx={{ display: "flex", gap: "20px", flexWrap: "wrap", backgroundColor: '#FFEDD1', padding: '5px', borderRadius: '4px' }}>
-                          <Typography variant="body2" sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
-                            <strong>Baggage:</strong> ADULT 25KG, CHILD 25KG, INFANT 0KG
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
-                            <strong>Check-in:</strong> Included
-                          </Typography>
-                        </Grid2>
-                      </Grid2>
-                      <Divider />
-                      <Box sx={{ marginBottom: '10px', borderLeft: '2px dashed', paddingLeft: '20px' }}>
+                      { 
+                      (flightDetails?.Results?.Segments[0].length!=segment.SegmentIndicator) ? (
+                        <>
+                       <Box sx={{ marginBottom: '10px', borderLeft: '2px dashed', paddingLeft: '20px' }}>
                         <Typography variant="body2" sx={{ marginTop: '10px', color: 'orange', fontWeight: 600, fontFamily: nunito.style }}>
                           Change of Planes
                         </Typography>
@@ -209,7 +238,12 @@ const FlightDetails = () => {
                           13h:10m Layover in Delhi - Indira Gandhi Airport
                         </Typography>
                       </Box>
-                      <Divider/>
+                      <Divider/></>) : null}
+                          </>
+                          );
+                        })}
+                      </Box>
+  {/* Intermediate flights end */}
 
 
                     </Card>
@@ -244,7 +278,7 @@ const FlightDetails = () => {
 
                 {/* Fare Summary */}
                 <Grid2 size={4}>
-                  <FareSummary fareData={flightDetails.Results} />
+                  <FareSummary fareData={flightDetails?.Results} />
                 </Grid2>
               </Grid2>
 
