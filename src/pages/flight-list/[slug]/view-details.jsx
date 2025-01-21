@@ -182,7 +182,7 @@ const FlightDetails = () => {
     
               {/* Fare Summary */}
               <Grid2 size={4}>
-                <FareSummary />
+                <FareSummary fareData={flightDetails?.Results} />
               </Grid2>
             </Grid2>
            
