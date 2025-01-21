@@ -218,11 +218,11 @@ const FlightDetails = () => {
                     {/* Traveler Details */}
                     {["Adult", "Child", "Infant"].map((type) => (
                       <Card key={type} sx={{ padding: 2, marginBottom: 3 }}>
-                        <Typography variant="h5" fontWeight="bold">
+                        <Typography variant="h5" sx={{fontFamily:nunito.style, fontWeight:800}}>
                           {type} Details
                         </Typography>
                         <Box sx={{ marginTop: 3 }}>
-                          {forms[type]?.map((form) => (
+                          {forms[type]?.map((form) => ( 
                             <TravellerForm
                               key={form.id}
                               form={form}

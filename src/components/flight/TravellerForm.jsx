@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, TextField, RadioGroup, FormControlLabel, Radio, Checkbox, Grid,Typography } from "@mui/material";
+import { nunito } from "@/utils/fonts";
 
 const TravellerForm = ({ 
   form, 
@@ -29,7 +30,7 @@ const TravellerForm = ({
 
   return (
     <Box sx={{ marginBottom: 4 }}>
-      <Typography variant="subtitle1" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: 800, marginBottom: 2 ,fontFamily:nunito.style }}>
         {formType} ({ageHint})
       </Typography>
       <Grid container spacing={2}>
@@ -39,6 +40,7 @@ const TravellerForm = ({
             label={nameLabel}
             placeholder={namePlaceholder}
             value={form.firstMiddleName}
+            sx={{fontFamily:nunito.style}}
             onChange={handleChange(form.id, "firstMiddleName")}
           />
         </Grid>
@@ -48,6 +50,7 @@ const TravellerForm = ({
             label="Last Name"
             placeholder="Last Name"
             value={form.lastName}
+            sx={{fontFamily:nunito.style}}
             onChange={handleChange(form.id, "lastName")}
           />
         </Grid>
@@ -57,8 +60,8 @@ const TravellerForm = ({
             value={form.gender}
             onChange={handleChange(form.id, "gender")}
           >
-            <FormControlLabel value="male" control={<Radio />} label="Male" />
-            <FormControlLabel value="female" control={<Radio />} label="Female" />
+            <FormControlLabel value="male" control={<Radio />} label="Male" sx={{fontFamily:nunito.style}}/>
+            <FormControlLabel value="female" control={<Radio />} label="Female" sx={{fontFamily:nunito.style}}/>
           </RadioGroup>
         </Grid>
       </Grid>
@@ -69,6 +72,7 @@ const TravellerForm = ({
             label="Country Code (Optional)"
             placeholder="Country Code"
             value={form.countryCode}
+            sx={{fontFamily:nunito.style}}
             onChange={handleChange(form.id, "countryCode")}
           />
         </Grid>
@@ -78,6 +82,7 @@ const TravellerForm = ({
             label="Mobile No (Optional)"
             placeholder="Mobile No"
             value={form.mobileNumber}
+            sx={{fontFamily:nunito.style}}
             onChange={handleChange(form.id, "mobileNumber")}
           />
         </Grid>
@@ -87,6 +92,7 @@ const TravellerForm = ({
             label="Email (Optional)"
             placeholder="Email"
             value={form.email}
+            sx={{fontFamily:nunito.style}}
             onChange={handleChange(form.id, "email")}
           />
         </Grid>
@@ -98,6 +104,7 @@ const TravellerForm = ({
               <Checkbox
                 checked={form.requiresWheelchair}
                 onChange={handleChange(form.id, "requiresWheelchair")}
+                sx={{fontFamily:nunito.style}}
               />
             }
             label="I require a wheelchair (Optional)"
