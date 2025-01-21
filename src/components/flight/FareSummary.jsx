@@ -17,6 +17,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {data} from "../../assests/data";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { nunito } from "@/utils/fonts";
 
 const FareSummary = ({ fareData }) => {
   const [open, setOpen] = useState(false);
@@ -29,7 +30,7 @@ const FareSummary = ({ fareData }) => {
     <Paper sx={{ padding: 2, backgroundColor: "#F4F4F4", height: "auto" }}>
       <Typography
         variant="h6"
-        sx={{ fontSize: 18, fontWeight: 600, color: "#000" }}
+        sx={{ fontSize: 18, fontWeight: 800, color: "#000",fontFamily:nunito.style }}
       >
         Fare Summary
       </Typography>
@@ -41,9 +42,9 @@ const FareSummary = ({ fareData }) => {
           sx={{ display: "flex", justifyContent: "space-between" }}
         >
           <ListItemIcon>  <AddCircleIcon/></ListItemIcon>
-          <ListItemText primary="Base Amount" />
+          <ListItemText><Typography sx={{fontFamily:nunito.style,fontWeight:700}} >Base Amount</Typography></ListItemText>
           <Box sx={{ display: "flex", alignItems: "flex-start",justifyContent:"flex-end" }}>
-            <Typography variant="body2" >
+            <Typography variant="body2" sx={{fontFamily:nunito.style,fontWeight:700}} >
             {fareData?.Fare?.BaseFare}  ₹
             </Typography>
            
@@ -61,9 +62,9 @@ const FareSummary = ({ fareData }) => {
           sx={{ display: "flex", justifyContent: "space-between" }}
         >
           <ListItemIcon> {open ? <RemoveCircleIcon/>  : <AddCircleIcon/>}</ListItemIcon>
-          <ListItemText primary="Taxes and Surcharges" />
+          <ListItemText><Typography sx={{fontFamily:nunito.style,fontWeight:700}} >Taxes and Surcharges</Typography></ListItemText>
           <Box sx={{ display: "flex", alignItems: "flex-start",justifyContent:"flex-end" }}>
-            <Typography variant="body2" >
+            <Typography variant="body2" sx={{fontFamily:nunito.style,fontWeight:700}} >
              {fareData?.Fare?.Tax} ₹ 
             </Typography>
            
@@ -78,10 +79,11 @@ const FareSummary = ({ fareData }) => {
                   display: "flex",
                   justifyContent: "space-between",
                   paddingLeft: 4,
+                  fontFamily:nunito.style
                 }}
               >
-                <Typography variant="body2">{tax.key}</Typography>
-                <Typography variant="body2">₹ {tax.value}</Typography>
+                <Typography variant="body2" sx={{fontFamily:nunito.style}}>{tax.key}</Typography>
+                <Typography variant="body2" sx={{fontFamily:nunito.style}}>₹ {tax.value}</Typography>
               </ListItem>
             ))}
           </List>
@@ -96,8 +98,8 @@ const FareSummary = ({ fareData }) => {
           fontWeight: "bold",
         }}
       >
-        <Typography>Total Amount</Typography>
-        <Typography>{fareData?.Fare?.PublishedFare} ₹</Typography>
+        <Typography sx={{fontFamily:nunito.style, fontWeight:800}}>Total Amount</Typography>
+        <Typography sx={{fontFamily:nunito.style,fontWeight:800}}>{fareData?.Fare?.PublishedFare} ₹</Typography>
       </Box>
     </Paper>
   );
