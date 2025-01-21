@@ -18,7 +18,7 @@ import {data} from "../../assests/data";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const FareSummary = ({ taxBreakup }) => {
+const FareSummary = ({ fareData }) => {
   const [open, setOpen] = useState(false);
 
   const toggleCollapse = () => {
@@ -44,7 +44,7 @@ const FareSummary = ({ taxBreakup }) => {
           <ListItemText primary="Base Amount" />
           <Box sx={{ display: "flex", alignItems: "flex-start",justifyContent:"flex-end" }}>
             <Typography variant="body2" >
-              ₹ 20000
+            {fareData.Fare.BaseFare}  ₹
             </Typography>
            
           </Box>
@@ -64,14 +64,14 @@ const FareSummary = ({ taxBreakup }) => {
           <ListItemText primary="Taxes and Surcharges" />
           <Box sx={{ display: "flex", alignItems: "flex-start",justifyContent:"flex-end" }}>
             <Typography variant="body2" >
-              ₹ 1064
+             {fareData.Fare.Tax} ₹ 
             </Typography>
            
           </Box>
         </ListItem>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {data.flightDetails.taxBreakup.map((tax, index) => (
+            {fareData.Fare.TaxBreakup.map((tax, index) => (
               <ListItem
                 key={index}
                 sx={{
@@ -97,7 +97,7 @@ const FareSummary = ({ taxBreakup }) => {
         }}
       >
         <Typography>Total Amount</Typography>
-        <Typography>₹ 3064</Typography>
+        <Typography>{fareData.Fare.PublishedFare} ₹</Typography>
       </Box>
     </Paper>
   );
