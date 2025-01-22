@@ -12,7 +12,6 @@ export const flightController = {
   searchFlight: async (data) => {
     try {
       let result = await flightPublicApi.post("flight/search-flight", data);
-     
       return result;
     } catch (error) {
       throw error;
@@ -21,7 +20,7 @@ export const flightController = {
   flightDetails:async(data)=>{
     try{
      let result=await flightPublicApi.post("/flightdetail/flightdetail",data);
-     console.log("result",result);
+    //  console.log("result",result);
      return result;
     }
     catch(error){

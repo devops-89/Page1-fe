@@ -2,48 +2,40 @@ import Banner from "@/components/banner";
 import InnerBanner from "@/components/innerBanner";
 import React, { useEffect, useState } from "react";
 import banner from "@/banner/flight.jpg";
-import { Box, Card, Container, Grid2, Typography, 
-
+import {
+  Box,
+  Card,
+  Container,
+  Grid2,
+  Typography,
   CardHeader,
   CardContent,
   Checkbox,
   FormControlLabel,
   TextField,
-  Button, 
+  Button,
   Slider,
-  CircularProgress,
 } from "@mui/material";
 
-import SearchIcon from '@mui/icons-material/Search';
-import StarIcon from '@mui/icons-material/Star';
+import SearchIcon from "@mui/icons-material/Search";
+import StarIcon from "@mui/icons-material/Star";
 import FlightForm from "@/components/flight/flightForm";
 import FlightListBox from "@/components/flight/flightListBox";
-import { flightData } from "@/assests/flightData";
-import { useSelector } from "react-redux";
 import Loading from "react-loading";
 import { COLORS } from "@/utils/colors";
 const FlightList = () => {
-  
   const [flightList, setFlightList] = useState(null);
-  const [traceId,setTraceId]=useState("");
- 
- 
+  const [traceId, setTraceId] = useState("");
+
   useEffect(() => {
     if (localStorage.getItem("flightData")) {
       setTimeout(() => {
         setFlightList(JSON.parse(localStorage.getItem("flightData")));
-      setTraceId(JSON.parse(localStorage.getItem("flightData")).trace_id);
+        setTraceId(JSON.parse(localStorage.getItem("flightData")).trace_id);
       }, 1500);
-      
     }
-  },[]);
+  }, []);
 
-
-
-  
-
-  
- 
   const [priceRange, setPriceRange] = useState([500, 2000]);
 
   const handleRangeChange = (event, newValue) => {
@@ -51,7 +43,7 @@ const FlightList = () => {
   };
 
   return (
-    <div>
+    <>
       <InnerBanner img={banner.src} heading={"Flight"} />
 
       <Box sx={{ pt: 10 }}>
@@ -62,120 +54,149 @@ const FlightList = () => {
           </Card>
         </Container>
       </Box>
-      <Box sx={{ pt: 10, pb: 10, }}>
-        <Container >
-          <Grid2 container spacing={4}  >
-            <Grid2 size={4} sx={{position:"relative"}}>
-             {/* filter card start */}
-             <Card variant="outlined" sx={{position:"sticky", top:"75px"}} style={{ marginBottom: '1rem', width: '100%', boxShadow:"0px 0px 3px 3px rgb(0,0,0,0.10)" }}>
-      <CardHeader
-        title="Filters"
-        action={
-          <Button variant="text" color="primary" size="small">
-            Reset
-          </Button>
-        }
-      />
-      <CardContent>
-        <Typography variant="subtitle1" gutterBottom>
-          Search by Airline Names
-        </Typography>
-        <TextField
-          fullWidth
-          size="small"
-          name="search"
-          placeholder="Search by Airline Names"
-          
-         
-          InputProps={{
-            startAdornment: <SearchIcon style={{ marginRight: '8px' }} />,
-          }}
-        />
 
-        {/* Popular Section */}
-        <div style={{ marginTop: '1rem' }}>
-          <Typography variant="subtitle1">Popular</Typography>
-          {['Breakfast Included', 'Budget', '4 Star Hotels', '5 Star Hotels'].map((label) => (
-            <FormControlLabel
-              key={label}
-              control={<Checkbox defaultChecked={label === 'Breakfast Included'} />}
-              label={label}
-            />
-          ))}
-        </div>
+      {flightList?.segments?.flightData ? (
+        <Box sx={{ pt: 10, pb: 10 }}>
+          <Container>
+            <Grid2 container spacing={4}>
+              <Grid2 size={4} sx={{ position: "relative" }}>
+                {/* filter card start */}
+                <Card
+                  variant="outlined"
+                  sx={{ position: "sticky", top: "75px" }}
+                  style={{
+                    marginBottom: "1rem",
+                    width: "100%",
+                    boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
+                  }}
+                >
+                  <CardHeader
+                    title="Filters"
+                    action={
+                      <Button variant="text" color="primary" size="small">
+                        Reset
+                      </Button>
+                    }
+                  />
+                  <CardContent>
+                    <Typography variant="subtitle1" gutterBottom>
+                      Search by Airline Names
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      name="search"
+                      placeholder="Search by Airline Names"
+                      InputProps={{
+                        startAdornment: (
+                          <SearchIcon style={{ marginRight: "8px" }} />
+                        ),
+                      }}
+                    />
 
-        {/* Price Range Section */}
-        <div style={{ marginTop: '1rem' }}>
-          <Typography variant="subtitle1">Price Per Night</Typography>
-          <Slider
-            value={priceRange}
-            onChange={handleRangeChange}
-            valueLabelDisplay="auto"
-            min={200}
-            max={5695}
-          />
-          <Typography>Range: ${priceRange[0]} - ${priceRange[1]}</Typography>
-        </div>
+                    {/* Popular Section */}
+                    <div style={{ marginTop: "1rem" }}>
+                      <Typography variant="subtitle1">Popular</Typography>
+                      {[
+                        "Breakfast Included",
+                        "Budget",
+                        "4 Star Hotels",
+                        "5 Star Hotels",
+                      ].map((label) => (
+                        <FormControlLabel
+                          key={label}
+                          control={
+                            <Checkbox
+                              defaultChecked={label === "Breakfast Included"}
+                            />
+                          }
+                          label={label}
+                        />
+                      ))}
+                    </div>
 
-        {/* Airline Names Section */}
-        <div style={{ marginTop: '1rem' }}>
-          <Typography variant="subtitle1">Airline Names</Typography>
-          {['American Airlines', 'Delta Air Lines', 'Emirates', 'Air France'].map((label) => (
-            <FormControlLabel
-              key={label}
-              control={<Checkbox />}
-              label={label}
-            />
-          ))}
-        </div>
+                    {/* Price Range Section */}
+                    <div style={{ marginTop: "1rem" }}>
+                      <Typography variant="subtitle1">
+                        Price Per Night
+                      </Typography>
+                      <Slider
+                        value={priceRange}
+                        onChange={handleRangeChange}
+                        valueLabelDisplay="auto"
+                        min={200}
+                        max={5695}
+                      />
+                      <Typography>
+                        Range: ${priceRange[0]} - ${priceRange[1]}
+                      </Typography>
+                    </div>
 
-        {/* Reviews Section */}
-        <div style={{ marginTop: '1rem' }}>
-          <Typography variant="subtitle1">Reviews</Typography>
-          {[5, 4, 3, 2, 1].map((stars) => (
-            
-            <FormControlLabel
-              key={stars}
-              control={<Checkbox />}
-             
-              label={
-                <Typography>
-                  {[...Array(stars)].map((_, i) => (
-                    <StarIcon key={i} style={{ color: 'gold' }} />
+                    {/* Airline Names Section */}
+                    <div style={{ marginTop: "1rem" }}>
+                      <Typography variant="subtitle1">Airline Names</Typography>
+                      {[
+                        "American Airlines",
+                        "Delta Air Lines",
+                        "Emirates",
+                        "Air France",
+                      ].map((label) => (
+                        <FormControlLabel
+                          key={label}
+                          control={<Checkbox />}
+                          label={label}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Reviews Section */}
+                    <div style={{ marginTop: "1rem" }}>
+                      <Typography variant="subtitle1">Reviews</Typography>
+                      {[5, 4, 3, 2, 1].map((stars) => (
+                        <FormControlLabel
+                          key={stars}
+                          control={<Checkbox />}
+                          label={
+                            <Typography>
+                              {[...Array(stars)].map((_, i) => (
+                                <StarIcon key={i} style={{ color: "gold" }} />
+                              ))}
+                            </Typography>
+                          }
+                        />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* filter card end */}
+              </Grid2>
+              <Grid2 size={8}>
+                <Grid2 container spacing={6}>
+                  {flightList?.segments?.flightData?.map((val, i) => (
+                    <Grid2 size={12} key={i}>
+                      <FlightListBox details={val} traceId={traceId} />
+                    </Grid2>
                   ))}
-                </Typography>
-              }
-            />
-           
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-
-             {/* filter card end */}
-            </Grid2>
-            <Grid2 size={8}>
-              <Grid2 container spacing={6}>
-                {/* {console.log("flightlist segments:",flightList.segments.flightData)} */}
-                {(flightList?.segments?.flightData)?
-                (flightList?.segments?.flightData?.map((val, i) => (
-                  <Grid2 size={12} key={i} >
-                    
-                    <FlightListBox details={val} traceId={traceId}  />
-                  </Grid2>
-                ))):<Box sx={{width:'100%', display:"flex", justifyContent:"center", marginTop:"50px"}}>
-                <Loading
-                                type="spin"
-                                width={40}
-                                height={40}
-                                color={COLORS.PRIMARY}
-                              /></Box>}
+                </Grid2>
               </Grid2>
             </Grid2>
-          </Grid2>
-        </Container>
-      </Box>
-    </div>
+          </Container>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "50px",
+            marginBottom:"50px"
+          }}
+        >
+          <Loading type="bars" width={50} height={50} color={COLORS.PRIMARY} />
+        </Box>
+      )}
+    </>
   );
 };
 
