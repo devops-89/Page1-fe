@@ -849,18 +849,7 @@ export const data = {
         "class": "Economy Saver"
       },
       "travelerData": {
-        "Adult": [
-          {
-            "id": 1,
-            "firstMiddleName": "",
-            "lastName": "",
-            "gender": "",
-            "countryCode": "",
-            "mobileNumber": "",
-            "email": "",
-            "requiresWheelchair": false
-          }
-        ],
+        "Adult":[],
         "Child": [],
         "Infant": []
       },

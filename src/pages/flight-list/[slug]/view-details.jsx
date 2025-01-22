@@ -13,11 +13,23 @@ import { display, nunito } from "@/utils/fonts";
 import pointerImage from '@/../public/images/pointer.png'
 import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
+import { useDispatch } from "react-redux";
+import { setToast } from "@/redux/reducers/toast";
+import { TOAST_STATUS } from "@/utils/enum";
 
 const FlightDetails = () => {
   const [forms, setForms] = useState(data.flightDetails.travelerData || []);
   const [flightDetails, setFlightDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [error,setError]=useState(null);
+  const [formState,setFormState]=useState();
+
+  useEffect(()=>{
+       if(localStorage.getItem("state")){
+           setFormState(JSON.parse(localStorage.getItem("state")));
+       }
+  },[]);
+
+  
   const router = useRouter();
 
   useEffect(() => {
@@ -38,19 +50,20 @@ const FlightDetails = () => {
         })
         .catch((error) => {
           console.error("Error fetching flight details:", error);
+          setError(error);
         });
 
     }
   }, []);
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("flightDetails"))) {
-      setLoading(true)
+    if (typeof window !== "undefined" && JSON.parse(localStorage.getItem("flightDetails"))) {
+    
       setTimeout(() => {
         setFlightDetails(JSON.parse(localStorage.getItem("flightDetails")));
       }, 3000);
 
-      setLoading(false);
+    
     }
 
   }, []);
@@ -62,10 +75,7 @@ const FlightDetails = () => {
         form.id === id
           ? {
             ...form,
-            [field]:
-              event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value,
+            [field]: event.target.value,
           }
           : form
       ),
@@ -73,7 +83,8 @@ const FlightDetails = () => {
   };
 
   const addNewForm = (type) => {
-    const newForm = {
+    if(forms[type].length!=formState[type.toLowerCase()]){
+        const newForm = {
       id: forms[type]?.length + 1 || 1,
       firstMiddleName: "",
       lastName: "",
@@ -87,14 +98,36 @@ const FlightDetails = () => {
       ...prevForms,
       [type]: [...(prevForms[type] || []), newForm],
     }));
+    }
+   
+    // console.log("state",type);
+    // console.log("state",formState[type.toLowerCase()]);
+    // console.log(forms[type].length);
   };
 
-
+ 
 
   return (
     <Box sx={{ width: "100%", backgroundColor: COLORS.GREY }}>
       {
-        (flightDetails) ? (
+        (error)?(
+<Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
+          textAlign: "center",
+          color: "red",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+         {error}
+        </Typography>
+        <Typography variant="body1">{error.message || "An unexpected error occurred. Please try again later."}</Typography>
+      </Box>
+        ):( flightDetails) ? (
           <Box
             sx={{
               backgroundColor: "#E5EEF4",
@@ -115,65 +148,7 @@ const FlightDetails = () => {
                   <Paper
                     sx={{ padding: 2, backgroundColor: "#F4F4F4", marginBottom: 2 }}
                   >
-                    {/* <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Box>
-                        {flightDetails?.Results?.Segments?.map((segment, index) => {
-                          console.log("segment:", segment[0]);
-                          return (
-                            <>
-                              <Typography
-                                key={index}
-                                variant="h6"
-                                className="Anshuman"
-                                sx={{ fontWeight: "bold", color: "#000" }}
-                              >
-                                {segment[0].Origin.Airport.CityName || "Unknown"} →{" "}
-                                {segment[0].Destination.Airport.CityName ||
-                                  "Unknown"}
-                              </Typography>
-
-                              <Box sx={{ display: "flex", gap: 2, marginTop: 1 }}>
-                                <Box
-                                  sx={{
-                                    backgroundColor: "rgb(255, 237, 209)",
-                                    padding: "4px 8px",
-                                    borderRadius: 1,
-                                    fontSize: 14,
-                                  }}
-                                >
-                                  <Typography
-                                    key={index}
-                                    variant="body1"
-                                    sx={{ color: "#000" }}
-                                  >
-                                    {moment(segment[0].Origin?.DepTime).format(
-                                      "Do MMM YYYY"
-                                    ) || "N/A"}{" "}
-                                    →{" "}
-                                    {moment(segment[0].Destination?.ArrTime).format(
-                                      "Do MMM YYYY"
-                                    ) || "N/A"}
-                                  </Typography>
-                                </Box>
-                                <Typography variant="body2" sx={{ fontSize: 14 }}>
-                                  {flightDetails?.Results?.Segments?.[0]?.StopCount ||
-                                    0}{" "}
-                                  Stops ·{" "}
-                                  {flightDetails?.Results?.Segments?.[0]?.Duration ||
-                                    "N/A"}
-                                </Typography>
-                              </Box>
-                            </>
-                          );
-                        })}
-                      </Box>
-                    </Box> */}
+                 
 
                     {/* Card Section start */}
                     <Card sx={{ padding: '20px', marginBottom: "20px" }}>

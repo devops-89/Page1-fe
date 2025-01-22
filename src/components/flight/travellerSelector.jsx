@@ -144,7 +144,10 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
             borderRadius: 6,
             width: 80,
           }}
-          onClick={() => setAnchorEl(null)}
+          onClick={() =>{ 
+            setAnchorEl(null)
+             localStorage.setItem("state",JSON.stringify(state));
+          }}
         >
           Apply
         </Button>
