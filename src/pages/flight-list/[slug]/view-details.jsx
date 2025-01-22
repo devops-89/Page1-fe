@@ -158,7 +158,7 @@ const FlightDetails = () => {
                             Varanasi → Dubai
                           </Typography>
                           <Typography variant="subtitle1" gutterBottom sx={{ marginBottom: "10px" }}>
-                            <span style={{ backgroundColor: "#FFEDD1", padding: '5px', borderRadius: '4px', fontFamily: nunito.style }}>Wednesday, Jan 22 1</span> Stop. 18h:45m
+                            <span style={{ backgroundColor: "#FFEDD1", padding: '5px', borderRadius: '4px', fontFamily: nunito.style }}>Wednesday, Jan 22</span>   1 Stop. 18h:45m
                           </Typography>
                         </Grid2>
                         <Grid2 size={{ xs: 4 }} sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>

@@ -46,10 +46,10 @@ const FlightListBox = ({ details, traceId }) => {
   };
 
   useEffect(() => {
-    let cabinData = data.FLIGHT_CLASS_DATA.filter((fligtClass) => {
+    let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
       return fligtClass.value == flightDetails?.departure[0]?.CabinClass;
     });
-    setCabin(cabinData[0].label);
+    setCabin(cabinData.label);
   }, []);
 
   return (
