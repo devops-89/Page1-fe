@@ -13,7 +13,7 @@ const FareDetails = ({ tableData }) => {
         *From The Date Of Departure
       </Typography>
     </Card>
-  );
+  );  
 };
 
 export default FareDetails;

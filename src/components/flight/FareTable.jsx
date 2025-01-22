@@ -43,7 +43,18 @@ const FareTable = ({ tableHead, tableData }) => {
                       fontFamily: nunito.style,
                     }}
                   >
-                    {tableData.TotalFare}
+                    {tableData.TotalFare} {tableData.Currency}
+                  </Typography>
+                </TableCell>
+                <TableCell >
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 500,
+                      fontFamily: nunito.style,
+                    }}
+                  >
+                    {tableData.Tax} {tableData.Currency}
                   </Typography>
                 </TableCell>
          
