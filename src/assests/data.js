@@ -769,6 +769,9 @@ export const data = {
     {
       label: "Total Fare"
     },
+    {
+      label: "Tax"
+    },
   ],
   fightFareData: [
     {
@@ -811,6 +814,7 @@ export const data = {
       value2: "	$16,325 + $250",
     },
   ],
+  
   FLIGHT_CLASS_DATA: [
     {
       label: FLIGHT_CLASS.ALL,

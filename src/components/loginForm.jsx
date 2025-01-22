@@ -1,7 +1,7 @@
 import { authenticationController } from "@/api/auth";
 import { setToast } from "@/redux/reducers/toast";
 import { setUserDetails } from "@/redux/reducers/user";
-import { COLORS } from "@/utils/colors";
+import { COLORS } from "@/utils/colors";    
 import { TOAST_STATUS } from "@/utils/enum";
 import { nunito } from "@/utils/fonts";
 import { loginTextField } from "@/utils/styles";

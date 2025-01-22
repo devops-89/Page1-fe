@@ -42,6 +42,7 @@ const FlightList = () => {
     setPriceRange(newValue);
   };
 
+
   return (
     <>
       <InnerBanner img={banner.src} heading={"Flight"} />

@@ -14,23 +14,12 @@ const BaggageDetails = ({ tableData }) => {
         <Typography
           sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
         >
-         {tableData.departure[0].Airline.AirlineName}
+         {`${tableData.departure[0].Airline.AirlineName} Airline (${tableData.departure[0].Airline.AirlineCode} ${tableData.departure[0].Airline.FlightNumber})`}
         </Typography>
       </Stack>
       <Divider />
       <Box>
         <BaggageTable tableHead={data.flightBaggageHead} tableData={tableData} />
-        <Typography
-          sx={{
-            px: 1,
-            fontSize: 12,
-            p: 1,
-            fontFamily: nunito.style,
-            fontWeight: 550,
-          }}
-        >
-          *1PC = 23KG
-        </Typography>
       </Box>
     </Card>
   );
