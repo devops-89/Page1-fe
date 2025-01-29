@@ -47,11 +47,13 @@ const FlightListBox = ({ details, traceId }) => {
 
   useEffect(() => {
     let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
+      console.log("api cabinData",flightDetails?.departure[0]?.CabinClass)
       return fligtClass.value == flightDetails?.departure[0]?.CabinClass;
     });
     setCabin(cabinData.label);
-  }, []);
+  }, [flightDetails, data.FLIGHT_CLASS_DATA]);
 
+  // console.log("himanshu",cabin);
   return (
     <div>
       <Card sx={{ boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)", p: 2 }}>

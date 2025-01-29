@@ -160,10 +160,10 @@ const OnewayForm = ({ onSubmit }) => {
 
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      console.log(val.value == state.cabin_class);
+      // console.log(val.value == state.cabin_class);
       return val.value == state.cabin_class;
     });
-    console.log("cabin class", cabinClass);
+    // console.log("cabin class", cabinClass);
 
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
