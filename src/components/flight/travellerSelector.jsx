@@ -18,6 +18,7 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
   const [adultValue, setAdultValue] = useState(1);
   const [childValue, setChildValue] = useState(0);
   const [infantValue, setInfantValue] = useState(0);
+  const [initialValue,setIntialValue]=useState({adult:adultValue,child:childValue,infant:infantValue});
   const adultIncreaseCounter = () => {
     setState({ ...state, adult: adultValue + 1 });
     setAdultValue(adultValue + 1);
@@ -68,6 +69,7 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
               setValue={setAdultValue}
               onIncrease={adultIncreaseCounter}
               onDecrease={adultDecreaseCounter}
+              initialValue={initialValue.adult}
             />
           </Grid2>
           <Grid2 size={4}>
@@ -77,6 +79,7 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
               setValue={setChildValue}
               onIncrease={childIncreaseCounter}
               onDecrease={childDecreaseCounter}
+              initialValue={initialValue.child}
             />
           </Grid2>
           <Grid2 size={4}>
@@ -86,6 +89,7 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
               setValue={setInfantValue}
               onIncrease={infantIncreaseCounter}
               onDecrease={infantDecreaseCounter}
+              initialValue={initialValue.infant}
             />
           </Grid2>
         </Grid2>
