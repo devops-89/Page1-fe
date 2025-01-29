@@ -9,6 +9,7 @@ const TravellorCounter = ({
   setValue,
   onIncrease,
   onDecrease,
+  initialValue
 }) => {
   // const increaseCounter = () => {
   //   setValue(value + 1);
@@ -40,7 +41,7 @@ const TravellorCounter = ({
             // width
           }}
           onClick={onDecrease}
-          disabled={value === 1}
+          disabled={value === initialValue}
         >
           <Remove sx={{ fontSize: 20 }} />
         </IconButton>

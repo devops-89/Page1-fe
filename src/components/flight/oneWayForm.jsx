@@ -170,7 +170,7 @@ const OnewayForm = ({ onSubmit }) => {
 
   return (
     <div>
-      {console.log("cabin class:", cabin_class)};
+      {console.log("cabin class:", cabin_class)}
       <Grid2 container alignItems={"center"}>
         <Grid2
           size={2.4}
