@@ -154,7 +154,7 @@ const HotelList = () => {
             >
               {data.hotelName.map((val, i) => (
                 <Grid2 size={{ xs: 6 }} key={i}>
-                <Link href={`/hotel-list/${i}/hotel-details`}>
+                <Link href={`/hotel-list/${i}/hotel-details`} style={{textDecoration:"none"}}>
                   <HotelCard
                     img={val.img}
                     hotelName={val.hotelName}
