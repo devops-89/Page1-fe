@@ -458,7 +458,7 @@ const hotelSummary = () => {
                                 </Grid2>
 
                                 <Grid2 size={{xs:12}}>
-                                    <Button variant="contained" sx={{backgroundColor:COLORS.PRIMARY}} type="submit">
+                                    <Button variant="text" sx={{backgroundColor:COLORS.PRIMARY}} type="submit">
                                         Add New Guest
                                     </Button>
                                 </Grid2>
