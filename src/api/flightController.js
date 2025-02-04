@@ -26,5 +26,17 @@ export const flightController = {
     catch(error){
       throw Error;
     }
-  }
-};
+  },
+
+  roundTrip:async(data)=>{
+    try{
+     let result=await flightPublicApi.post("/flight/search-flight",data);
+    //  console.log("result",result);
+     return result;
+    }
+    catch(error){
+      throw Error;
+    }
+}
+
+}

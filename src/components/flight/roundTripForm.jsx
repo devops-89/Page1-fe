@@ -1,7 +1,7 @@
 import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
-import {useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import {
   Autocomplete,
@@ -17,14 +17,27 @@ import {
 
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
+import { useRouter } from "next/router";
 
 import TravellerSelector from "./travellerSelector";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
+import { flightController } from "@/api/flightController";
+import VirtualList from "./fixedSizeList";
+import { customFilter } from "@/utils/regex";
+import ToastBar from "../toastBar";
+import { useDispatch } from "react-redux";
+import { setToast } from "@/redux/reducers/toast";
+import Loading from "react-loading";
+import { setFlightDetails } from "@/redux/reducers/flightInformation";
 
 const RoundTrip = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [airportList, setAirportList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
   const open = Boolean(anchorEl);
   const openPopover = (e) => {
     setAnchorEl(e.currentTarget);
@@ -38,7 +51,7 @@ const RoundTrip = () => {
     origin: "",
     destination: "",
     departure_date: "",
-    return_date:"",
+    return_date: "",
     cabin_class: "1",
     adult: 1,
     child: 0,
@@ -53,11 +66,14 @@ const RoundTrip = () => {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [departureDate, setDepartureDate] = useState(null);
-  const [returnDate,setReturnDate]=useState(null);
+  const [returnDate, setReturnDate] = useState(null);
   const [cabin_class, setCabinClass] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const dispatch = useDispatch();
 
   // fields change handler
   const originhandler = (e, newValue) => {
+    // console.log("origin ", newValue);
     setOrigin(newValue);
     if (newValue) {
       setState({ ...state, origin: newValue.iata_code });
@@ -92,13 +108,86 @@ const RoundTrip = () => {
     }
   };
 
+  const getAllAirport = () => {
+    flightController
+      .getAllAirports()
+      .then((res) => {
+        let response = res.data.data;
+        setAirportList(response);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+
+  const searchFlight = () => {
+    setButtonLoading(true);
+    flightController
+      .roundTrip(state)
+      .then((res) => {
+        // console.log("res", res);
+        let response = res.data.data;
+        dispatch(setFlightDetails({ ...response }));
+        console.log("response ", response)
+        localStorage.setItem("roundflightData", JSON.stringify(response));
+        setButtonLoading(false);
+        router.push("/round-list");
+      })
+      .catch((err) => {
+        // console.log("first", err);
+        let errMessage =
+          (err.response && err.response.data.message) || err.message;
+        dispatch(
+          setToast({
+            open: true,
+            message: errMessage,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+        setButtonLoading(false);
+      });
+  };
+
+
+
+
+
+
+
+
+  const submitHandler = () => {
+    const emptyFields = Object.keys(state).filter(
+      (key) =>
+        state[key] === "" || state[key] === null || state[key] === undefined
+    );
+
+    if (emptyFields.length > 0) {
+      dispatch(
+        setToast({
+          open: true,
+          message: `Please Enter the Required Fields : ${emptyFields}`,
+          severity: TOAST_STATUS.ERROR,
+        })
+      );
+    } else {
+      searchFlight();
+    }
+  };
+
+  useEffect(() => {
+    getAllAirport();
+    fetchApi();
+  }, []);
+
   // setting cabin_class
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      console.log(val.value == state.cabin_class);
+      // console.log(val.value == state.cabin_class);
       return val.value == state.cabin_class;
     });
-    console.log("cabin class", cabinClass);
+    // console.log("cabin class", cabinClass);
 
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
@@ -112,6 +201,7 @@ const RoundTrip = () => {
 
   return (
     <div>
+      {/* {console.log("cabin class:", cabin_class)} */}
       <Grid2 container alignItems={"center"}>
         <Grid2
           size={2}
@@ -147,9 +237,13 @@ const RoundTrip = () => {
             )}
             onChange={originhandler}
             value={origin}
-            options={data.airportData}
-
-            getOptionLabel={(option) => option.primary}
+            ListboxComponent={VirtualList}
+            loading={loading}
+            filterOptions={customFilter}
+            options={airportList}
+            getOptionLabel={(option) =>
+              `${option.airport_name} (${option.iata_code}) - ${option.city_name}`
+            }
             renderOption={(props, option) => (
               <Box {...props}>
                 <Stack
@@ -168,7 +262,7 @@ const RoundTrip = () => {
                         textAlign: "start",
                       }}
                     >
-                      {option.primary}
+                      {option.city_name}
                     </Typography>
 
                     <Typography
@@ -179,12 +273,13 @@ const RoundTrip = () => {
                         color: COLORS.DARKGREY,
                       }}
                     >
-                      {option.secondary}
+                      {option.airport_name}
                     </Typography>
                   </Box>
                 </Stack>
               </Box>
             )}
+            disableListWrap
           />
         </Grid2>
         <Grid2
@@ -221,8 +316,13 @@ const RoundTrip = () => {
             )}
             onChange={destinationHandler}
             value={destination}
-            options={data.airportData}
-            getOptionLabel={(option) => option.primary}
+            ListboxComponent={VirtualList}
+            filterOptions={customFilter}
+            loading={loading}
+            options={airportList}
+            getOptionLabel={(option) =>
+              `${option.airport_name} (${option.iata_code}) - ${option.city_name}`
+            }
             renderOption={(props, option) => (
               <Box {...props}>
                 <Stack
@@ -241,7 +341,7 @@ const RoundTrip = () => {
                         textAlign: "start",
                       }}
                     >
-                      {option.primary}
+                      {option.city_name}
                     </Typography>
 
                     <Typography
@@ -252,7 +352,7 @@ const RoundTrip = () => {
                         color: COLORS.DARKGREY,
                       }}
                     >
-                      {option.secondary}
+                      {option.airport_name}
                     </Typography>
                   </Box>
                 </Stack>
@@ -260,6 +360,7 @@ const RoundTrip = () => {
             )}
           />
         </Grid2>
+
         <Grid2
           size={2}
           sx={{
@@ -286,19 +387,14 @@ const RoundTrip = () => {
                 fieldset: {
                   border: "none",
                 },
-                label: {
-                  fontSize: 14,
-                  fontFamily: nunito.style,
-                },
               }}
               disablePast
               onChange={departureDateHandler}
               value={departureDate}
-              format="DD-MM-YYYY"
-              //   label="Select Departure Date"
             />
           </LocalizationProvider>
         </Grid2>
+
         <Grid2
           size={2}
           sx={{
@@ -317,7 +413,7 @@ const RoundTrip = () => {
               pt: 1,
             }}
           >
-            Return
+            Return Date
           </Typography>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
@@ -325,41 +421,14 @@ const RoundTrip = () => {
                 fieldset: {
                   border: "none",
                 },
-                label: {
-                  fontSize: 14,
-                  fontFamily: nunito.style,
-                },
               }}
+              disablePast
               onChange={returnDateHandler}
               value={returnDate}
-              disablePast
-              format="DD-MM-YYYY"
-              //   label="Select Return Date"
             />
           </LocalizationProvider>
         </Grid2>
-        {/* <Grid2
-          size={4}
-          sx={{
-            border: "1px solid #808080",
-            height:90,
-            position: "relative",
-            borderRight: "none",
-          }}
-        >
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DemoContainer components={["DateRangePicker"]}>
-              <DateRangePicker
-                localeText={{ start: "Departure", end: "Return" }}
-                sx={{
-                  fieldset: {
-                    border: "none",
-                  },
-                }}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-        </Grid2> */}
+
         <Grid2
           size={2}
           sx={{
@@ -373,7 +442,7 @@ const RoundTrip = () => {
         >
           <Typography
             sx={{
-              fontSize: 13,
+              fontSize: 15,
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
@@ -421,6 +490,7 @@ const RoundTrip = () => {
           </Popover>
           {/* popover end */}
         </Grid2>
+
         <Grid2 size={2} textAlign={"center"}>
           <Button
             sx={{
@@ -429,11 +499,22 @@ const RoundTrip = () => {
               width: 150,
               p: 2,
             }}
+            onClick={submitHandler}
           >
-            Search
+            {buttonLoading ? (
+              <Loading
+                type="bars"
+                width={20}
+                height={20}
+                color={COLORS.WHITE}
+              />
+            ) : (
+              "Search"
+            )}
           </Button>
         </Grid2>
       </Grid2>
+      <ToastBar />
     </div>
   );
 };

@@ -34,7 +34,8 @@ const FlightBox = ({ tableData }) => {
             <Card sx={{ p: 1, mt: 2 }}>
                 <TableContainer>
                     <Table>
-                        {tableData?.departure.map((intermediate, index) => (
+
+                        {tableData?.map((intermediate, index) => (
                             <TableRow
                                 key={index}
                                 aria-owns={open ? "mouse-over-popover" : undefined}

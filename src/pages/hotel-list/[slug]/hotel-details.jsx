@@ -444,7 +444,7 @@ const HotelDetails = () => {
                   size={{ xs: 3 }}
                   sx={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  <Button variant="text" sx={{ fontFamily: nunito.style }}>
+                  <Button variant="text" sx={{ fontWeight:700, fontFamily:nunito.style }}>
                     see all
                   </Button>
                 </Grid2>

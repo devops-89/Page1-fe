@@ -57,9 +57,11 @@ const OnewayForm = ({ onSubmit }) => {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [departureDate, setDepartureDate] = useState(null);
+
   const router = useRouter();
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
+    // console.log("one way ",newValue)
     if (newValue) {
       setState({ ...state, origin: newValue.iata_code });
     }
@@ -160,7 +162,7 @@ const OnewayForm = ({ onSubmit }) => {
 
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      // console.log(val.value == state.cabin_class);
+      // console.log(val.value == state.cabin_class)
       return val.value == state.cabin_class;
     });
     // console.log("cabin class", cabinClass);
@@ -170,7 +172,7 @@ const OnewayForm = ({ onSubmit }) => {
 
   return (
     <div>
-      {console.log("cabin class:", cabin_class)}
+      {/* {console.log("cabin class:", cabin_class)} */}
       <Grid2 container alignItems={"center"}>
         <Grid2
           size={2.4}

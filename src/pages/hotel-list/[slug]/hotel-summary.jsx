@@ -279,7 +279,7 @@ const hotelSummary = () => {
                                         Robusta
                                     </Typography>
                                     <Button
-                                        sx={{ position: "absolute", top: "10px", right: "10px" }}
+                                        sx={{ position: "absolute", top: "10px", right: "10px", fontWeight:700, fontFamily:nunito.style }}
                                         onClick={handleClickOpen}
                                     >
                                         See Inclusions
@@ -343,7 +343,7 @@ const hotelSummary = () => {
                                             </Typography>
                                         </ListItem>
                                     </List>
-                                    <Button onClick={handleClickOpen}>
+                                    <Button sx={{fontWeight:700, fontFamily:nunito.style}} onClick={handleClickOpen}>
                                         Cancellation policy details
                                     </Button>
                                     <Divider sx={{ my: 3 }} />
@@ -389,7 +389,7 @@ const hotelSummary = () => {
                                     <Divider sx={{ my: 3 }} />
                                 <Typography
                                         variant="h6"
-                                        sx={{ fontFamily: nunito.style, fontWeight: 700, mb:'10px' }}
+                                        sx={{ fontWeight:700, fontFamily:nunito.style, mb:'10px' }}
                                     >
                                         Add New Guest
                                     </Typography>
@@ -458,7 +458,7 @@ const hotelSummary = () => {
                                 </Grid2>
 
                                 <Grid2 size={{xs:12}}>
-                                    <Button variant="text" sx={{backgroundColor:COLORS.PRIMARY}} type="submit">
+                                    <Button variant="text" sx={{fontWeight:700}} type="submit">
                                         Add New Guest
                                     </Button>
                                 </Grid2>
