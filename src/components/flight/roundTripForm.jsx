@@ -133,7 +133,9 @@ const RoundTrip = () => {
         console.log("response ", response)
         localStorage.setItem("roundflightData", JSON.stringify(response));
         setButtonLoading(false);
-        router.push("/round-list");
+        router.pathname !== "/round-list"
+        ? router.push("/round-list")
+        : window.location.reload();
       })
       .catch((err) => {
         // console.log("first", err);

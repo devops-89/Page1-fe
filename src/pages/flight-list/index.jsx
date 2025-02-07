@@ -32,7 +32,7 @@ const FlightList = () => {
       setTimeout(() => {
         setFlightList(JSON.parse(localStorage.getItem("flightData")));
         setTraceId(JSON.parse(localStorage.getItem("flightData")).trace_id);
-      }, 1500);
+      }, 3000);
     }
   }, []);
 
@@ -42,6 +42,7 @@ const FlightList = () => {
     setPriceRange(newValue);
   };
 
+  // console.log("dfdf", flightList);
 
   return (
     <>
@@ -51,7 +52,7 @@ const FlightList = () => {
         <Container>
           <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
             <Typography sx={{ fontSize: 18 }}> Search Flight</Typography>
-            <FlightForm />
+            <FlightForm/>
           </Card>
         </Container>
       </Box>
@@ -191,7 +192,7 @@ const FlightList = () => {
             display: "flex",
             justifyContent: "center",
             marginTop: "50px",
-            marginBottom:"50px"
+            marginBottom: "50px",
           }}
         >
           <Loading type="bars" width={50} height={50} color={COLORS.PRIMARY} />
