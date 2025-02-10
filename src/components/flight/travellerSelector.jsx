@@ -15,10 +15,15 @@ import { useState } from "react";
 import TravellorCounter from "./travellorCounter";
 
 const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
+
   const [adultValue, setAdultValue] = useState(1);
   const [childValue, setChildValue] = useState(0);
   const [infantValue, setInfantValue] = useState(0);
-  const [initialValue,setIntialValue]=useState({adult:adultValue,child:childValue,infant:infantValue});
+  const [initialValue, setIntialValue] = useState({
+    adult: adultValue,
+    child: childValue,
+    infant: infantValue,
+  });
   const adultIncreaseCounter = () => {
     setState({ ...state, adult: adultValue + 1 });
     setAdultValue(adultValue + 1);
@@ -47,6 +52,12 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
   const flightClassHandler = (e) => {
     setState({ ...state, cabin_class: e.target.value });
   };
+
+
+
+  
+
+
 
   return (
     <div>
@@ -148,9 +159,8 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
             borderRadius: 6,
             width: 80,
           }}
-          onClick={() =>{ 
-            setAnchorEl(null)
-             localStorage.setItem("state",JSON.stringify(state));
+          onClick={() => {
+            setAnchorEl(null);
           }}
         >
           Apply

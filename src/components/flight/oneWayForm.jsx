@@ -29,7 +29,8 @@ import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
 import { useRouter } from "next/router";
 
-const OnewayForm = ({ onSubmit }) => {
+const OnewayForm = () => {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const openPopover = (e) => {
@@ -41,7 +42,11 @@ const OnewayForm = ({ onSubmit }) => {
     journey_type: JOURNEY_TYPE.ONEWAY,
     preferred_time: PREFERRED_TIME.AnyTime,
     origin: "",
+    originAirport : "",
+    originCity : "",
     destination: "",
+    destinationAirport:"",
+    destinationCity:"",
     departure_date: "",
     cabin_class: "1",
     adult: 1,
@@ -53,23 +58,33 @@ const OnewayForm = ({ onSubmit }) => {
 
   const [state, setState] = useState(initialState);
 
+  const [newFormData, setNewFormData] = useState(null);
+
+
+  useEffect(() => {
+    if (localStorage.getItem("state")) {
+      // console.log(localStorage.getItem("state"));
+      setNewFormData(JSON.parse(localStorage.getItem("state")));
+    }
+  }, []);
+
   const dispatch = useDispatch();
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [departureDate, setDepartureDate] = useState(null);
 
-  const router = useRouter();
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
-    // console.log("one way ",newValue)
+    // console.log(newValue);
     if (newValue) {
-      setState({ ...state, origin: newValue.iata_code });
+      setState({ ...state, origin: newValue.iata_code, originAirport : newValue.airport_name, originCity:newValue.city_name });
     }
   };
   const destinationHandler = (e, newValue) => {
+    
     setDestination(newValue);
     if (newValue) {
-      setState({ ...state, destination: newValue.iata_code });
+      setState({ ...state, destination: newValue.iata_code, destinationAirport : newValue.airport_name, destinationCity:newValue.city_name });
     }
   };
 
@@ -118,7 +133,9 @@ const OnewayForm = ({ onSubmit }) => {
         dispatch(setFlightDetails({ ...response }));
         localStorage.setItem("flightData", JSON.stringify(response));
         setButtonLoading(false);
-        router.push("/flight-list");
+        router.pathname !== "/flight-list"
+          ? router.push("/flight-list")
+          : window.location.reload();
       })
       .catch((err) => {
         // console.log("first", err);
@@ -135,7 +152,11 @@ const OnewayForm = ({ onSubmit }) => {
       });
   };
 
+
+
+
   const submitHandler = () => {
+    
     const emptyFields = Object.keys(state).filter(
       (key) =>
         state[key] === "" || state[key] === null || state[key] === undefined
@@ -150,7 +171,9 @@ const OnewayForm = ({ onSubmit }) => {
         })
       );
     } else {
+      localStorage.setItem("state",JSON.stringify(state));
       searchFlight();
+      
     }
   };
 
@@ -162,13 +185,24 @@ const OnewayForm = ({ onSubmit }) => {
 
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      // console.log(val.value == state.cabin_class)
       return val.value == state.cabin_class;
     });
-    // console.log("cabin class", cabinClass);
 
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
+
+
+
+    useEffect(() => {
+      if(router.pathname==='/flight-list'){
+      if (newFormData) {
+        setOrigin({ airport_name: newFormData.originAirport, city_name:newFormData.originCity, iata_code:newFormData.origin});
+        setDestination({ airport_name: newFormData.destinationAirport, city_name:newFormData.destinationCity, iata_code:newFormData.destination});
+        setDepartureDate(moment(newFormData.departure_date));
+      }
+    }
+    }, [newFormData]);
+  
 
   return (
     <div>
@@ -421,6 +455,7 @@ const OnewayForm = ({ onSubmit }) => {
               initialState={initialState}
               state={state}
               setState={setState}
+              newFormData={newFormData}
             />
           </Popover>
           {/* popover end */}
