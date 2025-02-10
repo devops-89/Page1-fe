@@ -93,3 +93,19 @@ export const pancard = Yup.object({
     });
   };
   
+
+  export const helicopter = Yup.object().shape({
+    fullName: Yup.string().required("Full Name is required"),
+    mobile: Yup.string()
+      .matches(/^\d{10}$/, "Mobile number must be 10 digits")
+      .required("Mobile number is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    from: Yup.string().required("From location is required"),
+    to: Yup.string().required("To location is required"),
+    date: Yup.date().required("Date is required"),
+    time: Yup.string().required("Time is required"),
+    adults: Yup.number().min(1, "At least 1 adult required").required("Number of adults is required"),
+    children: Yup.number().min(0, "Cannot be negative").required("Number of children is required"),
+    message: Yup.string(),
+    terms: Yup.boolean().oneOf([true], "You must accept the Terms and Conditions"),
+  });
