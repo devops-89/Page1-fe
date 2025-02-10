@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Grid2 from "@mui/material/Grid2";
+import FullScreenDialog from "@/components/flight/seats/FullScreenDiaog";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
@@ -737,6 +738,8 @@ const FlightDetails = () => {
                         </Box>
                       ) : null}
 
+                    
+
                       {/* GST  */}
 
                       {flightDetails?.Results?.GSTAllowed ? (
@@ -839,10 +842,12 @@ const FlightDetails = () => {
                         </Box>
                       ) : null}
                     </Grid2>
+                    
                   </Paper>
                   <Button variant="contained" onClick={()=>{console.log("myForms",forms)}} size="large" sx={{backgroundColor:COLORS.PRIMARY}}>
                       Continue
                   </Button>
+                  <FullScreenDialog />
                 </Grid2>
 
                 {/* Fare Summary */}
