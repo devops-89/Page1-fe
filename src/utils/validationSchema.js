@@ -109,3 +109,12 @@ export const pancard = Yup.object({
     message: Yup.string(),
     terms: Yup.boolean().oneOf([true], "You must accept the Terms and Conditions"),
   });
+
+
+  export const holidayPackageSchema = Yup.object({
+    destination: Yup.string().required('Destination is required'),
+    duration: Yup.string().required('Duration is required'),
+    month: Yup.string().required('Month is required'),
+    packagetype: Yup.string().required('Package Type is required'),
+    packagecategory: Yup.string().required('Package Category is required'),
+  });

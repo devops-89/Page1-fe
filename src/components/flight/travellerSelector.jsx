@@ -13,17 +13,25 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import TravellorCounter from "./travellorCounter";
+import { useRouter } from "next/router";
 
-const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
+const TravellerSelector = ({
+  setAnchorEl,
+  setState,
+  state,
+  adultValue,
+  setAdultValue,
+  infantValue,
+  setInfantValue,
+  childValue,
+  setChildValue,
+  initialValue,
+  setIntialValue,
+  newFormData,
+  defaultRoute
+}) => {
 
-  const [adultValue, setAdultValue] = useState(1);
-  const [childValue, setChildValue] = useState(0);
-  const [infantValue, setInfantValue] = useState(0);
-  const [initialValue, setIntialValue] = useState({
-    adult: adultValue,
-    child: childValue,
-    infant: infantValue,
-  });
+  const router = useRouter();
   const adultIncreaseCounter = () => {
     setState({ ...state, adult: adultValue + 1 });
     setAdultValue(adultValue + 1);
@@ -52,12 +60,6 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
   const flightClassHandler = (e) => {
     setState({ ...state, cabin_class: e.target.value });
   };
-
-
-
-  
-
-
 
   return (
     <div>
@@ -111,14 +113,14 @@ const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
         >
           Travellers
         </Typography>
-        <RadioGroup row value={state.cabin_class}>
+        <RadioGroup row value={(router.pathname==defaultRoute && newFormData) ? newFormData.cabin_class : state.cabin_class}>
           {data.FLIGHT_CLASS_DATA.map((val, i) => (
             <FormControlLabel
               value={val.value}
               control={
                 <Radio
-                  defaultChecked={state.cabin_class}
-                  defaultValue={state.cabin_class}
+                  defaultChecked={(router.pathname==defaultRoute && newFormData) ? newFormData.cabin_class : state.cabin_class}
+                  defaultValue={(router.pathname==defaultRoute && newFormData) ? newFormData.cabin_class : state.cabin_class}
                   onChange={flightClassHandler}
                 />
               }

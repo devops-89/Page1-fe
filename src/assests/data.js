@@ -115,7 +115,7 @@ export const data = {
     {
       img: packages,
       title: "holiday packages",
-      url: "/holiday-packages",
+      url: "/packages",
     },
     {
       img: cabs,
