@@ -26,13 +26,20 @@ import RoundFlightListBox from "@/components/flight/roundFlightListBox";
 import { nunito } from "@/utils/fonts";
 import InternationalRoundFlightBox from "@/components/flight/internationalRoundFlightBox";
 import moment from "moment";
+import { useRouter } from "next/router";
 const FlightList = () => {
+
+  const router = useRouter();
   const [flightList, setFlightList] = useState(null);
   const [traceId, setTraceId] = useState("");
   const [priceRange, setPriceRange] = useState([500, 2000]);
 
   const [selectedDeparture, setSelectedDeparture] = useState(null);
   const [selectedArrival, setSelectedArrival] = useState(null);
+
+  // const [flightDetails, setFlightDetails] = useState();
+
+  // flightList.map((val)=>)
 
   useEffect(() => {
     if (localStorage.getItem("roundflightData")) {
@@ -61,10 +68,8 @@ const FlightList = () => {
   const handleFlightSelection = (type, flight) => {
     if (type === "departure") {
       setSelectedDeparture(flight);
-      console.log("depature", flight);
     } else if (type === "arrival") {
       setSelectedArrival(flight);
-      console.log("arrival", flight);
     }
   };
 
@@ -197,6 +202,9 @@ const FlightList = () => {
               {/* filter card end */}
             </Grid2>
 
+
+
+            {/* Round Flight List Data Domestic and International  */}
             {flightList?.type === "INTERNATIONAL" ? (
               <Grid2 size={9} container>
                 <Grid2 size={12}>
@@ -230,10 +238,10 @@ const FlightList = () => {
                       <InternationalRoundFlightBox
                         details={val}
                         traceId={traceId}
+                        journey={flightList?.type}
                       />
                     </Grid2>
                   ))}
-                  <InternationalRoundFlightBox />
                 </Grid2>
               </Grid2>
             ) : (
@@ -346,6 +354,15 @@ const FlightList = () => {
         </Box>
       )}
 
+
+
+
+
+
+
+
+
+      {/* Footer Flight Detail section  */}
       {flightList?.type === "DOMESTIC" ? (
         <Grid2 container sx={{ position: "fixed", bottom: "0", width: "100%" }}>
           <Grid2 size={3}></Grid2>
@@ -518,10 +535,12 @@ const FlightList = () => {
                 }}
                 onClick={() => {
                   router.push({
-                    pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
+                    pathname: `/round-list/${flightDetails?.AirlineCode}/view-details`,
                     query: {
                       ResultIndex: flightDetails?.ResultIndex,
                       traceId: traceId,
+                      journey : flightList?.type
+
                     },
                   });
                 }}
@@ -529,6 +548,7 @@ const FlightList = () => {
                 Book Now
               </Button>
             </Grid2>
+
           </Grid2>
         </Grid2>
       ) : (

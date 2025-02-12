@@ -28,7 +28,7 @@ import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
 import FlightBox from "./FlightBox";
 
-const InternationalRoundFlightBox = ({ details, traceId }) => {
+const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
     const router = useRouter();
 
     const [openLeft, setOpenLeft] = useState(false);
@@ -54,13 +54,9 @@ const InternationalRoundFlightBox = ({ details, traceId }) => {
     const tabChangeHandlerRight = (e, newValue) => {
         setValueRight(newValue);
     };
-    //   console.log("RoundData ", flightDetails)
 
     useEffect(() => {
         let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
-
-            // console.log("api cabinData",flightDetails?.departure[0]?.CabinClass)
-
             return fligtClass.value == flightDetails?.departure[0]?.CabinClass;
         });
         setCabin(cabinData?.label);
@@ -95,7 +91,6 @@ const InternationalRoundFlightBox = ({ details, traceId }) => {
                     <Typography
                         sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
                     >
-                        {/* Travel Class: {flightDetails?.departure[0].CabinClass} */}
                         Travel Class : {cabin ? cabin : undefined}
                     </Typography>
                 </Stack>
@@ -461,10 +456,11 @@ const InternationalRoundFlightBox = ({ details, traceId }) => {
                             }}
                             onClick={() => {
                                 router.push({
-                                    pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
+                                    pathname: `/round-list/${flightDetails?.AirlineCode}/view-details`,
                                     query: {
                                         ResultIndex: flightDetails?.ResultIndex,
                                         traceId: traceId,
+                                        journey:journey
                                     },
                                 });
                             }}

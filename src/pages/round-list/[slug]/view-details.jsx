@@ -23,19 +23,18 @@ import {
   TableBody,
   TextField,
 } from "@mui/material";
-import Image from "next/image";
 import { flightController } from "@/api/flightController";
 import TravellerForm from "@/components/flight/TravellerForm";
 import { data } from "../../../assests/data";
 import { useRouter } from "next/router";
 import FareSummary from "@/components/flight/FareSummary";
-import moment from "moment";
 import { nunito } from "@/utils/fonts";
-import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
 import { useFormik } from "formik";
 import { gstForm, pancard, passport } from "@/utils/validationSchema";
+import { JOURNEY, JOURNEY_TYPE } from "@/utils/enum";
+import DomesticDetail from "@/components/flight/domesticDetail";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -55,14 +54,10 @@ const FlightDetails = () => {
   const [open, setOpen] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+
   const handleClose = () => {
     setOpen(false);
   };
-
-
 
   const formikPancard = useFormik({
     initialValues: {
@@ -95,30 +90,34 @@ const FlightDetails = () => {
   });
 
   useEffect(() => {
-    if (localStorage.getItem("state")) {
-      setFormState(JSON.parse(localStorage.getItem("state")));
+    if (localStorage.getItem("roundState")) {
+      setFormState(JSON.parse(localStorage.getItem("roundState")));
     }
   }, []);
 
-
-
   useEffect(() => {
-    if (router.query.ResultIndex && router.query.traceId) {
+    if (router.query.ResultIndex && router.query.traceId && router.query.journey) {
+      const body = {
+        ip_address: JSON.parse(localStorage.getItem("roundState")).ip_address,
+        journey_type: JOURNEY_TYPE.ROUNDTRIP,
+      };
+
       flightController
-        .flightDetails({
+        .roundflightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: "122.160.31.42",
-          journey_type: "ONEWAY",
-          journey: "DOMESTIC",
+          ip_address: body.ip_address,
+          journey_type: body.journey_type,
+          journey: router.query.journey,
         })
         .then((response) => {
           setIsGSTMandatory(
             response.data.data.Response?.ResultIndex?.IsGSTMandatory
           );
+          console.log("roundTrip", response.data.data);
           localStorage.setItem(
-            "oneWayflightDetails",
-            JSON.stringify(response.data.data.Response)
+            "roundTripflightDetails",
+            JSON.stringify(response.data.data)
           );
         })
         .catch((error) => {
@@ -131,11 +130,11 @@ const FlightDetails = () => {
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
-      JSON.parse(localStorage.getItem("oneWayflightDetails"))
+      JSON.parse(localStorage.getItem("roundTripflightDetails"))
     ) {
       setTimeout(() => {
         setFlightDetails(
-          JSON.parse(localStorage.getItem("oneWayflightDetails"))
+          JSON.parse(localStorage.getItem("roundTripflightDetails"))
         );
       }, 3000);
     }
@@ -174,7 +173,6 @@ const FlightDetails = () => {
     }
   };
 
-  // console.log("router", flightDetails?.Results?.Segments);
 
   return (
     <>
@@ -236,281 +234,11 @@ const FlightDetails = () => {
                       padding: 2,
                       backgroundColor: "#F4F4F4",
                       marginBottom: 2,
+                      position:'relative'
                     }}
                   >
-                    {/* Card Section start */}
-                    <Card sx={{ padding: "20px", marginBottom: "20px" }}>
-                      <Grid2 container>
-                        <Grid2 size={{ xs: 8 }}>
-                          <Typography
-                            variant="h6"
-                            gutterBottom
-                            sx={{
-                              fontFamily: nunito.style,
-                              fontSize: "20px",
-                              fontWeight: 700,
-                            }}
-                          >
-                            {`${flightDetails?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
-                            →{" "}
-                            {`${
-                              flightDetails?.Results?.Segments[0][
-                                flightDetails?.Results?.Segments[0].length - 1
-                              ]?.Destination?.Airport?.CityName
-                            }`}
-                          </Typography>
-                          <Typography
-                            variant="subtitle1"
-                            gutterBottomx
-                            sx={{ marginBottom: "10px" }}
-                          >
-                            <span
-                              style={{
-                                backgroundColor: "#FFEDD1",
-                                padding: "5px",
-                                borderRadius: "4px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              {moment(
-                                `${flightDetails?.Results?.Segments[0][0].Origin.DepTime}`
-                              ).format("ddd, MMM D")}
-                            </span>{" "}
-                            {`${
-                              flightDetails?.Results?.Segments[0].length - 1
-                            } Stop.`}{" "}
-                            {`${Math.floor(
-                              moment
-                                .duration(
-                                  flightDetails?.Results?.Segments[0][
-                                    flightDetails?.Results?.Segments[0].length -
-                                      1
-                                  ].AccumulatedDuration,
-                                  "minutes"
-                                )
-                                .asHours()
-                            )} hrs ${moment
-                              .duration(
-                                flightDetails?.Results?.Segments[0][
-                                  flightDetails?.Results?.Segments[0].length - 1
-                                ].AccumulatedDuration,
-                                "minutes"
-                              )
-                              .minutes()} min`}
-                          </Typography>
-                        </Grid2>
-                        <Grid2
-                          size={{ xs: 4 }}
-                          sx={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "flex-end",
-                          }}
-                        >
-                          <Button
-                            size="small"
-                            sx={{ fontFamily: nunito.style, fontWeight: 800 }}
-                            onClick={handleClickOpen}
-                          >
-                            View Fares Rules
-                          </Button>
-                        </Grid2>
-                      </Grid2>
-                      <Divider />
+                    <DomesticDetail flightDetails={flightDetails} setOpen={setOpen}/>
 
-                      {/* Intermediate flights start */}
-                      <Box>
-                        {flightDetails?.Results?.Segments[0]?.map(
-                          (segment, index) => {
-                            // console.log("segment:", segment);
-                            return (
-                              <>
-                                <Grid2
-                                  container
-                                  spacing={1}
-                                  sx={{ marginTop: "10px" }}
-                                >
-                                  {/* Flight Segment 1 */}
-                                  <Grid2
-                                    size={{ xs: 12 }}
-                                    sx={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "5px",
-                                    }}
-                                  >
-                                    <Image
-                                      src={segment?.Airline?.AirlineLogo}
-                                      alt="Image"
-                                      width={30}
-                                      height={30}
-                                    />
-                                    <Typography
-                                      variant="subtitle1"
-                                      gutterBottom
-                                      sx={{
-                                        fontFamily: nunito.style,
-                                        fontWeight: 600,
-                                      }}
-                                    >
-                                      {segment?.Airline?.AirlineName}{" "}
-                                      {segment?.Airline?.AirlineCode}{" "}
-                                      {segment?.Airline?.FlightNumber}
-                                    </Typography>
-                                  </Grid2>
-                                  <Grid2
-                                    size={{ xs: 12 }}
-                                    sx={{
-                                      backgroundColor: "#F4F4F4",
-                                      padding: "15px",
-                                      borderRadius: "4px",
-                                    }}
-                                  >
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 700,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                      {moment(segment?.Origin?.DepTime).format(
-                                        "HH:mm"
-                                      )}{" "}
-                                      - {segment?.Origin?.Airport?.CityName} (
-                                      {segment?.Origin?.Airport?.AirportCode})
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "10px",
-                                        marginLeft: "65px",
-                                      }}
-                                    >
-                                      <img
-                                        src={pointerImage.src}
-                                        style={{ width: "16px" }}
-                                      />{" "}
-                                      {`${Math.floor(
-                                        moment
-                                          .duration(segment.Duration, "minutes")
-                                          .asHours()
-                                      )} hrs : ${moment
-                                        .duration(segment.Duration, "minutes")
-                                        .minutes()} min`}
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 700,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                      {moment(
-                                        segment.Destination.ArrTime
-                                      ).format("HH:mm")}{" "}
-                                      - {segment.Destination.Airport.CityName} (
-                                      {segment.Destination.Airport.AirportCode})
-                                    </Typography>
-                                  </Grid2>
-
-                                  <Grid2
-                                    size={{ xs: 12 }}
-                                    sx={{
-                                      display: "flex",
-                                      gap: "20px",
-                                      flexWrap: "wrap",
-                                      backgroundColor: "#FFEDD1",
-                                      padding: "5px",
-                                      borderRadius: "4px",
-                                    }}
-                                  >
-                                    <Typography
-                                      variant="body2"
-                                      sx={{
-                                        fontFamily: nunito.style,
-                                        fontWeight: 500,
-                                      }}
-                                    >
-                                      <strong>Baggage :</strong>{" "}
-                                      {segment.Baggage}
-                                    </Typography>
-                                    <Typography
-                                      variant="body2"
-                                      sx={{
-                                        fontFamily: nunito.style,
-                                        fontWeight: 500,
-                                      }}
-                                    >
-                                      <strong>Cabin Baggage :</strong>{" "}
-                                      {segment.CabinBaggage}
-                                    </Typography>
-                                  </Grid2>
-                                </Grid2>
-                                <Divider />
-
-                                {flightDetails?.Results?.Segments[0].length !=
-                                segment.SegmentIndicator ? (
-                                  <>
-                                    <Box
-                                      sx={{
-                                        marginBottom: "10px",
-                                        borderLeft: "2px dashed",
-                                        paddingLeft: "20px",
-                                      }}
-                                    >
-                                      <Typography
-                                        variant="body2"
-                                        sx={{
-                                          marginTop: "10px",
-                                          color: "orange",
-                                          fontWeight: 600,
-                                          fontFamily: nunito.style,
-                                        }}
-                                      >
-                                        Change of Planes
-                                      </Typography>
-                                      <Typography
-                                        variant="body2"
-                                        sx={{
-                                          marginTop: "10px",
-                                          fontWeight: 700,
-                                          fontFamily: nunito.style,
-                                        }}
-                                      >
-                                        {`${moment
-                                          .utc(
-                                            moment(
-                                              flightDetails?.Results
-                                                ?.Segments[0][index + 1]?.Origin
-                                                .DepTime,
-                                              "YYYY-MM-DD HH:mm"
-                                            ).diff(
-                                              moment(
-                                                flightDetails?.Results
-                                                  ?.Segments[0][index]
-                                                  ?.Destination.ArrTime,
-                                                "YYYY-MM-DD HH:mm"
-                                              )
-                                            )
-                                          )
-                                          .format("H[h] : m[m]")}`}{" "}
-                                        Layover in{" "}
-                                        {`${segment?.Destination?.Airport?.AirportName}`}
-                                      </Typography>
-                                    </Box>
-                                    <Divider />
-                                  </>
-                                ) : null}
-                              </>
-                            );
-                          }
-                        )}
-                      </Box>
-                      {/* Intermediate flights end */}
-                    </Card>
-                    {/* Card Section end */}
 
                     {/* Traveler Details */}
                     {["Adult", "Child", "Infant"].map((type) => (
@@ -842,8 +570,15 @@ const FlightDetails = () => {
                       ) : null}
                     </Grid2>
                   </Paper>
-                  <Button variant="contained" onClick={()=>{console.log("myForms",forms)}} size="large" sx={{backgroundColor:COLORS.PRIMARY}}>
-                      Continue
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      console.log("myForms", forms);
+                    }}
+                    size="large"
+                    sx={{ backgroundColor: COLORS.PRIMARY }}
+                  >
+                    Continue
                   </Button>
                 </Grid2>
 
@@ -851,7 +586,6 @@ const FlightDetails = () => {
                 <Grid2 size={4}>
                   <FareSummary fareData={flightDetails?.Results} />
                 </Grid2>
-
               </Grid2>
             </Container>
           </Grid2>
@@ -937,7 +671,7 @@ const FlightDetails = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {flightDetails?.Results?.FareRules?.map((fareRule, index) => {
+                {flightDetails?.length > 0 && flightDetails[0]?.Response?.Results?.FareRules?.map((fareRule, index) => {
                   return (
                     <TableRow>
                       <TableCell
