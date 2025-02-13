@@ -190,8 +190,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                                 textTransform: "initial",
                             }}
                             endIcon={openLeft ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-                            onClick={handleOpenFlightDetailsLeft}
-                        >
+                            onClick={handleOpenFlightDetailsLeft}>
                             Flight Details
                         </Button>
                     </Stack>

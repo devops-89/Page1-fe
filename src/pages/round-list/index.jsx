@@ -28,7 +28,6 @@ import InternationalRoundFlightBox from "@/components/flight/internationalRoundF
 import moment from "moment";
 import { useRouter } from "next/router";
 const FlightList = () => {
-
   const router = useRouter();
   const [flightList, setFlightList] = useState(null);
   const [traceId, setTraceId] = useState("");
@@ -37,9 +36,9 @@ const FlightList = () => {
   const [selectedDeparture, setSelectedDeparture] = useState(null);
   const [selectedArrival, setSelectedArrival] = useState(null);
 
-  // const [flightDetails, setFlightDetails] = useState();
+  // flightList.map((val)=>{
 
-  // flightList.map((val)=>)
+  // })
 
   useEffect(() => {
     if (localStorage.getItem("roundflightData")) {
@@ -68,13 +67,37 @@ const FlightList = () => {
   const handleFlightSelection = (type, flight) => {
     if (type === "departure") {
       setSelectedDeparture(flight);
+      console.log(selectedDeparture);
     } else if (type === "arrival") {
       setSelectedArrival(flight);
+      // console.log(selectedArrival)
     }
   };
 
   const handleRangeChange = (event, newValue) => {
     setPriceRange(newValue);
+  };
+
+  const newResultIndex = {
+    arrival: selectedArrival?.ResultIndex,
+    departure: selectedDeparture?.ResultIndex,
+  };
+
+  // console.log(newResultIndex);
+  // console.log("first", selectedArrival?.ResultIndex);
+  // console.log("fffff", selectedDeparture?.ResultIndex);
+  // console.log(flightList)
+  const routetoAnotherPage = () => {
+    router.push({
+      pathname: `/round-list/${selectedDeparture?.AirlineCode}/view-details`,
+      query: {
+        ResultIndex: JSON.stringify(newResultIndex),
+        traceId: traceId,
+        journey: flightList?.type,
+      },
+    });
+
+    console.log("redult index", newResultIndex);
   };
 
   return (
@@ -201,8 +224,6 @@ const FlightList = () => {
 
               {/* filter card end */}
             </Grid2>
-
-
 
             {/* Round Flight List Data Domestic and International  */}
             {flightList?.type === "INTERNATIONAL" ? (
@@ -353,14 +374,6 @@ const FlightList = () => {
           <Loading type="bars" width={50} height={50} color={COLORS.PRIMARY} />
         </Box>
       )}
-
-
-
-
-
-
-
-
 
       {/* Footer Flight Detail section  */}
       {flightList?.type === "DOMESTIC" ? (
@@ -533,22 +546,11 @@ const FlightList = () => {
                   fontSize: 16,
                   fontFamily: nunito.style,
                 }}
-                onClick={() => {
-                  router.push({
-                    pathname: `/round-list/${flightDetails?.AirlineCode}/view-details`,
-                    query: {
-                      ResultIndex: flightDetails?.ResultIndex,
-                      traceId: traceId,
-                      journey : flightList?.type
-
-                    },
-                  });
-                }}
+                onClick={routetoAnotherPage}
               >
                 Book Now
               </Button>
             </Grid2>
-
           </Grid2>
         </Grid2>
       ) : (

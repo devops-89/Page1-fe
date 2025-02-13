@@ -54,7 +54,6 @@ const FlightDetails = () => {
   const [open, setOpen] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -96,20 +95,35 @@ const FlightDetails = () => {
   }, []);
 
   useEffect(() => {
-    if (router.query.ResultIndex && router.query.traceId && router.query.journey) {
+    if (
+      router.query.ResultIndex &&
+      router.query.traceId &&
+      router.query.journey
+    ) {
       const body = {
         ip_address: JSON.parse(localStorage.getItem("roundState")).ip_address,
         journey_type: JOURNEY_TYPE.ROUNDTRIP,
       };
 
       flightController
-        .roundflightDetails({
-          result_index: router.query.ResultIndex,
-          trace_id: router.query.traceId,
-          ip_address: body.ip_address,
-          journey_type: body.journey_type,
-          journey: router.query.journey,
-        })
+        .roundflightDetails(
+          router.query.journey === JOURNEY.INTERNATIONAL
+            ? {
+                result_index: router.query.ResultIndex,
+                trace_id: router.query.traceId,
+                ip_address: body.ip_address,
+                journey_type: body.journey_type,
+                journey: router.query.journey,
+              }
+            : {
+                result_index: router.query.ResultIndex.departure,
+                trace_id: router.query.traceId,
+                ip_address: body.ip_address,
+                journey_type: body.journey_type,
+                journey: router.query.journey,
+                result_index_ib: router.query.ResultIndex.arrival,
+              }
+        )
         .then((response) => {
           setIsGSTMandatory(
             response.data.data.Response?.ResultIndex?.IsGSTMandatory
@@ -125,8 +139,9 @@ const FlightDetails = () => {
           setError(error);
         });
     }
-  }, []);
+  }, [router.query]);
 
+  console.log("router",router)
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -172,7 +187,6 @@ const FlightDetails = () => {
       }));
     }
   };
-
 
   return (
     <>
@@ -234,11 +248,13 @@ const FlightDetails = () => {
                       padding: 2,
                       backgroundColor: "#F4F4F4",
                       marginBottom: 2,
-                      position:'relative'
+                      position: "relative",
                     }}
                   >
-                    <DomesticDetail flightDetails={flightDetails} setOpen={setOpen}/>
-
+                    <DomesticDetail
+                      flightDetails={flightDetails}
+                      setOpen={setOpen}
+                    />
 
                     {/* Traveler Details */}
                     {["Adult", "Child", "Infant"].map((type) => (
@@ -278,7 +294,7 @@ const FlightDetails = () => {
                     >
                       <Box sx={{ mb: "15px" }}>
                         {/* Refundable  */}
-                        {FlightDetails?.Results?.IsRefundable ? (
+                        {flightDetails[0]?.Response?.Results?.IsRefundable ? (
                           <Typography
                             variant="body1"
                             sx={{
@@ -306,8 +322,10 @@ const FlightDetails = () => {
                       </Box>
 
                       {/* PanCard */}
-                      {flightDetails?.Results?.IsPanRequiredAtBook ||
-                      flightDetails?.Results?.IsPanRequiredAtTicket ? (
+                      {flightDetails[0]?.Response?.Results
+                        ?.IsPanRequiredAtBook ||
+                      flightDetails[0]?.Response?.Results
+                        ?.IsPanRequiredAtTicket ? (
                         <Box sx={{ mb: "10px" }}>
                           <Typography
                             variant="h6"
@@ -374,8 +392,9 @@ const FlightDetails = () => {
                       ) : null}
 
                       {/* Passport  */}
-                      {flightDetails?.Results?.IsPassportRequiredAtBook ||
-                      flightDetails?.Results
+                      {flightDetails[0]?.Response?.Results
+                        ?.IsPassportRequiredAtBook ||
+                      flightDetails[0]?.Response?.Results
                         ?.IsPassportRequiredAtBookIsPassportRequiredAtTicket ? (
                         <Box sx={{ mb: "10px" }}>
                           <Typography
@@ -469,7 +488,7 @@ const FlightDetails = () => {
 
                       {/* GST  */}
 
-                      {flightDetails?.Results?.GSTAllowed ? (
+                      {flightDetails[0]?.Response?.Results?.GSTAllowed ? (
                         <Box sx={{ mb: "10px" }}>
                           <Typography
                             variant="h6"
@@ -584,7 +603,7 @@ const FlightDetails = () => {
 
                 {/* Fare Summary */}
                 <Grid2 size={4}>
-                  <FareSummary fareData={flightDetails?.Results} />
+                  <FareSummary fareData={flightDetails[0]?.Response?.Results} />
                 </Grid2>
               </Grid2>
             </Container>
@@ -671,42 +690,45 @@ const FlightDetails = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {flightDetails?.length > 0 && flightDetails[0]?.Response?.Results?.FareRules?.map((fareRule, index) => {
-                  return (
-                    <TableRow>
-                      <TableCell
-                        sx={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          fontWeight: 600,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {fareRule.Origin}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          fontWeight: 600,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {fareRule.Destination}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          fontWeight: 600,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {fareRule.Airline}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {flightDetails?.length > 0 &&
+                  flightDetails[0]?.Response?.Results?.FareRules?.map(
+                    (fareRule, index) => {
+                      return (
+                        <TableRow>
+                          <TableCell
+                            sx={{
+                              fontSize: "15px",
+                              textAlign: "center",
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            {fareRule.Origin}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontSize: "15px",
+                              textAlign: "center",
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            {fareRule.Destination}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontSize: "15px",
+                              textAlign: "center",
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            {fareRule.Airline}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
               </TableBody>
             </Table>
           </TableContainer>
