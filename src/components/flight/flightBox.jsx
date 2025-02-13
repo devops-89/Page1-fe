@@ -1,103 +1,121 @@
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
-import { FlightTakeoff } from "@mui/icons-material";
 import {
-    Avatar,
     Card,
-    Divider,
-    Grid2,
-    Stack,
-    Typography
+    Popover,
+    Table,
+    TableCell,
+    TableContainer,
+    TableRow,
+    Typography,
 } from "@mui/material";
-import Image from "next/image";
-const FlightBox = ({ data }) => {
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import moment, { duration } from "moment";
+import React, { useState } from "react";
 
-  const {
-    departureAirportCode,
-    departureLocation,
-    departureTerminal,
-    departureTime,
-  } = data?.departureDetails;
-  const { timeTaken } = data;
+const FlightBox = ({ tableData }) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [popoverData, setPopoverData] = useState(null);
 
-  const { arrivalAirportCode, arrivalLocation, arrivalTerminal, arrivalTime } =
-    data?.arrivalDetails;
-  return (
-    <Card sx={{ p: 2, mt: 2 }}>
-      <Stack
-        direction={"row"}
-        alignItems={"center"}
-        justifyContent={"space-between"}
-      >
-        <Stack direction={"row"} alignItems={"center"} spacing={2}>
-          <Image src={data.logo} width={30} />
-          <Typography
-            sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
-          >
-            {data.airlineName} {`(${data?.flightNumber})`}
-          </Typography>
-        </Stack>
-        <Typography
-          sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
-        >
-          Travel Class: {data?.travelClass}
-        </Typography>
-      </Stack>
-      <Grid2 container sx={{ mt: 3 }} spacing={4} alignItems={"center"}>
-        <Grid2 size={4}>
-          <Typography
-            sx={{ fontSize: 25, fontWeight: 700, fontFamily: nunito.style }}
-          >
-            {departureTime}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
-          >
-            {departureAirportCode} - {departureTerminal}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
-          >
-            {departureLocation}
-          </Typography>
-        </Grid2>
-        <Grid2 size={4}>
-          <Typography
-            sx={{
-              fontSize: 18,
-              fontWeight: 700,
-              fontFamily: nunito.style,
-              textAlign: "center",
-            }}
-          >
-            {timeTaken}
-          </Typography>
-          <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
-            <Avatar sx={{ backgroundColor: COLORS.PRIMARY }}>
-              <FlightTakeoff sx={{ fontSize: 17 }} />
-            </Avatar>
-          </Divider>
-        </Grid2>
-        <Grid2 size={4}>
-          <Typography
-            sx={{ fontSize: 25, fontWeight: 700, fontFamily: nunito.style }}
-          >
-            {arrivalTime}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
-          >
-            {arrivalAirportCode} - {arrivalTerminal}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
-          >
-            {arrivalLocation}
-          </Typography>
-        </Grid2>
-      </Grid2>
-    </Card>
-  );
+    const handlePopoverOpen = (event, data) => {
+        setAnchorEl(event.currentTarget);
+        setPopoverData(data);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+        setPopoverData(null);
+    };
+
+    const open = Boolean(anchorEl);
+
+    return (
+        <>
+            <Card sx={{ p: 1, mt: 2 }}>
+                <TableContainer>
+                    <Table>
+
+                        {tableData?.map((intermediate, index) => (
+                            <TableRow
+                                key={index}
+                                aria-owns={open ? "mouse-over-popover" : undefined}
+                                aria-haspopup="true"
+                                onMouseEnter={(event) => {
+                                    handlePopoverOpen(event, { duration: intermediate.Duration, })
+                                }}
+                                onMouseLeave={handlePopoverClose}
+                            >
+                                <TableCell sx={{ padding: "8px" }}>
+                                    <Typography
+                                        sx={{
+                                            textAlign: "start",
+                                            fontSize: 15,
+                                            fontWeight: 600,
+                                            fontFamily: nunito.style,
+                                        }}
+                                    >
+                                        {`${intermediate.Origin.Airport.CityCode} - ${intermediate.Origin.Airport.CityName
+                                            } (${moment(intermediate.Origin.DepTime).format("HH:mm")})`}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell sx={{ textAlign: "center", padding: "8px" }}>
+                                    <ArrowRightAltIcon sx={{ color: COLORS.PRIMARY }} />
+                                </TableCell>
+                                <TableCell sx={{ padding: "8px" }}>
+                                    <Typography
+                                        sx={{
+                                            fontSize: 15,
+                                            fontWeight: 600,
+                                            fontFamily: nunito.style,
+                                            textAlign: "end",
+                                        }}
+                                    >
+                                        {`${intermediate.Destination.Airport.CityCode} - ${intermediate.Destination.Airport.CityName
+                                            } (${moment(intermediate.Destination.ArrTime).format(
+                                                "HH:mm"
+                                            )})`}
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </Table>
+                    <Popover
+                        id="mouse-over-popover"
+                        sx={{ pointerEvents: "none" }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "center",
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                    >
+                        <Typography
+                            sx={{ p: 1, fontSize: "12px", fontFamily: nunito.style }}
+                        >
+                            {popoverData ? (
+                                <>
+                                    <strong>Origin:</strong>{" "}
+                                    {`${Math.floor(
+                                        moment.duration(popoverData.duration, "minutes").asHours()
+                                    )} hrs ${moment
+                                        .duration(popoverData.duration, "minutes")
+                                        .minutes()} min`}
+                                </>
+                            ) : (
+                                "Loading..."
+                            )}
+                        </Typography>
+                    </Popover>
+                </TableContainer>
+            </Card>
+        </>
+    );
 };
 
 export default FlightBox;

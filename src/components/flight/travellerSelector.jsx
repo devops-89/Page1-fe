@@ -11,115 +11,139 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect } from "react";
 import TravellorCounter from "./travellorCounter";
+import { useRouter } from "next/router";
 
-const TravellerSelector = ({ anchorEl, setAnchorEl, setState, state }) => {
-  const [adultValue, setAdultValue] = useState(1);
-  const [childValue, setChildValue] = useState(0);
-  const [infantValue, setInfantValue] = useState(0);
-  const adultIncreaseCounter = () => {
-    setState({ ...state, adult: adultValue + 1 });
-    setAdultValue(adultValue + 1);
-  };
-  const adultDecreaseCounter = () => {
-    setState({ ...state, adult: adultValue - 1 });
-    setAdultValue(adultValue - 1);
-  };
-  const childIncreaseCounter = () => {
-    setState({ ...state, child: childValue + 1 });
-    setChildValue(childValue + 1);
-  };
-  const childDecreaseCounter = () => {
-    setState({ ...state, child: childValue - 1 });
-    setChildValue(childValue - 1);
-  };
-  const infantIncreaseCounter = () => {
-    setState({ ...state, infant: infantValue + 1 });
-    setInfantValue(infantValue + 1);
-  };
-  const infantDecreaseCounter = () => {
-    setState({ ...state, infant: infantValue - 1 });
-    setInfantValue(infantValue - 1);
-  };
+const TravellerSelector = ({
+  setAnchorEl,
+  setState,
+  state,
+  adultValue,
+  setAdultValue,
+  infantValue,
+  setInfantValue,
+  childValue,
+  setChildValue,
+  initialValue,
+  newFormData,
+  defaultRoute
+}) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.pathname === defaultRoute && newFormData) {
+      setState((prevState) => ({
+        ...prevState,
+        cabin_class: newFormData.cabin_class || e.target.value
+      }));
+    }
+  }, [router.pathname, defaultRoute, newFormData]);
+
 
   const flightClassHandler = (e) => {
-    setState({ ...state, cabin_class: e.target.value });
+    setState((prevState) => ({
+      ...prevState,
+      cabin_class: e.target.value
+    }));
+  };
+
+  const adultIncreaseCounter = () => {
+    setAdultValue((prev) => prev + 1);
+    setState((prev) => ({ ...prev, adult: prev.adult + 1 }));
+  };
+  const adultDecreaseCounter = () => {
+    if (adultValue > 1) {
+      setAdultValue((prev) => prev - 1);
+      setState((prev) => ({ ...prev, adult: prev.adult - 1 }));
+    }
+  };
+  const childIncreaseCounter = () => {
+    setChildValue((prev) => prev + 1);
+    setState((prev) => ({ ...prev, child: prev.child + 1 }));
+  };
+  const childDecreaseCounter = () => {
+    if (childValue > 0) {
+      setChildValue((prev) => prev - 1);
+      setState((prev) => ({ ...prev, child: prev.child - 1 }));
+    }
+  };
+  const infantIncreaseCounter = () => {
+    setInfantValue((prev) => prev + 1);
+    setState((prev) => ({ ...prev, infant: prev.infant + 1 }));
+  };
+  const infantDecreaseCounter = () => {
+    if (infantValue > 0) {
+      setInfantValue((prev) => prev - 1);
+      setState((prev) => ({ ...prev, infant: prev.infant - 1 }));
+    }
   };
 
   return (
     <div>
-      <Typography
-        sx={{ fontFamily: nunito.style, fontSize: 20, fontWeight: 600 }}
-      >
+      <Typography sx={{ fontFamily: nunito.style, fontSize: 20, fontWeight: 600 }}>
         Select Travelers & Class
       </Typography>
+
       <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2 }}>
-        <Typography
-          sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}
-        >
+        <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
           Travellers
         </Typography>
         <Grid2 container spacing={4}>
-          <Grid2 size={4}>
+          <Grid2 size={{xs:4}}>
             <TravellorCounter
               heading={"Adults ( 12+ Yrs )"}
               value={adultValue}
               setValue={setAdultValue}
               onIncrease={adultIncreaseCounter}
               onDecrease={adultDecreaseCounter}
+              initialValue={initialValue.adult}
             />
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={{xs:4}}>
             <TravellorCounter
               heading={"Childrens ( 2-12 Yrs )"}
               value={childValue}
               setValue={setChildValue}
               onIncrease={childIncreaseCounter}
               onDecrease={childDecreaseCounter}
+              initialValue={initialValue.child}
             />
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={{xs:4}}>
             <TravellorCounter
-              heading={"Infants( 0-12 Yrs )"}
+              heading={"Infants( 0-2 Yrs )"}
               value={infantValue}
               setValue={setInfantValue}
               onIncrease={infantIncreaseCounter}
               onDecrease={infantDecreaseCounter}
+              initialValue={initialValue.infant}
             />
           </Grid2>
         </Grid2>
       </Box>
+
       <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2 }}>
-        <Typography
-          sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}
-        >
-          Travellers
+        <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
+          Flight Class
         </Typography>
-        <RadioGroup row value={state.cabin_class}>
+        <RadioGroup 
+          row 
+          value={state.cabin_class} 
+          onChange={flightClassHandler} // Properly updating state
+        >
           {data.FLIGHT_CLASS_DATA.map((val, i) => (
             <FormControlLabel
-              value={val.value}
-              control={
-                <Radio
-                  defaultChecked={state.cabin_class}
-                  defaultValue={state.cabin_class}
-                  onChange={flightClassHandler}
-                />
-              }
-              label={<Typography sx={{ fontSize: 14 }}>{val.label}</Typography>}
               key={i}
+              value={val.value}
+              control={<Radio />}
+              label={<Typography sx={{ fontSize: 14 }}>{val.label}</Typography>}
             />
           ))}
         </RadioGroup>
       </Box>
-      <Stack
-        direction={"row"}
-        alignItems={"center"}
-        justifyContent={"flex-end"}
-        spacing={4}
-        mt={2}
-      >
+
+      <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={4} mt={2}>
         <Button
           sx={{
             backgroundColor: COLORS.GREY,

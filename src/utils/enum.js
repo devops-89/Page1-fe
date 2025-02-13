@@ -7,7 +7,6 @@ export const FLIGHT_DETAILS = {
   FLIGHT_INFORMATIon: "Flight Information",
   FARE_DETAIL: "Fare Detail",
   BAGGAGE_RULES: "Baggage Rules",
-  CANCELLATION_RULES: "Cancellation Rules",
 };
 
 export const FARE_TYPE = {
@@ -26,6 +25,11 @@ export const PREFERRED_TIME = {
   Evening: "Evening",
   Night: "NIGHT",
   AnyTime: "AnyTime",
+};
+
+export const JOURNEY = {
+  DOMESTIC: "DOMESTIC",
+  INTERNATIONAL: "INTERNATIONAL",
 };
 
 export const FLIGHT_CLASS = {

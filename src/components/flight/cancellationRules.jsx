@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import logo from "@/icons/blogzine.svg";
 import { nunito } from "@/utils/fonts";
-import CustomTable from "./customTable";
+import CustomTable from "./BaggageTable";
 import { data } from "@/assests/data";
 const Cancellation = ({ tableData, departureDetails, arrivalDetails }) => {
   return (

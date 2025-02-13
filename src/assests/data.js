@@ -105,7 +105,7 @@ export const data = {
     {
       img: hotels,
       title: "Hotels",
-      url: "/hotels",
+      url: "/hotel-list",
     },
     {
       img: helicopter,
@@ -115,7 +115,7 @@ export const data = {
     {
       img: packages,
       title: "holiday packages",
-      url: "/holiday-packages",
+      url: "/packages",
     },
     {
       img: cabs,
@@ -757,19 +757,20 @@ export const data = {
     {
       label: FLIGHT_DETAILS.BAGGAGE_RULES,
     },
-    {
-      label: FLIGHT_DETAILS.CANCELLATION_RULES,
-    },
+   
   ],
   flightFareHead: [
+    // {
+    //   label: "Base Fare",
+    // },
+    // {
+    //   label: "Taxes and Fees",
+    // },
     {
-      label: "Base Fare",
+      label: "Total Fare"
     },
     {
-      label: "Taxes and Fees",
-    },
-    {
-      label: "Total Fees",
+      label: "Tax"
     },
   ],
   fightFareData: [
@@ -780,19 +781,17 @@ export const data = {
     },
   ],
   flightBaggageHead: [
+    
     {
-      label: "Baggage Type",
+      label: "Baggage",
+     
     },
     {
-      label: "Check In",
-    },
-    {
-      label: "Cabin",
+      label: "Cabin Baggage"
     },
   ],
   flightBaggageDetails: [
     {
-      value1: "Adult",
       value2: "2PC",
       value3: "7Kg",
     },
@@ -815,31 +814,94 @@ export const data = {
       value2: "	$16,325 + $250",
     },
   ],
+  
   FLIGHT_CLASS_DATA: [
     {
       label: FLIGHT_CLASS.ALL,
-      value: 1,
+      value: "1",
     },
     {
       label: FLIGHT_CLASS.ECONOMY,
-      value: 2,
+      value: "2",
     },
 
     {
       label: FLIGHT_CLASS.PREMIUMECONOMY,
-      value: 3,
+      value: "3",
     },
     {
       label: FLIGHT_CLASS.BUSINESS,
-      value: 4,
+      value: "4",
     },
     {
       label: FLIGHT_CLASS.PREMIUMBUSINESS,
-      value: 5,
+      value: "5",
     },
     {
       label: FLIGHT_CLASS.FIRST,
-      value: 6,
+      value: "6",
     },
   ],
+  flightDetails:{
+      "flightData": {
+        "origin": "New Delhi",
+        "destination": "Bengaluru",
+        "date": "Thursday, Jan 16",
+        "duration": "3h 5m",
+        "airline": "Akasa Air",
+        "flightNumber": "QP 1350",
+        "class": "Economy Saver"
+      },
+      "travelerData": {
+        "Adult":[],
+        "Child": [],
+        "Infant": []
+      },
+      "fareSummary": [
+        {
+          "label": "Base Fare",
+          "amount": 41186
+        },
+        {
+          "label": "Taxes and Surcharges",
+          "amount": 5004
+        }
+      ],
+      "taxBreakup":[
+        {
+          "key": "K3",
+          "value": 196
+        },
+        {
+          "key": "YQTax",
+          "value": 900
+        },
+        {
+          "key": "YR",
+          "value": 65
+        },
+        {
+          "key": "PSF",
+          "value": 91
+        },
+        {
+          "key": "UDF",
+          "value": 12
+        },
+        {
+          "key": "INTax",
+          "value": 0
+        },
+        {
+          "key": "TransactionFee",
+          "value": 0
+        },
+        {
+          "key": "OtherTaxes",
+          "value": 0
+        }
+      ]
+    }
+    
+  
 };

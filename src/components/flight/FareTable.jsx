@@ -10,30 +10,32 @@ import {
 } from "@mui/material";
 import React from "react";
 
-const CustomTable = ({ tableHead, tableData }) => {
+const FareTable = ({ tableHead, tableData }) => {
   return (
     <div>
       <TableContainer>
         <Table>
           <TableHead>
-            {tableHead.map((val, i) => (
-              <TableCell key={i}>
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    fontFamily: nunito.style,
-                  }}
-                >
-                  {val.label}
-                </Typography>
-              </TableCell>
-            ))}
+            <TableRow>
+              {tableHead.map((val, i) => (
+                <TableCell key={i}>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 700,
+                      fontFamily: nunito.style,
+                    }}
+                  >
+                    {val.label}
+                  </Typography>
+                </TableCell>
+              ))}
+            </TableRow>
           </TableHead>
           <TableBody>
-            {tableData.map((val, i) => (
-              <TableRow key={i}>
-                <TableCell>
+            <TableRow>
+         
+                <TableCell >
                   <Typography
                     sx={{
                       fontSize: 14,
@@ -41,10 +43,10 @@ const CustomTable = ({ tableHead, tableData }) => {
                       fontFamily: nunito.style,
                     }}
                   >
-                    {val.value1}
+                    {tableData.TotalFare} {tableData.Currency}
                   </Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell >
                   <Typography
                     sx={{
                       fontSize: 14,
@@ -52,22 +54,11 @@ const CustomTable = ({ tableHead, tableData }) => {
                       fontFamily: nunito.style,
                     }}
                   >
-                    {val.value2}
+                    {tableData.Tax} {tableData.Currency}
                   </Typography>
                 </TableCell>
-                <TableCell>
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      fontWeight: 500,
-                      fontFamily: nunito.style,
-                    }}
-                  >
-                    {val.value3}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ))}
+         
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
@@ -75,4 +66,4 @@ const CustomTable = ({ tableHead, tableData }) => {
   );
 };
 
-export default CustomTable;
+export default FareTable;

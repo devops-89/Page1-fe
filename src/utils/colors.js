@@ -16,4 +16,5 @@ export const COLORS = {
   BLUEOVERLAY: "#E4EBF1",
   DANGER: "#ff0000",
   SUCCESS: "#008000",
+  SEMIGREY : '#F2F2F2',
 };

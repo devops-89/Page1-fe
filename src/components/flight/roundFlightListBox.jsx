@@ -1,7 +1,6 @@
 import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
-import { useRouter } from "next/router";
 import moment from "moment";
 import {
   FlightTakeoff,
@@ -28,9 +27,7 @@ import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
 import FlightBox from "./FlightBox";
 
-const FlightListBox = ({ details, traceId }) => {
-  const router = useRouter();
-
+const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
   const [open, setOpen] = useState(false);
   const [cabin, setCabin] = useState(null);
 
@@ -45,8 +42,12 @@ const FlightListBox = ({ details, traceId }) => {
     setValue(newValue);
   };
 
+  // console.log("RoundData ", flightDetails)
+
   useEffect(() => {
     let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
+      // console.log("api cabinData",flightDetails?.departure[0]?.CabinClass)
+
       return fligtClass.value == flightDetails?.departure[0]?.CabinClass;
     });
     setCabin(cabinData.label);
@@ -54,7 +55,16 @@ const FlightListBox = ({ details, traceId }) => {
 
   return (
     <div>
-      <Card sx={{ boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)", p: 2 }}>
+      <Card
+        sx={{
+          boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
+          p: 2,
+          cursor: "pointer",
+          border: isSelected ? "1px solid blue" : "",
+          backgroundColor: isSelected ? "#dff7ff" : "",
+        }}
+        onClick={onSelect}
+      >
         <Stack
           direction={"row"}
           alignItems={"center"}
@@ -77,6 +87,7 @@ const FlightListBox = ({ details, traceId }) => {
           <Typography
             sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
           >
+            {/* Travel Class: {flightDetails?.departure[0].CabinClass} */}
             Travel Class : {cabin ? cabin : undefined}
           </Typography>
         </Stack>
@@ -104,7 +115,7 @@ const FlightListBox = ({ details, traceId }) => {
           <Grid2 size={3}>
             <Typography
               sx={{
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: 700,
                 fontFamily: nunito.style,
                 textAlign: "center",
@@ -168,32 +179,10 @@ const FlightListBox = ({ details, traceId }) => {
           </Grid2>
           <Grid2 size={3} textAlign={"center"}>
             <Typography
-              sx={{ fontSize: 25, fontWeight: 900, fontFamily: nunito.style }}
+              sx={{ fontSize: 20, fontWeight: 900, fontFamily: nunito.style }}
             >
               {flightDetails?.TotalFare} ₹
             </Typography>
-            <Button
-              sx={{
-                backgroundColor: COLORS.PRIMARY,
-                color: COLORS.BLACK,
-                fontWeight: 550,
-                fontSize: 12,
-                fontFamily: nunito.style,
-                mt: 1,
-              }}
-              onClick={() => {
-                router.push({
-                  pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
-                  query: {
-                    ResultIndex: flightDetails?.ResultIndex,
-                    traceId: traceId,
-                    
-                  },
-                });
-              }}
-            >
-              Book Now
-            </Button>
           </Grid2>
         </Grid2>
 
@@ -288,17 +277,10 @@ const FlightListBox = ({ details, traceId }) => {
           <TabPanel index={2} value={value}>
             <BaggageDetails tableData={flightDetails} />
           </TabPanel>
-          {/* <TabPanel index={3} value={value}>
-            <Cancellation
-              tableData={flightDetails?.flightDetails?.cancellationDetails}
-              departureDetails={flightDetails?.departureDetails}
-              arrivalDetails={flightDetails?.arrivalDetails}
-            />
-          </TabPanel> */}
         </Collapse>
       </Card>
     </div>
   );
 };
 
-export default FlightListBox;
+export default RoundFlightListBox;
