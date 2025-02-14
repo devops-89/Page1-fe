@@ -10,7 +10,6 @@ import {
   Paper,
   Button,
   Card,
-  Divider,
   DialogTitle,
   Dialog,
   IconButton,
@@ -35,6 +34,7 @@ import { useFormik } from "formik";
 import { gstForm, pancard, passport } from "@/utils/validationSchema";
 import { JOURNEY, JOURNEY_TYPE } from "@/utils/enum";
 import DomesticDetail from "@/components/flight/domesticDetail";
+import InternationalDetail from "@/components/flight/internationalDetail";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -116,19 +116,19 @@ const FlightDetails = () => {
                 journey: router.query.journey,
               }
             : {
-                result_index: router.query.ResultIndex.departure,
+                result_index: JSON.parse(router.query.ResultIndex).departure,
                 trace_id: router.query.traceId,
                 ip_address: body.ip_address,
                 journey_type: body.journey_type,
                 journey: router.query.journey,
-                result_index_ib: router.query.ResultIndex.arrival,
+                result_index_ib: JSON.parse(router.query.ResultIndex).arrival,
               }
         )
         .then((response) => {
           setIsGSTMandatory(
             response.data.data.Response?.ResultIndex?.IsGSTMandatory
           );
-          console.log("roundTrip", response.data.data);
+          // console.log("roundTrip", response.data.data);
           localStorage.setItem(
             "roundTripflightDetails",
             JSON.stringify(response.data.data)
@@ -141,7 +141,8 @@ const FlightDetails = () => {
     }
   }, [router.query]);
 
-  console.log("router",router)
+  // console.log("router", JSON.parse(router.query.ResultIndex).departure)
+
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -251,10 +252,15 @@ const FlightDetails = () => {
                       position: "relative",
                     }}
                   >
-                    <DomesticDetail
-                      flightDetails={flightDetails}
-                      setOpen={setOpen}
-                    />
+                    {router.query.journey === JOURNEY.INTERNATIONAL ? (
+                      <InternationalDetail
+                        flightDetails={flightDetails}
+                        setOpen={setOpen}
+                      />
+                    ) : (
+                      <DomesticDetail flightDetails={flightDetails}
+                      setOpen={setOpen}/>
+                    )}
 
                     {/* Traveler Details */}
                     {["Adult", "Child", "Infant"].map((type) => (
@@ -286,6 +292,7 @@ const FlightDetails = () => {
                         </Box>
                       </Card>
                     ))}
+
 
                     <Grid2
                       size={12}
@@ -588,6 +595,8 @@ const FlightDetails = () => {
                         </Box>
                       ) : null}
                     </Grid2>
+
+                    
                   </Paper>
                   <Button
                     variant="contained"

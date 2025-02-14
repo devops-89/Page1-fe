@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import TravellerForm from "@/components/flight/TravellerForm";
 import {data} from "../assests/data";
+
 const FlightDetails = ({ flightData, travelerData, fareSummary }) => {
   const [forms, setForms] = useState(data.flightDetails.travelerData);
 
@@ -150,6 +151,7 @@ const FlightDetails = ({ flightData, travelerData, fareSummary }) => {
                 <Button variant="text" onClick={() => addNewForm(type)}>
                   + Add New {type}
                 </Button>
+               
               </Box>
             </Card>
           ))}
@@ -186,6 +188,7 @@ const FlightDetails = ({ flightData, travelerData, fareSummary }) => {
          </Grid2>
           </Grid2>
       </Container>
+      
     </Box>
   );
 };
