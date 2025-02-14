@@ -45,17 +45,13 @@ const FlightListBox = ({ details, traceId }) => {
     setValue(newValue);
   };
 
-  // console.log("FlightData", flightDetails)
-  
   useEffect(() => {
     let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
-      // console.log("api cabinData",flightDetails?.departure[0]?.CabinClass)
       return fligtClass.value == flightDetails?.departure[0]?.CabinClass;
     });
     setCabin(cabinData.label);
   }, [flightDetails, data.FLIGHT_CLASS_DATA]);
 
-  // console.log("himanshu",cabin);
   return (
     <div>
       <Card sx={{ boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)", p: 2 }}>
@@ -81,7 +77,6 @@ const FlightListBox = ({ details, traceId }) => {
           <Typography
             sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
           >
-            {/* Travel Class: {flightDetails?.departure[0].CabinClass} */}
             Travel Class : {cabin ? cabin : undefined}
           </Typography>
         </Stack>
@@ -117,10 +112,19 @@ const FlightListBox = ({ details, traceId }) => {
             >
               {`${Math.floor(
                 moment
-                  .duration(flightDetails?.departure[flightDetails?.departure.length-1].AccumulatedDuration, "minutes")
+                  .duration(
+                    flightDetails?.departure[
+                      flightDetails?.departure.length - 1
+                    ].AccumulatedDuration,
+                    "minutes"
+                  )
                   .asHours()
               )} hrs ${moment
-                .duration(flightDetails?.departure[flightDetails?.departure.length-1].AccumulatedDuration, "minutes")
+                .duration(
+                  flightDetails?.departure[flightDetails?.departure.length - 1]
+                    .AccumulatedDuration,
+                  "minutes"
+                )
                 .minutes()} min`}
             </Typography>
 
@@ -134,21 +138,32 @@ const FlightListBox = ({ details, traceId }) => {
             <Typography
               sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
             >
-              {moment(flightDetails?.departure[flightDetails?.departure.length-1].Destination.ArrTime).format(
-                "HH:mm"
-              )}
+              {moment(
+                flightDetails?.departure[flightDetails?.departure.length - 1]
+                  .Destination.ArrTime
+              ).format("HH:mm")}
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {flightDetails?.departure[flightDetails?.departure.length-1].Destination.Airport.AirportCode} -{" "}
-              {flightDetails?.departure[flightDetails?.departure.length-1].Destination.Airport.Terminal}{" "}
+              {
+                flightDetails?.departure[flightDetails?.departure.length - 1]
+                  .Destination.Airport.AirportCode
+              }{" "}
+              -{" "}
+              {
+                flightDetails?.departure[flightDetails?.departure.length - 1]
+                  .Destination.Airport.Terminal
+              }{" "}
               Terminal
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {flightDetails?.departure[flightDetails?.departure.length-1].Destination.Airport.CityName}
+              {
+                flightDetails?.departure[flightDetails?.departure.length - 1]
+                  .Destination.Airport.CityName
+              }
             </Typography>
           </Grid2>
           <Grid2 size={3} textAlign={"center"}>
@@ -172,6 +187,7 @@ const FlightListBox = ({ details, traceId }) => {
                   query: {
                     ResultIndex: flightDetails?.ResultIndex,
                     traceId: traceId,
+                    
                   },
                 });
               }}

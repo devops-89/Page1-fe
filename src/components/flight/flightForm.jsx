@@ -1,11 +1,12 @@
 import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TabPanel from "../tabPanel";
 import OnewayForm from "./oneWayForm";
 import RoundTrip from "./roundTripForm";
 import Multiway from "./multiForm";
+import { useRouter } from "next/router";
 
 const FlightForm = () => {
   const tab = [
@@ -20,7 +21,20 @@ const FlightForm = () => {
     },
   ];
 
+
+  const router = useRouter();
+
   const [flightValue, setFlightValue] = useState(0);
+
+  useEffect(() => {
+    if (router.pathname === "/flight-list") {
+      setFlightValue(0);
+    } else if (router.pathname === "/round-list") {
+      setFlightValue(1);
+    } else if (router.pathname === "/multi-list") {
+      setFlightValue(2);
+    }
+  }, [router.pathname]); 
 
   const flightTabChangeHandler = (e, newValue) => {
     setFlightValue(newValue);

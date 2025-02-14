@@ -37,6 +37,16 @@ export const flightController = {
     catch(error){
       throw Error;
     }
-}
+},
+
+roundflightDetails:async(data)=>{
+  try{
+   let result=await flightPublicApi.post("/flightdetail/flightdetail",data);
+   return result;
+  }
+  catch(error){
+    throw Error;
+  }
+},
 
 }
