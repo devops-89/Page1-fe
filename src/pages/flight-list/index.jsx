@@ -44,6 +44,9 @@ const FlightList = () => {
 
   // console.log("dfdf", flightList);
 
+
+  
+
   return (
     <>
       <InnerBanner img={banner.src} heading={"Flight"} />

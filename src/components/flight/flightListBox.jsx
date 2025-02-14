@@ -52,6 +52,18 @@ const FlightListBox = ({ details, traceId }) => {
     setCabin(cabinData.label);
   }, [flightDetails, data.FLIGHT_CLASS_DATA]);
 
+
+
+  const routetoAnotherPage = () => {
+    router.push({
+      pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
+      query: {
+        ResultIndex: flightDetails?.ResultIndex,
+        traceId: traceId,
+      },
+    });
+  };
+
   return (
     <div>
       <Card sx={{ boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)", p: 2 }}>
@@ -181,16 +193,7 @@ const FlightListBox = ({ details, traceId }) => {
                 fontFamily: nunito.style,
                 mt: 1,
               }}
-              onClick={() => {
-                router.push({
-                  pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
-                  query: {
-                    ResultIndex: flightDetails?.ResultIndex,
-                    traceId: traceId,
-                    
-                  },
-                });
-              }}
+              onClick={routetoAnotherPage}
             >
               Book Now
             </Button>
