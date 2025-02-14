@@ -36,9 +36,6 @@ const FlightList = () => {
   const [selectedDeparture, setSelectedDeparture] = useState(null);
   const [selectedArrival, setSelectedArrival] = useState(null);
 
-  // flightList.map((val)=>{
-
-  // })
 
   useEffect(() => {
     if (localStorage.getItem("roundflightData")) {
@@ -63,7 +60,7 @@ const FlightList = () => {
     }
   }, [flightList]);
 
-  // Handle selection change
+
   const handleFlightSelection = (type, flight) => {
     if (type === "departure") {
       setSelectedDeparture(flight);
@@ -83,10 +80,6 @@ const FlightList = () => {
     departure: selectedDeparture?.ResultIndex,
   };
 
-  // console.log(newResultIndex);
-  // console.log("first", selectedArrival?.ResultIndex);
-  // console.log("fffff", selectedDeparture?.ResultIndex);
-  // console.log(flightList)
   const routetoAnotherPage = () => {
     router.push({
       pathname: `/round-list/${selectedDeparture?.AirlineCode}/view-details`,
@@ -96,8 +89,6 @@ const FlightList = () => {
         journey: flightList?.type,
       },
     });
-
-    console.log("redult index", newResultIndex);
   };
 
   return (
@@ -377,7 +368,7 @@ const FlightList = () => {
 
       {/* Footer Flight Detail section  */}
       {flightList?.type === "DOMESTIC" ? (
-        <Grid2 container sx={{ position: "fixed", bottom: "0", width: "100%" }}>
+        <Grid2 container sx={{ position: "fixed", bottom: "0", width: "100%", zIndex:9999 }}>
           <Grid2 size={3}></Grid2>
           <Grid2
             size={9}
@@ -464,7 +455,7 @@ const FlightList = () => {
                   variant="body1"
                   sx={{ fontFamily: nunito.style, fontWeight: 700, mb: 1 }}
                 >
-                  Onwards
+                  Return
                 </Typography>
                 <Typography
                   sx={{
