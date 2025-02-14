@@ -19,7 +19,7 @@ export const flightController = {
   },
   flightDetails:async(data)=>{
     try{
-     let result=await flightPublicApi.post("/flightdetail/flightdetail",data);
+     let result=await flightPublicApi.post("flightdetail/flightdetail",data);
     //  console.log("result",result);
      return result;
     }
@@ -30,7 +30,7 @@ export const flightController = {
 
   roundTrip:async(data)=>{
     try{
-     let result=await flightPublicApi.post("/flight/search-flight",data);
+     let result=await flightPublicApi.post("flight/search-flight",data);
     //  console.log("result",result);
      return result;
     }
@@ -41,7 +41,7 @@ export const flightController = {
 
 roundflightDetails:async(data)=>{
   try{
-   let result=await flightPublicApi.post("/flightdetail/flightdetail",data);
+   let result=await flightPublicApi.post("flightdetail/flightdetail",data);
    return result;
   }
   catch(error){

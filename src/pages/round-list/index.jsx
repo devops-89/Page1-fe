@@ -91,6 +91,7 @@ const FlightList = () => {
     });
   };
 
+  console.log("flightList round Trip", flightList)
   return (
     <>
       <InnerBanner img={banner.src} heading={"Round Flight Trip"} />

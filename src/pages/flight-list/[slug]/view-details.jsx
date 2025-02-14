@@ -37,6 +37,7 @@ import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
 import { useFormik } from "formik";
 import { gstForm, pancard, passport } from "@/utils/validationSchema";
+import { JOURNEY, JOURNEY_TYPE } from "@/utils/enum";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -101,7 +102,9 @@ const FlightDetails = () => {
     }
   }, []);
 
+  // console.log("router", router)
 
+  // console.log("ip_address", JSON.parse(localStorage.getItem('state')).ip_address)
 
   useEffect(() => {
     if (router.query.ResultIndex && router.query.traceId) {
@@ -109,17 +112,19 @@ const FlightDetails = () => {
         .flightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: "122.160.31.42",
-          journey_type: "ONEWAY",
-          journey: "DOMESTIC",
+          ip_address: JSON.parse(localStorage.getItem('state')).ip_address,
+          journey_type: JOURNEY_TYPE.ONEWAY,
+          journey: JOURNEY.DOMESTIC,
         })
         .then((response) => {
+          console.log('oneWayflightDetails', response.data.data[0].Response)
           setIsGSTMandatory(
             response.data.data.Response?.ResultIndex?.IsGSTMandatory
           );
+          
           localStorage.setItem(
             "oneWayflightDetails",
-            JSON.stringify(response.data.data.Response)
+            JSON.stringify(response.data.data[0].Response)
           );
         })
         .catch((error) => {
