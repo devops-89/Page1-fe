@@ -36,7 +36,10 @@ import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
 import { useFormik } from "formik";
 import { gstForm, pancard, passport } from "@/utils/validationSchema";
-import { JOURNEY, JOURNEY_TYPE } from "@/utils/enum";
+import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { useDispatch } from "react-redux";
+import { setToast } from "@/redux/reducers/toast";
+import ToastBar from "@/components/toastBar";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -48,6 +51,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const FlightDetails = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [forms, setForms] = useState(data.flightDetails.travelerData || []);
   const [flightDetails, setFlightDetails] = useState(null);
@@ -62,8 +66,6 @@ const FlightDetails = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-
 
   const formikPancard = useFormik({
     initialValues: {
@@ -101,34 +103,41 @@ const FlightDetails = () => {
     }
   }, []);
 
-  // console.log("router", router)
-
-  // console.log("ip_address", JSON.parse(localStorage.getItem('state')).ip_address)
-
   useEffect(() => {
     if (router.query.ResultIndex && router.query.traceId) {
       flightController
         .flightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: JSON.parse(localStorage.getItem('state')).ip_address,
+          ip_address: JSON.parse(localStorage.getItem("state")).ip_address,
           journey_type: JOURNEY_TYPE.ONEWAY,
           journey: JOURNEY.DOMESTIC,
         })
         .then((response) => {
-          console.log('oneWayflightDetails', response.data.data[0].Response)
+          console.log(
+            "oneWayflightDetails",
+            response.data.data[0].Response.Error
+          );
+          console.log("oneWayflightDetails", response.data.data);
+          setFlightDetails(response.data.data[0].Response);
           setIsGSTMandatory(
             response.data.data.Response?.ResultIndex?.IsGSTMandatory
           );
-          
+
           localStorage.setItem(
             "oneWayflightDetails",
             JSON.stringify(response.data.data[0].Response)
           );
         })
         .catch((error) => {
-          console.error("Error fetching flight details:", error);
           setError(error);
+          dispatch(
+            setToast({
+              open: true,
+              message: error,
+              severity: TOAST_STATUS.ERROR,
+            })
+          );
         });
     }
   }, []);
@@ -179,8 +188,6 @@ const FlightDetails = () => {
     }
   };
 
-  // console.log("router", flightDetails?.Results?.Segments);
-
   return (
     <>
       <Grid2 container>
@@ -208,6 +215,8 @@ const FlightDetails = () => {
           </Typography>
         </Grid2>
 
+
+        
         {error ? (
           <Grid2
             size={{ xs: "12" }}
@@ -229,7 +238,7 @@ const FlightDetails = () => {
               {error?.message ||
                 "An unexpected error occurred. Please try again later."}
             </Typography>
-          </Grid2>
+          </Grid2>     
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px" }}>
@@ -847,8 +856,15 @@ const FlightDetails = () => {
                       ) : null}
                     </Grid2>
                   </Paper>
-                  <Button variant="contained" onClick={()=>{console.log("myForms",forms)}} size="large" sx={{backgroundColor:COLORS.PRIMARY}}>
-                      Continue
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      console.log("myForms", forms);
+                    }}
+                    size="large"
+                    sx={{ backgroundColor: COLORS.PRIMARY }}
+                  >
+                    Continue
                   </Button>
                 </Grid2>
 
@@ -856,7 +872,6 @@ const FlightDetails = () => {
                 <Grid2 size={4}>
                   <FareSummary fareData={flightDetails?.Results} />
                 </Grid2>
-
               </Grid2>
             </Container>
           </Grid2>
@@ -983,6 +998,7 @@ const FlightDetails = () => {
           </TableContainer>
         </DialogContent>
       </BootstrapDialog>
+      <ToastBar/>
     </>
   );
 };

@@ -9,7 +9,6 @@ import Testimonials from "@/components/testimonial/testimonials";
 import { COLORS } from "@/utils/colors";
 import { Box } from "@mui/material";
 import Head from "next/head";
-import { useEffect } from "react";
 export default function Home() {
   return (
     <>
@@ -27,48 +26,6 @@ export default function Home() {
         <Box sx={{ backgroundColor: COLORS.LIGHTBLUE }}>
           <AboutUs />
         </Box>
-        {/* <Box sx={{ pt: 10 }}>
-          <Grid2 container>
-            <Grid2 size={6} margin={"auto"} sx={{ p: 2, border: "" }}>
-              <CardActionArea>
-                <Grid2
-                  container
-                  sx={{
-                    border: `2px solid ${COLORS.DARKGREY}`,
-                    pt: 4,
-                    borderRadius: 2,
-                    pb: 4,
-                  }}
-                  spacing={2}
-                >
-                  <Grid2 size={5.5} textAlign={"center"}>
-                    <Image src={visa} width={250} />
-                  </Grid2>
-                  <Grid2
-                    size={1}
-                    textAlign={"center"}
-                    sx={{ position: "relative" }}
-                  >
-                    <Divider
-                      sx={{
-                        borderColor: COLORS.DARKGREY,
-                        margin: "auto",
-                        position: "absolute",
-                        left: "50%",
-                        borderWidth: 1,
-                      }}
-                      orientation="vertical"
-                    />
-                  </Grid2>
-
-                  <Grid2 size={5.5} textAlign={"center"}>
-                    <Image src={exclusive} width={250} />
-                  </Grid2>
-                </Grid2>
-              </CardActionArea>
-            </Grid2>
-          </Grid2>
-        </Box> */}
         <Box sx={{ pt: 10 }}>
           <Festivals />
         </Box>

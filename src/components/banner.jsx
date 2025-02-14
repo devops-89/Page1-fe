@@ -1,6 +1,5 @@
 import {
   Box,
-  Card,
   Divider,
   Grid2,
   Tab,
@@ -9,7 +8,6 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import banner1 from "@/banner/banner6.jpg";
 import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
 import { Autoplay, EffectFade } from "swiper/modules";
@@ -67,7 +65,7 @@ const Banner = () => {
                   justifyContent: "center",
                 }}
               >
-                <Grid2 container sx={{ mt: 15}}>
+                <Grid2 container sx={{ mt: 15 }}>
                   <Grid2
                     size={10}
                     margin="auto"
@@ -129,7 +127,6 @@ const Banner = () => {
                   },
                   "& .MuiTabs-indicator": {
                     display: "none !important",
-                    // backgroundColor: COLORS.PRIMARY,
                   },
                   "& .MuiTab-root": {
                     width: 120,

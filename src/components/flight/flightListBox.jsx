@@ -10,7 +10,6 @@ import {
 } from "@mui/icons-material";
 import {
   Avatar,
-  Box,
   Button,
   Card,
   Collapse,
@@ -52,16 +51,14 @@ const FlightListBox = ({ details, traceId }) => {
     setCabin(cabinData.label);
   }, [flightDetails, data.FLIGHT_CLASS_DATA]);
 
-
-
   const routetoAnotherPage = () => {
-    router.push({
-      pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
-      query: {
-        ResultIndex: flightDetails?.ResultIndex,
-        traceId: traceId,
-      },
-    });
+      router.push({
+        pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
+        query: {
+          ResultIndex: flightDetails?.ResultIndex,
+          traceId: traceId,
+        },
+      });
   };
 
   return (
