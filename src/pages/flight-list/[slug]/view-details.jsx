@@ -37,7 +37,10 @@ import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
 import { useFormik } from "formik";
 import { gstForm, pancard, passport } from "@/utils/validationSchema";
-import { JOURNEY, JOURNEY_TYPE } from "@/utils/enum";
+import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { useDispatch } from "react-redux";
+import { setToast } from "@/redux/reducers/toast";
+import ToastBar from "@/components/toastBar";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -49,8 +52,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const FlightDetails = () => {
-
-  
+  const dispatch = useDispatch();
   const router = useRouter();
   const [forms, setForms] = useState(data.flightDetails.travelerData || []);
   const [flightDetails, setFlightDetails] = useState(null);
@@ -65,8 +67,6 @@ const FlightDetails = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-
 
   const formikPancard = useFormik({
     initialValues: {
@@ -104,34 +104,41 @@ const FlightDetails = () => {
     }
   }, []);
 
-  console.log("router", router.query)
-
-  // console.log("ip_address", JSON.parse(localStorage.getItem('state')).ip_address)
-
   useEffect(() => {
     if (router.query.ResultIndex && router.query.traceId) {
       flightController
         .flightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: JSON.parse(localStorage.getItem('state')).ip_address,
+          ip_address: JSON.parse(localStorage.getItem("state")).ip_address,
           journey_type: JOURNEY_TYPE.ONEWAY,
           journey: JOURNEY.DOMESTIC,
         })
         .then((response) => {
-          console.log('oneWayflightDetails', response)
-          setIsGSTMandatory(
-            response.data.data.Response?.ResultIndex?.IsGSTMandatory
-          );
-          
-          localStorage.setItem(
-            "oneWayflightDetails",
-            JSON.stringify(response.data.data[0].Response)
-          );
+          if (response?.data?.data) {
+            setFlightDetails(response?.data?.data);
+            console.log("flight", response?.data?.data);
+            localStorage.setItem(
+              "oneWayflightDetails",
+              JSON.stringify(response?.data?.data)
+            );
+            setIsGSTMandatory(
+              response.data.data.Response?.ResultIndex?.IsGSTMandatory
+            );
+          }
         })
         .catch((error) => {
           console.error("Error fetching flight details:", error);
           setError(error);
+          dispatch(
+            setToast({
+              open: true,
+              message:
+                error.message ||
+                "An error occurred while fetching flight details.",
+              severity: TOAST_STATUS.ERROR,
+            })
+          );
         });
     }
   }, []);
@@ -181,8 +188,6 @@ const FlightDetails = () => {
       }));
     }
   };
-
-  // console.log("router", flightDetails?.Results?.Segments);
 
   return (
     <>
@@ -259,12 +264,10 @@ const FlightDetails = () => {
                               fontWeight: 700,
                             }}
                           >
-                            {`${flightDetails?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
+                            {`${flightDetails[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
                             →{" "}
                             {`${
-                              flightDetails?.Results?.Segments[0][
-                                flightDetails?.Results?.Segments[0].length - 1
-                              ]?.Destination?.Airport?.CityName
+                              flightDetails[0]?.Results?.Segments[0][flightDetails[0]?.Results?.Segments[0].length-1]?.Destination?.Airport?.CityName
                             }`}
                           </Typography>
                           <Typography
@@ -281,17 +284,17 @@ const FlightDetails = () => {
                               }}
                             >
                               {moment(
-                                `${flightDetails?.Results?.Segments[0][0].Origin.DepTime}`
+                                `${flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime}`
                               ).format("ddd, MMM D")}
                             </span>{" "}
                             {`${
-                              flightDetails?.Results?.Segments[0].length - 1
+                              flightDetails[0]?.Results?.Segments[0].length - 1
                             } Stop.`}{" "}
                             {`${Math.floor(
                               moment
                                 .duration(
-                                  flightDetails?.Results?.Segments[0][
-                                    flightDetails?.Results?.Segments[0].length -
+                                  flightDetails[0]?.Results?.Segments[0][
+                                    flightDetails[0]?.Results?.Segments[0].length -
                                       1
                                   ].AccumulatedDuration,
                                   "minutes"
@@ -299,8 +302,8 @@ const FlightDetails = () => {
                                 .asHours()
                             )} hrs ${moment
                               .duration(
-                                flightDetails?.Results?.Segments[0][
-                                  flightDetails?.Results?.Segments[0].length - 1
+                                flightDetails[0]?.Results?.Segments[0][
+                                  flightDetails[0]?.Results?.Segments[0].length - 1
                                 ].AccumulatedDuration,
                                 "minutes"
                               )
@@ -328,7 +331,7 @@ const FlightDetails = () => {
 
                       {/* Intermediate flights start */}
                       <Box>
-                        {flightDetails?.Results?.Segments[0]?.map(
+                        {flightDetails[0]?.Results?.Segments[0]?.map(
                           (segment, index) => {
                             // console.log("segment:", segment);
                             return (
@@ -458,7 +461,7 @@ const FlightDetails = () => {
                                 </Grid2>
                                 <Divider />
 
-                                {flightDetails?.Results?.Segments[0].length !=
+                                {flightDetails[0]?.Results?.Segments[0].length !=
                                 segment.SegmentIndicator ? (
                                   <>
                                     <Box
@@ -490,13 +493,13 @@ const FlightDetails = () => {
                                         {`${moment
                                           .utc(
                                             moment(
-                                              flightDetails?.Results
+                                              flightDetails[0]?.Results
                                                 ?.Segments[0][index + 1]?.Origin
                                                 .DepTime,
                                               "YYYY-MM-DD HH:mm"
                                             ).diff(
                                               moment(
-                                                flightDetails?.Results
+                                                flightDetails[0]?.Results
                                                   ?.Segments[0][index]
                                                   ?.Destination.ArrTime,
                                                 "YYYY-MM-DD HH:mm"
@@ -558,7 +561,7 @@ const FlightDetails = () => {
                     >
                       <Box sx={{ mb: "15px" }}>
                         {/* Refundable  */}
-                        {FlightDetails?.Results?.IsRefundable ? (
+                        {flightDetails[0]?.Results?.IsRefundable ? (
                           <Typography
                             variant="body1"
                             sx={{
@@ -586,8 +589,8 @@ const FlightDetails = () => {
                       </Box>
 
                       {/* PanCard */}
-                      {flightDetails?.Results?.IsPanRequiredAtBook ||
-                      flightDetails?.Results?.IsPanRequiredAtTicket ? (
+                      {flightDetails[0]?.Results?.IsPanRequiredAtBook ||
+                      flightDetails[0]?.Results?.IsPanRequiredAtTicket ? (
                         <Box sx={{ mb: "10px" }}>
                           <Typography
                             variant="h6"
@@ -654,8 +657,8 @@ const FlightDetails = () => {
                       ) : null}
 
                       {/* Passport  */}
-                      {flightDetails?.Results?.IsPassportRequiredAtBook ||
-                      flightDetails?.Results
+                      {flightDetails[0]?.Results?.IsPassportRequiredAtBook ||
+                      flightDetails[0]?.Results
                         ?.IsPassportRequiredAtBookIsPassportRequiredAtTicket ? (
                         <Box sx={{ mb: "10px" }}>
                           <Typography
@@ -751,7 +754,7 @@ const FlightDetails = () => {
 
                       {/* GST  */}
 
-                      {flightDetails?.Results?.GSTAllowed ? (
+                      {flightDetails[0]?.Results?.GSTAllowed ? (
                         <Box sx={{ mb: "10px" }}>
                           <Typography
                             variant="h6"
@@ -853,17 +856,23 @@ const FlightDetails = () => {
                     </Grid2>
                     
                   </Paper>
-                  <Button variant="contained" onClick={()=>{console.log("myForms",forms)}} size="large" sx={{backgroundColor:COLORS.PRIMARY}}>
-                      Continue
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      console.log("myForms", forms);
+                    }}
+                    size="large"
+                    sx={{ backgroundColor: COLORS.PRIMARY }}
+                  >
+                    Continue
                   </Button>
                   <FullScreenDialog />
                 </Grid2>
 
                 {/* Fare Summary */}
                 <Grid2 size={4}>
-                  <FareSummary fareData={flightDetails?.Results} />
+                  <FareSummary fareData={flightDetails[0]?.Results} />
                 </Grid2>
-
               </Grid2>
             </Container>
           </Grid2>
@@ -949,7 +958,7 @@ const FlightDetails = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {flightDetails?.Results?.FareRules?.map((fareRule, index) => {
+                {flightDetails && flightDetails[0]?.Results?.FareRules?.map((fareRule, index) => {
                   return (
                     <TableRow>
                       <TableCell
@@ -990,6 +999,7 @@ const FlightDetails = () => {
           </TableContainer>
         </DialogContent>
       </BootstrapDialog>
+      <ToastBar />
     </>
   );
 };

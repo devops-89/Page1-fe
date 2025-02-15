@@ -21,7 +21,6 @@ const FlightForm = () => {
     },
   ];
 
-
   const router = useRouter();
 
   const [flightValue, setFlightValue] = useState(0);
@@ -34,7 +33,7 @@ const FlightForm = () => {
     } else if (router.pathname === "/multi-list") {
       setFlightValue(2);
     }
-  }, [router.pathname]); 
+  }, [router.pathname]);
 
   const flightTabChangeHandler = (e, newValue) => {
     setFlightValue(newValue);
