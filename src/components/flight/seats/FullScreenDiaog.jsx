@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import SeatMap from './SeatMap';
+import {COLORS} from "@/utils/colors.js";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -34,8 +35,9 @@ export default function FullScreenDialog() {
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
+       
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: 'relative' ,backgroundColor:COLORS.PRIMARY}}>
           <Toolbar>
             <IconButton
               edge="start"

@@ -1,7 +1,19 @@
-import React from 'react';
+import { useState,useEffect } from "react";
 import { Grid2, Button, Typography, Box, Stack } from "@mui/material";
+import {data} from "../../../assests/data.js";
 
-const Seat = ({seatsData}) => {
+const SeatColors = {
+  available: "#E8F2FF",
+  unavailable: "red",
+  reserved: "orange",
+  selected: "green",
+};
+
+const Seat = () => {
+  const [reservedSeats,setReservedSeats]=useState([]);
+  useEffect(()=>{
+    console.log(reservedSeats); 
+  })
   return (
     <Box
     sx={{
@@ -12,15 +24,16 @@ const Seat = ({seatsData}) => {
       p: 2,
     }}
   >
-    {seatsData.map((seat) => (
-      <Box
+    {data.seatsData.map((seat) => (
+      <Button
         key={`${seat.row}${seat.col}`}
+        disabled={(seat.status==="available")?false:true}
         sx={{
           border: "2px solid rgb(22, 129, 216)",
           borderRadius: "4px",
           p: 1,
           textAlign: "center",
-          backgroundColor: "#E8F2FF",
+          backgroundColor: SeatColors[seat.status] || "#E8F2FF",
 
           cursor: "pointer",
           transition: "box-shadow 0.3s ease-in-out",
@@ -28,13 +41,16 @@ const Seat = ({seatsData}) => {
             border: "2px solid rgb(5, 76, 153)",
           },
         }}
-        onClick={() => alert(`${seat.row}${seat.col}`)}
+        onClick={() =>{
+          
+           setReservedSeats([...reservedSeats,seat])
+          }}
       >
         <Typography variant="body1" sx={{ color: "black" }}>
           {seat.row}
           {seat.col}
         </Typography>
-      </Box>
+      </Button>
     ))}
   </Box>
   )

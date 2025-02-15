@@ -49,6 +49,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const FlightDetails = () => {
+
+  
   const router = useRouter();
   const [forms, setForms] = useState(data.flightDetails.travelerData || []);
   const [flightDetails, setFlightDetails] = useState(null);
@@ -102,7 +104,7 @@ const FlightDetails = () => {
     }
   }, []);
 
-  // console.log("router", router)
+  console.log("router", router.query)
 
   // console.log("ip_address", JSON.parse(localStorage.getItem('state')).ip_address)
 
@@ -117,7 +119,7 @@ const FlightDetails = () => {
           journey: JOURNEY.DOMESTIC,
         })
         .then((response) => {
-          console.log('oneWayflightDetails', response.data.data[0].Response)
+          console.log('oneWayflightDetails', response)
           setIsGSTMandatory(
             response.data.data.Response?.ResultIndex?.IsGSTMandatory
           );
