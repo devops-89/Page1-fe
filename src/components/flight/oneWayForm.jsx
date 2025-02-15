@@ -36,7 +36,6 @@ const OnewayForm = () => {
   const [childValue, setChildValue] = useState(0);
   const [infantValue, setInfantValue] = useState(0);
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [btnDisable, setBtnDisable] = useState(false);
   const [defaultRoute, setDefaultRoute] = useState("/flight-list");
 
   const [initialValue, setIntialValue] = useState({
@@ -184,7 +183,6 @@ const OnewayForm = () => {
     } else {
       localStorage.setItem("state", JSON.stringify(state));
       searchFlight();
-      setBtnDisable(true);
     }
   };
 
@@ -520,14 +518,8 @@ const OnewayForm = () => {
               color: COLORS.WHITE,
               width: 150,
               p: 2,
-              "&:disabled": {
-                cursor: "not-allowed",
-                pointerEvents: "auto",
-                color: COLORS.WHITE,
-              },
             }}
             onClick={submitHandler}
-            disabled={btnDisable}
           >
             {buttonLoading ? (
               <Loading
