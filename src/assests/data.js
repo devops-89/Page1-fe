@@ -934,7 +934,191 @@ export const data = {
       { row: 5, col: "D", price: 5, status: "available" },
       { row: 5, col: "E", price: 9, status: "available" },
       { row: 5, col: "F", price: 9, status: "available" },
-    ]
+    ],
+
+
+
+
+    
+      our_hotelers: [
+        {
+          "name": "SinQ Beach Resort",
+          "location": {
+            "city": "Calangute",
+            "distanceInfo": "6 minutes walk to Calangute Beach"
+          },
+          "tags": ["Couple Friendly"],
+          "services": [
+            "Swimming Pool",
+            "Free Wi-Fi",
+            "Gym",
+            "Restaurant"
+          ],
+          "description": "Near Calangute Beach, stunning pool area surrounded by lush greenery, room with pool views",
+          "images": {
+            "main": "https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg",
+            "thumbnails": [
+              "https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg",
+              "https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg",
+              "https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg",
+              "https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg"
+            ]
+          },
+          "rating": {
+            "label": "Very Good",
+            "score": 4.5,
+            "reviewCount": 57302
+          },
+          "price": {
+            "original": 698,
+            "discounted": 598,
+            "taxesInfo": "$598 taxes & fees Per Night"
+          },
+          "additionalInfo": "Login to book Now & Pay Later!"
+        },
+        {
+          "name": "The Grand Palace",
+          "location": {
+            "city": "Mumbai",
+            "distanceInfo": "10 minutes walk to Marine Drive"
+          },
+          "tags": ["Luxury Stay", "Family Friendly"],
+          "services": [
+            "Spa",
+            "Valet Parking",
+            "Rooftop Bar",
+            "Swimming Pool"
+          ],
+          "description": "Experience unparalleled luxury with views of the Arabian Sea.",
+          "images": {
+            "main": "https://via.placeholder.com/300x200",
+            "thumbnails": [
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100"
+            ]
+          },
+          "rating": {
+            "label": "Excellent",
+            "score": 4.8,
+            "reviewCount": 4305
+          },
+          "price": {
+            "original": 1200,
+            "discounted": 950,
+            "taxesInfo": "$950 taxes & fees Per Night"
+          },
+          "additionalInfo": "Free cancellation available!"
+        },
+        {
+          "name": "Mountain Retreat",
+          "location": {
+            "city": "Manali",
+            "distanceInfo": "5 minutes walk to Mall Road"
+          },
+          "tags": ["Nature Friendly", "Adventure"],
+          "services": [
+            "Bonfire",
+            "Mountain Views",
+            "Trekking Assistance",
+            "Outdoor Games"
+          ],
+          "description": "Reconnect with nature at this serene mountain retreat.",
+          "images": {
+            "main": "https://via.placeholder.com/300x200",
+            "thumbnails": [
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100"
+            ]
+          },
+          "rating": {
+            "label": "Good",
+            "score": 4.2,
+            "reviewCount": 2850
+          },
+          "price": {
+            "original": 450,
+            "discounted": 399,
+            "taxesInfo": "$399 taxes & fees Per Night"
+          },
+          "additionalInfo": "Special discount for trekkers!"
+        },
+        {
+          "name": "Ocean View Paradise",
+          "location": {
+            "city": "Goa",
+            "distanceInfo": "2 minutes walk to Baga Beach"
+          },
+          "tags": ["Beachfront", "Pet Friendly"],
+          "services": [
+            "Private Beach Access",
+            "Water Sports",
+            "Beach Bar",
+            "Kids Play Area"
+          ],
+          "description": "Wake up to the sound of waves and enjoy private beach access.",
+          "images": {
+            "main": "https://via.placeholder.com/300x200",
+            "thumbnails": [
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100"
+            ]
+          },
+          "rating": {
+            "label": "Very Good",
+            "score": 4.6,
+            "reviewCount": 6790
+          },
+          "price": {
+            "original": 800,
+            "discounted": 750,
+            "taxesInfo": "$750 taxes & fees Per Night"
+          },
+          "additionalInfo": "Book now for a free dinner voucher!"
+        },
+        {
+          "name": "Urban Stay",
+          "location": {
+            "city": "Delhi",
+            "distanceInfo": "5 minutes drive to Connaught Place"
+          },
+          "tags": ["Business Friendly", "Urban Luxury"],
+          "services": [
+            "Conference Rooms",
+            "Free Wi-Fi",
+            "City Tours",
+            "24/7 Room Service"
+          ],
+          "description": "The perfect blend of business and leisure in the heart of the city.",
+          "images": {
+            "main": "https://via.placeholder.com/300x200",
+            "thumbnails": [
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100",
+              "https://via.placeholder.com/100x100"
+            ]
+          },
+          "rating": {
+            "label": "Excellent",
+            "score": 4.9,
+            "reviewCount": 9843
+          },
+          "price": {
+            "original": 900,
+            "discounted": 850,
+            "taxesInfo": "$850 taxes & fees Per Night"
+          },
+          "additionalInfo": "Business packages available on request!"
+        }
+      ]
+    
+    
     
     
   

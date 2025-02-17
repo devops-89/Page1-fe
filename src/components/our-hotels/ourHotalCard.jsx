@@ -9,9 +9,12 @@ import {
 import PoolIcon from '@mui/icons-material/Pool';
 import { COLORS } from "@/utils/colors";
 
+
 import HotTubOutlinedIcon from '@mui/icons-material/HotTubOutlined';
 
-export default function OurHotalCard() {
+export default function OurHotalCard({data}) {
+
+ 
   return (
     <Container>
       <Stack
@@ -105,7 +108,7 @@ export default function OurHotalCard() {
               component={"h1"}
               sx={{ fontWeight: "bold" }}
             >
-              SinQ Beach Resort
+             {data.name}
             </Typography>
 
             <Stack
@@ -125,32 +128,49 @@ export default function OurHotalCard() {
                 color={COLORS.BHARTIBLUE}
                 sx={{ fontWeight: "bold" }}
               >
-                Calangute
+              {data.location.city}
               </Typography>
               <Typography variant="subtitle2">
-                6 ,minutes walk to Calangute Beach
+               {data.location.distanceInfo}
               </Typography>
             </Stack>
-            <Button variant="outlined" sx={{width:"40%" ,paddingTop:0.3,paddingBottom:0.3, fontSize:11, } } noWrap={true} >Couple Friendly</Button>
+            <Stack direction={{lg:"row" ,sm:"column"}} spacing={1}  divider={<Divider orientation="vertical" flexItem />}>
+            {data.tags.map((cur)=>(
+          
+     <Typography variant="outlined" sx={{ paddingTop:0.3,paddingBottom:0.3, fontSize:15, color:COLORS.SECONDARY } } noWrap={true} >{cur}</Typography>
+    
+
+            ))}
+
+</Stack>
+
+            {/* <Button variant="outlined" sx={{width:"30%" ,paddingTop:0.3,paddingBottom:0.3, fontSize:11, } } noWrap={true} >Couple Friendly</Button> */}
             {/* service stack */}
             <Stack direction={{lg:"row",sm:"column"}} gap={2} sx={{paddingTop:1}}>
+
+              {data.services.map(( cur)=>(
+                  <Stack direction={"row"} gap={1} alignItems={"center"} >
+                  <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
+                  <Typography variant="subtutle2" color={COLORS.DARKGREY}>{cur}</Typography>
+                </Stack>
+              ))}
               
-
+{/* 
               <Stack direction={"row"} gap={1} alignItems={"center"} >
                 <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
                 <Typography variant="subtutle2" color={COLORS.DARKGREY}>Swimming Pool</Typography>
-              </Stack>
+              </Stack> */}
 
-              <Stack direction={"row"} gap={1} alignItems={"center"} >
+              {/* <Stack direction={"row"} gap={1} alignItems={"center"} >
+                <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
+                <Typography variant="subtutle2" color={COLORS.DARKGREY}>Swimming Pool</Typography>
+              </Stack> */}
+
+              {/* <Stack direction={"row"} gap={1} alignItems={"center"} >
                 <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
                 <Typography variant="subtutle2" color={COLORS.DARKGREY}>Swimming Pool</Typography>
               </Stack>
-
-              <Stack direction={"row"} gap={1} alignItems={"center"} >
-                <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
-                <Typography variant="subtutle2" color={COLORS.DARKGREY}>Swimming Pool</Typography>
-              </Stack>
-              
+               */}
               
 
             
@@ -160,7 +180,7 @@ export default function OurHotalCard() {
 
              <Stack direction={"row"} gap={1} alignItems={"center"} sx={{paddingTop:1}} >
                 <PoolIcon sx={{ fontSize:18 ,}}/>
-                <Typography variant="subtutle2">Near Calangute Beach ,stunning pool area surrounded by lush greenery ,room with pool views</Typography>
+                <Typography variant="subtutle2"> {data.description }</Typography>
               </Stack>
               
 
@@ -173,30 +193,30 @@ export default function OurHotalCard() {
     justifyContent: "flex-start",
     alignItems: {lg:"flex-end" ,md:"flex-start"},
     paddingLeft:4,
-    mt:{lg:0 ,md:4}
+    mt:{lg:0 ,sm:4}
   }}>
        <Stack direction={"row"} alignItems={"center"} spacing={1}>
 
-       <Typography variant="h6" sx={{color:COLORS.SECONDARY , fontWeigh:"extrabold" }}  >very Good </Typography>
+       <Typography variant="h6" sx={{color:COLORS.SECONDARY , fontWeigh:"extrabold" }}  >{data.rating.label} </Typography>
        <Box sx={{ backgroundColor :COLORS.SECONDARY ,color:"white" ,padding:0.5 ,borderRadius:0.8 ,}}>
-        <Typography sx={{ fontWeight:"bold" }}> 3.9
+        <Typography sx={{ fontWeight:"bold" }}> { data.rating.score}
         </Typography></Box>
        </Stack>
-       <Typography variant="subtitle1">(5,7302)</Typography>
+       <Typography variant="subtitle1">{data.rating.reviewCount}</Typography>
 
        <Stack  sx={{
     justifyContent: "flex-start",
-    alignItems: "flex-end",
-    paddingLeft:4
+    alignItems: {lg:"flex-end" ,sm:"flex-start"},
+    paddingLeft:0
   }} >
-       <Typography variant="subtitle2" sx={{textDecoration:"line-through" ,color:COLORS.DARKGREY}}>(5,7302)</Typography>
+       <Typography variant="subtitle2" sx={{textDecoration:"line-through" ,color:COLORS.DARKGREY}}>{data.price.originalPrice}</Typography>
 
-       <Typography variant="h6" sx={{fontWeight:"bold"}}>(5,7302)</Typography>
-       <Typography variant="subtitle2" sx={{ color:COLORS.DARKGREY ,textAlign:"end"}}>$ 598 taxes & fees Per Night</Typography>
+       <Typography variant="h6" sx={{fontWeight:"bold"}}>{data.price.discounted}</Typography>
+       <Typography variant="subtitle2" sx={{ color:COLORS.DARKGREY ,textAlign:{lg:"end" ,sm:"start"}}}>{ data.price.texesInfo}</Typography>
 
        </Stack>
 
-       <Typography variant="subtitle2" sx={{color:COLORS.SECONDARY ,pt:2 , textAlign:"end" ,fontWeight:"bold", fontSize:12}} >Login to book Now & Pay Later!</Typography>
+       <Typography variant="subtitle2" sx={{color:COLORS.SECONDARY ,pt:2 , textAlign:"end" ,fontWeight:"bold", fontSize:12}} >{ data.additionalInfo}</Typography>
        
 
       </Stack>
@@ -206,35 +226,10 @@ export default function OurHotalCard() {
 
        
       </Stack>
+     
     </Container>
   );
 }
 
-{
-  /* <Stack direction={"row"} >
 
-<Stack direaction={"row"} >
-  
-  <Box component={"div"} >
-    <Box sx={{width:350, height:200}}>
-      <Box 
-      component={"img"}
-      src = "https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg"
-       sx ={{width:"100%" ,height:"100%" ,objectFit:"cover"}}
-
-      >
-        
-      </Box>
-
-  
-    </Box>
-
-  </Box>
-
-
-</Stack>
-<Box>
- <h1>hello</h1>
-</Box>
-</Stack> */
-}
+ 
