@@ -22,12 +22,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TextField,
 } from "@mui/material";
 import Image from "next/image";
 import { flightController } from "@/api/flightController";
-import TravellerForm from "@/components/flight/TravellerForm";
-import { data } from "../../../assests/data";
 import { useRouter } from "next/router";
 import FareSummary from "@/components/flight/FareSummary";
 import moment from "moment";
@@ -35,12 +32,12 @@ import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
-import { useFormik } from "formik";
-import { gstForm, pancard, passport } from "@/utils/validationSchema";
 import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
+import PassengerForm from "@/components/flight/PassengerForm";
+import Link from "next/link";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -54,13 +51,11 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [forms, setForms] = useState(data.flightDetails.travelerData || []);
   const [flightDetails, setFlightDetails] = useState(null);
-  const [otherDetails,setOtherDetails]=useState(null);
+  const [otherDetails, setOtherDetails] = useState(null);
   const [error, setError] = useState(null);
-  const [formState, setFormState] = useState();
   const [open, setOpen] = useState(false);
-  const [isGSTMandatory, setIsGSTMandatory] = useState(false);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,41 +64,7 @@ const FlightDetails = () => {
     setOpen(false);
   };
 
-  const formikPancard = useFormik({
-    initialValues: {
-      fullName: "",
-      panNumber: "",
-      dob: "",
-    },
-    validationSchema: pancard,
-  });
 
-  const formikPassPort = useFormik({
-    initialValues: {
-      passportNo: "",
-      passportExpiry: "",
-      passportIssueDate: "",
-      passportIssueCountryCode: "",
-    },
-    validationSchema: passport,
-  });
-
-  const formikGST = useFormik({
-    initialValues: {
-      GSTCompanyAddress: "",
-      GSTCompanyContactNumber: "",
-      GSTCompanyName: "",
-      GSTNumber: "",
-      GSTCompanyEmail: "",
-    },
-    validationSchema: gstForm(isGSTMandatory),
-  });
-
-  useEffect(() => {
-    if (localStorage.getItem("state")) {
-      setFormState(JSON.parse(localStorage.getItem("state")));
-    }
-  }, []);
 
   useEffect(() => {
     if (router.query.ResultIndex && router.query.traceId) {
@@ -119,19 +80,17 @@ const FlightDetails = () => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
             setOtherDetails(response?.data?.data[1]);
-            console.log("flight", response?.data?.data);
+            // console.log("flight", response?.data?.data);
             localStorage.setItem(
               "oneWayflightDetails",
               JSON.stringify(response?.data?.data)
             );
-            setIsGSTMandatory(
-              response.data.data.Response?.ResultIndex?.IsGSTMandatory
-            );
           }
         })
         .catch((error) => {
-          console.error("Error fetching flight details:", error);
+          // console.error("Error fetching flight details:", error);
           setError(error);
+          console.log("myError",error)
           dispatch(
             setToast({
               open: true,
@@ -158,38 +117,6 @@ const FlightDetails = () => {
     }
   }, []);
 
-  const handleChange = (type, id, field) => (event) => {
-    setForms((prevForms) => ({
-      ...prevForms,
-      [type]: prevForms[type].map((form) =>
-        form.id === id
-          ? {
-              ...form,
-              [field]: event.target.value,
-            }
-          : form
-      ),
-    }));
-  };
-
-  const addNewForm = (type) => {
-    if (forms[type].length != formState[type.toLowerCase()]) {
-      const newForm = {
-        id: forms[type]?.length + 1 || 1,
-        firstMiddleName: "",
-        lastName: "",
-        gender: "",
-        countryCode: "",
-        mobileNumber: "",
-        email: "",
-        requiresWheelchair: false,
-      };
-      setForms((prevForms) => ({
-        ...prevForms,
-        [type]: [...(prevForms[type] || []), newForm],
-      }));
-    }
-  };
 
   return (
     <>
@@ -234,11 +161,13 @@ const FlightDetails = () => {
                 fontWeight: 600,
                 fontFamily: nunito.style,
                 fontSize: "24px",
+                mb:"10px"
               }}
             >
-              {error?.message ||
-                "An unexpected error occurred. Please try again later."}
+              {(error?.message==null && error?.message==undefined) ?
+                "An unexpected error occurred. Please try again later.":'The Session is expired'}
             </Typography>
+            <Link href='/'><Button variant="contained" sx={{backgroundColor:COLORS.PRIMARY}}>Back to Homepage</Button></Link>
           </Grid2>
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
@@ -269,7 +198,10 @@ const FlightDetails = () => {
                             {`${flightDetails[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
                             →{" "}
                             {`${
-                              flightDetails[0]?.Results?.Segments[0][flightDetails[0]?.Results?.Segments[0].length-1]?.Destination?.Airport?.CityName
+                              flightDetails[0]?.Results?.Segments[0][
+                                flightDetails[0]?.Results?.Segments[0].length -
+                                  1
+                              ]?.Destination?.Airport?.CityName
                             }`}
                           </Typography>
                           <Typography
@@ -296,8 +228,8 @@ const FlightDetails = () => {
                               moment
                                 .duration(
                                   flightDetails[0]?.Results?.Segments[0][
-                                    flightDetails[0]?.Results?.Segments[0].length -
-                                      1
+                                    flightDetails[0]?.Results?.Segments[0]
+                                      .length - 1
                                   ].AccumulatedDuration,
                                   "minutes"
                                 )
@@ -305,7 +237,8 @@ const FlightDetails = () => {
                             )} hrs ${moment
                               .duration(
                                 flightDetails[0]?.Results?.Segments[0][
-                                  flightDetails[0]?.Results?.Segments[0].length - 1
+                                  flightDetails[0]?.Results?.Segments[0]
+                                    .length - 1
                                 ].AccumulatedDuration,
                                 "minutes"
                               )
@@ -463,8 +396,8 @@ const FlightDetails = () => {
                                 </Grid2>
                                 <Divider />
 
-                                {flightDetails[0]?.Results?.Segments[0].length !=
-                                segment.SegmentIndicator ? (
+                                {flightDetails[0]?.Results?.Segments[0]
+                                  .length != segment.SegmentIndicator ? (
                                   <>
                                     <Box
                                       sx={{
@@ -523,351 +456,10 @@ const FlightDetails = () => {
                       </Box>
                       {/* Intermediate flights end */}
                     </Card>
-                    {/* Card Section end */}
-
-                    {/* Traveler Details */}
-                    {["Adult", "Child", "Infant"].map((type) => (
-                      <Card key={type} sx={{ padding: 2, marginBottom: 3 }}>
-                        <Typography
-                          variant="h6"
-                          sx={{ fontFamily: nunito.style, fontWeight: 800 }}
-                        >
-                          {type} Details
-                        </Typography>
-                        <Box sx={{ marginTop: 3 }}>
-                          {forms[type]?.map((form) => (
-                            <TravellerForm
-                              key={form.id}
-                              form={form}
-                              handleChange={(id, field) =>
-                                handleChange(type, id, field)
-                              }
-                              formType={type}
-                              showWheelchairOption={type === "Adult"}
-                            />
-                          ))}
-                          <Button
-                            variant="text"
-                            onClick={() => addNewForm(type)}
-                          >
-                            + Add New {type}
-                          </Button>
-                        </Box>
-                      </Card>
-                    ))}
-
-                    <Grid2
-                      size={12}
-                      sx={{ padding: 2, backgroundColor: COLORS.WHITE }}
-                      component={Paper}
-                    >
-                      <Box sx={{ mb: "15px" }}>
-                        {/* Refundable  */}
-                        {flightDetails[0]?.Results?.IsRefundable ? (
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              fontWeight: 600,
-                              fontSize: "16px",
-                              fontFamily: nunito.style,
-                              color: "green",
-                            }}
-                          >
-                            * The fare is refundable.
-                          </Typography>
-                        ) : (
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              fontWeight: 600,
-                              fontSize: "16px",
-                              fontFamily: nunito.style,
-                              color: "red",
-                            }}
-                          >
-                            * Sorry, the fare is not refundable.
-                          </Typography>
-                        )}
-                      </Box>
-
-                      {/* PanCard */}
-                      {flightDetails[0]?.Results?.IsPanRequiredAtBook ||
-                      flightDetails[0]?.Results?.IsPanRequiredAtTicket ? (
-                        <Box sx={{ mb: "10px" }}>
-                          <Typography
-                            variant="h6"
-                            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
-                          >
-                            Enter Pan Card Details
-                          </Typography>
-                          <form>
-                            <TextField
-                              fullWidth
-                              label="Full Name"
-                              name="fullName"
-                              value={formikPancard.values.fullName}
-                              onChange={formikPancard.handleChange}
-                              onBlur={formikPancard.handleBlur}
-                              error={
-                                formikPancard.touched.fullName &&
-                                Boolean(formikPancard.errors.fullName)
-                              }
-                              helperText={
-                                formikPancard.touched.fullName &&
-                                formikPancard.errors.fullName
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="PAN Number"
-                              name="panNumber"
-                              value={formikPancard.values.panNumber}
-                              onChange={formikPancard.handleChange}
-                              onBlur={formikPancard.handleBlur}
-                              error={
-                                formikPancard.touched.panNumber &&
-                                Boolean(formikPancard.errors.panNumber)
-                              }
-                              helperText={
-                                formikPancard.touched.panNumber &&
-                                formikPancard.errors.panNumber
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="Date of Birth"
-                              name="dob"
-                              type="date"
-                              InputLabelProps={{ shrink: true }}
-                              value={formikPancard.values.dob}
-                              onChange={formikPancard.handleChange}
-                              onBlur={formikPancard.handleBlur}
-                              error={
-                                formikPancard.touched.dob &&
-                                Boolean(formikPancard.errors.dob)
-                              }
-                              helperText={
-                                formikPancard.touched.dob &&
-                                formikPancard.errors.dob
-                              }
-                              margin="normal"
-                            />
-                          </form>
-                        </Box>
-                      ) : null}
-
-                      {/* Passport  */}
-                      {flightDetails[0]?.Results?.IsPassportRequiredAtBook ||
-                      flightDetails[0]?.Results
-                        ?.IsPassportRequiredAtBookIsPassportRequiredAtTicket ? (
-                        <Box sx={{ mb: "10px" }}>
-                          <Typography
-                            variant="h6"
-                            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
-                          >
-                            Enter PassPort Details
-                          </Typography>
-                          <form>
-                            <TextField
-                              fullWidth
-                              label="Passport Number"
-                              name="passportNo"
-                              value={formikPassPort.values.passportNo}
-                              onChange={formikPassPort.handleChange}
-                              onBlur={formikPassPort.handleBlur}
-                              error={
-                                formikPassPort.touched.passportNo &&
-                                Boolean(formikPassPort.errors.passportNo)
-                              }
-                              helperText={
-                                formikPassPort.touched.passportNo &&
-                                formikPassPort.errors.passportNo
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="Passport Expiry Date"
-                              name="passportExpiry"
-                              type="date"
-                              InputLabelProps={{ shrink: true }}
-                              value={formikPassPort.values.passportExpiry}
-                              onChange={formikPassPort.handleChange}
-                              onBlur={formikPassPort.handleBlur}
-                              error={
-                                formikPassPort.touched.passportExpiry &&
-                                Boolean(formikPassPort.errors.passportExpiry)
-                              }
-                              helperText={
-                                formikPassPort.touched.passportExpiry &&
-                                formikPassPort.errors.passportExpiry
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="Passport Issue Date"
-                              name="passportIssueDate"
-                              type="date"
-                              InputLabelProps={{ shrink: true }}
-                              value={formikPassPort.values.passportIssueDate}
-                              onChange={formikPassPort.handleChange}
-                              onBlur={formikPassPort.handleBlur}
-                              error={
-                                formikPassPort.touched.passportIssueDate &&
-                                Boolean(formikPassPort.errors.passportIssueDate)
-                              }
-                              helperText={
-                                formikPassPort.touched.passportIssueDate &&
-                                formikPassPort.errors.passportIssueDate
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="Passport Issue Country Code"
-                              name="passportIssueCountryCode"
-                              value={
-                                formikPassPort.values.passportIssueCountryCode
-                              }
-                              onChange={formikPassPort.handleChange}
-                              onBlur={formikPassPort.handleBlur}
-                              error={
-                                formikPassPort.touched
-                                  .passportIssueCountryCode &&
-                                Boolean(
-                                  formikPassPort.errors.passportIssueCountryCode
-                                )
-                              }
-                              helperText={
-                                formikPassPort.touched
-                                  .passportIssueCountryCode &&
-                                formikPassPort.errors.passportIssueCountryCode
-                              }
-                              margin="normal"
-                            />
-                          </form>
-                        </Box>
-                      ) : null}
-
-                    
-
-                      {/* GST  */}
-
-                      {flightDetails[0]?.Results?.GSTAllowed ? (
-                        <Box sx={{ mb: "10px" }}>
-                          <Typography
-                            variant="h6"
-                            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
-                          >
-                            Enter GST Details
-                          </Typography>
-                          <form>
-                            <TextField
-                              fullWidth
-                              label="Company Address"
-                              name="GSTCompanyAddress"
-                              value={formikGST.values.GSTCompanyAddress}
-                              onChange={formikGST.handleChange}
-                              onBlur={formikGST.handleBlur}
-                              error={
-                                formikGST.touched.GSTCompanyAddress &&
-                                Boolean(formikGST.errors.GSTCompanyAddress)
-                              }
-                              helperText={
-                                formikGST.touched.GSTCompanyAddress &&
-                                formikGST.errors.GSTCompanyAddress
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="Company Contact Number"
-                              name="GSTCompanyContactNumber"
-                              value={formikGST.values.GSTCompanyContactNumber}
-                              onChange={formikGST.handleChange}
-                              onBlur={formikGST.handleBlur}
-                              error={
-                                formikGST.touched.GSTCompanyContactNumber &&
-                                Boolean(
-                                  formikGST.errors.GSTCompanyContactNumber
-                                )
-                              }
-                              helperText={
-                                formikGST.touched.GSTCompanyContactNumber &&
-                                formikGST.errors.GSTCompanyContactNumber
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="Company Name"
-                              name="GSTCompanyName"
-                              value={formikGST.values.GSTCompanyName}
-                              onChange={formikGST.handleChange}
-                              onBlur={formikGST.handleBlur}
-                              error={
-                                formikGST.touched.GSTCompanyName &&
-                                Boolean(formikGST.errors.GSTCompanyName)
-                              }
-                              helperText={
-                                formikGST.touched.GSTCompanyName &&
-                                formikGST.errors.GSTCompanyName
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="GST Number"
-                              name="GSTNumber"
-                              value={formikGST.values.GSTNumber}
-                              onChange={formikGST.handleChange}
-                              onBlur={formikGST.handleBlur}
-                              error={
-                                formikGST.touched.GSTNumber &&
-                                Boolean(formikGST.errors.GSTNumber)
-                              }
-                              helperText={
-                                formikGST.touched.GSTNumber &&
-                                formikGST.errors.GSTNumber
-                              }
-                              margin="normal"
-                            />
-                            <TextField
-                              fullWidth
-                              label="Company Email"
-                              name="GSTCompanyEmail"
-                              value={formikGST.values.GSTCompanyEmail}
-                              onChange={formikGST.handleChange}
-                              onBlur={formikGST.handleBlur}
-                              error={
-                                formikGST.touched.GSTCompanyEmail &&
-                                Boolean(formikGST.errors.GSTCompanyEmail)
-                              }
-                              helperText={
-                                formikGST.touched.GSTCompanyEmail &&
-                                formikGST.errors.GSTCompanyEmail
-                              }
-                              margin="normal"
-                            />
-                          </form>
-                        </Box>
-                      ) : null}
-                    </Grid2>
-                    
+                    <Card>
+                      <PassengerForm flightDetails={flightDetails} />
+                    </Card>
                   </Paper>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      console.log("myForms", forms);
-                    }}
-                    size="large"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                  >
-                    Continue
-                  </Button>
                   <FullScreenDialog />
                 </Grid2>
 
@@ -960,42 +552,45 @@ const FlightDetails = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {flightDetails && flightDetails[0]?.Results?.FareRules?.map((fareRule, index) => {
-                  return (
-                    <TableRow>
-                      <TableCell
-                        sx={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          fontWeight: 600,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {fareRule.Origin}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          fontWeight: 600,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {fareRule.Destination}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          fontSize: "15px",
-                          textAlign: "center",
-                          fontWeight: 600,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {fareRule.Airline}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {flightDetails &&
+                  flightDetails[0]?.Results?.FareRules?.map(
+                    (fareRule, index) => {
+                      return (
+                        <TableRow>
+                          <TableCell
+                            sx={{
+                              fontSize: "15px",
+                              textAlign: "center",
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            {fareRule.Origin}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontSize: "15px",
+                              textAlign: "center",
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            {fareRule.Destination}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontSize: "15px",
+                              textAlign: "center",
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            {fareRule.Airline}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
               </TableBody>
             </Table>
           </TableContainer>
