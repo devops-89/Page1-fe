@@ -56,6 +56,7 @@ const FlightDetails = () => {
   const router = useRouter();
   const [forms, setForms] = useState(data.flightDetails.travelerData || []);
   const [flightDetails, setFlightDetails] = useState(null);
+  const [otherDetails,setOtherDetails]=useState(null);
   const [error, setError] = useState(null);
   const [formState, setFormState] = useState();
   const [open, setOpen] = useState(false);
@@ -117,6 +118,7 @@ const FlightDetails = () => {
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
+            setOtherDetails(response?.data?.data[1]);
             console.log("flight", response?.data?.data);
             localStorage.setItem(
               "oneWayflightDetails",
