@@ -62,9 +62,14 @@ export default function OurHotalCard() {
         
         {/* <div>hey i am content box of img</div> */}
         <Stack direction={'column'}>
-          <Typography variant='h5' component={"h1"}>
-         SinQ Beach Resort
+          <Typography variant='h5' component={"h1"} sx={{fontWeight:"bold"}}>
+           SinQ Beach Resort
           </Typography>
+          <stack direction={"row"}   divider={<Divider orientation="vertical" flexItem />}     >
+           <Typography variant='h5' >Calangute</Typography>
+           <Typography>6 ,minutes walk to Calangute Beach</Typography>
+
+          </stack>
 
 
 
