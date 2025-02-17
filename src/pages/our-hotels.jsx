@@ -8,7 +8,8 @@ const OurHotels = () => {
   return (
     <div>
       <InnerBanner heading={"Our Hotels"} />
-      <Box  sx={{ pt: 10, pb: 10 }}>
+      <Box  sx={{ pt: 10, pb: 10 , }}>
+        <OurHotalCard/>
         <OurHotalCard/>
         {/* <Typography sx={{ fontSize: { lg: 100, xs: 20 } }}>Hello</Typography> */}
       </Box>
