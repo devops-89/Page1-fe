@@ -901,7 +901,41 @@ export const data = {
           "value": 0
         }
       ]
-    }
+    },
+
+   seatsData : [
+      { row: 1, col: "A", price: 9, status: "available" },
+      { row: 1, col: "B", price: 9, status: "available" },
+      { row: 1, col: "C", price: 9, status: "available" },
+      { row: 1, col: "D", price: 9, status: "available" },
+      { row: 1, col: "E", price: 9, status: "available" },
+      { row: 1, col: "F", price: 9, status: "available" },
+      { row: 2, col: "A", price: 5, status: "unavailable" },
+      { row: 2, col: "B", price: 5, status: "available" },
+      { row: 2, col: "C", price: 5, status: "reserved" },
+      { row: 2, col: "D", price: 9, status: "available" },
+      { row: 2, col: "E", price: 9, status: "available" },
+      { row: 2, col: "F", price: 9, status: "available" },
+      { row: 3, col: "A", price: 5, status: "unavailable" },
+      { row: 3, col: "B", price: 5, status: "unavailable" },
+      { row: 3, col: "C", price: 5, status: "available" },
+      { row: 3, col: "D", price: 9, status: "available" },
+      { row: 3, col: "E", price: 9, status: "reserved" },
+      { row: 3, col: "F", price: 9, status: "available" },
+      { row: 4, col: "A", price: 12, status: "available" },
+      { row: 4, col: "B", price: 12, status: "available" },
+      { row: 4, col: "C", price: 12, status: "available" },
+      { row: 4, col: "D", price: 9, status: "available" },
+      { row: 4, col: "E", price: 9, status: "available" },
+      { row: 4, col: "F", price: 9, status: "available" },
+      { row: 5, col: "A", price: 12, status: "available" },
+      { row: 5, col: "B", price: 5, status: "selected" },
+      { row: 5, col: "C", price: 5, status: "available" },
+      { row: 5, col: "D", price: 5, status: "available" },
+      { row: 5, col: "E", price: 9, status: "available" },
+      { row: 5, col: "F", price: 9, status: "available" },
+    ]
+    
     
   
 };

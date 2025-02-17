@@ -35,7 +35,8 @@ const OnewayForm = () => {
   const [adultValue, setAdultValue] = useState(1);
   const [childValue, setChildValue] = useState(0);
   const [infantValue, setInfantValue] = useState(0);
-  const [defaultRoute, setDefaultRoute]= useState('/flight-list')
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const [defaultRoute, setDefaultRoute] = useState("/flight-list");
 
   const [initialValue, setIntialValue] = useState({
     adult: adultValue,
@@ -73,7 +74,6 @@ const OnewayForm = () => {
 
   useEffect(() => {
     if (localStorage.getItem("state")) {
-      // console.log(localStorage.getItem("state"));
       setNewFormData(JSON.parse(localStorage.getItem("state")));
     }
   }, []);
@@ -85,7 +85,6 @@ const OnewayForm = () => {
 
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
-    // console.log(newValue);
     if (newValue) {
       setState({
         ...state,
@@ -140,14 +139,11 @@ const OnewayForm = () => {
       .then((data) => setState({ ...state, ip_address: data.ip }));
   };
 
-  const [buttonLoading, setButtonLoading] = useState(false);
-
   const searchFlight = () => {
     setButtonLoading(true);
     flightController
       .searchFlight(state)
       .then((res) => {
-        // console.log("res", res);
         let response = res.data.data;
         dispatch(setFlightDetails({ ...response }));
         localStorage.setItem("flightData", JSON.stringify(response));
@@ -157,7 +153,6 @@ const OnewayForm = () => {
           : window.location.reload();
       })
       .catch((err) => {
-        // console.log("first", err);
         let errMessage =
           (err.response && err.response.data.message) || err.message;
         dispatch(
@@ -199,12 +194,11 @@ const OnewayForm = () => {
 
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      if(router.pathname===defaultRoute && newFormData){
+      if (router.pathname === defaultRoute && newFormData) {
         return val.value == newFormData.cabin_class;
-      }
-      else{
+      } else {
         return val.value == state.cabin_class;
-      }  
+      }
     });
 
     setCabinClass(cabinClass);
@@ -227,17 +221,16 @@ const OnewayForm = () => {
         setAdultValue(newFormData.adult);
         setChildValue(newFormData.child);
         setInfantValue(newFormData.infant);
-        setState((prev)=>({
+        setState((prev) => ({
           ...prev,
-          cabin_class:newFormData.cabin_class
-        }))
+          cabin_class: newFormData.cabin_class,
+        }));
       }
     }
   }, [newFormData]);
 
   return (
-    <div>
-      {/* {console.log("cabin class:", cabin_class)} */}
+    <>
       <Grid2 container alignItems={"center"}>
         <Grid2
           size={2.4}
@@ -521,8 +514,8 @@ const OnewayForm = () => {
         <Grid2 size={2.4} textAlign={"center"}>
           <Button
             sx={{
-              color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
+              color: COLORS.WHITE,
               width: 150,
               p: 2,
             }}
@@ -542,7 +535,7 @@ const OnewayForm = () => {
         </Grid2>
       </Grid2>
       <ToastBar />
-    </div>
+    </>
   );
 };
 

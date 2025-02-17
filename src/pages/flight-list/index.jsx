@@ -42,11 +42,6 @@ const FlightList = () => {
     setPriceRange(newValue);
   };
 
-  // console.log("dfdf", flightList);
-
-
-  
-
   return (
     <>
       <InnerBanner img={banner.src} heading={"Flight"} />
@@ -55,7 +50,7 @@ const FlightList = () => {
         <Container>
           <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
             <Typography sx={{ fontSize: 18 }}> Search Flight</Typography>
-            <FlightForm/>
+            <FlightForm />
           </Card>
         </Container>
       </Box>
