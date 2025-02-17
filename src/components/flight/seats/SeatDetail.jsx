@@ -5,13 +5,14 @@ import AttachMoneySharpIcon from "@mui/icons-material/AttachMoneySharp";
 import CheckBoxOutlineBlankSharpIcon from "@mui/icons-material/CheckBoxOutlineBlankSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import SelectedList from "./SelectedList";
+import {COLORS} from "@/utils/colors.js";
 const SeatDetail = () => {
   return (
     <Box
       item
       style={{ marginTop: "55px" }}
 
-      sx={{ border: "1px solid gray", width: "440px", borderRadius: "10px",boxShadow:2 }}
+      sx={{ border: "1px solid gray", width: "440px", borderRadius: "10px",boxShadow:2,backgroundColor:COLORS.WHITE }}
     >
       <Typography variant="body1" sx={{ m: 2, fontWeight: "bold" }}>
         New Delhi (DEL) to Mumbai (BOM)
