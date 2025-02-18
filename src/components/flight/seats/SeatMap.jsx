@@ -17,19 +17,21 @@ const SeatMap = () => {
   };
 
   return (
-    <Box sx={{backgroundColor:COLORS.SKYBLUE}}>
+    <Box sx={{backgroundColor:COLORS.BLUEOVERLAY}}>
       <Typography variant="h6" sx={{ p: 2 }}>
         Flight Seat Selection
       </Typography>
 
-      <Stack direction="row" px={10} sx={{ alignItems: "start", justifyContent: "space-between" }}>
+      <Stack direction="row" px={10} sx={{ alignItems: "start", justifyContent: "space-between", position:'relative'}}>
         {/* Seat Detail Section */}
-        <Box>
-          <SeatDetail />
-          <Typography variant="subtitle1" sx={{ p: 1 }}>
-            Conveniently select your seats now for Free.
-          </Typography>
-        </Box>
+        <Box sx={{ height: "100vh", overflowY: "auto", flexShrink: 0, position: "sticky", top: "10px" }}>
+    <Box sx={{ p: 2 }}>
+      <SeatDetail />
+      <Typography variant="subtitle1" sx={{ p: 1 }}>
+        Conveniently select your seats now for Free.
+      </Typography>
+    </Box>
+  </Box>
 
         {/* Flight Map */}
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center"}}>

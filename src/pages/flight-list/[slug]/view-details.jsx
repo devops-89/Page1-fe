@@ -456,6 +456,12 @@ const FlightDetails = () => {
                       </Box>
                       {/* Intermediate flights end */}
                     </Card>
+                    {/* Meal Section start */}
+                    <Card >
+                      Meal Section
+                    </Card>
+
+                    {/* Meal Section end */}
                     <Card>
                       <PassengerForm flightDetails={flightDetails} />
                     </Card>
