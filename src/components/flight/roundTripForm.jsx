@@ -256,7 +256,7 @@ const RoundTrip = () => {
       {/* {console.log("cabin class:", cabin_class)} */}
       <Grid2 container alignItems={"center"}>
         <Grid2
-          size={2}
+           size={{lg:2,xs:6}}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
@@ -335,7 +335,7 @@ const RoundTrip = () => {
           />
         </Grid2>
         <Grid2
-          size={2}
+          size={{lg:2,xs:6}}
           sx={{
             border: "1px solid #808080",
 
@@ -414,7 +414,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-          size={2}
+         size={{lg:2,xs:6}}
           sx={{
             border: "1px solid #808080",
 
@@ -448,7 +448,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-          size={2}
+          size={{lg:2,xs:6}}
           sx={{
             border: "1px solid #808080",
 
@@ -482,7 +482,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-          size={2}
+        size={{lg:2,xs:12}}
           sx={{
             border: "1px solid #808080",
 
@@ -571,13 +571,14 @@ const RoundTrip = () => {
           {/* popover end */}
         </Grid2>
 
-        <Grid2 size={2} textAlign={"center"}>
+        <Grid2 size={{lg:2,xs:12}} textAlign={"center"}>
           <Button
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
               width: 150,
               p: 2,
+              mt:{lg:0,sm:1}
             }}
             onClick={submitHandler}
           >

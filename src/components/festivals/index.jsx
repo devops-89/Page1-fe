@@ -36,7 +36,7 @@ const Festivals = () => {
           Events And Festivals
         </Typography>
         <Grid2 container spacing={2} mt={4}>
-          <Grid2 size={6}>
+          <Grid2 size={{lg:6,xs:12}}>
             <FestivalCard
               img={diwali.src}
               height={"71vh"}
@@ -45,7 +45,7 @@ const Festivals = () => {
               top={"30%"}
             />
           </Grid2>
-          <Grid2 size={6}>
+          <Grid2 size={{lg:6,xs:12}}>
             <Stack spacing={1}>
               <FestivalCard
                 img={holi.src}

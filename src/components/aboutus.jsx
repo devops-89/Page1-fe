@@ -50,19 +50,29 @@ const AboutUs = () => {
       <Box sx={{ pt: 8, pb: 8 }}>
         <Container>
           <Grid2 container>
-            <Grid2 size={6}>
+            <Grid2 size={{ lg: 6, md: 12, sm: 12 }}>
               <Box
                 sx={{
                   backgroundColor: COLORS.PRIMARY,
-                  width: 500,
+                  width: { lg: 500, sm: "100%" },
+
+                  overflow: "hidden",
+
                   height: 500,
                   borderRadius: 5,
                 }}
               >
-                <Image src={about} width={499} />
+                <Image
+                  src={about}
+                  style={{
+                    width: "100%", // Scale image with the container
+                    height: "100%",
+                    objectFit:"fill" // Maintain aspect ratio
+                  }}
+                />
               </Box>
             </Grid2>
-            <Grid2 size={6}>
+             <Grid2 size={{lg:6,md:12}}>
               <Typography
                 sx={{
                   fontSize: 14,
@@ -78,7 +88,7 @@ const AboutUs = () => {
               </Typography>
               <Typography
                 sx={{
-                  fontSize: 40,
+                  fontSize: {lg:40,md:35},
                   fontWeight: 700,
                   fontFamily: nunito.style,
                   textTransform: "capitalize",

@@ -26,14 +26,14 @@ export default function Home() {
         <Box sx={{ backgroundColor: COLORS.LIGHTBLUE }}>
           <AboutUs />
         </Box>
-        <Box sx={{ pt: 10 }}>
-          <Festivals />
+        <Box sx={{ pt: {lg:10,md:5} }}>
+           <Festivals /> 
         </Box>
         <Box sx={{ pt: 10 }}>
-          <SubscribeBanner />
+           <SubscribeBanner /> 
         </Box>
         <Box sx={{ pt: 10 }}>
-          <Hotel />
+          <Hotel /> 
         </Box>
         <Box sx={{ pt: 10 }}>
           <Testimonials />

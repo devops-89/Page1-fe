@@ -48,14 +48,14 @@ const SubscribeBanner = () => {
         >
           <Container maxWidth="lg">
             <Grid2 container>
-              <Grid2 size={6}>
+              <Grid2 size={{lg:6, md:12 ,sm:12, xs:12}}>
                 <Typography
                   sx={{
                     fontSize: 17,
                     fontFamily: nunito.style,
                     color: COLORS.PRIMARY,
                     letterSpacing: 2,
-                    mb: 3,
+                    mb: {lg:3 ,sm:2},
                   }}
                 >
                   MEGA OFFER
@@ -74,7 +74,7 @@ const SubscribeBanner = () => {
                   </Typography>{" "}
                   <Typography
                     sx={{
-                      fontSize: 40,
+                      fontSize: {lg: 40 ,md: 30},
                       fontFamily: nunito.style,
                       color: COLORS.WHITE,
                       fontWeight: 800,
@@ -86,7 +86,7 @@ const SubscribeBanner = () => {
                   </Typography>
                 </Typography>
                 <Typography
-                  sx={{ mt: 3, color: COLORS.WHITE, fontFamily: raleway.style }}
+                  sx={{ mt: {lg:3 ,sm:2}, color: COLORS.WHITE, fontFamily: raleway.style }}
                 >
                   Love is in the air! Fall in love with a romantic getaway with
                   Page1 Travels special offer for newlywed couples. We include
@@ -103,7 +103,7 @@ const SubscribeBanner = () => {
                         primary={
                           <Typography
                             sx={{
-                              fontSize: 16,
+                              fontSize: {lg:16,sm:15},
                               color: COLORS.WHITE,
                               fontFamily: raleway.style,
                             }}
@@ -117,7 +117,7 @@ const SubscribeBanner = () => {
                 </List>
                 <Button
                   sx={{
-                    mt: 4,
+                    mt: {lg:4 ,sm:2},
                     fontSize: 14,
                     border: `1px solid ${COLORS.PRIMARY}`,
                     width: 150,

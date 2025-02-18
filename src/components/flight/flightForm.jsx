@@ -42,7 +42,7 @@ const FlightForm = () => {
   return (
     <Box sx={{ p: 1 }}>
       <Stack
-        direction={"row"}
+        direction={{lg:"row" ,md:"column", sm:"column"}}
         alignItems={"center"}
         justifyContent={"space-between"}
       >
@@ -50,7 +50,7 @@ const FlightForm = () => {
           value={flightValue}
           sx={{
             "& .MuiTab-root": {
-              width: 120,
+              width: 100,
               minHeight: 40,
               top: 5,
               borderRadius: 8,
@@ -78,6 +78,7 @@ const FlightForm = () => {
                     borderRadius: "50%",
                     width: 10,
                     height: 10,
+                    
                   }}
                 ></Box>
               }

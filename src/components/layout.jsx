@@ -49,9 +49,9 @@ const Layout = ({ children }) => {
       <Head>
         <link rel="icon" href="/favicon.png" />
       </Head>
-      {show && <Header />}
+      {/* {show && <Header />} */}
       {children}
-      {show && <Footer />}
+      {/* {show && <Footer />} */}
     </div>
   );
 };

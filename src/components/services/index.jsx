@@ -14,10 +14,14 @@ const Services = () => {
   return (
     <Box sx={{ position: "relative" }}>
       <Box sx={{ backgroundColor: COLORS.BLACK }}>
-        <Container maxWidth="xl">
-          <Grid2 container>
+        <Container >
+          <Grid2 container  spacing={3} wrap="wrap"   columns={{ xs: 4, sm: 8, md: 8 }}>
             {data.servicesData.map((val, i) => (
-              <Grid2 size={1} pt={2} pb={2} key={i}>
+              <Grid2 size={1} pt={2} pb={2} key={i} 
+          
+           
+              
+            >
                 <ServicesCard
                   img={val.img}
                   title={val.title}

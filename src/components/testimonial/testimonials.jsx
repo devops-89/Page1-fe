@@ -12,10 +12,10 @@ const Testimonials = () => {
     <div>
       <Box sx={{ pt: 10, pb: 10 }}>
         <Grid2 container>
-          <Grid2 size={5} margin={"auto"}>
+          <Grid2 size={{lg:5 ,md:5,sm:12}} margin={"auto"}>
             <Typography
               sx={{
-                fontSize: 40,
+                fontSize: {lg:40,md:40 ,sm:30},
                 textAlign: "center",
                 fontFamily: nunito.style,
                 color: COLORS.BLACK,
@@ -52,13 +52,29 @@ const Testimonials = () => {
         </Grid2>
         <Container sx={{ mt: 5 }}>
           <Swiper
-            slidesPerView={3}
-            spaceBetween={40}
+            // slidesPerView={3}
+            // slidesPerView={3}
+            // spaceBetween={40}
             modules={[Autoplay]}
             loop
             autoplay={{
               delay: 5000,
             }}
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 6,
+                spaceBetween: 40,
+              },
+              1024: {
+                slidesPerView: 5,
+                spaceBetween: 50,
+              },
+            }}
+           
             grabCursor
             centeredSlides={true}
           >

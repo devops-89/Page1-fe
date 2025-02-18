@@ -136,7 +136,8 @@ const Header = () => {
                 key={i}
                 onClick={() => handleRouter(val.url)}
               >
-                {val.label}
+                 {val.label} 
+               
               </Typography>
             ))}
           </Stack>

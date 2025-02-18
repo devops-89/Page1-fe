@@ -23,7 +23,7 @@ const Faq = () => {
         </Typography>
         <Grid2 container spacing={5} mt={3}>
           {data.faq.map((val, i) => (
-            <Grid2 size={6} key={i}>
+            <Grid2 size={{lg:6 ,md:12 ,sm:12}} key={i}>
               <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography

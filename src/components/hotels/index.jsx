@@ -35,19 +35,19 @@ const Hotel = () => {
               Hotels
             </Typography>
             <Typography
-              sx={{ fontFamily: nunito.style, fontSize: 40, fontWeight: 700 }}
+              sx={{ fontFamily: nunito.style, fontSize: {lg:40 ,md:16}, fontWeight: 700 }}
             >
               Our Exquisite Hotels
             </Typography>
           </Box>
           <Button
             sx={{
-              fontSize: 14,
+              fontSize: {lg:14,md:13},
               fontFamily: raleway.style,
               fontWeight: 500,
               color: COLORS.BLACK,
             }}
-            endIcon={<ArrowForwardIos sx={{ fontSize: 14 }} />}
+            endIcon={<ArrowForwardIos sx={{ fontSize: {lg:14 ,md:13} }} />}
           >
             View All
           </Button>
@@ -55,7 +55,7 @@ const Hotel = () => {
 
         <Grid2 container spacing={4} mt={3}>
           {data.hotelName.map((val, i) => (
-            <Grid2 size={3} key={i}>
+            <Grid2 size={{lg: 3,md: 6,sm: 6 ,xs:12}} key={i}>
               <HotelCard
                 img={val.img}
                 hotelName={val.hotelName}
