@@ -12,7 +12,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
     setOpen(true);
   };
 
-  console.log("flightDetails",flightDetails)
+  // console.log("domestic",flightDetails)
 
   return (
     <>
@@ -27,7 +27,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
       {flightDetails?.map((singleFlightDetail)=>{
         return(
           <>
-          {singleFlightDetail[0]?.Response?.Results?.Segments?.map(
+          {singleFlightDetail[0]?.Results?.Segments?.map(
             (segmentGroup, groupIndex) => (
               <Card key={groupIndex} sx={{ padding: "20px", marginBottom: "20px" }}>
                 <Grid2 container>
@@ -98,7 +98,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                           sx={{ display: "flex", alignItems: "center", gap: "5px" }}
                         >
                           <Image
-                            src={segment?.Airline?.AirlineLogo}
+                            src={segment?.AirlineLogo}
                             alt="Airline Logo"
                             width={30}
                             height={30}

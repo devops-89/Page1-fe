@@ -19,7 +19,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
       >
         View Fare Rules
       </Button>
-      {flightDetails[0]?.Response?.Results?.Segments?.map(
+      {flightDetails[0]?.Results?.Segments?.map(
         (segmentGroup, groupIndex) => (
           <Card key={groupIndex} sx={{ padding: "20px", marginBottom: "20px" }}>
             <Grid2 container>
@@ -87,7 +87,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                       sx={{ display: "flex", alignItems: "center", gap: "5px" }}
                     >
                       <Image
-                        src={segment?.Airline?.AirlineLogo}
+                        src={segment?.AirlineLogo}
                         alt="Airline Logo"
                         width={30}
                         height={30}
