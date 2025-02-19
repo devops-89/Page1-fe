@@ -17,12 +17,18 @@ import TravellerSelector from "./travellerSelector";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { JOURNEY_TYPE, PREFERRED_TIME } from "@/utils/enum";
 import { useRouter } from "next/router";
+import { flightController } from "@/api/flightController";
+import { useDispatch } from "react-redux";
+import VirtualList from "./fixedSizeList";
+import { customFilter } from "@/utils/regex";
+import Loading from "react-loading";
 
 const Multiway = () => {
   const router = useRouter();
   const [forms, setForms] = useState([1, 2]);
   const maxForms = 4;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [adultValue, setAdultValue] = useState(1);
   const [childValue, setChildValue] = useState(0);
   const [infantValue, setInfantValue] = useState(0);
@@ -48,19 +54,7 @@ const Multiway = () => {
         destination: "",
         departure_date: "",
         cabin_class: "1",
-      },
-      {
-        origin: "",
-        destination: "",
-        departure_date: "",
-        cabin_class: "1",
-      },
-      {
-        origin: "",
-        destination: "",
-        departure_date: "",
-        cabin_class: "1",
-      },
+      }
     ],
     adult: 1,
     child: 0,
@@ -83,51 +77,157 @@ const Multiway = () => {
     setForms(updatedForms);
   };
 
+  const dispatch = useDispatch();
+  const [origin, setOrigin] = useState(null);
+  const [destination, setDestination] = useState(null);
+  const [departureDate, setDepartureDate] = useState(null);
 
-
-   const [cabin_class, setCabinClass] = useState("");
-    useEffect(() => {
-      // getAllAirport();
-      fetchApi();
-    }, []);
-  
-    useEffect(() => {
-      let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-        if (router.pathname === defaultRoute && newFormData) {
-          return val.value == newFormData.cabin_class;
-        } else {
-          return val.value == state.cabin_class;
-        }
+  const originhandler = (e, newValue) => {
+    setOrigin(newValue);
+    if (newValue) {
+      setState({
+        ...state,
+        origin: newValue.iata_code,
+        originAirport: newValue.airport_name,
+        originCity: newValue.city_name,
       });
+    }
+  };
+  const destinationHandler = (e, newValue) => {
+    setDestination(newValue);
+    if (newValue) {
+      setState({
+        ...state,
+        destination: newValue.iata_code,
+        destinationAirport: newValue.airport_name,
+        destinationCity: newValue.city_name,
+      });
+    }
+  };
+
+  const departureDateHandler = (newDate) => {
+    setDepartureDate(newDate);
+    const isValid = moment(newDate).isValid();
+    if (isValid) {
+      setState({
+        ...state,
+        departure_date: moment(newDate._d).format("YYYY-MM-DD"),
+      });
+    }
+  };
+
+  const [airportList, setAirportList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getAllAirport = () => {
+    flightController
+      .getAllAirports()
+      .then((res) => {
+        let response = res.data.data;
+        setAirportList(response);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const fetchApi = () => {
+    fetch("https://api.ipify.org?format=json")
+      .then((res) => res.json())
+      .then((data) => setState({ ...state, ip_address: data.ip }));
+  };
+
+  const searchFlight = () => {
+      setButtonLoading(true);
+      flightController
+        .searchFlight(state)
+        .then((res) => {
+          let response = res.data.data;
+          dispatch(setFlightDetails({ ...response }));
+          localStorage.setItem("multiwayData", JSON.stringify(response));
+          setButtonLoading(false);
+          router.pathname !== defaultRoute
+            ? router.push(defaultRoute)
+            : window.location.reload();
+        })
+        .catch((err) => {
+          let errMessage =
+            (err.response && err.response.data.message) || err.message;
+          dispatch(
+            setToast({
+              open: true,
+              message: errMessage,
+              severity: TOAST_STATUS.ERROR,
+            })
+          );
+          setButtonLoading(false);
+        });
+    };
   
-      setCabinClass(cabinClass);
-    }, [state.cabin_class]);
-  
-    useEffect(() => {
-      if (router.pathname === defaultRoute) {
-        if (newFormData) {
-          setOrigin({
-            airport_name: newFormData.originAirport,
-            city_name: newFormData.originCity,
-            iata_code: newFormData.origin,
-          });
-          setDestination({
-            airport_name: newFormData.destinationAirport,
-            city_name: newFormData.destinationCity,
-            iata_code: newFormData.destination,
-          });
-          setDepartureDate(moment(newFormData.departure_date));
-          setAdultValue(newFormData.adult);
-          setChildValue(newFormData.child);
-          setInfantValue(newFormData.infant);
-          setState((prev) => ({
-            ...prev,
-            cabin_class: newFormData.cabin_class,
-          }));
-        }
+
+  const submitHandler = () => {
+    const emptyFields = Object.keys(state).filter(
+      (key) =>
+        state[key] === "" || state[key] === null || state[key] === undefined
+    );
+
+    if (emptyFields.length > 0) {
+      dispatch(
+        setToast({
+          open: true,
+          message: `Please Enter the Required Fields : ${emptyFields}`,
+          severity: TOAST_STATUS.ERROR,
+        })
+      );
+    } else {
+      localStorage.setItem("multistate", JSON.stringify(state));
+      searchFlight();
+    }
+  };
+
+  const [cabin_class, setCabinClass] = useState("");
+  useEffect(() => {
+    getAllAirport();
+    fetchApi();
+  }, []);
+
+  useEffect(() => {
+    let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
+      if (router.pathname === defaultRoute && newFormData) {
+        return val.value == newFormData.cabin_class;
+      } else {
+        return val.value == state.cabin_class;
       }
-    }, [newFormData]);
-  
+    });
+
+    setCabinClass(cabinClass);
+  }, [state.cabin_class]);
+
+  useEffect(() => {
+    if (router.pathname === defaultRoute) {
+      if (newFormData) {
+        setOrigin({
+          airport_name: newFormData.originAirport,
+          city_name: newFormData.originCity,
+          iata_code: newFormData.origin,
+        });
+        setDestination({
+          airport_name: newFormData.destinationAirport,
+          city_name: newFormData.destinationCity,
+          iata_code: newFormData.destination,
+        });
+        setDepartureDate(moment(newFormData.departure_date));
+        setAdultValue(newFormData.adult);
+        setChildValue(newFormData.child);
+        setInfantValue(newFormData.infant);
+        setState((prev) => ({
+          ...prev,
+          cabin_class: newFormData.cabin_class,
+        }));
+      }
+    }
+  }, [newFormData]);
 
   return (
     <Box
@@ -153,17 +253,27 @@ const Multiway = () => {
           }}
         >
           {/* From Field */}
-          <Grid2 size={3}>
+          <Grid2
+            size={3}
+            sx={{
+              border: "1px solid #808080",
+              borderTopLeftRadius: 4,
+              borderBottomLeftRadius: 4,
+              borderRight: "none",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: 15,
                 fontFamily: nunito.style,
                 color: COLORS.DARKGREY,
-                pb: 1,
+                px: 2,
+                pt: 1,
               }}
             >
               From
             </Typography>
+
             <Autocomplete
               renderInput={(params) => (
                 <TextField
@@ -175,23 +285,76 @@ const Multiway = () => {
                   }}
                 />
               )}
-              options={data.airportData}
-              getOptionLabel={(option) => option.primary}
+              onChange={originhandler}
+              value={origin}
+              ListboxComponent={VirtualList}
+              loading={loading}
+              filterOptions={customFilter}
+              options={airportList}
+              getOptionLabel={(option) =>
+                `${option.airport_name} (${option.iata_code}) - ${option.city_name}`
+              }
+              renderOption={(props, option) => (
+                <Box {...props}>
+                  <Stack
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"flex-start"}
+                    component="li"
+                  >
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          color: COLORS.BLACK,
+                          textAlign: "start",
+                        }}
+                      >
+                        {option.city_name}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontFamily: nunito.style,
+                          fontWeight: 400,
+                          color: COLORS.DARKGREY,
+                        }}
+                      >
+                        {option.airport_name}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Box>
+              )}
+              disableListWrap
             />
           </Grid2>
 
           {/* To Field */}
-          <Grid2 size={3}>
+          <Grid2
+            size={3}
+            sx={{
+              border: "1px solid #808080",
+
+              position: "relative",
+              borderRight: "none",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: 15,
                 fontFamily: nunito.style,
                 color: COLORS.DARKGREY,
-                pb: 1,
+                px: 2,
+                pt: 1,
               }}
             >
               To
             </Typography>
+
             <Autocomplete
               renderInput={(params) => (
                 <TextField
@@ -203,29 +366,84 @@ const Multiway = () => {
                   }}
                 />
               )}
-              options={data.airportData}
-              getOptionLabel={(option) => option.primary}
+              onChange={destinationHandler}
+              value={destination}
+              ListboxComponent={VirtualList}
+              filterOptions={customFilter}
+              loading={loading}
+              options={airportList}
+              getOptionLabel={(option) =>
+                `${option.airport_name} (${option.iata_code}) - ${option.city_name}`
+              }
+              renderOption={(props, option) => (
+                <Box {...props}>
+                  <Stack
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"flex-start"}
+                    component="li"
+                  >
+                    <Box>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          color: COLORS.BLACK,
+                          textAlign: "start",
+                        }}
+                      >
+                        {option.city_name}
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontFamily: nunito.style,
+                          fontWeight: 400,
+                          color: COLORS.DARKGREY,
+                        }}
+                      >
+                        {option.airport_name}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Box>
+              )}
             />
           </Grid2>
 
           {/* Departure Field */}
-          <Grid2 size={3}>
+          <Grid2
+            size={3}
+            sx={{
+              border: "1px solid #808080",
+
+              position: "relative",
+              borderRight: "none",
+            }}
+          >
             <Typography
               sx={{
                 fontSize: 15,
                 fontFamily: nunito.style,
                 color: COLORS.DARKGREY,
-                pb: 1,
+                px: 2,
+                pt: 1,
               }}
             >
               Departure
             </Typography>
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <DatePicker
-                disablePast
                 sx={{
-                  fieldset: { border: "none" },
+                  fieldset: {
+                    border: "none",
+                  },
                 }}
+                disablePast
+                onChange={departureDateHandler}
+                value={departureDate}
               />
             </LocalizationProvider>
           </Grid2>
@@ -302,13 +520,18 @@ const Multiway = () => {
       <Box>
         <Button
           sx={{
-            color: COLORS.WHITE,
             backgroundColor: COLORS.SECONDARY,
+            color: COLORS.WHITE,
             width: 150,
             p: 2,
           }}
+          onClick={submitHandler}
         >
-          Search
+          {buttonLoading ? (
+            <Loading type="bars" width={20} height={20} color={COLORS.WHITE} />
+          ) : (
+            "Search"
+          )}
         </Button>
       </Box>
       {/* popover start */}
