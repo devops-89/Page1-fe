@@ -108,9 +108,18 @@ const RoundTrip = () => {
         ...state,
         departure_date: moment(newDate._d).format("YYYY-MM-DD"),
       });
+  
+      if (returnDate && moment(returnDate).isSameOrBefore(newDate, "day")) {
+        const updatedReturnDate = moment(newDate).add(1, "day");
+        setReturnDate(updatedReturnDate);
+        setState({
+          ...state,
+          return_date: updatedReturnDate.format("YYYY-MM-DD"),
+        });
+      }
     }
   };
-
+  
   const returnDateHandler = (newDate) => {
     setReturnDate(newDate);
     const isValid = moment(newDate).isValid();
@@ -121,6 +130,8 @@ const RoundTrip = () => {
       });
     }
   };
+  
+  
 
   useEffect(() => {
     if (localStorage.getItem("state")) {
@@ -440,7 +451,7 @@ const RoundTrip = () => {
                   border: "none",
                 },
               }}
-              disablePast
+              minDate={moment()}
               onChange={departureDateHandler}
               value={departureDate}
             />
@@ -474,7 +485,7 @@ const RoundTrip = () => {
                   border: "none",
                 },
               }}
-              disablePast
+              minDate={departureDate ? moment(departureDate).add(1, "day") : moment()}
               onChange={returnDateHandler}
               value={returnDate}
             />
