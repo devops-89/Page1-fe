@@ -51,7 +51,7 @@ const Layout = ({ children }) => {
       </Head>
       {show && <Header />}
       {children}
-      {/* {show && <Footer />} */}
+      {show && <Footer />}
     </div>
   );
 };

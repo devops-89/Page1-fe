@@ -45,8 +45,8 @@ const Footer = () => {
   return (
     <Box sx={{ pt: 10, backgroundColor: COLORS.LIGHTBLUE }}>
       <Container>
-        <Grid2 container spacing={4}>
-          <Grid2 size={3}>
+        <Grid2 container spacing={4}  justifyContent="center" >
+          <Grid2 size={{lg:3 ,sm:6}} justifyContent="center"  textAlign="center">
             <Typography
               sx={{
                 fontSize: 25,
@@ -92,6 +92,7 @@ const Footer = () => {
                           textTransform: "capitalize",
                           fontFamily: nunito.style,
                           fontWeight: 550,
+                           textAlign:"center"
                         }}
                       >
                         {val.label}
@@ -103,7 +104,7 @@ const Footer = () => {
             </List>
           </Grid2>
 
-          <Grid2 size={3}>
+          <Grid2 size={{lg:3 ,sm:6}}>
             <Typography
               sx={{
                 fontSize: 25,
@@ -136,7 +137,7 @@ const Footer = () => {
             </List>
           </Grid2>
 
-          <Grid2 size={3}>
+          <Grid2 size={{lg:3 ,sm:6}}>
             <Typography
               sx={{
                 fontSize: 25,
@@ -168,7 +169,7 @@ const Footer = () => {
               ))}
             </List>
           </Grid2>
-          <Grid2 size={3}>
+          <Grid2 size={{lg:3 ,sm:6}}>
             <Typography
               sx={{
                 fontSize: 25,

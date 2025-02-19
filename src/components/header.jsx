@@ -208,12 +208,12 @@ const Header = () => {
             { tablet && ( openMenu ?
            <IconButton
                 sx={{
-                  backgroundColor: COLORS.WHITE,
+                  backgroundColor: COLORS.PRIMARY,
                   border: `1px solid ${COLORS.WHITE}`,
                 }}
               
               >
-                <MenuIcon sx={{ fontSize: {lg:14 ,sm:12 ,xs:10}, color: COLORS.PRIMARY }} onClick={handleOpenMenu}  />
+                <MenuIcon sx={{ fontSize: {lg:14 ,sm:16 ,xs:13}, color:COLORS.WHITE }} onClick={handleOpenMenu}  />
               </IconButton> : <IconButton
                 sx={{
                   backgroundColor: COLORS.WHITE,

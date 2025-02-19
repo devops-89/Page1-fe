@@ -9,8 +9,10 @@ import logo from "@/logo/logo.png";
 import Image from "next/image";
 import CloseIcon from "@mui/icons-material/Close";
 
+
 function TabletNavbar({onClose}) {
   const router = useRouter();
+  
   const [scrollPosition, setScrollPosition] = useState(0);
   const handleRouter = (path) => {
     router.push(path);
@@ -19,6 +21,8 @@ function TabletNavbar({onClose}) {
   let show = true;
 
   const [isScrolling, setIsScrolling] = useState(false);
+
+ 
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -39,13 +43,14 @@ function TabletNavbar({onClose}) {
         direction={"column"}
         alignItems={"flex-start"}
         spacing={3}
-        backgroundColor=" rgba( 255,255,255,0.8)"
+        backgroundColor={COLORS.WHITE}
         position={"absolute"}
         top={0}
         width="100%"
         zIndex={1000}
         boxSizing="border-box"
         padding={5}
+       height={"100vh"}
       >
         <Stack
           direction={"row"}
@@ -56,8 +61,8 @@ function TabletNavbar({onClose}) {
           <Link href={"/"} passHref>
             <Image src={logo} width={80} alt="" />
           </Link>
-          <IconButton onClick={onClose}>
-            <CloseIcon />
+          <IconButton onClick={onClose} >
+            <CloseIcon style={{color:COLORS.PRIMARY ,fontWeight:"extrabold" ,fontSize:"28px"}} />
           </IconButton>
         </Stack>
 

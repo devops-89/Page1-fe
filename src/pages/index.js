@@ -32,13 +32,13 @@ export default function Home() {
         <Box sx={{ pt: 10 }}>
            <SubscribeBanner /> 
         </Box>
-        <Box sx={{ pt: 10 }}>
+        <Box  sx={{ pt:10 }}>
           <Hotel /> 
         </Box>
-        <Box sx={{ pt: 10 }}>
+        <Box sx={{ pt: {lg:10,md:5} }}>
           <Testimonials />
         </Box>
-        <Box sx={{ pt: 10 }}>
+        <Box sx={{ pt: {lg:10,md:5} }}>
           <Faq />
         </Box>
       </Box>

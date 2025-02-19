@@ -17,7 +17,7 @@ const Faq = () => {
     <Box sx={{ pb: 10 }}>
       <Container>
         <Typography
-          sx={{ fontSize: 35, fontWeight: 700, fontFamily: nunito.style }}
+          sx={{ fontSize: {lg:35 ,sm:33}, fontWeight: 700, fontFamily: nunito.style }}
         >
           Frequently Asked Questions?
         </Typography>

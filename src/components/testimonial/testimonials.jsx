@@ -15,7 +15,7 @@ const Testimonials = () => {
           <Grid2 size={{lg:5 ,md:5,sm:12}} margin={"auto"}>
             <Typography
               sx={{
-                fontSize: {lg:40,md:40 ,sm:30},
+                fontSize: {lg:40,sm:35 ,xs:20},
                 textAlign: "center",
                 fontFamily: nunito.style,
                 color: COLORS.BLACK,
@@ -25,7 +25,7 @@ const Testimonials = () => {
               What’s Our{" "}
               <Typography
                 sx={{
-                  fontSize: 40,
+                  fontSize: {lg:40,sm:35 ,xs:20},
                   textAlign: "center",
                   fontFamily: nunito.style,
                   color: COLORS.PRIMARY,
@@ -40,7 +40,7 @@ const Testimonials = () => {
             </Typography>
             <Typography
               sx={{
-                fontSize: 15,
+                fontSize: {lg:15 ,sm:14},
                 textAlign: "center",
                 fontFamily: nunito.style,
               }}
