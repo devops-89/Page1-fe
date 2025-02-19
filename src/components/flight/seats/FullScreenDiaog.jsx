@@ -6,15 +6,14 @@ import {
   Dialog,
   IconButton,
   Slide,
-  Tab,
-  Tabs,
+ 
   Toolbar,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SeatMap from "./SeatMap";
 import { COLORS } from "@/utils/colors.js";
-import MealSelection from "../meal/MealSelection";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -66,24 +65,10 @@ export default function FullScreenDialog() {
           </Toolbar>
         </AppBar>
 
-        {/* Tabs for Seat Booking & Meals */}
-        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-          <Tabs value={tabIndex} onChange={handleTabChange} centered>
-            <Tab label="Seat Booking" />
-            <Tab label="Meals" />
-          </Tabs>
-        </Box>
-
-        {/* Tab Panels */}
-        <TabPanel value={tabIndex} index={0}>
           <SeatMap />
-        </TabPanel>
+        
 
-        <TabPanel value={tabIndex} index={1}>
-          <Typography variant="h5" align="center" sx={{ mt: 5 }}>
-            <MealSelection/>
-          </Typography>
-        </TabPanel>
+      
       </Dialog>
     </React.Fragment>
   );

@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import TabPanel from "../tabPanel";
 import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
-import FlightBox from "./FlightBox";
+import FlightBox from "./flightBox";
 
 const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
   const [open, setOpen] = useState(false);

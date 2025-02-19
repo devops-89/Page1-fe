@@ -17,10 +17,8 @@ const SeatMap = () => {
   };
 
   return (
-    <Box sx={{backgroundColor:COLORS.BLUEOVERLAY}}>
-      <Typography variant="h6" sx={{ p: 2 }}>
-        Flight Seat Selection
-      </Typography>
+    <Box sx={{backgroundColor:COLORS.BLUEOVERLAY,py:2}}>
+     
 
       <Stack direction="row" px={10} sx={{ alignItems: "start", justifyContent: "space-between", position:'relative'}}>
         {/* Seat Detail Section */}

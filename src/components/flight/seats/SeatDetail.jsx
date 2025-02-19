@@ -6,11 +6,13 @@ import CheckBoxOutlineBlankSharpIcon from "@mui/icons-material/CheckBoxOutlineBl
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import SelectedList from "./SelectedList";
 import {COLORS} from "@/utils/colors.js";
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import CancelIcon from '@mui/icons-material/Cancel';
 const SeatDetail = () => {
   return (
     <Box
       item
-      style={{ marginTop: "55px" }}
+     
 
       sx={{ border: "1px solid gray", width: "440px", borderRadius: "10px",boxShadow:2,backgroundColor:COLORS.WHITE }}
     >
@@ -50,7 +52,8 @@ const SeatDetail = () => {
       <Stack
         direction={"row"}
         sx={{
-          justifyContent: "space-between",
+          justifyContent: "center",
+          gap:"20px",
           alignItems: "center",
           padding: "20px",
         }}
@@ -58,54 +61,59 @@ const SeatDetail = () => {
         <Box sx={{ textAlign: "center" }}>
           <Box
             sx={{
-              width: "40px",
+              width: "35px",
+              height:"35px",
+              display:"flex",
+              justifyContent:"center",
+              alignItems:"center",     
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
+              backgroundColor:COLORS.PRIMARY,
+              color:"white"
             }}
           >
-            <AttachMoneySharpIcon />
+              <PersonOutlineIcon/> 
           </Box>
-          <Typography variant="subtitle2">Extra</Typography>
+          <Typography variant="subtitle2">Reserved</Typography>
         </Box>
         <Box sx={{ textAlign: "center" }}>
           <Box
             sx={{
-              width: "40px",
+              width: "35px",
+              height:"35px",
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
+              backgroundColor:COLORS.GREEN,
+            
             }}
           >
-            <CheckBoxOutlineBlankSharpIcon />
+           
           </Box>
-          <Typography variant="subtitle2">Empty</Typography>
+          <Typography variant="subtitle2">Open</Typography>
         </Box>
         <Box sx={{ textAlign: "center" }}>
           <Box
             sx={{
-              width: "40px",
+              width: "35px",
+              height:"35px",
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
+              backgroundColor:COLORS.RED,
+              display:"flex",
+              justifyContent:"center",
+              alignItems:"center",
+              color:"white"
             }}
           >
-            <CloseSharpIcon />
+           <CancelIcon/>
           </Box>
-          <Typography variant="subtitle2">Unavailable</Typography>
+          <Typography variant="subtitle2">Blocked</Typography>
         </Box>
-        <Box sx={{ textAlign: "center" }}>
-          <Box
-            sx={{
-              width: "50px",
-              height: "45px",
-              border: "1px solid gray",
-              borderRadius: "4px",
-              background: "blue",
-            }}
-          ></Box>
-          <Typography variant="subtitle2">Extra</Typography>
-        </Box>
+      
+      
       </Stack>
     </Box>
   );

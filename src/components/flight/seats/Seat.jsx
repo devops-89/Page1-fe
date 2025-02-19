@@ -1,96 +1,133 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Typography, Box, Stack } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSeatDetails } from "@/redux/reducers/seatsInformation.js";
-import {COLORS} from "@/utils/colors.js";
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import { styled } from '@mui/material/styles';
+import { COLORS } from "@/utils/colors.js";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const SeatColors = {
-  available: "#E8F2FF",
-  unavailable: "red",
-  reserved: "orange",
-  selected: "green",
+  0: "red", // Not set
+  1:"white",  // open
+  3: "orange", // Reserved
+  4: "red", // Blocked
 };
 
-
+const AvailablityStatus = {
+  0: "Not Set",
+  
+  3: "Reserved",
+  4: "Blocked",
+  5: "Empty Space",
+};
 
 const Seat = () => {
+  const [reservedSeats, setReservedSeats] = useState([]);
   const [extraDetails, setExtraDetails] = useState(null);
   const dispatch = useDispatch();
-  const [reservedSeats, setReservedSeats] = useState([]);
+  let value = useSelector((state) => state.SeatsInformation.seats);
+  console.log("teste", value);
+ 
+  useEffect(()=>{
+        setReservedSeats(value);
+        console.log("redux values: ",value);
+  },[value])
 
-  // Fetch data on mount
   useEffect(() => {
     const flightDetails = localStorage.getItem("oneWayflightDetails");
     if (flightDetails) {
       setExtraDetails(JSON.parse(flightDetails)[1]);
     }
   }, []);
-
-  useEffect(() => {
-    console.log("Other details: ", extraDetails);
-  }, [extraDetails]);
+  console.log(extraDetails);
 
   return (
-    <Box sx={{backgroundColor:COLORS.WHITE}}>
+    <Box sx={{ backgroundColor: COLORS.WHITE }}>
       {extraDetails ? (
         <Stack direction="column" spacing={2} p={2}>
-          {/* Loop through rows first */}
-          {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats.map((seats, rowIndex) => (
-            <Stack key={rowIndex} direction="row" spacing={2} >
-              {/* Loop through seats within the row */}
-              {seats.Seats.map((seat, colIndex) => (
-                 <HtmlTooltip
-                 title={
-                   <React.Fragment>
-                    <Stack direction={"row"}>
-                     <Typography color="inherit" sx={{fontWeight:"bold"}}>{seat.Code}</Typography>
-                     <Typography color="inherit"  sx={{fontWeight:"bold"}}>|</Typography>
-                     <Typography color="inherit">{seat.Price}</Typography>
-                     </Stack>
-                   </React.Fragment>
-                 }
-                 
-               >
-                 <Button
-                  key={seat.Code}
-                 title={seat.Price}
-                 disabled={(seat.Code==="NoSeat")?true:false}
-                 
-                  sx={{
-                    border: "2px solid rgb(22, 129, 216)",
-                    borderRadius: "4px",
-                    width: "30px",
-                    height: "30px",
-                    minWidth: "20px",
-                    
-                    textAlign: "center",
-                    backgroundColor: SeatColors[seat.status] || "#E8F2FF",
-                    cursor: "pointer",
-                    
-                    
-                    transition: "box-shadow 0.3s ease-in-out",
-                    "&:hover": {
-                      border: "2px solid rgb(5, 76, 153)",
-                    },
-                  }}
-                  onClick={() => {
-                   
-                      setReservedSeats([...reservedSeats, seat]);
-                      dispatch(setSeatDetails(seat));
-                 
-                  }}
-                >
-                  <Typography variant="body1" sx={{ color: "black" }}>
-                    {/* {rowIndex} {SeatColumns[colIndex]} */}
-                    {/* {seat.Code} */}
-                  </Typography>
-                </Button>
-                </HtmlTooltip>
-              ))}
-            </Stack>
-          ))}
+          {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats.map(
+            (seats, rowIndex) => (
+              <Stack key={rowIndex} direction="row" spacing={2}>
+                {seats.Seats.map(
+                  (seat, colIndex) =>
+                    seat.AvailablityType !== 5 &&
+                    seat.AvailablityType !== 0 && (
+                      <HtmlTooltip
+                        key={seat.Code}
+                        title={
+                          <Stack direction="row">
+                            <Stack direction="column">
+                              <Typography
+                                color="inherit"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                {seat.Code}
+                              </Typography>
+                              <Typography
+                                color="inherit"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                |
+                              </Typography>
+                              <Typography
+                                color="inherit"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                |
+                              </Typography>
+                            </Stack>
+
+                            <Typography color="inherit">
+                              Available:{" "}
+                              {AvailablityStatus[seat.AvailablityType]}
+                            </Typography>
+                          </Stack>
+                        }
+                        disableInteractive
+                      >
+                        <span>
+                          <Button
+                            disabled={[3, 4, 0].includes(seat.AvailablityType)}
+                            sx={{
+                              border: "2px solid rgb(22, 129, 216)",
+                              borderRadius: "4px",
+                              width: "30px",
+                              height: "30px",
+                              minWidth: "20px",
+                              backgroundColor:
+                              (reservedSeats.some((s) => s.Code === seat.Code)
+                                ? "green"
+                                : SeatColors[seat.AvailablityType]),
+                              cursor: "pointer",
+                              transition: "box-shadow 0.3s ease-in-out",
+                              "&:hover": {
+                                border: "2px solid rgb(5, 76, 153)",
+                              },
+                            }}
+                            onClick={() => {
+                              dispatch(setSeatDetails(seat));
+                            }}
+                          >
+                            {seat.AvailablityType === 4 ? (
+                              <CancelIcon sx={{ color: "white" }} />
+                            ) : (
+                              ""
+                            )}
+                            {seat.AvailablityType === 3 ? (
+                              <PersonOutlineIcon sx={{ color: "white" }} />
+                            ) : (
+                              ""
+                            )}
+                          </Button>
+                        </span>
+                      </HtmlTooltip>
+                    )
+                )}
+              </Stack>
+            )
+          )}
         </Stack>
       ) : (
         <h1>Extra Details Not Found</h1>
@@ -101,15 +138,14 @@ const Seat = () => {
 
 export default Seat;
 
-// Tooltip Component 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} arrow />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
+    border: "1px solid #dadde9",
   },
 }));

@@ -23,7 +23,7 @@ import {
   TextField,
 } from "@mui/material";
 import { flightController } from "@/api/flightController";
-import TravellerForm from "@/components/flight/TravellerForm";
+
 import { data } from "../../../assests/data";
 import { useRouter } from "next/router";
 import FareSummary from "@/components/flight/FareSummary";
@@ -31,7 +31,7 @@ import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
 import { useFormik } from "formik";
-import { gstForm, pancard, passport } from "@/utils/validationSchema";
+
 import { JOURNEY, JOURNEY_TYPE } from "@/utils/enum";
 import DomesticDetail from "@/components/flight/domesticDetail";
 import InternationalDetail from "@/components/flight/internationalDetail";
