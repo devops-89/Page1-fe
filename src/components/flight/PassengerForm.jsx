@@ -12,7 +12,7 @@ import GstForm from "./GstForm";
 import { setToast } from "@/redux/reducers/toast";
 import { useDispatch } from "react-redux";
 
-const PassengerForm = ({ flightDetails }) => {
+const PassengerForm = ({ flightDetails, state }) => {
   const dispatch = useDispatch();
   const [adultCount, setAdultCount] = useState(0);
   const [childCount, setChildCount] = useState(0);
@@ -22,7 +22,7 @@ const PassengerForm = ({ flightDetails }) => {
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
   useEffect(() => {
-    const storedState = localStorage.getItem("state");
+    const storedState = localStorage.getItem(state);
     if (storedState) {
       const parsedState = JSON.parse(storedState);
       const storedAdultCount = parsedState?.adult || 1;

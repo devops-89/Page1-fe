@@ -12,19 +12,65 @@ import {
   Typography,
 } from "@mui/material";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TravellerSelector from "./travellerSelector";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { JOURNEY_TYPE, PREFERRED_TIME } from "@/utils/enum";
+import { useRouter } from "next/router";
 
 const Multiway = () => {
+  const router = useRouter();
   const [forms, setForms] = useState([1, 2]);
   const maxForms = 4;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [adultValue, setAdultValue] = useState(1);
+  const [childValue, setChildValue] = useState(0);
+  const [infantValue, setInfantValue] = useState(0);
+  const [defaultRoute, setDefaultRoute] = useState("/multi-list");
+  const [initialValue, setIntialValue] = useState({
+    adult: adultValue,
+    child: childValue,
+    infant: infantValue,
+  });
   const open = Boolean(anchorEl);
 
   const openPopover = (e) => {
     setAnchorEl(e.currentTarget);
   };
+
+  const initialState = {
+    ip_address: "",
+    journey_type: JOURNEY_TYPE.ONEWAY,
+    preferred_time: PREFERRED_TIME.AnyTime,
+    multicity: [
+      {
+        origin: "",
+        destination: "",
+        departure_date: "",
+        cabin_class: "1",
+      },
+      {
+        origin: "",
+        destination: "",
+        departure_date: "",
+        cabin_class: "1",
+      },
+      {
+        origin: "",
+        destination: "",
+        departure_date: "",
+        cabin_class: "1",
+      },
+    ],
+    adult: 1,
+    child: 0,
+    infant: 0,
+    direct_flight: false,
+    one_stop_flight: false,
+  };
+
+  const [state, setState] = useState(initialState);
+  const [newFormData, setNewFormData] = useState(null);
 
   const addForm = () => {
     if (forms.length < maxForms) {
@@ -36,6 +82,52 @@ const Multiway = () => {
     const updatedForms = forms.filter((_, i) => i !== index);
     setForms(updatedForms);
   };
+
+
+
+   const [cabin_class, setCabinClass] = useState("");
+    useEffect(() => {
+      // getAllAirport();
+      fetchApi();
+    }, []);
+  
+    useEffect(() => {
+      let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
+        if (router.pathname === defaultRoute && newFormData) {
+          return val.value == newFormData.cabin_class;
+        } else {
+          return val.value == state.cabin_class;
+        }
+      });
+  
+      setCabinClass(cabinClass);
+    }, [state.cabin_class]);
+  
+    useEffect(() => {
+      if (router.pathname === defaultRoute) {
+        if (newFormData) {
+          setOrigin({
+            airport_name: newFormData.originAirport,
+            city_name: newFormData.originCity,
+            iata_code: newFormData.origin,
+          });
+          setDestination({
+            airport_name: newFormData.destinationAirport,
+            city_name: newFormData.destinationCity,
+            iata_code: newFormData.destination,
+          });
+          setDepartureDate(moment(newFormData.departure_date));
+          setAdultValue(newFormData.adult);
+          setChildValue(newFormData.child);
+          setInfantValue(newFormData.infant);
+          setState((prev) => ({
+            ...prev,
+            cabin_class: newFormData.cabin_class,
+          }));
+        }
+      }
+    }, [newFormData]);
+  
 
   return (
     <Box
@@ -154,12 +246,35 @@ const Multiway = () => {
                   Travellers and cabin class
                 </Typography>
                 <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
-                  <Typography sx={{ fontSize: 17, fontFamily: nunito.style }}>
-                    4 Persons
-                  </Typography>
-                  <Typography fontSize={13} fontFamily={nunito.style}>
-                    1 Adult, Economy
-                  </Typography>
+                  {router.pathname === defaultRoute && newFormData ? (
+                    <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+                      {newFormData.adult +
+                        newFormData.child +
+                        newFormData.infant}{" "}
+                      Persons
+                    </Typography>
+                  ) : (
+                    <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+                      {state.adult + state.child + state.infant} Persons
+                    </Typography>
+                  )}
+
+                  {router.pathname === defaultRoute && newFormData ? (
+                    <Typography fontSize={13} fontFamily={nunito.style}>
+                      {newFormData.adult}adult{" "}
+                      {newFormData.child !== 0 && `,${newFormData.child} child`}{" "}
+                      {newFormData.infant !== 0 &&
+                        `,${newFormData.infant} infant`}
+                      , {`${cabin_class.label} Class`}
+                    </Typography>
+                  ) : (
+                    <Typography fontSize={13} fontFamily={nunito.style}>
+                      {state.adult}adult{" "}
+                      {state.child !== 0 && `,${state.child} child`}{" "}
+                      {state.infant !== 0 && `,${state.infant} infant`},{" "}
+                      {`${cabin_class.label} Class`}
+                    </Typography>
+                  )}
                 </CardActionArea>
               </>
             ) : (
@@ -214,7 +329,23 @@ const Multiway = () => {
           },
         }}
       >
-        <TravellerSelector anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <TravellerSelector
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          initialState={initialState}
+          state={state}
+          setState={setState}
+          adultValue={adultValue}
+          setAdultValue={setAdultValue}
+          infantValue={infantValue}
+          setInfantValue={setInfantValue}
+          childValue={childValue}
+          setChildValue={setChildValue}
+          initialValue={initialValue}
+          setIntialValue={setIntialValue}
+          newFormData={newFormData}
+          defaultRoute={defaultRoute}
+        />
       </Popover>
       {/* popover end */}
     </Box>

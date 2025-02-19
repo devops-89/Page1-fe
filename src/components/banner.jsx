@@ -68,7 +68,7 @@ const Banner = () => {
                   justifyContent: "center",
                 }}
               >
-                <Grid2 container sx={{ mt: 15 }}>
+                <Grid2 container sx={{ mt:15}}>
                   <Grid2
                     size={10}
                     margin="auto"
@@ -107,7 +107,7 @@ const Banner = () => {
       </Swiper>
       {!phone && (
         <Box
-          sx={{ position: "absolute", width: "100%", top: "50%", zIndex: 999 }}
+          sx={{ position: "absolute", width: "100%", top: "50%", zIndex: 998 }}
         >
           <Grid2 container>
             <Grid2

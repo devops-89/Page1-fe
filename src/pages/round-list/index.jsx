@@ -64,7 +64,7 @@ const FlightList = () => {
   const handleFlightSelection = (type, flight) => {
     if (type === "departure") {
       setSelectedDeparture(flight);
-      console.log(selectedDeparture);
+      // console.log(selectedDeparture);
     } else if (type === "arrival") {
       setSelectedArrival(flight);
       // console.log(selectedArrival)
@@ -91,7 +91,7 @@ const FlightList = () => {
     });
   };
 
-  console.log("flightList round Trip", flightList)
+  // console.log("flightList round Trip", flightList)
   return (
     <>
       <InnerBanner img={banner.src} heading={"Round Flight Trip"} />

@@ -79,8 +79,8 @@ const FlightDetails = () => {
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
+            // console.log("response oneway",response?.data?.data)
             setOtherDetails(response?.data?.data[1]);
-            // console.log("flight", response?.data?.data);
             localStorage.setItem(
               "oneWayflightDetails",
               JSON.stringify(response?.data?.data)
@@ -88,9 +88,8 @@ const FlightDetails = () => {
           }
         })
         .catch((error) => {
-          // console.error("Error fetching flight details:", error);
           setError(error);
-          console.log("myError",error)
+          // console.log("myError",error)
           dispatch(
             setToast({
               open: true,
@@ -286,7 +285,7 @@ const FlightDetails = () => {
                                     }}
                                   >
                                     <Image
-                                      src={segment?.Airline?.AirlineLogo}
+                                      src={segment?.AirlineLogo}
                                       alt="Image"
                                       width={30}
                                       height={30}
@@ -456,8 +455,14 @@ const FlightDetails = () => {
                       </Box>
                       {/* Intermediate flights end */}
                     </Card>
+                    {/* Meal Section start */}
+                    <Card >
+                      Meal Section
+                    </Card>
+
+                    {/* Meal Section end */}
                     <Card>
-                      <PassengerForm flightDetails={flightDetails} />
+                      <PassengerForm state="state" flightDetails={flightDetails} />
                     </Card>
                   </Paper>
                   <FullScreenDialog />

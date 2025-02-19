@@ -17,6 +17,5 @@ export const COLORS = {
   DANGER: "#ff0000",
   SUCCESS: "#008000",
   SEMIGREY : '#F2F2F2',
-  SKYBLUE: '#ADD6EF',
-  BHARTIBLUE:"#3f7eeb"
+ 
 };

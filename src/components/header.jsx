@@ -14,19 +14,25 @@ import {
   ListItemText,
   Popover,
   Stack,
+  Table,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import TabletNavbar from "./tabletNavbar";
 const Header = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
+
 
   const handleShowPopover = (e) => {
     setAnchorEl(e.currentTarget);
@@ -46,9 +52,7 @@ const Header = () => {
     }
   }, []);
 
-  const handleRouter = (path) => {
-    router.push(path);
-  };
+          
   const dispatch = useDispatch();
   const changeRouter = (path) => {
     if (path === "/") {
@@ -75,6 +79,13 @@ const Header = () => {
   const user = useSelector((state) => state.USER);
 
   const name = user?.full_name ? user.full_name.slice(0, 1) : "";
+  const [openMenu ,setOpenMenu] = useState("false");
+
+  const tablet = useMediaQuery("(max-width:900px)");
+  const handleOpenMenu = function(){
+     setOpenMenu(pre =>!pre)
+  }
+
 
   return (
     <Box
@@ -85,18 +96,21 @@ const Header = () => {
         backgroundColor: isScrolling ? COLORS.BLACKOVERLAY : COLORS.TRANSPARENT,
         transition: "all 0.5s ease",
         backdropFilter: isScrolling ? "blur(5px)" : "none",
+        
       }}
+
     >
       <Container maxWidth="lg">
-        <Stack
+        < Stack
           direction={"row"}
           alignItems={"center"}
           justifyContent={"space-between"}
           p={1}
         >
-          <Link href={"/"} passHref>
-            <Image src={logo} width={100} alt="" />
-          </Link>
+         { openMenu && <Link href={"/"} passHref>
+            <Image src={logo} width={tablet ?80:100}  alt="" />
+          </Link>}
+          { !tablet &&
           <Stack direction={"row"} alignItems={"center"} spacing={3}>
             {data.headerLinks.map((val, i) => (
               <Typography
@@ -134,13 +148,17 @@ const Header = () => {
                   },
                 }}
                 key={i}
-                onClick={() => handleRouter(val.url)}
+                onClick={() => changeRouter(val.url)}
               >
                  {val.label} 
                
               </Typography>
             ))}
-          </Stack>
+
+         
+          </Stack>}
+
+          { openMenu &&
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
             <IconButton
               sx={{
@@ -148,7 +166,7 @@ const Header = () => {
                 border: `1px solid ${COLORS.WHITE}`,
               }}
             >
-              <ShoppingBag sx={{ fontSize: 16, color: COLORS.PRIMARY }} />
+              <ShoppingBag sx={{ fontSize: {lg:14 ,sm:14 ,xs:10}, color: COLORS.PRIMARY }} />
             </IconButton>
             {user?.isAuthenticated ? (
               <IconButton
@@ -183,10 +201,32 @@ const Header = () => {
                 }}
                 onClick={() => router.push("/login")}
               >
-                <Person sx={{ fontSize: 16, color: COLORS.PRIMARY }} />
+                <Person sx={{ fontSize: {lg:14 ,sm:12 ,xs:10}, color: COLORS.PRIMARY }} />
               </IconButton>
             )}
+           
+            { tablet && ( openMenu ?
+           <IconButton
+                sx={{
+                  backgroundColor: COLORS.WHITE,
+                  border: `1px solid ${COLORS.WHITE}`,
+                }}
+              
+              >
+                <MenuIcon sx={{ fontSize: {lg:14 ,sm:12 ,xs:10}, color: COLORS.PRIMARY }} onClick={handleOpenMenu}  />
+              </IconButton> : <IconButton
+                sx={{
+                  backgroundColor: COLORS.WHITE,
+                  border: `1px solid ${COLORS.WHITE}`,
+                }}
+              
+              >
+                <CloseIcon sx={{ fontSize: {lg:14 ,sm:12 ,xs:10}, color: COLORS.PRIMARY }} />
+              </IconButton>)
+                }
           </Stack>
+}
+       
         </Stack>
       </Container>
       <Popover
@@ -222,6 +262,8 @@ const Header = () => {
           ))}
         </List>
       </Popover>
+     
+     { !openMenu && <TabletNavbar onClose={handleOpenMenu}/> }
     </Box>
   );
 };
