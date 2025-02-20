@@ -51,10 +51,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [isLCC,setIsLCC]=useState(null);
   const [flightDetails, setFlightDetails] = useState(null);
   const [otherDetails, setOtherDetails] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [loading,setLoading]=useState(true);
 
 
   const handleClickOpen = () => {
@@ -103,6 +105,26 @@ const FlightDetails = () => {
     }
   }, []);
 
+
+  useEffect(() => {
+    const checkLCC = async () => {
+      setLoading(true); // Start loading
+
+    
+      if (!otherDetails) {
+        setIsLCC(null);
+      } else if (otherDetails.Baggage || otherDetails.MealDynamic ||otherDetails.SeatDynamic) {
+        setIsLCC(true); // LCC
+      } else if (otherDetails.SeatPreference) {
+        setIsLCC(false); // Non-LCC
+      }
+
+      setLoading(false); // Stop loading after state is set
+    };
+
+    checkLCC();
+  }, []);
+
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -116,7 +138,12 @@ const FlightDetails = () => {
     }
   }, []);
 
-
+  
+  
+   
+ 
+ 
+ 
   return (
     <>
       <Grid2 container>
@@ -465,7 +492,10 @@ const FlightDetails = () => {
                       <PassengerForm state="state" flightDetails={flightDetails} />
                     </Card>
                   </Paper>
-                  <FullScreenDialog />
+                  {
+                    (loading)?(<h4>Loading</h4> ):((isLCC)? (<FullScreenDialog />):("Non LCC"))
+                  }
+                
                 </Grid2>
 
                 {/* Fare Summary */}
