@@ -8,6 +8,7 @@ import {
   CardActionArea,
   Grid2,
   Popover,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,17 +16,19 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { useEffect, useState } from "react";
 import TravellerSelector from "./travellerSelector";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { JOURNEY_TYPE, PREFERRED_TIME } from "@/utils/enum";
+import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
 import { useRouter } from "next/router";
 import { flightController } from "@/api/flightController";
 import { useDispatch } from "react-redux";
 import VirtualList from "./fixedSizeList";
 import { customFilter } from "@/utils/regex";
 import Loading from "react-loading";
+import moment from "moment";
+import { setToast } from "@/redux/reducers/toast";
 
 const Multiway = () => {
   const router = useRouter();
-  const [forms, setForms] = useState([1, 2]);
+  const [forms, setForms] = useState([{ id: 1 }]);
   const maxForms = 4;
   const [anchorEl, setAnchorEl] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -68,15 +71,25 @@ const Multiway = () => {
 
   const addForm = () => {
     if (forms.length < maxForms) {
-      setForms([...forms, forms.length + 1]);
+      setForms([...forms, { id: forms.length + 1 }]);
+      setState((prevState) => ({
+        ...prevState,
+        multicity: [
+          ...prevState.multicity,
+          { origin: "", destination: "", departure_date: "", cabin_class: "1" },
+        ],
+      }));
     }
   };
 
   const removeForm = (index) => {
     const updatedForms = forms.filter((_, i) => i !== index);
     setForms(updatedForms);
+    setState((prevState) => ({
+      ...prevState,
+      multicity: prevState.multicity.filter((_, i) => i !== index),
+    }));
   };
-
   const dispatch = useDispatch();
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
@@ -146,6 +159,7 @@ const Multiway = () => {
           let response = res.data.data;
           dispatch(setFlightDetails({ ...response }));
           localStorage.setItem("multiwayData", JSON.stringify(response));
+          console.log("multi  ",response)
           setButtonLoading(false);
           router.pathname !== defaultRoute
             ? router.push(defaultRoute)
@@ -490,7 +504,7 @@ const Multiway = () => {
                       {state.adult}adult{" "}
                       {state.child !== 0 && `,${state.child} child`}{" "}
                       {state.infant !== 0 && `,${state.infant} infant`},{" "}
-                      {`${cabin_class.label} Class`}
+                      {/* {`${cabin_class.label} Class`} */}
                     </Typography>
                   )}
                 </CardActionArea>
