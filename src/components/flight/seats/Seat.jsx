@@ -7,6 +7,7 @@ import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ReactLoading,{spin} from "react-loading";
 
 const SeatColors = {
   0: "red", // Not set
@@ -29,7 +30,7 @@ const Seat = () => {
   const dispatch = useDispatch();
   let value = useSelector((state) => state.SeatsInformation.seats);
   console.log("teste", value);
- 
+ 3
   useEffect(()=>{
         setReservedSeats(value);
         console.log("redux values: ",value);
@@ -44,8 +45,8 @@ const Seat = () => {
   console.log(extraDetails);
 
   return (
-    <Box sx={{ backgroundColor: COLORS.WHITE }}>
-      {extraDetails ? (
+    <Box sx={{ backgroundColor: COLORS.WHITE,minWidth:"300px" }}>
+      {(extraDetails) ? (
         <Stack direction="column" spacing={2} p={2}>
           {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats.map(
             (seats, rowIndex) => (
@@ -130,7 +131,7 @@ const Seat = () => {
           )}
         </Stack>
       ) : (
-        <h1>Extra Details Not Found</h1>
+        <ReactLoading type="spin" color={COLORS.PRIMARY} height={50} width={50} />
       )}
     </Box>
   );

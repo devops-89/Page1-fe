@@ -20,6 +20,7 @@ import {
   TableBody,
   Button,
 } from "@mui/material";
+
 import { flightController } from "@/api/flightController";
 import { useRouter } from "next/router";
 import FareSummary from "@/components/flight/FareSummary";
@@ -46,11 +47,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const FlightDetails = () => {
+ 
   const router = useRouter();
   const dispatch = useDispatch();
   const [flightDetails, setFlightDetails] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+
+  useEffect(()=>{
+
+  })
 
   const handleClose = () => {
     setOpen(false);
