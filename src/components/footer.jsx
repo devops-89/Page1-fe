@@ -13,6 +13,7 @@ import {
   ListItemText,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
 import logo from "@/logo/logo.png";
@@ -27,29 +28,33 @@ import footer from "@/banner/footer.svg";
 import { TiSocialFacebook } from "react-icons/ti";
 import { RiLinkedinFill } from "react-icons/ri";
 const Footer = () => {
+  const phone = useMediaQuery("(max-width:600px)");
+ const tablet =  useMediaQuery("(max-width:900px)");
+  const fontSize = phone ? 15 : tablet ? 15 : 18;
+  const minWidthValue = tablet ? 360 : "auto"; 
   const socialIcons = [
     {
-      icon: <TiSocialFacebook fontSize={20} />,
+      icon: <TiSocialFacebook style={{ fontSize: `${fontSize}px` }}  />,
     },
     {
-      icon: <X sx={{ fontSize: 18 }} />,
+      icon: <X sx={{ fontSize:{lg:18,sm:15 ,xs:15}  }} />,
     },
     {
-      icon: <Instagram sx={{ fontSize: 18 }} />,
+      icon: <Instagram sx={{ fontSize: {lg:18,sm:15 ,xs:15}}} />,
     },
     {
-      icon: <RiLinkedinFill fontSize={20} />,
+      icon: <RiLinkedinFill style={{ fontSize: `${fontSize}px` }}  />,
     },
   ];
-
+ 
   return (
     <Box sx={{ pt: 10, backgroundColor: COLORS.LIGHTBLUE }}>
       <Container>
         <Grid2 container spacing={4}  justifyContent="center" >
-          <Grid2 size={{lg:3 ,sm:6}} justifyContent="center"  textAlign="center">
+          <Grid2 size={{lg:3 ,sm:6 ,xs:6}} justifyContent="center"  textAlign="center">
             <Typography
               sx={{
-                fontSize: 25,
+                fontSize: {lg:25 ,sm:20,xs:20},
                 fontFamily: nunito.style,
                 fontWeight: 600,
                 mb: 2,
@@ -88,7 +93,7 @@ const Footer = () => {
                     primary={
                       <Typography
                         sx={{
-                          fontSize: 15,
+                          fontSize: {lg:15 ,sm:15, xs:13},
                           textTransform: "capitalize",
                           fontFamily: nunito.style,
                           fontWeight: 550,
@@ -104,13 +109,14 @@ const Footer = () => {
             </List>
           </Grid2>
 
-          <Grid2 size={{lg:3 ,sm:6}}>
+          <Grid2 size={{lg:3 ,sm:6 ,xs:6}}>
             <Typography
               sx={{
-                fontSize: 25,
+                fontSize: {lg:25 ,sm:20,xs:20},
                 fontFamily: nunito.style,
                 fontWeight: 600,
                 mb: 2,
+                 textAlign:"center"
               }}
             >
               Company
@@ -122,10 +128,11 @@ const Footer = () => {
                     primary={
                       <Typography
                         sx={{
-                          fontSize: 15,
+                          fontSize: {lg:15 ,sm:15, xs:13},
                           textTransform: "capitalize",
                           fontFamily: nunito.style,
                           fontWeight: 550,
+                           textAlign:"center"
                         }}
                       >
                         {val.label}
@@ -137,13 +144,14 @@ const Footer = () => {
             </List>
           </Grid2>
 
-          <Grid2 size={{lg:3 ,sm:6}}>
+          <Grid2 size={{lg:3 ,sm:6 ,xs:6}}>
             <Typography
               sx={{
-                fontSize: 25,
+                fontSize: {lg:25 ,sm:20,xs:20},
                 fontFamily: nunito.style,
                 fontWeight: 600,
                 mb: 2,
+                 textAlign:"center"
               }}
             >
               Support
@@ -155,10 +163,11 @@ const Footer = () => {
                     primary={
                       <Typography
                         sx={{
-                          fontSize: 15,
+                          fontSize: {lg:15 ,sm:15, xs:13},
                           textTransform: "capitalize",
                           fontFamily: nunito.style,
                           fontWeight: 550,
+                           textAlign:"center"
                         }}
                       >
                         {val.label}
@@ -169,13 +178,14 @@ const Footer = () => {
               ))}
             </List>
           </Grid2>
-          <Grid2 size={{lg:3 ,sm:6}}>
+          <Grid2 size={{lg:3 ,sm:6,xs:6}}>
             <Typography
               sx={{
-                fontSize: 25,
+                fontSize: {lg:25 ,sm:20,xs:20},
                 fontFamily: nunito.style,
                 fontWeight: 600,
                 mb: 2,
+                 textAlign:"center"
               }}
             >
               Destinations
@@ -187,10 +197,11 @@ const Footer = () => {
                     primary={
                       <Typography
                         sx={{
-                          fontSize: 15,
+                          fontSize: {lg:15 ,sm:15, xs:13},
                           textTransform: "capitalize",
                           fontFamily: nunito.style,
                           fontWeight: 550,
+                           textAlign:"center"
                         }}
                       >
                         {val.label}
@@ -208,37 +219,54 @@ const Footer = () => {
             borderRadius: 2,
             px: 1,
             boxShadow: " rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
+            textAlign:"center",
 
             mt: 3,
           }}
         >
           <Grid2 container spacing={4}>
             <Grid2
-              size={3}
+             size={{lg:3 ,sm:6,xs:12}}
+
+             pl={{lg:0 ,sm:0 ,xs:4}} 
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
+                justifyContent: {lg:"center" ,sm:"center" ,xs:"start"
+
+                },
+                
+
+
               }}
             >
-              <Image src={logo} width={100} />
+              <Image src={logo} width={100} textAlign={"center"} pl={{lg:0 ,sm:0 ,xs:6}} />
             </Grid2>
-            <Grid2 size={3} textAlign={"center"}>
+            <Grid2 size={{lg:3 ,sm:6,xs:12}} textAlign={"center"}   sx={{
+                display: "flex",
+                alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
+                justifyContent: {lg:"center" ,sm:"center" ,xs:"start"},
+                minWidth: minWidthValue,
+                
+              }}>
               <List>
                 <ListItem>
                   <ListItemAvatar
                     sx={{
                       backgroundColor: COLORS.PRIMARY,
                       borderRadius: "50%",
-                      minWidth: 50,
-                      height: 50,
+                      minWidth: {lg:50 ,sm:40 ,xs:40},
+                      height: {lg:50 ,sm:40 ,xs:40},
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                    
                     }}
                   >
                     <Headphones
-                      sx={{ fontSize: 20, color: COLORS.SECONDARY }}
+                   
+                      sx={{ fontSize: {lg:20,sm:15 ,xs:15}, color: COLORS.SECONDARY }}
                     />
                   </ListItemAvatar>
                   <ListItemText
@@ -248,6 +276,7 @@ const Footer = () => {
                           fontSize: 14,
                           fontWeight: 700,
                           fontFamily: nunito.style,
+                        
                         }}
                       >
                         Customer Support
@@ -269,21 +298,25 @@ const Footer = () => {
                 </ListItem>
               </List>
             </Grid2>
-            <Grid2 size={3}>
+            <Grid2 size={{lg:3 ,sm:6,xs:12}} textAlign={"center"}   sx={{
+                display: "flex",
+                alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
+                justifyContent: {lg:"center" ,sm:"center" ,xs:"start"},
+              }}>
               <List>
                 <ListItem>
                   <ListItemAvatar
                     sx={{
                       backgroundColor: COLORS.PRIMARY,
                       borderRadius: "50%",
-                      minWidth: 50,
-                      height: 50,
+                      minWidth: {lg:50 ,sm:40 ,xs:40},
+                      height: {lg:50 ,sm:40 ,xs:40},
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
-                    <Message sx={{ fontSize: 20, color: COLORS.SECONDARY }} />
+                    <Message sx={{ fontSize: {lg:20 ,sm:15 ,xs:15}, color: COLORS.SECONDARY }} />
                   </ListItemAvatar>
                   <ListItemText
                     primary={
@@ -313,22 +346,27 @@ const Footer = () => {
                 </ListItem>
               </List>
             </Grid2>
-            <Grid2 size={3}>
+            <Grid2 size={{lg:3 ,sm:6,xs:12}} textAlign={"center"}   sx={{
+                display: "flex",
+                alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
+                justifyContent: {lg:"center" ,sm:"center" ,xs:"start"},
+              
+              }}>
               <List>
                 <ListItem>
                   <ListItemAvatar
                     sx={{
                       backgroundColor: COLORS.PRIMARY,
                       borderRadius: "50%",
-                      minWidth: 50,
-                      height: 50,
+                      minWidth: {lg:50 ,sm:40 ,xs:40},
+                      height: {lg:50 ,sm:40 ,xs:40},
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
                     <LocationOn
-                      sx={{ fontSize: 20, color: COLORS.SECONDARY }}
+                      sx={{ fontSize: {lg:20 ,sm:15 ,xs:15}, color: COLORS.SECONDARY }}
                     />
                   </ListItemAvatar>
                   <ListItemText
@@ -362,11 +400,11 @@ const Footer = () => {
           </Grid2>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <Image src={footer} style={{ width: "100%" }} />
+          <Image src={footer} style={{ width: "100%"}} />
         </Box>
         <Grid2 container alignItems={"center"} sx={{ mb: 2, mt: 2 }}>
-          <Grid2 size={4}>
-            <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+          <Grid2 size={{lg:4 ,sm:12 ,xs:12}} alignItems={{sm:"center" ,xs:"center"}} justifyItems={{sm:"center" ,xs:"center"}}>
+            <Typography sx={{ fontSize: 14, fontFamily: nunito.style }} textAlign={"center"}>
               Copyright © 2025. All Rights Reserved,{" "}
               <Typography
                 sx={{
@@ -380,7 +418,7 @@ const Footer = () => {
               </Typography>
             </Typography>
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={{lg:4 ,sm:6 ,xs:12}} mt={{ lg:0,xs:1}} >
             <Stack
               direction={"row"}
               alignItems={"center"}
@@ -404,7 +442,7 @@ const Footer = () => {
               ))}
             </Stack>
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={{lg:4 ,sm:6 ,xs:12}}   mt={{ lg:0,xs:2}}          >
             <Stack
               direction={"row"}
               alignItems={"center"}
@@ -412,7 +450,7 @@ const Footer = () => {
               justifyContent={"center"}
             >
               {data.cards.map((val, i) => (
-                <Image src={val.img} key={i} />
+                <Image src={val.img} key={i} width={phone && 35} />
               ))}
             </Stack>
           </Grid2>

@@ -51,6 +51,7 @@ function TabletNavbar({onClose}) {
         boxSizing="border-box"
         padding={5}
        height={"100vh"}
+        overflow={"hidden"}
       >
         <Stack
           direction={"row"}
