@@ -5,16 +5,20 @@ import AttachMoneySharpIcon from "@mui/icons-material/AttachMoneySharp";
 import CheckBoxOutlineBlankSharpIcon from "@mui/icons-material/CheckBoxOutlineBlankSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import SelectedList from "./SelectedList";
-import {COLORS} from "@/utils/colors.js";
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { COLORS } from "@/utils/colors.js";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
 const SeatDetail = () => {
   return (
     <Box
       item
-     
-
-      sx={{ border: "1px solid gray", width: "440px", borderRadius: "10px",boxShadow:2,backgroundColor:COLORS.WHITE }}
+      sx={{
+        border: "1px solid gray",
+        width: "440px",
+        borderRadius: "10px",
+        boxShadow: 2,
+        backgroundColor: COLORS.WHITE,
+      }}
     >
       <Typography variant="body1" sx={{ m: 2, fontWeight: "bold" }}>
         New Delhi (DEL) to Mumbai (BOM)
@@ -47,13 +51,13 @@ const SeatDetail = () => {
           borderBottom: "1px solid gray",
         }}
       >
-       <SelectedList />
+        <SelectedList />
       </Stack>
       <Stack
         direction={"row"}
         sx={{
           justifyContent: "center",
-          gap:"20px",
+          gap: "20px",
           alignItems: "center",
           padding: "20px",
         }}
@@ -62,18 +66,18 @@ const SeatDetail = () => {
           <Box
             sx={{
               width: "35px",
-              height:"35px",
-              display:"flex",
-              justifyContent:"center",
-              alignItems:"center",     
+              height: "35px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
-              backgroundColor:COLORS.PRIMARY,
-              color:"white"
+              backgroundColor: COLORS.PRIMARY,
+              color: "white",
             }}
           >
-              <PersonOutlineIcon/> 
+            <PersonOutlineIcon />
           </Box>
           <Typography variant="subtitle2">Reserved</Typography>
         </Box>
@@ -81,39 +85,34 @@ const SeatDetail = () => {
           <Box
             sx={{
               width: "35px",
-              height:"35px",
+              height: "35px",
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
-              backgroundColor:COLORS.GREEN,
-            
+              backgroundColor: COLORS.GREEN,
             }}
-          >
-           
-          </Box>
+          ></Box>
           <Typography variant="subtitle2">Open</Typography>
         </Box>
         <Box sx={{ textAlign: "center" }}>
           <Box
             sx={{
               width: "35px",
-              height:"35px",
+              height: "35px",
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
-              backgroundColor:COLORS.RED,
-              display:"flex",
-              justifyContent:"center",
-              alignItems:"center",
-              color:"white"
+              backgroundColor: COLORS.RED,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "white",
             }}
           >
-           <CancelIcon/>
+            <CancelIcon />
           </Box>
           <Typography variant="subtitle2">Blocked</Typography>
         </Box>
-      
-      
       </Stack>
     </Box>
   );

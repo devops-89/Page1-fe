@@ -7,18 +7,17 @@ import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
-import ReactLoading,{spin} from "react-loading";
+import ReactLoading, { spin } from "react-loading";
 
 const SeatColors = {
   0: "red", // Not set
-  1:"white",  // open
+  1: "white", // open
   3: "orange", // Reserved
   4: "red", // Blocked
 };
 
 const AvailablityStatus = {
   0: "Not Set",
-  
   3: "Reserved",
   4: "Blocked",
   5: "Empty Space",
@@ -29,12 +28,12 @@ const Seat = () => {
   const [extraDetails, setExtraDetails] = useState(null);
   const dispatch = useDispatch();
   let value = useSelector((state) => state.SeatsInformation.seats);
-  console.log("teste", value);
- 3
-  useEffect(()=>{
-        setReservedSeats(value);
-        console.log("redux values: ",value);
-  },[value])
+  console.log("test", value);
+  3;
+  useEffect(() => {
+    setReservedSeats(value);
+    console.log("redux values: ", value);
+  }, [value]);
 
   useEffect(() => {
     const flightDetails = localStorage.getItem("oneWayflightDetails");
@@ -45,8 +44,8 @@ const Seat = () => {
   console.log(extraDetails);
 
   return (
-    <Box sx={{ backgroundColor: COLORS.WHITE,minWidth:"300px" }}>
-      {(extraDetails) ? (
+    <Box sx={{ backgroundColor: COLORS.WHITE, minWidth: "300px" }}>
+      {extraDetails ? (
         <Stack direction="column" spacing={2} p={2}>
           {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats.map(
             (seats, rowIndex) => (
@@ -97,10 +96,11 @@ const Seat = () => {
                               width: "30px",
                               height: "30px",
                               minWidth: "20px",
-                              backgroundColor:
-                              (reservedSeats.some((s) => s.Code === seat.Code)
+                              backgroundColor: reservedSeats.some(
+                                (s) => s.Code === seat.Code
+                              )
                                 ? "green"
-                                : SeatColors[seat.AvailablityType]),
+                                : SeatColors[seat.AvailablityType],
                               cursor: "pointer",
                               transition: "box-shadow 0.3s ease-in-out",
                               "&:hover": {
@@ -131,7 +131,12 @@ const Seat = () => {
           )}
         </Stack>
       ) : (
-        <ReactLoading type="spin" color={COLORS.PRIMARY} height={50} width={50} />
+        <ReactLoading
+          type="spin"
+          color={COLORS.PRIMARY}
+          height={50}
+          width={50}
+        />
       )}
     </Box>
   );
