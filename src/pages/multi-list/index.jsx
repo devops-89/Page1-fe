@@ -20,9 +20,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import StarIcon from "@mui/icons-material/Star";
 import FlightForm from "@/components/flight/flightForm";
-import FlightListBox from "@/components/flight/flightListBox";
 import Loading from "react-loading";
 import { COLORS } from "@/utils/colors";
+import TabFilter from "@/components/flight/tabFilter";
 
 const MultiList = () => {
   const [flightList, setFlightList] = useState(null);
@@ -40,6 +40,8 @@ const MultiList = () => {
 
   const [priceRange, setPriceRange] = useState([500, 2000]);
 
+  console.log("multi flightlist", flightList)
+
   const handleRangeChange = (event, newValue) => {
     setPriceRange(newValue);
   };
@@ -48,20 +50,17 @@ const MultiList = () => {
     <>
       <InnerBanner img={banner.src} heading={"Flight"} />
 
-      <Box sx={{ pt: 10 }}>
-        <Container>
+      <Box sx={{ pt: 10, px: 4 }}>
           <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
             <Typography sx={{ fontSize: 18 }}> Search Flight</Typography>
             <FlightForm />
           </Card>
-        </Container>
       </Box>
 
-      {/* {flightList?.segments?.flightData ? (
-        <Box sx={{ pt: 10, pb: 10 }}>
-          <Container>
+      {flightList?.flight_list?.flightData ? (
+        <Box sx={{ pt: 10, pb: 10, px: 4 }}>
             <Grid2 container spacing={4}>
-              <Grid2 size={4} sx={{ position: "relative" }}>
+              <Grid2 size={3} sx={{ position: "relative" }}>
                 <Card
                   variant="outlined"
                   sx={{ position: "sticky", top: "75px" }}
@@ -167,17 +166,14 @@ const MultiList = () => {
                 </Card>
 
               </Grid2>
-              <Grid2 size={8}>
+              <Grid2 size={9}>
                 <Grid2 container spacing={6}>
-                  {flightList?.segments?.flightData?.map((val, i) => (
-                    <Grid2 size={12} key={i}>
-                      <FlightListBox details={val} traceId={traceId} />
-                    </Grid2>
-                  ))}
+                  <Grid2 size={12}>
+                      <TabFilter flightList={flightList}/>
+                  </Grid2>
                 </Grid2>
               </Grid2>
             </Grid2>
-          </Container>
         </Box>
       ) : (
         <Box
@@ -191,7 +187,7 @@ const MultiList = () => {
         >
           <Loading type="bars" width={50} height={50} color={COLORS.PRIMARY} />
         </Box>
-      )} */}
+      )}
     </>
   );
 };

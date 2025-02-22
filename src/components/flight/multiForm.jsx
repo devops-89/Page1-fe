@@ -224,7 +224,7 @@ const Multiway = () => {
             .searchFlight(payload)
             .then((res) => {
                 let response = res?.data?.data;
-                console.log("multiData", response)
+                // console.log("multiData", response)
                 dispatch(setFlightDetails({ ...response }));
                 localStorage.setItem("multiwayData", JSON.stringify(response));
                 setButtonLoading(false);
