@@ -6,10 +6,10 @@ import { nunito } from "@/utils/fonts";
 const PassportForm = ({ values, handleChange, handleBlur, errors }) => {
   return (
     <>
-      <Typography variant="h6" sx={{fontWeight:600, fontFamily:nunito.style, mb:'20px'}}>
+      <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:'10px'}}>
         Passport Details
       </Typography>
-      <Grid2 container spacing={1}>
+      <Grid2 container spacing={1} sx={{mb:'20px'}}>
       <Grid2 size={{xs:12, sm:6, md:4}}>
       <Field
         as={TextField}

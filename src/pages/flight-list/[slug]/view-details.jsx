@@ -505,7 +505,7 @@ const FlightDetails = () => {
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={4}>
+                <Grid2 size={4} sx={{position:'sticky'}}>
                   <FareSummary fareData={flightDetails[0]?.Results} />
                 </Grid2>
               </Grid2>

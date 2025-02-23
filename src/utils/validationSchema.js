@@ -77,6 +77,9 @@ export const holidayPackageSchema = Yup.object({
 
 
 
+
+
+
 export const passengerSchema = Yup.object({
   passengers: Yup.array().of(
     Yup.object({
@@ -142,8 +145,8 @@ export const gstForm = (IsGSTMandatory) => {
 
 export const validationSchema = (isGSTMandatory) => {
   return Yup.object().shape({
-    ...passengerSchema.fields, 
-    gstForm: isGSTMandatory ? gstForm(true) : Yup.object().optional(), 
+    ...passengerSchema.fields,
+    gstForm: isGSTMandatory ? gstForm(true) : Yup.object().optional(),
     cell_country_code: Yup.string().required("Cell Country Code is required"),
     country_code: Yup.string().required("Country Code is required"),
     city: Yup.string().required("City is required"),

@@ -6,10 +6,10 @@ import { nunito } from "@/utils/fonts";
 const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors }) => {
   return (
     <>
-      <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "20px" }}>
+      <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style, mb: "10px" }}>
         Passenger {index + 1}
       </Typography>
-      <Grid2 container spacing={2}>
+      <Grid2 container spacing={2} sx={{mb:'20px'}}>
         {/* Title */}
         <Grid2 size={3}>
           <Field

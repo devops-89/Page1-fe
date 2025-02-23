@@ -10,7 +10,7 @@ import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
 import { useDispatch } from "react-redux";
-import * as Yup from "yup"; 
+import * as Yup from "yup";
 import AddForm from "./AddForm";
 
 const PassengerForm = ({ flightDetails, state }) => {
@@ -78,7 +78,6 @@ const PassengerForm = ({ flightDetails, state }) => {
       GSTCompanyContactNumber: "",
       GSTCompanyEmail: "",
     },
-
     cell_country_code: "",
     country_code: "",
     city: "",
@@ -93,6 +92,9 @@ const PassengerForm = ({ flightDetails, state }) => {
   };
 
   const handleSubmit = (values) => {
+    console.log("handleSubmit function CALLED!"); 
+    console.log("Form Values on Submit:", values);
+
     const { passengers } = values;
 
     const checkDuplicatePassengers = (passengers) => {
@@ -118,24 +120,11 @@ const PassengerForm = ({ flightDetails, state }) => {
       return;
     }
 
-    console.log("Submitted Values:", values);
+    console.log("Submitted Values (after duplicate check):", values);
   };
 
   const currentValidationSchema = useMemo(() => {
-    return Yup.object().shape({ 
-      ...validationSchema(isGSTMandatory).fields, 
-      cell_country_code: Yup.string().required("Cell Country Code is required"),
-      country_code: Yup.string().required("Country Code is required"),
-      city: Yup.string().required("City is required"),
-      contact_no: Yup.string().required("Contact No is required"),
-      country: Yup.string().required("Country is required"),
-      house_number: Yup.string().required("House Number is required"),
-      postal_code: Yup.string().required("Postal Code is required"),
-      street: Yup.string().required("Street is required"),
-      state: Yup.string().required("State is required"),
-      nationality: Yup.string().required("Nationality is required"),
-      email: Yup.string().email("Invalid email address").required("Email is required"),
-    });
+    return validationSchema(isGSTMandatory);
   }, [isGSTMandatory]);
 
   return (
@@ -179,6 +168,9 @@ const PassengerForm = ({ flightDetails, state }) => {
             })));
           }, [adultCount, childCount, infantCount, setFieldValue, totalPassengers]);
 
+          console.log("Formik ERRORS during render:", errors);
+          console.log("Formik VALUES during render:", values); 
+
           return (
             <Form>
               {values.passengers.map((passenger, index) => (
@@ -187,15 +179,15 @@ const PassengerForm = ({ flightDetails, state }) => {
                 </Box>
               ))}
 
-              {isPanRequired && <PanCardForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} />}
-              {isPassportRequired && <PassportForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} />}
-              {isGSTMandatory && <GstForm values={values.gstForm} handleChange={handleChange} handleBlur={handleBlur} errors={errors.gstForm} />}
+              {isPanRequired && <PanCardForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />}
+              {isPassportRequired && <PassportForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />}
+              {isGSTMandatory && <GstForm values={values.gstForm} handleChange={handleChange} handleBlur={handleBlur} errors={errors.gstForm} touched={touched} />}
 
               <AddForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
               <Box sx={{ mt: 2 }}>
                 <Button type="submit" variant="contained" sx={{ backgroundColor: COLORS.PRIMARY }}>
-                  Submit
+                  Book Now
                 </Button>
               </Box>
             </Form>
