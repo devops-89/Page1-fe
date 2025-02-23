@@ -482,7 +482,6 @@ const FlightDetails = () => {
                       {/* Intermediate flights end */}
                     </Card>
                     {/* Meal Section start */}
-                    <Card>Meal Section</Card>
 
                     {/* Meal Section end */}
                     <Card sx={{ mb: "20px" }}>
@@ -496,12 +495,12 @@ const FlightDetails = () => {
                       />
                     </Card>
 
-                    {isLCC ? (
+                    {/* {isLCC ? (
                         <>
                         <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:"10px", fontSize:"18px"}}>Pick Your Preferred Seats</Typography>
                       <FullScreenDialog />
                       </>
-                    ) : null}
+                    ) : null} */}
                   </Paper>
                 </Grid2>
 

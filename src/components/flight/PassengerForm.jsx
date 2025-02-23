@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Container, Button, Grid2, Typography, Box } from "@mui/material";
-import { Formik, Field, Form } from "formik";
-import * as Yup from "yup";
+import React, { useState, useEffect, useMemo } from "react";
+import { Container, Button, Typography, Box } from "@mui/material";
+import { Formik, Form } from "formik";
 import PassengerFields from "./PassengerFields";
 import PanCardForm from "./PancardForm";
 import PassportForm from "./PassportForm";
+import GstForm from "./GstForm";
 import { validationSchema } from "@/utils/validationSchema";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
-import GstForm from "./GstForm";
 import { setToast } from "@/redux/reducers/toast";
 import { useDispatch } from "react-redux";
+import * as Yup from "yup"; 
+import AddForm from "./AddForm";
 
 const PassengerForm = ({ flightDetails, state }) => {
   const dispatch = useDispatch();
@@ -25,13 +26,9 @@ const PassengerForm = ({ flightDetails, state }) => {
     const storedState = localStorage.getItem(state);
     if (storedState) {
       const parsedState = JSON.parse(storedState);
-      const storedAdultCount = parsedState?.adult || 1;
-      const storedChildCount = parsedState?.child || 0;
-      const storedInfantCount = parsedState?.infant || 0;
-
-      setAdultCount(storedAdultCount);
-      setChildCount(storedChildCount);
-      setInfantCount(storedInfantCount);
+      setAdultCount(parsedState?.adult || 1);
+      setChildCount(parsedState?.child || 0);
+      setInfantCount(parsedState?.infant || 0);
     }
 
     setIsPanRequired(
@@ -46,25 +43,21 @@ const PassengerForm = ({ flightDetails, state }) => {
     if (flightDetails[0]?.Results?.GSTAllowed) {
       setIsGSTMandatory(flightDetails[0]?.Results?.IsGSTMandatory || false);
     }
-  }, [flightDetails]);
+  }, [flightDetails, state]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
   const initialValues = {
     passengers: Array.from({ length: totalPassengers }, (_, index) => ({
+      title: "",
+      gender: "",
       firstName: "",
       middleName: "",
       lastName: "",
       email: "",
       phone: "",
-      mobileNumber: "",
-      countryCode: "",
-      type:
-        index < adultCount
-          ? "Adult"
-          : index < adultCount + childCount
-          ? "Child"
-          : "Infant",
+      dob: "",
+      type: index < adultCount ? "Adult" : index < adultCount + childCount ? "Child" : "Infant",
     })),
     panCard: {
       fullName: "",
@@ -76,16 +69,27 @@ const PassengerForm = ({ flightDetails, state }) => {
       passportNumber: "",
       passportExpiryDate: "",
       passportIssueDate: "",
-      passportIssueCountryCode: "",
       passportIssueCountry: "",
     },
     gstForm: {
-      GSTCompanyAddress: "",
-      GSTCompanyContactNumber: "",
       GSTCompanyName: "",
       GSTNumber: "",
+      GSTCompanyAddress: "",
+      GSTCompanyContactNumber: "",
       GSTCompanyEmail: "",
     },
+
+    cell_country_code: "",
+    country_code: "",
+    city: "",
+    contact_no: "",
+    country: "",
+    house_number: "",
+    postal_code: "",
+    street: "",
+    state: "",
+    nationality: "",
+    email: "",
   };
 
   const handleSubmit = (values) => {
@@ -107,9 +111,8 @@ const PassengerForm = ({ flightDetails, state }) => {
       dispatch(
         setToast({
           open: true,
-          message:
-            "Duplicate passenger found. Please ensure each passenger has unique details.",
-          severity: TOAST_STATUS.ERROR,
+          message: "Duplicate passenger found. Please ensure each passenger has unique details.",
+          severity: "error",
         })
       );
       return;
@@ -118,31 +121,32 @@ const PassengerForm = ({ flightDetails, state }) => {
     console.log("Submitted Values:", values);
   };
 
+  const currentValidationSchema = useMemo(() => {
+    return Yup.object().shape({ 
+      ...validationSchema(isGSTMandatory).fields, 
+      cell_country_code: Yup.string().required("Cell Country Code is required"),
+      country_code: Yup.string().required("Country Code is required"),
+      city: Yup.string().required("City is required"),
+      contact_no: Yup.string().required("Contact No is required"),
+      country: Yup.string().required("Country is required"),
+      house_number: Yup.string().required("House Number is required"),
+      postal_code: Yup.string().required("Postal Code is required"),
+      street: Yup.string().required("Street is required"),
+      state: Yup.string().required("State is required"),
+      nationality: Yup.string().required("Nationality is required"),
+      email: Yup.string().email("Invalid email address").required("Email is required"),
+    });
+  }, [isGSTMandatory]);
+
   return (
     <Container sx={{ py: 2 }}>
       <Box sx={{ mb: "15px" }}>
         {flightDetails[0]?.Results?.IsRefundable ? (
-          <Typography
-            variant="body1"
-            sx={{
-              fontWeight: 600,
-              fontSize: "16px",
-              fontFamily: nunito.style,
-              color: "green",
-            }}
-          >
+          <Typography variant="body1" sx={{ fontWeight: 600, fontSize: "16px", fontFamily: nunito.style, color: "green" }}>
             * The fare is refundable.
           </Typography>
         ) : (
-          <Typography
-            variant="body1"
-            sx={{
-              fontWeight: 600,
-              fontSize: "16px",
-              fontFamily: nunito.style,
-              color: "red",
-            }}
-          >
+          <Typography variant="body1" sx={{ fontWeight: 600, fontSize: "16px", fontFamily: nunito.style, color: "red" }}>
             * Sorry, the fare is not refundable.
           </Typography>
         )}
@@ -157,91 +161,43 @@ const PassengerForm = ({ flightDetails, state }) => {
       </Box>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema(isGSTMandatory)}
+        validationSchema={currentValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, setFieldValue, handleChange, handleBlur, errors }) => {
+        {({ values, setFieldValue, handleChange, handleBlur, errors, touched }) => {
           useEffect(() => {
-            // Update passengers based on the total count
-            const updatedPassengers = Array.from(
-              { length: totalPassengers },
-              (_, index) => ({
-                firstName: "",
-                middleName: "",
-                lastName: "",
-                email: "",
-                phone: "",
-                mobileNumber: "",
-                countryCode: "",
-                type:
-                  index < adultCount
-                    ? "Adult"
-                    : index < adultCount + childCount
-                    ? "Child"
-                    : "Infant",
-              })
-            );
-            setFieldValue("passengers", updatedPassengers);
-          }, [adultCount, childCount, infantCount, setFieldValue]);
+            setFieldValue("passengers", Array.from({ length: totalPassengers }, (_, index) => ({
+              title: "",
+              gender: "",
+              firstName: "",
+              middleName: "",
+              lastName: "",
+              email: "",
+              phone: "",
+              dob: "",
+              type: index < adultCount ? "Adult" : index < adultCount + childCount ? "Child" : "Infant",
+            })));
+          }, [adultCount, childCount, infantCount, setFieldValue, totalPassengers]);
 
           return (
             <Form>
               {values.passengers.map((passenger, index) => (
-                <Grid2 container sx={{ mb: "10px" }} key={index}>
-                  <PassengerFields
-                    passenger={passenger}
-                    index={index}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors}
-                  />
-                </Grid2>
+                <Box key={index} sx={{ mb: "10px" }}>
+                  <PassengerFields passenger={passenger} index={index} handleChange={handleChange} handleBlur={handleBlur} errors={errors} />
+                </Box>
               ))}
 
-              {isPanRequired && (
-                <Grid2 container sx={{ mb: "10px" }}>
-                  <PanCardForm
-                    values={values}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors}
-                  />
-                </Grid2>
-              )}
+              {isPanRequired && <PanCardForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} />}
+              {isPassportRequired && <PassportForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} />}
+              {isGSTMandatory && <GstForm values={values.gstForm} handleChange={handleChange} handleBlur={handleBlur} errors={errors.gstForm} />}
 
-              {isPassportRequired && (
-                <Grid2 container>
-                  <PassportForm
-                    values={values}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors}
-                  />
-                </Grid2>
-              )}
+              <AddForm values={values} handleChange={handleChange} handleBlur={handleBlur} errors={errors} touched={touched} />
 
-              {isGSTMandatory && (
-                <Grid2 container>
-                  <GstForm
-                    values={values.gstForm}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors.gstForm} // Ensure correct error mapping
-                  />
-                </Grid2>
-              )}
-
-              <Grid2 container>
-                <Grid2 size={{ xs: 12 }}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                  >
-                    Submit
-                  </Button>
-                </Grid2>
-              </Grid2>
+              <Box sx={{ mt: 2 }}>
+                <Button type="submit" variant="contained" sx={{ backgroundColor: COLORS.PRIMARY }}>
+                  Submit
+                </Button>
+              </Box>
             </Form>
           );
         }}
