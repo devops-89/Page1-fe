@@ -14,6 +14,41 @@ import * as Yup from "yup";
 import AddForm from "./AddForm";
 
 const PassengerForm = ({ flightDetails, state }) => {
+
+  const [payload,setPayload]=useState({
+    result_index: "",
+    trace_id: "",
+    ip_address: "",
+    cell_country_code: "",
+    country_code: "",
+    city: "",
+    contact_no: "",
+    country: "",
+    house_number: "",
+    postal_code: "",
+    street: "",
+    state: "",
+    nationality: "",
+    email: "",
+    passenger_details:{
+      adult:[],
+      child:[],
+      infant:[]
+
+    },
+    gst_company_address: "",
+    gst_company_contact_number: "",
+    gst_company_name: "",
+    gst_number: "",
+    gst_company_email: "",
+    fare:[],
+    fareBreakdown:[]
+  });
+
+  console.log("flight Details on Passenger form:",flightDetails);
+  console.log("state from Passenger form:",state);
+ 
+
   const dispatch = useDispatch();
   const [adultCount, setAdultCount] = useState(0);
   const [childCount, setChildCount] = useState(0);
@@ -92,8 +127,8 @@ const PassengerForm = ({ flightDetails, state }) => {
   };
 
   const handleSubmit = (values) => {
-    console.log("handleSubmit function CALLED!"); 
-    console.log("Form Values on Submit:", values);
+   
+
 
     const { passengers } = values;
 
@@ -120,12 +155,53 @@ const PassengerForm = ({ flightDetails, state }) => {
       return;
     }
 
+    console.log("values are setting",values)
+    setPayload(prevPayload => ({
+      ...prevPayload,
+      result_index: flightDetails[0].Results.ResultIndex,
+      trace_id: flightDetails[0].TraceId,
+      ip_address: "122.160.31.42",
+      cell_country_code: values.cell_country_code,
+      country_code: values.country_code,
+      city: values.city,
+      contact_no: values.contact_no,
+      country: values.country,
+      house_number: values.house_number,
+      postal_code: values.postal_code,
+      street: values.street,
+      state: values.state,
+      nationality: values.nationality,
+      email: values.email,
+      passenger_details: {
+        adult: values.passengers || [],
+        infant: [],
+        child: []
+      },
+      gst_company_address: values.gstForm.GSTCompanyAddress,
+      gst_company_contact_number: values.gstForm.GSTCompanyContactNumber,
+      gst_company_name: values.gstForm.GSTCompanyName,
+      gst_number: values.gstForm.GSTNumber,
+      gst_company_email: values.gstForm.GSTCompanyEmail,
+      fare: [{ ...flightDetails[0].Results.Fare }] || [],
+      fareBreakdown: flightDetails[0].Results.FareBreakdown || []
+    }));
+    console.log("handleSubmit function CALLED!"); 
+    console.log("Form Values on Submit:", values);
+   
+   
+
     console.log("Submitted Values (after duplicate check):", values);
+    
   };
 
   const currentValidationSchema = useMemo(() => {
     return validationSchema(isGSTMandatory);
   }, [isGSTMandatory]);
+
+
+  useEffect(()=>{
+    console.log("payload printing:",payload)
+  },[payload])
 
   return (
     <Container sx={{ py: 2 }}>
@@ -151,7 +227,7 @@ const PassengerForm = ({ flightDetails, state }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={currentValidationSchema}
-        onSubmit={handleSubmit}
+       
       >
         {({ values, setFieldValue, handleChange, handleBlur, errors, touched }) => {
           useEffect(() => {
@@ -168,11 +244,11 @@ const PassengerForm = ({ flightDetails, state }) => {
             })));
           }, [adultCount, childCount, infantCount, setFieldValue, totalPassengers]);
 
-          console.log("Formik ERRORS during render:", errors);
-          console.log("Formik VALUES during render:", values); 
+          // console.log("Formik ERRORS during render:", errors);
+          // console.log("Formik VALUES during render:", values); 
 
           return (
-            <Form>
+            <Form onSubmit={()=>handleSubmit(values)}>
               {values.passengers.map((passenger, index) => (
                 <Box key={index} sx={{ mb: "10px" }}>
                   <PassengerFields passenger={passenger} index={index} handleChange={handleChange} handleBlur={handleBlur} errors={errors} />
