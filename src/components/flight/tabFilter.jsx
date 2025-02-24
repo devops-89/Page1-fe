@@ -1,20 +1,26 @@
 import { Box, Tab, Tabs, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import TabPanel from '../tabPanel'
+import TabPanel from '../tabPanel' 
 import { COLORS } from '@/utils/colors';
 import { nunito } from '@/utils/fonts';
 import moment from 'moment';
-import MultiListBox from './multListBox';
+import MultiListBox from './multListBox'; 
 
 const TabFilter = ({ flightList }) => {
 
     const [value, setValue] = useState(0);
     const [departureRoute, setDepatureRoute] = useState(flightList?.flight_list?.flightData[0]?.departure);
-
-    // console.log("departure", flightList)
+    const [selectedFlights, setSelectedFlights] = useState({}); 
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+    };
+
+    const handleFlightSelect = (detailIndex, flightDetail) => {
+        setSelectedFlights(prevSelectedFlights => ({
+            ...prevSelectedFlights,
+            [detailIndex]: flightDetail === prevSelectedFlights[detailIndex] ? null : flightDetail, 
+        }));
     };
 
     return (
@@ -59,22 +65,25 @@ const TabFilter = ({ flightList }) => {
                 ))}
             </Tabs>
 
-
-
             {flightList?.flight_list?.flightData?.map((departureData, index) => {
 
                 const refundableValue = departureData?.IsRefundable
 
                 return (
-                    <>
-                        {departureData?.departure?.map((details, index) => {
+                    <React.Fragment key={`departureData-${index}`}> 
+                        {departureData?.departure?.map((details, detailIndex) => {
                             return (
-                                <TabPanel value={value} index={index}>
-                                    <MultiListBox details={details} refundableValue={refundableValue} />
+                                <TabPanel key={`tabpanel-${detailIndex}`} value={value} index={detailIndex}>
+                                    <MultiListBox
+                                        details={details}
+                                        refundableValue={refundableValue}
+                                        selectedFlight={selectedFlights[detailIndex]} 
+                                        onFlightSelect={(flightDetail) => handleFlightSelect(detailIndex, flightDetail)} 
+                                    />
                                 </TabPanel>
                             )
                         })}
-                    </>
+                    </React.Fragment>
                 )
             })}
 

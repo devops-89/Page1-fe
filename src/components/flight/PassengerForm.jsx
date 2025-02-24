@@ -33,11 +33,11 @@ const PassengerForm = ({ flightDetails, state }) => {
 
     setIsPanRequired(
       flightDetails[0]?.Results?.IsPanRequiredAtBook ||
-        flightDetails[0]?.Results?.IsPanRequiredAtTicket
+      flightDetails[0]?.Results?.IsPanRequiredAtTicket
     );
     setIsPassportRequired(
       flightDetails[0]?.Results?.IsPassportRequiredAtBook ||
-        flightDetails[0]?.Results?.IsPassportRequiredAtTicket
+      flightDetails[0]?.Results?.IsPassportRequiredAtTicket
     );
 
     if (flightDetails[0]?.Results?.GSTAllowed) {
@@ -92,7 +92,7 @@ const PassengerForm = ({ flightDetails, state }) => {
   };
 
   const handleSubmit = (values) => {
-    console.log("handleSubmit function CALLED!"); 
+    console.log("handleSubmit function CALLED!");
     console.log("Form Values on Submit:", values);
 
     const { passengers } = values;
@@ -169,7 +169,7 @@ const PassengerForm = ({ flightDetails, state }) => {
           }, [adultCount, childCount, infantCount, setFieldValue, totalPassengers]);
 
           console.log("Formik ERRORS during render:", errors);
-          console.log("Formik VALUES during render:", values); 
+          console.log("Formik VALUES during render:", values);
 
           return (
             <Form>

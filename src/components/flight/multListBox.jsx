@@ -1,4 +1,3 @@
-// MultiListBox.js
 import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
@@ -10,7 +9,6 @@ import {
 } from "@mui/icons-material";
 import {
     Avatar,
-    Box,
     Button,
     Card,
     Collapse,
@@ -24,12 +22,10 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import TabPanel from "../tabPanel";
-import FareDetails from "./fareDetail";
-import BaggageDetails from "./baggageDetails";
 import FlightBox from "./FlightBox";
 import MultiBaggageDetails from "./multBaggageDetails";
 
-const MultiListBox = ({ details, refundableValue }) => {
+const MultiListBox = ({ details, refundableValue, selectedFlight, onFlightSelect }) => { 
     const [open, setOpen] = useState(false);
     const [cabin, setCabin] = useState(null);
 
@@ -40,7 +36,16 @@ const MultiListBox = ({ details, refundableValue }) => {
     const [flightDetails, setFlightDetails] = useState(details);
     const [value, setValue] = useState(0);
 
-    console.log("flightDetail", flightDetails)
+    // console.log("flightDetail 1", flightDetails)
+
+
+    useEffect(() => {
+        if (flightDetails) {
+            onFlightSelect(flightDetails); 
+        }
+    }, []);
+
+
 
     const tabChangeHandler = (e, newValue) => {
         setValue(newValue);
@@ -53,6 +58,12 @@ const MultiListBox = ({ details, refundableValue }) => {
         setCabin(cabinData.label);
     }, [flightDetails, data.FLIGHT_CLASS_DATA]);
 
+
+    const handleCardClick = (flightDetails) => {
+        onFlightSelect(flightDetails); 
+    };
+
+
     return (
         <>
             <Card
@@ -60,8 +71,11 @@ const MultiListBox = ({ details, refundableValue }) => {
                     boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
                     p: 2,
                     cursor: "pointer",
-                    mb:3
+                    mb:3,
+                    border: selectedFlight === flightDetails ? `1px solid blue` : 'none', 
+                    backgroundColor: selectedFlight===flightDetails ? "#dff7ff" : ""
                 }}
+                onClick={() => handleCardClick(flightDetails)}
             >
                 <Stack
                     direction={"row"}
@@ -69,13 +83,12 @@ const MultiListBox = ({ details, refundableValue }) => {
                     justifyContent={"space-between"}
                 >
                     <Stack direction={"row"} alignItems={"center"} spacing={2}>
-                        {/* <Image
-                            src={flightDetails?.AirlineLogo}
+                        <Image
+                            src={flightDetails[0]?.AirlineLogo}
                             alt="Image"
                             width={30}
-                            height={30} 
-                        /> */}
-                        <img src={""} alt="logo"/>
+                            height={30}
+                        />
                         <Typography
                             sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
                         >
@@ -90,7 +103,7 @@ const MultiListBox = ({ details, refundableValue }) => {
                     </Typography>
                 </Stack>
                 <Grid2 container sx={{ mt: 3 }} spacing={4} alignItems={"flex-start"}>
-                    <Grid2 size={3}>
+                    <Grid2 size={4}>
                         <Typography
                             sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
                         >
@@ -110,7 +123,7 @@ const MultiListBox = ({ details, refundableValue }) => {
                             {flightDetails[0]?.Origin?.Airport?.CityName}
                         </Typography>
                     </Grid2>
-                 <Grid2 size={3}>
+                   <Grid2 size={4}>
                         <Typography
                             sx={{
                                 fontSize: 16,
@@ -144,9 +157,9 @@ const MultiListBox = ({ details, refundableValue }) => {
                             </Avatar>
                         </Divider>
                     </Grid2>
-                       <Grid2 size={3}>
+                        <Grid2 size={4}>
                         <Typography
-                            sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
+                            sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style, textAlign:'end' }}
                         >
                             {moment(
                                 flightDetails[flightDetails?.length - 1]
@@ -154,7 +167,7 @@ const MultiListBox = ({ details, refundableValue }) => {
                             ).format("HH:mm")}
                         </Typography>
                         <Typography
-                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style, textAlign:'end'}}
                         >
                             {
                                 flightDetails[flightDetails?.length - 1]
@@ -168,7 +181,7 @@ const MultiListBox = ({ details, refundableValue }) => {
                             Terminal
                         </Typography>
                          <Typography
-                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style, textAlign:'end' }}
                         >
                             {
                                 flightDetails[flightDetails?.length - 1]
@@ -176,13 +189,13 @@ const MultiListBox = ({ details, refundableValue }) => {
                             }
                         </Typography>
                     </Grid2>
-                    <Grid2 size={3} textAlign={"center"}>
+                    {/* <Grid2 size={3} textAlign={"center"}>
                         <Typography
                             sx={{ fontSize: 20, fontWeight: 900, fontFamily: nunito.style }}
                         >
                             {flightDetails[0]?.TotalFare} ₹
                         </Typography>
-                    </Grid2>
+                    </Grid2> */}
                 </Grid2>
 
                 <Card
@@ -249,7 +262,7 @@ const MultiListBox = ({ details, refundableValue }) => {
                             },
                         }}
                     >
-                        {data.flightTab.map((val, i) => (
+                        {data.multiflightTab.map((val, i) => (
                             <Tab
                                 label={
                                     <Typography
@@ -271,9 +284,6 @@ const MultiListBox = ({ details, refundableValue }) => {
                         <FlightBox tableData={flightDetails} />
                     </TabPanel>
                     <TabPanel index={1} value={value}>
-                        <FareDetails tableData={flightDetails} />
-                    </TabPanel>
-                    <TabPanel index={2} value={value}>
                         <MultiBaggageDetails tableData={flightDetails} />
                     </TabPanel>
                 </Collapse>
