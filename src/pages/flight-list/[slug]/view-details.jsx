@@ -490,7 +490,7 @@ const FlightDetails = () => {
                           backgroundColor: COLORS.PRIMARY,
                           color: COLORS.WHITE,
                         }}
-                        state="state"
+                     
                         flightDetails={flightDetails}
                       />
                     </Card>
