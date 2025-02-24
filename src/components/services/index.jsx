@@ -4,6 +4,7 @@ import React from "react";
 import ServicesCard from "./servicesCard";
 import { data } from "@/assests/data";
 import { useRouter } from "next/router";
+import FromTasting from "../fromTasting";
 
 const Services = () => {
   const router = useRouter();
@@ -36,6 +37,11 @@ const Services = () => {
           </Grid2>
         </Container>
       </Box>
+
+       <Container>
+       {/* <FromTasting/> */}
+
+       </Container>
     </Box>
   );
 };

@@ -63,7 +63,7 @@ const SubscribeBanner = () => {
                 <Typography>
                   <Typography
                     sx={{
-                      fontSize: 40,
+                      fontSize: {lg:40 ,sm:40,xs:30},
                       fontFamily: nunito.style,
                       color: COLORS.PRIMARY,
                       fontWeight: 800,
@@ -86,14 +86,14 @@ const SubscribeBanner = () => {
                   </Typography>
                 </Typography>
                 <Typography
-                  sx={{ mt: {lg:3 ,sm:2}, color: COLORS.WHITE, fontFamily: raleway.style }}
+                  sx={{ mt: {lg:3 ,sm:2}, fontSize:{ lg:20 ,xs:15} ,color: COLORS.WHITE, fontFamily: raleway.style }}
                 >
                   Love is in the air! Fall in love with a romantic getaway with
                   Page1 Travels special offer for newlywed couples. We include
                   the most romantic destinations in our honeymoon package to
                   ensure you a once-in-a-lifetime experience.
                 </Typography>
-                <List sx={{mt:2}}>
+                <List sx={{mt:{lg:2 ,sm:2 ,xs:1}}}>
                   {list.map((val, i) => (
                     <ListItem key={i} disablePadding sx={{mb:1}}>
                       <ListItemAvatar sx={{ minWidth: 40 }}>

@@ -233,7 +233,7 @@ const OnewayForm = () => {
     <>
       <Grid2 container alignItems={"center"}>
         <Grid2
-          size={{ lg: 2.4, xs: 6 }}
+          size={{ lg: 2.4, xs: 6,md:4 }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
@@ -390,7 +390,7 @@ const OnewayForm = () => {
           />
         </Grid2>
         <Grid2
-            size={{ lg: 2.4, xs: 6 }}
+          size={{ lg: 2.4, xs: 6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -423,7 +423,7 @@ const OnewayForm = () => {
           </LocalizationProvider>
         </Grid2>
         <Grid2
-            size={{ lg: 2.4, xs: 6 }}
+          size={{ lg: 2.4, xs: 6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -511,14 +511,14 @@ const OnewayForm = () => {
           </Popover>
           {/* popover end */}
         </Grid2>
-        <Grid2    size={{ lg: 2.4, xs: 12 }} textAlign={"center"}>
+        <Grid2 size={{ lg: 2.4, xs: 12 }} textAlign={"center"}>
           <Button
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
               width: 150,
               p: 2,
-              mt:{lg:0,sm:1}
+              mt: { lg: 0, sm: 1 },
             }}
             onClick={submitHandler}
           >

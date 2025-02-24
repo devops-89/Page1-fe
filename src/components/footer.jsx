@@ -247,7 +247,7 @@ const Footer = () => {
                 display: "flex",
                 alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
                 justifyContent: {lg:"center" ,sm:"center" ,xs:"start"},
-                minWidth: minWidthValue,
+              
                 
               }}>
               <List>

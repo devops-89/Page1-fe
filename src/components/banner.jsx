@@ -21,6 +21,7 @@ import HotelForm from "./hotelForm";
 const Banner = () => {
   const tabs = [
     {
+
       icon: <Flight sx={{ fontSize: 14 }} />,
       label: "Flights",
     },
@@ -37,6 +38,7 @@ const Banner = () => {
   };
 
   const phone = useMediaQuery("(max-width:600px)");
+  const tablet = useMediaQuery("(max-width:900px)");
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -53,7 +55,7 @@ const Banner = () => {
             <Box
               sx={{
                 backgroundImage: `url(${val.img})`,
-                height: { lg: "100vh", xs: "50vh" },
+                height: { lg: "100vh" , md:"120vh", xs: "50vh" },
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
@@ -102,12 +104,14 @@ const Banner = () => {
                 </Grid2>
               </Box>
             </Box>
+
+            
           </SwiperSlide>
         ))}
       </Swiper>
-      {!phone && (
+      {!phone && !tablet && (
         <Box
-          sx={{ position: "absolute", width: "100%", top: "50%", zIndex: 998 }}
+          sx={{ position: "absolute", width: "100%", top: "39%", zIndex: 998 }}
         >
           <Grid2 container>
             <Grid2

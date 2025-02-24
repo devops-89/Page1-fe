@@ -65,9 +65,9 @@ const AboutUs = () => {
                 <Image
                   src={about}
                   style={{
-                    width: "100%", // Scale image with the container
+                    width: "100%",
                     height: "100%",
-                    objectFit:"fill" // Maintain aspect ratio
+                    objectFit:"cover" 
                   }}
                 />
               </Box>
@@ -88,7 +88,7 @@ const AboutUs = () => {
               </Typography>
               <Typography
                 sx={{
-                  fontSize: {lg:40,md:35},
+                  fontSize: {lg:40,sm:35,},
                   fontWeight: 700,
                   fontFamily: nunito.style,
                   textTransform: "capitalize",
@@ -98,7 +98,7 @@ const AboutUs = () => {
               </Typography>
               <Typography
                 sx={{
-                  fontSize: 15,
+                  fontSize: 15 ,
                   fontWeight: 500,
                   fontFamily: nunito.style,
                   // textTransform: "capitalize",
