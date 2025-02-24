@@ -1,6 +1,6 @@
 import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
-import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Stack, Tab, Tabs, Typography ,useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TabPanel from "../tabPanel";
 import OnewayForm from "./oneWayForm";
@@ -21,7 +21,11 @@ const FlightForm = () => {
     },
   ];
 
+  const phone = useMediaQuery("(max-width:800px)");
+  const tablet = useMediaQuery("(max-width:900px)");
+
   const router = useRouter();
+
 
   const [flightValue, setFlightValue] = useState(0);
 
@@ -42,7 +46,7 @@ const FlightForm = () => {
   return (
     <Box sx={{ p: 1 }}>
       <Stack
-        direction={{lg:"row" ,md:"column", sm:"column"}}
+        direction={!phone ? "row " :"column"}
         alignItems={"center"}
         justifyContent={"space-between"}
       >

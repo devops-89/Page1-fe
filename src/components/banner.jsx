@@ -41,7 +41,7 @@ const Banner = () => {
   const tablet = useMediaQuery("(max-width:900px)");
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{}} hright={!tablet ?"100vh" :"150vh"} >
       <Swiper
         modules={[EffectFade, Autoplay]}
         effect="fade"
@@ -49,13 +49,14 @@ const Banner = () => {
         autoplay={{
           delay: 4000,
         }}
+        border= "2px solid red"
       >
         {data.heroSectionData.map((val, i) => (
           <SwiperSlide>
             <Box
               sx={{
                 backgroundImage: `url(${val.img})`,
-                height: { lg: "100vh" , md:"120vh", xs: "50vh" },
+                height:{lg:"100vh" ,sm:"150vh"},
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
@@ -66,11 +67,12 @@ const Banner = () => {
                   backgroundColor: "#00000030",
                   height: "100%",
                   display: "flex",
-                  alignItems: "start",
+                  flexDirection:"column",
+                  alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Grid2 container sx={{ mt:15}}>
+                <Grid2 container sx={{ mt:10}}>
                   <Grid2
                     size={10}
                     margin="auto"
@@ -91,7 +93,7 @@ const Banner = () => {
                     <Typography
                       sx={{
                         fontSize: { lg: 50, xs: 30 },
-                        lineHeight: { sm: "60px" },
+                       
                         color: COLORS.WHITE,
                         textAlign: "center",
                         fontFamily: raleway.style,
@@ -102,6 +104,83 @@ const Banner = () => {
                     </Typography>
                   </Grid2>
                 </Grid2>
+            {(
+              <Box
+                sx={{ width: "100%", top: "39%", zIndex: 998 ,mb:2 }}
+              >
+                <Grid2 container>
+                  <Grid2
+                    size={10}
+                    margin={"auto"}
+                    sx={{
+                      boxShadow: "0px 0px 1px 1px #d7d7d7",
+                      bgcolor: COLORS.WHITE,
+                      borderRadius: 4,
+                      pb: 2,
+                      mt: 3,
+                    }}
+                  >
+                    <Box>
+                      <Tabs
+                        value={value}
+                        onChange={tabChangeHandler}
+                        sx={{
+                          "& .Mui-selected": {
+                            color: `${COLORS.WHITE} !important`,
+                            backgroundColor: COLORS.SECONDARY,
+                          },
+                          "& .MuiTabs-indicator": {
+                            display: "none !important",
+                          },
+                          "& .MuiTab-root": {
+                            width: 120,
+                            minHeight: 40,
+                            top: 5,
+                            borderRadius: 8,
+                            padding: 0,
+                            transition: "0.5s ease all",
+                          },
+      
+                          "& .MuiTab-root:hover": {
+                            color: `${COLORS.WHITE} !important`,
+                            backgroundColor: COLORS.SECONDARY,
+                          },
+                        }}
+                      >
+                        {tabs.map((val, i) => (
+                          <Tab
+                            label={
+                              <Typography
+                                fontSize={12}
+                                fontWeight={800}
+                                fontFamily={nunito.style}
+                              >
+                                {val.label}
+                              </Typography>
+                            }
+                            icon={val.icon}
+                            iconPosition="start"
+                            sx={{
+                              mx: 1,
+                            }}
+                            key={i}
+                          />
+                        ))}
+                      </Tabs>
+                      <Divider />
+                      <Box>
+                        <TabPanel value={value} index={0}>
+                          <FlightForm />
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                          <HotelForm />
+                        </TabPanel>
+                      </Box>
+                    </Box>
+                  </Grid2>
+                </Grid2>
+              </Box>
+            )}
               </Box>
             </Box>
 
@@ -109,83 +188,6 @@ const Banner = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      {!phone && !tablet && (
-        <Box
-          sx={{ position: "absolute", width: "100%", top: "39%", zIndex: 998 }}
-        >
-          <Grid2 container>
-            <Grid2
-              size={10}
-              margin={"auto"}
-              sx={{
-                boxShadow: "0px 0px 1px 1px #d7d7d7",
-                bgcolor: COLORS.WHITE,
-                borderRadius: 4,
-                pb: 2,
-                mt: 3,
-              }}
-            >
-              <Box>
-                <Tabs
-                  value={value}
-                  onChange={tabChangeHandler}
-                  sx={{
-                    "& .Mui-selected": {
-                      color: `${COLORS.WHITE} !important`,
-                      backgroundColor: COLORS.SECONDARY,
-                    },
-                    "& .MuiTabs-indicator": {
-                      display: "none !important",
-                    },
-                    "& .MuiTab-root": {
-                      width: 120,
-                      minHeight: 40,
-                      top: 5,
-                      borderRadius: 8,
-                      padding: 0,
-                      transition: "0.5s ease all",
-                    },
-
-                    "& .MuiTab-root:hover": {
-                      color: `${COLORS.WHITE} !important`,
-                      backgroundColor: COLORS.SECONDARY,
-                    },
-                  }}
-                >
-                  {tabs.map((val, i) => (
-                    <Tab
-                      label={
-                        <Typography
-                          fontSize={12}
-                          fontWeight={800}
-                          fontFamily={nunito.style}
-                        >
-                          {val.label}
-                        </Typography>
-                      }
-                      icon={val.icon}
-                      iconPosition="start"
-                      sx={{
-                        mx: 1,
-                      }}
-                      key={i}
-                    />
-                  ))}
-                </Tabs>
-                <Divider />
-                <Box>
-                  <TabPanel value={value} index={0}>
-                    <FlightForm />
-                  </TabPanel>
-                  <TabPanel value={value} index={1}>
-                    <HotelForm />
-                  </TabPanel>
-                </Box>
-              </Box>
-            </Grid2>
-          </Grid2>
-        </Box>
-      )}
     </Box>
   );
 };
