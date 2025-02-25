@@ -269,7 +269,7 @@ const RoundTrip = () => {
       {/* {console.log("cabin class:", cabin_class)} */}
       <Grid2 container alignItems={"center"}>
         <Grid2
-          size={{ lg: 2, xs: 12,sm:6 }}
+           size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
@@ -348,7 +348,7 @@ const RoundTrip = () => {
           />
         </Grid2>
         <Grid2
-         size={{ lg: 2, xs: 12,sm:6 }}
+          size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
           sx={{
             border: "1px solid #808080",
 
@@ -427,7 +427,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 2, xs: 12,sm:6 }}
+           size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
        
           sx={{
             border: "1px solid #808080",
@@ -464,7 +464,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-        size={{ lg: 2, xs: 12,sm:6 }}
+        size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
           sx={{
             border: "1px solid #808080",
 
@@ -501,7 +501,8 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-         size={{ lg: 2, xs: 12,sm:12 }}
+          size={{ lg: 2.4, md:2.4, xs: 12,sm:6, }}
+
           sx={{
             border: "1px solid #808080",
 
@@ -513,7 +514,7 @@ const RoundTrip = () => {
         >
           <Typography
             sx={{
-              fontSize: 15,
+              fontSize: {lg:15, md:13 ,sm:12 ,xs:12},
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
@@ -524,25 +525,25 @@ const RoundTrip = () => {
           </Typography>
                   <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
             {router.pathname === defaultRoute && newFormData ? (
-              <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+              <Typography sx={{ fontSize:{lg:14 , md:13 ,sm:13 ,xs:12}, fontFamily: nunito.style }}>
                 {newFormData.adult + newFormData.child + newFormData.infant}{" "}
                 Persons
               </Typography>
             ) : (
-              <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+              <Typography sx={{ fontSize: {lg:14 , md:13 ,sm:10 ,xs:12}, fontFamily: nunito.style }}>
                 {state.adult + state.child + state.infant} Persons
               </Typography>
             )}
 
             {router.pathname === defaultRoute && newFormData ? (
-              <Typography fontSize={13} fontFamily={nunito.style}>
+              <Typography fontSize={{lg:14 ,md:13 ,sm:10 ,xs:12}} fontFamily={nunito.style}>
                 {newFormData.adult}adult{" "}
                 {newFormData.child !== 0 && `,${newFormData.child} child`}{" "}
                 {newFormData.infant !== 0 && `,${newFormData.infant} infant`},{" "}
                 {`${cabin_class.label} Class`}
               </Typography>
             ) : (
-              <Typography fontSize={13} fontFamily={nunito.style}>
+              <Typography fontSize={{lg:14 ,md:13 ,sm:10,xs:12}} fontFamily={nunito.style}>
                 {state.adult}adult{" "}
                 {state.child !== 0 && `,${state.child} child`}{" "}
                 {state.infant !== 0 && `,${state.infant} infant`},{" "}
@@ -590,7 +591,7 @@ const RoundTrip = () => {
           {/* popover end */}
         </Grid2>
 
-        <Grid2   size={{ lg: 2, xs: 12,sm:12 }} textAlign={"center"}>
+        <Grid2   size={{ lg: 12, md:12, xs: 12,sm:6, }} textAlign={"center"}>
           <Button
             sx={{
               color: COLORS.WHITE,

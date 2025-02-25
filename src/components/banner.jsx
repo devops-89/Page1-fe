@@ -52,7 +52,7 @@ const Banner = () => {
             <Box
               sx={{
                 backgroundImage: `url(${val.img})`,
-                height: {xs:'110vh', sm:"100vh"},
+                height: {xs:'110vh', sm:"100vh",md:'110vh', lg:'115vh'},
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
@@ -107,7 +107,7 @@ const Banner = () => {
 
 
       {/* Search  */}
-      <Box sx={{ position: "absolute", width: "100%", top: {xs:'30%', sm:"40%"}, zIndex: 999 }}
+      <Box sx={{ position: "absolute", width: "100%", top: {xs:'30%', sm:"40%", md:'50%'}, zIndex: 999 }}
       >
         <Grid2 container>
           <Grid2
