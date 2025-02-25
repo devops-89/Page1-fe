@@ -17,6 +17,7 @@ export const FARE_TYPE = {
 export const JOURNEY_TYPE = {
   ONEWAY: "ONEWAY",
   ROUNDTRIP: "ROUNDTRIP",
+  MULTIWAY: "MULTICITY",
 };
 
 export const PREFERRED_TIME = {

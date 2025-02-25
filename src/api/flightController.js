@@ -28,6 +28,17 @@ export const flightController = {
     }
   },
 
+  oneWayBookingNonLLC:async(data)=>{
+    try{
+     let result=await flightPublicApi.post("flight-booking/non_LCC_booking",data);
+     return result;
+    }
+    catch(error){
+      throw Error;
+    }
+  },
+
+
   roundTrip:async(data)=>{
     try{
      let result=await flightPublicApi.post("flight/search-flight",data);

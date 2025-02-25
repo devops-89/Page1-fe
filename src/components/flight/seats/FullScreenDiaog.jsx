@@ -6,21 +6,17 @@ import {
   Dialog,
   IconButton,
   Slide,
-  Tab,
-  Tabs,
   Toolbar,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SeatMap from "./SeatMap";
 import { COLORS } from "@/utils/colors.js";
-import MealSelection from "../meal/MealSelection";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-// Tab Panel Component
 function TabPanel({ children, value, index }) {
   return (
     <Box role="tabpanel" hidden={value !== index} sx={{ width: "100%" }}>
@@ -31,7 +27,7 @@ function TabPanel({ children, value, index }) {
 
 export default function FullScreenDialog() {
   const [open, setOpen] = React.useState(false);
-  const [tabIndex, setTabIndex] = React.useState(0); // State for Tabs
+  const [tabIndex, setTabIndex] = React.useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,14 +43,28 @@ export default function FullScreenDialog() {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Flight Services
+      <Button
+        variant="outlined"
+        sx={{ backgroundColor: COLORS.PRIMARY, color: COLORS.WHITE }}
+        onClick={handleClickOpen}
+      >
+        Select Seat
       </Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
         {/* AppBar with Close Button */}
         <AppBar sx={{ position: "relative", backgroundColor: COLORS.PRIMARY }}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
@@ -66,24 +76,7 @@ export default function FullScreenDialog() {
           </Toolbar>
         </AppBar>
 
-        {/* Tabs for Seat Booking & Meals */}
-        <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-          <Tabs value={tabIndex} onChange={handleTabChange} centered>
-            <Tab label="Seat Booking" />
-            <Tab label="Meals" />
-          </Tabs>
-        </Box>
-
-        {/* Tab Panels */}
-        <TabPanel value={tabIndex} index={0}>
-          <SeatMap />
-        </TabPanel>
-
-        <TabPanel value={tabIndex} index={1}>
-          <Typography variant="h5" align="center" sx={{ mt: 5 }}>
-            <MealSelection/>
-          </Typography>
-        </TabPanel>
+        <SeatMap />
       </Dialog>
     </React.Fragment>
   );

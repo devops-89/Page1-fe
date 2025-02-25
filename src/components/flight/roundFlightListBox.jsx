@@ -72,7 +72,7 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
         >
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
             <Image
-              src={flightDetails.AirlineLogo}
+              src={flightDetails?.AirlineLogo}
               alt="Image"
               width={30}
               height={30}

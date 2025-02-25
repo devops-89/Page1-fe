@@ -759,6 +759,16 @@ export const data = {
     },
    
   ],
+
+  multiflightTab : [
+    {
+      label: FLIGHT_DETAILS.FLIGHT_INFORMATIon,
+    },
+    {
+      label: FLIGHT_DETAILS.BAGGAGE_RULES,
+    },
+   
+  ],
   flightFareHead: [
     // {
     //   label: "Base Fare",

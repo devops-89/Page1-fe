@@ -1,20 +1,27 @@
 import React from "react";
-import { Grid2, TextField } from "@mui/material";
+import { Grid2, TextField, Typography } from "@mui/material";
+import { nunito } from "@/utils/fonts";
 
 const GstForm = ({ values, handleChange, handleBlur, errors }) => {
+  const gstValues = values || {}; 
+  const gstErrors = errors || {};
+
   return (
     <>
-      <Grid2 container spacing={2}>
+      <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style, mb: "10px" }}>
+        GST Details
+      </Typography>
+      <Grid2 container spacing={2} sx={{ mb: "20px" }}>
         <Grid2 size={{xs:12, sm:6}}>
           <TextField
             fullWidth
             name="GSTCompanyAddress"
             label="Company Address"
-            value={values.GSTCompanyAddress}
+            value={gstValues.GSTCompanyAddress || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.GSTCompanyAddress)}
-            helperText={errors.GSTCompanyAddress}
+            error={Boolean(gstErrors.GSTCompanyAddress)}
+            helperText={gstErrors.GSTCompanyAddress}
           />
         </Grid2>
         <Grid2 size={{xs:12, sm:6}}>
@@ -22,11 +29,11 @@ const GstForm = ({ values, handleChange, handleBlur, errors }) => {
             fullWidth
             name="GSTCompanyContactNumber"
             label="Company Contact Number"
-            value={values.GSTCompanyContactNumber}
+            value={gstValues.GSTCompanyContactNumber || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.GSTCompanyContactNumber)}
-            helperText={errors.GSTCompanyContactNumber}
+            error={Boolean(gstErrors.GSTCompanyContactNumber)}
+            helperText={gstErrors.GSTCompanyContactNumber}
           />
         </Grid2>
         <Grid2 size={{xs:12, sm:6}}>
@@ -34,11 +41,11 @@ const GstForm = ({ values, handleChange, handleBlur, errors }) => {
             fullWidth
             name="GSTCompanyName"
             label="Company Name"
-            value={values.GSTCompanyName}
+            value={gstValues.GSTCompanyName || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.GSTCompanyName)}
-            helperText={errors.GSTCompanyName}
+            error={Boolean(gstErrors.GSTCompanyName)}
+            helperText={gstErrors.GSTCompanyName}
           />
         </Grid2>
         <Grid2 size={{xs:12, sm:6}}>
@@ -46,23 +53,23 @@ const GstForm = ({ values, handleChange, handleBlur, errors }) => {
             fullWidth
             name="GSTNumber"
             label="GST Number"
-            value={values.GSTNumber}
+            value={gstValues.GSTNumber || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.GSTNumber)}
-            helperText={errors.GSTNumber}
+            error={Boolean(gstErrors.GSTNumber)}
+            helperText={gstErrors.GSTNumber}
           />
         </Grid2>
-        <Grid2 size={{xs:12, sm:6}}>
+        <Grid2 size={{xs:12}}>
           <TextField
             fullWidth
             name="GSTCompanyEmail"
             label="Company Email"
-            value={values.GSTCompanyEmail}
+            value={gstValues.GSTCompanyEmail || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.GSTCompanyEmail)}
-            helperText={errors.GSTCompanyEmail}
+            error={Boolean(gstErrors.GSTCompanyEmail)}
+            helperText={gstErrors.GSTCompanyEmail}
           />
         </Grid2>
       </Grid2>

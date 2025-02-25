@@ -1,20 +1,53 @@
-import React, { useState, useEffect } from "react";
-import { Container, Button, Grid2, Typography, Box } from "@mui/material";
-import { Formik, Field, Form } from "formik";
-import * as Yup from "yup";
+import React, { useState, useEffect, useMemo } from "react";
+import { Container, Button, Typography, Box } from "@mui/material";
+import { Formik, Form } from "formik";
 import PassengerFields from "./PassengerFields";
 import PanCardForm from "./PancardForm";
 import PassportForm from "./PassportForm";
+import GstForm from "./GstForm";
 import { validationSchema } from "@/utils/validationSchema";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
-import GstForm from "./GstForm";
 import { setToast } from "@/redux/reducers/toast";
 import { useDispatch } from "react-redux";
+import * as Yup from "yup";
+import AddForm from "./AddForm";
 
 const PassengerForm = ({ flightDetails, state }) => {
+  const [payload, setPayload] = useState({
+    result_index: "",
+    trace_id: "",
+    ip_address: "",
+    cell_country_code: "",
+    country_code: "",
+    city: "",
+    contact_no: "",
+    country: "",
+    house_number: "",
+    postal_code: "",
+    street: "",
+    state: "",
+    nationality: "",
+    email: "",
+    passenger_details: {
+      adult: [],
+      child: [],
+      infant: [],
+    },
+    gst_company_address: "",
+    gst_company_contact_number: "",
+    gst_company_name: "",
+    gst_number: "",
+    gst_company_email: "",
+    fare: [],
+    fareBreakdown: [],
+  });
+
+  console.log("flight Details on Passenger form:", flightDetails);
+
+
   const dispatch = useDispatch();
-  const [adultCount, setAdultCount] = useState(0);
+  const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
   const [isPanRequired, setIsPanRequired] = useState(false);
@@ -22,49 +55,70 @@ const PassengerForm = ({ flightDetails, state }) => {
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
   useEffect(() => {
-    const storedState = localStorage.getItem(state);
+    const storedState = localStorage.getItem("state");
     if (storedState) {
       const parsedState = JSON.parse(storedState);
-      const storedAdultCount = parsedState?.adult || 1;
-      const storedChildCount = parsedState?.child || 0;
-      const storedInfantCount = parsedState?.infant || 0;
-
-      setAdultCount(storedAdultCount);
-      setChildCount(storedChildCount);
-      setInfantCount(storedInfantCount);
+      setAdultCount(parsedState?.adult || 1);
+      setChildCount(parsedState?.child || 0);
+      setInfantCount(parsedState?.infant || 0);
     }
 
     setIsPanRequired(
       flightDetails[0]?.Results?.IsPanRequiredAtBook ||
-        flightDetails[0]?.Results?.IsPanRequiredAtTicket
+      flightDetails[0]?.Results?.IsPanRequiredAtTicket
     );
     setIsPassportRequired(
       flightDetails[0]?.Results?.IsPassportRequiredAtBook ||
-        flightDetails[0]?.Results?.IsPassportRequiredAtTicket
+      flightDetails[0]?.Results?.IsPassportRequiredAtTicket
     );
 
     if (flightDetails[0]?.Results?.GSTAllowed) {
       setIsGSTMandatory(flightDetails[0]?.Results?.IsGSTMandatory || false);
     }
-  }, [flightDetails]);
+  }, [flightDetails, state]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
   const initialValues = {
-    passengers: Array.from({ length: totalPassengers }, (_, index) => ({
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      mobileNumber: "",
-      countryCode: "",
-      type:
-        index < adultCount
-          ? "Adult"
-          : index < adultCount + childCount
-          ? "Child"
-          : "Infant",
+  
+    adult:Array.from({length: adultCount},(_,index)=>({
+      title:"",
+      gender:"",
+      firstName:"",
+      middleName:"",
+      lastName:"",
+      email:"",
+      phone:"",
+      dob:"",
+      formType:"adult"
+
+
+    })),
+    child:Array.from({length: adultCount},(_,index)=>({
+      title:"",
+      gender:"",
+      firstName:"",
+      middleName:"",
+      lastName:"",
+      email:"",
+      phone:"",
+      dob:"",
+      formType:"child"
+
+
+    })),
+    infant:Array.from({length: adultCount},(_,index)=>({
+      title:"",
+      gender:"",
+      firstName:"",
+      middleName:"",
+      lastName:"",
+      email:"",
+      phone:"",
+      dob:"",
+      formType:"infant"
+
+
     })),
     panCard: {
       fullName: "",
@@ -76,47 +130,100 @@ const PassengerForm = ({ flightDetails, state }) => {
       passportNumber: "",
       passportExpiryDate: "",
       passportIssueDate: "",
-      passportIssueCountryCode: "",
       passportIssueCountry: "",
     },
     gstForm: {
-      GSTCompanyAddress: "",
-      GSTCompanyContactNumber: "",
       GSTCompanyName: "",
       GSTNumber: "",
+      GSTCompanyAddress: "",
+      GSTCompanyContactNumber: "",
       GSTCompanyEmail: "",
     },
+    cell_country_code: "",
+    country_code: "",
+    city: "",
+    contact_no: "",
+    country: "",
+    house_number: "",
+    postal_code: "",
+    street: "",
+    state: "",
+    nationality: "",
+    email: "",
   };
 
-  const handleSubmit = (values) => {
-    const { passengers } = values;
+  const handleSubmit = (e, values) => {
+    e.preventDefault();
 
-    const checkDuplicatePassengers = (passengers) => {
-      const seen = new Set();
-      for (let passenger of passengers) {
-        const uniqueKey = `${passenger.firstName}-${passenger.lastName}-${passenger.email}`;
-        if (seen.has(uniqueKey)) {
-          return true;
-        }
-        seen.add(uniqueKey);
-      }
-      return false;
-    };
+    // const { passengers } = values;
 
-    if (checkDuplicatePassengers(passengers)) {
-      dispatch(
-        setToast({
-          open: true,
-          message:
-            "Duplicate passenger found. Please ensure each passenger has unique details.",
-          severity: TOAST_STATUS.ERROR,
-        })
-      );
-      return;
-    }
+    // const checkDuplicatePassengers = (passengers) => {
+    //   const seen = new Set();
+    //   for (let passenger of passengers) {
+    //     const uniqueKey = `${passenger.firstName}-${passenger.lastName}-${passenger.email}`;
+    //     if (seen.has(uniqueKey)) {
+    //       return true;
+    //     }
+    //     seen.add(uniqueKey);
+    //   }
+    //   return false;
+    // };
 
-    console.log("Submitted Values:", values);
+    // if (checkDuplicatePassengers(passengers)) {
+    //   dispatch(
+    //     setToast({
+    //       open: true,
+    //       message:
+    //         "Duplicate passenger found. Please ensure each passenger has unique details.",
+    //       severity: "error",
+    //     })
+    //   );
+    //   return;
+    // }
+
+    console.log("values are setting", values);
+    setPayload((prevPayload) => ({
+      ...prevPayload,
+      result_index: flightDetails[0].Results.ResultIndex,
+      trace_id: flightDetails[0].TraceId,
+      ip_address: "122.160.31.42",
+      cell_country_code: values.cell_country_code,
+      country_code: values.country_code,
+      city: values.city,
+      contact_no: values.contact_no,
+      country: values.country,
+      house_number: values.house_number,
+      postal_code: values.postal_code,
+      street: values.street,
+      state: values.state,
+      nationality: values.nationality,
+      email: values.email,
+      passenger_details: {
+        adult: values.adult || [],
+        infant: values.infant || [],
+        child: values.child || [],
+      },
+      gst_company_address: values.gstForm.GSTCompanyAddress,
+      gst_company_contact_number: values.gstForm.GSTCompanyContactNumber,
+      gst_company_name: values.gstForm.GSTCompanyName,
+      gst_number: values.gstForm.GSTNumber,
+      gst_company_email: values.gstForm.GSTCompanyEmail,
+      fare: [{ ...flightDetails[0].Results.Fare }] || [],
+      fareBreakdown: flightDetails[0].Results.FareBreakdown || [],
+    }));
+    console.log("handleSubmit function CALLED!");
+    console.log("Form Values on Submit:", values);
+
+    console.log("Submitted Values (after duplicate check):", values);
   };
+
+  const currentValidationSchema = useMemo(() => {
+    return validationSchema(isGSTMandatory);
+  }, [isGSTMandatory]);
+
+  useEffect(() => {
+    console.log("payload printing:", payload);
+  }, [payload]);
 
   return (
     <Container sx={{ py: 2 }}>
@@ -147,101 +254,179 @@ const PassengerForm = ({ flightDetails, state }) => {
           </Typography>
         )}
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Typography variant="h5" sx={{ fontFamily: nunito.style, fontWeight: 700, mb: "10px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ fontFamily: nunito.style, fontWeight: 700, mb: "10px" }}
+        >
           Passenger Form
         </Typography>
-        <Typography variant="body1" sx={{ fontFamily: nunito.style, fontWeight: 600, mb: "10px" }}>
+        <Typography
+          variant="body1"
+          sx={{ fontFamily: nunito.style, fontWeight: 600, mb: "10px" }}
+        >
           Total Passengers: {totalPassengers}
         </Typography>
       </Box>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema(isGSTMandatory)}
-        onSubmit={handleSubmit}
+        validationSchema={currentValidationSchema}
       >
-        {({ values, setFieldValue, handleChange, handleBlur, errors }) => {
+        {({
+          values,
+          setFieldValue,
+          handleChange,
+          handleBlur,
+          errors,
+          touched,
+        }) => {
           useEffect(() => {
-            // Update passengers based on the total count
-            const updatedPassengers = Array.from(
-              { length: totalPassengers },
-              (_, index) => ({
+            setFieldValue(
+              "adult",
+              Array.from({ length: adultCount }, (_, index) => ({
+                title: "",
+                gender: "",
                 firstName: "",
                 middleName: "",
                 lastName: "",
                 email: "",
                 phone: "",
-                mobileNumber: "",
-                countryCode: "",
-                type:
-                  index < adultCount
-                    ? "Adult"
-                    : index < adultCount + childCount
-                    ? "Child"
-                    : "Infant",
-              })
-            );
-            setFieldValue("passengers", updatedPassengers);
-          }, [adultCount, childCount, infantCount, setFieldValue]);
+                dob: "",
+                formType:`adult`
+                
+              }))
+            ),
+            setFieldValue(
+              "child",
+              Array.from({ length: childCount }, (_, index) => ({
+                title: "",
+                gender: "",
+                firstName: "",
+                middleName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                dob: "",
+                formType:`child`
+                
+              }))
+            ),
+            setFieldValue(
+              "infant",
+              Array.from({ length: infantCount }, (_, index) => ({
+                title: "",
+                gender: "",
+                firstName: "",
+                middleName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                dob: "",
+                formType:`infant`
+                
+              }))
+            )
+          }, [
+            adultCount,
+            childCount,
+            infantCount,
+            setFieldValue,
+            totalPassengers,
+          ]);
+
+          // console.log("Formik ERRORS during render:", errors);
+          // console.log("Formik VALUES during render:", values);
 
           return (
-            <Form>
-              {values.passengers.map((passenger, index) => (
-                <Grid2 container sx={{ mb: "10px" }} key={index}>
+            <Form onSubmit={(e) => handleSubmit(e, values)}>
+               {values.adult.map((dataObj, index) => (
+                <Box key={index} sx={{ mb: "10px" }}>
                   <PassengerFields
-                    passenger={passenger}
+                    passenger={dataObj}
                     index={index}
                     handleChange={handleChange}
                     handleBlur={handleBlur}
                     errors={errors}
                   />
-                </Grid2>
-              ))}
+                </Box>
+              ))} 
+
+{values.child.map((dataObj, index) => (
+                <Box key={index} sx={{ mb: "10px" }}>
+                  <PassengerFields
+                    passenger={dataObj}
+                    index={index}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                  />
+                </Box>
+              ))} 
+
+{values.infant.map((dataObj, index) => (
+                <Box key={index} sx={{ mb: "10px" }}>
+                  <PassengerFields
+                    passenger={dataObj}
+                    index={index}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                  />
+                </Box>
+              ))} 
+              
 
               {isPanRequired && (
-                <Grid2 container sx={{ mb: "10px" }}>
-                  <PanCardForm
-                    values={values}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors}
-                  />
-                </Grid2>
+                <PanCardForm
+                  values={values}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                  touched={touched}
+                />
               )}
-
               {isPassportRequired && (
-                <Grid2 container>
-                  <PassportForm
-                    values={values}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors}
-                  />
-                </Grid2>
+                <PassportForm
+                  values={values}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors}
+                  touched={touched}
+                />
               )}
-
               {isGSTMandatory && (
-                <Grid2 container>
-                  <GstForm
-                    values={values.gstForm}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors.gstForm} // Ensure correct error mapping
-                  />
-                </Grid2>
+                <GstForm
+                  values={values.gstForm}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  errors={errors.gstForm}
+                  touched={touched}
+                />
               )}
 
-              <Grid2 container>
-                <Grid2 size={{ xs: 12 }}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                  >
-                    Submit
-                  </Button>
-                </Grid2>
-              </Grid2>
+              <AddForm
+                values={values}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors}
+                touched={touched}
+              />
+
+              <Box sx={{ mt: 2 }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ backgroundColor: COLORS.PRIMARY }}
+                >
+                  Book Now
+                </Button>
+              </Box>
             </Form>
           );
         }}

@@ -51,20 +51,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [isLCC, setIsLCC] = useState(null);
   const [flightDetails, setFlightDetails] = useState(null);
   const [otherDetails, setOtherDetails] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     if (router.query.ResultIndex && router.query.traceId) {
@@ -72,15 +67,16 @@ const FlightDetails = () => {
         .flightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: JSON.parse(localStorage.getItem("state")).ip_address,
+          ip_address: JSON.parse(localStorage.getItem("state"))?.ip_address,
           journey_type: JOURNEY_TYPE.ONEWAY,
           journey: JOURNEY.DOMESTIC,
         })
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
-            // console.log("response oneway",response?.data?.data)
             setOtherDetails(response?.data?.data[1]);
+            console.log("otherDetails", response?.data?.data[1]);
+
             localStorage.setItem(
               "oneWayflightDetails",
               JSON.stringify(response?.data?.data)
@@ -89,7 +85,6 @@ const FlightDetails = () => {
         })
         .catch((error) => {
           setError(error);
-          // console.log("myError",error)
           dispatch(
             setToast({
               open: true,
@@ -101,12 +96,36 @@ const FlightDetails = () => {
           );
         });
     }
-  }, []);
+  }, [router.query.ResultIndex, router.query.traceId]);
+
+  // ✅ Run checkLCC whenever otherDetails updates
+  useEffect(() => {
+    if (!otherDetails) {
+      setIsLCC(null);
+      return;
+    }
+
+    setLoading(true);
+
+    if (
+      otherDetails.Baggage ||
+      otherDetails.MealDynamic ||
+      otherDetails.SeatDynamic
+    ) {
+      setIsLCC(true); // It's an LCC flight
+    } else if (otherDetails.SeatPreference) {
+      setIsLCC(false); // It's a non-LCC flight
+    } else {
+      setIsLCC(null); // Default fallback
+    }
+
+    setLoading(false);
+  }, [otherDetails]);
 
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
-      JSON.parse(localStorage.getItem("oneWayflightDetails"))
+      localStorage.getItem("oneWayflightDetails")
     ) {
       setTimeout(() => {
         setFlightDetails(
@@ -115,7 +134,6 @@ const FlightDetails = () => {
       }, 3000);
     }
   }, []);
-
 
   return (
     <>
@@ -160,13 +178,21 @@ const FlightDetails = () => {
                 fontWeight: 600,
                 fontFamily: nunito.style,
                 fontSize: "24px",
-                mb:"10px"
+                mb: "10px",
               }}
             >
-              {(error?.message==null && error?.message==undefined) ?
-                "An unexpected error occurred. Please try again later.":'The Session is expired'}
+              {error?.message == null && error?.message == undefined
+                ? "An unexpected error occurred. Please try again later."
+                : "The Session is expired"}
             </Typography>
-            <Link href='/'><Button variant="contained" sx={{backgroundColor:COLORS.PRIMARY}}>Back to Homepage</Button></Link>
+            <Link href="/">
+              <Button
+                variant="contained"
+                sx={{ backgroundColor: COLORS.PRIMARY }}
+              >
+                Back to Homepage
+              </Button>
+            </Link>
           </Grid2>
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
@@ -456,20 +482,30 @@ const FlightDetails = () => {
                       {/* Intermediate flights end */}
                     </Card>
                     {/* Meal Section start */}
-                    <Card >
-                      Meal Section
-                    </Card>
 
                     {/* Meal Section end */}
-                    <Card>
-                      <PassengerForm state="state" flightDetails={flightDetails} />
+                    <Card sx={{ mb: "20px" }}>
+                      <PassengerForm
+                        sx={{
+                          backgroundColor: COLORS.PRIMARY,
+                          color: COLORS.WHITE,
+                        }}
+                     
+                        flightDetails={flightDetails}
+                      />
                     </Card>
+
+                    {/* {isLCC ? (
+                        <>
+                        <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:"10px", fontSize:"18px"}}>Pick Your Preferred Seats</Typography>
+                      <FullScreenDialog />
+                      </>
+                    ) : null} */}
                   </Paper>
-                  <FullScreenDialog />
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={4}>
+                <Grid2 size={4} sx={{position:'sticky'}}>
                   <FareSummary fareData={flightDetails[0]?.Results} />
                 </Grid2>
               </Grid2>
