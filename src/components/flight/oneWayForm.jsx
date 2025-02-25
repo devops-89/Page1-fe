@@ -525,7 +525,7 @@ const OnewayForm = () => {
               color: COLORS.WHITE,
               width: 150,
               p: 2,
-              mt: { lg: 0, sm: 1 },
+              mt: { lg: 0, sm: 1 ,xs:2 },
             }}
             onClick={submitHandler}
           >

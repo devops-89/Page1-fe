@@ -29,7 +29,7 @@ const HotelForm = () => {
       </Typography>
       <Grid2 container alignItems={"center"}> 
         <Grid2
-          size={{lg:2.4,xs:6}}
+            size={{ lg: 2.4, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
@@ -100,7 +100,7 @@ const HotelForm = () => {
           />
         </Grid2>
         <Grid2
-            size={{lg:2.4,xs:6}}
+             size={{ lg: 2.4, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -131,7 +131,7 @@ const HotelForm = () => {
           </LocalizationProvider>
         </Grid2>
         <Grid2
-            size={{lg:2.4,xs:6}}
+             size={{ lg: 2.4, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -156,13 +156,13 @@ const HotelForm = () => {
                 fieldset: {
                   border: "none",
                 },
-              }}
+              }}  
               disablePast
             />
           </LocalizationProvider>
         </Grid2>
         <Grid2
-           size={{lg:2.4,xs:6}}
+            size={{ lg: 2.4, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -215,14 +215,14 @@ const HotelForm = () => {
           </Popover>
           {/* popover end */}
         </Grid2>
-        <Grid2   size={{lg:2.4,xs:12}} sx={{ textAlign: "center" }}>
+        <Grid2    size={{ lg: 2.4, xs: 12,sm:12 }} sx={{ textAlign: "center" }}>
           <Button
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
               width: 150,
               p: 2,
-              mt:{lg:0 ,sm:1}
+              mt: { lg: 0, sm: 1 ,xs:2 },
             }}
           >
             Search

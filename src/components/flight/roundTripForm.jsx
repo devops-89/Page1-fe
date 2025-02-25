@@ -12,6 +12,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery
 } from "@mui/material";
 
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -33,6 +34,7 @@ import { setFlightDetails } from "@/redux/reducers/flightInformation";
 const RoundTrip = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const phone = useMediaQuery("(max-width:600px)");
 
   const initialState = {
     ip_address: "",
@@ -267,7 +269,7 @@ const RoundTrip = () => {
       {/* {console.log("cabin class:", cabin_class)} */}
       <Grid2 container alignItems={"center"}>
         <Grid2
-           size={{lg:2,xs:6}}
+          size={{ lg: 2.4, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
@@ -346,7 +348,7 @@ const RoundTrip = () => {
           />
         </Grid2>
         <Grid2
-          size={{lg:2,xs:6}}
+         size={{ lg: 2.4, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -425,9 +427,11 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-         size={{lg:2,xs:6}}
+          size={{ lg: 2.4, xs: 12,sm:6 }}
+       
           sx={{
             border: "1px solid #808080",
+
 
             position: "relative",
             borderRight: "none",
@@ -449,6 +453,7 @@ const RoundTrip = () => {
               sx={{
                 fieldset: {
                   border: "none",
+                  
                 },
               }}
               minDate={moment()}
@@ -459,7 +464,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-          size={{lg:2,xs:6}}
+        size={{ lg: 2.4, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -480,10 +485,13 @@ const RoundTrip = () => {
           </Typography>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
+           
               sx={{
                 fieldset: {
                   border: "none",
+                  
                 },
+
               }}
               minDate={departureDate ? moment(departureDate).add(1, "day") : moment()}
               onChange={returnDateHandler}
@@ -493,7 +501,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-        size={{lg:2,xs:12}}
+         size={{ lg: 2.4, xs: 12,sm:12 }}
           sx={{
             border: "1px solid #808080",
 
@@ -582,14 +590,14 @@ const RoundTrip = () => {
           {/* popover end */}
         </Grid2>
 
-        <Grid2 size={{lg:2,xs:12}} textAlign={"center"}>
+        <Grid2   size={{ lg: 2.4, xs: 12,sm:12 }} textAlign={"center"}>
           <Button
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
               width: 150,
               p: 2,
-              mt:{lg:0,sm:1}
+              mt: { lg: 0, sm: 1 ,xs:2 },
             }}
             onClick={submitHandler}
           >

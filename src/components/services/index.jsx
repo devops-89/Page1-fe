@@ -16,7 +16,7 @@ const Services = () => {
     router.push(path);
   };
   return (
-    <Box sx={{ }}>
+    <Box sx={{ position:"relative" ,zIndex:100 }}>
     
       <Box sx={{ backgroundColor: COLORS.BLACK }}>
         <Container >
