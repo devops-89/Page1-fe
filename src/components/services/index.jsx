@@ -4,7 +4,7 @@ import React from "react";
 import ServicesCard from "./servicesCard";
 import { data } from "@/assests/data";
 import { useRouter } from "next/router";
-import FromTasting from "../fromTasting";
+import FromTasting from "../bin";
 
 const Services = () => {
   const router = useRouter();

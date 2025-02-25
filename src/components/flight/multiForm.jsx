@@ -362,7 +362,7 @@ const Multiway = () => {
                     >
                         {/* From Field */}
                         <Grid2
-                            size={3}
+                            size={{lg:3 ,sm:6 ,xs:12}}
                             sx={{
                                 border: "1px solid #808080",
                                 borderTopLeftRadius: 4,
@@ -443,7 +443,7 @@ const Multiway = () => {
 
                         {/* To Field */}
                         <Grid2
-                            size={3}
+                            size={{lg:3 ,sm:6 ,xs:12}}
                             sx={{
                                 border: "1px solid #808080",
                                 position: "relative",
@@ -523,7 +523,7 @@ const Multiway = () => {
 
                         {/* Departure Field */}
                         <Grid2
-                            size={3}
+                            size={{lg:3 ,sm:6 ,xs:12}}
                             sx={{
                                 border: "1px solid #808080",
                                 position: "relative",
@@ -553,7 +553,7 @@ const Multiway = () => {
                                 />
                             </LocalizationProvider>
                         </Grid2>
-                        <Grid2 size={3} textAlign="center">
+                        <Grid2  size={{lg:3 ,sm:6 ,xs:12}} textAlign="center">
                             {index === 0 ? (
                                 <>
                                     <Typography
@@ -620,7 +620,7 @@ const Multiway = () => {
                         </Grid2>
                     </Grid2>
                 ))}
-                <Box>
+                <Grid2  size={{ lg: 2.4, xs: 12,sm:12 }} textAlign={"center"}>
                     <Button
                         sx={{
                             backgroundColor: COLORS.SECONDARY,
@@ -637,7 +637,7 @@ const Multiway = () => {
                             "Search"
                         )}
                     </Button>
-                </Box>
+                </Grid2>
 
                 {/* Popover Start */}
                 <Popover

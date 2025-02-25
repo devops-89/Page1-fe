@@ -40,8 +40,14 @@ const Banner = () => {
   const phone = useMediaQuery("(max-width:600px)");
   const tablet = useMediaQuery("(max-width:900px)");
 
+  // height={ phone ? "100vh":!tablet ?"130vh" :"90vh"}
+  // height:{lg:"100vh" ,sm:"130vh", xs:"100vh"}
+
   return (
-    <Box sx={{}} height={ phone ? "100vh":!tablet ?"100vh" :"90vh"} >
+    <Box sx={{
+      
+    }} 
+    >
       <Swiper
         modules={[EffectFade, Autoplay]}
         effect="fade"
@@ -56,11 +62,14 @@ const Banner = () => {
             <Box
               sx={{
                 backgroundImage: `url(${val.img})`,
-                height:{lg:"100vh" ,sm:"100vh", xs:"100vh"},
+                
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
+
+                
               }}
+
             >
               <Box
                 sx={{
