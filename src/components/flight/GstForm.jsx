@@ -15,61 +15,61 @@ const GstForm = ({ values, handleChange, handleBlur, errors }) => {
         <Grid2 size={{xs:12, sm:6}}>
           <TextField
             fullWidth
-            name="GSTCompanyAddress"
+            name="gst_company_address"
             label="Company Address"
-            value={gstValues.GSTCompanyAddress || ""}
+            value={gstValues.gst_company_address || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(gstErrors.GSTCompanyAddress)}
-            helperText={gstErrors.GSTCompanyAddress}
+            error={Boolean(gstErrors.gst_company_address)}
+            helperText={gstErrors.gst_company_address}
           />
         </Grid2>
         <Grid2 size={{xs:12, sm:6}}>
           <TextField
             fullWidth
-            name="GSTCompanyContactNumber"
+            name="gst_company_contact_number"
             label="Company Contact Number"
-            value={gstValues.GSTCompanyContactNumber || ""}
+            value={gstValues.gst_company_contact_number || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(gstErrors.GSTCompanyContactNumber)}
-            helperText={gstErrors.GSTCompanyContactNumber}
+            error={Boolean(gstErrors.gst_company_contact_number)}
+            helperText={gstErrors.gst_company_contact_number}
           />
         </Grid2>
         <Grid2 size={{xs:12, sm:6}}>
           <TextField
             fullWidth
-            name="GSTCompanyName"
+            name="gst_company_name"
             label="Company Name"
-            value={gstValues.GSTCompanyName || ""}
+            value={gstValues.gst_company_name || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(gstErrors.GSTCompanyName)}
-            helperText={gstErrors.GSTCompanyName}
+            error={Boolean(gstErrors.gst_company_name)}
+            helperText={gstErrors.gst_company_name}
           />
         </Grid2>
         <Grid2 size={{xs:12, sm:6}}>
           <TextField
             fullWidth
-            name="GSTNumber"
+            name="gst_number"
             label="GST Number"
-            value={gstValues.GSTNumber || ""}
+            value={gstValues.gst_number || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(gstErrors.GSTNumber)}
-            helperText={gstErrors.GSTNumber}
+            error={Boolean(gstErrors.gst_number)}
+            helperText={gstErrors.gst_number}
           />
         </Grid2>
         <Grid2 size={{xs:12}}>
           <TextField
             fullWidth
-            name="GSTCompanyEmail"
+            name="gst_company_email"
             label="Company Email"
-            value={gstValues.GSTCompanyEmail || ""}
+            value={gstValues.gst_company_email || ""}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(gstErrors.GSTCompanyEmail)}
-            helperText={gstErrors.GSTCompanyEmail}
+            error={Boolean(gstErrors.gst_company_email)}
+            helperText={gstErrors.gst_company_email}
           />
         </Grid2>
       </Grid2>
