@@ -25,7 +25,8 @@ import { useEffect, useState } from "react";
 import TabPanel from "../tabPanel";
 import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
-import FlightBox from "./flightBox";
+import FlightBox from "./FlightBox";
+
 
 
 const FlightListBox = ({ details, traceId }) => {

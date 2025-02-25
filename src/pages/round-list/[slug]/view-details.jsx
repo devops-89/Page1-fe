@@ -215,12 +215,11 @@ const FlightDetails = () => {
                       />
                     )}
 
-                    <Card>
+                    {/* <Card>
                       <PassengerForm
-                        state="roundState"
                         flightDetails={flightDetails[0]}
                       />
-                    </Card>
+                    </Card> */}
                   </Paper>
                 </Grid2>
 

@@ -36,9 +36,10 @@ const MultiListBox = ({ details, refundableValue, selectedFlight, onFlightSelect
     const [flightDetails, setFlightDetails] = useState(details);
     const [value, setValue] = useState(0);
 
-    // console.log("flightDetail 1", flightDetails)
+    console.log("flightDetail 1", flightDetails)
 
 
+    
     useEffect(() => {
         if (flightDetails) {
             onFlightSelect(flightDetails); 

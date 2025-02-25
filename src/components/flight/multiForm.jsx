@@ -620,7 +620,7 @@ const Multiway = () => {
                         </Grid2>
                     </Grid2>
                 ))}
-                <Grid2  size={{ lg: 2.4, xs: 12,sm:12 }} textAlign={"center"}>
+                <Grid2  size={{ lg: 12, xs: 12,sm:12 }} textAlign={"start"}>
                     <Button
                         sx={{
                             backgroundColor: COLORS.SECONDARY,

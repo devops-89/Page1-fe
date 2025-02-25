@@ -233,7 +233,7 @@ const OnewayForm = () => {
     <>
       <Grid2 container alignItems={"center"}>
         <Grid2
-          size={{ lg: 2.4, xs: 12,sm:6 }}
+          size={{ lg: 2.4, xs: 6,sm:6, }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
@@ -313,7 +313,7 @@ const OnewayForm = () => {
         </Grid2>
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, xs: 12,sm:6 }}
+          size={{ lg: 2.4, xs: 6,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -393,7 +393,7 @@ const OnewayForm = () => {
         
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, xs: 12,sm:6 }}
+          size={{ lg: 2.4, xs: 6,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -427,7 +427,7 @@ const OnewayForm = () => {
         </Grid2>
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, xs: 12,sm:6 }}
+          size={{ lg: 2.4, xs: 6,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -491,7 +491,7 @@ const OnewayForm = () => {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                 p: 2,
-                width: "40%",
+                width: {xs:'100%', sm:'80%', md:"60%", lg:"40%"},
               },
             }}
           >

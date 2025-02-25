@@ -4,7 +4,7 @@ import { Grid2, TextField, Typography, MenuItem } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 
 const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors }) => {
-  console.log("passenger:",passenger);
+  // console.log("passenger:",passenger);
   return (
     <>
       <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style, mb: "10px" }}>

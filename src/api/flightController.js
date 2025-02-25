@@ -31,9 +31,24 @@ export const flightController = {
   oneWayBookingNonLLC:async(data)=>{
     try{
      let result=await flightPublicApi.post("flight-booking/non_LCC_booking",data);
+     console.log("result nonLLC", result)
      return result;
     }
     catch(error){
+      console.log("error nonLLC", error)
+      throw Error;
+     
+    }
+  },
+
+  oneWayBookingLLC:async(data)=>{
+    try{
+     let result=await flightPublicApi.post("flight-booking/booking",data);
+     console.log("result LLC", result)
+     return result;
+    }
+    catch(error){
+      console.log("error LLC", error)
       throw Error;
     }
   },
