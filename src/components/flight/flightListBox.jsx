@@ -29,6 +29,7 @@ import FlightBox from "./FlightBox";
 
 
 
+
 const FlightListBox = ({ details, traceId }) => {
   const router = useRouter();
 

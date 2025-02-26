@@ -233,7 +233,7 @@ const OnewayForm = () => {
     <>
       <Grid2 container alignItems={"center"}>
         <Grid2
-          size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
+          size={{ lg: 2.4, xs: 6,sm:6, md:2.4, }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
@@ -316,7 +316,7 @@ const OnewayForm = () => {
           size={{ lg: 2.4, md:2.4, xs: 6,sm:6 }}
           sx={{
             border: "1px solid #808080",
-
+        
             position: "relative",
             borderRight: "none",
           }}
@@ -393,7 +393,7 @@ const OnewayForm = () => {
         
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, md:2.4, xs: 6,sm:6 }}
+          size={{ lg: 2.4, md:2.4, xs: 6,sm:6}}
           sx={{
             border: "1px solid #808080",
 
@@ -427,7 +427,7 @@ const OnewayForm = () => {
         </Grid2>
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, md:2.4, xs: 6,sm:6 }}
+          size={{ lg: 2.4, md:2.4, xs: 6,sm:6}}
           sx={{
             border: "1px solid #808080",
 
@@ -439,7 +439,7 @@ const OnewayForm = () => {
         >
           <Typography
             sx={{
-              fontSize: 15,
+              fontSize: {lg:15, md:13 ,sm:12 ,xs:12},
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
@@ -450,25 +450,25 @@ const OnewayForm = () => {
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
             {router.pathname === defaultRoute && newFormData ? (
-              <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+              <Typography sx={{ fontSize:{lg:14 , md:13 ,sm:13 ,xs:12}, fontFamily: nunito.style }}>
                 {newFormData.adult + newFormData.child + newFormData.infant}{" "}
                 Persons
               </Typography>
             ) : (
-              <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+              <Typography sx={{fontSize: {lg:14 , md:13 ,sm:10 ,xs:12} ,fontFamily: nunito.style }}>
                 {state.adult + state.child + state.infant} Persons
               </Typography>
             )}
 
             {router.pathname === defaultRoute && newFormData ? (
-              <Typography fontSize={13} fontFamily={nunito.style}>
+              <Typography fontSize={{lg:14 ,md:13 ,sm:10 ,xs:12}} fontFamily={nunito.style}>
                 {newFormData.adult}adult{" "}
                 {newFormData.child !== 0 && `,${newFormData.child} child`}{" "}
                 {newFormData.infant !== 0 && `,${newFormData.infant} infant`},{" "}
                 {`${cabin_class.label} Class`}
               </Typography>
             ) : (
-              <Typography fontSize={13} fontFamily={nunito.style}>
+              <Typography fontSize={{lg:14 ,md:13 ,sm:10,xs:12}} fontFamily={nunito.style}>
                 {state.adult}adult{" "}
                 {state.child !== 0 && `,${state.child} child`}{" "}
                 {state.infant !== 0 && `,${state.infant} infant`},{" "}
@@ -490,8 +490,10 @@ const OnewayForm = () => {
               "& .MuiPopover-paper": {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-                p: 2,
+                p: {lg:2},
+                py:{xs:2,sm:2 ,md:2 ,lg:2},
                 width: {xs:'100%', sm:'80%', md:"60%", lg:"40%"},
+                
               },
             }}
           >
@@ -517,7 +519,7 @@ const OnewayForm = () => {
         </Grid2>
         <Grid2
         //  size={{ lg: 2.4, xs: 12 }} 
-        size={{ lg: 2.4, md:2.4, xs: 12,sm:12 }}
+        size={{ lg: 2.4, md:2.4, xs: 12,sm:12}}
         
         textAlign={"center"}>
           <Button

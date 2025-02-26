@@ -102,7 +102,7 @@ const FlightForm = () => {
             />
           ))}
         </Tabs>
-        <Typography sx={{ fontSize: 15, fontFamily: raleway.style, mr: 2 ,mb:{xs:1} }}>
+        <Typography sx={{ fontSize: 15, fontFamily: raleway.style, mr: 2 ,mb:{xs:1} ,textAlign:"center" }}>
           Millions of cheap flights. One simple search
         </Typography>
       </Stack>

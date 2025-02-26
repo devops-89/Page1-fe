@@ -343,7 +343,7 @@ const Multiway = () => {
                 sx={{
                     maxHeight: "400px",
                     overflowY: "auto",
-                    padding: 2,
+                    padding: {xs:1},
                     border: "1px solid #ccc",
                     borderRadius: 4,
                 }}
@@ -362,7 +362,8 @@ const Multiway = () => {
                     >
                         {/* From Field */}
                         <Grid2
-                            size={{lg:3 ,sm:6 ,xs:12}}
+                            // size={{lg:3 ,sm:6 ,xs:12}}
+                            size={{ lg: 2.4, xs: 6,sm:2.4, md:2.4, }}
                             sx={{
                                 border: "1px solid #808080",
                                 borderTopLeftRadius: 4,
@@ -443,7 +444,7 @@ const Multiway = () => {
 
                         {/* To Field */}
                         <Grid2
-                            size={{lg:3 ,sm:6 ,xs:12}}
+                           size={{ lg: 2.4, md:2.4, xs: 6,sm:2.4 }}
                             sx={{
                                 border: "1px solid #808080",
                                 position: "relative",
@@ -523,7 +524,7 @@ const Multiway = () => {
 
                         {/* Departure Field */}
                         <Grid2
-                            size={{lg:3 ,sm:6 ,xs:12}}
+                             size={{ lg: 2.4, md:2.4, xs: 12,sm:2.4}} 
                             sx={{
                                 border: "1px solid #808080",
                                 position: "relative",
@@ -553,12 +554,14 @@ const Multiway = () => {
                                 />
                             </LocalizationProvider>
                         </Grid2>
-                        <Grid2  size={{lg:3 ,sm:6 ,xs:12}} textAlign="center">
+                        <Grid2
+                         size={{ lg: 4, md:4, xs: 12,sm:4}}
+                          textAlign="center">
                             {index === 0 ? (
                                 <>
                                     <Typography
                                         sx={{
-                                            fontSize: 15,
+                                            fontSize: {lg:15, md:13 ,sm:12 ,xs:12},
                                             fontFamily: nunito.style,
                                             color: COLORS.DARKGREY,
                                             px: 2,
@@ -569,19 +572,19 @@ const Multiway = () => {
                                     </Typography>
                                     <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
                                         {router.pathname === defaultRoute && newFormData ? (
-                                            <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+                                            <Typography sx={{ fontSize:  {lg:14 , md:13 ,sm:10 ,xs:12}, fontFamily: nunito.style }}>
                                                 {newFormData.adult +
                                                     newFormData.child +
                                                     newFormData.infant}
                                                 Persons
                                             </Typography>
                                         ) : (
-                                            <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+                                            <Typography sx={{ fontSize:  {lg:14 , md:13 ,sm:10 ,xs:12}, fontFamily: nunito.style }}>
                                                 {state.adult + state.child + state.infant} Persons
                                             </Typography>
                                         )}
                                         {router.pathname === defaultRoute && newFormData ? (
-                                            <Typography fontSize={13} fontFamily={nunito.style}>
+                                            <Typography fontSize={{lg:14 ,md:13 ,sm:10,xs:12}} fontFamily={nunito.style}>
                                                 {newFormData.adult}adult
                                                 {newFormData.child !== 0 && `,${newFormData.child} child`}
                                                 {newFormData.infant !== 0 &&
@@ -589,7 +592,7 @@ const Multiway = () => {
                                                 , {`${cabin_class?.label || ""} Class`}
                                             </Typography>
                                         ) : (
-                                            <Typography fontSize={13} fontFamily={nunito.style}>
+                                            <Typography fontSize={{lg:14 ,md:13 ,sm:10,xs:12}} fontFamily={nunito.style}>
                                                 {state.adult}adult
                                                 {state.child !== 0 && `,${state.child} child`}
                                                 {state.infant !== 0 && `,${state.infant} infant`},
@@ -603,7 +606,7 @@ const Multiway = () => {
                                     variant="outlined"
                                     color="error"
                                     onClick={() => removeForm(index)}
-                                    sx={{ marginTop: 1, display:'block', marginX:'auto' }}
+                                    sx={{ marginTop: 1, display:'block', marginX:'auto' ,fontSize:{lg:15 ,md:14 ,sm:10 ,xs:10} }}
                                 >
                                     Remove
                                 </Button>
@@ -612,7 +615,7 @@ const Multiway = () => {
                                 <Button
                                     variant="contained"
                                     onClick={addForm}
-                                    sx={{ marginTop: 1 }}
+                                    sx={{ marginTop: 1 ,fontSize:{lg:15 ,md:14 ,sm:10 ,xs:10} }}
                                 >
                                     Add Another Flight
                                 </Button>
@@ -620,7 +623,7 @@ const Multiway = () => {
                         </Grid2>
                     </Grid2>
                 ))}
-                <Grid2  size={{ lg: 12, xs: 12,sm:12 }} textAlign={"start"}>
+                <Grid2  size={{ lg: 2.4, xs: 12,sm:12 ,md:12 }} textAlign={"center"}>
                     <Button
                         sx={{
                             backgroundColor: COLORS.SECONDARY,

@@ -80,17 +80,18 @@ const TravellerSelector = ({
   };
 
   return (
-    <div>
-      <Typography sx={{ fontFamily: nunito.style, fontSize: 20, fontWeight: 600 }}>
+    <div >
+      <Typography
+       sx={{ fontFamily: nunito.style, fontSize: {lg:20,xs:15,sm:20 ,md:20}, fontWeight: 600 , textAlign:{xs:"center"}}}>
         Select Travelers & Class
       </Typography>
 
-      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2 }}>
+      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, m:1 }}>
         <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
           Travellers
         </Typography>
-        <Grid2 container spacing={4}>
-          <Grid2 size={{xs:4}}>
+        <Grid2 container spacing={{lg:4 ,md:4 ,sm:4 ,xs:1}}  >
+          <Grid2 size={{lg:4 ,md:4 ,sm:4 ,xs:6}}>
             <TravellorCounter
               heading={"Adults ( 12+ Yrs )"}
               value={adultValue}
@@ -100,7 +101,7 @@ const TravellerSelector = ({
               initialValue={initialValue.adult}
             />
           </Grid2>
-          <Grid2 size={{xs:4}}>
+          <Grid2 size={{lg:4 ,md:4 ,sm:4 ,xs:6}}>
             <TravellorCounter
               heading={"Childrens ( 2-12 Yrs )"}
               value={childValue}
@@ -110,7 +111,7 @@ const TravellerSelector = ({
               initialValue={initialValue.child}
             />
           </Grid2>
-          <Grid2 size={{xs:4}}>
+          <Grid2 size={{lg:4 ,md:4 ,sm:4 ,xs:6}}>
             <TravellorCounter
               heading={"Infants( 0-2 Yrs )"}
               value={infantValue}
@@ -123,7 +124,7 @@ const TravellerSelector = ({
         </Grid2>
       </Box>
 
-      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2 }}>
+      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2 ,m:1 }}>
         <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
           Flight Class
         </Typography>
@@ -143,7 +144,7 @@ const TravellerSelector = ({
         </RadioGroup>
       </Box>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={4} mt={2}>
+      <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={{lg:4 ,md:4,sm:4,xs:2}} m={2}>
         <Button
           sx={{
             backgroundColor: COLORS.GREY,

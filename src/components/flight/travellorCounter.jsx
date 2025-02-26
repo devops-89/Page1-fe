@@ -20,18 +20,19 @@ const TravellorCounter = ({
   //   valueDetector(value - 1);
   // };
   return (
-    <div>
+    <Stack direction={"column"}  alignItems={"start"} justifyContent={"start"} > 
       <Typography
         sx={{
-          fontSize: 13,
+          fontSize: {lg:13 ,xs:12},
           color: COLORS.BLACK,
           fontFamily: nunito.style,
+        
         }}
         mt={2}
       >
         {heading}
       </Typography>
-      <Stack direction={"row"} alignItems={"center"} spacing={2} mt={1}>
+      <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} width={100}  mt={1}>
         <IconButton
           sx={{
             backgroundColor: COLORS.GREY,
@@ -43,7 +44,7 @@ const TravellorCounter = ({
           onClick={onDecrease}
           disabled={value === initialValue}
         >
-          <Remove sx={{ fontSize: 20 }} />
+          <Remove sx={{ fontSize: {lg:20 ,md:20 ,sm:20,xs:10}   }} />
         </IconButton>
         <TextField
           sx={{
@@ -70,10 +71,10 @@ const TravellorCounter = ({
           }}
           onClick={onIncrease}
         >
-          <Add sx={{ fontSize: 20 }} />
+          <Add sx={{ fontSize: {lg:20 ,md:20 ,sm:20,xs:15} }} />
         </IconButton>
       </Stack>
-    </div>
+    </Stack>
   );
 };
 

@@ -52,10 +52,26 @@ const Banner = () => {
             <Box
               sx={{
                 backgroundImage: `url(${val.img})`,
-                height: {xs:'110vh', sm:"100vh",md:'110vh', lg:'115vh'},
+               
+                height: {xs:'130vh', sm:"140vh",md:'140vh', lg:'140vh'},
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
+                "@media (max-width: 414px)": {
+                  height: "120vh", // Specific fix for 414px width
+                },
+
+                "@media (min-width: 415px) and (max-width: 768px)": {
+                   height: "170vh", // Adjustment for screens between 415px and 768px
+                    },
+
+                    "@media (min-width: 769px)": {
+                      height: "140vh", // Adjustment for 769px and above
+                    },
+                    "@media (min-width: 769px) and (max-width: 1024px)": {
+                      height: "100vh", // Small desktops
+                    },
+
               }}
             >
               <Box
@@ -107,7 +123,29 @@ const Banner = () => {
 
 
       {/* Search  */}
-      <Box sx={{ position: "absolute", width: "100%", top: {xs:'30%', sm:"40%", md:'50%'}, zIndex: 999 }}
+      <Box sx={{ position: "absolute", width: "100%", 
+      top: {xs:'30%', sm:"34%", md:'37%', lg:"40%"}, 
+
+      "@media (max-width: 414px)": {
+        top: "25%", // Adjusted value for smaller screens (414px and below)
+      },
+
+      "@media (min-width: 415px) and (max-width: 768px)": {
+      top: "26%", // Adjustment for screens between 415px and 768px
+    },
+    "@media (min-width: 769px)": {
+      top: "40%", // Adjustment for 769px and above
+    },
+    "@media (min-width: 769px) and (max-width: 1024px)": {
+      top: "38%", // Small desktops
+    },
+    "@media (min-width: 1025px)": {
+      top: "35%", // Large desktops
+    },
+      
+    
+
+      zIndex: 999 }}
       >
         <Grid2 container>
           <Grid2
