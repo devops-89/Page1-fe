@@ -1,4 +1,4 @@
-import { publicApi, userSecuredApi } from "./config";
+import { publicApi, userSecuredApi,securedApi } from "./config";
 
 export const authenticationController = {
   registerUser: async (data) => {
@@ -49,4 +49,22 @@ export const authenticationController = {
       throw error;
     }
   },
+  signUpLoginViaEmail:async (data)=>{
+    try{
+       let result=await securedApi.post("/signup_login_via_email",data);
+       return result;
+    }
+    catch(error){
+      throw error;
+    }
+  },
+  verifyEmailOtp:async (data)=>{
+    try{
+      let result=await securedApi.post("/verify",data);
+      return result;
+    }
+    catch(error){
+      return error;
+    }
+  }
 };

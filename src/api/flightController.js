@@ -24,10 +24,11 @@ export const flightController = {
      return result;
     }
     catch(error){
-      throw Error;
+      throw error;
     }
   },
 
+ 
   oneWayBookingNonLLC:async(data)=>{
     try{
      let result=await flightPublicApi.post("flight-booking/non_LCC_booking",data);
