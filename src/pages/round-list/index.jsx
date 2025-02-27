@@ -36,7 +36,6 @@ const FlightList = () => {
   const [selectedDeparture, setSelectedDeparture] = useState(null);
   const [selectedArrival, setSelectedArrival] = useState(null);
 
-
   useEffect(() => {
     if (localStorage.getItem("roundflightData")) {
       setTimeout(() => {
@@ -59,7 +58,6 @@ const FlightList = () => {
       setSelectedArrival(flightList.flight_list.arrival_flights.flightData[0]);
     }
   }, [flightList]);
-
 
   const handleFlightSelection = (type, flight) => {
     if (type === "departure") {
@@ -369,7 +367,10 @@ const FlightList = () => {
 
       {/* Footer Flight Detail section  */}
       {flightList?.type === "DOMESTIC" ? (
-        <Grid2 container sx={{ position: "fixed", bottom: "0", width: "100%", zIndex:9999 }}>
+        <Grid2
+          container
+          sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 9999 }}
+        >
           <Grid2 size={3}></Grid2>
           <Grid2
             size={9}

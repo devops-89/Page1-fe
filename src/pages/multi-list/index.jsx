@@ -1,11 +1,9 @@
-import Banner from "@/components/banner";
 import InnerBanner from "@/components/innerBanner";
 import React, { useEffect, useState } from "react";
 import banner from "@/banner/flight.jpg";
 import {
   Box,
   Card,
-  Container,
   Grid2,
   Typography,
   CardHeader,
@@ -22,13 +20,11 @@ import StarIcon from "@mui/icons-material/Star";
 import FlightForm from "@/components/flight/flightForm";
 import Loading from "react-loading";
 import { COLORS } from "@/utils/colors";
-import TabFilter from "@/components/flight/tabFilter";
 import MultiListBox from "@/components/flight/multListBox";
 
 const MultiList = () => {
   const [flightList, setFlightList] = useState(null);
   const [traceId, setTraceId] = useState("");
-
 
   useEffect(() => {
     if (localStorage.getItem("multiwayData")) {
@@ -41,14 +37,6 @@ const MultiList = () => {
 
   const [priceRange, setPriceRange] = useState([500, 2000]);
 
-
-
-  console.log("multi flightlist", flightList)
-
-
-
-
-  
   const handleRangeChange = (event, newValue) => {
     setPriceRange(newValue);
   };
@@ -65,7 +53,7 @@ const MultiList = () => {
       </Box>
 
       {flightList?.flight_list?.flightData ? (
-        <Box sx={{ pt: 10, pb: 10, px: 4, position:'relative' }}>
+        <Box sx={{ pt: 10, pb: 10, px: 4, position: "relative" }}>
           <Grid2 container spacing={4}>
             <Grid2 size={3} sx={{ position: "relative" }}>
               <Card
@@ -122,9 +110,7 @@ const MultiList = () => {
                   </div>
 
                   <div style={{ marginTop: "1rem" }}>
-                    <Typography variant="subtitle1">
-                      Price Per Night
-                    </Typography>
+                    <Typography variant="subtitle1">Price Per Night</Typography>
                     <Slider
                       value={priceRange}
                       onChange={handleRangeChange}
@@ -171,24 +157,22 @@ const MultiList = () => {
                   </div>
                 </CardContent>
               </Card>
-
             </Grid2>
             <Grid2 size={9}>
               <Grid2 container spacing={6}>
-
-                  <Grid2 size={12}>
-                  {flightList?.flight_list?.flightData?.map((details, index)=>{
-                    return (
-                    <MultiListBox details={details} index={index}/>
-                    )
-                  })}
-                  </Grid2>
-
-
-                {/* <Grid2 size={12}> 
-                  <TabFilter flightList={flightList} />
-                </Grid2> */}
-
+                <Grid2 size={12}>
+                  {flightList?.flight_list?.flightData?.map(
+                    (details, index) => {
+                      return (
+                        <MultiListBox
+                          details={details}
+                          index={index}
+                          traceId={traceId}
+                        />
+                      );
+                    }
+                  )}
+                </Grid2>
               </Grid2>
             </Grid2>
           </Grid2>
