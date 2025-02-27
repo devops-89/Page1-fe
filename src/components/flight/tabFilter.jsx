@@ -6,7 +6,7 @@ import { nunito } from '@/utils/fonts';
 import moment from 'moment';
 import MultiListBox from './multListBox'; 
 
-const TabFilter = ({ flightList }) => {
+const TabFilter = ({ flightList  }) => {
 
     const [value, setValue] = useState(0);
     const [departureRoute, setDepatureRoute] = useState(flightList?.flight_list?.flightData[0]?.departure);
@@ -22,6 +22,8 @@ const TabFilter = ({ flightList }) => {
             [detailIndex]: flightDetail === prevSelectedFlights[detailIndex] ? null : flightDetail, 
         }));
     };
+
+
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -68,7 +70,6 @@ const TabFilter = ({ flightList }) => {
             {flightList?.flight_list?.flightData?.map((departureData, index) => {
 
                 const refundableValue = departureData?.IsRefundable
-
                 return (
                     <React.Fragment key={`departureData-${index}`}> 
                         {departureData?.departure?.map((details, detailIndex) => {

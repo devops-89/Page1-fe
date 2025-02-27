@@ -23,6 +23,7 @@ import FlightForm from "@/components/flight/flightForm";
 import Loading from "react-loading";
 import { COLORS } from "@/utils/colors";
 import TabFilter from "@/components/flight/tabFilter";
+import MultiListBox from "@/components/flight/multListBox";
 
 const MultiList = () => {
   const [flightList, setFlightList] = useState(null);
@@ -40,7 +41,11 @@ const MultiList = () => {
 
   const [priceRange, setPriceRange] = useState([500, 2000]);
 
+
+
   console.log("multi flightlist", flightList)
+
+
 
 
   
@@ -170,20 +175,20 @@ const MultiList = () => {
             </Grid2>
             <Grid2 size={9}>
               <Grid2 container spacing={6}>
-                <Grid2 size={12}> 
-                  <TabFilter flightList={flightList} />
-                </Grid2>
 
-                <Grid2 size={12} sx={{
-                  position: "fixed", bottom: "0", width: "100%", zIndex: 9999, px: 4,
-                  py: 2,
-                  borderTopLeftRadius: "15px",
-                  borderTopRightRadius: "15px",
-                  backgroundColor: COLORS.SEMIGREY,
-                  boxShadow: `0px 0px 10px #b2a8a8`,
-                }}>
-                  <Typography>Hello</Typography>
-                </Grid2>
+                  <Grid2 size={12}>
+                  {flightList?.flight_list?.flightData?.map((details, index)=>{
+                    return (
+                    <MultiListBox details={details} index={index}/>
+                    )
+                  })}
+                  </Grid2>
+
+
+                {/* <Grid2 size={12}> 
+                  <TabFilter flightList={flightList} />
+                </Grid2> */}
+
               </Grid2>
             </Grid2>
           </Grid2>
