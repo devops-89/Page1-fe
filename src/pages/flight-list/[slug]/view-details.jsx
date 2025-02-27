@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import Grid2 from "@mui/material/Grid2";
 import FullScreenDialog from "@/components/flight/seats/FullScreenDiaog";
 import CloseIcon from "@mui/icons-material/Close";
+import UserVerifyForm from "@/components/flight/UserVerifyForm";
 import {
   Box,
   Container,
@@ -22,6 +23,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  TextField,
 } from "@mui/material";
 import Image from "next/image";
 import { flightController } from "@/api/flightController";
@@ -38,6 +40,7 @@ import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -57,6 +60,7 @@ const FlightDetails = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [verifiedData,setVerifiedData]=useState(null);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -481,19 +485,32 @@ const FlightDetails = () => {
                       </Box>
                       {/* Intermediate flights end */}
                     </Card>
+                    {/* OTP Verification Start */}
+                    {
+                        (!verifiedData)?(
+                          <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
+                             <UserVerifyForm setVerifiedData={setVerifiedData} />
+                          </Card>
+                        ):(null)
+                      }
+
+                    {/* OTP verification end */}
                     {/* Meal Section start */}
 
                     {/* Meal Section end */}
-                    <Card sx={{ mb: "20px" }}>
+                    {
+                      (verifiedData)?(
+                        <Card sx={{ mb: "20px" }}>
                       <PassengerForm
                         sx={{
                           backgroundColor: COLORS.PRIMARY,
                           color: COLORS.WHITE,
                         }}
-                     
                         flightDetails={flightDetails}
                       />
                     </Card>
+                      ):(null)
+                    }
 
                     {/* {isLCC ? (
                         <>
@@ -505,7 +522,7 @@ const FlightDetails = () => {
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={4} sx={{position:'sticky'}}>
+                <Grid2 size={4} sx={{ position: "sticky" }}>
                   <FareSummary fareData={flightDetails[0]?.Results} />
                 </Grid2>
               </Grid2>
