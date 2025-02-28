@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import PassengerFields from "./PassengerFields";
-import PanCardForm from "./PancardForm";
 import PassportForm from "./PassportForm";
 import GstForm from "./GstForm";
 import { validationSchema } from "@/utils/validationSchema";
@@ -54,7 +53,6 @@ const PassengerForm = ({ flightDetails, myState }) => {
   const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
-  const [isPanRequired, setIsPanRequired] = useState(false);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
@@ -87,10 +85,7 @@ const PassengerForm = ({ flightDetails, myState }) => {
             setInfantCount(parsedState?.infant || 0);
         }
 
-    setIsPanRequired(
-      flightDetails[0]?.Results?.IsPanRequiredAtBook ||
-        flightDetails[0]?.Results?.IsPanRequiredAtTicket
-    );
+ 
     setIsPassportRequired(
       flightDetails[0]?.Results?.IsPassportRequiredAtBook ||
         flightDetails[0]?.Results?.IsPassportRequiredAtTicket
@@ -137,11 +132,6 @@ const PassengerForm = ({ flightDetails, myState }) => {
       date_of_birth: "",
       formType: "infant",
     })),
-    panCard: {
-      fullName: "",
-      panNumber: "",
-      dob: "",
-    },
     passport: {
       fullName: "",
       passport_no: "",
@@ -489,15 +479,7 @@ const PassengerForm = ({ flightDetails, myState }) => {
                   </Box>
                 ))}
 
-                {isPanRequired && (
-                  <PanCardForm
-                    values={values.panCard} // corrected values prop
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    errors={errors.panCard} // corrected errors prop
-                    touched={touched.panCard} // corrected touched prop
-                  />
-                )}
+    
                 {isPassportRequired && (
                   <PassportForm
                     values={values.passport} // corrected values prop

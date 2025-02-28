@@ -31,13 +31,13 @@ import moment from "moment";
 import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
-import Loading from "react-loading";
 import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
+import Loader from "@/utils/Loader";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -517,12 +517,7 @@ const FlightDetails = () => {
               padding: "50px",
             }}
           >
-            <Loading
-              type="bars"
-              width={60}
-              height={60}
-              color={COLORS.PRIMARY}
-            />
+            <Loader open={true}/>
           </Grid2>
         )}
       </Grid2>
