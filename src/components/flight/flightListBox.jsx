@@ -26,8 +26,6 @@ import TabPanel from "../tabPanel";
 import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
 import FlightBox from "./FlightBox";
-// import FlightBox from "./flightBox";
-
 
 
 const FlightListBox = ({ details, traceId }) => {
@@ -291,13 +289,6 @@ const FlightListBox = ({ details, traceId }) => {
           <TabPanel index={2} value={value}>
             <BaggageDetails tableData={flightDetails} />
           </TabPanel>
-          {/* <TabPanel index={3} value={value}>
-            <Cancellation
-              tableData={flightDetails?.flightDetails?.cancellationDetails}
-              departureDetails={flightDetails?.departureDetails}
-              arrivalDetails={flightDetails?.arrivalDetails}
-            />
-          </TabPanel> */}
         </Collapse>
       </Card>
     </div>

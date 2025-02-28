@@ -18,9 +18,8 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import StarIcon from "@mui/icons-material/Star";
 import FlightForm from "@/components/flight/flightForm";
-import Loading from "react-loading";
-import { COLORS } from "@/utils/colors";
 import MultiListBox from "@/components/flight/multListBox";
+import Loader from "@/utils/Loader";
 
 const MultiList = () => {
   const [flightList, setFlightList] = useState(null);
@@ -187,7 +186,7 @@ const MultiList = () => {
             marginBottom: "50px",
           }}
         >
-          <Loading type="bars" width={50} height={50} color={COLORS.PRIMARY} />
+          <Loader open={true}/>
         </Box>
       )}
     </>

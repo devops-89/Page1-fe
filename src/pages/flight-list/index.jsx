@@ -1,4 +1,3 @@
-import Banner from "@/components/banner";
 import InnerBanner from "@/components/innerBanner";
 import React, { useEffect, useState } from "react";
 import banner from "@/banner/flight.jpg";
@@ -21,8 +20,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import StarIcon from "@mui/icons-material/Star";
 import FlightForm from "@/components/flight/flightForm";
 import FlightListBox from "@/components/flight/flightListBox";
-import Loading from "react-loading";
-import { COLORS } from "@/utils/colors";
+import Loader from "@/utils/Loader";
 const FlightList = () => {
   const [flightList, setFlightList] = useState(null);
   const [traceId, setTraceId] = useState("");
@@ -193,7 +191,7 @@ const FlightList = () => {
             marginBottom: "50px",
           }}
         >
-          <Loading type="bars" width={50} height={50} color={COLORS.PRIMARY} />
+          <Loader open={true}/>
         </Box>
       )}
     </>

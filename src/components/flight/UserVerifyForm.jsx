@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Typography, Button, TextField } from "@mui/material";
 import { authenticationController } from "@/api/auth";
 import { COLORS } from "@/utils/colors";
+import { loginTextField } from "@/utils/styles";
 const UserVerifyForm = ({ setVerifiedData }) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -52,14 +53,17 @@ const UserVerifyForm = ({ setVerifiedData }) => {
       <Typography variant="h6" sx={{ mb: "12px", fontWeight: 600 }}>
         Verify Your Email
       </Typography>
-      <form>
         <TextField
           fullWidth
           label="Email"
           variant="outlined"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          sx={{ mb: 2 }}
+          sx={{
+            mb: 2,
+            ...loginTextField,
+            "& fieldset": { borderWidth: "2px!important" },
+          }}
           type="email"
         />
 
@@ -74,16 +78,23 @@ const UserVerifyForm = ({ setVerifiedData }) => {
               variant="outlined"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              sx={{ mb: 2, mt: 2 }}
+              sx={{
+                ...loginTextField,
+                "& fieldset": { borderWidth: "2px!important" },
+                mb: 2,
+                mt: 2,
+              }}
               disabled={otpSent ? false : true}
             />
 
             <Button
               type="button"
               variant="contained"
+              type="button"
               fullWidth
               onClick={handleVerifyOtp}
               disabled={!otp}
+              sx={{ backgroundColor: COLORS.PRIMARY }}
             >
               Verify OTP
             </Button>
@@ -92,14 +103,14 @@ const UserVerifyForm = ({ setVerifiedData }) => {
           <Button
             type="button"
             variant="contained"
-            sx={{ width: "150px" }}
             onClick={handleSendOtp}
             disabled={!email}
+            sx={{ backgroundColor: COLORS.PRIMARY, width: "150px" }}
           >
             Send OTP
           </Button>
         )}
-      </form>
+     
     </>
   );
 };
