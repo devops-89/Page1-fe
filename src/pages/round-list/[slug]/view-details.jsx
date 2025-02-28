@@ -36,6 +36,7 @@ import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import Link from "next/link";
 import ToastBar from "@/components/toastBar";
+import UserVerifyForm from "@/components/flight/UserVerifyForm";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -53,6 +54,8 @@ const FlightDetails = () => {
   const [flightDetails, setFlightDetails] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [verifiedData,setVerifiedData]=useState(null);
+
 
   useEffect(()=>{
 
@@ -131,6 +134,7 @@ const FlightDetails = () => {
     }
   }, []);
 
+ 
   return (
     <>
       <Grid2 container>
@@ -215,13 +219,37 @@ const FlightDetails = () => {
                       />
                     )}
 
-                    {/* <Card>
+                      {/* OTP Verification Start */}
+
+                      {
+                        (!verifiedData)?(
+                          <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
+                             <UserVerifyForm setVerifiedData={setVerifiedData} />
+                          </Card>
+                        ):(null)
+                      }
+
+                    {/* OTP verification end */}
+
+                   {/* Passenger form start */}
+                   {
+                    (verifiedData)?(
+                      <Card>
                       <PassengerForm
                         flightDetails={flightDetails[0]}
+                        myState="roundState"
+                       
                       />
-                    </Card> */}
+
+                    </Card>
+
+                    ):(null)
+                   }
+                   {/* Passenger form end */}
+                   
                   </Paper>
                 </Grid2>
+
 
                 {/* Fare Summary */}
                 <Grid2 size={4}>
@@ -399,6 +427,7 @@ const FlightDetails = () => {
                         );
                       }
                     )}
+
 
                   {flightDetails?.length > 0 &&
                     flightDetails[1][0]?.Results?.FareRules?.map(

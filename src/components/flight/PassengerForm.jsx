@@ -15,7 +15,10 @@ import { flightController } from "@/api/flightController";
 import { TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 
-const PassengerForm = ({ flightDetails, state,verifiedData }) => {
+import Loader from "@/utils/Loader";
+
+const PassengerForm = ({ flightDetails, myState }) => {
+      const [loading,setLoading]=useState(false);
     const [payload, setPayload] = useState({
         result_index: "",
         trace_id: "",
@@ -77,7 +80,7 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
 
     console.log("break", flightDetails[0]?.Results?.FareBreakdown)
     useEffect(() => {
-        const storedState = localStorage.getItem("state");
+        const storedState = localStorage.getItem(myState);
         if (storedState) {
             const parsedState = JSON.parse(storedState);
             setAdultCount(parsedState?.adult || 1);
@@ -97,7 +100,7 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
         if (flightDetails[0]?.Results?.GSTAllowed) {
             setIsGSTMandatory(flightDetails[0]?.Results?.IsGSTMandatory || false);
         }
-    }, [flightDetails, state]);
+    }, [flightDetails]);
 
     const totalPassengers = adultCount + childCount + infantCount;
 
@@ -172,13 +175,13 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
 
     const handleSubmit = (e, values) => {
         e.preventDefault();
-
+         
 
         console.log("values are setting", values);
 
-        const storedState = localStorage.getItem("state");
+        const storedState = localStorage.getItem(myState);
 
-
+         setLoading(true);
         setPayload((prevPayload) => ({
             ...prevPayload,
             result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
@@ -292,6 +295,7 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
 
 
     useEffect(() => {
+       
         console.log("payload", payload)
         if (payload.trace_id) {
             const bookingPromise = flightDetails[0]?.Results?.IsLCC
@@ -299,6 +303,7 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
                 : flightController.oneWayBookingNonLLC(payload);
 
             bookingPromise.then((response) => {
+               
                 if (response) {
                     console.log("Booking response:", response);
                     dispatch(
@@ -309,6 +314,7 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
                             severity: TOAST_STATUS.SUCCESS,
                         })
                     );
+                    setLoading(false);
                 }
             }).catch((error) => {
                 console.error("Booking Error:", error); // Log the entire error object
@@ -320,12 +326,20 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
                         severity: TOAST_STATUS.ERROR,
                     })
                 );
+                setLoading(false);
             });
         }
-    }, [payload, flightDetails, dispatch]);
+    }, [payload, flightDetails]);
 
 
 
+
+    if(loading){
+        
+        return <>
+        <Loader open={loading} />
+      </>
+    }
 
 
     return (
