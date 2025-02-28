@@ -44,7 +44,7 @@ export const flightController = {
 
   oneWayBookingLLC:async(data)=>{
     try{
-     let result=await flightPublicApi.post("flight-booking/booking",data);
+     let result=await securedFlightApi.post("flight-booking/booking",data);
     //  console.log("result LLC", result)
      return result;
     }

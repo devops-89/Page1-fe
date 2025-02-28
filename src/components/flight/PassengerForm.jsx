@@ -305,7 +305,7 @@ const PassengerForm = ({ flightDetails, state,verifiedData }) => {
                         setToast({
                             open: true,
                             message:
-                                response,
+                                response.data.message,
                             severity: TOAST_STATUS.SUCCESS,
                         })
                     );
