@@ -138,6 +138,8 @@ const FlightDetails = () => {
     }
   }, []);
 
+  console.log("verified data:",verifiedData);
+
   return (
     <>
       <Grid2 container>
@@ -506,6 +508,7 @@ const FlightDetails = () => {
                           color: COLORS.WHITE,
                         }}
                         flightDetails={flightDetails}
+                        verifiedData={verifiedData}
                       />
                     </Card>
                       ):(null)
