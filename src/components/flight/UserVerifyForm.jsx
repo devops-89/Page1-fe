@@ -79,6 +79,7 @@ const UserVerifyForm = ({ setVerifiedData }) => {
             />
 
             <Button
+              type="button"
               variant="contained"
               fullWidth
               onClick={handleVerifyOtp}
@@ -89,6 +90,7 @@ const UserVerifyForm = ({ setVerifiedData }) => {
           </>
         ) : (
           <Button
+            type="button"
             variant="contained"
             sx={{ width: "150px" }}
             onClick={handleSendOtp}
