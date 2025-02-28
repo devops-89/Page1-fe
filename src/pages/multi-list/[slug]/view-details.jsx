@@ -55,64 +55,64 @@ const FlightDetails = () => {
   const [flightDetails, setFlightDetails] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [verifiedData,setVerifiedData]=useState(null);
+  // const [verifiedData,setVerifiedData]=useState(null);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
 
-  console.log("router", router)
+  // console.log("router", router)
 
-  // useEffect(() => {
-  //   if (router.query.ResultIndex && router.query.traceId) {
-  //     flightController
-  //       .flightDetails({
-  //         result_index: router.query.ResultIndex,
-  //         trace_id: router.query.traceId,
-  //         ip_address: JSON.parse(localStorage.getItem("multistate"))?.ip_address,
-  //         journey: JOURNEY.DOMESTIC,
-  //       })
-  //       .then((response) => {
-  //         if (response?.data?.data) {
-  //           setFlightDetails(response?.data?.data);
-  //           setOtherDetails(response?.data?.data[1]);
-  //           console.log("otherDetails", response?.data?.data[1]);
+  useEffect(() => {
+    if (router.query.ResultIndex && router.query.traceId) {
+      flightController.multiflightDetails({
+          result_index: router.query.ResultIndex,
+          trace_id: router.query.traceId,
+          ip_address: JSON.parse(localStorage.getItem("multistate"))?.ip_address,
+          journey: JOURNEY.DOMESTIC,
+          journey_type : JOURNEY_TYPE.MULTIWAY
+        })
+        .then((response) => {
+          if (response?.data?.data) {
+            setFlightDetails(response?.data?.data);
+            console.log("multidetail", response?.data?.data)
+            // setOtherDetails(response?.data?.data[1]);
 
-  //           localStorage.setItem(
-  //             "oneWayflightDetails",
-  //             JSON.stringify(response?.data?.data)
-  //           );
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         setError(error);
-  //         dispatch(
-  //           setToast({
-  //             open: true,
-  //             message:
-  //               error.message ||
-  //               "An error occurred while fetching flight details.",
-  //             severity: TOAST_STATUS.ERROR,
-  //           })
-  //         );
-  //       });
-  //   }
-  // }, [router.query.ResultIndex, router.query.traceId]);
+            localStorage.setItem(
+              "multitripflightDetails",
+              JSON.stringify(response?.data?.data)
+            );
+          }
+        })
+        .catch((error) => {
+          setError(error);
+          dispatch(
+            setToast({
+              open: true,
+              message:
+                error.message ||
+                "An error occurred while fetching flight details.",
+              severity: TOAST_STATUS.ERROR,
+            })
+          );
+        });
+    }
+  }, [router.query.ResultIndex, router.query.traceId]);
 
 
 
-//   useEffect(() => {
-//     if (
-//       typeof window !== "undefined" &&
-//       localStorage.getItem("oneWayflightDetails")
-//     ) {
-//       setTimeout(() => {
-//         setFlightDetails(
-//           JSON.parse(localStorage.getItem("oneWayflightDetails"))
-//         );
-//       }, 3000);
-//     }
-//   }, []);
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      localStorage.getItem("multitripflightDetails")
+    ) {
+      setTimeout(() => {
+        setFlightDetails(
+          JSON.parse(localStorage.getItem("multitripflightDetails"))
+        );
+      }, 3000);
+    }
+  }, []);
 
   return (
     <>

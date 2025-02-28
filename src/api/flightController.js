@@ -77,6 +77,16 @@ roundflightDetails:async(data)=>{
 },
 
 
+multiflightDetails:async(data)=>{
+  try{
+   let result=await flightPublicApi.post("flightdetail/flightdetail",data);
+   return result;
+  }
+  catch(error){
+    throw Error;
+  }
+},
+
 
 
 }
