@@ -363,7 +363,7 @@ const Multiway = () => {
                         {/* From Field */}
                         <Grid2
                             // size={{lg:3 ,sm:6 ,xs:12}}
-                            size={{ lg: 2.4, xs: 6,sm:2.4, md:2.4, }}
+                            size={{ lg: 3, xs: 6,sm:2.4, md:2.4, }}
                             sx={{
                                 border: "1px solid #808080",
                                 borderTopLeftRadius: 4,
@@ -444,7 +444,7 @@ const Multiway = () => {
 
                         {/* To Field */}
                         <Grid2
-                           size={{ lg: 2.4, md:2.4, xs: 6,sm:2.4 }}
+                           size={{ lg: 3, md:2.4, xs: 6,sm:2.4 }}
                             sx={{
                                 border: "1px solid #808080",
                                 position: "relative",
@@ -524,7 +524,7 @@ const Multiway = () => {
 
                         {/* Departure Field */}
                         <Grid2
-                             size={{ lg: 2.4, md:2.4, xs: 12,sm:2.4}} 
+                             size={{ lg: 3, md:2.4, xs: 12,sm:2.4}} 
                             sx={{
                                 border: "1px solid #808080",
                                 position: "relative",
@@ -555,7 +555,7 @@ const Multiway = () => {
                             </LocalizationProvider>
                         </Grid2>
                         <Grid2
-                         size={{ lg: 4, md:4, xs: 12,sm:4}}
+                         size={{ lg: 3, md:4, xs: 12,sm:4}}
                           textAlign="center">
                             {index === 0 ? (
                                 <>
@@ -623,7 +623,7 @@ const Multiway = () => {
                         </Grid2>
                     </Grid2>
                 ))}
-                <Grid2  size={{ lg: 2.4, xs: 12,sm:12 ,md:12 }} textAlign={"center"}>
+                <Grid2  size={{ lg: 12, xs: 12,sm:12 ,md:12 }} textAlign={"center"}>
                     <Button
                         sx={{
                             backgroundColor: COLORS.SECONDARY,
