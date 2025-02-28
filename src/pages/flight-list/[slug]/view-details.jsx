@@ -101,7 +101,7 @@ const FlightDetails = () => {
     }
   }, [router.query.ResultIndex, router.query.traceId]);
 
-  // ✅ Run checkLCC whenever otherDetails updates
+  //  Run checkLCC whenever otherDetails updates
   useEffect(() => {
     if (!otherDetails) {
       setIsLCC(null);
@@ -508,7 +508,8 @@ const FlightDetails = () => {
                           color: COLORS.WHITE,
                         }}
                         flightDetails={flightDetails}
-                        verifiedData={verifiedData}
+                      
+                        myState="state"
                       />
                     </Card>
                       ):(null)
