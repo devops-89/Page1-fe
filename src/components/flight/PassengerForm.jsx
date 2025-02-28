@@ -15,7 +15,7 @@ import { flightController } from "@/api/flightController";
 import { TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 
-const PassengerForm = ({ flightDetails, state }) => {
+const PassengerForm = ({ flightDetails, state,verifiedData }) => {
     const [payload, setPayload] = useState({
         result_index: "",
         trace_id: "",

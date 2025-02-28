@@ -35,9 +35,12 @@ const UserVerifyForm = ({setVerifiedData}) => {
         console.log("Response after the email and otp verification: ",response.data.data);
         if(response.statusText==="OK"){
           setVerifiedData(response.data.data);
+          localStorage.setItem("access_token",response?.data?.data?.access_token)
         }
       })
     };
+
+   
   
   return (
     <>

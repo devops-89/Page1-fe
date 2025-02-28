@@ -4,6 +4,7 @@ export const APIURL = {
   authenticationUrl: `${baseUrl}/auth/api/auth`,
   userUrl: `${baseUrl}/user/api/users`,
   flightUrl: `${baseUrl}/flight/api/`,
+  authFlightUrl:`${baseUrl}/flight/api/`
 };
 
 // export const baseUrl = "http://192.168.31.233";

@@ -1,4 +1,4 @@
-import { flightPublicApi } from "./config";
+import { flightPublicApi,securedFlightApi } from "./config";
 
 export const flightController = {
   getAllAirports: async () => {
@@ -31,7 +31,7 @@ export const flightController = {
  
   oneWayBookingNonLLC:async(data)=>{
     try{
-     let result=await flightPublicApi.post("flight-booking/non_LCC_booking",data);
+     let result=await securedFlightApi.post("flight-booking/non_LCC_booking",data);
     //  console.log("result nonLLC", result)
      return result;
     }
