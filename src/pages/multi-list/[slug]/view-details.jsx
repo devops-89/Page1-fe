@@ -63,42 +63,41 @@ const FlightDetails = () => {
 
   console.log("router", router)
 
-//   useEffect(() => {
-//     if (router.query.ResultIndex && router.query.traceId) {
-//       flightController
-//         .flightDetails({
-//           result_index: router.query.ResultIndex,
-//           trace_id: router.query.traceId,
-//           ip_address: JSON.parse(localStorage.getItem("state"))?.ip_address,
-//           journey_type: JOURNEY_TYPE.ONEWAY,
-//           journey: JOURNEY.DOMESTIC,
-//         })
-//         .then((response) => {
-//           if (response?.data?.data) {
-//             setFlightDetails(response?.data?.data);
-//             setOtherDetails(response?.data?.data[1]);
-//             console.log("otherDetails", response?.data?.data[1]);
+  // useEffect(() => {
+  //   if (router.query.ResultIndex && router.query.traceId) {
+  //     flightController
+  //       .flightDetails({
+  //         result_index: router.query.ResultIndex,
+  //         trace_id: router.query.traceId,
+  //         ip_address: JSON.parse(localStorage.getItem("multistate"))?.ip_address,
+  //         journey: JOURNEY.DOMESTIC,
+  //       })
+  //       .then((response) => {
+  //         if (response?.data?.data) {
+  //           setFlightDetails(response?.data?.data);
+  //           setOtherDetails(response?.data?.data[1]);
+  //           console.log("otherDetails", response?.data?.data[1]);
 
-//             localStorage.setItem(
-//               "oneWayflightDetails",
-//               JSON.stringify(response?.data?.data)
-//             );
-//           }
-//         })
-//         .catch((error) => {
-//           setError(error);
-//           dispatch(
-//             setToast({
-//               open: true,
-//               message:
-//                 error.message ||
-//                 "An error occurred while fetching flight details.",
-//               severity: TOAST_STATUS.ERROR,
-//             })
-//           );
-//         });
-//     }
-//   }, [router.query.ResultIndex, router.query.traceId]);
+  //           localStorage.setItem(
+  //             "oneWayflightDetails",
+  //             JSON.stringify(response?.data?.data)
+  //           );
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         setError(error);
+  //         dispatch(
+  //           setToast({
+  //             open: true,
+  //             message:
+  //               error.message ||
+  //               "An error occurred while fetching flight details.",
+  //             severity: TOAST_STATUS.ERROR,
+  //           })
+  //         );
+  //       });
+  //   }
+  // }, [router.query.ResultIndex, router.query.traceId]);
 
 
 

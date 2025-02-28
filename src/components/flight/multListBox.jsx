@@ -38,7 +38,7 @@ const MultiListBox = ({ details, traceId }) => {
 
   const routetoAnotherPage = () => {
     router.push({
-      pathname: `/multi-list/${flightDetails?.Airline?.AirlineCode}/view-details`,
+      pathname: `/multi-list/${flightDetails?.AirlineCode}/view-details`,
       query: {
         ResultIndex: flightDetails?.ResultIndex,
         traceId: traceId,
