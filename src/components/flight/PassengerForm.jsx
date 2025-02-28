@@ -15,7 +15,7 @@ import { flightController } from "@/api/flightController";
 import { TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 
-const PassengerForm = ({ flightDetails, state }) => {
+const PassengerForm = ({ flightDetails, state,verifiedData }) => {
     const [payload, setPayload] = useState({
         result_index: "",
         trace_id: "",
@@ -301,6 +301,14 @@ const PassengerForm = ({ flightDetails, state }) => {
             bookingPromise.then((response) => {
                 if (response) {
                     console.log("Booking response:", response);
+                    dispatch(
+                        setToast({
+                            open: true,
+                            message:
+                                response.data.message,
+                            severity: TOAST_STATUS.SUCCESS,
+                        })
+                    );
                 }
             }).catch((error) => {
                 console.error("Booking Error:", error); // Log the entire error object
@@ -308,8 +316,7 @@ const PassengerForm = ({ flightDetails, state }) => {
                     setToast({
                         open: true,
                         message:
-                            error.message ||
-                            "An error occurred during booking.",
+                            error.message,
                         severity: TOAST_STATUS.ERROR,
                     })
                 );

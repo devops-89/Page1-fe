@@ -26,7 +26,7 @@ import TabPanel from "../tabPanel";
 import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
 import FlightBox from "./FlightBox";
-
+// import FlightBox from "./flightBox";
 
 
 

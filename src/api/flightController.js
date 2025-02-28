@@ -1,4 +1,4 @@
-import { flightPublicApi } from "./config";
+import { flightPublicApi,securedFlightApi } from "./config";
 
 export const flightController = {
   getAllAirports: async () => {
@@ -24,18 +24,19 @@ export const flightController = {
      return result;
     }
     catch(error){
-      throw Error;
+      throw error;
     }
   },
 
+ 
   oneWayBookingNonLLC:async(data)=>{
     try{
-     let result=await flightPublicApi.post("flight-booking/non_LCC_booking",data);
-     console.log("result nonLLC", result)
+     let result=await securedFlightApi.post("flight-booking/non_LCC_booking",data);
+    //  console.log("result nonLLC", result)
      return result;
     }
     catch(error){
-      console.log("error nonLLC", error)
+      // console.log("error nonLLC", error)
       throw Error;
      
     }
@@ -43,12 +44,12 @@ export const flightController = {
 
   oneWayBookingLLC:async(data)=>{
     try{
-     let result=await flightPublicApi.post("flight-booking/booking",data);
-     console.log("result LLC", result)
+     let result=await securedFlightApi.post("flight-booking/booking",data);
+    //  console.log("result LLC", result)
      return result;
     }
     catch(error){
-      console.log("error LLC", error)
+      // console.log("error LLC", error)
       throw Error;
     }
   },
@@ -74,5 +75,18 @@ roundflightDetails:async(data)=>{
     throw Error;
   }
 },
+
+
+multiflightDetails:async(data)=>{
+  try{
+   let result=await flightPublicApi.post("flightdetail/flightdetail",data);
+   return result;
+  }
+  catch(error){
+    throw Error;
+  }
+},
+
+
 
 }

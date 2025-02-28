@@ -29,32 +29,32 @@ const PassportForm = ({ values, handleChange, handleBlur, errors }) => {
       <Field
         as={TextField}
         label="Passport Number"
-        name="passport.passportNumber"
-        value={values.passport.passportNumber}
+        name="passport.passport_no"
+        value={values.passport.passport_no}
         onChange={handleChange}
         onBlur={handleBlur}
         fullWidth
         size="normal"
         required
-        error={Boolean(errors.passport?.passportNumber)}
-        helperText={<ErrorMessage name="passport.passportNumber" />}
+        error={Boolean(errors.passport?.passport_no)}
+        helperText={<ErrorMessage name="passport.passport_no" />}
       />
        </Grid2>
        <Grid2 size={{xs:12, sm:6, md:4}}>
       <Field
         as={TextField}
         label="Passport Expiry Date"
-        name="passport.passportExpiryDate"
+        name="passport.passport_expiry"
         type="date"
-        value={values.passport.passportExpiryDate}
+        value={values.passport.passport_expiry}
         onChange={handleChange}
         onBlur={handleBlur}
         fullWidth
         size="normal"
         required
         InputLabelProps={{ shrink: true }}
-        error={Boolean(errors.passport?.passportExpiryDate)}
-        helperText={<ErrorMessage name="passport.passportExpiryDate" />}
+        error={Boolean(errors.passport?.passport_expiry)}
+        helperText={<ErrorMessage name="passport.passport_expiry" />}
       />
        </Grid2>
        <Grid2 size={{xs:12, sm:6, md:4}}>

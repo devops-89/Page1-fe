@@ -85,16 +85,16 @@ export const passengerSchema = Yup.object({
     Yup.object({
       title: Yup.string().required("Title is required"),
       gender: Yup.string().required("Gender is required"),
-      firstName: Yup.string().required("First Name is required"),
-      middleName: Yup.string().optional(),
-      lastName: Yup.string().required("Last Name is required"),
+      first_name: Yup.string().required("First Name is required"),
+      middle_name: Yup.string().optional(),
+      last_name: Yup.string().required("Last Name is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
-      phone: Yup.string()
+      contact_no: Yup.string()
         .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
         .required("Phone Number is required"),
-      dob: Yup.date().required("Date of Birth is required"),
+        date_of_birth: Yup.date().required("Date of Birth is required"),
     })
   ),
   panCard: Yup.object({
@@ -106,10 +106,10 @@ export const passengerSchema = Yup.object({
   }),
   passport: Yup.object({
     fullName: Yup.string().required("Full Name is required"),
-    passportNumber: Yup.string()
+    passport_no: Yup.string()
       .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport Number format")
       .required("Passport Number is required"),
-    passportExpiryDate: Yup.date().required("Passport Expiry Date is required"),
+      passport_expiry: Yup.date().required("Passport Expiry Date is required"),
     passportIssueDate: Yup.date().required("Passport Issue Date is required"),
     passportIssueCountry: Yup.string().required(
       "Passport Issue Country is required"
@@ -119,23 +119,23 @@ export const passengerSchema = Yup.object({
 
 export const gstForm = (IsGSTMandatory) => {
   return Yup.object({
-    GSTCompanyName: IsGSTMandatory
+    gst_company_name: IsGSTMandatory
       ? Yup.string().required("Company Name is required")
       : Yup.string().optional(),
-    GSTNumber: IsGSTMandatory
+      gst_number: IsGSTMandatory
       ? Yup.string()
           .matches(/^[0-9A-Z]{15}$/, "Invalid GST Number format")
           .required("GST Number is required")
       : Yup.string().optional(),
-    GSTCompanyAddress: IsGSTMandatory
+      gst_company_address: IsGSTMandatory
       ? Yup.string().required("Company Address is required")
       : Yup.string().optional(),
-    GSTCompanyContactNumber: IsGSTMandatory
+      gst_company_contact_number: IsGSTMandatory
       ? Yup.string()
           .matches(/^[0-9]{10}$/, "Invalid Contact Number format")
           .required("Company Contact Number is required")
       : Yup.string().optional(),
-    GSTCompanyEmail: IsGSTMandatory
+      gst_company_email: IsGSTMandatory
       ? Yup.string()
           .email("Invalid email address")
           .required("Company Email is required")

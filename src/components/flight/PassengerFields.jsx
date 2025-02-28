@@ -38,14 +38,14 @@ const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors })
           <Field
             as={TextField}
             label="First Name"
-            name={`${passenger.formType}[${index}].firstName`}
+            name={`${passenger.formType}[${index}].first_name`}
             fullWidth
             required
-            value={passenger.firstName}
+            value={passenger.first_name}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.passengers?.[index]?.firstName)}
-            helperText={<ErrorMessage name={`${passenger.formType}[${index}].firstName`} />}
+            error={Boolean(errors.passengers?.[index]?.first_name)}
+            helperText={<ErrorMessage name={`${passenger.formType}[${index}].first_name`} />}
           />
         </Grid2>
 
@@ -55,7 +55,7 @@ const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors })
             as={TextField}
             label="Middle Name"
            
-            name={`${passenger.formType}[${index}].middlename`}
+            name={`${passenger.formType}[${index}].middle_name`}
             fullWidth
             value={passenger.middleName}
             onChange={handleChange}
@@ -69,14 +69,14 @@ const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors })
             as={TextField}
             label="Last Name"
             
-            name={`${passenger.formType}[${index}].lastName`}
+            name={`${passenger.formType}[${index}].last_name`}
             fullWidth
             required
-            value={passenger.lastName}
+            value={passenger.last_name}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.passengers?.[index]?.lastName)}
-            helperText={<ErrorMessage name={`${passenger.formType}[${index}].lastName`} />}
+            error={Boolean(errors.passengers?.[index]?.last_name)}
+            helperText={<ErrorMessage name={`${passenger.formType}[${index}].last_name`} />}
           />
         </Grid2>
 
@@ -85,16 +85,16 @@ const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors })
           <Field
             as={TextField}
             label="Date of Birth"
-            name={`${passenger.formType}[${index}].dob`}
+            name={`${passenger.formType}[${index}].date_of_birth`}
             type="date"
             fullWidth
             required
             InputLabelProps={{ shrink: true }}
-            value={passenger.dob}
+            value={passenger.date_of_birth}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.passengers?.[index]?.dob)}
-            helperText={<ErrorMessage name={`${passenger.formType}[${index}].dob`} />}
+            error={Boolean(errors.passengers?.[index]?.date_of_birth)}
+            helperText={<ErrorMessage name={`${passenger.formType}[${index}].date_of_birth`} />}
           />
         </Grid2>
 
@@ -141,15 +141,15 @@ const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors })
           <Field
             as={TextField}
             label="Phone Number"
-            name={`${passenger.formType}[${index}].phone`}
+            name={`${passenger.formType}[${index}].contact_no`}
             type="tel"
             fullWidth
             required
-            value={passenger.phone}
+            value={passenger.contact_no}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={Boolean(errors.passengers?.[index]?.phone)}
-            helperText={<ErrorMessage name={`${passenger.formType}[${index}].phone`} />}
+            error={Boolean(errors.passengers?.[index]?.contact_no)}
+            helperText={<ErrorMessage name={`${passenger.formType}[${index}].contact_no`} />}
           />
         </Grid2> 
       </Grid2>

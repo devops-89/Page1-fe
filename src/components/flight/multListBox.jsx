@@ -3,294 +3,321 @@ import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import moment from "moment";
 import {
-    FlightTakeoff,
-    KeyboardArrowDown,
-    KeyboardArrowUp,
+  FlightTakeoff,
 } from "@mui/icons-material";
 import {
-    Avatar,
-    Button,
-    Card,
-    Collapse,
-    Divider,
-    Grid2,
-    Stack,
-    Tab,
-    Tabs,
-    Typography,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  Grid2,
+  Stack,
+  Typography,
 } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import TabPanel from "../tabPanel";
-import FlightBox from "./FlightBox";
-import MultiBaggageDetails from "./multBaggageDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useRouter } from "next/router";
 
-const MultiListBox = ({ details, refundableValue, selectedFlight, onFlightSelect }) => { 
-    const [open, setOpen] = useState(false);
-    const [cabin, setCabin] = useState(null);
+const MultiListBox = ({ details, traceId }) => {
+  const [cabin, setCabin] = useState(null);
+    const router = useRouter();
 
-    const handleOpenFlightDetails = () => {
-        setOpen(!open);
-    };
-
-    const [flightDetails, setFlightDetails] = useState(details);
-    const [value, setValue] = useState(0);
-
-    console.log("flightDetail 1", flightDetails)
+  const [flightDetails, setFlightDetails] = useState(details);
 
 
-    
-    useEffect(() => {
-        if (flightDetails) {
-            onFlightSelect(flightDetails); 
-        }
-    }, []);
+  useEffect(() => {
+    let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
+      return fligtClass.value == flightDetails?.departure[0][0]?.CabinClass;
+    });
+    setCabin(cabinData.label);
+  }, [flightDetails, data.FLIGHT_CLASS_DATA]);
 
+  const routetoAnotherPage = () => {
+    router.push({
+      pathname: `/multi-list/${flightDetails?.AirlineCode}/view-details`,
+      query: {
+        ResultIndex: flightDetails?.ResultIndex,
+        traceId: traceId,
+      },
+    });
+  };
 
-
-    const tabChangeHandler = (e, newValue) => {
-        setValue(newValue);
-    };
-
-    useEffect(() => {
-        let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
-            return fligtClass.value == flightDetails[0]?.CabinClass;
-        });
-        setCabin(cabinData.label);
-    }, [flightDetails, data.FLIGHT_CLASS_DATA]);
-
-
-    const handleCardClick = (flightDetails) => {
-        onFlightSelect(flightDetails); 
-    };
-
-
-    return (
-        <>
-            <Card
-                sx={{
-                    boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
-                    p: 2,
-                    cursor: "pointer",
-                    mb:3,
-                    border: selectedFlight === flightDetails ? `1px solid blue` : 'none', 
-                    backgroundColor: selectedFlight===flightDetails ? "#dff7ff" : ""
-                }}
-                onClick={() => handleCardClick(flightDetails)}
-            >
-                <Stack
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                >
-                    <Stack direction={"row"} alignItems={"center"} spacing={2}>
-                        <Image
-                            src={flightDetails[0]?.AirlineLogo}
-                            alt="Image"
-                            width={30}
-                            height={30}
-                        />
-                        <Typography
-                            sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
-                        >
-                            {`${flightDetails[0]?.Airline?.AirlineName} Airline`}{" "}
-                            {`(${flightDetails[0]?.Airline?.AirlineCode} ${flightDetails[0]?.Airline?.FlightNumber})`}
-                        </Typography>
-                    </Stack>
+  return (
+    <>
+      <Card
+        sx={{
+          boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
+          p: 2,
+          cursor: "pointer",
+          mb: "30px",
+        }}
+      >
+        <Grid2
+          container
+          sx={{ mb: "15px" }}
+          spacing={2}
+          alignItems={"flex-start"}
+          justifyContent={"flex-start"}
+        >
+          <Grid2 size={12}>
+            {flightDetails?.departure?.map((flight, index) => {
+              return (
+                <Accordion defaultExpanded={index == 0}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`panel${index}-content`}
+                    id={`panel${1}-header`}
+                    sx={{ backgroundColor: COLORS.SEMIGREY }}
+                  >
                     <Typography
-                        sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
+                      sx={{
+                        fontSize: 15,
+                        fontWeight: 600,
+                        fontFamily: nunito.style,
+                      }}
                     >
-                        Travel Class : {cabin ? cabin : undefined}
+                      {flight[0]?.Origin?.Airport?.CityName} -{" "}
+                      {
+                        flight[flight?.length - 1]?.Destination?.Airport
+                          ?.CityName
+                      }
                     </Typography>
-                </Stack>
-                <Grid2 container sx={{ mt: 3 }} spacing={4} alignItems={"flex-start"}>
-                    <Grid2 size={4}>
-                        <Typography
-                            sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Grid2 container spacing={2}>
+                      <Grid2 size={12}>
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}
                         >
-                            {moment(flightDetails[0]?.Origin?.DepTime).format(
-                                "HH:mm"
-                            )}
-                        </Typography>
-                        <Typography
-                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
-                        >
-                            {flightDetails[0]?.Origin?.Airport?.AirportCode} -{" "}
-                            {flightDetails[0]?.Origin?.Airport?.Terminal} Terminal
-                        </Typography>
-                        <Typography
-                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
-                        >
-                            {flightDetails[0]?.Origin?.Airport?.CityName}
-                        </Typography>
-                    </Grid2>
-                   <Grid2 size={4}>
-                        <Typography
-                            sx={{
-                                fontSize: 16,
-                                fontWeight: 700,
+                          <Stack
+                            direction={"row"}
+                            alignItems={"center"}
+                            spacing={1}
+                          >
+                            <Image
+                              src={flight[0]?.AirlineLogo}
+                              alt="Image"
+                              width={30}
+                              height={30}
+                            />
+                            <Typography
+                              sx={{
+                                fontSize: 15,
                                 fontFamily: nunito.style,
-                                textAlign: "center",
-                            }}
+                                fontWeight: 550,
+                              }}
+                            >
+                              {`${flight[0]?.Airline?.AirlineName} Airline`}{" "}
+                              {`(${flight[0]?.Airline?.AirlineCode} ${flight[0]?.Airline?.FlightNumber})`}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      </Grid2>
+
+                      <Grid2 size={4}>
+                        <Typography
+                          sx={{
+                            fontSize: 22,
+                            fontWeight: 700,
+                            fontFamily: nunito.style,
+                          }}
                         >
-                            {`${Math.floor(
-                                moment
-                                    .duration(
-                                        flightDetails[
-                                            flightDetails.length - 1
-                                        ].AccumulatedDuration,
-                                        "minutes"
-                                    )
-                                    .asHours()
-                            )} hrs ${moment
-                                .duration(
-                                    flightDetails[
-                                        flightDetails.length - 1
-                                    ].AccumulatedDuration,
-                                    "minutes"
-                                )
-                                .minutes()} min`}
+                          {moment(flight[0]?.Origin?.DepTime).format("HH:mm")}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 600,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {flight[0]?.Origin?.Airport?.AirportCode} -{" "}
+                          {flight[0]?.Origin?.Airport?.Terminal} Terminal
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 600,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {flight[0]?.Origin?.Airport?.CityName}
+                        </Typography>
+                      </Grid2>
+
+                      <Grid2 size={4}>
+                        <Typography
+                          sx={{
+                            fontSize: 16,
+                            fontWeight: 700,
+                            fontFamily: nunito.style,
+                            textAlign: "center",
+                          }}
+                        >
+                          {`${Math.floor(
+                            moment
+                              .duration(
+                                flight[flight.length - 1].AccumulatedDuration,
+                                "minutes"
+                              )
+                              .asHours()
+                          )} hrs ${moment
+                            .duration(
+                              flight[flight.length - 1].AccumulatedDuration,
+                              "minutes"
+                            )
+                            .minutes()} min`}
                         </Typography>
 
                         <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
-                            <Avatar sx={{ backgroundColor: COLORS.PRIMARY }}>
-                                <FlightTakeoff sx={{ fontSize: 17 }} />
-                            </Avatar>
+                          <Avatar sx={{ backgroundColor: COLORS.PRIMARY }}>
+                            <FlightTakeoff sx={{ fontSize: 17 }} />
+                          </Avatar>
                         </Divider>
-                    </Grid2>
-                        <Grid2 size={4}>
-                        <Typography
-                            sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style, textAlign:'end' }}
-                        >
-                            {moment(
-                                flightDetails[flightDetails?.length - 1]
-                                    ?.Destination?.ArrTime
-                            ).format("HH:mm")}
-                        </Typography>
-                        <Typography
-                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style, textAlign:'end'}}
-                        >
-                            {
-                                flightDetails[flightDetails?.length - 1]
-                                    ?.Destination?.Airport?.AirportCode
-                            }
-                            -{" "}
-                            {
-                                flightDetails[flightDetails?.length - 1]
-                                    ?.Destination?.Airport?.Terminal
-                            } {" "}
-                            Terminal
-                        </Typography>
-                         <Typography
-                            sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style, textAlign:'end' }}
-                        >
-                            {
-                                flightDetails[flightDetails?.length - 1]
-                                    ?.Destination?.Airport?.CityName
-                            }
-                        </Typography>
-                    </Grid2>
-                    {/* <Grid2 size={3} textAlign={"center"}>
-                        <Typography
-                            sx={{ fontSize: 20, fontWeight: 900, fontFamily: nunito.style }}
-                        >
-                            {flightDetails[0]?.TotalFare} ₹
-                        </Typography>
-                    </Grid2> */}
-                </Grid2>
+                      </Grid2>
 
-                <Card
-                    sx={{ boxShadow: "0px 0px 2px 2px rgb(0,0,0,0.10)", p: 1, mt: 2 }}
-                >
-                    <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                    >
+                      <Grid2 size={4}>
                         <Typography
-                            sx={{
-                                fontSize: 15,
-                                color: COLORS.DANGER,
-                                fontFamiy: nunito.style,
-                                fontWeight: 500,
-                            }}
+                          sx={{
+                            fontSize: 22,
+                            fontWeight: 700,
+                            fontFamily: nunito.style,
+                            textAlign: "end",
+                          }}
                         >
-                            Only {flightDetails[0]?.NoOfSeatAvailable} seats left
+                          {moment(
+                            flight[flight?.length - 1]?.Destination?.ArrTime
+                          ).format("HH:mm")}
                         </Typography>
                         <Typography
-                            sx={{
-                                fontSize: 15,
-                                color: refundableValue
-                                    ? COLORS.SUCCESS
-                                    : COLORS.DANGER,
-                                fontFamiy: nunito.style,
-                                fontWeight: 500,
-                            }}
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 600,
+                            fontFamily: nunito.style,
+                            textAlign: "end",
+                          }}
                         >
-                            {refundableValue ? "Refundable" : "Non Refundable"}
+                          {
+                            flight[flight?.length - 1]?.Destination?.Airport
+                              ?.AirportCode
+                          }
+                          -{" "}
+                          {
+                            flight[flight?.length - 1]?.Destination?.Airport
+                              ?.Terminal
+                          }{" "}
+                          Terminal
                         </Typography>
-                        <Button
-                            sx={{
-                                fontSize: 15,
-                                p: 0.4,
-                                fontFamiy: nunito.style,
-                                fontWeight: 500,
-                                color: COLORS.BLACK,
-                                textTransform: "initial",
-                            }}
-                            endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-                            onClick={handleOpenFlightDetails}
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 600,
+                            fontFamily: nunito.style,
+                            textAlign: "end",
+                          }}
                         >
-                            Flight Details
-                        </Button>
-                    </Stack>
-                </Card>
-                <Collapse in={open} sx={{ mt: 2 }}>
-                    <Tabs
-                        value={value}
-                        onChange={tabChangeHandler}
+                          {
+                            flight[flight?.length - 1]?.Destination?.Airport
+                              ?.CityName
+                          }
+                        </Typography>
+                      </Grid2>
+
+                      <Grid2
+                        size={12}
+                        container
                         sx={{
-                            "& .Mui-selected": {
-                                color: `${COLORS.BLACK} !important`,
-                                backgroundColor: COLORS.PRIMARY,
-                                transition: "0.5s ease all",
-                            },
-                            "& .MuiTabs-indicator": {
-                                display: "none",
-                            },
-                            "& .MuiTab-root": {
-                                borderRadius: 8,
-                            },
+                          borderTop: `1px solid ${COLORS.GREY}`,
+                          paddingTop: "10px",
                         }}
-                    >
-                        {data.multiflightTab.map((val, i) => (
-                            <Tab
-                                label={
-                                    <Typography
-                                        sx={{
-                                            fontSize: 14,
-                                            textAlign: "center",
-                                            fontFamily: nunito.style,
-                                            fontWeight: 550,
-                                        }}
-                                    >
-                                        {val.label}
-                                    </Typography>
-                                }
-                                key={i}
-                            />
-                        ))}
-                    </Tabs>
-                    <TabPanel index={0} value={value}>
-                        <FlightBox tableData={flightDetails} />
-                    </TabPanel>
-                    <TabPanel index={1} value={value}>
-                        <MultiBaggageDetails tableData={flightDetails} />
-                    </TabPanel>
-                </Collapse>
-            </Card>
-        </>
-    );
+                      >
+                        <Grid2 size={6}>
+                          <Typography
+                            sx={{
+                              fontSize: 15,
+                              color: COLORS.DANGER,
+                              fontFamiy: nunito.style,
+                              fontWeight: 500,
+                            }}
+                          >
+                            Only {flight[0]?.NoOfSeatAvailable} seats left
+                          </Typography>
+                        </Grid2>
+                        <Grid2 size={6} sx={{ textAlign: "right" }}>
+                          <Typography
+                            sx={{
+                              fontSize: 15,
+                              fontFamiy: nunito.style,
+                              fontWeight: 500,
+                            }}
+                          >
+                            Baggage : {flight[0]?.Baggage} &nbsp; Cabin Baggage
+                            : {flight[0]?.CabinBaggage}
+                          </Typography>
+                        </Grid2>
+                      </Grid2>
+                    </Grid2>
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })}
+          </Grid2>
+
+          {/* second  */}
+          <Grid2 size={12} container>
+            <Grid2 size={6} sx={{ display: "flex", alignItems: "center" }}>
+              <Typography
+                sx={{
+                  fontSize: 15,
+                  fontFamily: nunito.style,
+                  fontWeight: 550,
+                }}
+              >
+                Travel Class : {cabin ? cabin : undefined}
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={6}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: 28,
+                  fontWeight: 900,
+                  fontFamily: nunito.style,
+                  marginRight: "10px",
+                }}
+              >
+                ₹ {flightDetails?.TotalFare}
+              </Typography>
+              <Button
+                sx={{
+                  backgroundColor: COLORS.PRIMARY,
+                  color: COLORS.BLACK,
+                  fontWeight: 550,
+                  fontSize: 16,
+                  fontFamily: nunito.style,
+                }}
+                onClick={routetoAnotherPage}
+              >
+                Book Now
+              </Button>
+            </Grid2>
+          </Grid2>
+        </Grid2>
+      </Card>
+    </>
+  );
 };
 
 export default MultiListBox;

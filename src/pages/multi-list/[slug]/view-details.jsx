@@ -22,7 +22,6 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TextField,
 } from "@mui/material";
 import Image from "next/image";
 import { flightController } from "@/api/flightController";
@@ -53,35 +52,34 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [isLCC, setIsLCC] = useState(null);
   const [flightDetails, setFlightDetails] = useState(null);
-  const [otherDetails, setOtherDetails] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [verifiedData,setVerifiedData]=useState(null);
+  // const [verifiedData,setVerifiedData]=useState(null);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+
+  // console.log("router", router)
+
   useEffect(() => {
     if (router.query.ResultIndex && router.query.traceId) {
-      flightController
-        .flightDetails({
+      flightController.multiflightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: JSON.parse(localStorage.getItem("state"))?.ip_address,
-          journey_type: JOURNEY_TYPE.ONEWAY,
+          ip_address: JSON.parse(localStorage.getItem("multistate"))?.ip_address,
           journey: JOURNEY.DOMESTIC,
+          journey_type : JOURNEY_TYPE.MULTIWAY
         })
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
-            setOtherDetails(response?.data?.data[1]);
-            console.log("otherDetails", response?.data?.data[1]);
+            console.log("multidetail", response?.data?.data)
+            // setOtherDetails(response?.data?.data[1]);
 
             localStorage.setItem(
-              "oneWayflightDetails",
+              "multitripflightDetails",
               JSON.stringify(response?.data?.data)
             );
           }
@@ -101,48 +99,24 @@ const FlightDetails = () => {
     }
   }, [router.query.ResultIndex, router.query.traceId]);
 
-  // ✅ Run checkLCC whenever otherDetails updates
-  useEffect(() => {
-    if (!otherDetails) {
-      setIsLCC(null);
-      return;
-    }
 
-    setLoading(true);
-
-    if (
-      otherDetails.Baggage ||
-      otherDetails.MealDynamic ||
-      otherDetails.SeatDynamic
-    ) {
-      setIsLCC(true); // It's an LCC flight
-    } else if (otherDetails.SeatPreference) {
-      setIsLCC(false); // It's a non-LCC flight
-    } else {
-      setIsLCC(null); // Default fallback
-    }
-
-    setLoading(false);
-  }, [otherDetails]);
 
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
-      localStorage.getItem("oneWayflightDetails")
+      localStorage.getItem("multitripflightDetails")
     ) {
       setTimeout(() => {
         setFlightDetails(
-          JSON.parse(localStorage.getItem("oneWayflightDetails"))
+          JSON.parse(localStorage.getItem("multitripflightDetails"))
         );
       }, 3000);
     }
   }, []);
 
-  console.log("verified data:",verifiedData);
-
   return (
     <>
-      <Grid2 container>
+      {/* <Grid2 container>
         <Grid2
           size={{ xs: "12" }}
           sx={{
@@ -203,7 +177,6 @@ const FlightDetails = () => {
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px" }}>
               <Grid2 container spacing={2}>
-                {/* Flight Details */}
                 <Grid2 size={8}>
                   <Paper
                     sx={{
@@ -212,7 +185,6 @@ const FlightDetails = () => {
                       marginBottom: 2,
                     }}
                   >
-                    {/* Card Section start */}
                     <Card sx={{ padding: "20px", marginBottom: "20px" }}>
                       <Grid2 container>
                         <Grid2 size={{ xs: 8 }}>
@@ -294,11 +266,9 @@ const FlightDetails = () => {
                       </Grid2>
                       <Divider />
 
-                      {/* Intermediate flights start */}
                       <Box>
                         {flightDetails[0]?.Results?.Segments[0]?.map(
                           (segment, index) => {
-                            // console.log("segment:", segment);
                             return (
                               <>
                                 <Grid2
@@ -306,7 +276,7 @@ const FlightDetails = () => {
                                   spacing={1}
                                   sx={{ marginTop: "10px" }}
                                 >
-                                  {/* Flight Segment 1 */}
+            
                                   <Grid2
                                     size={{ xs: 12 }}
                                     sx={{
@@ -484,22 +454,22 @@ const FlightDetails = () => {
                           }
                         )}
                       </Box>
-                      {/* Intermediate flights end */}
                     </Card>
+
+
                     {/* OTP Verification Start */}
-                    {
+
+                    {/* {
                         (!verifiedData)?(
                           <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
                              <UserVerifyForm setVerifiedData={setVerifiedData} />
                           </Card>
                         ):(null)
-                      }
+                      } */}
 
                     {/* OTP verification end */}
-                    {/* Meal Section start */}
 
-                    {/* Meal Section end */}
-                    {
+                    {/* {
                       (verifiedData)?(
                         <Card sx={{ mb: "20px" }}>
                       <PassengerForm
@@ -508,22 +478,14 @@ const FlightDetails = () => {
                           color: COLORS.WHITE,
                         }}
                         flightDetails={flightDetails}
-                        verifiedData={verifiedData}
                       />
                     </Card>
                       ):(null)
-                    }
+                    } 
 
-                    {/* {isLCC ? (
-                        <>
-                        <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:"10px", fontSize:"18px"}}>Pick Your Preferred Seats</Typography>
-                      <FullScreenDialog />
-                      </>
-                    ) : null} */}
                   </Paper>
                 </Grid2>
 
-                {/* Fare Summary */}
                 <Grid2 size={4} sx={{ position: "sticky" }}>
                   <FareSummary fareData={flightDetails[0]?.Results} />
                 </Grid2>
@@ -549,114 +511,115 @@ const FlightDetails = () => {
             />
           </Grid2>
         )}
-      </Grid2>
+      </Grid2> */}
 
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <DialogTitle
-          sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
-          id="customized-dialog-title"
-        >
-          Fare Rules
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={(theme) => ({
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: theme.palette.grey[500],
-          })}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers sx={{ minWidth: "500px" }}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      fontSize: "17px",
-                      textAlign: "center",
-                      fontWeight: 600,
-                      fontFamily: nunito.style,
-                    }}
-                  >
-                    Origin
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: "17px",
-                      textAlign: "center",
-                      fontWeight: 600,
-                      fontFamily: nunito.style,
-                    }}
-                  >
-                    Destination
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: "17px",
-                      textAlign: "center",
-                      fontWeight: 600,
-                      fontFamily: nunito.style,
-                    }}
-                  >
-                    Airline
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {flightDetails &&
-                  flightDetails[0]?.Results?.FareRules?.map(
-                    (fareRule, index) => {
-                      return (
-                        <TableRow>
-                          <TableCell
-                            sx={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                              fontWeight: 600,
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            {fareRule.Origin}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                              fontWeight: 600,
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            {fareRule.Destination}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                              fontWeight: 600,
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            {fareRule.Airline}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    }
-                  )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </DialogContent>
-      </BootstrapDialog>
-      <ToastBar />
+       <BootstrapDialog
+         onClose={handleClose}
+         aria-labelledby="customized-dialog-title"
+         open={open}
+       >
+         <DialogTitle
+           sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
+           id="customized-dialog-title"
+         >
+           Fare Rules
+         </DialogTitle>
+         <IconButton
+           aria-label="close"
+           onClick={handleClose}
+           sx={(theme) => ({
+             position: "absolute",
+             right: 8,
+             top: 8,
+             color: theme.palette.grey[500],
+           })}
+         >
+           <CloseIcon />
+         </IconButton>
+         <DialogContent dividers sx={{ minWidth: "500px" }}>
+           <TableContainer component={Paper}>
+             <Table>
+               <TableHead>
+                 <TableRow>
+                   <TableCell
+                     sx={{
+                       fontSize: "17px",
+                       textAlign: "center",
+                       fontWeight: 600,
+                       fontFamily: nunito.style,
+                     }}
+                   >
+                     Origin
+                   </TableCell>
+                   <TableCell
+                     sx={{
+                       fontSize: "17px",
+                       textAlign: "center",
+                       fontWeight: 600,
+                       fontFamily: nunito.style,
+                     }}
+                   >
+                     Destination
+                   </TableCell>
+                   <TableCell
+                     sx={{
+                       fontSize: "17px",
+                       textAlign: "center",
+                       fontWeight: 600,
+                       fontFamily: nunito.style,
+                     }}
+                   >
+                     Airline
+                   </TableCell>
+                 </TableRow>
+               </TableHead>
+               <TableBody>
+                 {flightDetails &&
+                   flightDetails[0]?.Results?.FareRules?.map(
+                     (fareRule, index) => {
+                       return (
+                         <TableRow>
+                           <TableCell
+                             sx={{
+                               fontSize: "15px",
+                               textAlign: "center",
+                               fontWeight: 600,
+                               fontFamily: nunito.style,
+                             }}
+                           >
+                             {fareRule.Origin}
+                           </TableCell>
+                           <TableCell
+                             sx={{
+                               fontSize: "15px",
+                               textAlign: "center",
+                               fontWeight: 600,
+                               fontFamily: nunito.style,
+                             }}
+                           >
+                             {fareRule.Destination}
+                           </TableCell>
+                           <TableCell
+                             sx={{
+                               fontSize: "15px",
+                               textAlign: "center",
+                               fontWeight: 600,
+                               fontFamily: nunito.style,
+                             }}
+                           >
+                             {fareRule.Airline}
+                           </TableCell>
+                         </TableRow>
+                       );
+                     }
+                   )}
+               </TableBody>
+             </Table>
+           </TableContainer>
+         </DialogContent>
+       </BootstrapDialog>
+       <ToastBar />
+
     </>
   );
 };
