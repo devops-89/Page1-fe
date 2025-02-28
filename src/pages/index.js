@@ -1,5 +1,6 @@
 import AboutUs from "@/components/aboutus";
 import Banner from "@/components/banner";
+import CheckoutPage from "@/components/checkoutPage";
 import Faq from "@/components/faq";
 import Festivals from "@/components/festivals";
 import Hotel from "@/components/hotels";
@@ -20,13 +21,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.png" />
       </Head>
        <Box>
- 
+      
         <Banner />
         <Box>
           <Services />
         </Box>
         <Box sx={{ backgroundColor: COLORS.LIGHTBLUE }}>
-          <AboutUs />
+          {/* <AboutUs /> */}
+          <CheckoutPage/>
         </Box>
         <Box sx={{ pt: {lg:10,md:5} }}>
            <Festivals /> 
