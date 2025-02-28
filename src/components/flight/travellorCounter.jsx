@@ -6,33 +6,29 @@ import { IconButton, Stack, TextField, Typography } from "@mui/material";
 const TravellorCounter = ({
   heading,
   value,
-  setValue,
   onIncrease,
   onDecrease,
-  initialValue
+  initialValue,
 }) => {
-  // const increaseCounter = () => {
-  //   setValue(value + 1);
-  //   valueDetector(value + 1);
-  // };
-  // const decreaseCounter = () => {
-  //   setValue(value - 1);
-  //   valueDetector(value - 1);
-  // };
   return (
-    <Stack direction={"column"}  alignItems={"start"} justifyContent={"start"} > 
+    <Stack direction={"column"} alignItems={"start"} justifyContent={"start"}>
       <Typography
         sx={{
-          fontSize: {lg:13 ,xs:12},
+          fontSize: { lg: 13, xs: 12 },
           color: COLORS.BLACK,
           fontFamily: nunito.style,
-        
         }}
         mt={2}
       >
         {heading}
       </Typography>
-      <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} width={100}  mt={1}>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        width={100}
+        mt={1}
+      >
         <IconButton
           sx={{
             backgroundColor: COLORS.GREY,
@@ -44,7 +40,7 @@ const TravellorCounter = ({
           onClick={onDecrease}
           disabled={value === initialValue}
         >
-          <Remove sx={{ fontSize: {lg:20 ,md:20 ,sm:20,xs:10}   }} />
+          <Remove sx={{ fontSize: { lg: 20, md: 20, sm: 20, xs: 10 } }} />
         </IconButton>
         <TextField
           sx={{
@@ -71,7 +67,7 @@ const TravellorCounter = ({
           }}
           onClick={onIncrease}
         >
-          <Add sx={{ fontSize: {lg:20 ,md:20 ,sm:20,xs:15} }} />
+          <Add sx={{ fontSize: { lg: 20, md: 20, sm: 20, xs: 15 } }} />
         </IconButton>
       </Stack>
     </Stack>
