@@ -5,15 +5,16 @@ import {
   Box,
   Button,
   FormControlLabel,
-  Grid2,
+  Grid,
   Radio,
   RadioGroup,
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TravellorCounter from "./travellorCounter";
 import { useRouter } from "next/router";
+import useTravellerValidation from "@/custom-hook/useTravellerValidation";
 
 const TravellerSelector = ({
   setAnchorEl,
@@ -27,112 +28,146 @@ const TravellerSelector = ({
   setChildValue,
   initialValue,
   newFormData,
-  defaultRoute
+  defaultRoute,
 }) => {
   const router = useRouter();
+  const [validationErrors, setValidationErrors] = useState(null);
 
   useEffect(() => {
     if (router.pathname === defaultRoute && newFormData) {
       setState((prevState) => ({
         ...prevState,
-        cabin_class: newFormData.cabin_class || e.target.value
+        cabin_class: newFormData.cabin_class || "",
       }));
     }
-  }, [router.pathname, defaultRoute, newFormData]);
-
+  }, [router.pathname, defaultRoute, newFormData, setState]);
 
   const flightClassHandler = (e) => {
     setState((prevState) => ({
       ...prevState,
-      cabin_class: e.target.value
+      cabin_class: e.target.value,
     }));
   };
 
-  const adultIncreaseCounter = () => {
-    setAdultValue((prev) => prev + 1);
-    setState((prev) => ({ ...prev, adult: prev.adult + 1 }));
-  };
-  const adultDecreaseCounter = () => {
-    if (adultValue > 1) {
-      setAdultValue((prev) => prev - 1);
-      setState((prev) => ({ ...prev, adult: prev.adult - 1 }));
+  const { errors, validateTravelers } = useTravellerValidation({
+    adultValue,
+    childValue,
+    infantValue,
+  });
+
+  const updateTravellerCount = (type, action) => {
+    let updatedValue = 0;
+
+    if (type === "adult") {
+      updatedValue = action === "increase" ? adultValue + 1 : adultValue - 1;
+      if (updatedValue >= 1) setAdultValue(updatedValue);
+    } else if (type === "child") {
+      updatedValue = action === "increase" ? childValue + 1 : childValue - 1;
+      if (updatedValue >= 0) setChildValue(updatedValue);
+    } else if (type === "infant") {
+      updatedValue = action === "increase" ? infantValue + 1 : infantValue - 1;
+      if (updatedValue >= 0) setInfantValue(updatedValue);
+    }
+
+    setState((prev) => ({ ...prev, [type]: updatedValue }));
+
+    if (!validateTravelers()) {
+      setValidationErrors(errors);
+    } else {
+      setValidationErrors(null);
     }
   };
-  const childIncreaseCounter = () => {
-    setChildValue((prev) => prev + 1);
-    setState((prev) => ({ ...prev, child: prev.child + 1 }));
-  };
-  const childDecreaseCounter = () => {
-    if (childValue > 0) {
-      setChildValue((prev) => prev - 1);
-      setState((prev) => ({ ...prev, child: prev.child - 1 }));
-    }
-  };
-  const infantIncreaseCounter = () => {
-    setInfantValue((prev) => prev + 1);
-    setState((prev) => ({ ...prev, infant: prev.infant + 1 }));
-  };
-  const infantDecreaseCounter = () => {
-    if (infantValue > 0) {
-      setInfantValue((prev) => prev - 1);
-      setState((prev) => ({ ...prev, infant: prev.infant - 1 }));
+
+  const handleApply = () => {
+    if (validateTravelers()) {
+      setAnchorEl(null);
+      setValidationErrors(null);
+    } else {
+      setValidationErrors(errors);
+      console.log("Validation errors:", errors);
     }
   };
 
   return (
-    <div >
+    <div>
       <Typography
-       sx={{ fontFamily: nunito.style, fontSize: {lg:20,xs:15,sm:20 ,md:20}, fontWeight: 600 , textAlign:{xs:"center"}}}>
+        sx={{
+          fontFamily: nunito.style,
+          fontSize: { lg: 20, xs: 15, sm: 20, md: 20 },
+          fontWeight: 600,
+          textAlign: { xs: "center" },
+        }}
+      >
         Select Travelers & Class
       </Typography>
 
-      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, m:1 }}>
-        <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
+      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, m: 1 }}>
+        <Typography
+          sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}
+        >
           Travellers
         </Typography>
-        <Grid2 container spacing={{lg:4 ,md:4 ,sm:4 ,xs:1}}  >
-          <Grid2 size={{lg:4 ,md:4 ,sm:4 ,xs:6}}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
             <TravellorCounter
-              heading={"Adults ( 12+ Yrs )"}
+              heading="Adults (12+ Yrs)"
               value={adultValue}
               setValue={setAdultValue}
-              onIncrease={adultIncreaseCounter}
-              onDecrease={adultDecreaseCounter}
+              onIncrease={() => updateTravellerCount("adult", "increase")}
+              onDecrease={() => updateTravellerCount("adult", "decrease")}
               initialValue={initialValue.adult}
             />
-          </Grid2>
-          <Grid2 size={{lg:4 ,md:4 ,sm:4 ,xs:6}}>
+          </Grid>
+          <Grid item xs={12} sm={4}>
             <TravellorCounter
-              heading={"Childrens ( 2-12 Yrs )"}
+              heading="Children (2-12 Yrs)"
               value={childValue}
               setValue={setChildValue}
-              onIncrease={childIncreaseCounter}
-              onDecrease={childDecreaseCounter}
+              onIncrease={() => updateTravellerCount("child", "increase")}
+              onDecrease={() => updateTravellerCount("child", "decrease")}
               initialValue={initialValue.child}
             />
-          </Grid2>
-          <Grid2 size={{lg:4 ,md:4 ,sm:4 ,xs:6}}>
+          </Grid>
+          <Grid item xs={12} sm={4}>
             <TravellorCounter
-              heading={"Infants( 0-2 Yrs )"}
+              heading="Infants (0-2 Yrs)"
               value={infantValue}
               setValue={setInfantValue}
-              onIncrease={infantIncreaseCounter}
-              onDecrease={infantDecreaseCounter}
+              onIncrease={() => updateTravellerCount("infant", "increase")}
+              onDecrease={() => updateTravellerCount("infant", "decrease")}
               initialValue={initialValue.infant}
             />
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
+
+        {validationErrors && (
+          <Box sx={{ mt: 2, color: "red" }}>
+            {validationErrors.maxTravelers && (
+              <Typography>Total travelers cannot exceed 9.</Typography>
+            )}
+            {validationErrors.infantLimit && (
+              <Typography>
+                Infants cannot exceed total adults and children.
+              </Typography>
+            )}
+            {validationErrors.adultInfantRatio && (
+              <Typography>
+                Adults must be more than the sum of children and infants.
+              </Typography>
+            )}
+          </Box>
+        )}
       </Box>
 
-      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2 ,m:1 }}>
-        <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
+      <Box
+        sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2, m: 1 }}
+      >
+        <Typography
+          sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}
+        >
           Flight Class
         </Typography>
-        <RadioGroup 
-          row 
-          value={state.cabin_class} 
-          onChange={flightClassHandler} // Properly updating state
-        >
+        <RadioGroup row value={state.cabin_class} onChange={flightClassHandler}>
           {data.FLIGHT_CLASS_DATA.map((val, i) => (
             <FormControlLabel
               key={i}
@@ -144,7 +179,13 @@ const TravellerSelector = ({
         </RadioGroup>
       </Box>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={{lg:4 ,md:4,sm:4,xs:2}} m={2}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-end"
+        spacing={2}
+        m={2}
+      >
         <Button
           sx={{
             backgroundColor: COLORS.GREY,
@@ -160,6 +201,7 @@ const TravellerSelector = ({
           Cancel
         </Button>
         <Button
+          disabled={!!validationErrors}
           sx={{
             backgroundColor: COLORS.SECONDARY,
             color: COLORS.WHITE,
@@ -169,7 +211,7 @@ const TravellerSelector = ({
             borderRadius: 6,
             width: 80,
           }}
-          onClick={() => setAnchorEl(null)}
+          onClick={handleApply}
         >
           Apply
         </Button>
