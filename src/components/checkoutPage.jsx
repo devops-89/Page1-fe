@@ -331,7 +331,7 @@ export default function CheckoutPage() {
             >
               <Box sx={{borderBottom: 1, backgroundColor:COLORS.WHITE,  p:2}}>
               <Box sx={{ borderBottom: 1 }}>
-                <Typography
+                <Typography variant="h6"
                   sx={{
                     fontFamily:nunito.style,
                     fontWeight: "bold",
@@ -344,58 +344,57 @@ export default function CheckoutPage() {
               </Box>
               {/* GIVE BOX TO GET BORDER BOTTOM */}
               <Box
-                sx={{ borderBottom: 1, borderColor: COLORS.GREY, p: 1, pb: 4 }}
+                sx={{ borderBottom: 1, borderColor: COLORS.GREY, p: 1, pb: 2 }}
               >
-                <Typography
-                  sx={{  fontFamily:nunito.style, fontWeight: "bold", color: COLORS.BLACK }}
+                <Typography variant="body1"
+                  sx={{  fontFamily:nunito.style, fontWeight: "bold", mb:1 }}
                 >
                   Departure
                 </Typography>
-                <Typography sx={{  fontFamily:nunito.style, color: COLORS.DARKGREY }}>
+                <Typography variant="body2" sx={{  fontFamily:nunito.style, color: COLORS.DARKGREY, mb:2 }}>
                   Mon 2 jun 2025
                 </Typography>
-                <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <Stack sx={{mb:2}} direction={"row"} alignItems={"center"} spacing={1}>
                   <Typography
                     sx={{
-                      fontSize: 14,
+                      fontFamily:nunito.style,
                       fontWeight: "bold",
                       color: COLORS.BLACK,
                     }}
                   >
                     Discount Voucher
                   </Typography>
-                  <Typography sx={{ fontSize: 12, color: COLORS.DARKGREY }}>
-                    Mon 2 jun 2025
+                  <Typography variant="body2" sx={{ fontFamily:nunito.style, color: COLORS.DARKGREY }}>
+                    WELCOME50
                   </Typography>
                 </Stack>
-                <Typography sx={{ fontSize: 12, color: COLORS.DARKGREY }}>
+                <Typography sx={{ fontFamily:nunito.style, color: COLORS.DARKGREY }}>
                   DEL New Delhi -BOM Mumbai
                 </Typography>
               </Box>
               <Box
                 sx={{ borderBottom: 1, borderColor: COLORS.GREY, p: 1, pb: 4 }}
               >
-                <Typography
-                  sx={{ fontSize: 16, fontWeight: "bold", color: COLORS.BLACK }}
+                <Typography variant="h6"
+                  sx={{ fontFamily:nunito.style, fontWeight: "bold", color: COLORS.BLACK }}
                 >
                   Bags
                 </Typography>
                 <Grid2 container mt={2}>
                   <Grid2 size={12}>
-                    <Stack direction="row" alignItems={"center"}>
+                    <Stack direction="row" alignItems={"center"} spacing={1}>
                       <CategoryRoundedIcon />
                       <Typography
                         sx={{
-                          fontSize: 14,
+                          fontFamily:nunito.style,
                           fontWeight: "bold",
-                          color: COLORS.BLACK,
                         }}
                       >
-                        personal item
+                        Personal item
                       </Typography>
                     </Stack>
-                    <Typography sx={{ fontSize: 12, color: COLORS.DARKGREY }}>
-                      personal item included for all passengers
+                    <Typography sx={{ fontFamily:nunito.style, color: COLORS.DARKGREY }}>
+                      Personal item included for all passengers
                     </Typography>
                   </Grid2>
                 </Grid2>
@@ -430,7 +429,7 @@ export default function CheckoutPage() {
                 }}
               >
                 <Typography
-                  sx={{ fontSize: 14, fontWeight: "bold", color: COLORS.BLACK }}
+                  sx={{ fontSize: 14, fontWeight: "bold" }}
                 >
                   Contact information
                 </Typography>
