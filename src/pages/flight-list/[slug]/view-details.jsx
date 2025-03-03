@@ -153,7 +153,8 @@ const FlightDetails = () => {
             justifyContent: "center",
             py: "10px",
           }}
-        >
+          >
+        
           <Typography
             variant="h5"
             sx={{
@@ -202,6 +203,7 @@ const FlightDetails = () => {
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px" }}>
               <Grid2 container spacing={2}>
+               
                 {/* Flight Details */}
                 <Grid2 size={8}>
                   <Paper
