@@ -60,7 +60,7 @@ export default function CheckoutPage() {
       </Grid2>
 
       {/* Section 2  */}
-      <Grid2 size={{ xs: 12 }} sx={{ border: "2px solid red", py: 5 }}>
+      <Grid2 size={{ xs: 12 }} sx={{ py: 5 }}>
         <Container>
           <Typography
             variant="h5"
@@ -72,7 +72,7 @@ export default function CheckoutPage() {
           >
             Payment Now
           </Typography>
-          <Grid2 size={{ xs: 12 }} container spacing={3}>
+          <Grid2 size={{ xs: 12 }} container spacing={3} alignItems={'flex-start'}>
             <Grid2
               size={{ xs: 12, sm: 12, md: 8 }}
               sx={{ backgroundColor: COLORS.SEMIGREY, p: 2, borderRadius: 2 }}
