@@ -3,7 +3,6 @@ import {
   Divider,
   Stack,
   Box,
-
   Typography,
   FormControl,
   RadioGroup,
@@ -16,10 +15,10 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Card
+  Card,
 } from "@mui/material";
 import pointerImage from "@/../public/images/pointer.png";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { COLORS } from "@/utils/colors";
 import visa from "@/checkout/visa.png";
 import test from "@/checkout/test.png";
@@ -28,10 +27,21 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Image from "next/image";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
-import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import { nunito } from "@/utils/fonts";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function CheckoutPage() {
+  const router = useRouter();
+
+  const [oneWay, setOneWay]= useState();
+
+  console.log("router", router);
+
+  useEffect(()=>{
+    setOneWay(JSON.parse(localStorage.getItem('oneWayflightDetails')));
+  },[router])
+
   return (
     <Grid2 container>
       {/* top bar  */}
@@ -61,6 +71,7 @@ export default function CheckoutPage() {
 
       {/* Section 2  */}
       <Grid2 size={{ xs: 12 }} sx={{ py: 5 }}>
+
         <Container>
           <Typography
             variant="h5"
@@ -72,7 +83,13 @@ export default function CheckoutPage() {
           >
             Payment Now
           </Typography>
-          <Grid2 size={{ xs: 12 }} container spacing={3} alignItems={'flex-start'}>
+
+          <Grid2
+            size={{ xs: 12 }}
+            container
+            spacing={3}
+            alignItems={"flex-start"}
+          >
             <Grid2
               size={{ xs: 12, sm: 12, md: 8 }}
               sx={{ backgroundColor: COLORS.SEMIGREY, p: 2, borderRadius: 2 }}
@@ -98,6 +115,7 @@ export default function CheckoutPage() {
                   <Image src={visa} width="50" objectFit="contain" />
                   <Image src={test} width="50" objectFit="contain" />
                 </Stack>
+                
                 {/* form for payment option */}
                 <FormControl sx={{ width: "100%" }}>
                   <RadioGroup name="paymentMethod">
@@ -203,8 +221,15 @@ export default function CheckoutPage() {
                 {/* form for payment option */}
 
                 {/* fare details */}
-                <Accordion sx={{ border: 0.1, borderColor:COLORS.LIGHTGREY, mt: 2, borderRadius: 1 }}>
-                <AccordionSummary
+                <Accordion
+                  sx={{
+                    border: 0.1,
+                    borderColor: COLORS.LIGHTGREY,
+                    mt: 2,
+                    borderRadius: 1,
+                  }}
+                >
+                  <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel-content"
                     id="panel-header"
@@ -221,11 +246,11 @@ export default function CheckoutPage() {
                         fontFamily: nunito.style,
                       }}
                     >
-                    Delhi to Mumbai
+                      Delhi to Mumbai
                     </Typography>
-                  </AccordionSummary> 
+                  </AccordionSummary>
                   <AccordionDetails>
-                  <Card sx={{ padding: "20px", marginBottom: "20px" }}>
+                    <Card sx={{ padding: "20px", marginBottom: "20px" }}>
                       <Grid2 container>
                         <Grid2 size={{ xs: 8 }}>
                           <Typography
@@ -237,8 +262,7 @@ export default function CheckoutPage() {
                               fontWeight: 700,
                             }}
                           >
-                            Delhi
-                            → Mumbai
+                            Delhi → Mumbai
                           </Typography>
                           <Typography
                             variant="subtitle1"
@@ -253,255 +277,264 @@ export default function CheckoutPage() {
                                 fontFamily: nunito.style,
                               }}
                             >
-                             Mon, Mar 24
+                              Mon, Mar 24
                             </span>{" "}
                             0 stop .2 hrs 20 min
-                         
                           </Typography>
                         </Grid2>
-                      
                       </Grid2>
                       <Divider />
 
-                    
-                                <Grid2
-                                  container
-                                  spacing={1}
-                                  sx={{ marginTop: "10px" }}
-                                >
-                                  {/* Flight Segment 1 */}
-                                  <Grid2
-                                    size={{ xs: 12 }}
-                                    sx={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "5px",
-                                    }}
-                                  >
-                                    {/* <Image
+                      <Grid2 container spacing={1} sx={{ marginTop: "10px" }}>
+                        {/* Flight Segment 1 */}
+                        <Grid2
+                          size={{ xs: 12 }}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          {/* <Image
                                       src={?.AirlineLogo}
                                       alt="Image"
                                       width={30}
                                       height={30}
                                     /> */}
-                                    <Typography
-                                      variant="subtitle1"
-                                      gutterBottom
-                                      sx={{
-                                        fontFamily: nunito.style,
-                                        fontWeight: 600,
-                                      }}
-                                    >
-                                      IndiGo 6E 6051
-                                    </Typography>
-                                  </Grid2>
-                                  <Grid2
-                                    size={{ xs: 12 }}
-                                    sx={{
-                                      backgroundColor: "#F4F4F4",
-                                      padding: "15px",
-                                      borderRadius: "4px",
-                                    }}
-                                  >
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 700,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                      13:00
-                                      - Delhi (DEL)
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "10px",
-                                        marginLeft: "65px",
-                                      }}
-                                    >
-                                      <img
-                                        src={pointerImage.src}
-                                        style={{ width: "16px" }}
-                                      />{" "}
-                                       2 hrs :20 min
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 700,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                      15:20
-                                    {" "}
-                                      - Mumbai {"(BOM)"}
-                                    </Typography>
-                                  </Grid2>
+                          <Typography
+                            variant="subtitle1"
+                            gutterBottom
+                            sx={{
+                              fontFamily: nunito.style,
+                              fontWeight: 600,
+                            }}
+                          >
+                            IndiGo 6E 6051
+                          </Typography>
+                        </Grid2>
+                        <Grid2
+                          size={{ xs: 12 }}
+                          sx={{
+                            backgroundColor: "#F4F4F4",
+                            padding: "15px",
+                            borderRadius: "4px",
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 700,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            13:00 - Delhi (DEL)
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              marginLeft: "65px",
+                            }}
+                          >
+                            <img
+                              src={pointerImage.src}
+                              style={{ width: "16px" }}
+                            />{" "}
+                            2 hrs :20 min
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 700,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            15:20 - Mumbai {"(BOM)"}
+                          </Typography>
+                        </Grid2>
 
-                                  <Grid2
-                                    size={{ xs: 12 }}
-                                    sx={{
-                                      display: "flex",
-                                      gap: "20px",
-                                      flexWrap: "wrap",
-                                      backgroundColor: "#FFEDD1",
-                                      padding: "5px",
-                                      borderRadius: "4px",
-                                    }}
-                                  >
-                                    <Typography
-                                      variant="body2"
-                                      sx={{
-                                        fontFamily: nunito.style,
-                                        fontWeight: 500,
-                                      }}
-                                    >
-                                      <strong>Baggage :</strong>{" "}
-                                      15 kilograms
-                                    </Typography>
-                                    <Typography
-                                      variant="body2"
-                                      sx={{
-                                        fontFamily: nunito.style,
-                                        fontWeight: 500,
-                                      }}
-                                    >
-                                      <strong>Cabin Baggage :</strong>{" "}
-                                     7kg
-                                    </Typography>
-                                  </Grid2>
-                                </Grid2>
-                                <Divider />
+                        <Grid2
+                          size={{ xs: 12 }}
+                          sx={{
+                            display: "flex",
+                            gap: "20px",
+                            flexWrap: "wrap",
+                            backgroundColor: "#FFEDD1",
+                            padding: "5px",
+                            borderRadius: "4px",
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontFamily: nunito.style,
+                              fontWeight: 500,
+                            }}
+                          >
+                            <strong>Baggage :</strong> 15 kilograms
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontFamily: nunito.style,
+                              fontWeight: 500,
+                            }}
+                          >
+                            <strong>Cabin Baggage :</strong> 7kg
+                          </Typography>
+                        </Grid2>
+                      </Grid2>
+                      <Divider />
 
-                               <Box sx={{mt:2 , p:1 , border: 0.1, borderColor:COLORS.LIGHTGREY, borderRadius:1}}>
-                               <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: "bold",
-                        fontFamily: nunito.style,
-                        p:1
-                      }}
-                    >
-                   Fare Summary
-                    </Typography>
+                      <Box
+                        sx={{
+                          mt: 2,
+                          p: 1,
+                          border: 0.1,
+                          borderColor: COLORS.LIGHTGREY,
+                          borderRadius: 1,
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontWeight: "bold",
+                            fontFamily: nunito.style,
+                            p: 1,
+                          }}
+                        >
+                          Fare Summary
+                        </Typography>
 
-                      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} mt={1}  p={1}>
-                      <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 600,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                     Base Amount
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 600,
-                                        fontFamily: nunito.style,
-                                        textAlign:"center"
-                                      }}
-                                    >
-                                   4483 <CurrencyRupeeIcon sx={{ fontSize:15}}/>
-                                    </Typography>
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}
+                          mt={1}
+                          p={1}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            Base Amount
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                              textAlign: "center",
+                            }}
+                          >
+                            4483 <CurrencyRupeeIcon sx={{ fontSize: 15 }} />
+                          </Typography>
+                        </Stack>
 
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}
+                          mt={1}
+                          p={1}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            Taxes and Surcharges
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                              textAlign: "center",
+                            }}
+                          >
+                            717 <CurrencyRupeeIcon sx={{ fontSize: 15 }} />
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}
+                          mt={1}
+                          p={1}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            Discount
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                              textAlign: "center",
+                            }}
+                          >
+                            0 <CurrencyRupeeIcon sx={{ fontSize: 15 }} />
+                          </Typography>
+                        </Stack>
 
-
-                      </Stack>
-
-                      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}  mt={1}  p={1}>
-                      <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 600,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                     
-                                     Taxes and Surcharges
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 600,
-                                        fontFamily: nunito.style,
-                                        textAlign:"center"
-                                      }}
-                                    >
-                                   717 <CurrencyRupeeIcon sx={{ fontSize:15}}/>
-                                    </Typography>
-
-
-
-                      </Stack>
-                      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}  mt={1}  p={1}>
-                      <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 600,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                     Discount
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 600,
-                                        fontFamily: nunito.style,
-                                        textAlign:"center"
-                                      }}
-                                    >
-                                   0 <CurrencyRupeeIcon sx={{ fontSize:15}}/>
-                                    </Typography>
-
-
-
-                      </Stack>
-                      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"} mt={2} borderTop={1} p={1} borderRadius={0} borderColor={COLORS.LIGHTGREY}>
-                      <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 700,
-                                        fontFamily: nunito.style,
-                                      }}
-                                    >
-                                     Total Amount
-                                    </Typography>
-                                    <Typography
-                                      variant="body1"
-                                      sx={{
-                                        fontWeight: 700,
-                                        fontFamily: nunito.style,
-                                        textAlign:"center"
-                                      }}
-                                    >
-                                   5200 <CurrencyRupeeIcon sx={{ fontSize:15}}/>
-                                    </Typography>
-
-
-
-                      </Stack>
-                               </Box>
-                           
-                        
-                          
-                        
-                    
-                     
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          justifyContent={"space-between"}
+                          mt={2}
+                          borderTop={1}
+                          borderRadius={0}
+                          borderColor={COLORS.LIGHTGREY}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 700,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            Total Amount
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              fontWeight: 700,
+                              fontFamily: nunito.style,
+                              textAlign: "center",
+                            }}
+                          >
+                            5200 <CurrencyRupeeIcon sx={{ fontSize: 15 }} />
+                          </Typography>
+                        </Stack>
+                      </Box>
                     </Card>
-                    
-                    </AccordionDetails>
-                  </Accordion>
+                  </AccordionDetails>
+                </Accordion>
 
+                {/* fare details */}
 
-                  {/* fare details */}
-
-                <Accordion sx={{ border: 0.2 , borderColor:COLORS.LIGHTGREY, mt: 2, borderRadius: 1 }}>
+                <Accordion
+                  sx={{
+                    border: 0.2,
+                    borderColor: COLORS.LIGHTGREY,
+                    mt: 2,
+                    borderRadius: 1,
+                  }}
+                >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel-content"
@@ -557,7 +590,15 @@ export default function CheckoutPage() {
                 </Accordion>
                 {/* </Box> */}
 
-                <Box sx={{  border: 0.2 , borderColor:COLORS.LIGHTGREY, mt: 2, p: 2, borderRadius: 1 }}>
+                <Box
+                  sx={{
+                    border: 0.2,
+                    borderColor: COLORS.LIGHTGREY,
+                    mt: 2,
+                    p: 2,
+                    borderRadius: 1,
+                  }}
+                >
                   <Typography
                     variant="h6"
                     sx={{
@@ -565,20 +606,22 @@ export default function CheckoutPage() {
                       fontFamily: nunito.style,
                     }}
                   >
-                 Fare Summary
+                    Fare Summary
                   </Typography>
 
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
                     justifyContent={"space-between"}
-                     mt={1}
+                    mt={1}
                   >
                     <Typography sx={{ fontFamily: nunito.style }}>
                       Base Amount
                     </Typography>
-                    <Typography sx={{ fontFamily: nunito.style ,textAlign:"center" }}>
-                      4483 <CurrencyRupeeIcon sx={{ fontSize:16}}/>
+                    <Typography
+                      sx={{ fontFamily: nunito.style, textAlign: "center" }}
+                    >
+                      4483 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
                     </Typography>
                   </Stack>
 
@@ -591,8 +634,10 @@ export default function CheckoutPage() {
                     <Typography sx={{ fontFamily: nunito.style }}>
                       taxes and subCharges
                     </Typography>
-                    <Typography sx={{ fontFamily: nunito.style ,textAlign:"center" }}>
-                      4483 <CurrencyRupeeIcon sx={{ fontSize:16}}/>
+                    <Typography
+                      sx={{ fontFamily: nunito.style, textAlign: "center" }}
+                    >
+                      4483 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
                     </Typography>
                   </Stack>
 
@@ -603,10 +648,12 @@ export default function CheckoutPage() {
                     mt={1}
                   >
                     <Typography sx={{ fontFamily: nunito.style }}>
-                      Discount 
+                      Discount
                     </Typography>
-                    <Typography sx={{ fontFamily: nunito.style ,textAlign:"center" }}>
-                      0 <CurrencyRupeeIcon sx={{ fontSize:16}}/>
+                    <Typography
+                      sx={{ fontFamily: nunito.style, textAlign: "center" }}
+                    >
+                      0 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
                     </Typography>
                   </Stack>
 
@@ -618,20 +665,17 @@ export default function CheckoutPage() {
                     borderTop={1}
                     p={1}
                   >
-                    <Typography sx={{ fontFamily: nunito.style , fontWeight: "bold",  }}>
-                      Total Amount 
+                    <Typography
+                      sx={{ fontFamily: nunito.style, fontWeight: "bold" }}
+                    >
+                      Total Amount
                     </Typography>
-                    <Typography sx={{ fontFamily: nunito.style ,textAlign:"center" }}>
-                      5200 <CurrencyRupeeIcon sx={{ fontSize:16}}/>
+                    <Typography
+                      sx={{ fontFamily: nunito.style, textAlign: "center" }}
+                    >
+                      5200 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
                     </Typography>
                   </Stack>
-
-
-
-
-                 
-
-                 
 
                   <FormControlLabel
                     control={<Checkbox defaultChecked />}
@@ -784,7 +828,7 @@ export default function CheckoutPage() {
                     DEL New Delhi -BOM Mumbai
                   </Typography>
                 </Box>
-               
+
                 {/* contact information */}
                 <Box
                   sx={{

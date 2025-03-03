@@ -293,8 +293,12 @@ const PassengerForm = ({ flightDetails, myState }) => {
                 message: response.data.message,
                 severity: TOAST_STATUS.SUCCESS,
               })
-            );
+            );   
             setLoading(false);
+            setTimeout(() => {
+              router.push('/checkout')
+            }, 2000);
+           
           }
         })
         .catch((error) => {
@@ -320,16 +324,7 @@ const PassengerForm = ({ flightDetails, myState }) => {
   }
 
 
-  // route checkout page 
 
-  const handleCheckout=()=>{
-    router.push({
-      pathname: `/checkout`,
-      query: {
-        formValue: values,
-      },
-    });
-  }
 
 
   return (
@@ -481,18 +476,18 @@ const PassengerForm = ({ flightDetails, myState }) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       errors={errors}
-                      formType="infant" // Added formType prop
+                      formType="infant" 
                     />
                   </Box>
                 ))}
 
                 {isPassportRequired && (
                   <PassportForm
-                    values={values.passport} // corrected values prop
+                    values={values.passport} 
                     handleChange={handleChange}
                     handleBlur={handleBlur}
-                    errors={errors.passport} // corrected errors prop
-                    touched={touched.passport} // corrected touched prop
+                    errors={errors.passport} 
+                    touched={touched.passport} 
                   />
                 )}
                 {isGSTMandatory && (
@@ -515,7 +510,6 @@ const PassengerForm = ({ flightDetails, myState }) => {
 
                 <Box sx={{ mt: 2 }}>
                   <Button
-                    onClick={handleCheckout}
                     type="submit"
                     variant="contained"
                     sx={{ backgroundColor: COLORS.PRIMARY }}
