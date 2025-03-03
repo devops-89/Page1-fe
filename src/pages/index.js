@@ -27,8 +27,7 @@ export default function Home() {
           <Services />
         </Box>
         <Box sx={{ backgroundColor: COLORS.LIGHTBLUE }}>
-          {/* <AboutUs /> */}
-          <CheckoutPage/>
+          <AboutUs />
         </Box>
         <Box sx={{ pt: {lg:10,md:5} }}>
            <Festivals /> 

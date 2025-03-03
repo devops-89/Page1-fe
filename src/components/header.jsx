@@ -3,7 +3,8 @@ import logo from "@/logo/logo.png";
 import { removeUserDetails } from "@/redux/reducers/user";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
-import { Person, ShoppingBag } from "@mui/icons-material";
+import { ShoppingBag } from "@mui/icons-material";
+import PersonIcon from '@mui/icons-material/Person';
 import {
   Avatar,
   Box,
@@ -166,7 +167,7 @@ const Header = () => {
                 border: `1px solid ${COLORS.WHITE}`,
               }}
             >
-              <ShoppingBag sx={{ fontSize: {lg:14 ,sm:14 ,xs:10}, color: COLORS.PRIMARY }} />
+              <ShoppingBag sx={{ color: COLORS.PRIMARY, fontSize: {lg:14 ,sm:14 ,xs:10} }} />
             </IconButton>
             {user?.isAuthenticated ? (
               <IconButton
@@ -201,7 +202,7 @@ const Header = () => {
                 }}
                 onClick={() => router.push("/login")}
               >
-                <Person sx={{ fontSize: {lg:14 ,sm:12 ,xs:10}, color: COLORS.PRIMARY }} />
+                <PersonIcon sx={{color: COLORS.PRIMARY, fontSize: {lg:14 ,sm:12 ,xs:10}, zIndex:999 }} />
               </IconButton>
             )}
            
