@@ -20,6 +20,11 @@ export const JOURNEY_TYPE = {
   MULTIWAY: "MULTICITY",
 };
 
+export const COMMISSION_TYPE = {
+  FIXED : "FIXED",
+  PERCENTAGE : "PERCENTAGE"
+};
+
 export const PREFERRED_TIME = {
   Morning: "Morning",
   AfterNoon: "AfterNoon",

@@ -24,7 +24,6 @@ import visa from "@/checkout/visa.png";
 import test from "@/checkout/test.png";
 import phonepay from "@/checkout/phonepay.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Image from "next/image";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import { nunito } from "@/utils/fonts";
@@ -34,13 +33,13 @@ import { useEffect, useState } from "react";
 export default function CheckoutPage() {
   const router = useRouter();
 
-  const [oneWay, setOneWay]= useState();
+  const [oneWay, setOneWay] = useState();
 
   console.log("router", router);
 
-  useEffect(()=>{
-    setOneWay(JSON.parse(localStorage.getItem('oneWayflightDetails')));
-  },[router])
+  useEffect(() => {
+    setOneWay(JSON.parse(localStorage.getItem("oneWayflightDetails")));
+  }, [router]);
 
   return (
     <Grid2 container>
@@ -71,7 +70,6 @@ export default function CheckoutPage() {
 
       {/* Section 2  */}
       <Grid2 size={{ xs: 12 }} sx={{ py: 5 }}>
-
         <Container>
           <Typography
             variant="h5"
@@ -115,7 +113,7 @@ export default function CheckoutPage() {
                   <Image src={visa} width="50" objectFit="contain" />
                   <Image src={test} width="50" objectFit="contain" />
                 </Stack>
-                
+
                 {/* form for payment option */}
                 <FormControl sx={{ width: "100%" }}>
                   <RadioGroup name="paymentMethod">

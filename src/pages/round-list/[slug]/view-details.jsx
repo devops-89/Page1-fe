@@ -52,15 +52,13 @@ const FlightDetails = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [flightDetails, setFlightDetails] = useState(null);
+  const [commission, setCommission] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [verifiedData,setVerifiedData]=useState(null);
 
 
-  useEffect(()=>{
-
-  })
-
+  // console.log("router", router)
   const handleClose = () => {
     setOpen(false);
   };
@@ -98,7 +96,8 @@ const FlightDetails = () => {
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
-            console.log("roundtrip respone", response?.data?.data);
+            setCommission(response?.data?.data[2]);
+            // console.log("roundtrip respone", response?.data?.data);
             localStorage.setItem(
               "roundTripflightDetails",
               JSON.stringify(response.data.data)
@@ -119,7 +118,7 @@ const FlightDetails = () => {
           );
         });
     }
-  }, []);
+  }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
   useEffect(() => {
     if (
@@ -238,7 +237,7 @@ const FlightDetails = () => {
                       <PassengerForm
                         flightDetails={flightDetails[0]}
                         myState="roundState"
-                       
+                        journey_type='ROUNDTRIP'
                       />
 
                     </Card>
@@ -254,9 +253,9 @@ const FlightDetails = () => {
                 {/* Fare Summary */}
                 <Grid2 size={4}>
                   {router.query.journey === JOURNEY.INTERNATIONAL ? (
-                    <FareSummary fareData={flightDetails[0]?.Results} />
+                    <FareSummary fareData={flightDetails[0]?.Results} commission={commission}/>
                   ) : (
-                    <RoundFareSummary fareData={flightDetails} />
+                    <RoundFareSummary fareData={flightDetails} commission={commission}/>
                   )}
                 </Grid2>
               </Grid2>

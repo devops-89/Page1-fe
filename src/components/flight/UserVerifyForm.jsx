@@ -35,7 +35,7 @@ const UserVerifyForm = ({ setVerifiedData }) => {
       try {
         const response = await authenticationController.verifyEmailOtp(payload);
         if (response.status === 200) {
-          console.log(response.data.data.access_token)
+          // console.log(response.data.data.access_token)
           setVerifiedData(response.data.data);
           localStorage.setItem("access_token", response.data.data.access_token);
         }

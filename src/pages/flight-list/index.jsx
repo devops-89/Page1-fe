@@ -24,15 +24,18 @@ import Loader from "@/utils/Loader";
 const FlightList = () => {
   const [flightList, setFlightList] = useState(null);
   const [traceId, setTraceId] = useState("");
+  const [journey, setJourney] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("flightData")) {
       setTimeout(() => {
         setFlightList(JSON.parse(localStorage.getItem("flightData")));
         setTraceId(JSON.parse(localStorage.getItem("flightData")).trace_id);
+        setJourney(JSON.parse(localStorage.getItem("flightData")).type)
       }, 3000);
     }
   }, []);
+
 
   const [priceRange, setPriceRange] = useState([500, 2000]);
 
@@ -173,7 +176,7 @@ const FlightList = () => {
                 <Grid2 container spacing={6}>
                   {flightList?.segments?.flightData?.map((val, i) => (
                     <Grid2 size={12} key={i}>
-                      <FlightListBox details={val} traceId={traceId} />
+                      <FlightListBox details={val} traceId={traceId} journey={journey}/>
                     </Grid2>
                   ))}
                 </Grid2>

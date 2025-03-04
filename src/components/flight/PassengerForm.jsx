@@ -11,16 +11,17 @@ import { setToast } from "@/redux/reducers/toast";
 import { useDispatch } from "react-redux";
 import AddForm from "./AddForm";
 import { flightController } from "@/api/flightController";
-import { TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 
-const PassengerForm = ({ flightDetails, myState }) => {
+const PassengerForm = ({ flightDetails, myState, journey_type }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({
     result_index: "",
+    journey_type:"",
     trace_id: "",
     ip_address: "",
     cell_country_code: "",
@@ -167,6 +168,7 @@ const PassengerForm = ({ flightDetails, myState }) => {
     setLoading(true);
     setPayload((prevPayload) => ({
       ...prevPayload,
+      journey_type:journey_type,
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
@@ -296,7 +298,18 @@ const PassengerForm = ({ flightDetails, myState }) => {
             );   
             setLoading(false);
             setTimeout(() => {
-              router.push('/checkout')
+              // router.push('/checkout')
+              // console.log("mytraceid", payload?.trace_id)
+
+              if (journey_type === JOURNEY_TYPE.ONEWAY) {
+                router.push(`/flight-list/${payload?.trace_id}/oneway-checkout`);
+              } else if (journey_type === JOURNEY_TYPE.ROUNDTRIP) {
+                router.push(`/round-list/${payload?.trace_id}/roundtrip-checkout`);
+              } else if (journey_type === JOURNEY_TYPE.MULTIWAY) {
+                router.push(`/multi-list/${payload?.trace_id}/multitrip-checkout`);
+              }
+              
+              
             }, 2000);
            
           }
