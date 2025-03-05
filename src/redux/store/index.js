@@ -12,6 +12,6 @@ export default configureStore({
     TravellerInformation: travellerInformationReducer,
     RoundTripTravellerInformation: roundTripTravellerInformationReducer,
     FlightInformation: flightInformationReducer,
-    SeatsInformation: seatsInformationReducer
+    SeatsInformation: seatsInformationReducer,
   },
 });

@@ -28,7 +28,7 @@ import BaggageDetails from "./baggageDetails";
 import FlightBox from "./FlightBox";
 
 
-const FlightListBox = ({ details, traceId }) => {
+const FlightListBox = ({ details, traceId, journey }) => {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -58,6 +58,7 @@ const FlightListBox = ({ details, traceId }) => {
         query: {
           ResultIndex: flightDetails?.ResultIndex,
           traceId: traceId,
+          journey : journey
         },
       });
   };

@@ -31,7 +31,7 @@ import moment from "moment";
 import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
-import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
@@ -55,6 +55,8 @@ const FlightDetails = () => {
   const [isLCC, setIsLCC] = useState(null);
   const [flightDetails, setFlightDetails] = useState(null);
   const [otherDetails, setOtherDetails] = useState(null);
+  const [commission, setCommission] = useState(null);
+  const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -64,21 +66,24 @@ const FlightDetails = () => {
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    if (router.query.ResultIndex && router.query.traceId) {
+    if (router.query.ResultIndex && router.query.traceId && router.query.journey) {
       flightController
         .flightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
           ip_address: JSON.parse(localStorage.getItem("state"))?.ip_address,
           journey_type: JOURNEY_TYPE.ONEWAY,
-          journey: JOURNEY.DOMESTIC,
+          journey: router.query.journey,
         })
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
+            setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setOtherDetails(response?.data?.data[1]);
-            console.log("otherDetails", response?.data?.data[1]);
-
+            setCommission(response?.data?.data[2]);
+            setJourney(response?.data?.data[3]);
+            // console.log("otherDetails", response?.data?.data[1]);
+            // console.log('commission', response?.data?.data[2])
             localStorage.setItem(
               "oneWayflightDetails",
               JSON.stringify(response?.data?.data)
@@ -98,31 +103,33 @@ const FlightDetails = () => {
           );
         });
     }
-  }, [router.query.ResultIndex, router.query.traceId]);
+  }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
-  //  Run checkLCC whenever otherDetails updates
-  useEffect(() => {
-    if (!otherDetails) {
-      setIsLCC(null);
-      return;
-    }
 
-    setLoading(true);
+  // useEffect(() => {
+  //   if (!otherDetails) {
+  //     setIsLCC(null);
+  //     return;
+  //   }
 
-    if (
-      otherDetails.Baggage ||
-      otherDetails.MealDynamic ||
-      otherDetails.SeatDynamic
-    ) {
-      setIsLCC(true); // It's an LCC flight
-    } else if (otherDetails.SeatPreference) {
-      setIsLCC(false); // It's a non-LCC flight
-    } else {
-      setIsLCC(null); // Default fallback
-    }
+  //   setLoading(true);
 
-    setLoading(false);
-  }, [otherDetails]);
+  //   if (
+  //     otherDetails.Baggage ||
+  //     otherDetails.MealDynamic ||
+  //     otherDetails.SeatDynamic
+  //   ) {
+  //     setIsLCC(true); // It's an LCC flight
+  //   } else if (otherDetails.SeatPreference) {
+  //     setIsLCC(false); // It's a non-LCC flight
+  //   } else {
+  //     setIsLCC(null); // Default fallback
+  //   }
+
+  //   setLoading(false);
+  // }, [otherDetails]);
+
+
 
   useEffect(() => {
     if (
@@ -137,7 +144,7 @@ const FlightDetails = () => {
     }
   }, []);
 
-  console.log("verified data:",verifiedData);
+  // console.log("verified data:",verifiedData);
 
   return (
     <>
@@ -153,7 +160,8 @@ const FlightDetails = () => {
             justifyContent: "center",
             py: "10px",
           }}
-        >
+          >
+        
           <Typography
             variant="h5"
             sx={{
@@ -202,6 +210,7 @@ const FlightDetails = () => {
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px" }}>
               <Grid2 container spacing={2}>
+               
                 {/* Flight Details */}
                 <Grid2 size={8}>
                   <Paper
@@ -507,8 +516,9 @@ const FlightDetails = () => {
                           color: COLORS.WHITE,
                         }}
                         flightDetails={flightDetails}
-                      
                         myState="state"
+                        journey={journey}
+                        isLCC={isLCC}
                       />
                     </Card>
                       ):(null)
@@ -525,7 +535,7 @@ const FlightDetails = () => {
 
                 {/* Fare Summary */}
                 <Grid2 size={4} sx={{ position: "sticky" }}>
-                  <FareSummary fareData={flightDetails[0]?.Results} />
+                  <FareSummary fareData={flightDetails[0]?.Results} commission={commission}/>
                 </Grid2>
               </Grid2>
             </Container>

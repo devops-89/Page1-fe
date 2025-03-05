@@ -13,14 +13,19 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { nunito } from "@/utils/fonts";
+import { COMMISSION_TYPE } from "@/utils/enum";
 
-const FareSummary = ({ fareData }) => {
+const FareSummary = ({ fareData, commission }) => {
   const [open, setOpen] = useState(false);
-
+  // console.log("commission", commission)
   const toggleCollapse = () => {
     setOpen(!open);
   };
-
+  let serviceFeeInFixed = parseFloat(commission?.percentage);
+  let serviceFeeInPercent =
+    (parseInt(fareData?.Fare?.BaseFare) * parseFloat(commission?.percentage)) /
+    100;
+  let publishFare = parseInt(fareData?.Fare?.PublishedFare);
   return (
     <Paper sx={{ padding: 2, backgroundColor: "#F4F4F4", height: "auto" }}>
       <Typography
@@ -157,20 +162,67 @@ const FareSummary = ({ fareData }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          fontWeight: "bold",
+          mb: "10px",
         }}
       >
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 800 }}
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
-          Total Amount
+          Amount
         </Typography>
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 800 }}
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
           {fareData?.Fare?.PublishedFare} ₹
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography
+          variant="body1"
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+        >
+          Service Fee
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+        >
+          {commission?.commission_type === COMMISSION_TYPE.FIXED
+            ? serviceFeeInFixed
+            : serviceFeeInPercent}{" "}
+          ₹
+        </Typography>
+      </Box>
+
+      <Divider sx={{ my: 1 }} />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+        >
+          Grand Total
+        </Typography>
+        <Typography
+          variant="h6"
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+        >
+          {commission?.commission_type === COMMISSION_TYPE.FIXED
+            ? publishFare + serviceFeeInFixed
+            : publishFare + serviceFeeInPercent}{" "}
+          ₹
         </Typography>
       </Box>
     </Paper>

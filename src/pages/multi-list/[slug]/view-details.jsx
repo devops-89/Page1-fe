@@ -31,7 +31,7 @@ import moment from "moment";
 import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
-import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
@@ -52,6 +52,7 @@ const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [flightDetails, setFlightDetails] = useState(null);
+   const [commission, setCommission] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [verifiedData, setVerifiedData] = useState(null);
@@ -59,24 +60,25 @@ const FlightDetails = () => {
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // console.log("router", router)
+  // console.log("router", router.query)
 
   useEffect(() => {
-    if (router.query.ResultIndex && router.query.traceId) {
+    if (router.query.ResultIndex && router.query.traceId && router.query.journey) {
       flightController
         .multiflightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
           ip_address: JSON.parse(localStorage.getItem("multistate"))
             ?.ip_address,
-          journey: JOURNEY.DOMESTIC,
+          journey: router.query.journey,
           journey_type: JOURNEY_TYPE.MULTIWAY,
         })
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
-            console.log("multidetail", response?.data?.data);
             // setOtherDetails(response?.data?.data[1]);
+            setCommission(response?.data?.data[2])
+            // console.log("multidetail", response?.data?.data);
 
             localStorage.setItem(
               "multitripflightDetails",
@@ -97,7 +99,7 @@ const FlightDetails = () => {
           );
         });
     }
-  }, [router.query.ResultIndex, router.query.traceId]);
+  }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
   useEffect(() => {
     if (
@@ -174,7 +176,7 @@ const FlightDetails = () => {
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px" }}>
-              <Grid2 container spacing={2}>
+              <Grid2 container spacing={2} sx={{position:"relative"}}>
                 <Grid2 size={8}>
                   <Paper
                     sx={{
@@ -494,15 +496,17 @@ const FlightDetails = () => {
                           }}
                           flightDetails={flightDetails}
                           myState="multistate"
+                          journey_type='MULTICITY'
                         />
                       </Card>
                     ) : null}
                   </Paper>
                 </Grid2>
 
-                <Grid2 size={4} sx={{ position: "sticky" }}>
-                  <FareSummary fareData={flightDetails[0]?.Results} />
+                <Grid2 size={4} sx={{ position: "sticky", top:'70px' }}>
+                  <FareSummary fareData={flightDetails[0]?.Results} commission={commission}/>
                 </Grid2>
+
               </Grid2>
             </Container>
           </Grid2>

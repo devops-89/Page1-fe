@@ -22,12 +22,11 @@ import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useRouter } from "next/router";
 
-const MultiListBox = ({ details, traceId }) => {
+const MultiListBox = ({ details, traceId, journey }) => {
   const [cabin, setCabin] = useState(null);
     const router = useRouter();
 
   const [flightDetails, setFlightDetails] = useState(details);
-
 
   useEffect(() => {
     let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
@@ -42,6 +41,7 @@ const MultiListBox = ({ details, traceId }) => {
       query: {
         ResultIndex: flightDetails?.ResultIndex,
         traceId: traceId,
+        journey:journey
       },
     });
   };
