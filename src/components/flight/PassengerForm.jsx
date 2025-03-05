@@ -16,12 +16,17 @@ import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 
-const PassengerForm = ({ flightDetails, myState, journey_type }) => {
+const PassengerForm = ({ flightDetails, myState, journey,isLCC }) => {
+
+  // console.log("journey", journey)
+  // console.log("isLCC",isLCC)
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({
     result_index: "",
     journey_type:"",
+    journey:"",
+    is_LCC:"",
     trace_id: "",
     ip_address: "",
     cell_country_code: "",
@@ -168,7 +173,9 @@ const PassengerForm = ({ flightDetails, myState, journey_type }) => {
     setLoading(true);
     setPayload((prevPayload) => ({
       ...prevPayload,
-      journey_type:journey_type,
+      journey_type:journey?.journey_type,
+      journey:journey?.journey,
+      is_LCC:isLCC,
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
@@ -289,6 +296,7 @@ const PassengerForm = ({ flightDetails, myState, journey_type }) => {
         .then((response) => {
           if (response) {
             console.log("Booking response:", response);
+            // console.log("payload", payload);
             dispatch(
               setToast({
                 open: true,
@@ -301,16 +309,16 @@ const PassengerForm = ({ flightDetails, myState, journey_type }) => {
               // router.push('/checkout')
               // console.log("mytraceid", payload?.trace_id)
 
-              if (journey_type === JOURNEY_TYPE.ONEWAY) {
+              if (journey?.journey_type === JOURNEY_TYPE.ONEWAY) {
                 router.push(`/flight-list/${payload?.trace_id}/oneway-checkout`);
-              } else if (journey_type === JOURNEY_TYPE.ROUNDTRIP) {
+              } else if (journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP) {
                 router.push(`/round-list/${payload?.trace_id}/roundtrip-checkout`);
-              } else if (journey_type === JOURNEY_TYPE.MULTIWAY) {
+              } else if (journey?.journey_type === JOURNEY_TYPE.MULTIWAY) {
                 router.push(`/multi-list/${payload?.trace_id}/multitrip-checkout`);
               }
               
               
-            }, 2000);
+            }, 1500);
            
           }
         })

@@ -56,6 +56,7 @@ const FlightDetails = () => {
   const [flightDetails, setFlightDetails] = useState(null);
   const [otherDetails, setOtherDetails] = useState(null);
   const [commission, setCommission] = useState(null);
+  const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -77,8 +78,10 @@ const FlightDetails = () => {
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
+            setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setOtherDetails(response?.data?.data[1]);
             setCommission(response?.data?.data[2]);
+            setJourney(response?.data?.data[3]);
             // console.log("otherDetails", response?.data?.data[1]);
             // console.log('commission', response?.data?.data[2])
             localStorage.setItem(
@@ -102,28 +105,31 @@ const FlightDetails = () => {
     }
   }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
-  useEffect(() => {
-    if (!otherDetails) {
-      setIsLCC(null);
-      return;
-    }
 
-    setLoading(true);
+  // useEffect(() => {
+  //   if (!otherDetails) {
+  //     setIsLCC(null);
+  //     return;
+  //   }
 
-    if (
-      otherDetails.Baggage ||
-      otherDetails.MealDynamic ||
-      otherDetails.SeatDynamic
-    ) {
-      setIsLCC(true); // It's an LCC flight
-    } else if (otherDetails.SeatPreference) {
-      setIsLCC(false); // It's a non-LCC flight
-    } else {
-      setIsLCC(null); // Default fallback
-    }
+  //   setLoading(true);
 
-    setLoading(false);
-  }, [otherDetails]);
+  //   if (
+  //     otherDetails.Baggage ||
+  //     otherDetails.MealDynamic ||
+  //     otherDetails.SeatDynamic
+  //   ) {
+  //     setIsLCC(true); // It's an LCC flight
+  //   } else if (otherDetails.SeatPreference) {
+  //     setIsLCC(false); // It's a non-LCC flight
+  //   } else {
+  //     setIsLCC(null); // Default fallback
+  //   }
+
+  //   setLoading(false);
+  // }, [otherDetails]);
+
+
 
   useEffect(() => {
     if (
@@ -138,7 +144,7 @@ const FlightDetails = () => {
     }
   }, []);
 
-  console.log("verified data:",verifiedData);
+  // console.log("verified data:",verifiedData);
 
   return (
     <>
@@ -511,7 +517,8 @@ const FlightDetails = () => {
                         }}
                         flightDetails={flightDetails}
                         myState="state"
-                        journey_type="ONEWAY"
+                        journey={journey}
+                        isLCC={isLCC}
                       />
                     </Card>
                       ):(null)
