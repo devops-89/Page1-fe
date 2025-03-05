@@ -45,7 +45,7 @@ export default function FullScreenDialog() {
     <React.Fragment>
       <Button
         variant="outlined"
-        sx={{ backgroundColor: COLORS.PRIMARY, color: COLORS.WHITE }}
+        sx={{ backgroundColor: COLORS.SECONDARY, color: COLORS.WHITE }}
         onClick={handleClickOpen}
       >
         Select Seat
