@@ -16,7 +16,7 @@ import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 
-const PassengerForm = ({ flightDetails, myState, journey,isLCC }) => {
+const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
 
   // console.log("journey", journey)
   // console.log("isLCC",isLCC)

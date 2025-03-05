@@ -258,14 +258,7 @@ return (
                         fontFamily: nunito.style,
                       }}
                     >
-                     {`${oneWay?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
-                            →{" "}
-                            {`${
-                              oneWay?.Results?.Segments[0][
-                                oneWay?.Results?.Segments[0].length -
-                                  1
-                              ]?.Destination?.Airport?.CityName
-                            }`}
+                     Delhi → Mumbai
                     </Typography>
                   </AccordionSummary>
     
