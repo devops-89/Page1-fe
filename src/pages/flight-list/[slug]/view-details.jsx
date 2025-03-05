@@ -38,6 +38,7 @@ import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
+import FullScreenDialog from "@/components/flight/seats/FullScreenDiaog";
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -60,7 +61,7 @@ const FlightDetails = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [verifiedData,setVerifiedData]=useState(null);
+  const [verifiedData, setVerifiedData] = useState(null);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -160,8 +161,8 @@ const FlightDetails = () => {
             justifyContent: "center",
             py: "10px",
           }}
-          >
-        
+        >
+
           <Typography
             variant="h5"
             sx={{
@@ -210,7 +211,7 @@ const FlightDetails = () => {
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px" }}>
               <Grid2 container spacing={2}>
-               
+
                 {/* Flight Details */}
                 <Grid2 size={8}>
                   <Paper
@@ -235,12 +236,11 @@ const FlightDetails = () => {
                           >
                             {`${flightDetails[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
                             →{" "}
-                            {`${
-                              flightDetails[0]?.Results?.Segments[0][
+                            {`${flightDetails[0]?.Results?.Segments[0][
                                 flightDetails[0]?.Results?.Segments[0].length -
-                                  1
+                                1
                               ]?.Destination?.Airport?.CityName
-                            }`}
+                              }`}
                           </Typography>
                           <Typography
                             variant="subtitle1"
@@ -259,9 +259,8 @@ const FlightDetails = () => {
                                 `${flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime}`
                               ).format("ddd, MMM D")}
                             </span>{" "}
-                            {`${
-                              flightDetails[0]?.Results?.Segments[0].length - 1
-                            } Stop.`}{" "}
+                            {`${flightDetails[0]?.Results?.Segments[0].length - 1
+                              } Stop.`}{" "}
                             {`${Math.floor(
                               moment
                                 .duration(
@@ -496,46 +495,40 @@ const FlightDetails = () => {
                     </Card>
                     {/* OTP Verification Start */}
                     {
-                        (!verifiedData)?(
-                          <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                             <UserVerifyForm setVerifiedData={setVerifiedData} />
-                          </Card>
-                        ):(null)
-                      }
+                      (!verifiedData) ? (
+                        <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
+                          <UserVerifyForm setVerifiedData={setVerifiedData} />
+                        </Card>
+                      ) : (null)
+                    }
 
                     {/* OTP verification end */}
                     {/* Meal Section start */}
 
                     {/* Meal Section end */}
                     {
-                      (verifiedData)?(
+                      (verifiedData) ? (
                         <Card sx={{ mb: "20px" }}>
-                      <PassengerForm
-                        sx={{
-                          backgroundColor: COLORS.PRIMARY,
-                          color: COLORS.WHITE,
-                        }}
-                        flightDetails={flightDetails}
-                        myState="state"
-                        journey={journey}
-                        isLCC={isLCC}
-                      />
-                    </Card>
-                      ):(null)
+                          <PassengerForm
+                            sx={{
+                              backgroundColor: COLORS.PRIMARY,
+                              color: COLORS.WHITE,
+                            }}
+                            flightDetails={flightDetails}
+                            myState="state"
+                            journey={journey}
+                            isLCC={isLCC}
+                          />
+                        </Card>
+                      ) : (null)
                     }
 
-                    {/* {isLCC ? (
-                        <>
-                        <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:"10px", fontSize:"18px"}}>Pick Your Preferred Seats</Typography>
-                      <FullScreenDialog />
-                      </>
-                    ) : null} */}
                   </Paper>
                 </Grid2>
 
                 {/* Fare Summary */}
                 <Grid2 size={4} sx={{ position: "sticky" }}>
-                  <FareSummary fareData={flightDetails[0]?.Results} commission={commission}/>
+                  <FareSummary fareData={flightDetails[0]?.Results} commission={commission} />
                 </Grid2>
               </Grid2>
             </Container>
@@ -551,7 +544,7 @@ const FlightDetails = () => {
               padding: "50px",
             }}
           >
-             <Loader open={true}/>
+            <Loader open={true} />
           </Grid2>
         )}
       </Grid2>

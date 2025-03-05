@@ -15,18 +15,18 @@ import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
+import FullScreenDialog from "./seats/FullScreenDiaog";
 
 const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
-
   // console.log("journey", journey)
   // console.log("isLCC",isLCC)
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({
     result_index: "",
-    journey_type:"",
-    journey:"",
-    is_LCC:"",
+    journey_type: "",
+    journey: "",
+    is_LCC: "",
     trace_id: "",
     ip_address: "",
     cell_country_code: "",
@@ -173,9 +173,9 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     setLoading(true);
     setPayload((prevPayload) => ({
       ...prevPayload,
-      journey_type:journey?.journey_type,
-      journey:journey?.journey,
-      is_LCC:isLCC,
+      journey_type: journey?.journey_type,
+      journey: journey?.journey,
+      is_LCC: isLCC,
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
@@ -303,23 +303,26 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 message: response.data.message,
                 severity: TOAST_STATUS.SUCCESS,
               })
-            );   
+            );
             setLoading(false);
             setTimeout(() => {
               // router.push('/checkout')
               // console.log("mytraceid", payload?.trace_id)
 
               if (journey?.journey_type === JOURNEY_TYPE.ONEWAY) {
-                router.push(`/flight-list/${payload?.trace_id}/oneway-checkout`);
+                router.push(
+                  `/flight-list/${payload?.trace_id}/oneway-checkout`
+                );
               } else if (journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP) {
-                router.push(`/round-list/${payload?.trace_id}/roundtrip-checkout`);
+                router.push(
+                  `/round-list/${payload?.trace_id}/roundtrip-checkout`
+                );
               } else if (journey?.journey_type === JOURNEY_TYPE.MULTIWAY) {
-                router.push(`/multi-list/${payload?.trace_id}/multitrip-checkout`);
+                router.push(
+                  `/multi-list/${payload?.trace_id}/multitrip-checkout`
+                );
               }
-              
-              
             }, 1500);
-           
           }
         })
         .catch((error) => {
@@ -344,9 +347,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     );
   }
 
-
-
-
+  console.log("loading", loading);
 
   return (
     <>
@@ -497,18 +498,18 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       errors={errors}
-                      formType="infant" 
+                      formType="infant"
                     />
                   </Box>
                 ))}
 
                 {isPassportRequired && (
                   <PassportForm
-                    values={values.passport} 
+                    values={values.passport}
                     handleChange={handleChange}
                     handleBlur={handleBlur}
-                    errors={errors.passport} 
-                    touched={touched.passport} 
+                    errors={errors.passport}
+                    touched={touched.passport}
                   />
                 )}
                 {isGSTMandatory && (
@@ -529,7 +530,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                   touched={touched}
                 />
 
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ mt: 2, mb:2 }}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -542,7 +543,23 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             );
           }}
         </Formik>
+
+        <Box sx={{display:'flex', alignItems:"center", justifyContent:'space-between'}}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      fontFamily: nunito.style,
+                      mb: "10px",
+                      fontSize: "18px",
+                    }}
+                  >
+                    Pick Your Preferred Seats
+                  </Typography>
+                  <FullScreenDialog />
+                </Box>
       </Container>
+
       <ToastBar />
     </>
   );
