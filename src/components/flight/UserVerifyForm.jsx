@@ -90,7 +90,7 @@ const UserVerifyForm = ({ setVerifiedData }) => {
             <Button
              
               variant="contained"
-              type="button"
+             
               fullWidth
               onClick={handleVerifyOtp}
               disabled={!otp}
