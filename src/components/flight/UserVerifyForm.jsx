@@ -88,7 +88,7 @@ const UserVerifyForm = ({ setVerifiedData }) => {
             />
 
             <Button
-              type="button"
+             
               variant="contained"
               type="button"
               fullWidth
