@@ -52,7 +52,9 @@ const FlightDetails = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [flightDetails, setFlightDetails] = useState(null);
+  const [isLCC, setIsLCC] = useState(null);
   const [commission, setCommission] = useState(null);
+  const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [verifiedData,setVerifiedData]=useState(null);
@@ -96,7 +98,9 @@ const FlightDetails = () => {
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
+            setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setCommission(response?.data?.data[2]);
+            setJourney(response?.data?.data[3])
             // console.log("roundtrip respone", response?.data?.data);
             localStorage.setItem(
               "roundTripflightDetails",
@@ -235,9 +239,10 @@ const FlightDetails = () => {
                     (verifiedData)?(
                       <Card>
                       <PassengerForm
-                        flightDetails={flightDetails[0]}
+                        flightDetails={router.query.journey===JOURNEY.DOMESTIC? flightDetails[0]:flightDetails}
                         myState="roundState"
-                        journey_type='ROUNDTRIP'
+                        journey={journey}
+                        isLCC={isLCC}
                       />
 
                     </Card>

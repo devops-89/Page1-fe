@@ -52,7 +52,9 @@ const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [flightDetails, setFlightDetails] = useState(null);
-   const [commission, setCommission] = useState(null);
+  const [commission, setCommission] = useState(null);
+  const [isLCC, setIsLCC] = useState(null);
+  const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [verifiedData, setVerifiedData] = useState(null);
@@ -63,7 +65,11 @@ const FlightDetails = () => {
   // console.log("router", router.query)
 
   useEffect(() => {
-    if (router.query.ResultIndex && router.query.traceId && router.query.journey) {
+    if (
+      router.query.ResultIndex &&
+      router.query.traceId &&
+      router.query.journey
+    ) {
       flightController
         .multiflightDetails({
           result_index: router.query.ResultIndex,
@@ -76,8 +82,10 @@ const FlightDetails = () => {
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
+            setIsLCC(response?.data?.data[0]?.Results?.IsLCC)
             // setOtherDetails(response?.data?.data[1]);
-            setCommission(response?.data?.data[2])
+            setCommission(response?.data?.data[2]);
+            setJourney(response?.data?.data[3])
             // console.log("multidetail", response?.data?.data);
 
             localStorage.setItem(
@@ -176,7 +184,7 @@ const FlightDetails = () => {
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px" }}>
-              <Grid2 container spacing={2} sx={{position:"relative"}}>
+              <Grid2 container spacing={2} sx={{ position: "relative" }}>
                 <Grid2 size={8}>
                   <Paper
                     sx={{
@@ -496,17 +504,20 @@ const FlightDetails = () => {
                           }}
                           flightDetails={flightDetails}
                           myState="multistate"
-                          journey_type='MULTICITY'
+                          journey={journey}
+                          isLCC={isLCC}
                         />
                       </Card>
                     ) : null}
                   </Paper>
                 </Grid2>
 
-                <Grid2 size={4} sx={{ position: "sticky", top:'70px' }}>
-                  <FareSummary fareData={flightDetails[0]?.Results} commission={commission}/>
+                <Grid2 size={4} sx={{ position: "sticky", top: "70px" }}>
+                  <FareSummary
+                    fareData={flightDetails[0]?.Results}
+                    commission={commission}
+                  />
                 </Grid2>
-
               </Grid2>
             </Container>
           </Grid2>
@@ -521,7 +532,7 @@ const FlightDetails = () => {
               padding: "50px",
             }}
           >
-            <Loader open={true}/>
+            <Loader open={true} />
           </Grid2>
         )}
       </Grid2>
