@@ -1,14 +1,13 @@
 import React from "react";
 import FlightSharpIcon from "@mui/icons-material/FlightSharp";
 import { Grid2, Button, Typography, Box, Stack } from "@mui/material";
-import AttachMoneySharpIcon from "@mui/icons-material/AttachMoneySharp";
-import CheckBoxOutlineBlankSharpIcon from "@mui/icons-material/CheckBoxOutlineBlankSharp";
-import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import SelectedList from "./SelectedList";
 import { COLORS } from "@/utils/colors.js";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
-const SeatDetail = () => {
+const SeatDetail = ({extraDetails}) => {
+
+   console.log("extraDetails",extraDetails);
   return (
     <Box
       item
@@ -21,6 +20,7 @@ const SeatDetail = () => {
       }}
     >
       <Typography variant="body1" sx={{ m: 2, fontWeight: "bold" }}>
+        {/* {extraDetails?.Results?.Segments[0][0]?.Origin} */}
         New Delhi (DEL) to Mumbai (BOM)
       </Typography>
       <Stack
