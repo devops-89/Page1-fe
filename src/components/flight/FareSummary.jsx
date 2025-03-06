@@ -196,8 +196,8 @@ const FareSummary = ({ fareData, commission }) => {
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
           {commission?.commission_type === COMMISSION_TYPE.FIXED
-            ? serviceFeeInFixed
-            : serviceFeeInPercent}{" "}
+            ? serviceFeeInFixed.toFixed(2)
+            : serviceFeeInPercent.toFixed(2)}{" "}
           ₹
         </Typography>
       </Box>
@@ -220,8 +220,8 @@ const FareSummary = ({ fareData, commission }) => {
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
           {commission?.commission_type === COMMISSION_TYPE.FIXED
-            ? publishFare + serviceFeeInFixed
-            : publishFare + serviceFeeInPercent}{" "}
+            ? (publishFare + serviceFeeInFixed).toFixed(2)
+            : (publishFare + serviceFeeInPercent).toFixed(2)}{" "}
           ₹
         </Typography>
       </Box>
