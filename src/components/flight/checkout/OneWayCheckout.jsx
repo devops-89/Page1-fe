@@ -8,18 +8,11 @@ import {
   Button,
   Checkbox,
   Grid2,
-  TextField,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Card,
 } from "@mui/material";
 import moment from "moment";
 import pointerImage from "@/../public/images/pointer.png";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { COLORS } from "@/utils/colors";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import Image from "next/image";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import { nunito } from "@/utils/fonts";
@@ -34,11 +27,16 @@ export default function OneWayCheckout() {
   const { isAuthenticated } = selector;
   const [oneWay, setOneWay] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [passengerCount, setPassengerCount] = useState(null);
 
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("oneWayflightDetails");
+    const storedPassengerCount = localStorage.getItem("state");
     if (storedFlightDetails) {
       setOneWay(JSON.parse(storedFlightDetails));
+    }
+    if (storedPassengerCount) {
+      setPassengerCount(JSON.parse(storedPassengerCount));
     }
     if (!isAuthenticated || !storedFlightDetails) {
       router.back();
@@ -116,397 +114,431 @@ export default function OneWayCheckout() {
 
                     {/* fare details */}
 
-                    <Accordion
-                      sx={{
-                        border: 0.1,
-                        borderColor: COLORS.LIGHTGREY,
-                        mt: 2,
-                        borderRadius: 1,
-                      }}
-                    >
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel-content"
-                        id="panel-header"
-                        sx={{
-                          borderBottom: 1,
-                          borderColor: "divider",
-                        }}
-                      >
-                        {/* <Box sx={{ border: 1, mt: 2, p: 2 }} borderRadius={1}> */}
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          {`${oneWay[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
-                          →{" "}
-                          {`${
-                            oneWay[0]?.Results?.Segments[0][
-                              oneWay[0]?.Results?.Segments[0].length - 1
-                            ]?.Destination?.Airport?.CityName
-                          }`}
-                        </Typography>
-                      </AccordionSummary>
-
-                      <AccordionDetails>
-                        <Card sx={{ padding: "20px", marginBottom: "20px" }}>
-                          <Grid2 container>
-                            <Grid2 size={{ xs: 8 }}>
-                              <Typography
-                                variant="h6"
-                                gutterBottom
-                                sx={{
-                                  fontFamily: nunito.style,
-                                  fontSize: "20px",
-                                  fontWeight: 700,
-                                }}
-                              >
-                                {`${oneWay[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
-                                →{" "}
-                                {`${
-                                  oneWay[0]?.Results?.Segments[0][
-                                    oneWay[0]?.Results?.Segments[0].length - 1
-                                  ]?.Destination?.Airport?.CityName
-                                }`}
-                              </Typography>
-                              <Typography
-                                variant="subtitle1"
-                                gutterBottomx
-                                sx={{ marginBottom: "10px" }}
-                              >
-                                <span
-                                  style={{
-                                    backgroundColor: "#FFEDD1",
-                                    padding: "5px",
-                                    borderRadius: "4px",
-                                    fontFamily: nunito.style,
-                                  }}
-                                >
-                                  {moment(
-                                    `${oneWay[0]?.Results?.Segments[0][0].Origin.DepTime}`
-                                  ).format("ddd, MMM D")}
-                                </span>{" "}
-                                {`${
-                                  oneWay[0]?.Results?.Segments[0].length - 1
-                                } Stop.`}{" "}
-                                {`${Math.floor(
-                                  moment
-                                    .duration(
-                                      oneWay[0]?.Results?.Segments[0][
-                                        oneWay[0]?.Results?.Segments[0].length -
-                                          1
-                                      ].AccumulatedDuration,
-                                      "minutes"
-                                    )
-                                    .asHours()
-                                )} hrs ${moment
-                                  .duration(
-                                    oneWay[0]?.Results?.Segments[0][
-                                      oneWay[0]?.Results?.Segments[0].length - 1
-                                    ].AccumulatedDuration,
-                                    "minutes"
-                                  )
-                                  .minutes()} min`}
-                              </Typography>
-                            </Grid2>
-                            <Grid2
-                              size={{ xs: 4 }}
-                              sx={{
-                                display: "flex",
-                                alignItems: "flex-start",
-                                justifyContent: "flex-end",
-                              }}
-                            ></Grid2>
-                          </Grid2>
-                          <Divider />
-
-                          {/* Intermediate flights start */}
-                          <Box>
-                            {oneWay[0]?.Results?.Segments[0]?.map(
-                              (segment, index) => {
-                                // console.log("segment:", segment);
-                                return (
-                                  <>
-                                    <Grid2
-                                      container
-                                      spacing={1}
-                                      sx={{ marginTop: "10px" }}
-                                    >
-                                      {/* Flight Segment 1 */}
-                                      <Grid2
-                                        size={{ xs: 12 }}
-                                        sx={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          gap: "5px",
-                                        }}
-                                      >
-                                        <Image
-                                          src={segment?.AirlineLogo}
-                                          alt="Image"
-                                          width={30}
-                                          height={30}
-                                        />
-                                        <Typography
-                                          variant="subtitle1"
-                                          gutterBottom
-                                          sx={{
-                                            fontFamily: nunito.style,
-                                            fontWeight: 600,
-                                          }}
-                                        >
-                                          {segment?.Airline?.AirlineName}{" "}
-                                          {segment?.Airline?.AirlineCode}{" "}
-                                          {segment?.Airline?.FlightNumber}
-                                        </Typography>
-                                      </Grid2>
-                                      <Grid2
-                                        size={{ xs: 12 }}
-                                        sx={{
-                                          backgroundColor: "#F4F4F4",
-                                          padding: "15px",
-                                          borderRadius: "4px",
-                                        }}
-                                      >
-                                        <Typography
-                                          variant="body1"
-                                          sx={{
-                                            fontWeight: 700,
-                                            fontFamily: nunito.style,
-                                          }}
-                                        >
-                                          {moment(
-                                            segment?.Origin?.DepTime
-                                          ).format("HH:mm")}{" "}
-                                          - {segment?.Origin?.Airport?.CityName}{" "}
-                                          (
-                                          {
-                                            segment?.Origin?.Airport
-                                              ?.AirportCode
-                                          }
-                                          )
-                                        </Typography>
-                                        <Typography
-                                          variant="body1"
-                                          sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "10px",
-                                            marginLeft: "65px",
-                                          }}
-                                        >
-                                          <img
-                                            src={pointerImage.src}
-                                            style={{ width: "16px" }}
-                                          />{" "}
-                                          {`${Math.floor(
-                                            moment
-                                              .duration(
-                                                segment.Duration,
-                                                "minutes"
-                                              )
-                                              .asHours()
-                                          )} hrs : ${moment
-                                            .duration(
-                                              segment.Duration,
-                                              "minutes"
-                                            )
-                                            .minutes()} min`}
-                                        </Typography>
-                                        <Typography
-                                          variant="body1"
-                                          sx={{
-                                            fontWeight: 700,
-                                            fontFamily: nunito.style,
-                                          }}
-                                        >
-                                          {moment(
-                                            segment.Destination.ArrTime
-                                          ).format("HH:mm")}{" "}
-                                          -{" "}
-                                          {segment.Destination.Airport.CityName}{" "}
-                                          (
-                                          {
-                                            segment.Destination.Airport
-                                              .AirportCode
-                                          }
-                                          )
-                                        </Typography>
-                                      </Grid2>
-
-                                      <Grid2
-                                        size={{ xs: 12 }}
-                                        sx={{
-                                          display: "flex",
-                                          gap: "20px",
-                                          flexWrap: "wrap",
-                                          backgroundColor: "#FFEDD1",
-                                          padding: "5px",
-                                          borderRadius: "4px",
-                                        }}
-                                      >
-                                        <Typography
-                                          variant="body2"
-                                          sx={{
-                                            fontFamily: nunito.style,
-                                            fontWeight: 500,
-                                          }}
-                                        >
-                                          <strong>Baggage :</strong>{" "}
-                                          {segment.Baggage}
-                                        </Typography>
-                                        <Typography
-                                          variant="body2"
-                                          sx={{
-                                            fontFamily: nunito.style,
-                                            fontWeight: 500,
-                                          }}
-                                        >
-                                          <strong>Cabin Baggage :</strong>{" "}
-                                          {segment.CabinBaggage}
-                                        </Typography>
-                                      </Grid2>
-                                    </Grid2>
-                                    <Divider />
-
-                                    {oneWay[0]?.Results?.Segments[0].length !=
-                                    segment.SegmentIndicator ? (
-                                      <>
-                                        <Box
-                                          sx={{
-                                            marginBottom: "10px",
-                                            borderLeft: "2px dashed",
-                                            paddingLeft: "20px",
-                                          }}
-                                        >
-                                          <Typography
-                                            variant="body2"
-                                            sx={{
-                                              marginTop: "10px",
-                                              color: "orange",
-                                              fontWeight: 600,
-                                              fontFamily: nunito.style,
-                                            }}
-                                          >
-                                            Change of Planes
-                                          </Typography>
-                                          <Typography
-                                            variant="body2"
-                                            sx={{
-                                              marginTop: "10px",
-                                              fontWeight: 700,
-                                              fontFamily: nunito.style,
-                                            }}
-                                          >
-                                            {`${moment
-                                              .utc(
-                                                moment(
-                                                  oneWay[0]?.Results
-                                                    ?.Segments[0][index + 1]
-                                                    ?.Origin.DepTime,
-                                                  "YYYY-MM-DD HH:mm"
-                                                ).diff(
-                                                  moment(
-                                                    oneWay[0]?.Results
-                                                      ?.Segments[0][index]
-                                                      ?.Destination.ArrTime,
-                                                    "YYYY-MM-DD HH:mm"
-                                                  )
-                                                )
-                                              )
-                                              .format("H[h] : m[m]")}`}{" "}
-                                            Layover in{" "}
-                                            {`${segment?.Destination?.Airport?.AirportName}`}
-                                          </Typography>
-                                        </Box>
-                                        <Divider />
-                                      </>
-                                    ) : null}
-                                  </>
-                                );
-                              }
-                            )}
-                          </Box>
-                          {/* Intermediate flights end */}
-                        </Card>
-                      </AccordionDetails>
-                    </Accordion>
-
-                    {/* -------------Discount section start-------------  */}
-                    <Accordion
-                      sx={{
-                        border: 0.2,
-                        borderColor: COLORS.LIGHTGREY,
-                        mt: 2,
-                        borderRadius: 1,
-                        mb: "20px",
-                      }}
-                    >
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel-content"
-                        id="panel-header"
-                        sx={{
-                          borderBottom: 1,
-                          borderColor: "divider",
-                        }}
-                      >
-                        {/* <Box sx={{ border: 1, mt: 2, p: 2 }} borderRadius={1}> */}
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Discount Voucher
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Typography sx={{ fontFamily: nunito.style }}>
-                          want to add a discount Voucher ?
-                        </Typography>
-                        <Typography sx={{ fontFamily: nunito.style, mb: 1 }}>
-                          Discount Voucher
-                        </Typography>
-                        <Stack
-                          direction={{
-                            lg: "row",
-                            md: "row",
-                            sm: "row",
-                            xs: "column",
-                          }}
-                          spacing={1}
-                        >
-                          <TextField
-                            type="text"
-                            placeholder="Discount Voucher"
-                            style={{ p: 2, borderRadius: 0.5 }}
-                          />
-                          <Button
-                            variant="outlined"
+                    <Card sx={{ padding: "20px", marginBottom: "20px" }}>
+                      <Grid2 container>
+                        <Grid2 size={{ xs: 8 }}>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
                             sx={{
-                              borderColor: COLORS.PRIMARY,
-                              color: COLORS.PRIMARY,
+                              fontFamily: nunito.style,
+                              fontSize: "20px",
+                              fontWeight: 700,
                             }}
                           >
-                            Apply
-                          </Button>
-                        </Stack>
-                      </AccordionDetails>
-                    </Accordion>
-                    {/* </Box> */}
-                    {/* -------------Discount section end-------------  */}
+                            {`${oneWay[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
+                            →{" "}
+                            {`${
+                              oneWay[0]?.Results?.Segments[0][
+                                oneWay[0]?.Results?.Segments[0].length - 1
+                              ]?.Destination?.Airport?.CityName
+                            }`}
+                          </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            gutterBottomx
+                            sx={{ marginBottom: "10px" }}
+                          >
+                            <span
+                              style={{
+                                backgroundColor: "#FFEDD1",
+                                padding: "5px",
+                                borderRadius: "4px",
+                                fontFamily: nunito.style,
+                              }}
+                            >
+                              {moment(
+                                `${oneWay[0]?.Results?.Segments[0][0].Origin.DepTime}`
+                              ).format("ddd, MMM D")}
+                            </span>{" "}
+                            {`${
+                              oneWay[0]?.Results?.Segments[0].length - 1
+                            } Stop.`}{" "}
+                            {`${Math.floor(
+                              moment
+                                .duration(
+                                  oneWay[0]?.Results?.Segments[0][
+                                    oneWay[0]?.Results?.Segments[0].length - 1
+                                  ].AccumulatedDuration,
+                                  "minutes"
+                                )
+                                .asHours()
+                            )} hrs ${moment
+                              .duration(
+                                oneWay[0]?.Results?.Segments[0][
+                                  oneWay[0]?.Results?.Segments[0].length - 1
+                                ].AccumulatedDuration,
+                                "minutes"
+                              )
+                              .minutes()} min`}
+                          </Typography>
+                        </Grid2>
+                        <Grid2
+                          size={{ xs: 4 }}
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            justifyContent: "flex-end",
+                          }}
+                        ></Grid2>
+                      </Grid2>
+                      <Divider />
 
-                    {/* --------------fare Summary Start-----------------  */}
-                    <FareSummary
-                      fareData={oneWay[0]?.Results}
-                      commission={oneWay[2]}
-                    />
-                    {/* --------------fare Summary End-----------------  */}
+                      {/* Intermediate flights start */}
+                      <Box>
+                        {oneWay[0]?.Results?.Segments[0]?.map(
+                          (segment, index) => {
+                            // console.log("segment:", segment);
+                            return (
+                              <>
+                                <Grid2
+                                  container
+                                  spacing={1}
+                                  sx={{ marginTop: "10px" }}
+                                >
+                                  {/* Flight Segment 1 */}
+                                  <Grid2
+                                    size={{ xs: 12 }}
+                                    sx={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "5px",
+                                    }}
+                                  >
+                                    <Image
+                                      src={segment?.AirlineLogo}
+                                      alt="Image"
+                                      width={30}
+                                      height={30}
+                                    />
+                                    <Typography
+                                      variant="subtitle1"
+                                      gutterBottom
+                                      sx={{
+                                        fontFamily: nunito.style,
+                                        fontWeight: 600,
+                                      }}
+                                    >
+                                      {segment?.Airline?.AirlineName}{" "}
+                                      {segment?.Airline?.AirlineCode}{" "}
+                                      {segment?.Airline?.FlightNumber}
+                                    </Typography>
+                                  </Grid2>
+                                  <Grid2
+                                    size={{ xs: 12 }}
+                                    sx={{
+                                      backgroundColor: "#F4F4F4",
+                                      padding: "15px",
+                                      borderRadius: "4px",
+                                    }}
+                                  >
+                                    <Typography
+                                      variant="body1"
+                                      sx={{
+                                        fontWeight: 700,
+                                        fontFamily: nunito.style,
+                                      }}
+                                    >
+                                      {moment(segment?.Origin?.DepTime).format(
+                                        "HH:mm"
+                                      )}{" "}
+                                      - {segment?.Origin?.Airport?.CityName} (
+                                      {segment?.Origin?.Airport?.AirportCode})
+                                    </Typography>
+                                    <Typography
+                                      variant="body1"
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                        marginLeft: "65px",
+                                      }}
+                                    >
+                                      <img
+                                        src={pointerImage.src}
+                                        style={{ width: "16px" }}
+                                      />{" "}
+                                      {`${Math.floor(
+                                        moment
+                                          .duration(segment.Duration, "minutes")
+                                          .asHours()
+                                      )} hrs : ${moment
+                                        .duration(segment.Duration, "minutes")
+                                        .minutes()} min`}
+                                    </Typography>
+                                    <Typography
+                                      variant="body1"
+                                      sx={{
+                                        fontWeight: 700,
+                                        fontFamily: nunito.style,
+                                      }}
+                                    >
+                                      {moment(
+                                        segment.Destination.ArrTime
+                                      ).format("HH:mm")}{" "}
+                                      - {segment.Destination.Airport.CityName} (
+                                      {segment.Destination.Airport.AirportCode})
+                                    </Typography>
+                                  </Grid2>
+
+                                  <Grid2
+                                    size={{ xs: 12 }}
+                                    sx={{
+                                      display: "flex",
+                                      gap: "20px",
+                                      flexWrap: "wrap",
+                                      backgroundColor: "#FFEDD1",
+                                      padding: "5px",
+                                      borderRadius: "4px",
+                                    }}
+                                  >
+                                    <Typography
+                                      variant="body2"
+                                      sx={{
+                                        fontFamily: nunito.style,
+                                        fontWeight: 500,
+                                      }}
+                                    >
+                                      <strong>Baggage :</strong>{" "}
+                                      {segment.Baggage}
+                                    </Typography>
+                                    <Typography
+                                      variant="body2"
+                                      sx={{
+                                        fontFamily: nunito.style,
+                                        fontWeight: 500,
+                                      }}
+                                    >
+                                      <strong>Cabin Baggage :</strong>{" "}
+                                      {segment.CabinBaggage}
+                                    </Typography>
+                                  </Grid2>
+                                </Grid2>
+                                <Divider />
+
+                                {oneWay[0]?.Results?.Segments[0].length !=
+                                segment.SegmentIndicator ? (
+                                  <>
+                                    <Box
+                                      sx={{
+                                        marginBottom: "10px",
+                                        borderLeft: "2px dashed",
+                                        paddingLeft: "20px",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="body2"
+                                        sx={{
+                                          marginTop: "10px",
+                                          color: "orange",
+                                          fontWeight: 600,
+                                          fontFamily: nunito.style,
+                                        }}
+                                      >
+                                        Change of Planes
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{
+                                          marginTop: "10px",
+                                          fontWeight: 700,
+                                          fontFamily: nunito.style,
+                                        }}
+                                      >
+                                        {`${moment
+                                          .utc(
+                                            moment(
+                                              oneWay[0]?.Results?.Segments[0][
+                                                index + 1
+                                              ]?.Origin.DepTime,
+                                              "YYYY-MM-DD HH:mm"
+                                            ).diff(
+                                              moment(
+                                                oneWay[0]?.Results?.Segments[0][
+                                                  index
+                                                ]?.Destination.ArrTime,
+                                                "YYYY-MM-DD HH:mm"
+                                              )
+                                            )
+                                          )
+                                          .format("H[h] : m[m]")}`}{" "}
+                                        Layover in{" "}
+                                        {`${segment?.Destination?.Airport?.AirportName}`}
+                                      </Typography>
+                                    </Box>
+                                    <Divider />
+                                  </>
+                                ) : null}
+                              </>
+                            );
+                          }
+                        )}
+                      </Box>
+                      {/* Intermediate flights end */}
+                    </Card>
+
+                    <Box
+                      sx={{
+                        borderBottom: 1,
+                        borderColor: COLORS.GREY,
+                        p: 1,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          mb: 1,
+                          color: COLORS.PRIMARY,
+                        }}
+                      >
+                        Passenger Info
+                      </Typography>
+
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Adult
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {passengerCount?.adult}
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Child
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {passengerCount?.child}
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Infant
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {passengerCount?.infant}
+                        </Typography>
+                      </Stack>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        borderBottom: 1,
+                        borderColor: COLORS.GREY,
+                        p: 1,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          mb: 1,
+                          color: COLORS.PRIMARY,
+                        }}
+                      >
+                        Journey Detail
+                      </Typography>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Departure Date 
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {moment((oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime)).format( "D MMM, ddd")}
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Departure Time 
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {moment((oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime)).format("HH:mm A")}
+                        </Typography>
+                      </Stack>
+                    </Box>
 
                     <FormControlLabel
                       control={<Checkbox defaultChecked />}
@@ -566,238 +598,39 @@ export default function OneWayCheckout() {
                 <Grid2
                   size={{ xs: 12, sm: 12, md: 4 }}
                   sx={{
-                    backgroundColor: COLORS.SEMIGREY,
-                    p: 2,
+                    backgroundColor: COLORS.WHITE,
                     borderRadius: 2,
+                    position: "sticky",
+                    top: "75px",
                   }}
                 >
-                  <Box
+                  {/* --------------fare Summary Start-----------------  */}
+                  <FareSummary
+                    fareData={oneWay[0]?.Results}
+                    commission={oneWay[2]}
+                  />
+                  {/* --------------fare Summary End-----------------  */}
+
+                  <Stack
                     sx={{
-                      borderBottom: 1,
-                      backgroundColor: COLORS.WHITE,
-                      p: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      flexDirection: "row",
+                      mt: "20px",
                     }}
                   >
-                    <Box sx={{ borderBottom: 1 }}>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontFamily: nunito.style,
-                          fontWeight: "bold",
-                          color: COLORS.PRIMARY,
-                          p: 1,
-                        }}
-                      >
-                        Your Order
-                      </Typography>
-                    </Box>
-                    {/* GIVE BOX TO GET BORDER BOTTOM */}
-                    <Box
+                    <Button
+                      variant="contained"
                       sx={{
-                        borderBottom: 1,
-                        borderColor: COLORS.GREY,
-                        p: 1,
-                        pb: 2,
+                        backgroundColor: COLORS.PRIMARY,
+                        color: COLORS.WHITE,
+                        minWidth: 10,
                       }}
                     >
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontFamily: nunito.style,
-                          fontWeight: "bold",
-                          mb: 1,
-                        }}
-                      >
-                        Departure
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontFamily: nunito.style,
-                          color: COLORS.DARKGREY,
-                          mb: 2,
-                        }}
-                      >
-                        {moment(
-                          `${oneWay[0]?.Results?.Segments[0][0].Origin.DepTime}`
-                        ).format("ddd, MMM D")}
-                      </Typography>
-                      <Stack
-                        sx={{ mb: 1 }}
-                        direction={"row"}
-                        alignItems={"center"}
-                        spacing={1}
-                      >
-                        <Typography
-                          sx={{
-                            fontFamily: nunito.style,
-                            fontWeight: "bold",
-                            color: COLORS.BLACK,
-                          }}
-                        >
-                          Discount Voucher
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontFamily: nunito.style,
-                            color: COLORS.DARKGREY,
-                          }}
-                        >
-                          WELCOME50
-                        </Typography>
-                      </Stack>
-                      <Typography
-                        sx={{
-                          fontFamily: nunito.style,
-                          color: COLORS.DARKGREY,
-                        }}
-                      >
-                        {`${oneWay[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
-                        →{" "}
-                        {`${
-                          oneWay[0]?.Results?.Segments[0][
-                            oneWay[0]?.Results?.Segments[0].length - 1
-                          ]?.Destination?.Airport?.CityName
-                        }`}
-                      </Typography>
-                    </Box>
-
-                   
-                   <Box  sx={{
-                        borderBottom: 1,
-                        borderColor: COLORS.GREY,
-                        p: 1,
-                        pb: 2,
-                      }}>
-
-                        <Typography variant="h6" sx={{fontFamily:nunito.style, fontWeight:600, mb:1, color:COLORS.PRIMARY}}>Passenger Info</Typography>
-
-                        <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        sx={{ mb: "5px" }}
-                      >
-                        <Typography     
-                          sx={{
-                            fontWeight: 500,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Adult
-                        </Typography>
-
-                        <Typography    
-                          sx={{
-                            fontWeight: 500,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          1
-                        </Typography>
-                      </Stack>
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        sx={{ mb: "5px" }}
-                      >
-                        <Typography     
-                          sx={{
-                            fontWeight: 500,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Child
-                        </Typography>
-
-                        <Typography    
-                          sx={{
-                            fontWeight: 500,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          0
-                        </Typography>
-                      </Stack>
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        sx={{ mb: "5px" }}
-                      >
-                        <Typography     
-                          sx={{
-                            fontWeight: 500,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Infant
-                        </Typography>
-
-                        <Typography    
-                          sx={{
-                            fontWeight: 500,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          0
-                        </Typography>
-                      </Stack>
-                      </Box>
-
-                    <Box
-                      sx={{
-                        borderBottom: 1,
-                        borderColor: COLORS.GREY,
-                        p: 1,
-                        pt: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        sx={{ mb: "20px" }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            color: COLORS.BLACK,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Amount to Pay
-                        </Typography>
-
-                        <Typography
-                         variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            color: COLORS.BLACK,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          19,188
-                        </Typography>
-                      </Stack>
-
-                      <Button
-                        variant="contained"
-                        sx={{
-                          backgroundColor: COLORS.PRIMARY,
-                          color: COLORS.WHITE,
-                          minWidth: 8,
-                        }}
-                      >
-                        Pay Now
-                      </Button>
-                    </Box>
-                    {/* total amount */}
-                  </Box>
+                      Pay Now
+                    </Button>
+                  </Stack>
                 </Grid2>
               </Grid2>
             </Container>

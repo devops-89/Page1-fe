@@ -314,9 +314,9 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                   `/flight-list/${payload?.trace_id}/oneway-checkout`
                 );
               } else if (journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP) {
-                router.push(
-                  `/round-list/${payload?.trace_id}/roundtrip-checkout`
-                );
+                // router.push(
+                //   `/round-list/${payload?.trace_id}/roundtrip-checkout`
+                // );
               } else if (journey?.journey_type === JOURNEY_TYPE.MULTIWAY) {
                 router.push(
                   `/multi-list/${payload?.trace_id}/multitrip-checkout`
