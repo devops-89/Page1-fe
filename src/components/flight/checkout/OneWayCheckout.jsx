@@ -4,10 +4,7 @@ import {
   Stack,
   Box,
   Typography,
-  FormControl,
-  RadioGroup,
   FormControlLabel,
-  Radio,
   Button,
   Checkbox,
   Grid2,
@@ -21,9 +18,6 @@ import moment from "moment";
 import pointerImage from "@/../public/images/pointer.png";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { COLORS } from "@/utils/colors";
-import visa from "@/checkout/visa.png";
-import test from "@/checkout/test.png";
-import phonepay from "@/checkout/phonepay.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Image from "next/image";
@@ -32,6 +26,7 @@ import { nunito } from "@/utils/fonts";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import FareSummary from "../FareSummary";
 
 export default function OneWayCheckout() {
   const router = useRouter();
@@ -52,7 +47,7 @@ export default function OneWayCheckout() {
     }
   }, [isAuthenticated, router]);
 
-  console.log("checkout details:", oneWay);
+  // console.log("checkout details:", oneWay);
 
   return (
     <>
@@ -440,12 +435,14 @@ export default function OneWayCheckout() {
                       </AccordionDetails>
                     </Accordion>
 
+                    {/* -------------Discount section start-------------  */}
                     <Accordion
                       sx={{
                         border: 0.2,
                         borderColor: COLORS.LIGHTGREY,
                         mt: 2,
                         borderRadius: 1,
+                        mb: "20px",
                       }}
                     >
                       <AccordionSummary
@@ -502,163 +499,67 @@ export default function OneWayCheckout() {
                       </AccordionDetails>
                     </Accordion>
                     {/* </Box> */}
+                    {/* -------------Discount section end-------------  */}
 
-                    <Box
+                    {/* --------------fare Summary Start-----------------  */}
+                    <FareSummary
+                      fareData={oneWay[0]?.Results}
+                      commission={oneWay[2]}
+                    />
+                    {/* --------------fare Summary End-----------------  */}
+
+                    <FormControlLabel
+                      control={<Checkbox defaultChecked />}
+                      label={
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontFamily: nunito.style,
+                            textAlign: "left",
+                          }}
+                        >
+                          I have read and accept Flight networks travel
+                          condition,Fare Rules ,the airlines general terms and
+                          condition and I have verified that i have entered my
+                          booking information correctly .<br /> you can read our
+                          Privacy here.
+                        </Typography>
+                      }
                       sx={{
-                        border: 0.2,
-                        borderColor: COLORS.LIGHTGREY,
-                        mt: 2,
-                        p: 2,
-                        borderRadius: 1,
+                        mt: 4,
+                        display: "flex",
+                        alignItems: "flex-start",
                       }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: "bold",
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        Fare Summary
-                      </Typography>
-
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        mt={1}
-                      >
-                        <Typography sx={{ fontFamily: nunito.style }}>
-                          Base Amount
-                        </Typography>
-                        <Typography
-                          sx={{ fontFamily: nunito.style, textAlign: "center" }}
-                        >
-                          4483 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
-                        </Typography>
-                      </Stack>
-
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        mt={1}
-                      >
-                        <Typography sx={{ fontFamily: nunito.style }}>
-                          taxes and subCharges
-                        </Typography>
-                        <Typography
-                          sx={{ fontFamily: nunito.style, textAlign: "center" }}
-                        >
-                          4483 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
-                        </Typography>
-                      </Stack>
-
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        mt={1}
-                      >
-                        <Typography sx={{ fontFamily: nunito.style }}>
-                          Discount
-                        </Typography>
-                        <Typography
-                          sx={{ fontFamily: nunito.style, textAlign: "center" }}
-                        >
-                          0 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
-                        </Typography>
-                      </Stack>
-
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        justifyContent={"space-between"}
-                        mt={1}
-                        borderTop={1}
-                        p={1}
-                      >
-                        <Typography
-                          sx={{ fontFamily: nunito.style, fontWeight: "bold" }}
-                        >
-                          Total Amount
-                        </Typography>
-                        <Typography
-                          sx={{ fontFamily: nunito.style, textAlign: "center" }}
-                        >
-                          5200 <CurrencyRupeeIcon sx={{ fontSize: 16 }} />
-                        </Typography>
-                      </Stack>
-
-                      <FormControlLabel
-                        control={<Checkbox defaultChecked />}
-                        label={
-                          <Typography
-                            sx={{
-                              fontSize: 14,
-                              fontFamily: nunito.style,
-                              textAlign: "left",
-                            }}
-                          >
-                            I have read and accept Flight networks travel
-                            condition,Fare Rules ,the airlines general terms and
-                            condition and I have verified that i have entered my
-                            booking information correctly .<br /> you can read
-                            our Privacy here.
+                    />
+                    <Grid2 container mt={2} spacing={2}>
+                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                        <Stack direction="row" alignItems={"center"}>
+                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                          <Typography sx={{ fontFamily: nunito.style }}>
+                            100% secure booking
                           </Typography>
-                        }
-                        sx={{
-                          mt: 4,
-                          display: "flex",
-                          alignItems: "flex-start",
-                        }}
-                      />
-                      <Grid2 container mt={2} spacing={2}>
-                        <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                          <Stack direction="row" alignItems={"center"}>
-                            <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                            <Typography sx={{ fontFamily: nunito.style }}>
-                              100% secure booking
-                            </Typography>
-                          </Stack>
-                        </Grid2>
-
-                        <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                          <Stack direction="row" alignItems={"center"}>
-                            <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                            <Typography sx={{ fontFamily: nunito.style }}>
-                              100% secure booking
-                            </Typography>
-                          </Stack>
-                        </Grid2>
-
-                        <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                          <Stack direction="row" alignItems={"center"}>
-                            <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                            <Typography sx={{ fontFamily: nunito.style }}>
-                              100% secure booking
-                            </Typography>
-                          </Stack>
-                        </Grid2>
+                        </Stack>
                       </Grid2>
-                      <Stack alignItems={"flex-end"} mt={3}></Stack>
-                    </Box>
+
+                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                        <Stack direction="row" alignItems={"center"}>
+                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                          <Typography sx={{ fontFamily: nunito.style }}>
+                            100% secure booking
+                          </Typography>
+                        </Stack>
+                      </Grid2>
+
+                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                        <Stack direction="row" alignItems={"center"}>
+                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                          <Typography sx={{ fontFamily: nunito.style }}>
+                            100% secure booking
+                          </Typography>
+                        </Stack>
+                      </Grid2>
+                    </Grid2>
                   </Box>
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      fontFamily: nunito.style,
-                      mt: 1,
-                      mb: 2,
-                      ml: 1,
-                    }}
-                  >
-                    I have read and accept Flight networks travel condition,Fare
-                    Rules ,the airlines general terms and condition and I have
-                    verified that i have entered my booking information
-                    correctly .
-                    <br /> you can read our Privacy here.
-                  </Typography>
                 </Grid2>
                 {/* order-box */}
 
@@ -717,10 +618,12 @@ export default function OneWayCheckout() {
                           mb: 2,
                         }}
                       >
-                        Mon 2 jun 2025
+                        {moment(
+                          `${oneWay[0]?.Results?.Segments[0][0].Origin.DepTime}`
+                        ).format("ddd, MMM D")}
                       </Typography>
                       <Stack
-                        sx={{ mb: 2 }}
+                        sx={{ mb: 1 }}
                         direction={"row"}
                         alignItems={"center"}
                         spacing={1}
@@ -750,9 +653,99 @@ export default function OneWayCheckout() {
                           color: COLORS.DARKGREY,
                         }}
                       >
-                        DEL New Delhi -BOM Mumbai
+                        {`${oneWay[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
+                        →{" "}
+                        {`${
+                          oneWay[0]?.Results?.Segments[0][
+                            oneWay[0]?.Results?.Segments[0].length - 1
+                          ]?.Destination?.Airport?.CityName
+                        }`}
                       </Typography>
                     </Box>
+
+                   
+                   <Box  sx={{
+                        borderBottom: 1,
+                        borderColor: COLORS.GREY,
+                        p: 1,
+                        pb: 2,
+                      }}>
+
+                        <Typography variant="h6" sx={{fontFamily:nunito.style, fontWeight:600, mb:1, color:COLORS.PRIMARY}}>Passenger Info</Typography>
+
+                        <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography     
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Adult
+                        </Typography>
+
+                        <Typography    
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          1
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography     
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Child
+                        </Typography>
+
+                        <Typography    
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          0
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography     
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Infant
+                        </Typography>
+
+                        <Typography    
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          0
+                        </Typography>
+                      </Stack>
+                      </Box>
 
                     <Box
                       sx={{
@@ -763,33 +756,6 @@ export default function OneWayCheckout() {
                         pb: 2,
                       }}
                     >
-                      <Typography
-                        sx={{
-                          fontWeight: "bold",
-                          color: COLORS.BLACK,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        Total amount
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: COLORS.DARKGREY,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        subtotal
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: COLORS.PRIMARY,
-                          textDecoration: "underline",
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        payment options
-                      </Typography>
-
                       <Stack
                         direction={"row"}
                         alignItems={"center"}
@@ -797,16 +763,18 @@ export default function OneWayCheckout() {
                         sx={{ mb: "20px" }}
                       >
                         <Typography
+                          variant="h6"
                           sx={{
                             fontWeight: "bold",
                             color: COLORS.BLACK,
                             fontFamily: nunito.style,
                           }}
                         >
-                          Amount to pay
+                          Amount to Pay
                         </Typography>
 
                         <Typography
+                         variant="h6"
                           sx={{
                             fontWeight: "bold",
                             color: COLORS.BLACK,
@@ -816,6 +784,7 @@ export default function OneWayCheckout() {
                           19,188
                         </Typography>
                       </Stack>
+
                       <Button
                         variant="contained"
                         sx={{

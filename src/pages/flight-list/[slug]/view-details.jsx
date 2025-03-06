@@ -38,7 +38,7 @@ import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
-import FullScreenDialog from "@/components/flight/seats/FullScreenDiaog";
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
