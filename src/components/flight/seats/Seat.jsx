@@ -25,9 +25,8 @@ const AvailablityStatus = {
   5: "Empty Space",
 };
 
-const Seat = () => {
+const Seat = ({extraDetails}) => {
   const [reservedSeats, setReservedSeats] = useState([]);
-  const [extraDetails, setExtraDetails] = useState(null);
   const dispatch = useDispatch();
   let value = useSelector((state) => state.SeatsInformation.seats);
   console.log("test", value);
@@ -37,13 +36,6 @@ const Seat = () => {
     console.log("redux values: ", value);
   }, [value]);
 
-  useEffect(() => {
-    const flightDetails = localStorage.getItem("oneWayflightDetails");
-    if (flightDetails) {
-      setExtraDetails(JSON.parse(flightDetails)[1]);
-    }
-  }, []);
-  console.log(extraDetails);
 
   return (
     <Box sx={{ backgroundColor: COLORS.WHITE, minWidth: "300px" }}>
