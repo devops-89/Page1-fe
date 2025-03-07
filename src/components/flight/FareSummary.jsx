@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import {
   Box,
+  Stack,
+  Button,
   Typography,
+  useMediaQuery,
   Paper,
   Divider,
   List,
@@ -12,17 +15,20 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
+import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
 import { nunito } from "@/utils/fonts";
 
-const FareSummary = ({ fareData }) => {
+const FareSummary = ({ fareData , toggleDrawer }) => {
   const [open, setOpen] = useState(false);
 
   const toggleCollapse = () => {
     setOpen(!open);
   };
-
+  const smallScreen = useMediaQuery("(max-width:1199px)")
   return (
-    <Paper sx={{ padding: 2, backgroundColor: "#F4F4F4", height: "auto" }}>
+    <Paper sx={{ padding: 2, backgroundColor: "#F4F4F4", height: "auto",}}>
+      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
       <Typography
         variant="h6"
         sx={{
@@ -34,6 +40,11 @@ const FareSummary = ({ fareData }) => {
       >
         Fare Summary
       </Typography>
+       {smallScreen ?  <Button onClick={toggleDrawer.toggle} variant="contained" color="primary">
+        {!toggleDrawer.open ? <KeyboardDoubleArrowUpOutlinedIcon/>: <KeyboardDoubleArrowDownOutlinedIcon/>}
+      </Button>  : null}
+     
+      </Stack>
       <Divider sx={{ marginY: 1 }} />
       <List component="nav" sx={{ p: 0 }}>
         <ListItem

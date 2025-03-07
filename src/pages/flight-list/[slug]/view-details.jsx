@@ -22,6 +22,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  useMediaQuery,
 } from "@mui/material";
 import Image from "next/image";
 import { flightController } from "@/api/flightController";
@@ -38,6 +39,7 @@ import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
+import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -59,9 +61,11 @@ const FlightDetails = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [verifiedData,setVerifiedData]=useState(null);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const smallScreen = useMediaQuery("(max-width:1199px)")
 
   useEffect(() => {
     if (router.query.ResultIndex && router.query.traceId) {
@@ -139,9 +143,14 @@ const FlightDetails = () => {
 
   console.log("verified data:",verifiedData);
 
+  const toggleDrawer = {
+    open: drawerOpen, // Current state of the drawer
+    toggle: () => setDrawerOpen((prev) => !prev), // Function to toggle the state
+  };
+
   return (
     <>
-      <Grid2 container>
+      <Grid2 container >
         <Grid2
           size={{ xs: "12" }}
           sx={{
@@ -201,11 +210,14 @@ const FlightDetails = () => {
           </Grid2>
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
+          
             <Container sx={{ mt: "-70px" }}>
               <Grid2 container spacing={2}>
                
-                {/* Flight Details */}
-                <Grid2 size={8}>
+                {/* Flight Details  */}
+                  <Grid2 size={{lg:8 ,xs:12}} order={{lg:1 ,xs:2}} >
+                    
+                  
                   <Paper
                     sx={{
                       padding: 2,
@@ -526,8 +538,11 @@ const FlightDetails = () => {
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={4} sx={{ position: "sticky" }}>
-                  <FareSummary fareData={flightDetails[0]?.Results} />
+                <Grid2 size={{lg:4 ,xs:12}} order={{lg:2 ,xs:1}} > 
+                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer}   /> }/> :
+                 <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer}  /> }
+              {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
+                  {/* <FareSummary fareData={flightDetails[0]?.Results} /> */}
                 </Grid2>
               </Grid2>
             </Container>

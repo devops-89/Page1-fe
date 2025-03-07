@@ -364,13 +364,13 @@ const PassengerForm = ({ flightDetails, myState }) => {
         >
           <Typography
             variant="h5"
-            sx={{ fontFamily: nunito.style, fontWeight: 700, mb: "10px" }}
+            sx={{ fontSize:{lg:18 ,xs:14} ,fontFamily: nunito.style, fontWeight: 700, mb: "10px" }}
           >
             Passenger Form
           </Typography>
           <Typography
             variant="body1"
-            sx={{ fontFamily: nunito.style, fontWeight: 600, mb: "10px" }}
+            sx={{ fontSize:{lg:18 ,xs:14},fontFamily: nunito.style, fontWeight: 600, mb: "10px" }}
           >
             Total Passengers: {totalPassengers}
           </Typography>
