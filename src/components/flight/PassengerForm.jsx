@@ -306,17 +306,15 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             );
             setLoading(false);
             setTimeout(() => {
-              // router.push('/checkout')
-              // console.log("mytraceid", payload?.trace_id)
-
+  
               if (journey?.journey_type === JOURNEY_TYPE.ONEWAY) {
                 router.push(
                   `/flight-list/${payload?.trace_id}/oneway-checkout`
                 );
               } else if (journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP) {
-                // router.push(
-                //   `/round-list/${payload?.trace_id}/roundtrip-checkout`
-                // );
+                router.push(
+                  `/round-list/${payload?.trace_id}/roundtrip-checkout`
+                );
               } else if (journey?.journey_type === JOURNEY_TYPE.MULTIWAY) {
                 router.push(
                   `/multi-list/${payload?.trace_id}/multitrip-checkout`
@@ -326,7 +324,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           }
         })
         .catch((error) => {
-          console.error("Booking Error:", error); // Log the entire error object
+          console.log(error.message); // Log the entire error object
           dispatch(
             setToast({
               open: true,
@@ -347,7 +345,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     );
   }
 
-  console.log("loading", loading);
+  // console.log("loading", loading);
 
   return (
     <>

@@ -4,22 +4,37 @@ import Image from "next/image";
 import React from "react";
 import pointerImage from "@/../public/images/pointer.png";
 import { nunito } from "@/utils/fonts";
+import { useRouter } from "next/router";
 
 const InternationalDetail = ({ flightDetails, setOpen }) => {
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  const router = useRouter();
+  // console.log("router", router.query.slug);
+  // console.log("flight", flightDetails?.[0]?.TraceId);
+
   return (
     <>
       <Button
         size="small"
-        sx={{ fontFamily: nunito.style, fontWeight: 800, position:'absolute', right:'30px', top:"30px" }}
+        sx={{
+          fontFamily: nunito.style,
+          fontWeight: 800,
+          position: "absolute",
+          right: "30px",
+          top: "30px",
+          display: {
+            xs: router.query.slug === flightDetails?.[0]?.TraceId ? "none" : "block",
+          },
+        }}
         onClick={handleClickOpen}
       >
         View Fare Rules
       </Button>
-      {flightDetails[0]?.Results?.Segments?.map(
+
+      {flightDetails?.[0]?.Results?.Segments?.map(
         (segmentGroup, groupIndex) => (
           <Card key={groupIndex} sx={{ padding: "20px", marginBottom: "20px" }}>
             <Grid2 container>
@@ -215,7 +230,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                                 )
                               )
                             )
-                            .format("H[h] : m[m]")}`}{" "}
+                            .format("H[h] : m[m]")}`}
                           Layover in{" "}
                           {`${segment?.Destination?.Airport?.AirportName}`}
                         </Typography>

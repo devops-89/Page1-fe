@@ -65,7 +65,7 @@ const FareSummary = ({ fareData, commission }) => {
               variant="body1"
               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
             >
-              {fareData?.Fare?.BaseFare} ₹
+             ₹ {fareData?.Fare?.BaseFare} 
             </Typography>
           </Box>
         </ListItem>
@@ -98,7 +98,7 @@ const FareSummary = ({ fareData, commission }) => {
               variant="body1"
               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
             >
-              {fareData?.Fare?.Tax} ₹
+              ₹ {fareData?.Fare?.Tax}
             </Typography>
           </Box>
         </ListItem>
@@ -151,7 +151,7 @@ const FareSummary = ({ fareData, commission }) => {
               variant="body1"
               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
             >
-              {fareData?.Fare?.Discount} ₹
+              ₹ {fareData?.Fare?.Discount} 
             </Typography>
           </Box>
         </ListItem>
@@ -175,7 +175,7 @@ const FareSummary = ({ fareData, commission }) => {
           variant="body1"
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
-          {fareData?.Fare?.PublishedFare} ₹
+         ₹ {fareData?.Fare?.PublishedFare} 
         </Typography>
       </Box>
 
@@ -195,10 +195,10 @@ const FareSummary = ({ fareData, commission }) => {
           variant="body1"
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
-          {commission?.commission_type === COMMISSION_TYPE.FIXED
+          ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
             ? serviceFeeInFixed.toFixed(2)
             : serviceFeeInPercent.toFixed(2)}{" "}
-          ₹
+          
         </Typography>
       </Box>
 
@@ -219,10 +219,10 @@ const FareSummary = ({ fareData, commission }) => {
           variant="h6"
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
-          {commission?.commission_type === COMMISSION_TYPE.FIXED
+          ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
             ? (publishFare + serviceFeeInFixed).toFixed(2)
             : (publishFare + serviceFeeInPercent).toFixed(2)}{" "}
-          ₹
+          
         </Typography>
       </Box>
     </Paper>

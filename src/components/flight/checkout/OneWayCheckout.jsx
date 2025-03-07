@@ -29,6 +29,8 @@ export default function OneWayCheckout() {
   const [loading, setLoading] = useState(true);
   const [passengerCount, setPassengerCount] = useState(null);
 
+  // console.log("selector", selector)
+
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("oneWayflightDetails");
     const storedPassengerCount = localStorage.getItem("state");
@@ -39,7 +41,7 @@ export default function OneWayCheckout() {
       setPassengerCount(JSON.parse(storedPassengerCount));
     }
     if (!isAuthenticated || !storedFlightDetails) {
-      router.back();
+      router.replace('/login');
     } else {
       setLoading(false);
     }
@@ -535,7 +537,7 @@ export default function OneWayCheckout() {
                             fontFamily: nunito.style,
                           }}
                         >
-                          {moment((oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime)).format("HH:mm A")}
+                          {moment((oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime)).format("HH:mm")}
                         </Typography>
                       </Stack>
                     </Box>

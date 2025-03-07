@@ -39,7 +39,7 @@ export default function OneWayCheckout() {
       setPassengerCount(JSON.parse(storedPassengerCount));
     }
     if (!isAuthenticated || !storedFlightDetails) {
-      router.back();
+      router.replace('/login');
     } else {
       setLoading(false);
     }
@@ -560,7 +560,7 @@ export default function OneWayCheckout() {
                           {moment(
                             multiCity[0]?.Results?.Segments[0][0]?.Origin
                               ?.DepTime
-                          ).format("HH:mm A")}
+                          ).format("HH:mm")}
                         </Typography>
                       </Stack>
                     </Box>
