@@ -79,7 +79,9 @@ const Header = () => {
 
   const user = useSelector((state) => state.USER);
 
-  const name = user?.full_name ? user.full_name.slice(0, 1) : "";
+  // console.log("user", user)
+
+  const name = user?.email ? user.email.slice(0, 1) : "";
   const [openMenu ,setOpenMenu] = useState("false");
 
   const tablet = useMediaQuery("(max-width:900px)");
@@ -161,14 +163,14 @@ const Header = () => {
 
           { openMenu &&
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
-            <IconButton
+            {/* <IconButton
               sx={{
                 backgroundColor: COLORS.WHITE,
                 border: `1px solid ${COLORS.WHITE}`,
               }}
             >
               <ShoppingBag sx={{ color: COLORS.PRIMARY, fontSize: {lg:14 ,sm:14 ,xs:10} }} />
-            </IconButton>
+            </IconButton> */}
             {user?.isAuthenticated ? (
               <IconButton
                 sx={{
@@ -190,7 +192,7 @@ const Header = () => {
                       color: COLORS.PRIMARY,
                     }}
                   >
-                    {name}
+                    {name.toUpperCase()}
                   </Typography>
                 )}
               </IconButton>
