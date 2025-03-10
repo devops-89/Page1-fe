@@ -15,7 +15,7 @@ import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
-
+import FullScreenDialog from "./ssr/oneway/seats/FullScreenDiaog";
 
 const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   // console.log("journey", journey)
@@ -542,7 +542,22 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           }}
         </Formik>
 
-      
+        <Box sx={{display:'flex', alignItems:"center", justifyContent:'space-between'}}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      fontFamily: nunito.style,
+                      mb: "10px",
+                      fontSize: "18px",
+                    }}
+                  >
+                    Pick Your Preferred Seats
+                  </Typography>
+                  <FullScreenDialog />
+                </Box>
+
+
       </Container>
 
       <ToastBar />

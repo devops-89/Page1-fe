@@ -39,6 +39,8 @@ import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
+import MealSelection from "@/components/flight/ssr/oneway/MealSelection";
+import BaggageSelection from "@/components/flight/ssr/oneway/BaggageSelection";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -61,6 +63,7 @@ const FlightDetails = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [verifiedData, setVerifiedData] = useState(null);
+
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -519,34 +522,16 @@ const FlightDetails = () => {
                       </Card>
                     ) : null}
 
-                    {/* Seat Details Controls */}
-                    <Card sx={{ display:"flex",alignItems:"center",py:"0px"}}>
-                      {verifiedData ? (
-                        <Container sx={{ py: 2 }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                             
-                            }}
-                          >
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                fontWeight: 700,
-                                fontFamily: nunito.style,
-                                mb: "10px",
-                                fontSize: "18px",
-                              }}
-                            >
-                              Pick Your Preferred Seats
-                            </Typography>
-                            <FullScreenDialog />
-                          </Box>
-                        </Container>
-                      ) : null}
-                    </Card>
+                    {otherDetails ? (<Card sx={{ mb: "20px", p: "20px" }}>
+                    <MealSelection mealData={otherDetails?.MealDynamic}/>
+                    </Card>):null}
+
+                    {otherDetails ? (<Card sx={{ mb: "20px", p: "20px" }}>
+                    <BaggageSelection baggageData={otherDetails?.Baggage}/>
+                    </Card>):null}
+                    
+
+
                   </Paper>
                 </Grid2>
 
