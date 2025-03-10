@@ -2,14 +2,22 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { Grid2, TextField, Typography, MenuItem } from "@mui/material";
 import { nunito } from "@/utils/fonts";
+import {Accordion,AccordionSummary,AccordionDetails} from "@mui/material";
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors }) => {
   // console.log("passenger:",passenger);
   return (
-    <>
-      <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style, mb: "10px" }}>
-       {passenger.formType}
+    <Accordion defaultExpanded={index===0}>
+      <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
+      <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style,textTransform:"capitalize" }}>
+       {passenger.formType} {index+1}
       </Typography>
+      </AccordionSummary>
+     <AccordionDetails>
+
+    
       <Grid2 container spacing={2} sx={{mb:'20px'}}>
         {/* Title */}
         <Grid2 size={3}>
@@ -153,7 +161,8 @@ const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors })
           />
         </Grid2> 
       </Grid2>
-    </>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
