@@ -15,7 +15,7 @@ import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
-import FullScreenDialog from "./seats/FullScreenDiaog";
+import FullScreenDialog from "./ssr/oneway/seats/FullScreenDiaog";
 
 const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   // console.log("journey", journey)
@@ -556,6 +556,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                   </Typography>
                   <FullScreenDialog />
                 </Box>
+
+
       </Container>
 
       <ToastBar />
