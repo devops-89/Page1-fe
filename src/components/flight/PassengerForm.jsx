@@ -6,7 +6,6 @@ import PassportForm from "./PassportForm";
 import GstForm from "./GstForm";
 import { validationSchema } from "@/utils/validationSchema";
 import { nunito } from "@/utils/fonts";
-import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
 import { useDispatch } from "react-redux";
 import AddForm from "./AddForm";
@@ -54,8 +53,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     fareBreakdown: [],
   });
 
-  
-
   const dispatch = useDispatch();
   const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
@@ -81,7 +78,17 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   } = flightDetails[0]?.Results?.Fare;
 
   console.log("break", flightDetails[0]?.Results?.FareBreakdown);
-  console.log("flightdata",flightDetails)
+  // console.log("flightdata",flightDetails)
+
+  const mealAndBaggageData =
+  journey?.journey_type === JOURNEY_TYPE.ONEWAY
+      ? flightDetails[1]
+      : journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP
+      ? flightDetails[1]?.Response
+      : journey?.journey_type === JOURNEY_TYPE.MULTIWAY
+      ? flightDetails[1]?.Response
+      : null;
+
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
     if (storedState) {
@@ -307,7 +314,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             );
             setLoading(false);
             setTimeout(() => {
-  
               if (journey?.journey_type === JOURNEY_TYPE.ONEWAY) {
                 router.push(
                   `/flight-list/${payload?.trace_id}/oneway-checkout`
@@ -347,7 +353,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   }
 
   // console.log("loading", loading);
-  console.log("Flight Details on Passenger form:",flightDetails)
+  console.log("Flight Details on Passenger form:", flightDetails);
 
   return (
     <>
@@ -467,7 +473,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 {values.adult.map((dataObj, index) => (
                   <Box key={index} sx={{ mb: "10px" }}>
                     <PassengerFields
-                       data={flightDetails[1]}
+                      data={mealAndBaggageData}
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}
@@ -481,7 +487,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 {values.child.map((dataObj, index) => (
                   <Box key={index} sx={{ mb: "10px" }}>
                     <PassengerFields
-                       data={flightDetails[1]}
+                      data={mealAndBaggageData}
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}
@@ -546,22 +552,26 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           }}
         </Formik>
 
-        <Box sx={{display:'flex', alignItems:"center", justifyContent:'space-between'}}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 700,
-                      fontFamily: nunito.style,
-                      mb: "10px",
-                      fontSize: "18px",
-                    }}
-                  >
-                    Pick Your Preferred Seats
-                  </Typography>
-                  <FullScreenDialog />
-                </Box>
-
-
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              fontFamily: nunito.style,
+              mb: "10px",
+              fontSize: "18px",
+            }}
+          >
+            Pick Your Preferred Seats
+          </Typography>
+          <FullScreenDialog />
+        </Box>
       </Container>
 
       <ToastBar />

@@ -14,7 +14,7 @@ export default function MealSelection({ mealData }) {
     <>
       <Typography
         variant="h6"
-        sx={{ fontFamily: nunito.style, fontWeight: 700, mb: "20px" }}
+        sx={{ fontFamily: nunito.style, fontWeight: 700, mb: "10px" }}
       >
         Select Your Meal
       </Typography>

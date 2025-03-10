@@ -13,7 +13,7 @@ export default function BaggageSelection({ baggageData }) {
     <>
       <Typography
         variant="h6"
-        sx={{ fontFamily: nunito.style, fontWeight: 700, mb: "20px" }}
+        sx={{ fontFamily: nunito.style, fontWeight: 700, mb: "10px" }}
       >
         Select Your Baggage
       </Typography>
@@ -22,9 +22,9 @@ export default function BaggageSelection({ baggageData }) {
         return (
           <Autocomplete
             key={baggageIndex}
-            options={singleBaggage || []} // Ensure it never gets undefined
+            options={singleBaggage || []} 
             getOptionLabel={(baggage) => baggage?.Text || "--"}
-            value={selectedBaggage[baggageIndex] || null} // Unique state per dropdown
+            value={selectedBaggage[baggageIndex] || null} 
             onChange={(event, newValue) => {
               console.log(`Selected baggage for index ${baggageIndex}:`, newValue);
               setSelectedBaggage((prev) => ({ ...prev, [baggageIndex]: newValue }));
@@ -50,6 +50,7 @@ export default function BaggageSelection({ baggageData }) {
             sx={{
               width: "100%",
               mb: 2,
+              overflowY:'scroll',
               fontFamily: nunito.style,
               ...loginTextField,
               "& fieldset": { borderWidth: "2px!important" },

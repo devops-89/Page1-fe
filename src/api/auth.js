@@ -4,6 +4,7 @@ export const authenticationController = {
   registerUser: async (data) => {
     try {
       let result = await publicApi.post("/register", data);
+      console.log("result",result)
       return result;
     } catch (error) {
       throw error;

@@ -84,8 +84,6 @@ const RegistrationForm = () => {
     initialValues: {
       full_name: "",
       email: "",
-      country_code: "",
-      phone_number: "",
       password: "",
       user_type: "USER",
     },
