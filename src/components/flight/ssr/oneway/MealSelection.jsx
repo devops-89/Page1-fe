@@ -6,9 +6,9 @@ import { nunito } from "@/utils/fonts";
 import { loginTextField } from "@/utils/styles";
 
 export default function MealSelection({ mealData }) {
-  console.log("mealData", mealData);
+  // console.log("mealData", mealData);
   const theme = useTheme();
-  const [selectedMeal, setSelectedMeal] = React.useState(null); // Single meal state
+  const [selectedMeal, setSelectedMeal] = React.useState(null); 
 
   return (
     <>
@@ -20,29 +20,29 @@ export default function MealSelection({ mealData }) {
       </Typography>
 
       {mealData?.map((singleMeal, mealIndex) => {
-        // Filter meals to remove items with Price === 0
-        const availableMeals = singleMeal?.filter((meal) => meal?.Price !== 0);
-
         return (
           <Autocomplete
             key={mealIndex}
-            options={availableMeals}
-            getOptionLabel={(meal) => meal?.AirlineDescription}
+            options={singleMeal} 
+            getOptionLabel={(meal) => meal?.AirlineDescription || "--"}
             value={selectedMeal}
-            onChange={(event, newValue) => setSelectedMeal(newValue)}
+            onChange={(event, newValue) => {
+              console.log("Selected Meal:", newValue); 
+              setSelectedMeal(newValue);
+            }}
             renderInput={(params) => (
               <TextField {...params} label="Meals" variant="outlined" />
             )}
             renderOption={(props, meal) => (
-              <li {...props} key={meal?.AirlineDescription}>
+              <li {...props} key={meal?.AirlineDescription || "default-key"}>
                 <Grid2 container spacing={2} sx={{ width: "100%" }}>
-                  <Grid2 size={7} sx={{ textAlign: "start", fontWeight:600, fontFamily:nunito.style }}>
-                    {meal?.AirlineDescription}
+                  <Grid2 size={7} sx={{ textAlign: "start", fontWeight: 600, fontFamily: nunito.style }}>
+                    {meal?.AirlineDescription || "--"}
                   </Grid2>
-                  <Grid2 size={2} sx={{ textAlign: "center", fontWeight:600, fontFamily:nunito.style }}>
-                    {meal?.Code}
+                  <Grid2 size={2} sx={{ textAlign: "center", fontWeight: 600, fontFamily: nunito.style }}>
+                    {meal?.Code || "--"}
                   </Grid2>
-                  <Grid2 size={3} sx={{ textAlign: "end", fontWeight:600, fontFamily:nunito.style }}>
+                  <Grid2 size={3} sx={{ textAlign: "end", fontWeight: 600, fontFamily: nunito.style }}>
                     {meal?.Price} {meal?.Currency}
                   </Grid2>
                 </Grid2>

@@ -38,7 +38,8 @@ import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
-import MealSelection from "@/components/flight/ssr/oneway/meal/MealSelection";
+import MealSelection from "@/components/flight/ssr/oneway/MealSelection";
+import BaggageSelection from "@/components/flight/ssr/oneway/BaggageSelection";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -522,6 +523,10 @@ const FlightDetails = () => {
 
                     {otherDetails ? (<Card sx={{ mb: "20px", p: "20px" }}>
                     <MealSelection mealData={otherDetails?.MealDynamic}/>
+                    </Card>):null}
+
+                    {otherDetails ? (<Card sx={{ mb: "20px", p: "20px" }}>
+                    <BaggageSelection baggageData={otherDetails?.Baggage}/>
                     </Card>):null}
                     
 
