@@ -19,7 +19,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { MuiTelInput } from "mui-tel-input";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Loading from "react-loading";
