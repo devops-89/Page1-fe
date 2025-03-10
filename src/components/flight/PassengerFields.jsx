@@ -5,9 +5,11 @@ import { nunito } from "@/utils/fonts";
 import {Accordion,AccordionSummary,AccordionDetails} from "@mui/material";
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import MealSelection from "./ssr/oneway/MealSelection";
+import BaggageSelection from "./ssr/oneway/BaggageSelection";
 
-const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors }) => {
-  // console.log("passenger:",passenger);
+const PassengerFields = ({data, passenger, index, handleChange, handleBlur, errors }) => {
+    console.log("data", data)
   return (
     <Accordion defaultExpanded={index===0}>
       <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
@@ -160,6 +162,14 @@ const PassengerFields = ({ passenger, index, handleChange, handleBlur, errors })
             helperText={<ErrorMessage name={`${passenger.formType}[${index}].contact_no`} />}
           />
         </Grid2> 
+       {
+        (data)?(<MealSelection mealData={data?.MealDynamic}  />):(null)
+       } 
+
+       {
+        (data)?( <BaggageSelection baggageData={data?.Baggage} />):(null)
+       }
+       
       </Grid2>
       </AccordionDetails>
     </Accordion>

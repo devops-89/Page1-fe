@@ -54,7 +54,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     fareBreakdown: [],
   });
 
-  console.log("flight Details on Passenger form:", flightDetails);
+  
 
   const dispatch = useDispatch();
   const [adultCount, setAdultCount] = useState(1);
@@ -81,6 +81,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   } = flightDetails[0]?.Results?.Fare;
 
   console.log("break", flightDetails[0]?.Results?.FareBreakdown);
+  console.log("flightdata",flightDetails)
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
     if (storedState) {
@@ -346,6 +347,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   }
 
   // console.log("loading", loading);
+  console.log("Flight Details on Passenger form:",flightDetails)
 
   return (
     <>
@@ -465,6 +467,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 {values.adult.map((dataObj, index) => (
                   <Box key={index} sx={{ mb: "10px" }}>
                     <PassengerFields
+                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}
@@ -478,6 +481,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 {values.child.map((dataObj, index) => (
                   <Box key={index} sx={{ mb: "10px" }}>
                     <PassengerFields
+                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}

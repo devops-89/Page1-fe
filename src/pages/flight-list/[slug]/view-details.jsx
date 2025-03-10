@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import Grid2 from "@mui/material/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
 import UserVerifyForm from "@/components/flight/UserVerifyForm";
-import FullScreenDialog from "@/components/flight/seats/FullScreenDiaog";
+
 import {
   Box,
   Container,
@@ -39,8 +39,8 @@ import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
-import MealSelection from "@/components/flight/ssr/oneway/MealSelection";
-import BaggageSelection from "@/components/flight/ssr/oneway/BaggageSelection";
+
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -148,7 +148,7 @@ const FlightDetails = () => {
     }
   }, []);
 
-  // console.log("verified data:",verifiedData);
+ 
 
   return (
     <>
@@ -522,13 +522,7 @@ const FlightDetails = () => {
                       </Card>
                     ) : null}
 
-                    {otherDetails ? (<Card sx={{ mb: "20px", p: "20px" }}>
-                    <MealSelection mealData={otherDetails?.MealDynamic}/>
-                    </Card>):null}
-
-                    {otherDetails ? (<Card sx={{ mb: "20px", p: "20px" }}>
-                    <BaggageSelection baggageData={otherDetails?.Baggage}/>
-                    </Card>):null}
+                  
                     
 
 
