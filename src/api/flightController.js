@@ -5,8 +5,8 @@ export const flightController = {
     try {
       let result = await flightPublicApi.get("flight/all-airport");
       return result;
-    } catch (Error) {
-      throw Error;
+    } catch (error) {
+      throw error;
     }
   },
   searchFlight: async (data) => {
@@ -37,7 +37,7 @@ export const flightController = {
     }
     catch(error){
       // console.log("error nonLLC", error)
-      throw Error;
+      throw error;
      
     }
   },
@@ -50,7 +50,7 @@ export const flightController = {
     }
     catch(error){
       // console.log("error LLC", error)
-      throw Error;
+      throw error;
     }
   },
 
@@ -62,7 +62,7 @@ export const flightController = {
      return result;
     }
     catch(error){
-      throw Error;
+      throw error;
     }
 },
 
@@ -72,7 +72,7 @@ roundflightDetails:async(data)=>{
    return result;
   }
   catch(error){
-    throw Error;
+    throw error;
   }
 },
 
@@ -83,7 +83,7 @@ multiflightDetails:async(data)=>{
    return result;
   }
   catch(error){
-    throw Error;
+    throw error;
   }
 },
 

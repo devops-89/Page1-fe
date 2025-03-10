@@ -26,10 +26,10 @@ import { useEffect, useState } from "react";
 import TabPanel from "../tabPanel";
 import FareDetails from "./fareDetail";
 import BaggageDetails from "./baggageDetails";
-import FlightBox from "./FlightBox";
+import FlightBox from "./flightBox";
 
 
-const FlightListBox = ({ details, traceId }) => {
+const FlightListBox = ({ details, traceId, journey }) => {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -59,6 +59,7 @@ const FlightListBox = ({ details, traceId }) => {
         query: {
           ResultIndex: flightDetails?.ResultIndex,
           traceId: traceId,
+          journey : journey
         },
       });
   };

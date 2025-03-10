@@ -31,6 +31,7 @@ const FlightList = () => {
   const router = useRouter();
   const [flightList, setFlightList] = useState(null);
   const [traceId, setTraceId] = useState("");
+  const [journey, setJourney] = useState("");
   const [priceRange, setPriceRange] = useState([500, 2000]);
 
   const [selectedDeparture, setSelectedDeparture] = useState(null);
@@ -42,6 +43,9 @@ const FlightList = () => {
         setFlightList(JSON.parse(localStorage.getItem("roundflightData")));
         setTraceId(
           JSON.parse(localStorage.getItem("roundflightData")).trace_id
+        );
+        setJourney(
+          JSON.parse(localStorage.getItem("roundflightData")).type
         );
       }, 1500);
     }
@@ -84,7 +88,7 @@ const FlightList = () => {
       query: {
         ResultIndex: JSON.stringify(newResultIndex),
         traceId: traceId,
-        journey: flightList?.type,
+        journey: journey,
       },
     });
   };
@@ -216,7 +220,7 @@ const FlightList = () => {
             </Grid2>
 
             {/* Round Flight List Data Domestic and International  */}
-            {flightList?.type === "INTERNATIONAL" ? (
+            {journey === "INTERNATIONAL" ? (
               <Grid2 size={9} container>
                 <Grid2 size={12}>
                   <Box
@@ -249,7 +253,7 @@ const FlightList = () => {
                       <InternationalRoundFlightBox
                         details={val}
                         traceId={traceId}
-                        journey={flightList?.type}
+                        journey={journey}
                       />
                     </Grid2>
                   ))}
@@ -366,7 +370,7 @@ const FlightList = () => {
       )}
 
       {/* Footer Flight Detail section  */}
-      {flightList?.type === "DOMESTIC" ? (
+      {journey=== "DOMESTIC" ? (
         <Grid2
           container
           sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 9999 }}

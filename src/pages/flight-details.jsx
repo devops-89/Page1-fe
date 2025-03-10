@@ -11,7 +11,7 @@ import {
   Stack,
   Card,
 } from "@mui/material";
-import TravellerForm from "@/components/flight/TravellerForm";
+
 import {data} from "../assests/data";
 
 const FlightDetails = ({ flightData, travelerData, fareSummary }) => {

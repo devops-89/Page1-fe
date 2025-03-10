@@ -1,47 +1,135 @@
 import React from "react";
 import FlightSharpIcon from "@mui/icons-material/FlightSharp";
-import { Grid2, Button, Typography, Box, Stack } from "@mui/material";
-import AttachMoneySharpIcon from "@mui/icons-material/AttachMoneySharp";
-import CheckBoxOutlineBlankSharpIcon from "@mui/icons-material/CheckBoxOutlineBlankSharp";
-import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import { Grid2, Button, Typography, Box, Stack,Divider,Avatar } from "@mui/material";
 import SelectedList from "./SelectedList";
 import { COLORS } from "@/utils/colors.js";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
-const SeatDetail = () => {
+import moment from "moment";
+import { FlightTakeoff } from "@mui/icons-material";
+
+import { nunito } from "@/utils/fonts";
+const SeatDetail = ({extraDetails}) => {
+
+   console.log("Seat Details",extraDetails);
   return (
     <Box
       item
       sx={{
         border: "1px solid gray",
-        width: "440px",
+        width: "450px",
         borderRadius: "10px",
         boxShadow: 2,
         backgroundColor: COLORS.WHITE,
+        px:2,
+        
       }}
     >
-      <Typography variant="body1" sx={{ m: 2, fontWeight: "bold" }}>
-        New Delhi (DEL) to Mumbai (BOM)
-      </Typography>
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "20px",
-          borderBottom: "1px solid gray",
-        }}
-      >
-        <Stack direction={"row"} spacing={1} sx={{ alignItems: "center" }}>
-          <FlightSharpIcon />
-          <Box>
-            <Typography variant="subtitle2">Flight 2429</Typography>
-            <Typography variant="subtitle2">Operated by: AI</Typography>
-          </Box>
-        </Stack>
+    {/* expermiment start */}
+    
 
-        <Typography variant="subtitle2">Travel time: 2h 15m</Typography>
-      </Stack>
+    <Grid2 container sx={{ mt: 3}} spacing={6} alignItems={"flex-start"}>
+          <Grid2 size={4}>
+            <Typography
+              sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
+            >
+              {moment(extraDetails?.Results?.Segments[0][0]?.Origin?.DepTime).format(
+                "HH:mm"
+              )}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+            >
+              {extraDetails?.Results?.Segments[0][0]?.Origin?.Airport.AirportCode} -{" "}
+              {extraDetails?.Results?.Segments[0][0]?.Origin?.Airport.Terminal} Terminal
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+            >
+              {extraDetails?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}
+            </Typography>
+          </Grid2>
+          <Grid2 size={4}>
+            <Typography
+              sx={{
+                fontSize: 18,
+                fontWeight: 700,
+                fontFamily: nunito.style,
+                textAlign: "center",
+              }}
+            >
+             {`${Math.floor(
+                                      moment
+                                        .duration(
+                                          extraDetails?.Results?.Segments[0][
+                                            extraDetails?.Results?.Segments[0]
+                                              .length - 1
+                                          ].AccumulatedDuration,
+                                          "minutes"
+                                        )
+                                        .asHours()
+                                    )} hrs ${moment
+                                      .duration(
+                                        extraDetails?.Results?.Segments[0][
+                                          extraDetails?.Results?.Segments[0]
+                                            .length - 1
+                                        ].AccumulatedDuration,
+                                        "minutes"
+                                      )
+                                      .minutes()} min`}
+            </Typography>
+
+            <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
+              <Avatar sx={{ backgroundColor: COLORS.PRIMARY }}>
+                <FlightTakeoff sx={{ fontSize: 17 }} />
+              </Avatar>
+            </Divider>
+          </Grid2>
+          <Grid2 size={4}>
+            <Typography
+              sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
+            >
+              {moment(
+                extraDetails?.Results?.Segments[0][
+                  extraDetails?.Results?.Segments[0]
+                    .length - 1
+                ]?.Destination.ArrTime
+              ).format("HH:mm")}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+            >
+              {
+                extraDetails?.Results?.Segments[0][
+                  extraDetails?.Results?.Segments[0]
+                    .length - 1
+                ]?.Destination.Airport.AirportCode
+              }{" "}
+              -{" "}
+              {
+                extraDetails?.Results?.Segments[0][
+                  extraDetails?.Results?.Segments[0]
+                    .length - 1
+                ]?.Destination.Airport.Terminal
+              }{" "}
+              Terminal
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+            >
+              {
+                extraDetails?.Results?.Segments[0][
+                  extraDetails?.Results?.Segments[0]
+                    .length - 1
+                ]?.Destination.Airport.CityName
+              }
+            </Typography>
+          </Grid2>
+         
+        </Grid2>
+
+
+   
       <Stack
         direction={"row"}
         sx={{
@@ -62,11 +150,11 @@ const SeatDetail = () => {
           padding: "20px",
         }}
       >
-        <Box sx={{ textAlign: "center" }}>
+        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
             sx={{
-              width: "35px",
-              height: "35px",
+              width: "20px",
+              height: "20px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -79,26 +167,39 @@ const SeatDetail = () => {
           >
             <PersonOutlineIcon />
           </Box>
-          <Typography variant="subtitle2">Reserved</Typography>
+          <Typography variant="subtitle2" sx={{textAlign:"center",fontSize:"12px"}}>Reserved</Typography>
         </Box>
-        <Box sx={{ textAlign: "center" }}>
+        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
             sx={{
-              width: "35px",
-              height: "35px",
+              width: "20px",
+              height: "20px",
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
               backgroundColor: COLORS.GREEN,
             }}
           ></Box>
-          <Typography variant="subtitle2">Open</Typography>
+          <Typography variant="subtitle2" sx={{textAlign:"center",fontSize:"12px"}}>Selected</Typography>
         </Box>
-        <Box sx={{ textAlign: "center" }}>
+        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
             sx={{
-              width: "35px",
-              height: "35px",
+              width: "20px",
+              height: "20px",
+              p: 1,
+              border: "2px solid blue",
+              borderRadius: "4px",
+             
+            }}
+          ></Box>
+          <Typography variant="subtitle2" sx={{textAlign:"center",fontSize:"12px"}}>Available</Typography>
+        </Box>
+        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
+          <Box
+            sx={{
+              width: "20px",
+              height: "20px",
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
@@ -111,7 +212,7 @@ const SeatDetail = () => {
           >
             <CancelIcon />
           </Box>
-          <Typography variant="subtitle2">Blocked</Typography>
+          <Typography sx={{textAlign:"center",fontSize:"12px"}} variant="subtitle2">Blocked</Typography>
         </Box>
       </Stack>
     </Box>

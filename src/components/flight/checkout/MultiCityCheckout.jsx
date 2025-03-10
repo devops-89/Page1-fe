@@ -1,199 +1,120 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import Grid2 from "@mui/material/Grid2";
-import CloseIcon from "@mui/icons-material/Close";
-import UserVerifyForm from "@/components/flight/UserVerifyForm";
 import {
-  Box,
   Container,
-  Typography,
-  Paper,
-  Button,
-  Card,
   Divider,
-  DialogTitle,
-  Dialog,
-  IconButton,
-  DialogContent,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
+  Stack,
+  Box,
+  Typography,
+  FormControlLabel,
+  Button,
+  Checkbox,
+  Grid2,
+  Card,
 } from "@mui/material";
-import Image from "next/image";
-import { flightController } from "@/api/flightController";
-import { useRouter } from "next/router";
-import FareSummary from "@/components/flight/FareSummary";
 import moment from "moment";
-import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
-import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
-import { useDispatch } from "react-redux";
-import { setToast } from "@/redux/reducers/toast";
-import ToastBar from "@/components/toastBar";
-import PassengerForm from "@/components/flight/PassengerForm";
-import Link from "next/link";
-import Loader from "@/utils/Loader";
+import Image from "next/image";
+import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
+import { nunito } from "@/utils/fonts";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import FareSummary from "../FareSummary";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-
-const FlightDetails = () => {
-  const dispatch = useDispatch();
+export default function OneWayCheckout() {
   const router = useRouter();
-  const [flightDetails, setFlightDetails] = useState(null);
-  const [commission, setCommission] = useState(null);
-  const [isLCC, setIsLCC] = useState(null);
-  const [journey, setJourney] = useState(null);
-  const [error, setError] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [verifiedData, setVerifiedData] = useState(null);
-
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  // console.log("router", router.query)
+  const selector = useSelector((state) => state.USER);
+  const { isAuthenticated } = selector;
+  const [multiCity, setMultiCity] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [passengerCount, setPassengerCount] = useState(null);
 
   useEffect(() => {
-    if (
-      router.query.ResultIndex &&
-      router.query.traceId &&
-      router.query.journey
-    ) {
-      flightController
-        .multiflightDetails({
-          result_index: router.query.ResultIndex,
-          trace_id: router.query.traceId,
-          ip_address: JSON.parse(localStorage.getItem("multistate"))
-            ?.ip_address,
-          journey: router.query.journey,
-          journey_type: JOURNEY_TYPE.MULTIWAY,
-        })
-        .then((response) => {
-          if (response?.data?.data) {
-            setFlightDetails(response?.data?.data);
-            setIsLCC(response?.data?.data[0]?.Results?.IsLCC)
-            // setOtherDetails(response?.data?.data[1]);
-            setCommission(response?.data?.data[2]);
-            setJourney(response?.data?.data[3])
-            // console.log("multidetail", response?.data?.data);
-
-            localStorage.setItem(
-              "multitripflightDetails",
-              JSON.stringify(response?.data?.data)
-            );
-          }
-        })
-        .catch((error) => {
-          setError(error);
-          dispatch(
-            setToast({
-              open: true,
-              message:
-                error.message ||
-                "An error occurred while fetching flight details.",
-              severity: TOAST_STATUS.ERROR,
-            })
-          );
-        });
+    const storedFlightDetails = localStorage.getItem("multitripflightDetails");
+    const storedPassengerCount = localStorage.getItem("multistate");
+    if (storedFlightDetails) {
+      setMultiCity(JSON.parse(storedFlightDetails));
     }
-  }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      localStorage.getItem("multitripflightDetails")
-    ) {
-      setTimeout(() => {
-        setFlightDetails(
-          JSON.parse(localStorage.getItem("multitripflightDetails"))
-        );
-      }, 3000);
+    if (storedPassengerCount) {
+      setPassengerCount(JSON.parse(storedPassengerCount));
     }
-  }, []);
+    if (!isAuthenticated || !storedFlightDetails) {
+      router.replace('/login');
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated, router]);
+
+  // console.log("checkout details:", multiCity);
 
   return (
     <>
-      <Grid2 container>
-        <Grid2
-          size={{ xs: "12" }}
-          sx={{
-            height: "230px",
-            background: "rgba(8,8,79,1)",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            py: "10px",
-          }}
-        >
-          <Typography
-            variant="h5"
-            sx={{
-              color: COLORS.WHITE,
-              fontFamily: nunito.style,
-              fontWeight: 700,
-            }}
-          >
-            Complete Your Booking
-          </Typography>
-        </Grid2>
-
-        {error ? (
+      {isAuthenticated && multiCity ? (
+        <Grid2 container>
+          {/* top bar  */}
           <Grid2
             size={{ xs: "12" }}
             sx={{
-              textAlign: "center",
+              height: "230px",
+              background: "rgba(8,8,79,1)",
               width: "100%",
-              padding: "50px",
-              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              py: "10px",
             }}
           >
             <Typography
-              variant="h6"
+              variant="h5"
               sx={{
-                fontWeight: 600,
+                color: COLORS.WHITE,
                 fontFamily: nunito.style,
-                fontSize: "24px",
-                mb: "10px",
+                fontWeight: 700,
               }}
             >
-              {error?.message == null && error?.message == undefined
-                ? "An unexpected error occurred. Please try again later."
-                : "The Session is expired"}
+              Checkout
             </Typography>
-            <Link href="/">
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: COLORS.PRIMARY }}
-              >
-                Back to Homepage
-              </Button>
-            </Link>
           </Grid2>
-        ) : flightDetails ? (
-          <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
-            <Container sx={{ mt: "-70px" }}>
-              <Grid2 container spacing={2} sx={{ position: "relative" }}>
-                <Grid2 size={8}>
-                  <Paper
+
+          {/* Section 2  */}
+          <Grid2 size={{ xs: 12 }} sx={{ py: 5 }}>
+            <Container>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: "bold",
+                  fontFamily: nunito.style,
+                  mb: 4,
+                }}
+              >
+                Payment Now
+              </Typography>
+
+              <Grid2
+                size={{ xs: 12 }}
+                container
+                spacing={3}
+                alignItems={"flex-start"}
+              >
+                <Grid2
+                  size={{ xs: 12, sm: 12, md: 8 }}
+                  sx={{
+                    backgroundColor: COLORS.SEMIGREY,
+                    p: 2,
+                    borderRadius: 2,
+                  }}
+                >
+                  <Box
                     sx={{
-                      padding: 2,
-                      backgroundColor: "#F4F4F4",
-                      marginBottom: 2,
+                      backgroundColor: COLORS.WHITE,
+                      p: 2,
                     }}
                   >
-                    {flightDetails[0]?.Results?.Segments?.map(
+                    {/* form for payment option */}
+
+                    {/* fare details */}
+
+                    {multiCity[0]?.Results?.Segments?.map(
                       (flight, index) => {
                         return (
                           <Card
@@ -260,16 +181,6 @@ const FlightDetails = () => {
                                   justifyContent: "flex-end",
                                 }}
                               >
-                                <Button
-                                  size="small"
-                                  sx={{
-                                    fontFamily: nunito.style,
-                                    fontWeight: 800,
-                                  }}
-                                  onClick={handleClickOpen}
-                                >
-                                  View Fares Rules
-                                </Button>
                               </Grid2>
                             </Grid2>
                             <Divider />
@@ -485,166 +396,272 @@ const FlightDetails = () => {
                       }
                     )}
 
-                    {/* OTP Verification Start */}
+                    <Box
+                      sx={{
+                        borderBottom: 1,
+                        borderColor: COLORS.GREY,
+                        p: 1,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          mb: 1,
+                          color: COLORS.PRIMARY,
+                        }}
+                      >
+                        Passenger Info
+                      </Typography>
 
-                    {!verifiedData ? (
-                      <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                        <UserVerifyForm setVerifiedData={setVerifiedData} />
-                      </Card>
-                    ) : null}
-
-                    {/* OTP verification end */}
-
-                    {verifiedData ? (
-                      <Card sx={{ mb: "20px" }}>
-                        <PassengerForm
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
                           sx={{
-                            backgroundColor: COLORS.PRIMARY,
-                            color: COLORS.WHITE,
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
                           }}
-                          flightDetails={flightDetails}
-                          myState="multistate"
-                          journey={journey}
-                          isLCC={isLCC}
-                        />
-                      </Card>
-                    ) : null}
-                  </Paper>
-                </Grid2>
+                        >
+                          Adult
+                        </Typography>
 
-                <Grid2 size={4} sx={{ position: "sticky", top: "70px" }}>
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {passengerCount?.adult}
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Child
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {passengerCount?.child}
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Infant
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {passengerCount?.infant}
+                        </Typography>
+                      </Stack>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        borderBottom: 1,
+                        borderColor: COLORS.GREY,
+                        p: 1,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          mb: 1,
+                          color: COLORS.PRIMARY,
+                        }}
+                      >
+                        Journey Detail
+                      </Typography>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Departure Date
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {moment(
+                            multiCity[0]?.Results?.Segments[0][0]?.Origin
+                              ?.DepTime
+                          ).format("D MMM, ddd")}
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                        sx={{ mb: "5px" }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Departure Time
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 500,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {moment(
+                            multiCity[0]?.Results?.Segments[0][0]?.Origin
+                              ?.DepTime
+                          ).format("HH:mm")}
+                        </Typography>
+                      </Stack>
+                    </Box>
+
+                    <FormControlLabel
+                      control={<Checkbox defaultChecked />}
+                      label={
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontFamily: nunito.style,
+                            textAlign: "left",
+                          }}
+                        >
+                          I have read and accept Flight networks travel
+                          condition,Fare Rules ,the airlines general terms and
+                          condition and I have verified that i have entered my
+                          booking information correctly .<br /> you can read our
+                          Privacy here.
+                        </Typography>
+                      }
+                      sx={{
+                        mt: 4,
+                        display: "flex",
+                        alignItems: "flex-start",
+                      }}
+                    />
+                    <Grid2 container mt={2} spacing={2}>
+                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                        <Stack direction="row" alignItems={"center"}>
+                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                          <Typography sx={{ fontFamily: nunito.style }}>
+                            100% secure booking
+                          </Typography>
+                        </Stack>
+                      </Grid2>
+
+                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                        <Stack direction="row" alignItems={"center"}>
+                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                          <Typography sx={{ fontFamily: nunito.style }}>
+                            100% secure booking
+                          </Typography>
+                        </Stack>
+                      </Grid2>
+
+                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                        <Stack direction="row" alignItems={"center"}>
+                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                          <Typography sx={{ fontFamily: nunito.style }}>
+                            100% secure booking
+                          </Typography>
+                        </Stack>
+                      </Grid2>
+                    </Grid2>
+                  </Box>
+                </Grid2>
+                {/* order-box */}
+
+                <Grid2
+                  size={{ xs: 12, sm: 12, md: 4 }}
+                  sx={{
+                    backgroundColor: COLORS.WHITE,
+                    borderRadius: 2,
+                    position: "sticky",
+                    top: "75px",
+                  }}
+                >
+                  {/* --------------fare Summary Start-----------------  */}
                   <FareSummary
-                    fareData={flightDetails[0]?.Results}
-                    commission={commission}
+                    fareData={multiCity[0]?.Results}
+                    commission={multiCity[2]}
                   />
+                  {/* --------------fare Summary End-----------------  */}
+
+                  <Stack
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      flexDirection: "row",
+                      mt: "20px",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: COLORS.PRIMARY,
+                        color: COLORS.WHITE,
+                        minWidth: 10,
+                      }}
+                    >
+                      Pay Now
+                    </Button>
+                  </Stack>
                 </Grid2>
               </Grid2>
             </Container>
           </Grid2>
-        ) : (
-          <Grid2
-            size={{ xs: "12" }}
-            sx={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "50px",
-            }}
-          >
-            <Loader open={true} />
-          </Grid2>
-        )}
-      </Grid2>
-
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <DialogTitle
-          sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
-          id="customized-dialog-title"
-        >
-          Fare Rules
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={(theme) => ({
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: theme.palette.grey[500],
-          })}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers sx={{ minWidth: "500px" }}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      fontSize: "17px",
-                      textAlign: "center",
-                      fontWeight: 600,
-                      fontFamily: nunito.style,
-                    }}
-                  >
-                    Origin
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: "17px",
-                      textAlign: "center",
-                      fontWeight: 600,
-                      fontFamily: nunito.style,
-                    }}
-                  >
-                    Destination
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      fontSize: "17px",
-                      textAlign: "center",
-                      fontWeight: 600,
-                      fontFamily: nunito.style,
-                    }}
-                  >
-                    Airline
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {flightDetails &&
-                  flightDetails[0]?.Results?.FareRules?.map(
-                    (fareRule, index) => {
-                      return (
-                        <TableRow>
-                          <TableCell
-                            sx={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                              fontWeight: 600,
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            {fareRule.Origin}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                              fontWeight: 600,
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            {fareRule.Destination}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              fontSize: "15px",
-                              textAlign: "center",
-                              fontWeight: 600,
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            {fareRule.Airline}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    }
-                  )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </DialogContent>
-      </BootstrapDialog>
-      <ToastBar />
+        </Grid2>
+      ) : null}
     </>
   );
-};
-
-export default FlightDetails;
+}

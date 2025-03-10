@@ -24,12 +24,14 @@ import Loader from "@/utils/Loader";
 const MultiList = () => {
   const [flightList, setFlightList] = useState(null);
   const [traceId, setTraceId] = useState("");
+  const [journey, setJourney] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("multiwayData")) {
       setTimeout(() => {
         setFlightList(JSON.parse(localStorage.getItem("multiwayData")));
         setTraceId(JSON.parse(localStorage.getItem("multiwayData")).trace_id);
+        setJourney(JSON.parse(localStorage.getItem("multiwayData")).type);
       }, 3000);
     }
   }, []);
@@ -167,6 +169,7 @@ const MultiList = () => {
                           details={details}
                           index={index}
                           traceId={traceId}
+                          journey={journey}
                         />
                       );
                     }

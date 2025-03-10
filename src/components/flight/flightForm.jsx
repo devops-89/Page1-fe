@@ -54,7 +54,7 @@ const FlightForm = () => {
           value={flightValue}
           sx={{
             "& .MuiTab-root": {
-              width: 100,
+              width: 115,
               minHeight: 40,
               top: 5,
               borderRadius: 8,
@@ -75,14 +75,14 @@ const FlightForm = () => {
               icon={
                 <Box
                   sx={{
-                    border:
+                    backgroundColor:
                       i === flightValue
-                        ? `3px solid ${COLORS.SECONDARY}`
-                        : "1px solid #d7d7d7",
+                        ? `${COLORS.SECONDARY}`
+                        : "#d7d7d7",
                     borderRadius: "50%",
-                    width: 10,
-                    height: 10,
-                    
+                    width: 15,
+                    height: 15,
+                    border:`4px solid ${COLORS.SEMIGREY}`,
                   }}
                 ></Box>
               }

@@ -127,7 +127,7 @@ const About = () => {
           </Box>
         </Container>
       </Box>
-      <Box sx={{ mt: 10, mb: 10, position: "relative" }}>
+      {/* <Box sx={{ mt: 10, mb: 10, position: "relative" }}>
         <Box>
           <Image src={aboutBg} style={{ width: "100%" }} />
         </Box>
@@ -158,7 +158,7 @@ const About = () => {
             </Grid2>
           </Grid2>
         </Grid2>
-      </Box>
+      </Box> */}
       <Box sx={{}}>
         <Testimonials />
       </Box>

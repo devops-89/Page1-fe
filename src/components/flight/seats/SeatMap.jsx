@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Box, Stack } from "@mui/material";
 import SeatDetail from "./SeatDetail";
 import Seat from "./Seat";
@@ -10,11 +10,18 @@ const columns = ["A", "B", "C", "D", "E", "F"];
 
 const SeatMap = () => {
   const [selectedSeat, setSelectedSeat] = useState(null);
-
+  const [extraDetails, setExtraDetails] = useState(null);
   const handleSeatClick = (seat) => {
     if (seat.status === "unavailable") return;
     setSelectedSeat(seat);
   };
+
+    useEffect(() => {
+      const flightDetails = localStorage.getItem("oneWayflightDetails");
+      if (flightDetails) {
+        setExtraDetails(JSON.parse(flightDetails));
+      }
+    }, []);
 
   return (
     <Box sx={{ backgroundColor: COLORS.BLUEOVERLAY, py: 2 }}>
@@ -38,7 +45,7 @@ const SeatMap = () => {
           }}
         >
           <Box sx={{ p: 2 }}>
-            <SeatDetail />
+            <SeatDetail extraDetails={extraDetails?.[0]}/>
             <Typography variant="subtitle1" sx={{ p: 1 }}>
               Conveniently select your seats now for Free.
             </Typography>
@@ -75,7 +82,7 @@ const SeatMap = () => {
           </Box>
 
           {/* Printing Seats */}
-          <Seat />
+          <Seat extraDetails={extraDetails?.[1]}/>
 
           {/* Airplane Back Image */}
           <Box

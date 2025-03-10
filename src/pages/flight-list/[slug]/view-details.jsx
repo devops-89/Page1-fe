@@ -32,7 +32,7 @@ import moment from "moment";
 import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
-import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
@@ -57,10 +57,12 @@ const FlightDetails = () => {
   const [isLCC, setIsLCC] = useState(null);
   const [flightDetails, setFlightDetails] = useState(null);
   const [otherDetails, setOtherDetails] = useState(null);
+  const [commission, setCommission] = useState(null);
+  const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [verifiedData,setVerifiedData]=useState(null);
+  const [verifiedData, setVerifiedData] = useState(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const handleClickOpen = () => setOpen(true);
@@ -68,21 +70,24 @@ const FlightDetails = () => {
   const smallScreen = useMediaQuery("(max-width:1199px)")
 
   useEffect(() => {
-    if (router.query.ResultIndex && router.query.traceId) {
+    if (router.query.ResultIndex && router.query.traceId && router.query.journey) {
       flightController
         .flightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
           ip_address: JSON.parse(localStorage.getItem("state"))?.ip_address,
           journey_type: JOURNEY_TYPE.ONEWAY,
-          journey: JOURNEY.DOMESTIC,
+          journey: router.query.journey,
         })
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
+            setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setOtherDetails(response?.data?.data[1]);
-            console.log("otherDetails", response?.data?.data[1]);
-
+            setCommission(response?.data?.data[2]);
+            setJourney(response?.data?.data[3]);
+            // console.log("otherDetails", response?.data?.data[1]);
+            // console.log('commission', response?.data?.data[2])
             localStorage.setItem(
               "oneWayflightDetails",
               JSON.stringify(response?.data?.data)
@@ -102,31 +107,33 @@ const FlightDetails = () => {
           );
         });
     }
-  }, [router.query.ResultIndex, router.query.traceId]);
+  }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
-  //  Run checkLCC whenever otherDetails updates
-  useEffect(() => {
-    if (!otherDetails) {
-      setIsLCC(null);
-      return;
-    }
 
-    setLoading(true);
+  // useEffect(() => {
+  //   if (!otherDetails) {
+  //     setIsLCC(null);
+  //     return;
+  //   }
 
-    if (
-      otherDetails.Baggage ||
-      otherDetails.MealDynamic ||
-      otherDetails.SeatDynamic
-    ) {
-      setIsLCC(true); // It's an LCC flight
-    } else if (otherDetails.SeatPreference) {
-      setIsLCC(false); // It's a non-LCC flight
-    } else {
-      setIsLCC(null); // Default fallback
-    }
+  //   setLoading(true);
 
-    setLoading(false);
-  }, [otherDetails]);
+  //   if (
+  //     otherDetails.Baggage ||
+  //     otherDetails.MealDynamic ||
+  //     otherDetails.SeatDynamic
+  //   ) {
+  //     setIsLCC(true); // It's an LCC flight
+  //   } else if (otherDetails.SeatPreference) {
+  //     setIsLCC(false); // It's a non-LCC flight
+  //   } else {
+  //     setIsLCC(null); // Default fallback
+  //   }
+
+  //   setLoading(false);
+  // }, [otherDetails]);
+
+
 
   useEffect(() => {
     if (
@@ -162,8 +169,8 @@ const FlightDetails = () => {
             justifyContent: "center",
             py: "10px",
           }}
-          >
-        
+        >
+
           <Typography
             variant="h5"
             sx={{
@@ -240,12 +247,11 @@ const FlightDetails = () => {
                           >
                             {`${flightDetails[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
                             →{" "}
-                            {`${
-                              flightDetails[0]?.Results?.Segments[0][
+                            {`${flightDetails[0]?.Results?.Segments[0][
                                 flightDetails[0]?.Results?.Segments[0].length -
-                                  1
+                                1
                               ]?.Destination?.Airport?.CityName
-                            }`}
+                              }`}
                           </Typography>
                           <Typography
                             variant="subtitle1"
@@ -264,9 +270,8 @@ const FlightDetails = () => {
                                 `${flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime}`
                               ).format("ddd, MMM D")}
                             </span>{" "}
-                            {`${
-                              flightDetails[0]?.Results?.Segments[0].length - 1
-                            } Stop.`}{" "}
+                            {`${flightDetails[0]?.Results?.Segments[0].length - 1
+                              } Stop.`}{" "}
                             {`${Math.floor(
                               moment
                                 .duration(
@@ -298,7 +303,7 @@ const FlightDetails = () => {
                         >
                           <Button
                             size="small"
-                            sx={{ fontFamily: nunito.style, fontWeight: 800 }}
+                            sx={{ fontFamily: nunito.style, fontWeight: 800, fontSize:{lg:15 ,md:15 , xs:12} }}
                             onClick={handleClickOpen}
                           >
                             View Fares Rules
@@ -501,46 +506,41 @@ const FlightDetails = () => {
                     </Card>
                     {/* OTP Verification Start */}
                     {
-                        (!verifiedData)?(
-                          <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                             <UserVerifyForm setVerifiedData={setVerifiedData} />
-                          </Card>
-                        ):(null)
-                      }
+                      (!verifiedData) ? (
+                        <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
+                          <UserVerifyForm setVerifiedData={setVerifiedData} />
+                        </Card>
+                      ) : (null)
+                    }
 
                     {/* OTP verification end */}
                     {/* Meal Section start */}
 
                     {/* Meal Section end */}
                     {
-                      (verifiedData)?(
+                      (verifiedData) ? (
                         <Card sx={{ mb: "20px" }}>
-                      <PassengerForm
-                        sx={{
-                          backgroundColor: COLORS.PRIMARY,
-                          color: COLORS.WHITE,
-                        }}
-                        flightDetails={flightDetails}
-                      
-                        myState="state"
-                      />
-                    </Card>
-                      ):(null)
+                          <PassengerForm
+                            sx={{
+                              backgroundColor: COLORS.PRIMARY,
+                              color: COLORS.WHITE,
+                            }}
+                            flightDetails={flightDetails}
+                            myState="state"
+                            journey={journey}
+                            isLCC={isLCC}
+                          />
+                        </Card>
+                      ) : (null)
                     }
 
-                    {/* {isLCC ? (
-                        <>
-                        <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:"10px", fontSize:"18px"}}>Pick Your Preferred Seats</Typography>
-                      <FullScreenDialog />
-                      </>
-                    ) : null} */}
                   </Paper>
                 </Grid2>
 
                 {/* Fare Summary */}
                 <Grid2 size={{lg:4 ,xs:12}} order={{lg:2 ,xs:1}} > 
-                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer}   /> }/> :
-                 <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer}  /> }
+                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={commission} fareData={flightDetails[0]?.Results}     /> }/> :
+                 <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer} commission={commission} /> }
               {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
                   {/* <FareSummary fareData={flightDetails[0]?.Results} /> */}
                 </Grid2>
@@ -558,7 +558,7 @@ const FlightDetails = () => {
               padding: "50px",
             }}
           >
-             <Loader open={true}/>
+            <Loader open={true} />
           </Grid2>
         )}
       </Grid2>

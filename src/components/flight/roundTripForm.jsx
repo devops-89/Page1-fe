@@ -459,6 +459,7 @@ const RoundTrip = () => {
               minDate={moment()}
               onChange={departureDateHandler}
               value={departureDate}
+              format="DD/MM/YYYY"
             />
           </LocalizationProvider>
         </Grid2>
@@ -496,6 +497,7 @@ const RoundTrip = () => {
               minDate={departureDate ? moment(departureDate).add(1, "day") : moment()}
               onChange={returnDateHandler}
               value={returnDate}
+              format="DD/MM/YYYY"
             />
           </LocalizationProvider>
         </Grid2>
@@ -593,12 +595,14 @@ const RoundTrip = () => {
 
         <Grid2   size={{ lg: 12, md:12, xs: 12,sm:6, }} textAlign={"center"} mt={{lg:2}} >
           <Button
+            disabled={buttonLoading}
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
               width: 150,
               p: 2,
               mt: { lg: 0, sm: 1 ,xs:2 },
+              cursor: buttonLoading ? "not-allowed" : "pointer",
             }}
             onClick={submitHandler}
           >

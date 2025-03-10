@@ -13,8 +13,9 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { nunito } from "@/utils/fonts";
+import { COMMISSION_TYPE } from "@/utils/enum";
 
-const RoundFareSummary = ({ fareData }) => {
+const RoundFareSummary = ({ fareData, commission }) => {
   const [onwardTaxBreakup, setOnwardTaxBreakup] = useState(
     fareData[0][0]?.Results?.Fare?.TaxBreakup || []
   );
@@ -43,6 +44,12 @@ const RoundFareSummary = ({ fareData }) => {
     taxBreakup : mergedTaxBreakup
   };
 
+
+  let serviceFeeInFixed = parseFloat(commission?.percentage);
+  let serviceFeeInPercent =
+    (parseInt(initialRoundFare?.base_amount) * parseFloat(commission?.percentage)) /
+    100;
+  let publishFare = parseInt(initialRoundFare?.publishFare);
 
   const [open, setOpen] = useState(false);
 
@@ -90,7 +97,7 @@ const RoundFareSummary = ({ fareData }) => {
               variant="body1"
               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
             >
-              {initialRoundFare.base_amount} ₹
+             ₹ {initialRoundFare.base_amount} 
             </Typography>
           </Box>
         </ListItem>
@@ -123,7 +130,7 @@ const RoundFareSummary = ({ fareData }) => {
               variant="body1"
               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
             >
-              {initialRoundFare.tax} ₹
+              ₹ {initialRoundFare.tax} 
             </Typography>
           </Box>
         </ListItem>
@@ -176,7 +183,7 @@ const RoundFareSummary = ({ fareData }) => {
               variant="body1"
               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
             >
-              {initialRoundFare.discount} ₹
+              ₹ {initialRoundFare.discount} 
             </Typography>
           </Box>
         </ListItem>
@@ -187,22 +194,70 @@ const RoundFareSummary = ({ fareData }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          fontWeight: "bold",
+          mb: "10px",
         }}
       >
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 800 }}
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
-          Total Amount
+          Amount
         </Typography>
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 800 }}
+          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
-          {initialRoundFare.publishFare} ₹
+         ₹ {initialRoundFare.publishFare} 
         </Typography>
       </Box>
+
+
+      <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+              >
+                Service Fee
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+              >
+               ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
+                  ? serviceFeeInFixed
+                  : serviceFeeInPercent}{" "}
+                
+              </Typography>
+            </Box>
+      
+            <Divider sx={{ my: 1 }} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+              >
+                Grand Total
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+              >
+               ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
+                  ? publishFare + serviceFeeInFixed
+                  : publishFare + serviceFeeInPercent}{" "}
+                
+              </Typography>
+            </Box>
     </Paper>
   );
 };

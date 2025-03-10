@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import pointerImage from "@/../public/images/pointer.png";
 import { nunito } from "@/utils/fonts";
+import { useRouter } from "next/router";
 
 const DomesticDetail = ({ flightDetails, setOpen }) => {
 
@@ -14,11 +15,14 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
 
   // console.log("domestic",flightDetails)
 
+    const router = useRouter();
   return (
     <>
       <Button
         size="small"
-        sx={{ fontFamily: nunito.style, fontWeight: 800, position:'absolute', right:'30px', top:"30px" }}
+        sx={{ fontFamily: nunito.style, fontWeight: 800, position:'absolute', right:'30px', top:"30px", display:{
+          xs: router.query.slug === flightDetails?.[0][0]?.TraceId ? "none" : "block",
+        } }}
         onClick={handleClickOpen}
       >
         View Fare Rules

@@ -6,6 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { grey } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { shadows } from '@mui/system';
+
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
@@ -61,6 +63,10 @@ function SwipeableEdgeDrawer(props) {
           '.MuiDrawer-root > .MuiPaper-root': {
             height: `calc(50% - ${drawerBleeding}px)`,
             overflow: 'visible',
+            
+          
+
+           
           },
         }}
       />
@@ -100,6 +106,8 @@ function SwipeableEdgeDrawer(props) {
             visibility: 'visible',
             right: 0,
             left: 0,
+            
+            
           }}
         >
          {props.fairSummary}

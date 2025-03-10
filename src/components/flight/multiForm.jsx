@@ -549,8 +549,10 @@ const Multiway = () => {
                                         },
                                     }}
                                     disablePast
+                                    format="DD/MM/YYYY"
                                     onChange={(newDate) => departureDateHandler(newDate, index)}
                                     value={form.departure_date}
+
                                 />
                             </LocalizationProvider>
                         </Grid2>
@@ -625,11 +627,13 @@ const Multiway = () => {
                 ))}
                 <Grid2  size={{ lg: 12, xs: 12,sm:12 ,md:12 }} textAlign={"center"}>
                     <Button
+                    
                         sx={{
                             backgroundColor: COLORS.SECONDARY,
                             color: COLORS.WHITE,
                             width: 150,
                             p: 2,
+                            cursor: buttonLoading ? "not-allowed" : "pointer",
                         }}
                         onClick={submitHandler}
                         disabled={buttonLoading}

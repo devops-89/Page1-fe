@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ReactLoading, { spin } from "react-loading";
+import { nunito } from "@/utils/fonts";
 
 const SeatColors = {
   0: "red", // Not set
@@ -18,14 +19,14 @@ const SeatColors = {
 
 const AvailablityStatus = {
   0: "Not Set",
+  1: "Available",
   3: "Reserved",
   4: "Blocked",
   5: "Empty Space",
 };
 
-const Seat = () => {
+const Seat = ({extraDetails}) => {
   const [reservedSeats, setReservedSeats] = useState([]);
-  const [extraDetails, setExtraDetails] = useState(null);
   const dispatch = useDispatch();
   let value = useSelector((state) => state.SeatsInformation.seats);
   console.log("test", value);
@@ -35,19 +36,12 @@ const Seat = () => {
     console.log("redux values: ", value);
   }, [value]);
 
-  useEffect(() => {
-    const flightDetails = localStorage.getItem("oneWayflightDetails");
-    if (flightDetails) {
-      setExtraDetails(JSON.parse(flightDetails)[1]);
-    }
-  }, []);
-  console.log(extraDetails);
 
   return (
     <Box sx={{ backgroundColor: COLORS.WHITE, minWidth: "300px" }}>
       {extraDetails ? (
         <Stack direction="column" spacing={2} p={2}>
-          {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats.map(
+          {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats?.map(
             (seats, rowIndex) => (
               <Stack key={rowIndex} direction="row" spacing={2}>
                 {seats.Seats.map(
@@ -57,32 +51,27 @@ const Seat = () => {
                       <HtmlTooltip
                         key={seat.Code}
                         title={
-                          <Stack direction="row">
-                            <Stack direction="column">
+                          <Stack direction="column" gap={'3px'}>
+                            <Stack direction="row" gap={1}>
                               <Typography
                                 color="inherit"
-                                sx={{ fontWeight: "bold" }}
+                                sx={{ fontWeight: "bold", fontFamily:nunito.style }}
                               >
                                 {seat.Code}
                               </Typography>
-                              <Typography
-                                color="inherit"
-                                sx={{ fontWeight: "bold" }}
-                              >
-                                |
-                              </Typography>
-                              <Typography
-                                color="inherit"
-                                sx={{ fontWeight: "bold" }}
-                              >
-                                |
-                              </Typography>
-                            </Stack>
-
-                            <Typography color="inherit">
-                              Available:{" "}
+                             
+                              <Typography color="inherit">
+                              Status:{" "}
                               {AvailablityStatus[seat.AvailablityType]}
                             </Typography>
+                            </Stack>
+
+                            <Typography
+                                color="inherit"
+                                sx={{ fontWeight: "bold", fontFamily:nunito.style }}
+                              >
+                                Price: {seat?.Price} {" "} {seat?.Currency}
+                              </Typography>
                           </Stack>
                         }
                         disableInteractive

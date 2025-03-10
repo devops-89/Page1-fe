@@ -1,6 +1,5 @@
 import AboutUs from "@/components/aboutus";
 import Banner from "@/components/banner";
-import CheckoutPage from "@/components/checkoutPage";
 import Faq from "@/components/faq";
 import Festivals from "@/components/festivals";
 import Hotel from "@/components/hotels";
