@@ -20,8 +20,11 @@ const seatsInformation = createSlice({
     removeSeatDetails: (state, action) => {
       state.seats = state.seats.filter((seat) => seat.Code !== action.payload.Code);
     },
+    resetSeatDetails:(state)=>{
+      state.seats = initialState.seats
+    }
   },
 });
 
-export const { setSeatDetails, removeSeatDetails } = seatsInformation.actions;
+export const { setSeatDetails, removeSeatDetails,resetSeatDetails } = seatsInformation.actions;
 export default seatsInformation.reducer;

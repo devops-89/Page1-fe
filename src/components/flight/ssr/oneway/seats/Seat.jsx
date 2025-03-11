@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Button, Typography, Box, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setSeatDetails } from "@/redux/reducers/seatsInformation.js";
+import { setSeatDetails, resetSeatDetails } from "@/redux/reducers/seatsInformation.js";
 import { COLORS } from "@/utils/colors.js";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
-import ReactLoading, { spin } from "react-loading";
+import ReactLoading from "react-loading";
 import { nunito } from "@/utils/fonts";
+import { setToast } from "@/redux/reducers/toast";
+import { TOAST_STATUS } from "@/utils/enum";
+import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
 
+// Define SeatColors and AvailablityStatus as constants outside the component for better organization
 const SeatColors = {
-  0: "red", // Not set
-  1: "white", // open
-  3: "orange", // Reserved
-  4: "red", // Blocked
+  0: "gray",
+  1: "#0096FF",
+  3: "orange",
+  4: "red",
 };
 
 const AvailablityStatus = {
@@ -25,96 +29,173 @@ const AvailablityStatus = {
   5: "Empty Space",
 };
 
-const Seat = ({extraDetails}) => {
-  const [reservedSeats, setReservedSeats] = useState([]);
+const Seat = ({ extraDetails }) => {
+  // Use useSelector to directly access seats from Redux state
+  const reservedSeats = useSelector((state) => state.SeatsInformation.seats);
   const dispatch = useDispatch();
-  let value = useSelector((state) => state.SeatsInformation.seats);
-  console.log("test", value);
-  3;
+  const [maxPassengerCount, setMaxPassengerCount] = useState(null);
+  const [columns, setColumns] = useState([]); // State for columns
+
   useEffect(() => {
-    setReservedSeats(value);
-    console.log("redux values: ", value);
-  }, [value]);
+    const storedState = localStorage.getItem("state");
+    if (storedState) {
+      const passengerData = JSON.parse(storedState);
+      setMaxPassengerCount(passengerData);
+    }
+  }, []); // Fetch passenger count from localStorage only once on component mount
+
+  useEffect(() => {
+    // Dynamically determine columns based on seat data
+    if (!extraDetails?.SeatDynamic?.[0]?.SegmentSeat?.[0]?.RowSeats) {
+      setColumns([]); // Set empty array if seat data is not available yet
+      return;
+    }
+
+    let maxColumns = 0;
+    extraDetails.SeatDynamic[0].SegmentSeat[0].RowSeats.forEach(row => {
+      maxColumns = Math.max(maxColumns, row.Seats.length);
+    });
+
+    const columnLetters = [];
+    for (let i = 0; i < maxColumns; i++) {
+      columnLetters.push(String.fromCharCode(65 + i)); 
+    }
+    setColumns(columnLetters);
+  }, [extraDetails]); 
+
+
+  // No need for a useEffect to update reservedSeats based on Redux state 'value'
+  // reservedSeats is now directly derived from Redux using useSelector
+
+  const handleSeatClick = (seat) => {
+    if (!maxPassengerCount) {
+      dispatch(
+        setToast({
+          open: true,
+          message: "Passenger count not loaded. Please refresh.",
+          severity: TOAST_STATUS.ERROR,
+        })
+      );
+      return; // Exit if passenger count is not loaded
+    }
+
+    const totalAllowedSeats =
+      parseInt(maxPassengerCount?.adult || 0) +
+      parseInt(maxPassengerCount?.child || 0);
+    const currentSelectedSeatsCount = reservedSeats.length;
+    const isSeatAlreadyReserved = reservedSeats.some((s) => s.Code === seat.Code);
+
+    if (
+      currentSelectedSeatsCount >= totalAllowedSeats &&
+      !isSeatAlreadyReserved
+    ) {
+      dispatch(
+        setToast({
+          open: true,
+          message: `You can select only seat for ${maxPassengerCount?.adult} adult and ${maxPassengerCount?.child} child`,
+          severity: TOAST_STATUS.ERROR,
+        })
+      );
+      return; // Prevent selecting more seats than allowed
+    }
+
+    dispatch(setSeatDetails(seat)); // Allow seat selection/deselection
+  };
+
 
 
   return (
-    <Box sx={{ backgroundColor: COLORS.WHITE, minWidth: "300px" }}>
+    <Box sx={{ backgroundColor: COLORS.WHITE, width:"100%", display:'flex', flexDirection:'column', alignItems:'center' }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 1, gap:1.5 }}>
+        {columns.map((column, index) => (
+          <Box sx={{
+            width: "30px",
+            height: "30px",
+            backgroundColor:COLORS.SECONDARY,
+            color:COLORS.WHITE,
+            padding:'2px',
+            textAlign:'center'}}>
+          <Typography key={index} variant="h6">
+            {column}
+          </Typography>
+          </Box>
+        ))}
+      </Box>
       {extraDetails ? (
         <Stack direction="column" spacing={2} p={2}>
           {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats?.map(
             (seats, rowIndex) => (
-              <Stack key={rowIndex} direction="row" spacing={2}>
-                {seats.Seats.map(
-                  (seat, colIndex) =>
-                    seat.AvailablityType !== 5 &&
-                    seat.AvailablityType !== 0 && (
+              <Stack key={rowIndex} direction="row" spacing={1.5}>
+                {seats.Seats.map((seat, colIndex) => {
+                  return (
+                    seat.AvailablityType !== 5 && (
                       <HtmlTooltip
                         key={seat.Code}
                         title={
-                          <Stack direction="column" gap={'3px'}>
+                          <Stack direction="column" gap={"3px"}>
                             <Stack direction="row" gap={1}>
                               <Typography
                                 color="inherit"
-                                sx={{ fontWeight: "bold", fontFamily:nunito.style }}
+                                sx={{
+                                  fontWeight: "bold",
+                                  fontFamily: nunito.style,
+                                }}
                               >
                                 {seat.Code}
                               </Typography>
-                             
+
                               <Typography color="inherit">
-                              Status:{" "}
-                              {AvailablityStatus[seat.AvailablityType]}
-                            </Typography>
+                                Status: {AvailablityStatus[seat.AvailablityType]}
+                              </Typography>
                             </Stack>
 
                             <Typography
-                                color="inherit"
-                                sx={{ fontWeight: "bold", fontFamily:nunito.style }}
-                              >
-                                Price: {seat?.Price} {" "} {seat?.Currency}
-                              </Typography>
+                              color="inherit"
+                              sx={{
+                                fontWeight: "bold",
+                                fontFamily: nunito.style,
+                              }}
+                            >
+                              Price: {seat?.Price} {seat?.Currency}
+                            </Typography>
                           </Stack>
                         }
                         disableInteractive
                       >
-                        <span>
-                          <Button
+                        <Box sx={{boxShadow: '0px 0px 2px #727272', paddingX:'2px', borderRadius:1}}>
+                          <AirlineSeatReclineExtraIcon
                             disabled={[3, 4, 0].includes(seat.AvailablityType)}
                             sx={{
-                              border: "2px solid rgb(22, 129, 216)",
                               borderRadius: "4px",
                               width: "30px",
                               height: "30px",
                               minWidth: "20px",
-                              backgroundColor: reservedSeats.some(
+                              color: reservedSeats.some(
                                 (s) => s.Code === seat.Code
                               )
                                 ? "green"
-                                : SeatColors[seat.AvailablityType],
+                                : SeatColors[seat.AvailablityType], // Directly use SeatColors
                               cursor: "pointer",
                               transition: "box-shadow 0.3s ease-in-out",
-                              "&:hover": {
-                                border: "2px solid rgb(5, 76, 153)",
-                              },
+                              // "&:hover": {
+                              //   border: "2px solid rgb(5, 76, 153)",
+                              // },
                             }}
-                            onClick={() => {
-                              dispatch(setSeatDetails(seat));
-                            }}
+                            onClick={() => handleSeatClick(seat)} // Use handleSeatClick function
                           >
                             {seat.AvailablityType === 4 ? (
                               <CancelIcon sx={{ color: "white" }} />
-                            ) : (
-                              ""
-                            )}
-                            {seat.AvailablityType === 3 ? (
+                            ) : seat.AvailablityType === 3 ? (
                               <PersonOutlineIcon sx={{ color: "white" }} />
                             ) : (
                               ""
                             )}
-                          </Button>
-                        </span>
+                          </AirlineSeatReclineExtraIcon>
+                        </Box>
                       </HtmlTooltip>
                     )
-                )}
+                  );
+                })}
               </Stack>
             )
           )}
