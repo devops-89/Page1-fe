@@ -5,8 +5,7 @@ import Seat from "./Seat";
 import flightFront from "@/assests/flight_image/flight_front.png";
 import flightBack from "@/assests/flight_image/flight_back.png";
 import { COLORS } from "@/utils/colors.js";
-
-const columns = ["A", "B", "C", "D", "E", "F"];
+import { nunito } from "@/utils/fonts";
 
 const SeatMap = () => {
   const [selectedSeat, setSelectedSeat] = useState(null);
@@ -44,9 +43,9 @@ const SeatMap = () => {
             top: "10px",
           }}
         >
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2}}>
             <SeatDetail extraDetails={extraDetails?.[0]}/>
-            <Typography variant="subtitle1" sx={{ p: 1 }}>
+            <Typography variant="body1" sx={{ p: 1, fontFamily:nunito.style }}>
               Conveniently select your seats now for Free.
             </Typography>
           </Box>
@@ -65,21 +64,8 @@ const SeatMap = () => {
             component="img"
             src={flightFront.src}
             alt="Airplane Front"
-            sx={{ width: "300px", mb: -2 }}
+            sx={{ maxWidth: "300px", mb: -2 }}
           />
-
-          {/* Printing Seat Columns */}
-          <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-            {columns.map((column, index) => (
-              <Typography
-                key={index}
-                variant="h6"
-                sx={{ mx: 2, color: "gray" }}
-              >
-                {column}
-              </Typography>
-            ))}
-          </Box>
 
           {/* Printing Seats */}
           <Seat extraDetails={extraDetails?.[1]}/>
@@ -89,7 +75,7 @@ const SeatMap = () => {
             component="img"
             src={flightBack.src}
             alt="Airplane Back"
-            sx={{ width: "292px", mt: -2 }}
+            sx={{ maxWidth: "300px" }}
           />
         </Box>
       </Stack>

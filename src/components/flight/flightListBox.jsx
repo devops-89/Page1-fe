@@ -55,7 +55,7 @@ const FlightListBox = ({ details, traceId, journey }) => {
 
   const routetoAnotherPage = () => {
       router.push({
-        pathname: `/flight-list/${flightDetails?.AirlineCode}/view-details`,
+        pathname: `/oneway-flightlist/${flightDetails?.AirlineCode}/view-details`,
         query: {
           ResultIndex: flightDetails?.ResultIndex,
           traceId: traceId,

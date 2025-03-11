@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import Grid2 from "@mui/material/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
 import UserVerifyForm from "@/components/flight/UserVerifyForm";
+
 import {
   Box,
   Container,
@@ -65,12 +66,17 @@ const FlightDetails = () => {
   const [verifiedData, setVerifiedData] = useState(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
+
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const smallScreen = useMediaQuery("(max-width:1199px)")
 
   useEffect(() => {
-    if (router.query.ResultIndex && router.query.traceId && router.query.journey) {
+    if (
+      router.query.ResultIndex &&
+      router.query.traceId &&
+      router.query.journey
+    ) {
       flightController
         .flightDetails({
           result_index: router.query.ResultIndex,
@@ -110,30 +116,6 @@ const FlightDetails = () => {
   }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
 
-  // useEffect(() => {
-  //   if (!otherDetails) {
-  //     setIsLCC(null);
-  //     return;
-  //   }
-
-  //   setLoading(true);
-
-  //   if (
-  //     otherDetails.Baggage ||
-  //     otherDetails.MealDynamic ||
-  //     otherDetails.SeatDynamic
-  //   ) {
-  //     setIsLCC(true); // It's an LCC flight
-  //   } else if (otherDetails.SeatPreference) {
-  //     setIsLCC(false); // It's a non-LCC flight
-  //   } else {
-  //     setIsLCC(null); // Default fallback
-  //   }
-
-  //   setLoading(false);
-  // }, [otherDetails]);
-
-
 
   useEffect(() => {
     if (
@@ -170,7 +152,6 @@ const FlightDetails = () => {
             py: "10px",
           }}
         >
-
           <Typography
             variant="h5"
             sx={{
@@ -247,11 +228,12 @@ const FlightDetails = () => {
                           >
                             {`${flightDetails[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}`}{" "}
                             →{" "}
-                            {`${flightDetails[0]?.Results?.Segments[0][
+                            {`${
+                              flightDetails[0]?.Results?.Segments[0][
                                 flightDetails[0]?.Results?.Segments[0].length -
-                                1
+                                  1
                               ]?.Destination?.Airport?.CityName
-                              }`}
+                            }`}
                           </Typography>
                           <Typography
                             variant="subtitle1"
@@ -270,8 +252,9 @@ const FlightDetails = () => {
                                 `${flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime}`
                               ).format("ddd, MMM D")}
                             </span>{" "}
-                            {`${flightDetails[0]?.Results?.Segments[0].length - 1
-                              } Stop.`}{" "}
+                            {`${
+                              flightDetails[0]?.Results?.Segments[0].length - 1
+                            } Stop.`}{" "}
                             {`${Math.floor(
                               moment
                                 .duration(
@@ -505,35 +488,32 @@ const FlightDetails = () => {
                       {/* Intermediate flights end */}
                     </Card>
                     {/* OTP Verification Start */}
-                    {
-                      (!verifiedData) ? (
-                        <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                          <UserVerifyForm setVerifiedData={setVerifiedData} />
-                        </Card>
-                      ) : (null)
-                    }
+                    {!verifiedData ? (
+                      <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
+                        <UserVerifyForm setVerifiedData={setVerifiedData} />
+                      </Card>
+                    ) : null}
 
-                    {/* OTP verification end */}
-                    {/* Meal Section start */}
+                  {/* Passenger Form */}
+                    {verifiedData ? (
+                      <Card sx={{ mb: "20px" }}>
+                        <PassengerForm
+                          sx={{
+                            backgroundColor: COLORS.PRIMARY,
+                            color: COLORS.WHITE,
+                          }}
+                          flightDetails={flightDetails}
+                          myState="state"
+                          journey={journey}
+                          isLCC={isLCC}
+                        />
+                      </Card>
+                    ) : null}
 
-                    {/* Meal Section end */}
-                    {
-                      (verifiedData) ? (
-                        <Card sx={{ mb: "20px" }}>
-                          <PassengerForm
-                            sx={{
-                              backgroundColor: COLORS.PRIMARY,
-                              color: COLORS.WHITE,
-                            }}
-                            flightDetails={flightDetails}
-                            myState="state"
-                            journey={journey}
-                            isLCC={isLCC}
-                          />
-                        </Card>
-                      ) : (null)
-                    }
+                  
+                    
 
+                    
                   </Paper>
                 </Grid2>
 

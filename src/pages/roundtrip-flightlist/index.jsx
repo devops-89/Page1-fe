@@ -84,7 +84,7 @@ const FlightList = () => {
 
   const routetoAnotherPage = () => {
     router.push({
-      pathname: `/round-list/${selectedDeparture?.AirlineCode}/view-details`,
+      pathname: `/roundtrip-flightlist/${selectedDeparture?.AirlineCode}/view-details`,
       query: {
         ResultIndex: JSON.stringify(newResultIndex),
         traceId: traceId,

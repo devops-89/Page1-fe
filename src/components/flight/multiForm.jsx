@@ -67,7 +67,7 @@ const Multiway = () => {
     const [adultValue, setAdultValue] = useState(1);
     const [childValue, setChildValue] = useState(0);
     const [infantValue, setInfantValue] = useState(0);
-    const [defaultRoute, setDefaultRoute] = useState("/multi-list");
+    const [defaultRoute, setDefaultRoute] = useState("/multitrip-flightlist");
     const [initialValue, setIntialValue] = useState({
         adult: adultValue,
         child: childValue,
@@ -439,6 +439,13 @@ const Multiway = () => {
                                         </Stack>
                                     </Box>
                                 )}
+                                slotProps={{
+                                    popper: {
+                                      sx: {
+                                        zIndex: 100
+                                      }
+                                    }
+                                 }}
                             />
                         </Grid2>
 
@@ -519,6 +526,13 @@ const Multiway = () => {
                                         </Stack>
                                     </Box>
                                 )}
+                                slotProps={{
+                                    popper: {
+                                      sx: {
+                                        zIndex: 100
+                                      }
+                                    }
+                                 }}
                             />
                         </Grid2>
 
@@ -552,6 +566,13 @@ const Multiway = () => {
                                     format="DD/MM/YYYY"
                                     onChange={(newDate) => departureDateHandler(newDate, index)}
                                     value={form.departure_date}
+                                    slotProps={{
+                                        popper: {
+                                          sx: {
+                                            zIndex: 100
+                                          }
+                                        }
+                                     }}
 
                                 />
                             </LocalizationProvider>

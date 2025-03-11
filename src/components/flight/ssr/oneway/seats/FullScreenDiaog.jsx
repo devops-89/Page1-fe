@@ -44,8 +44,8 @@ export default function FullScreenDialog() {
   return (
     <React.Fragment>
       <Button
-        variant="outlined"
-        sx={{ backgroundColor: COLORS.SECONDARY, color: COLORS.WHITE }}
+        variant="text"
+        sx={{color:"darkgreen" , fontWeight:600,fontSize:"15px",borderBottom:"2px solid darkgreen",p:"0px",borderRadius:0}}
         onClick={handleClickOpen}
       >
         Select Seat
@@ -57,7 +57,7 @@ export default function FullScreenDialog() {
         TransitionComponent={Transition}
       >
         {/* AppBar with Close Button */}
-        <AppBar sx={{ position: "relative", backgroundColor: COLORS.PRIMARY }}>
+        <AppBar sx={{ position: "relative", backgroundColor: COLORS.PRIMARY, zIndex:9999 }}>
           <Toolbar>
             <IconButton
               edge="start"

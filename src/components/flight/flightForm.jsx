@@ -30,11 +30,11 @@ const FlightForm = () => {
   const [flightValue, setFlightValue] = useState(0);
 
   useEffect(() => {
-    if (router.pathname === "/flight-list") {
+    if (router.pathname === "/oneway-flightlist") {
       setFlightValue(0);
-    } else if (router.pathname === "/round-list") {
+    } else if (router.pathname === "/roundtrip-flightlist") {
       setFlightValue(1);
-    } else if (router.pathname === "/multi-list") {
+    } else if (router.pathname === "/multitrip-flightlist") {
       setFlightValue(2);
     }
   }, [router.pathname]);
