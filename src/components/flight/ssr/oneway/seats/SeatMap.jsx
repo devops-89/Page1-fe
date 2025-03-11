@@ -75,7 +75,7 @@ const SeatMap = () => {
             component="img"
             src={flightBack.src}
             alt="Airplane Back"
-            sx={{ maxWidth: "300px", mt: -2 }}
+            sx={{ maxWidth: "300px" }}
           />
         </Box>
       </Stack>
