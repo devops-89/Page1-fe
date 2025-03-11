@@ -63,7 +63,7 @@ const FlightList = () => {
 
   return (
     <>
-      <InnerBanner img={banner.src} heading={"Flight"} />
+      <InnerBanner img={banner.src} heading={"OnewayFlight"} />
 
       <Box sx={{ pt: 10 }}>
         <Container>

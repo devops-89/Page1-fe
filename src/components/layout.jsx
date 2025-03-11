@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { authenticationController } from "@/api/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "@/redux/reducers/user";
+import ToastBar from "./toastBar";
 const Layout = ({ children }) => {
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ const Layout = ({ children }) => {
       {show && <Header />}
       {children}
       {show && <Footer />}
+      <ToastBar/>
     </div>
   );
 };

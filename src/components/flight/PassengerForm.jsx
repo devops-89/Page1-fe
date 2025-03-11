@@ -316,15 +316,15 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             setTimeout(() => {
               if (journey?.journey_type === JOURNEY_TYPE.ONEWAY) {
                 router.push(
-                  `/flight-list/${payload?.trace_id}/oneway-checkout`
+                  `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`
                 );
               } else if (journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP) {
                 router.push(
-                  `/round-list/${payload?.trace_id}/roundtrip-checkout`
+                  `/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`
                 );
               } else if (journey?.journey_type === JOURNEY_TYPE.MULTIWAY) {
                 router.push(
-                  `/multi-list/${payload?.trace_id}/multitrip-checkout`
+                  `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`
                 );
               }
             }, 1500);
