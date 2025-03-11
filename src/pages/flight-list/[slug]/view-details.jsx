@@ -112,28 +112,7 @@ const FlightDetails = () => {
     }
   }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
-  // useEffect(() => {
-  //   if (!otherDetails) {
-  //     setIsLCC(null);
-  //     return;
-  //   }
 
-  //   setLoading(true);
-
-  //   if (
-  //     otherDetails.Baggage ||
-  //     otherDetails.MealDynamic ||
-  //     otherDetails.SeatDynamic
-  //   ) {
-  //     setIsLCC(true); // It's an LCC flight
-  //   } else if (otherDetails.SeatPreference) {
-  //     setIsLCC(false); // It's a non-LCC flight
-  //   } else {
-  //     setIsLCC(null); // Default fallback
-  //   }
-
-  //   setLoading(false);
-  // }, [otherDetails]);
 
   useEffect(() => {
     if (
@@ -503,10 +482,7 @@ const FlightDetails = () => {
                       </Card>
                     ) : null}
 
-                    {/* OTP verification end */}
-                    {/* Meal Section start */}
-
-                    {/* Meal Section end */}
+                  {/* Passenger Form */}
                     {verifiedData ? (
                       <Card sx={{ mb: "20px" }}>
                         <PassengerForm
