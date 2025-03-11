@@ -455,7 +455,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                             }}
                             onClick={() => {
                                 router.push({
-                                    pathname: `/round-list/${flightDetails?.AirlineCode}/view-details`,
+                                    pathname: `/roundtrip-flightlist/${flightDetails?.AirlineCode}/view-details`,
                                     query: {
                                         ResultIndex: flightDetails?.ResultIndex,
                                         traceId: traceId,

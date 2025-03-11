@@ -161,6 +161,8 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             helperText={<ErrorMessage name={`${passenger.formType}[${index}].contact_no`} />}
           />
         </Grid2> 
+
+      <Grid2 size={12}>
        {
         (data)?(<MealSelection mealData={data?.MealDynamic}  />):(null)
        } 
@@ -168,6 +170,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
        {
         (data)?( <BaggageSelection baggageData={data?.Baggage} />):(null)
        }
+       </Grid2>
        
       </Grid2>
       </AccordionDetails>

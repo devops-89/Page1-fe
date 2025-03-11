@@ -145,7 +145,7 @@ const Banner = () => {
       
     
 
-      zIndex: 999 }}
+      zIndex: 99 }}
       >
         <Grid2 container>
           <Grid2

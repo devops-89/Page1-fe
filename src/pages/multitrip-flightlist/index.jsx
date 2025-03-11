@@ -44,7 +44,7 @@ const MultiList = () => {
 
   return (
     <>
-      <InnerBanner img={banner.src} heading={"Flight"} />
+      <InnerBanner img={banner.src} heading={"Multi Trip Flight"} />
 
       <Box sx={{ pt: 10, px: 4 }}>
         <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
