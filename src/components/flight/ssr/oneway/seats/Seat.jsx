@@ -105,8 +105,8 @@ const Seat = ({ extraDetails }) => {
 
 
   return (
-    <Box sx={{ backgroundColor: COLORS.WHITE, width:"100%", display:'flex', flexDirection:'column', alignItems:'center' }}>
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 1, gap:1.5 }}>
+    <Box sx={{ backgroundColor: COLORS.WHITE, width:"100%", display:'flex', flexDirection:'column', alignItems:'center', py:2 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 3, gap:1.5 }}>
         {columns.map((column, index) => (
           <Box sx={{
             width: "30px",
@@ -162,14 +162,10 @@ const Seat = ({ extraDetails }) => {
                         }
                         disableInteractive
                       >
-                        <Box sx={{boxShadow: '0px 0px 2px #727272', paddingX:'2px', borderRadius:1}}>
+                        <Box sx={{boxShadow: '0px 0px 2px #727272', paddingX:'2px', borderRadius:1,pointerEvents:  [3, 4, 0].includes(seat.AvailablityType) ? 'none' : 'auto'}}>
                           <AirlineSeatReclineExtraIcon
-                            disabled={[3, 4, 0].includes(seat.AvailablityType)}
-                            sx={{
-                              borderRadius: "4px",
-                              width: "30px",
-                              height: "30px",
-                              minWidth: "20px",
+                            sx={{   
+                              fontSize:'30px',                 
                               color: reservedSeats.some(
                                 (s) => s.Code === seat.Code
                               )
