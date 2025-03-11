@@ -501,7 +501,7 @@ const FlightDetails = () => {
                   
                     
 
-
+                    
                   </Paper>
                 </Grid2>
 

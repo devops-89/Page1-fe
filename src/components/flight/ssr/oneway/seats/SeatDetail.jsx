@@ -1,5 +1,4 @@
 import React from "react";
-import FlightSharpIcon from "@mui/icons-material/FlightSharp";
 import { Grid2, Button, Typography, Box, Stack,Divider,Avatar } from "@mui/material";
 import SelectedList from "./SelectedList";
 import { COLORS } from "@/utils/colors.js";
@@ -7,6 +6,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
 import moment from "moment";
 import { FlightTakeoff } from "@mui/icons-material";
+import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
 
 import { nunito } from "@/utils/fonts";
 const SeatDetail = ({extraDetails}) => {
@@ -21,15 +21,15 @@ const SeatDetail = ({extraDetails}) => {
         borderRadius: "10px",
         boxShadow: 2,
         backgroundColor: COLORS.WHITE,
-        px:2,
+        p:2,
         
       }}
     >
     {/* expermiment start */}
     
 
-    <Grid2 container sx={{ mt: 3}} spacing={6} alignItems={"flex-start"}>
-          <Grid2 size={4}>
+    <Grid2 container sx={{p:1}} spacing={6} alignItems={"flex-start"}>
+          <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
               sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
             >
@@ -49,7 +49,7 @@ const SeatDetail = ({extraDetails}) => {
               {extraDetails?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}
             </Typography>
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
               sx={{
                 fontSize: 18,
@@ -85,7 +85,7 @@ const SeatDetail = ({extraDetails}) => {
               </Avatar>
             </Divider>
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
               sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
             >
@@ -126,21 +126,13 @@ const SeatDetail = ({extraDetails}) => {
             </Typography>
           </Grid2>
          
+          <Grid2 size={12} sx={{ display:"flex", alignItems:"center", justifyContent:'center'}}>
+          <SelectedList />
+          </Grid2>
         </Grid2>
 
 
-   
-      <Stack
-        direction={"row"}
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "20px",
-          borderBottom: "1px solid gray",
-        }}
-      >
-        <SelectedList />
-      </Stack>
+  
       <Stack
         direction={"row"}
         sx={{
@@ -161,13 +153,28 @@ const SeatDetail = ({extraDetails}) => {
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
-              backgroundColor: COLORS.PRIMARY,
               color: "white",
+              mb:'10px'
             }}
           >
-            <PersonOutlineIcon />
+            <AirlineSeatReclineExtraIcon sx={{color:COLORS.PRIMARY}}/>
           </Box>
-          <Typography variant="subtitle2" sx={{textAlign:"center",fontSize:"12px"}}>Reserved</Typography>
+          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style}}>Reserved</Typography>
+        </Box>
+        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",  fontFamily:nunito.style}}>
+          <Box
+            sx={{
+              width: "20px",
+              height: "20px",
+              p: 1,
+              border: "1px solid gray",
+              borderRadius: "4px",
+               mb:'10px'
+            }}
+          >
+             <AirlineSeatReclineExtraIcon sx={{color:COLORS.GREEN,}}/>
+          </Box>
+          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style}}>Selected</Typography>
         </Box>
         <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
@@ -177,23 +184,13 @@ const SeatDetail = ({extraDetails}) => {
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
-              backgroundColor: COLORS.GREEN,
-            }}
-          ></Box>
-          <Typography variant="subtitle2" sx={{textAlign:"center",fontSize:"12px"}}>Selected</Typography>
-        </Box>
-        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
-          <Box
-            sx={{
-              width: "20px",
-              height: "20px",
-              p: 1,
-              border: "2px solid blue",
-              borderRadius: "4px",
+               mb:'10px'
              
             }}
-          ></Box>
-          <Typography variant="subtitle2" sx={{textAlign:"center",fontSize:"12px"}}>Available</Typography>
+          >
+            <AirlineSeatReclineExtraIcon sx={{color:COLORS.SECONDARY}}/>
+          </Box>
+          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style}}>Available</Typography>
         </Box>
         <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
@@ -203,16 +200,16 @@ const SeatDetail = ({extraDetails}) => {
               p: 1,
               border: "1px solid gray",
               borderRadius: "4px",
-              backgroundColor: COLORS.RED,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               color: "white",
+               mb:'10px'
             }}
           >
-            <CancelIcon />
+             <AirlineSeatReclineExtraIcon sx={{color:COLORS.RED}}/>
           </Box>
-          <Typography sx={{textAlign:"center",fontSize:"12px"}} variant="subtitle2">Blocked</Typography>
+          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style}}>Blocked</Typography>
         </Box>
       </Stack>
     </Box>

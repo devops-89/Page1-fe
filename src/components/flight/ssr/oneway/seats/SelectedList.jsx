@@ -5,6 +5,7 @@ import { RiCloseCircleFill } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { removeSeatDetails } from "@/redux/reducers/seatsInformation";
 import {COLORS} from "@/utils/colors.js";
+import { nunito } from "@/utils/fonts";
 
 const SelectedList = () => {
   const dispatch = useDispatch();
@@ -26,9 +27,9 @@ const SelectedList = () => {
       sx={{
         mt: 2,
         backgroundColor: "#E8F2FF",
-        width: "380px",
-        justifyContent: "start",
+        justifyContent: "center",
         gap:"20px",
+        width:'100%',
         flexWrap:"wrap",
         borderRadius: "4px",
         alignItems: "center",
@@ -40,7 +41,7 @@ const SelectedList = () => {
     >
       {!selectedSeats || selectedSeats.length === 0 ? (
         // Show message when selectedSeats is undefined, null, or empty
-        <Typography variant="h6" sx={{ textAlign: "center", color: "gray" }}>
+        <Typography variant="h6" sx={{ color: "gray", fontFamily:nunito.style }}>
           There is no seat selected
         </Typography>
       ) : (
@@ -49,8 +50,8 @@ const SelectedList = () => {
             <Box
               key={seat.Code || `${seat.row}-${seat.col}`}
               sx={{
-                width: "60px",
-                height: "60px",
+                width: "50px",
+                height: "50px",
                 border: "1px solid black",
                 borderRadius: "4px",
                 background: COLORS.SECONDARY,
@@ -59,6 +60,7 @@ const SelectedList = () => {
                 alignItems: "center",
                 color: "white",
                 position: "relative",
+                fontFamily:nunito.style
               }}
             >
               {seat.Code || `${seat.row}${seat.col}`}
