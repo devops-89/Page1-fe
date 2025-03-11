@@ -8,13 +8,13 @@ const Contact = () => {
   return (
     <div>
       <InnerBanner img={contact.src} heading={"Contact Us"} />
-      <Box sx={{ pt: 10, pb: 10 }}>
+      <Box sx={{ pt: {lg:10 ,xs:5}, pb: 10 }}>
         <Container>
           <Grid2 container>
-            <Grid2 size={6}>
+            <Grid2 size={12}>
               <Typography
                 sx={{
-                  fontSize: 35,
+                  fontSize: {lg:35 ,md:35 , xs:35 , xs:27},
                   fontFamily: nunito.style,
                   fontWeight: 700,
                   lineHeight: 1.2,

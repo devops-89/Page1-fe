@@ -17,7 +17,7 @@ const ChooseCard = ({ icon, heading, description }) => {
         transition: "0.5s ease all",
       }}
     >
-      <Avatar sx={{ bgcolor: COLORS.SECONDARY, width: 60, height: 60 }}>
+      <Avatar sx={{ bgcolor: COLORS.SECONDARY, width: {lg:60 , md:50 ,sm:50 ,xs:50}, height: {lg:60 , md:50 ,sm:50 ,xs:50} }}>
         {icon}
       </Avatar>
       <Typography
