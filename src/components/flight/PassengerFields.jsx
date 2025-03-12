@@ -21,7 +21,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
     
       <Grid2 container spacing={2} sx={{mb:'20px'}}>
         {/* Title */}
-        <Grid2 size={3}>
+        <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="Title"
@@ -43,7 +43,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         </Grid2>
 
         {/* First Name */}
-        <Grid2 size={3}>
+        <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="First Name"
@@ -59,7 +59,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         </Grid2>
 
         {/* Middle Name */}
-        <Grid2 size={3}>
+        <Grid2  size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="Middle Name"
@@ -73,7 +73,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         </Grid2>
 
         {/* Last Name */}
-        <Grid2 size={3}>
+        <Grid2  size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="Last Name"
@@ -90,7 +90,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         </Grid2>
 
         {/* Date of Birth */}
-        <Grid2 size={6}>
+        <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="Date of Birth"
@@ -108,7 +108,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         </Grid2>
 
         {/* Gender */}
-        <Grid2 size={6}>
+        <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="Gender"
@@ -129,7 +129,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         </Grid2>
 
         {/* Email */}
-        <Grid2 size={6}>
+        <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="Email"
@@ -146,7 +146,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         </Grid2>
 
         {/* Phone Number */}
-        <Grid2 size={6}>
+        <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
             label="Phone Number"

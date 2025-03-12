@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import {
   Box,
+  Stack,
+  Button,
   Typography,
+  useMediaQuery,
   Paper,
   Divider,
   List,
@@ -9,13 +12,17 @@ import {
   ListItemText,
   Collapse,
   ListItemIcon,
+  boxShadow
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
+import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
 import { nunito } from "@/utils/fonts";
 import { COMMISSION_TYPE } from "@/utils/enum";
+import { COLORS } from "@/utils/colors";
 
-const FareSummary = ({ fareData, commission }) => {
+const  FareSummary = ({ fareData, commission , toggleDrawer }) => {
   const [open, setOpen] = useState(false);
   // console.log("commission", commission)
   const toggleCollapse = () => {
@@ -26,8 +33,10 @@ const FareSummary = ({ fareData, commission }) => {
     (parseInt(fareData?.Fare?.BaseFare) * parseFloat(commission?.percentage)) /
     100;
   let publishFare = parseInt(fareData?.Fare?.PublishedFare);
+   const smallScreen = useMediaQuery("(max-width:1199px)")
   return (
-    <Paper sx={{ padding: 2, backgroundColor: "#F4F4F4", height: "auto" }}>
+    <Paper sx={{ padding: 2,  backgroundColor: "#F4F4F4" ,boxShadow:{lg:0 , xs:10}}} >
+      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}  >
       <Typography
         variant="h6"
         sx={{
@@ -39,8 +48,13 @@ const FareSummary = ({ fareData, commission }) => {
       >
         Fare Summary
       </Typography>
+       {smallScreen ?  <Button onClick={toggleDrawer.toggle} variant="contained" color="primary">
+        {!toggleDrawer.open ? <KeyboardDoubleArrowUpOutlinedIcon />: <KeyboardDoubleArrowDownOutlinedIcon/>}
+      </Button>  : null}
+     
+      </Stack>
       <Divider sx={{ marginY: 1 }} />
-      <List component="nav" sx={{ p: 0 }}>
+      <List component="nav" sx={{ p: 0 ,  }}>
         <ListItem
           button
           sx={{ display: "flex", justifyContent: "space-between" }}
@@ -59,6 +73,7 @@ const FareSummary = ({ fareData, commission }) => {
               display: "flex",
               alignItems: "flex-start",
               justifyContent: "flex-end",
+              
             }}
           >
             <Typography
@@ -207,11 +222,15 @@ const FareSummary = ({ fareData, commission }) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+         
+        
+          
         }}
       >
         <Typography
           variant="h6"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+
+          sx={{ fontFamily: nunito.style, fontWeight: 700  }}
         >
           Grand Total
         </Typography>

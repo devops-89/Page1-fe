@@ -98,7 +98,7 @@ const AboutUs = () => {
               </Typography>
               <Typography
                 sx={{
-                  fontSize: 15 ,
+                  fontSize: {lg:15 , md:15,sm:13, xs:13},
                   fontWeight: 500,
                   fontFamily: nunito.style,
                   // textTransform: "capitalize",
@@ -122,13 +122,13 @@ const AboutUs = () => {
                         textAlign: "center",
                         color: COLORS.WHITE,
                         borderRadius: "50%",
-                        height: 50,
+                        height: {lg:50 , md:40 ,sm:40 , xs:40},
                         backgroundColor: COLORS.PRIMARY,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: 40,
-                        minWidth: 50,
+                        width:  {lg:40 , md:40 ,sm:40 , xs:30},
+                        minWidth:  {lg:50 , md:40 ,sm:40 , xs:40},
                       }}
                     >
                       {val.icon}
@@ -137,7 +137,7 @@ const AboutUs = () => {
                       primary={
                         <Typography
                           sx={{
-                            fontSize: 15,
+                            fontSize: {lg:15 , md:15,sm:13, xs:12},
                             fontFamily: nunito.style,
                             fontWeight: 500,
                           }}
@@ -145,7 +145,7 @@ const AboutUs = () => {
                           {val.label}
                         </Typography>
                       }
-                      sx={{ ml: 3 }}
+                      sx={{ ml: {lg:3 ,md:2 , sm:1 ,xs:1} }}
                     />
                   </ListItem>
                 ))}
@@ -165,7 +165,7 @@ const AboutUs = () => {
                   </Typography>
                   <Typography
                     sx={{
-                      fontSize: 15,
+                      fontSize:{lg:15 , md:15,sm:13, xs:13},
                       fontFamily: nunito.style,
                       fontWeight: 500,
                     }}

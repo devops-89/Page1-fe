@@ -92,7 +92,7 @@ const Packagescard = ({ img, location, rating, title, price, duration }) => {
           </Stack>
           <Typography
             sx={{
-              fontSize: 18,
+              fontSize: {lg:18},
               fontWeight: 700,
               mt: 1,
               fontFamily: nunito.style,

@@ -8,6 +8,7 @@ import {
   Button,
   Checkbox,
   Grid2,
+  useMediaQuery,
   Card,
 } from "@mui/material";
 import moment from "moment";
@@ -20,6 +21,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
+import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 
 export default function OneWayCheckout() {
   const router = useRouter();
@@ -28,6 +30,12 @@ export default function OneWayCheckout() {
   const [oneWay, setOneWay] = useState(null);
   const [loading, setLoading] = useState(true);
   const [passengerCount, setPassengerCount] = useState(null);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = {
+    open: drawerOpen, // Current state of the drawer
+    toggle: () => setDrawerOpen((prev) => !prev), // Function to toggle the state
+  };
 
   // console.log("selector", selector)
 
@@ -48,7 +56,7 @@ export default function OneWayCheckout() {
   }, [isAuthenticated, router]);
 
   // console.log("checkout details:", oneWay);
-
+   const smallScreen = useMediaQuery("(max-width:1199px)");
   return (
     <>
       {isAuthenticated && oneWay ? (
@@ -99,7 +107,7 @@ export default function OneWayCheckout() {
                 alignItems={"flex-start"}
               >
                 <Grid2
-                  size={{ xs: 12, sm: 12, md: 8 }}
+                  size={{ xs: 12, sm: 12, md: 12 ,lg:8 }}
                   sx={{
                     backgroundColor: COLORS.SEMIGREY,
                     p: 2,
@@ -124,7 +132,7 @@ export default function OneWayCheckout() {
                             gutterBottom
                             sx={{
                               fontFamily: nunito.style,
-                              fontSize: "20px",
+                              fontSize: {lg:"20px" ,md:"20px" ,sm:"20px",xs:"15px"  },
                               fontWeight: 700,
                             }}
                           >
@@ -550,6 +558,7 @@ export default function OneWayCheckout() {
                             fontSize: 14,
                             fontFamily: nunito.style,
                             textAlign: "left",
+                            mb:1
                           }}
                         >
                           I have read and accept Flight networks travel
@@ -565,7 +574,7 @@ export default function OneWayCheckout() {
                         alignItems: "flex-start",
                       }}
                     />
-                    <Grid2 container mt={2} spacing={2}>
+                    <Grid2 container mt={2} spacing={{lg:2 , xs:3}}>
                       <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Stack direction="row" alignItems={"center"}>
                           <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
@@ -597,8 +606,23 @@ export default function OneWayCheckout() {
                 </Grid2>
                 {/* order-box */}
 
+                {/* 
+
+
+               <Grid2 size={{lg:4 ,xs:12}} order={{lg:2 ,xs:1}} > 
+                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={commission} fareData={flightDetails[0]?.Results}     /> }/> :
+                 <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer} commission={commission} /> }
+
+                 size={{ xs: 12, sm: 12, md: 4 }}
+             
+                </Grid2>
+                
+                */}
+                
+
+
                 <Grid2
-                  size={{ xs: 12, sm: 12, md: 4 }}
+                  size={{lg:4 ,xs:12}}
                   sx={{
                     backgroundColor: COLORS.WHITE,
                     borderRadius: 2,
@@ -607,10 +631,18 @@ export default function OneWayCheckout() {
                   }}
                 >
                   {/* --------------fare Summary Start-----------------  */}
-                  <FareSummary
+
+                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={oneWay[2]}  fareData={oneWay[0]?.Results}      /> }/> :
+
+                 <FareSummary  fareData={oneWay[0]?.Results}  commission={oneWay[2]}  toggleDrawer={toggleDrawer}  /> }
+
+
+
+                  {/* <FareSummary
                     fareData={oneWay[0]?.Results}
                     commission={oneWay[2]}
-                  />
+                    toggleDrawer={toggleDrawer}
+                  /> */}
                   {/* --------------fare Summary End-----------------  */}
 
                   <Stack

@@ -40,7 +40,7 @@ const Testimonials = () => {
             </Typography>
             <Typography
               sx={{
-                fontSize: {lg:15 ,sm:14},
+                fontSize: {lg:15 ,sm:14 ,xs:12},
                 textAlign: "center",
                 fontFamily: nunito.style,
               }}

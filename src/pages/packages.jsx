@@ -77,7 +77,7 @@ const Packages = () => {
       </Head>
 
       <InnerBanner img={packageBanner.src} heading={"Packages"} />
-      <Box sx={{ pt: 10, pb: 10 }}>
+      <Box sx={{ pt: {lg:10 , xs:5}, pb: 10 }}>
         <Container>
           <Grid2 container sx={{ mb: "20px" }}>
             <Grid2 size={{ xs: 12 }} sx={{ p: 3 }} component={Paper}>
@@ -90,7 +90,7 @@ const Packages = () => {
               <form onSubmit={formik.handleSubmit}>
                 <Grid2 container spacing={0.5}>
                   <Grid2
-                    size={{ xs: 12, sm: 3, md: 2 }}
+                    size={{ xs: 12, sm: 6, md: 2 }}
                     sx={{
                       border: "1px solid #808080",
                       borderRadius: 1,
@@ -118,7 +118,7 @@ const Packages = () => {
                     />
                   </Grid2>
 
-                  <Grid2 size={{ xs: 12, sm: 3, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
+                  <Grid2 size={{ xs: 12, sm: 6, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
                     <Typography
                       sx={{
                         fontSize: 15,
@@ -141,7 +141,7 @@ const Packages = () => {
                     />
                   </Grid2>
 
-                  <Grid2 size={{ xs: 12, sm: 3, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
+                  <Grid2 size={{ xs: 12, sm: 6, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
                     <Typography
                       sx={{
                         fontSize: 15,
@@ -164,7 +164,7 @@ const Packages = () => {
                     />
                   </Grid2>
 
-                  <Grid2 size={{ xs: 12, sm: 3, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
+                  <Grid2 size={{ xs: 12, sm: 6, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
                     <Typography
                       sx={{
                         fontSize: 15,
@@ -187,7 +187,7 @@ const Packages = () => {
                     />
                   </Grid2>
 
-                  <Grid2 size={{ xs: 12, sm: 3, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
+                  <Grid2 size={{ xs: 12, sm: 6, md: 2 }} sx={{ border: "1px solid #808080", borderRadius: 1 }}>
                     <Typography
                       sx={{
                         fontSize: 15,
@@ -221,6 +221,7 @@ const Packages = () => {
                         backgroundColor: COLORS.SECONDARY,
                         width: 150,
                         p: 2,
+                        
                       }}
                     >
                       Search
@@ -239,7 +240,7 @@ const Packages = () => {
 
           <Grid2 container mt={4} spacing={3}>
             {data.toursData.map((val, i) => (
-              <Grid2 size={3} key={i}>
+              <Grid2 size={{xs:12, sm:6, md:4,lg:3}} key={i} >
                 <Packagescard title={val.title} img={val.img} location={val.location} rating={val.rating} price={val.price} duration={val.duration} />
               </Grid2>
             ))}

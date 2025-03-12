@@ -15,14 +15,14 @@ const ContactCard = ({ data }) => {
     <div>
       <List>
         {data.map((val, i) => (
-          <Box sx={{p:1}}>
+          <Box sx={{p:1 }}>
             <ListItem key={i}>
               <ListItemAvatar
                 sx={{
                   backgroundColor: COLORS.BLUEOVERLAY,
                   borderRadius: "50%",
-                  minWidth: 50,
-                  height: 50,
+                  minWidth:  {lg:50 , md:50 , sm:50 , xs:40},
+                  height: {lg:50 , md:50 , sm:50 , xs:40},
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -31,7 +31,7 @@ const ContactCard = ({ data }) => {
                 {val.icon}
               </ListItemAvatar>
               <ListItemText
-                sx={{ ml: 4 }}
+                sx={{ ml: {lg:4 ,md:4 , sm:3 ,xs:2} }}
                 primary={
                   <Typography
                     sx={{
@@ -46,7 +46,7 @@ const ContactCard = ({ data }) => {
                 secondary={
                   <Typography
                     sx={{
-                      fontSize: 18,
+                      fontSize: {lg:18 , md:18 , sm:18 , xs:14},
                       color: COLORS.BLACK,
                       fontFamily: nunito.style,
                     }}
