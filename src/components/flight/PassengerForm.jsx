@@ -171,6 +171,28 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     email: "",
   };
 
+// --------Meal Selection----------------- 
+  const [selectMeal, setSelectMeal] = React.useState(null);
+
+  const handleMealValue = (meal)=>{
+    setSelectMeal(meal)
+  }
+
+
+  console.log("selectMeal", selectMeal)
+
+
+
+// --------Baggage Selection----------------- 
+  const [selectBaggage, setSelectBaggage] = React.useState(null);
+
+  const handleBaggageValue = (baggage)=>{
+    setSelectBaggage(baggage)
+  }
+
+  console.log("baggageData", selectBaggage)
+
+
   const handleSubmit = (e, values) => {
     e.preventDefault();
 
@@ -486,7 +508,11 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       errors={errors}
-                      formType="adult" // Added formType prop
+                      formType="adult"
+                      handleMealValue={handleMealValue}
+                      selectMeal={selectMeal}
+                      selectBaggage={selectBaggage}
+                      handleBaggageValue={handleBaggageValue} // Added formType prop
                     />
                   </Box>
                 ))}
@@ -500,7 +526,9 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       errors={errors}
-                      formType="child" // Added formType prop
+                      formType="child"
+                      handleMealValue={handleMealValue}
+                      selectMeal={selectMeal} // Added formType prop
                     />
                   </Box>
                 ))}
