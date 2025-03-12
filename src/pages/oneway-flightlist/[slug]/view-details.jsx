@@ -33,7 +33,7 @@ import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
 import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
@@ -53,6 +53,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const FlightDetails = () => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state)=>state.USER.isAuthenticated);
+  console.log('isAuthenticated',isAuthenticated)
   const router = useRouter();
   const [isLCC, setIsLCC] = useState(null);
   const [flightDetails, setFlightDetails] = useState(null);
