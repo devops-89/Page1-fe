@@ -23,6 +23,7 @@ export default function MealSelection({ mealData }) {
         return (
           <Autocomplete
             key={mealIndex}
+            size="small"
             options={singleMeal} 
             getOptionLabel={(meal) => meal?.AirlineDescription || "--"}
             value={selectedMeal}

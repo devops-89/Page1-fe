@@ -18,10 +18,11 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
   </Typography>
     <Grid2 container spacing={2} sx={{ mb: "20px" }} >
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-        <FormControl fullWidth>
-          <InputLabel id="cell-country-code-label">Cell Country Code</InputLabel>
+        <FormControl fullWidth size="small">
+          <InputLabel id="cell-country-code-label" >Cell Country Code</InputLabel>
           <Select
             labelId="cell-country-code-label"
+           
             id="cell_country_code"
             name="cell_country_code"
             value={values.cell_country_code}
@@ -30,6 +31,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
             error={touched.cell_country_code && Boolean(errors.cell_country_code)}
             label="Cell Country Code"
             defaultValue=""
+             size="small"
           >
             <MenuItem value="+91">+91</MenuItem>
           </Select>
@@ -42,6 +44,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           fullWidth
+          size="small"
           id="country_code"
           name="country_code"
           label="Country Code"
@@ -55,6 +58,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
 
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
+        size="small"
           fullWidth
           id="city"
           name="city"
@@ -70,6 +74,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           fullWidth
+          size="small"
           id="contact_no"
           name="contact_no"
           label="Contact No"
@@ -85,6 +90,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           fullWidth
+          size="small"
           id="country"
           name="country"
           label="Country"
@@ -99,6 +105,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           fullWidth
+          size="small"
           id="house_number"
           name="house_number"
           label="House Number"
@@ -113,6 +120,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           fullWidth
+          size="small"
           id="postal_code"
           name="postal_code"
           label="Postal Code"
@@ -127,6 +135,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           fullWidth
+          size="small"
           id="street"
           name="street"
           label="Street"
@@ -141,6 +150,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
         <TextField
           fullWidth
+          size="small"
           id="state"
           name="state"
           label="State"
@@ -155,6 +165,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
         <TextField
           fullWidth
+          size="small"
           id="nationality"
           name="nationality"
           label="Nationality"
@@ -169,6 +180,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
       <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
         <TextField
           fullWidth
+          size="small"
           id="email"
           name="email"
           label="Email"

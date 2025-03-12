@@ -22,6 +22,7 @@ export default function BaggageSelection({ baggageData }) {
         return (
           <Autocomplete
             key={baggageIndex}
+            size="small"
             options={singleBaggage || []} 
             getOptionLabel={(baggage) => baggage?.Text || "--"}
             value={selectedBaggage[baggageIndex] || null} 

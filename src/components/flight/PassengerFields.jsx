@@ -26,6 +26,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             as={TextField}
             label="Title"
             name={`${passenger.formType}[${index}].title`}
+            size="small"
             select
             fullWidth
             required
@@ -47,6 +48,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="First Name"
+            size="small"
             name={`${passenger.formType}[${index}].first_name`}
             fullWidth
             required
@@ -63,7 +65,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Middle Name"
-           
+             size="small"
             name={`${passenger.formType}[${index}].middle_name`}
             fullWidth
             value={passenger.middleName}
@@ -77,7 +79,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Last Name"
-            
+            size="small"
             name={`${passenger.formType}[${index}].last_name`}
             fullWidth
             required
@@ -96,6 +98,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             label="Date of Birth"
             name={`${passenger.formType}[${index}].date_of_birth`}
             type="date"
+            size="small"
             fullWidth
             required
             InputLabelProps={{ shrink: true }}
@@ -114,6 +117,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             label="Gender"
             name={`${passenger.formType}[${index}].gender`}
             select
+            size="small"
             fullWidth
             required
             value={passenger.gender}
@@ -133,6 +137,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Email"
+            size="small"
             name={`${passenger.formType}[${index}].email`}
             type="email"
             fullWidth
@@ -150,6 +155,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Phone Number"
+            size="small"
             name={`${passenger.formType}[${index}].contact_no`}
             type="tel"
             fullWidth
