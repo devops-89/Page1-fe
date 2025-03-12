@@ -214,6 +214,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               is_lead_pax: values?.adult?.length === 1,
               ff_airline_code: null,
               ff_number: null,
+             
             })) || [],
           child:
             values?.child?.map((passenger) => ({
