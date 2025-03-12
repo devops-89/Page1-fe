@@ -25,6 +25,7 @@ export default function BaggageSelection({ baggageData }) {
           expandIcon={<KeyboardArrowDownIcon />}
           aria-controls="panel1-content"
           id="panel1-header"
+          sx={{backgroundColor:COLORS.SEMIGREY}}
         >
           <Typography
             variant="body1"
@@ -33,7 +34,7 @@ export default function BaggageSelection({ baggageData }) {
           <LuggageIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/> Baggage 
           </Typography>
         </AccordionSummary>
-        <AccordionDetails  sx={{p:1}}>
+        <AccordionDetails  sx={{p:1,maxHeight:"240px",overflowY:"auto"}}>
         {baggageData?.map((singleBaggage, baggageIndex) => {
         return (
           <>

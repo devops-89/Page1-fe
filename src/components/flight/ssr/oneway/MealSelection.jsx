@@ -26,6 +26,7 @@ export default function MealSelection({ mealData }) {
           expandIcon={<KeyboardArrowDownIcon />}
           aria-controls="panel1-content"
           id="panel1-header"
+          sx={{backgroundColor:COLORS.SEMIGREY}}
         >
           <Typography
             variant="body1"
@@ -34,7 +35,7 @@ export default function MealSelection({ mealData }) {
            <RestaurantMenuIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/> Meal 
           </Typography>
         </AccordionSummary>
-        <AccordionDetails  sx={{p:1}}>
+        <AccordionDetails  sx={{p:1,maxHeight:"240px",overflowY:"auto"}}>
         {mealData?.map((singleMeal, mealIndex) => {
         return (
           <>

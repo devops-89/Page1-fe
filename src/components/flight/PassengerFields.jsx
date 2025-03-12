@@ -6,12 +6,13 @@ import {Accordion,AccordionSummary,AccordionDetails} from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MealSelection from "./ssr/oneway/MealSelection";
 import BaggageSelection from "./ssr/oneway/BaggageSelection";
+import { COLORS } from "@/utils/colors";
 
 const PassengerFields = ({data, passenger, index, handleChange, handleBlur, errors }) => {
     console.log("data", data)
   return (
     <Accordion defaultExpanded={index===0}>
-      <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
+      <AccordionSummary expandIcon={<KeyboardArrowDownIcon />} sx={{backgroundColor:COLORS.SEMIGREY}}>
       <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style,textTransform:"capitalize" }}>
        {passenger.formType} {index+1}
       </Typography>

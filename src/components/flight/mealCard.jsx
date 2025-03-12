@@ -27,7 +27,8 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
             whiteSpace: "nowrap",
           }}
         >
-          {`${meal?.AirlineDescription?.substring(0, 20)}...` || "--"}
+         {meal?.AirlineDescription ? `${meal.AirlineDescription.substring(0, 20)}...` : "--"}
+
         </Typography>
         <Typography
           variant="body2"
