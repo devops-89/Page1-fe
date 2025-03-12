@@ -9,7 +9,7 @@ const CounterCard = ({ icon, heading, count }) => {
   return (
     <div>
       <Box>
-        <Stack direction={"row"} alignItems={"center"} spacing={2}>
+        <Stack direction={"row"} alignItems={"center"} justifyContent={"center"} spacing={2} pb={1}>
           {icon}
           <Typography
             sx={{
@@ -17,6 +17,8 @@ const CounterCard = ({ icon, heading, count }) => {
               color: COLORS.PRIMARY,
               fontFamily: nunito.style,
               fontWeight: 600,
+              textAlign:"center",
+              textWrap:"nowrap"
             }}
           >
             {heading}

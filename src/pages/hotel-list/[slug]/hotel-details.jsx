@@ -174,6 +174,7 @@ const HotelDetails = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
+                  flexWrap:"wrap",
                   gap: "20px",
                   mb: "25px",
                 }}
@@ -458,9 +459,10 @@ const HotelDetails = () => {
             backgroundColor: COLORS.WHITE,
             borderRadius: "18px",
             py: "30px",
+            
           }}
         >
-          <Box>
+          <Box  >
             <FormControl sx={{ width: 180 }}>
               <InputLabel
                 id="demo-simple-select-label"
@@ -492,7 +494,7 @@ const HotelDetails = () => {
               </Select>
             </FormControl>
           </Box>
-          <Grid2 container sx={{ mb: 4 }}>
+          <Grid2 container sx={{ mb: 4 }} >
             <Grid2
               size={{ xs: 12 }}
               sx={{
@@ -506,8 +508,9 @@ const HotelDetails = () => {
                 just ₹7700 more!
               </Typography>
             </Grid2>
+            {/* hey */}
             <Grid2
-              size={{ xs: 12, sm: 4, md: 4 }}
+              size={{ xs: 12, sm: 12, md: 4 }}
               sx={{ border: `1px solid ${COLORS.GREY}`, padding: "15px" }}
             >
               <Card
@@ -523,10 +526,11 @@ const HotelDetails = () => {
                     transition: "0.5s ease all",
                   },
                   boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
-                  height: 480,
+                  height: {lg:500 , md:530 ,xs:540},
                 }}
+                
               >
-                <Box sx={{ position: "relative", overflow: "hiden" }}>
+                <Box sx={{ position: "relative", overflow: "hiden" }} border={10}>
                   <Box
                     sx={{
                       backgroundImage: `url(${banner.src})`,
@@ -538,14 +542,14 @@ const HotelDetails = () => {
                     className="image"
                   ></Box>
                 </Box>
-                <Box sx={{ position: "absolute", top: 0, width: "100%" }}>
+                {/* <Box sx={{ position: "absolute", top: 0, width: "100%" , border:10  }}>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
                     justifyContent={"space-between"}
                     p={2}
                   ></Stack>
-                </Box>
+                </Box> */}
                 <CardContent>
                   <Typography
                     sx={{
@@ -573,9 +577,11 @@ const HotelDetails = () => {
                     alignItems={"flex-start"}
                     spacing={2}
                     mt={1}
+                  
+                    
                   >
-                    <Grid2 container>
-                      <Grid2 size={{ xs: 6 }}>
+                    <Grid2 container sx={{pb:10}}  >
+                      <Grid2 size={{ xs: 6 }} >
                         <List>
                           <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
                             <Typography
@@ -643,7 +649,6 @@ const HotelDetails = () => {
                           </ListItem>
                         </List>
                       </Grid2>
-                    </Grid2>
                     <Button
                       variant="contained"
                       sx={{ backgroundColor: COLORS.PRIMARY }}
@@ -651,13 +656,17 @@ const HotelDetails = () => {
                     >
                       More Details
                     </Button>
+                    </Grid2>
                   </Stack>
+                 
                 </CardContent>
+            
               </Card>
             </Grid2>
+            {/* hey */}
 
             <Grid2
-              size={{ xs: 12, sm: 8, md: 8 }}
+              size={{ xs: 12, sm: 12, md: 8 }}
               sx={{
                 border: `1px solid ${COLORS.GREY}`,
                 padding: "15px",
@@ -742,7 +751,7 @@ const HotelDetails = () => {
             </Grid2>
           </Grid2>
 
-          <Grid2 container sx={{ mb: 4 }}>
+          <Grid2 container sx={{ mb: 4 }} >
             <Grid2
               size={{ xs: 12 }}
               sx={{
@@ -756,8 +765,9 @@ const HotelDetails = () => {
                 just ₹7700 more!
               </Typography>
             </Grid2>
+            {/* hey */}
             <Grid2
-              size={{ xs: 12, sm: 4, md: 4 }}
+              size={{ xs: 12, sm: 12, md: 4 }}
               sx={{ border: `1px solid ${COLORS.GREY}`, padding: "15px" }}
             >
               <Card
@@ -773,10 +783,11 @@ const HotelDetails = () => {
                     transition: "0.5s ease all",
                   },
                   boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
-                  height: 480,
+                  height: {lg:500 , md:530 ,xs:540},
                 }}
+                
               >
-                <Box sx={{ position: "relative", overflow: "hiden" }}>
+                <Box sx={{ position: "relative", overflow: "hiden" }} border={10}>
                   <Box
                     sx={{
                       backgroundImage: `url(${banner.src})`,
@@ -788,14 +799,14 @@ const HotelDetails = () => {
                     className="image"
                   ></Box>
                 </Box>
-                <Box sx={{ position: "absolute", top: 0, width: "100%" }}>
+                {/* <Box sx={{ position: "absolute", top: 0, width: "100%" , border:10  }}>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
                     justifyContent={"space-between"}
                     p={2}
                   ></Stack>
-                </Box>
+                </Box> */}
                 <CardContent>
                   <Typography
                     sx={{
@@ -823,9 +834,11 @@ const HotelDetails = () => {
                     alignItems={"flex-start"}
                     spacing={2}
                     mt={1}
+                  
+                    
                   >
-                    <Grid2 container>
-                      <Grid2 size={{ xs: 6 }}>
+                    <Grid2 container sx={{pb:10}}  >
+                      <Grid2 size={{ xs: 6 }} >
                         <List>
                           <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
                             <Typography
@@ -893,7 +906,6 @@ const HotelDetails = () => {
                           </ListItem>
                         </List>
                       </Grid2>
-                    </Grid2>
                     <Button
                       variant="contained"
                       sx={{ backgroundColor: COLORS.PRIMARY }}
@@ -901,13 +913,17 @@ const HotelDetails = () => {
                     >
                       More Details
                     </Button>
+                    </Grid2>
                   </Stack>
+                 
                 </CardContent>
+            
               </Card>
             </Grid2>
+            {/* hey */}
 
             <Grid2
-              size={{ xs: 12, sm: 8, md: 8 }}
+              size={{ xs: 12, sm: 12, md: 8 }}
               sx={{
                 border: `1px solid ${COLORS.GREY}`,
                 padding: "15px",
@@ -991,6 +1007,9 @@ const HotelDetails = () => {
               </Grid2>
             </Grid2>
           </Grid2>
+
+
+         
         </Container>
       </Grid2>
 

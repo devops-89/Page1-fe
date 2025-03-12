@@ -63,7 +63,7 @@ function SwipeableEdgeDrawer(props) {
           '.MuiDrawer-root > .MuiPaper-root': {
             height: `calc(50% - ${drawerBleeding}px)`,
             overflow: 'visible',
-            
+            marginBottom: "15PX"
           
 
            

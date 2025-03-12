@@ -15,7 +15,7 @@ import Head from "next/head";
 import Image from "next/image";
 const About = () => {
   return (
-    <Box>
+    <Box sx={{}}>
       <Head>
         <title>About Us</title>
       </Head>
@@ -84,7 +84,7 @@ const About = () => {
       </Box>
       <Box
         sx={{
-          pt: {lg:10 ,xs:5},
+          pt: { lg: 10, xs: 5 },
           pb: 10,
           position: "relative",
           backgroundColor: COLORS.LIGHTBLUE,
@@ -113,7 +113,7 @@ const About = () => {
 
           <Grid2 container spacing={3} sx={{ mt: 3 }}>
             {data.choose.map((val, i) => (
-              <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12}}>
+              <Grid2 size={{ lg: 3, md: 6, sm: 6, xs: 12 }}>
                 <ChooseCard
                   icon={val.icon}
                   heading={val.heading}
@@ -127,13 +127,39 @@ const About = () => {
           </Box>
         </Container>
       </Box>
-      <Box sx={{ mt: 10, mb: 10, position: "relative" }}>
-        <Box>
-          <Image src={aboutBg} style={{ width: "100%" }} />
+      <Box
+        sx={{
+          mt: { lg: 10, md: 10, sm: 10, xs: 30 },
+          mb: { lg: 10, md: 10, sm: 10, xs: 20 },
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: -9,
+            display:{lg:"block", md:"block", sm:"block" ,xs:"none" }
+          }}
+        >
+          <Image
+            src={aboutBg}
+            style={{width:'100%'}}
+          />
         </Box>
-        <Grid2 container sx={{ position: "absolute", width: "100%", top: {lg:-10 , md:-60,sm:-60, xs:-80} }}>
+        <Grid2
+          container
+          sx={{
+            position: "relative",
+            width: "100%",
+            top: { lg: -10, md: -60, sm: -60, xs: -210 },
+          }}
+        >
           <Grid2
-            size={{lg:10 ,xs:12}}
+            size={{ lg: 10, xs: 12 }}
             margin={"auto"}
             sx={{
               backgroundColor: COLORS.WHITE,
@@ -143,12 +169,15 @@ const About = () => {
               boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
               opacity: 0.9,
               height: 130,
-            
             }}
           >
-            <Grid2 container spacing={{lg:8 ,xs:8}}>
+            <Grid2 container spacing={{ lg: 8, xs: 6 }}> 
               {data.counterData.map((val, i) => (
-                <Grid2 size={{lg:3 ,md:6 , sm:6 ,xs:6}} key={i} boxShadow={1} >
+                <Grid2
+                  size={{ lg: 3, md: 6, sm: 6, xs: 12 }}
+                  key={i}
+                  boxShadow={1}
+                >
                   <CounterCard
                     count={val.count}
                     heading={val.heading}

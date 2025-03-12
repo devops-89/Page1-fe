@@ -101,12 +101,12 @@ const Cabs = () => {
       <Box sx={{ pt: 10, pb: 10 }}>
         <Container>
           <Grid2 container spacing={5}>
-            <Grid2 size={6}>
-              <Grid2 container spacing={3}>
-                <Grid2 size={6}>
+            <Grid2 size={{lg:6 , xs:12}}>
+              <Grid2 container spacing={{lg:3 , xs:1}}>
+                <Grid2 size={{lg:6 , xs:12}}>
                   <Image src={cabs1} className="img-fluid" />
                 </Grid2>
-                <Grid2 size={6}>
+                <Grid2 size={{lg:6 , xs:12}}>
                   <Box sx={{ width: 260, height: 300, mb: 2 }}>
                     <Image src={cab2} className="img-fluid" />
                   </Box>
@@ -116,7 +116,7 @@ const Cabs = () => {
                 </Grid2>
               </Grid2>
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{lg:6 , xs:12}}>
               <Typography
                 sx={{
                   textTransform: "capitalize",
@@ -190,15 +190,15 @@ const Cabs = () => {
             </Grid2>
           </Grid2>
         </Container>
-        <Box sx={{ pt: 10, pb: 10 }}>
+        {/* <Box sx={{ pt: 10, pb: 10 }}>
           <Taxiform />
-        </Box>
-        <Box sx={{ pt: 5, pb: 10 }}>
+        </Box> */}
+        {/* <Box sx={{ pt: 5, pb: 10 }}>
           <Services />
-        </Box>
-        <Box sx={{ pt: 5 }}>
+        </Box> */}
+        {/* <Box sx={{ pt: 5 }}>
           <Ensures />
-        </Box>
+        </Box> */}
       </Box>
     </div>
   );

@@ -271,7 +271,7 @@ const FlightListBox = ({ details, traceId, journey }) => {
                 label={
                   <Typography
                     sx={{
-                      fontSize: 14,
+                      fontSize: {lg:14 , xs:10},
                       textAlign: "center",
                       fontFamily: nunito.style,
                       fontWeight: 550,

@@ -521,8 +521,7 @@ const FlightDetails = () => {
                 <Grid2 size={{lg:4 ,xs:12}} order={{lg:2 ,xs:1}} > 
                   {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={commission} fareData={flightDetails[0]?.Results}     /> }/> :
                  <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer} commission={commission} /> }
-              {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
-                  {/* <FareSummary fareData={flightDetails[0]?.Results} /> */}
+              
                 </Grid2>
               </Grid2>
             </Container>

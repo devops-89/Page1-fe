@@ -35,7 +35,7 @@ const  FareSummary = ({ fareData, commission , toggleDrawer }) => {
   let publishFare = parseInt(fareData?.Fare?.PublishedFare);
    const smallScreen = useMediaQuery("(max-width:1199px)")
   return (
-    <Paper sx={{ padding: 2,  backgroundColor: "#F4F4F4" ,boxShadow:{lg:0 , xs:10}}} >
+    <Paper sx={{padding: 2,   boxShadow:{lg:0 , xs:10}}}  >
       <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}  >
       <Typography
         variant="h6"
