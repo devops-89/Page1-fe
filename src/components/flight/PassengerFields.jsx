@@ -6,13 +6,12 @@ import {Accordion,AccordionSummary,AccordionDetails} from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MealSelection from "./ssr/oneway/MealSelection";
 import BaggageSelection from "./ssr/oneway/BaggageSelection";
-import { COLORS } from "@/utils/colors";
 
-const PassengerFields = ({data, passenger, index, handleChange, handleBlur, errors }) => {
+const PassengerFields = ({data, passenger, index, handleChange, handleBlur, errors, handleMealValue, selectMeal, selectBaggage, handleBaggageValue }) => {
     console.log("data", data)
   return (
     <Accordion defaultExpanded={index===0}>
-      <AccordionSummary expandIcon={<KeyboardArrowDownIcon />} sx={{backgroundColor:COLORS.SEMIGREY}}>
+      <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
       <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style,textTransform:"capitalize" }}>
        {passenger.formType} {index+1}
       </Typography>
@@ -27,7 +26,6 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             as={TextField}
             label="Title"
             name={`${passenger.formType}[${index}].title`}
-            size="small"
             select
             fullWidth
             required
@@ -49,7 +47,6 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="First Name"
-            size="small"
             name={`${passenger.formType}[${index}].first_name`}
             fullWidth
             required
@@ -66,7 +63,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Middle Name"
-             size="small"
+           
             name={`${passenger.formType}[${index}].middle_name`}
             fullWidth
             value={passenger.middleName}
@@ -80,7 +77,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Last Name"
-            size="small"
+            
             name={`${passenger.formType}[${index}].last_name`}
             fullWidth
             required
@@ -99,7 +96,6 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             label="Date of Birth"
             name={`${passenger.formType}[${index}].date_of_birth`}
             type="date"
-            size="small"
             fullWidth
             required
             InputLabelProps={{ shrink: true }}
@@ -118,7 +114,6 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             label="Gender"
             name={`${passenger.formType}[${index}].gender`}
             select
-            size="small"
             fullWidth
             required
             value={passenger.gender}
@@ -138,7 +133,6 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Email"
-            size="small"
             name={`${passenger.formType}[${index}].email`}
             type="email"
             fullWidth
@@ -156,7 +150,6 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Phone Number"
-            size="small"
             name={`${passenger.formType}[${index}].contact_no`}
             type="tel"
             fullWidth
@@ -171,11 +164,11 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
 
       <Grid2 size={12}>
        {
-        (data)?(<MealSelection mealData={data?.MealDynamic}  />):(null)
+        (data)?(<MealSelection mealData={data?.MealDynamic}  handleMealValue={handleMealValue} selectMeal={selectMeal}/>):(null)
        } 
 
        {
-        (data)?( <BaggageSelection baggageData={data?.Baggage} />):(null)
+        (data)?( <BaggageSelection baggageData={data?.Baggage} handleBaggageValue={handleBaggageValue} selectBaggage={selectBaggage}/>):(null)
        }
        </Grid2>
        
