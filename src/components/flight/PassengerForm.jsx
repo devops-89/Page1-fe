@@ -214,6 +214,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               is_lead_pax: values?.adult?.length === 1,
               ff_airline_code: null,
               ff_number: null,
+             
             })) || [],
           child:
             values?.child?.map((passenger) => ({
@@ -396,6 +397,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+         
           }}
         >
           <Typography
@@ -477,7 +479,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             return (
               <Form onSubmit={(e) => handleSubmit(e, values)}>
                 {values.adult.map((dataObj, index) => (
-                  <Box key={index} sx={{ mb: "10px" }}>
+                  <Box key={index} sx={{ mb: "10px",boxShadow: "0px 2px 6px rgba(128, 128, 128, 0.2)",borderRadius:"4px" }}>
                     <PassengerFields
                       data={mealAndBaggageData}
                       passenger={dataObj}
