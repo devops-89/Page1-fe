@@ -116,7 +116,7 @@ const Cabs = () => {
                 </Grid2>
               </Grid2>
             </Grid2>
-            <Grid2 size={{lg:6 , xs:12}}>
+            {/* <Grid2 size={{lg:6 , xs:12}}>
               <Typography
                 sx={{
                   textTransform: "capitalize",
@@ -187,18 +187,18 @@ const Cabs = () => {
                   </ListItem>
                 ))}
               </List>
-            </Grid2>
+            </Grid2> */}
           </Grid2>
         </Container>
         {/* <Box sx={{ pt: 10, pb: 10 }}>
           <Taxiform />
         </Box> */}
-        {/* <Box sx={{ pt: 5, pb: 10 }}>
+        <Box sx={{ pt: 5, pb: 10 }}>
           <Services />
-        </Box> */}
-        {/* <Box sx={{ pt: 5 }}>
+        </Box>
+        <Box sx={{ pt: 5 }}>
           <Ensures />
-        </Box> */}
+        </Box>
       </Box>
     </div>
   );

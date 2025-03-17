@@ -225,24 +225,35 @@ const Footer = () => {
           }}
         >
           <Grid2 container spacing={4}>
-            <Grid2
+            {/* <Grid2
              size={{lg:3 ,sm:6,xs:12}}
 
-             pl={{lg:0 ,sm:0 ,xs:4}} 
+            //  pl={{lg:0 ,sm:0 ,xs:2}} 
               sx={{
                 display: "flex",
                 alignItems: "center",
-                alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
-                justifyContent: {lg:"center" ,sm:"center" ,xs:"start"
-
-                },
+                alignItems:"center",
+                justifyContent: "center",
                 
 
 
               }}
             >
-              <Image src={logo} width={100} textAlign={"center"} pl={{lg:0 ,sm:0 ,xs:6}} />
-            </Grid2>
+              <Image src={logo} width={100} textAlign={"center"} pl={{lg:0 ,sm:0 ,xs:0}} />
+            </Grid2> */}
+              <Grid2 size={{lg:3 ,sm:6,xs:12}} textAlign={"start"}    sx={{
+                display: "flex",
+                alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
+                justifyContent: {lg:"center" ,sm:"center" ,xs:"start"},
+                  
+                
+              }}>
+                  <Image src={logo} width={100} textAlign={"center"} pr={{lg:0 , md:"71px" ,sm:"71px" ,xs:0}} pl={{lg:0 ,md:0 ,sm:0,xs:"20px"}}  />
+
+              </Grid2>
+             
+
+
             <Grid2 size={{lg:3 ,sm:6,xs:12}} textAlign={"center"}   sx={{
                 display: "flex",
                 alignItems:{lg:"center" ,sm:"center" ,xs:"start"},

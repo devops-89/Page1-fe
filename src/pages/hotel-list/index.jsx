@@ -117,7 +117,7 @@ const HotelList = () => {
                           </Button>
                         }
                       />
-                      <CardContent>
+                      <CardContent sx={{marginTop:"-18px"}}>
                         <Typography variant="subtitle1" gutterBottom>
                           Search by Hotel Names
                         </Typography>
@@ -256,7 +256,7 @@ const HotelList = () => {
                       </Button>
                     }
                   />
-                  <CardContent>
+                  <CardContent >
                     <Typography variant="subtitle1" gutterBottom>
                       Search by Hotel Names
                     </Typography>

@@ -98,6 +98,9 @@ const HotelDetails = () => {
         >
           <Grid2 container spacing={3}>
             <Grid2 size={{ xs: 12, md: 12, lg: 8 }}>
+              {/* here */}
+              <Container>
+
               <Typography
                 variant="h5"
                 sx={{
@@ -105,12 +108,16 @@ const HotelDetails = () => {
                   fontWeight: 700,
                   display: "flex",
                   alignItems: "center",
+                  justifyContent:"space-between",
                   gap: "10px",
                   mb: "15px",
+                  fontSize:{lg:"24px",md:"24px",xs:"18px"},
+                 
+                   
                 }}
               >
                 Taj Fort Aguada Resort & Spa, Goa{" "}
-                <Rating name="read-only" value={4} readOnly />
+                <Rating name="read-only" value={4} readOnly fontSize={{lg:"30px",md:"24px",xs:"10px"}} />
               </Typography>
               <img
                 src={banner.src}
@@ -123,7 +130,7 @@ const HotelDetails = () => {
               />
               <Typography
                 variant="h6"
-                sx={{ marginTop: "10px", fontFamily: nunito.style }}
+                sx={{ marginTop: "10px", fontFamily: nunito.style ,fontSize:{ lg:24, md:24,sm:24,xs:18} }}
               >
                 Award-winning Seafront Resort Frequented by Celebrities
               </Typography>
@@ -137,6 +144,12 @@ const HotelDetails = () => {
                   More
                 </Button>
               </Typography>
+              {/* here */}
+              
+
+              </Container>
+
+              <Container>
 
               <Box
                 sx={{
@@ -144,13 +157,21 @@ const HotelDetails = () => {
                   alignItems: "center",
                   gap: "15px",
                   mb: "25px",
+                 
                 }}
               >
                 <Button
                   variant="outlined"
                   color="warning"
-                  sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+                  sx={{ fontFamily: nunito.style, 
+                    fontWeight: 600 , 
+                    fontSize:{lg:16 ,md:16 , sm:16 , xs:10} ,
+                    py :{lg:0.5 , }
+
+                  }}
                   onClick={handleClickOpen}
+                  
+
                 >
                   Food And Dinning
                 </Button>
@@ -163,6 +184,9 @@ const HotelDetails = () => {
                   Location & Surroundings
                 </Button>
               </Box>
+              </Container>
+
+              <Container>
 
               <Typography
                 variant="h5"
@@ -170,6 +194,10 @@ const HotelDetails = () => {
               >
                 Amenities
               </Typography>
+              </Container>
+
+              <Container>
+
               <Box
                 sx={{
                   display: "flex",
@@ -234,6 +262,7 @@ const HotelDetails = () => {
                   </Typography>
                 </Box>
               </Box>
+              </Container>
             </Grid2>
             <Grid2
               size={{ xs: 12, md: 12, lg: 4 }}

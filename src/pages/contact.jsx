@@ -12,6 +12,9 @@ const Contact = () => {
         <Container>
           <Grid2 container>
             <Grid2 size={12}>
+              <Box>
+              <Container>
+           
               <Typography
                 sx={{
                   fontSize: {lg:35 ,md:35 , xs:35 , xs:27},
@@ -22,6 +25,7 @@ const Contact = () => {
               >
                 Reach Out to Our Dedicated Support Team
               </Typography>
+
               <Typography
                 sx={{
                   fontSize: 15,
@@ -33,6 +37,8 @@ const Contact = () => {
               >
                 Our team is ready to help. Your satisfaction is our priority
               </Typography>
+              
+
               <Typography
                 sx={{
                   fontSize: 15,
@@ -47,10 +53,15 @@ const Contact = () => {
                 We’re just a message or call away, ready to provide the guidance
                 you need.
               </Typography>
-
+            </Container>
+              </Box>
+              
+                
               <ContactCard data={data.contactData} />
             </Grid2>
-            <Grid2 size={6}></Grid2>
+            <Grid2 size={6}>
+              
+            </Grid2>
           </Grid2>
         </Container>
       </Box>

@@ -46,9 +46,10 @@ const Ensures = () => {
   ];
   return (
     <Box sx={{ position: "relative" }}>
-      <Container>
-        <Grid2 container alignItems={"center"} spacing={5}>
-          <Grid2 size={6}>
+
+          <Grid2 container alignItems={"center"} spacing={5} >
+          <Grid2 size={{lg:6 , xs:12}} sx={{pl:{lg:16 ,xs:4}}} >
+            
             <Typography
               sx={{ fontSize: 35, fontFamily: nunito.style, fontWeight: 800 }}
             >
@@ -63,7 +64,7 @@ const Ensures = () => {
             </Typography>
             <Grid2 container mt={2}>
               {features.map((val, i) => (
-                <Grid2 size={4} key={i}>
+                <Grid2 size={4} key={i} >
                   <List>
                     <ListItem>
                       <ListItemAvatar sx={{ minWidth: 30 }}>
@@ -84,11 +85,11 @@ const Ensures = () => {
               ))}
             </Grid2>
           </Grid2>
-          <Grid2 size={6} sx={{ position: "absolute", right: 0 }}>
-            <Image src={taxiBig} className="img-fluid" />
+          <Grid2 size={{lg:6 ,xs:12}}  sx={{ position: {lg:"absolute" ,xs:"relative"}, right: 0 }}>
+            <Image src={taxiBig} className="img-fluid"    />
           </Grid2>
         </Grid2>
-      </Container>
+      
     </Box>
   );
 };

@@ -39,6 +39,7 @@ const Header = () => {
     setAnchorEl(e.currentTarget);
   };
   const [isScrolling, setIsScrolling] = useState(false);
+  const [openMenu ,setOpenMenu] = useState(false);
   const router = useRouter();
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -64,8 +65,18 @@ const Header = () => {
     } else {
       router.push(path);
       setAnchorEl(null);
+
+    
     }
+   
+    
+   
   };
+  
+  useEffect(() => {
+    setOpenMenu(true); // Close the menu whenever the route changes
+  }, [router.pathname]);
+  
 
   const [show, setShow] = useState(false);
 
@@ -82,7 +93,7 @@ const Header = () => {
   // console.log("user", user)
 
   const name = user?.email ? user.email.slice(0, 1) : "";
-  const [openMenu ,setOpenMenu] = useState("false");
+  
 
   const tablet = useMediaQuery("(max-width:900px)");
   const handleOpenMenu = function(){
@@ -152,6 +163,7 @@ const Header = () => {
                 }}
                 key={i}
                 onClick={() => changeRouter(val.url)}
+                 
               >
                  {val.label} 
                
