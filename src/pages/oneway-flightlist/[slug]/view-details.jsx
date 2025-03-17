@@ -512,10 +512,7 @@ const FlightDetails = () => {
                       </Card>
                     ) : null}
 
-                  
-                    
-
-                    
+                              
                   </Paper>
                 </Grid2>
 

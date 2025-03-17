@@ -145,14 +145,9 @@ const TravellerSelector = ({
             {validationErrors.maxTravelers && (
               <Typography>Total travelers cannot exceed 9.</Typography>
             )}
-            {validationErrors.infantLimit && (
-              <Typography>
-                Infants cannot exceed total adults and children.
-              </Typography>
-            )}
             {validationErrors.adultInfantRatio && (
               <Typography>
-                Adults must be more than the sum of children and infants.
+                Adult should be greater or equal to Infant.
               </Typography>
             )}
           </Box>
