@@ -2,11 +2,9 @@ import { COLORS } from "@/utils/colors";
 import { Box, Card, Grid2 } from "@mui/material";
 import React from "react";
 import footer from "@/banner/footer.svg";
-import RegistrationForm from "@/components/registrationForm";
 import Image from "next/image";
 import logo from "@/logo/logo.png";
 import Link from "next/link";
-import LoginForm from "@/components/loginForm";
 import ForgotPasswordForm from "@/components/forgotPasswordForm";
 const ForgotPassword = () => {
   return (

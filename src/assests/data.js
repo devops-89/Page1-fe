@@ -615,7 +615,7 @@ export const data = {
     },
     {
       label: "Logout",
-      url: "/",
+      url: "/login"
     },
   ],
   toursData: [
