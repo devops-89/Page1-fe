@@ -22,9 +22,29 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
+import { paymentController } from "@/api/paymentController";
+
 
 export default function OneWayCheckout() {
+
+  const [paymentPayload,setPaymentPayload]=useState(null);
+  const [buttonLoading,setButtonLoading]=useState(false);
+
   const router = useRouter();
+
+  // checking the session storage payment credentials to continue
+  useEffect(()=>{
+      if(sessionStorage.getItem("payment_info")){
+        let payment_credentials=JSON.parse(sessionStorage.getItem("payment_info"));
+        console.log("payment_credentials on payment page:",payment_credentials);
+        setPaymentPayload({...payment_credentials, currency: "INR"});
+      }
+      else{
+          router.back();
+      }
+  },[]);
+
+  
   const selector = useSelector((state) => state.USER);
   const { isAuthenticated } = selector;
   const [oneWay, setOneWay] = useState(null);
@@ -54,6 +74,15 @@ export default function OneWayCheckout() {
       setLoading(false);
     }
   }, [isAuthenticated, router]);
+
+  // handling function to initiate the payment process
+  function handlePay(){
+      paymentController.paymentInit(paymentPayload).then((response)=>{
+              console.log("response: ",response);
+      }).catch((error)=>{
+        console.log("Payment Response Error:",error.message)
+      })
+  }
 
   // console.log("checkout details:", oneWay);
    const smallScreen = useMediaQuery("(max-width:1199px)");
@@ -661,6 +690,8 @@ export default function OneWayCheckout() {
                         color: COLORS.WHITE,
                         minWidth: 10,
                       }}
+                      disabled={!paymentPayload}
+                      onClick={handlePay}
                     >
                       Pay Now
                     </Button>

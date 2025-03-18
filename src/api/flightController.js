@@ -1,4 +1,4 @@
-import { flightPublicApi,securedFlightApi } from "./config";
+import { flightPublicApi, securedFlightApi } from "./config";
 
 export const flightController = {
   getAllAirports: async () => {
@@ -17,76 +17,75 @@ export const flightController = {
       throw error;
     }
   },
-  flightDetails:async(data)=>{
-    try{
-     let result=await flightPublicApi.post("flightdetail/flightdetail",data);
-    //  console.log("result",result);
-     return result;
-    }
-    catch(error){
+  flightDetails: async (data) => {
+    try {
+      let result = await flightPublicApi.post(
+        "flightdetail/flightdetail",
+        data
+      );
+
+      return result;
+    } catch (error) {
       throw error;
     }
   },
 
- 
-  oneWayBookingNonLLC:async(data)=>{
-    try{
-     let result=await securedFlightApi.post("flight-booking/non_LCC_booking",data);
-    //  console.log("result nonLLC", result)
-     return result;
-    }
-    catch(error){
+  oneWayBookingNonLLC: async (data) => {
+    try {
+      let result = await securedFlightApi.post(
+        "flight-booking/non_LCC_booking",
+        data
+      );
+      //  console.log("result nonLLC", result)
+      return result;
+    } catch (error) {
       // console.log("error nonLLC", error)
       throw error;
-     
     }
   },
 
-  oneWayBookingLLC:async(data)=>{
-    try{
-     let result=await securedFlightApi.post("flight-booking/booking",data);
-    //  console.log("result LLC", result)
-     return result;
-    }
-    catch(error){
+  oneWayBookingLLC: async (data) => {
+    try {
+      let result = await securedFlightApi.post("flight-booking/booking", data);
+      //  console.log("result LLC", result)
+      return result;
+    } catch (error) {
       // console.log("error LLC", error)
       throw error;
     }
   },
 
-
-  roundTrip:async(data)=>{
-    try{
-     let result=await flightPublicApi.post("flight/search-flight",data);
-    //  console.log("result",result);
-     return result;
-    }
-    catch(error){
+  roundTrip: async (data) => {
+    try {
+      let result = await flightPublicApi.post("flight/search-flight", data);
+      //  console.log("result",result);
+      return result;
+    } catch (error) {
       throw error;
     }
-},
+  },
 
-roundflightDetails:async(data)=>{
-  try{
-   let result=await flightPublicApi.post("flightdetail/flightdetail",data);
-   return result;
-  }
-  catch(error){
-    throw error;
-  }
-},
+  roundflightDetails: async (data) => {
+    try {
+      let result = await flightPublicApi.post(
+        "flightdetail/flightdetail",
+        data
+      );
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
 
-
-multiflightDetails:async(data)=>{
-  try{
-   let result=await flightPublicApi.post("flightdetail/flightdetail",data);
-   return result;
-  }
-  catch(error){
-    throw error;
-  }
-},
-
-
-
-}
+  multiflightDetails: async (data) => {
+    try {
+      let result = await flightPublicApi.post(
+        "flightdetail/flightdetail",
+        data
+      );
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
+};

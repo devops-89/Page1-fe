@@ -333,7 +333,11 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
         .then((response) => {
           if (response) {
             console.log("Booking response:", response);
-            // console.log("payload", payload);
+
+            if(response.statusText==="OK"){
+                 sessionStorage.setItem("payment_info",JSON.stringify(response.data.response));
+            }
+           
             dispatch(
               setToast({
                 open: true,
