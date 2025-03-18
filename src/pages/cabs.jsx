@@ -101,22 +101,91 @@ const Cabs = () => {
       <Box sx={{ pt: 10, pb: 10 }}>
         <Container>
           <Grid2 container spacing={5}>
+          <Grid2 size={{ lg: 6, xs: 12 }}>
+  <Grid2 container spacing={{ lg: 3, xs: 1 }}>
+    {/* First Image */}
+    <Grid2
+      size={6}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          height: { lg: 600, xs: 600 }, // Match the height of the combined second and third images
+          display: "flex",
+        }}
+      >
+        <Image
+          src={cabs1}
+          className="img-fluid"
+          style={{
+            maxWidth: "100%",
+            height: "100%", // Fill parent height
+            objectFit: "cover", // Maintain aspect ratio
+          }}
+        />
+      </Box>
+    </Grid2>
+
+    {/* Second and Third Images */}
+    <Grid2
+      size={6}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          height: { lg: 300, xs: 300 }, // Half of the first image's height
+          mb: 2,
+        }}
+      >
+        <Image
+          src={cab2}
+          className="img-fluid"
+          style={{
+            maxWidth: "100%",
+            height: "100%", // Fill parent height
+            objectFit: "cover", // Maintain aspect ratio
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          height: { lg: 300, xs: 300 }, // Half of the first image's height
+        }}
+      >
+        <Image
+          src={cab3}
+          className="img-fluid"
+          style={{
+            maxWidth: "100%",
+            height: "100%", // Fill parent height
+            objectFit: "cover", // Maintain aspect ratio
+          }}
+        />
+      </Box>
+    </Grid2>
+  </Grid2>
+</Grid2>
+
+       
+
+        
+
+
+
+          
             <Grid2 size={{lg:6 , xs:12}}>
-              <Grid2 container spacing={{lg:3 , xs:1}}>
-                <Grid2 size={{lg:6 , xs:12}}>
-                  <Image src={cabs1} className="img-fluid" />
-                </Grid2>
-                <Grid2 size={{lg:6 , xs:12}}>
-                  <Box sx={{ width: 260, height: 300, mb: 2 }}>
-                    <Image src={cab2} className="img-fluid" />
-                  </Box>
-                  <Box sx={{ width: 260, height: 300 }}>
-                    <Image src={cab3} className="img-fluid" />
-                  </Box>
-                </Grid2>
-              </Grid2>
-            </Grid2>
-            {/* <Grid2 size={{lg:6 , xs:12}}>
               <Typography
                 sx={{
                   textTransform: "capitalize",
@@ -132,7 +201,7 @@ const Cabs = () => {
               <Typography
                 sx={{
                   textTransform: "capitalize",
-                  fontSize: 50,
+                  fontSize: {lg:50 ,xs:30},
                   fontWeight: 700,
                   fontFamily: nunito.style,
                   mb: 1,
@@ -187,12 +256,12 @@ const Cabs = () => {
                   </ListItem>
                 ))}
               </List>
-            </Grid2> */}
+            </Grid2>
           </Grid2>
         </Container>
-        {/* <Box sx={{ pt: 10, pb: 10 }}>
+        <Box sx={{ pt: 10, pb: 10 }}>
           <Taxiform />
-        </Box> */}
+        </Box>
         <Box sx={{ pt: 5, pb: 10 }}>
           <Services />
         </Box>
