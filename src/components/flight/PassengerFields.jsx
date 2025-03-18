@@ -9,6 +9,9 @@ import BaggageSelection from "./ssr/oneway/BaggageSelection";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import { setToast } from "@/redux/reducers/toast";
+import { TOAST_STATUS } from "@/utils/enum";
 
 const PassengerFields = ({
   data,
@@ -25,9 +28,11 @@ const PassengerFields = ({
   values, // Added the missing values prop
 }) => {
   const passengerKey = `${formType}-${index}`;
+  // console.log("formType", formType, "index", index);
 
+  const dispatch = useDispatch();
   return (
-    <Accordion defaultExpanded={index === 0}>
+    <Accordion defaultExpanded={index === 0} key={passengerKey}>
       <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
         <Typography
           variant="h6"
@@ -61,6 +66,7 @@ const PassengerFields = ({
               variant="outlined"
               onChange={handleChange}
               onBlur={handleBlur}
+              value={values[formType][index]?.title || ""}
               error={
                 errors &&
                 errors[formType] &&
@@ -98,6 +104,7 @@ const PassengerFields = ({
               placeholder="Enter Gender"
               onChange={handleChange}
               onBlur={handleBlur}
+              value={values[formType][index]?.gender || ""}
               error={
                 errors &&
                 errors[formType] &&
@@ -134,6 +141,7 @@ const PassengerFields = ({
               placeholder="Enter First Name"
               onChange={handleChange}
               onBlur={handleBlur}
+              value={values[formType][index]?.first_name || ""}
               error={
                 errors &&
                 errors[formType] &&
@@ -166,6 +174,7 @@ const PassengerFields = ({
               placeholder="Enter Middle Name"
               onChange={handleChange}
               onBlur={handleBlur}
+              value={values[formType][index]?.middle_name || ""}
               error={
                 errors &&
                 errors[formType] &&
@@ -198,6 +207,7 @@ const PassengerFields = ({
               placeholder="Enter Last Name"
               onChange={handleChange}
               onBlur={handleBlur}
+              value={values[formType][index]?.last_name || ""}
               error={
                 errors &&
                 errors[formType] &&
@@ -223,35 +233,74 @@ const PassengerFields = ({
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Field name={`${formType}[${index}].date_of_birth`}>
-                {({ field, form }) => (
-                  <DatePicker
-                    disableFuture
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={(date) =>
-                      form.setFieldValue(
-                        `${formType}[${index}].date_of_birth`,
-                        date ? date.toISOString() : ""
-                      )
-                    }
-                    slotProps={{
-                      textField: {
-                        size: "small",
-                        fullWidth: true,
-                        error: !!errors?.[formType]?.[index]?.date_of_birth,
-                        helperText: errors?.[formType]?.[index]?.date_of_birth,
-                      },
-                      popper: {
-                        sx: {
-                          zIndex: 100,
+                {({ field, form }) => {
+                  const today = dayjs();
+                  let minDate, maxDate, errorMessage;
+
+                  if (formType === "infant") {
+                    minDate = today.subtract(2, "year");
+                    maxDate = today;
+                    errorMessage = "Infants must be between 0-2 years old.";
+                  } else if (formType === "child") {
+                    minDate = today.subtract(12, "year");
+                    maxDate = today.subtract(2, "year");
+                    errorMessage = "Children must be between 2-12 years old.";
+                  } else if (formType === "adult") {
+                    minDate = dayjs("1900-01-01");
+                    maxDate = today.subtract(12, "year");
+                    errorMessage = "Adults must be 12+ years old.";
+                  }
+
+                  return (
+                    <DatePicker
+                      disableFuture
+                      value={field.value ? dayjs(field.value) : null}
+                      onChange={(date) => {
+                        const selectedDate = dayjs(date);
+                        if (
+                          selectedDate.isBefore(minDate) ||
+                          selectedDate.isAfter(maxDate)
+                        ) {
+                          dispatch(
+                            setToast({
+                              open: true,
+                              message: errorMessage,
+                              severity: TOAST_STATUS.ERROR,
+                            })
+                          );
+
+                          return;
+                        }
+
+                        // Set valid date value
+                        form.setFieldValue(
+                          `${formType}[${index}].date_of_birth`,
+                          date ? date.toISOString() : ""
+                        );
+                      }}
+                      minDate={minDate}
+                      maxDate={maxDate}
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          fullWidth: true,
+                          error: !!errors?.[formType]?.[index]?.date_of_birth,
+                          helperText:
+                            errors?.[formType]?.[index]?.date_of_birth,
                         },
-                      },
-                    }}
-                    sx={{
-                      "& .MuiInputBase-input": { padding: "8.5px 14px" },
-                      "& .MuiFormLabel-root": { top: "-7px" },
-                    }}
-                  />
-                )}
+                        popper: {
+                          sx: {
+                            zIndex: 100,
+                          },
+                        },
+                      }}
+                      sx={{
+                        "& .MuiInputBase-input": { padding: "8.5px 14px" },
+                        "& .MuiFormLabel-root": { top: "-7px" },
+                      }}
+                    />
+                  );
+                }}
               </Field>
             </LocalizationProvider>
           </Grid2>
@@ -273,6 +322,7 @@ const PassengerFields = ({
               placeholder="Enter Email"
               onChange={handleChange}
               onBlur={handleBlur}
+              value={values[formType][index]?.email || ""}
               error={
                 errors &&
                 errors[formType] &&
@@ -305,6 +355,7 @@ const PassengerFields = ({
               placeholder="Enter Phone No"
               onChange={handleChange}
               onBlur={handleBlur}
+              value={values[formType][index]?.contact_no || ""}
               error={
                 errors &&
                 errors[formType] &&
@@ -360,6 +411,7 @@ const PassengerFields = ({
                 variant="outlined"
                 onChange={handleChange}
                 onBlur={handleBlur}
+                value={values[formType][index]?.passport_no || ""}
                 error={
                   errors &&
                   errors[formType] &&

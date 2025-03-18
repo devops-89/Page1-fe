@@ -72,12 +72,14 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
         results?.IsPassportRequiredAtTicket
     );
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [flightDetails, myState]);
+
+  }, [myState]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
+  // Define initialValues inside the component to be recalculated on each render
   const initialValues = {
-    adult: Array.from({ length: adultCount }, () => ({
+    adult: Array.from({ length: adultCount }, (_, index) => ({
       title: "",
       gender: "",
       first_name: "",
@@ -87,10 +89,10 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       contact_no: "",
       date_of_birth: "",
       formType: "adult",
-      passport_no: "",
-      passport_expiry: "",
+      passport_no: null,
+      passport_expiry: null,
     })),
-    child: Array.from({ length: childCount }, () => ({
+    child: Array.from({ length: childCount }, (_, index) => ({
       title: "",
       gender: "",
       first_name: "",
@@ -100,10 +102,10 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       contact_no: "",
       date_of_birth: "",
       formType: "child",
-      passport_no: "",
-      passport_expiry: "",
+      passport_no: null,
+      passport_expiry:null,
     })),
-    infant: Array.from({ length: infantCount }, () => ({
+    infant: Array.from({ length: infantCount }, (_, index) => ({
       title: "",
       gender: "",
       first_name: "",
@@ -113,8 +115,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       contact_no: "",
       date_of_birth: "",
       formType: "infant",
-      passport_no: "",
-      passport_expiry: "",
+      passport_no: null,
+      passport_expiry:null,
     })),
     gstForm: {
       gst_company_name: "",
@@ -151,6 +153,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   };
 
   const handleSubmit = async (values) => {
+    console.log("submit value", values)
     setLoading(true);
     const storedState = localStorage.getItem(myState);
     const commonPayload = {
@@ -205,7 +208,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           YQTax: fare.YQTax || 0,
           AdditionalTxnFeeOfrd: fare.AdditionalTxnFeeOfrd || 0,
           AdditionalTxnFeePub: fare.AdditionalTxnFeePub || 0,
-        })) ||[],
+        })) || [],
     };
 
     const passengerDetails = {
@@ -213,11 +216,11 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
         values?.adult?.map((passenger, index) => ({
           ...passenger,
           pax_type: 1,
-          is_lead_pax: values?.adult?.length === 1,
+          is_lead_pax: index === 0,
           ff_airline_code: null,
           ff_number: null,
-          meal: selectMeal[`adult-${index}`] || null,
-          baggage: selectBaggage[`adult-${index}`] || null,
+          // mealDynamic: selectMeal[`adult-${index}`] || null,
+          // baggage: selectBaggage[`adult-${index}`] || null,
         })) || [],
       child:
         values?.child?.map((passenger, index) => ({
@@ -226,8 +229,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-          meal: selectMeal[`child-${index}`] || null,
-          baggage: selectBaggage[`child-${index}`] || null,
+          // meal: selectMeal[`child-${index}`] || null,
+          // baggage: selectBaggage[`child-${index}`] || null,
         })) || [],
       infant:
         values?.infant?.map((passenger, index) => ({
@@ -236,8 +239,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-          meal: selectMeal[`infant-${index}`] || null,
-          baggage: selectBaggage[`infant-${index}`] || null,
+          // meal: selectMeal[`infant-${index}`] || null,
+          // baggage: selectBaggage[`infant-${index}`] || null,
         })) || [],
     };
 
@@ -247,6 +250,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     };
 
     setPayload(finalPayload);
+    console.log('finalpayload', finalPayload)
   };
 
   const currentValidationSchema = validationSchema(isGSTMandatory);
@@ -364,6 +368,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           initialValues={initialValues}
           validationSchema={currentValidationSchema}
           onSubmit={handleSubmit}
+          enableReinitialize
         >
           {({
             values,
@@ -373,13 +378,13 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             touched,
             handleSubmit,
           }) => {
-            // console.log("values", values)
-            // console.log("errors", errors)
+            // console.log("all values", values);
+            // console.log("all errors", errors)
             return (
               <Form onSubmit={handleSubmit}>
                 {values.adult.map((dataObj, index) => (
                   <Box
-                    key={index}
+                    key={`adult-${index}`}
                     sx={{
                       mb: "10px",
                       boxShadow: "0px 2px 6px rgba(128, 128, 128, 0.2)",
@@ -399,12 +404,13 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       selectBaggage={selectBaggage}
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
+                      values={values}
                     />
                   </Box>
                 ))}
 
                 {values.child.map((dataObj, index) => (
-                  <Box key={index} sx={{ mb: "10px" }}>
+                  <Box key={`child-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
                       data={mealAndBaggageData}
                       passenger={dataObj}
@@ -418,12 +424,13 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       selectBaggage={selectBaggage}
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
+                      values={values}
                     />
                   </Box>
                 ))}
 
                 {values.infant.map((dataObj, index) => (
-                  <Box key={index} sx={{ mb: "10px" }}>
+                  <Box key={`infant-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
                       passenger={dataObj}
                       index={index}
@@ -432,6 +439,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       errors={errors}
                       formType="infant"
                       isPassportRequired={isPassportRequired}
+                      values={values}
                     />
                   </Box>
                 ))}

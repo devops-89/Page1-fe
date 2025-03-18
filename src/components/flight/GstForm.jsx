@@ -1,12 +1,12 @@
 import React from "react";
-import { TextField, Typography, Box, Container, Grid2 } from "@mui/material";
+import { TextField, Typography, Box, Grid2 } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { Field } from "formik";
 
-const GstForm = ({ values, errors, touched, isGSTMandatory }) => {
-  console.log("gst error", errors);
-  console.log("gst values", values);
+const GstForm = ({ errors, touched, isGSTMandatory, values, handleChange, handleBlur }) => {
+  // console.log("gst errors", errors);
+  // console.log("gst values", values);
   if (!isGSTMandatory) {
     return null;
   }
@@ -24,13 +24,15 @@ const GstForm = ({ values, errors, touched, isGSTMandatory }) => {
             <Field
               as={TextField}
               fullWidth
-              name="gst_company_name"
+              name="gstForm.gst_company_name"
               placeholder="Company Name"
               variant="outlined"
               size="small"
-              value={values?.gst_company_name || ""}
-              error={touched?.gst_company_name && Boolean(errors?.gst_company_name)}
-              helperText={touched?.gst_company_name ? errors?.gst_company_name : ""}
+              value={values?.gst_company_name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.gst_company_name && !!errors?.gst_company_name}
+              helperText={touched?.gst_company_name && errors?.gst_company_name}
             />
           </Grid2>
 
@@ -40,13 +42,15 @@ const GstForm = ({ values, errors, touched, isGSTMandatory }) => {
             <Field
               as={TextField}
               fullWidth
-              name="gst_number"
+              name="gstForm.gst_number"
               placeholder="GST Number"
               variant="outlined"
               size="small"
-              value={values?.gst_number || ""}
-              error={touched?.gst_number && Boolean(errors?.gst_number)}
-              helperText={touched?.gst_number ? errors?.gst_number : ""}
+              value={values?.gst_number}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.gst_number && !!errors?.gst_number}
+              helperText={touched?.gst_number && errors?.gst_number}
             />
           </Grid2>
 
@@ -56,13 +60,15 @@ const GstForm = ({ values, errors, touched, isGSTMandatory }) => {
             <Field
               as={TextField}
               fullWidth
-              name="gst_company_address"
+              name="gstForm.gst_company_address"
               placeholder="Company Address"
               variant="outlined"
               size="small"
-              value={values?.gst_company_address || ""}
-              error={touched?.gst_company_address && Boolean(errors?.gst_company_address)}
-              helperText={touched?.gst_company_address ? errors?.gst_company_address : ""}
+              value={values?.gst_company_address}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.gst_company_address && !!errors?.gst_company_address}
+              helperText={touched?.gst_company_address && errors?.gst_company_address}
             />
           </Grid2>
 
@@ -72,13 +78,15 @@ const GstForm = ({ values, errors, touched, isGSTMandatory }) => {
             <Field
               as={TextField}
               fullWidth
-              name="gst_company_contact_number"
+              name="gstForm.gst_company_contact_number"
               placeholder="Contact Number"
               variant="outlined"
               size="small"
-              value={values?.gst_company_contact_number || ""}
-              error={touched?.gst_company_contact_number && Boolean(errors?.gst_company_contact_number)}
-              helperText={touched?.gst_company_contact_number ? errors?.gst_company_contact_number : ""}
+              value={values?.gst_company_contact_number}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.gst_company_contact_number && !!errors?.gst_company_contact_number}
+              helperText={touched?.gst_company_contact_number && errors?.gst_company_contact_number}
             />
           </Grid2>
 
@@ -88,13 +96,15 @@ const GstForm = ({ values, errors, touched, isGSTMandatory }) => {
             <Field
               as={TextField}
               fullWidth
-              name="gst_company_email"
+              name="gstForm.gst_company_email"
               placeholder="Company Email"
               variant="outlined"
               size="small"
-              value={values?.gst_company_email || ""}
-              error={touched?.gst_company_email && Boolean(errors?.gst_company_email)}
-              helperText={touched?.gst_company_email ? errors?.gst_company_email : ""}
+              value={values?.gst_company_email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.gst_company_email && !!errors?.gst_company_email}
+              helperText={touched?.gst_company_email && errors?.gst_company_email}
             />
           </Grid2>
         </Grid2>
