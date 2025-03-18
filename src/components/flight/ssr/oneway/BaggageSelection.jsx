@@ -10,14 +10,8 @@ import { COLORS } from "@/utils/colors";
 import BaggageCard from "../../baggageCard";
 
 
-export default function BaggageSelection({ baggageData }) {
-  const [selectBaggage, setSelectBaggage] = React.useState(null);
-
-  const handleBaggageValue = (baggage)=>{
-    setSelectBaggage(baggage)
-  }
-
-  console.log("baggageData", selectBaggage)
+export default function BaggageSelection({ baggageData, handleBaggageValue, selectBaggage }) {
+ 
   return (
     <>
       <Accordion sx={{mb:'10px'}}>

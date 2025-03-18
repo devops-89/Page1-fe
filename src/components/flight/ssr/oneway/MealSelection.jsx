@@ -9,16 +9,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import { COLORS } from "@/utils/colors";
 
-export default function MealSelection({ mealData }) {
+export default function MealSelection({ mealData, handleMealValue, selectMeal }) {
   // console.log("mealData", mealData);
 
-  const [selectMeal, setSelectMeal] = React.useState(null);
 
-  const handleMealValue = (meal)=>{
-    setSelectMeal(meal)
-  }
-
-  console.log("selectMeal", selectMeal)
   return (
     <>
       <Accordion sx={{mb:'10px'}}>
