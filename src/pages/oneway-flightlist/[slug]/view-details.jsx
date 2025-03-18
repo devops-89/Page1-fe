@@ -63,7 +63,6 @@ const FlightDetails = () => {
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const handleClickOpen = () => setOpen(true);
