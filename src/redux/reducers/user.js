@@ -21,8 +21,11 @@ export const USER = createSlice({
     removeUserDetails: (state) => {
       return (state = initialState);
     },
+    setAuthenticated : (state, actions)=>{
+      return (state ={...state, isAuthenticated:actions.payload})
+    }
   },
 });
 
-export const { setUserDetails, removeUserDetails } = USER.actions;
+export const { setUserDetails, removeUserDetails, setAuthenticated } = USER.actions;
 export default USER.reducer;

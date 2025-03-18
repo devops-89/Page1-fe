@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { Typography, Button, TextField } from "@mui/material";
 import { authenticationController } from "@/api/auth";
-
 import { COLORS } from "@/utils/colors";
 import { loginTextField } from "@/utils/styles";
 import { MuiOtpInput } from "mui-one-time-password-input";
-const UserVerifyForm = ({ setVerifiedData }) => {
+import { useDispatch } from "react-redux";
+import { setAuthenticated } from "@/redux/reducers/user.js";
+import { nunito } from "@/utils/fonts";
+import Loading from "react-loading";
+
+const UserVerifyForm = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(null);
   const [enableOtpButton, setEnableOtpButton] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function matchIsNumeric(text) {
     const isNumber = typeof text === "number";
@@ -26,6 +32,7 @@ const UserVerifyForm = ({ setVerifiedData }) => {
   };
 
   const handleSendOtp = () => {
+    setLoading(true);
     if (email) {
       let payload = {
         email: email,
@@ -37,14 +44,17 @@ const UserVerifyForm = ({ setVerifiedData }) => {
         .then((response) => {
           //  console.log("Response in the email verification: ",response.data);
           setOtpSent(response.data);
+          setLoading(false);
         })
         .catch((error) => {
+          setLoading(false);
           console.log("Error in email verification: ", error);
         });
     }
   };
 
   const handleVerifyOtp = () => {
+    setLoading(true);
     console.log(otpSent.data);
     let payload = {
       reference_id: otpSent?.data?.reference_id,
@@ -56,19 +66,23 @@ const UserVerifyForm = ({ setVerifiedData }) => {
         response.data.data
       );
       if (response.statusText === "OK") {
-        setVerifiedData(response.data.data);
+        dispatch(setAuthenticated(true));
         localStorage.setItem(
           "access_token",
           response?.data?.data?.access_token
         );
+        setLoading(false);
       }
     });
   };
 
   return (
     <>
-      <Typography variant="h6" sx={{ mb: "12px", fontWeight: 600 }}>
-        Verify Your Email
+      <Typography
+        variant="h6"
+        sx={{ mb: "12px", fontWeight: 700, fontFamily: nunito.style }}
+      >
+        Enter Your Email to Continue Booking
       </Typography>
       <TextField
         fullWidth
@@ -90,20 +104,6 @@ const UserVerifyForm = ({ setVerifiedData }) => {
           <Typography sx={{ color: COLORS.GREEN }}>
             {otpSent?.message}
           </Typography>
-          {/* <TextField
-              fullWidth
-              label="Enter OTP"
-              variant="outlined"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              sx={{
-                ...loginTextField,
-                "& fieldset": { borderWidth: "2px!important" },
-                mb: 2,
-                mt: 2,
-              }}
-              disabled={otpSent ? false : true}
-            /> */}
           <MuiOtpInput
             className="custom-otp-input"
             value={otp}
@@ -118,7 +118,7 @@ const UserVerifyForm = ({ setVerifiedData }) => {
                 height: "40px",
               },
               "& .MuiOtpInput-TextField .MuiOutlinedInput-root": {
-                fontSize: "14px", 
+                fontSize: "14px",
                 padding: "5px",
               },
               "& .MuiOtpInput-TextField input": {
@@ -139,9 +139,19 @@ const UserVerifyForm = ({ setVerifiedData }) => {
             fullWidth
             onClick={handleVerifyOtp}
             disabled={!enableOtpButton}
-            sx={{ backgroundColor: COLORS.PRIMARY }}
+            sx={{ backgroundColor: COLORS.PRIMARY,
+              cursor: loading ? "not-allowed" : "pointer",
+             }}
           >
-            Verify OTP
+            {loading ? (
+              <Loading
+                type="spin"
+                width={25} height={25}
+                color={COLORS.WHITE}
+              />
+            ) : (
+              "Verify OTP"
+            )}
           </Button>
         </>
       ) : (
@@ -150,9 +160,16 @@ const UserVerifyForm = ({ setVerifiedData }) => {
           variant="contained"
           onClick={handleSendOtp}
           disabled={!email}
-          sx={{ backgroundColor: COLORS.PRIMARY, width: "150px" }}
+          sx={{ backgroundColor: COLORS.PRIMARY, width: "150px",
+            cursor: loading ? "not-allowed" : "pointer",
+           }}
+          
         >
-          Send OTP
+          {loading ? (
+            <Loading type="spin" width={25} height={25} color={COLORS.WHITE} />
+          ) : (
+            "Send OTP"
+          )}
         </Button>
       )}
     </>

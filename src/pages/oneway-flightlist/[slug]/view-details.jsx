@@ -42,7 +42,6 @@ import Link from "next/link";
 import Loader from "@/utils/Loader";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -54,8 +53,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const FlightDetails = () => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state)=>state.USER.isAuthenticated);
-  console.log('isAuthenticated',isAuthenticated)
+  const isAuthenticated = useSelector((state) => state.USER.isAuthenticated);
+  // console.log('isAuthenticated',isAuthenticated)
   const router = useRouter();
   const [isLCC, setIsLCC] = useState(null);
   const [flightDetails, setFlightDetails] = useState(null);
@@ -65,13 +64,11 @@ const FlightDetails = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [verifiedData, setVerifiedData] = useState(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const smallScreen = useMediaQuery("(max-width:1199px)")
+  const smallScreen = useMediaQuery("(max-width:1199px)");
 
   useEffect(() => {
     if (
@@ -117,8 +114,6 @@ const FlightDetails = () => {
     }
   }, [router.query.ResultIndex, router.query.traceId, router.query.journey]);
 
-
-
   useEffect(() => {
     if (
       typeof window !== "undefined" &&
@@ -132,8 +127,6 @@ const FlightDetails = () => {
     }
   }, []);
 
-  console.log("verified data:",verifiedData);
-
   const toggleDrawer = {
     open: drawerOpen, // Current state of the drawer
     toggle: () => setDrawerOpen((prev) => !prev), // Function to toggle the state
@@ -141,7 +134,7 @@ const FlightDetails = () => {
 
   return (
     <>
-      <Grid2 container >
+      <Grid2 container>
         <Grid2
           size={{ xs: "12" }}
           sx={{
@@ -200,14 +193,10 @@ const FlightDetails = () => {
           </Grid2>
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
-          
             <Container sx={{ mt: "-70px" }}>
               <Grid2 container spacing={2}>
-               
                 {/* Flight Details  */}
-                  <Grid2 size={{lg:8 ,xs:12}} order={{lg:1 ,xs:2}} >
-                    
-                  
+                <Grid2 size={{ lg: 8, xs: 12 }} order={{ lg: 1, xs: 2 }}>
                   <Paper
                     sx={{
                       padding: 2,
@@ -288,7 +277,11 @@ const FlightDetails = () => {
                         >
                           <Button
                             size="small"
-                            sx={{ fontFamily: nunito.style, fontWeight: 800, fontSize:{lg:15 ,md:15 , xs:12} }}
+                            sx={{
+                              fontFamily: nunito.style,
+                              fontWeight: 800,
+                              fontSize: { lg: 15, md: 15, xs: 12 },
+                            }}
                             onClick={handleClickOpen}
                           >
                             View Fares Rules
@@ -490,14 +483,11 @@ const FlightDetails = () => {
                       {/* Intermediate flights end */}
                     </Card>
                     {/* OTP Verification Start */}
-                    {!verifiedData ? (
+                    {!isAuthenticated ? (
                       <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                        <UserVerifyForm setVerifiedData={setVerifiedData} />
+                        <UserVerifyForm />
                       </Card>
-                    ) : null}
-
-                  {/* Passenger Form */}
-                    {verifiedData ? (
+                    ) : (
                       <Card sx={{ mb: "20px" }}>
                         <PassengerForm
                           sx={{
@@ -510,17 +500,31 @@ const FlightDetails = () => {
                           isLCC={isLCC}
                         />
                       </Card>
-                    ) : null}
-
-                              
+                    )}
                   </Paper>
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={{lg:4 ,xs:12}} order={{lg:2 ,xs:1}} > 
-                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={commission} fareData={flightDetails[0]?.Results}     /> }/> :
-                 <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer} commission={commission} /> }
-              {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
+                <Grid2 size={{ lg: 4, xs: 12 }} order={{ lg: 2, xs: 1 }}>
+                  {smallScreen ? (
+                    <SwipeableEdgeDrawer
+                      toggleDrawer={toggleDrawer}
+                      fairSummary={
+                        <FareSummary
+                          toggleDrawer={toggleDrawer}
+                          commission={commission}
+                          fareData={flightDetails[0]?.Results}
+                        />
+                      }
+                    />
+                  ) : (
+                    <FareSummary
+                      fareData={flightDetails[0]?.Results}
+                      toggleDrawer={toggleDrawer}
+                      commission={commission}
+                    />
+                  )}
+                  {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
                   {/* <FareSummary fareData={flightDetails[0]?.Results} /> */}
                 </Grid2>
               </Grid2>

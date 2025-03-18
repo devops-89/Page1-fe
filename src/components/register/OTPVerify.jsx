@@ -4,7 +4,6 @@ import { TOAST_STATUS } from "@/utils/enum";
 import { nunito } from "@/utils/fonts";
 import { loginTextField } from "@/utils/styles";
 import {
-  Close,
   VisibilityOffOutlined,
   VisibilityOutlined,
 } from "@mui/icons-material";
@@ -79,11 +78,6 @@ const OTPVerify = ({ submitOtp, loading, onClose, show }) => {
   return (
     <div>
       <Box sx={{ p: 2, position: "relative" }}>
-        <Box sx={{ textAlign: "end" }}>
-          <IconButton sx={{ position: "", right: 10 }} onClick={onClose}>
-            <Close sx={{ fontSize: 14, fontWeight: 550 }} />
-          </IconButton>
-        </Box>
         <Typography
           sx={{
             fontSize: 20,
