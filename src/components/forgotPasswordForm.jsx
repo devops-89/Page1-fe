@@ -66,6 +66,9 @@ const ForgotPasswordForm = () => {
           })
         );
         setOtpLoading(false);
+        setTimeout(()=>{
+          router.replace('/login')
+        },1500)
       })
       .catch((err) => {
         let errMessage =

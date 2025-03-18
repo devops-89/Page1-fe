@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  TextField,
-  Typography,
-  Grid2,
-  Box,
-  Autocomplete,
-} from "@mui/material";
+import { TextField, Typography, Grid2, Box, Autocomplete } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { data } from "@/assests/data";
@@ -88,12 +82,22 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                   }
                 />
               )}
+              slotProps={{
+                popper: {
+                  sx: {
+                    zIndex: 100,
+                  },
+                },
+              }}
             />
           </Grid2>
 
           {/* Country Code */}
           <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Typography variant="body1" sx={{ fontWeight: 600, mb: "5px", fontFamily: nunito.style }}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 600, mb: "5px", fontFamily: nunito.style }}
+            >
               Country Code
             </Typography>
             <Autocomplete
@@ -134,9 +138,16 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                     alt={option.label}
                     style={{ marginRight: 10 }}
                   />
-                   {option.code}
+                  {option.code}
                 </li>
               )}
+              slotProps={{
+                popper: {
+                  sx: {
+                    zIndex: 100,
+                  },
+                },
+              }}
             />
           </Grid2>
 
@@ -219,7 +230,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                     srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
                     src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
                     alt={option.label}
-                    style={{ marginRight: 10 }}
+                    style={{ marginRight: 10, fontFamily:nunito.style }}
                   />
                   {option.label}
                 </li>
@@ -233,6 +244,13 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                   helperText={touched?.country && errors?.country}
                 />
               )}
+              slotProps={{
+                popper: {
+                  sx: {
+                    zIndex: 100,
+                  },
+                },
+              }}
             />
           </Grid2>
 

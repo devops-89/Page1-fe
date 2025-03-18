@@ -13,9 +13,11 @@ import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import { TOAST_STATUS } from "@/utils/enum";
 import { authenticationController } from "@/api/auth";
+import { useRouter } from "next/router";
 const VerifyOtp = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
   const verifyOneTimePassword = ({ body }) => {
     setLoading(true);
     authenticationController
@@ -30,6 +32,9 @@ const VerifyOtp = () => {
             severity: TOAST_STATUS.SUCCESS,
           })
         );
+        setTimeout(()=>{
+          router.replace('/login')
+        },1500)
       })
       .catch((err) => {
         let errMessage =
