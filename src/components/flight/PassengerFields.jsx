@@ -7,6 +7,12 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MealSelection from "./ssr/oneway/MealSelection";
 import BaggageSelection from "./ssr/oneway/BaggageSelection";
 
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+
+
 const PassengerFields = ({data, passenger, index, handleChange, handleBlur, errors, handleMealValue, selectMeal, selectBaggage, handleBaggageValue }) => {
     console.log("data", data)
   return (
@@ -25,6 +31,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Title"
+            size="small"
             name={`${passenger.formType}[${index}].title`}
             select
             fullWidth
@@ -47,6 +54,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="First Name"
+            size="small"
             name={`${passenger.formType}[${index}].first_name`}
             fullWidth
             required
@@ -63,7 +71,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Middle Name"
-           
+            size="small"
             name={`${passenger.formType}[${index}].middle_name`}
             fullWidth
             value={passenger.middleName}
@@ -77,7 +85,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
           <Field
             as={TextField}
             label="Last Name"
-            
+            size="small"
             name={`${passenger.formType}[${index}].last_name`}
             fullWidth
             required
@@ -91,26 +99,41 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
 
         {/* Date of Birth */}
         <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
-          <Field
-            as={TextField}
-            label="Date of Birth"
-            name={`${passenger.formType}[${index}].date_of_birth`}
-            type="date"
-            fullWidth
-            required
-            InputLabelProps={{ shrink: true }}
-            value={passenger.date_of_birth}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={Boolean(errors.passengers?.[index]?.date_of_birth)}
-            helperText={<ErrorMessage name={`${passenger.formType}[${index}].date_of_birth`} />}
-          />
+        
+           <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        label="Date of Birth"
+        disableFuture
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        value={passenger?.date_of_birth ? dayjs(passenger.date_of_birth) : null}
+        onChange={(newValue) => {
+          if (newValue) {
+            handleChange({
+              target: {
+                name: `${passenger.formType}[${index}].date_of_birth`,
+                value: newValue.format("YYYY-MM-DD"),
+              },
+            });
+          }
+        }}
+        onBlur={handleBlur}
+        renderInput={(params) => <TextField {...params} size="small" />}
+        sx={{
+          "& .MuiInputBase-input": { padding: "8.5px 14px" },
+          "& .MuiFormLabel-root": { top: "-7px" },
+        }}
+        error={Boolean(errors?.passengers?.[index]?.date_of_birth)}
+        helperText={<ErrorMessage name={`${passenger.formType}[${index}].date_of_birth`} />}
+      />
+    </LocalizationProvider>
         </Grid2>
 
         {/* Gender */}
         <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
+            size="small"
             label="Gender"
             name={`${passenger.formType}[${index}].gender`}
             select
@@ -132,6 +155,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
         <Grid2 size={{lg:3 ,md:6 , sm:6,xs:12 }}>
           <Field
             as={TextField}
+            size="small"
             label="Email"
             name={`${passenger.formType}[${index}].email`}
             type="email"
@@ -151,6 +175,7 @@ const PassengerFields = ({data, passenger, index, handleChange, handleBlur, erro
             as={TextField}
             label="Phone Number"
             name={`${passenger.formType}[${index}].contact_no`}
+            size="small"
             type="tel"
             fullWidth
             required

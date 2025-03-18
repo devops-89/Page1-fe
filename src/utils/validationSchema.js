@@ -71,6 +71,9 @@ export const holidayPackageSchema = Yup.object({
   packagecategory: Yup.string().required("Package Category is required"),
 });
 
+
+
+
 export const passengerSchema = Yup.object({
   passengers: Yup.array().of(
     Yup.object({
