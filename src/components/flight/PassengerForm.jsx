@@ -15,7 +15,9 @@ import { useDispatch } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import PassengerFields from "./PassengerFields";
 
-const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
+import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
+
+const PassengerForm = ({ flightDetails, myState, journey, isLCC,selectMeal,selectBaggage,setSelectBaggage,setSelectMeal }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -26,8 +28,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
-  const [selectMeal, setSelectMeal] = useState({});
-  const [selectBaggage, setSelectBaggage] = useState({});
+
 
   const {
     Currency,
@@ -68,11 +69,9 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     }
     const results = flightDetails?.[0]?.Results;
     setIsPassportRequired(
-      results?.IsPassportRequiredAtBook ||
-        results?.IsPassportRequiredAtTicket
+      results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-
   }, [myState]);
 
   const totalPassengers = adultCount + childCount + infantCount;
@@ -103,7 +102,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       date_of_birth: "",
       formType: "child",
       passport_no: null,
-      passport_expiry:null,
+      passport_expiry: null,
     })),
     infant: Array.from({ length: infantCount }, (_, index) => ({
       title: "",
@@ -116,7 +115,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       date_of_birth: "",
       formType: "infant",
       passport_no: null,
-      passport_expiry:null,
+      passport_expiry: null,
     })),
     gstForm: {
       gst_company_name: "",
@@ -153,7 +152,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   };
 
   const handleSubmit = async (values) => {
-    console.log("submit value", values)
+    console.log("submit value", values);
     setLoading(true);
     const storedState = localStorage.getItem(myState);
     const commonPayload = {
@@ -219,8 +218,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           is_lead_pax: index === 0,
           ff_airline_code: null,
           ff_number: null,
-          // mealDynamic: selectMeal[`adult-${index}`] || null,
-          // baggage: selectBaggage[`adult-${index}`] || null,
+          MealDynamic: selectMeal[`adult-${index}`] || null,
+          Baggage: selectBaggage[`adult-${index}`] || null,
         })) || [],
       child:
         values?.child?.map((passenger, index) => ({
@@ -229,8 +228,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-          // meal: selectMeal[`child-${index}`] || null,
-          // baggage: selectBaggage[`child-${index}`] || null,
+          MealDynamic: selectMeal[`child-${index}`] || null,
+          Baggage: selectBaggage[`child-${index}`] || null,
         })) || [],
       infant:
         values?.infant?.map((passenger, index) => ({
@@ -239,8 +238,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-          // meal: selectMeal[`infant-${index}`] || null,
-          // baggage: selectBaggage[`infant-${index}`] || null,
+        
         })) || [],
     };
 
@@ -250,7 +248,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     };
 
     setPayload(finalPayload);
-    console.log('finalpayload', finalPayload)
+    console.log("finalpayload", finalPayload);
   };
 
   const currentValidationSchema = validationSchema(isGSTMandatory);
@@ -462,6 +460,16 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                   errors={errors}
                   touched={touched}
                 />
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <FullScreenDialog />
+                </Box>
 
                 <Box
                   sx={{
