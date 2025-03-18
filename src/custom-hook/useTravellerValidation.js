@@ -27,5 +27,4 @@ const useTravellerValidation = () => {
     // Return the values so the component using the hook can access them
     return validateTravelers;
 };
-
 export default useTravellerValidation;

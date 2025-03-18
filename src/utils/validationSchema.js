@@ -71,82 +71,93 @@ export const holidayPackageSchema = Yup.object({
   packagecategory: Yup.string().required("Package Category is required"),
 });
 
-
-
-
-export const passengerSchema = Yup.object({
-  passengers: Yup.array().of(
-    Yup.object({
-      title: Yup.string().required("Title is required"),
-      gender: Yup.string().required("Gender is required"),
-      first_name: Yup.string().required("First Name is required"),
-      middle_name: Yup.string().optional(),
-      last_name: Yup.string().required("Last Name is required"),
-      email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-      contact_no: Yup.string()
-        .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
-        .required("Phone Number is required"),
-      date_of_birth: Yup.date().required("Date of Birth is required"),
-    })
-  ),
-
-  passport: Yup.object({
-    fullName: Yup.string().required("Full Name is required"),
+// Validation schema for passenger fields (used for adult, child, infant)
+const passengerSchema = (isPassportRequired) =>
+  Yup.object({
+    title: Yup.string().required("Title is required"),
+    gender: Yup.string().required("Gender is required"),
+    first_name: Yup.string().required("First Name is required"),
+    last_name: Yup.string().required("Last Name is required"),
+    date_of_birth: Yup.date().required("Date of Birth is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    contact_no: Yup.string()
+      .matches(/^[0-9]{10}$/, "10 digits required")
+      .required("Phone No. is required"),
     passport_no: Yup.string()
-      .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport Number format")
-      .required("Passport Number is required"),
-    passport_expiry: Yup.date().required("Passport Expiry Date is required"),
-    passportIssueDate: Yup.date().required("Passport Issue Date is required"),
-    passportIssueCountry: Yup.string().required(
-      "Passport Issue Country is required"
-    ),
-  }),
+      .matches(/^[A-Z0-9]{6,9}$/, "Invalid format")
+      .when([], {
+        is: () => isPassportRequired,
+        then: (schema) => schema.required("Passport No. required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+    passport_expiry: Yup.date().when([], {
+      is: () => isPassportRequired,
+      then: (schema) => schema.required("Expiry Date required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  });
+
+const baseGstSchema = {
+  gst_company_email: Yup.string()
+    .email("Invalid email format")
+    .required("Company Email is required"),
+
+  gst_company_contact_number: Yup.string()
+    .matches(/^[0-9]{10}$/, "Contact number must be exactly 10 digits")
+    .required("Company Contact Number is required"),
+
+  gst_company_address: Yup.string()
+    .min(5, "Address must be at least 5 characters long")
+    .required("Company Address is required"),
+
+  gst_number: Yup.string()
+    .matches(
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/,
+      "Invalid GST Number format"
+    )
+    .required("GST Number is required"),
+
+  gst_company_name: Yup.string()
+    .min(3, "Company Name must be at least 3 characters long")
+    .required("Company Name is required"),
+};
+
+const gstFormSchema = (isGSTMandatory) => {
+  return Yup.object().shape(
+    isGSTMandatory
+      ? baseGstSchema
+      : Object.keys(baseGstSchema).reduce((schema, key) => {
+          schema[key] = Yup.string().optional();
+          return schema;
+        }, {})
+  );
+};
+
+// Validation schema for AddForm (contact details form)
+const addFormSchema = Yup.object({
+  cell_country_code: Yup.string().required("Cell Country Code is required"),
+  country_code: Yup.string().required("Country Code is required"),
+  city: Yup.string().required("City required"),
+  contact_no: Yup.string()
+    .matches(/^[0-9]{10}$/, "10 digits required")
+    .required("Phone No. is required"),
+  country: Yup.string().required("Country required"),
+  house_number: Yup.string().required("House No. required"),
+  postal_code: Yup.string().required("Postal code required"),
+  street: Yup.string().required("Street required"),
+  state: Yup.string().required("State required"),
+  nationality: Yup.string().required("Nationality required"),
+  email: Yup.string().email("Invalid email").required("Email required"),
 });
 
-export const gstForm = (IsGSTMandatory) => {
-  return Yup.object({
-    gst_company_name: IsGSTMandatory
-      ? Yup.string().required("Company Name is required")
-      : Yup.string().optional(),
-    gst_number: IsGSTMandatory
-      ? Yup.string()
-          .matches(/^[0-9A-Z]{15}$/, "Invalid GST Number format")
-          .required("GST Number is required")
-      : Yup.string().optional(),
-    gst_company_address: IsGSTMandatory
-      ? Yup.string().required("Company Address is required")
-      : Yup.string().optional(),
-    gst_company_contact_number: IsGSTMandatory
-      ? Yup.string()
-          .matches(/^[0-9]{10}$/, "Invalid Contact Number format")
-          .required("Company Contact Number is required")
-      : Yup.string().optional(),
-    gst_company_email: IsGSTMandatory
-      ? Yup.string()
-          .email("Invalid email address")
-          .required("Company Email is required")
-      : Yup.string().email("Invalid email address").optional(),
+export const validationSchema = (isGSTMandatory, isPassportRequired) => {
+  return Yup.object().shape({
+    adult: Yup.array().of(passengerSchema(isPassportRequired)),
+    child: Yup.array().of(passengerSchema(isPassportRequired)),
+    infant: Yup.array().of(passengerSchema(isPassportRequired)),
+    gstForm: isGSTMandatory ? gstFormSchema(true) : Yup.object().optional(),
+    ...addFormSchema.fields,
   });
 };
 
-export const validationSchema = (isGSTMandatory) => {
-  return Yup.object().shape({
-    ...passengerSchema.fields,
-    gstForm: isGSTMandatory ? gstForm(true) : Yup.object().optional(),
-    cell_country_code: Yup.string().required("Cell Country Code is required"),
-    country_code: Yup.string().required("Country Code is required"),
-    city: Yup.string().required("City is required"),
-    contact_no: Yup.string().required("Contact No is required"),
-    country: Yup.string().required("Country is required"),
-    house_number: Yup.string().required("House Number is required"),
-    postal_code: Yup.string().required("Postal Code is required"),
-    street: Yup.string().required("Street is required"),
-    state: Yup.string().required("State is required"),
-    nationality: Yup.string().required("Nationality is required"),
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-  });
-};
+export { passengerSchema, gstFormSchema, addFormSchema };
