@@ -52,11 +52,11 @@ const Ensures = () => {
 
             <Container>
             <Typography
-              sx={{ fontSize: 35, fontFamily: nunito.style, fontWeight: 800 }}
+              sx={{ fontSize: 35, fontFamily: nunito.style, fontWeight: 800 , textAlign:{ lg:"left",xs:"center"} }}
             >
               We Ensure
             </Typography>
-            <Typography sx={{ fontSize: 15, fontFamily: nunito.style, mt: 1 }}>
+            <Typography sx={{ fontSize: 15, fontFamily: nunito.style, mt: 1 , textAlign: { lg:"left",xs:"center"} }}>
               At the heart of everything we do, "We Ensure" represents our
               unwavering commitment to quality, reliability, and trust. Our
               focus is on delivering excellence across every aspect of our
