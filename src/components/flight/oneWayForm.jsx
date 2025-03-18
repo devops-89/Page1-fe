@@ -238,7 +238,9 @@ const OnewayForm = () => {
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
             borderBottomLeftRadius: 4,
-            borderRight: "none",
+          
+           
+          
           }}
         >
           <Typography
@@ -325,7 +327,7 @@ const OnewayForm = () => {
             border: "1px solid #808080",
 
             position: "relative",
-            borderRight: "none",
+          
           }}
         >
           <Typography
@@ -413,6 +415,10 @@ const OnewayForm = () => {
 
             position: "relative",
             borderRight: "none",
+          
+
+             
+              
           }}
         >
           <Typography
@@ -422,6 +428,7 @@ const OnewayForm = () => {
               color: COLORS.DARKGREY,
               px: 2,
               pt: 1,
+              
             }}
           >
             Departure
@@ -454,7 +461,7 @@ const OnewayForm = () => {
             border: "1px solid #808080",
 
             position: "relative",
-            height: 90,
+           height:90,
             borderTopRightRadius: 4,
             borderBottomRightRadius: 4,
           }}
@@ -568,6 +575,9 @@ const OnewayForm = () => {
               p: 2,
               mt: { lg: 0, sm: 1, xs: 2 },
               cursor: buttonLoading ? "not-allowed" : "pointer",
+              fontSize:{lg:16 ,md:16 , sm:16 , xs:10} ,
+              py:1.5
+              
             }}
             onClick={submitHandler}
           >

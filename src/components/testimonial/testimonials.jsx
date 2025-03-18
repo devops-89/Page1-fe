@@ -10,7 +10,7 @@ import { Autoplay } from "swiper/modules";
 const Testimonials = () => {
   return (
     <div>
-      <Box sx={{ pt: 10, pb: 10 }}>
+      <Box sx={{ pt:10 , pb: 10 }}>
         <Grid2 container>
           <Grid2 size={{lg:5 ,md:5,sm:12}} margin={"auto"}>
             <Typography
@@ -38,6 +38,7 @@ const Testimonials = () => {
               </Typography>{" "}
               Says
             </Typography>
+            <Container>
             <Typography
               sx={{
                 fontSize: {lg:15 ,sm:14 ,xs:12},
@@ -48,6 +49,8 @@ const Testimonials = () => {
               Page1Travels, a tour operator specializing in dream destinations,
               offers a variety of benefits for travelers.
             </Typography>
+
+            </Container>
           </Grid2>
         </Grid2>
         <Container sx={{ mt: 5 }}>

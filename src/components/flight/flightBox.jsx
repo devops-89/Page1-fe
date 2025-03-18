@@ -49,7 +49,7 @@ const FlightBox = ({ tableData }) => {
                                     <Typography
                                         sx={{
                                             textAlign: "start",
-                                            fontSize: 15,
+                                            fontSize:  {lg:15 , xs:12},
                                             fontWeight: 600,
                                             fontFamily: nunito.style,
                                         }}
@@ -64,7 +64,7 @@ const FlightBox = ({ tableData }) => {
                                 <TableCell sx={{ padding: "8px" }}>
                                     <Typography
                                         sx={{
-                                            fontSize: 15,
+                                            fontSize: {lg:15 , xs:12},
                                             fontWeight: 600,
                                             fontFamily: nunito.style,
                                             textAlign: "end",

@@ -15,7 +15,7 @@ const ContactCard = ({ data }) => {
     <div>
       <List>
         {data.map((val, i) => (
-          <Box sx={{p:1 }}>
+          <Box sx={{ }}>
             <ListItem key={i}>
               <ListItemAvatar
                 sx={{

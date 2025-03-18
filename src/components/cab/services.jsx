@@ -35,7 +35,7 @@ const Services = () => {
         <Grid2 container mt={3}>
           {data.cabServices.map((val, i) => (
             <Grid2
-              size={3}
+              size={{lg:3 , sm:6 , xs:12}}
               textAlign={"center"}
               sx={{
                 borderRight:

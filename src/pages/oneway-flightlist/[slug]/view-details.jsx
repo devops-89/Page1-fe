@@ -64,6 +64,8 @@ const FlightDetails = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [selectMeal, setSelectMeal] = useState({});
+  const [selectBaggage, setSelectBaggage] = useState({});
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -497,6 +499,10 @@ const FlightDetails = () => {
                           myState="state"
                           journey={journey}
                           isLCC={isLCC}
+                          selectMeal={selectMeal}
+                          selectBaggage={selectBaggage}
+                          setSelectBaggage={setSelectBaggage}
+                          setSelectMeal={setSelectMeal}
                         />
                       </Card>
                     )}

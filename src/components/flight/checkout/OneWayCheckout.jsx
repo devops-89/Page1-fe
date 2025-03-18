@@ -28,7 +28,7 @@ import { paymentController } from "@/api/paymentController";
 export default function OneWayCheckout() {
 
   const [paymentPayload,setPaymentPayload]=useState(null);
-  const [buttonLoading,setButtonLoading]=useState(false);
+  
 
   const router = useRouter();
 

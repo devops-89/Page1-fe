@@ -44,15 +44,17 @@ const FlightForm = () => {
   };
 
   return (
-    <Box sx={{ p: 1 }}>
+    <Box sx={{ p: 1  }}>
       <Stack
         direction={!phone ? "row " :"column"}
         alignItems={"center"}
         justifyContent={"space-between"}
+       
       >
         <Tabs
           value={flightValue}
           sx={{
+            
             "& .MuiTab-root": {
               width: 115,
               minHeight: 40,
@@ -75,6 +77,7 @@ const FlightForm = () => {
               icon={
                 <Box
                   sx={{
+                  
                     backgroundColor:
                       i === flightValue
                         ? `${COLORS.SECONDARY}`
@@ -107,7 +110,7 @@ const FlightForm = () => {
         </Typography>
       </Stack>
 
-      <TabPanel value={flightValue} index={0}>
+      <TabPanel value={flightValue} index={0} >
         <OnewayForm />
       </TabPanel>
       <TabPanel value={flightValue} index={1}>
