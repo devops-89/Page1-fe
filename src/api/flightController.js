@@ -77,6 +77,17 @@ export const flightController = {
     }
   },
 
+  roundTripDomesticBooking: async (data) => {
+    try {
+      let result = await securedFlightApi.post("flight-booking/round-trip",data);
+      console.log("result", result)
+      return result;
+    } catch (error) {
+      console.log("error", error)
+      throw error;
+    }
+  },
+
   multiflightDetails: async (data) => {
     try {
       let result = await flightPublicApi.post(

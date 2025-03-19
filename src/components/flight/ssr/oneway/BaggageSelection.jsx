@@ -35,7 +35,7 @@ export default function BaggageSelection({ baggageData, handleBaggageValue, sele
             <Grid2
               container
               spacing={2}
-              sx={{ flexWrap: "wrap" }}
+              sx={{ flexWrap: "wrap", mb:'10px' }}
               key={baggageIndex}
             >
               {singleBaggage?.map((baggage, baggageIndex) => {

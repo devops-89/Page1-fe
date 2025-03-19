@@ -30,13 +30,14 @@ import { COLORS } from "@/utils/colors";
 import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import DomesticDetail from "@/components/flight/domesticDetail";
 import InternationalDetail from "@/components/flight/internationalDetail";
-import PassengerForm from "@/components/flight/PassengerForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import Link from "next/link";
 import ToastBar from "@/components/toastBar";
 import UserVerifyForm from "@/components/flight/UserVerifyForm";
 import Loader from "@/utils/Loader";
+import InternationalPassengerForm from "@/components/flight/roundtrip/InternationalPassengerForm";
+import DomesticPassengerForm from "@/components/flight/roundtrip/DomesticPassengerForm";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -48,17 +49,17 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const FlightDetails = () => {
- 
   const router = useRouter();
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.USER.isAuthenticated);
   const [flightDetails, setFlightDetails] = useState(null);
   const [isLCC, setIsLCC] = useState(null);
   const [commission, setCommission] = useState(null);
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [verifiedData,setVerifiedData]=useState(null);
-
+  const [selectMeal, setSelectMeal] = useState({});
+  const [selectBaggage, setSelectBaggage] = useState({});
 
   // console.log("router", router)
   const handleClose = () => {
@@ -100,7 +101,7 @@ const FlightDetails = () => {
             setFlightDetails(response?.data?.data);
             setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setCommission(response?.data?.data[2]);
-            setJourney(response?.data?.data[3])
+            setJourney(response?.data?.data[3]);
             // console.log("roundtrip respone", response?.data?.data);
             localStorage.setItem(
               "roundTripflightDetails",
@@ -133,11 +134,10 @@ const FlightDetails = () => {
         setFlightDetails(
           JSON.parse(localStorage.getItem("roundTripflightDetails"))
         );
-      }, 3000);
+      }, 1000);
     }
   }, []);
 
- 
   return (
     <>
       <Grid2 container>
@@ -222,45 +222,62 @@ const FlightDetails = () => {
                       />
                     )}
 
-                      {/* OTP Verification Start */}
+                    {/* OTP Verification Start */}
 
-                      {
-                        (!verifiedData)?(
-                          <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                             <UserVerifyForm setVerifiedData={setVerifiedData} />
-                          </Card>
-                        ):(null)
-                      }
-
-                    {/* OTP verification end */}
-
-                   {/* Passenger form start */}
-                   {
-                    (verifiedData)?(
-                      <Card>
-                      <PassengerForm
-                        flightDetails={router.query.journey===JOURNEY.DOMESTIC? flightDetails[0]:flightDetails}
-                        myState="roundState"
-                        journey={journey}
-                        isLCC={isLCC}
-                      />
-
-                    </Card>
-
-                    ):(null)
-                   }
-                   {/* Passenger form end */}
-                   
+                    {!isAuthenticated ? (
+                      <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
+                        <UserVerifyForm />
+                      </Card>
+                    ) : (
+                      <Card sx={{ mb: "20px" }}>
+                        {router.query.journey === JOURNEY.INTERNATIONAL ? (
+                          <InternationalPassengerForm
+                            sx={{
+                              backgroundColor: COLORS.PRIMARY,
+                              color: COLORS.WHITE,
+                            }}
+                            flightDetails={flightDetails}
+                            myState="roundState"
+                            journey={journey}
+                            isLCC={isLCC}
+                            selectMeal={selectMeal}
+                            selectBaggage={selectBaggage}
+                            setSelectBaggage={setSelectBaggage}
+                            setSelectMeal={setSelectMeal}
+                          />
+                        ) : (
+                          <DomesticPassengerForm
+                            sx={{
+                              backgroundColor: COLORS.PRIMARY,
+                              color: COLORS.WHITE,
+                            }}
+                            flightDetails={flightDetails}
+                            myState="roundState"
+                            journey={journey}
+                            selectMeal={selectMeal}
+                            selectBaggage={selectBaggage}
+                            setSelectBaggage={setSelectBaggage}
+                            setSelectMeal={setSelectMeal}
+                          />
+                        )}
+                      </Card>
+                    )}
+                    {/* Passenger form end */}
                   </Paper>
                 </Grid2>
-
 
                 {/* Fare Summary */}
                 <Grid2 size={4}>
                   {router.query.journey === JOURNEY.INTERNATIONAL ? (
-                    <FareSummary fareData={flightDetails[0]?.Results} commission={commission}/>
+                    <FareSummary
+                      fareData={flightDetails[0]?.Results}
+                      commission={commission}
+                    />
                   ) : (
-                    <RoundFareSummary fareData={flightDetails} commission={commission}/>
+                    <RoundFareSummary
+                      fareData={flightDetails}
+                      commission={commission}
+                    />
                   )}
                 </Grid2>
               </Grid2>
@@ -277,7 +294,7 @@ const FlightDetails = () => {
               padding: "50px",
             }}
           >
-            <Loader open={true}/>
+            <Loader open={true} />
           </Grid2>
         )}
       </Grid2>
@@ -426,7 +443,6 @@ const FlightDetails = () => {
                         );
                       }
                     )}
-
 
                   {flightDetails?.length > 0 &&
                     flightDetails[1][0]?.Results?.FareRules?.map(
