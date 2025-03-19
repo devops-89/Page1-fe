@@ -25,25 +25,29 @@ const SeatMap = () => {
   return (
     <Box sx={{ backgroundColor: COLORS.BLUEOVERLAY, py: 2 }}>
       <Stack
-        direction="row"
-        px={10}
+        direction={{lg:"row" ,xs:"column"}}
+        px={{lg:10 , xs:2}}
         sx={{
-          alignItems: "start",
-          justifyContent: "space-between",
+          alignItems: {lg:"start" ,xs:"center"},
+          justifyContent:{lg:"space-between" ,xs:"center"},
           position: "relative",
+          flexWrap:"wrap",
+          
         }}
       >
         {/* Seat Detail Section */}
         <Box
-          sx={{
-            height: "100vh",
-            overflowY: "auto",
-            flexShrink: 0,
-            position: "sticky",
-            top: "10px",
-          }}
+         sx={{
+          height: { lg: "100vh", xs: "auto" }, // Full viewport height on lg, auto on small
+          overflowY: "auto",
+          flexShrink: 0,
+          position: { lg: "sticky", xs: "relative" },
+          top: "10px",
+          width: { lg: "450px", xs: "100%" }, // Fixed width on lg, full width on smaller screens
+          maxWidth: "100%", // Prevents overflow
+        }}
         >
-          <Box sx={{ p: 2}}>
+          <Box sx={{ p: 2 ,  mx: "auto" }}>
             <SeatDetail extraDetails={extraDetails?.[0]}/>
             <Typography variant="body1" sx={{ p: 1, fontFamily:nunito.style }}>
               Conveniently select your seats now for Free.
@@ -78,6 +82,7 @@ const SeatMap = () => {
             sx={{ maxWidth: "300px" }}
           />
         </Box>
+       
       </Stack>
     </Box>
   );

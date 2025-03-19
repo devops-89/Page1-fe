@@ -17,12 +17,15 @@ const SeatDetail = ({extraDetails}) => {
       item
       sx={{
         border: "1px solid gray",
-        width: "450px",
+        width: { lg: "450px", xs: "100%" }, // Fixed width for lg, 100% for smaller
+        maxWidth: "100%", // Prevent overflow on smaller screens
+        minWidth: { xs: "auto", sm: "300px" }, // Minimum width to ensure readability
         borderRadius: "10px",
         boxShadow: 2,
         backgroundColor: COLORS.WHITE,
-        p:2,
-        
+        p: 2,
+        overflow: "hidden", // Ensures no overflow from the content
+        boxSizing: "border-box", // Include padding and border in the width
       }}
     >
     {/* expermiment start */}
@@ -31,7 +34,7 @@ const SeatDetail = ({extraDetails}) => {
     <Grid2 container sx={{p:1}} spacing={6} alignItems={"flex-start"}>
           <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
-              sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize:{lg:22 , xs:18}, fontWeight: 700, fontFamily: nunito.style }}
             >
               {moment(extraDetails?.Results?.Segments[0][0]?.Origin?.DepTime).format(
                 "HH:mm"
@@ -52,7 +55,7 @@ const SeatDetail = ({extraDetails}) => {
           <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
               sx={{
-                fontSize: 18,
+                fontSize: {lg:18 , xs:16},
                 fontWeight: 700,
                 fontFamily: nunito.style,
                 textAlign: "center",
@@ -87,7 +90,7 @@ const SeatDetail = ({extraDetails}) => {
           </Grid2>
           <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
-              sx={{ fontSize: 22, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize: {lg:22 , xs:18}, fontWeight: 700, fontFamily: nunito.style }}
             >
               {moment(
                 extraDetails?.Results?.Segments[0][
@@ -137,7 +140,7 @@ const SeatDetail = ({extraDetails}) => {
         direction={"row"}
         sx={{
           justifyContent: "center",
-          gap: "20px",
+          gap: {lg:"20px" ,xs:"10px"},
           alignItems: "center",
           padding: "20px",
         }}
@@ -150,7 +153,7 @@ const SeatDetail = ({extraDetails}) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              p: 1,
+              p: {lg:1 ,xs:2},
               border: "1px solid gray",
               borderRadius: "4px",
               color: "white",
@@ -166,10 +169,14 @@ const SeatDetail = ({extraDetails}) => {
             sx={{
               width: "20px",
               height: "20px",
-              p: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              p: {lg:1 ,xs:2},
               border: "1px solid gray",
               borderRadius: "4px",
-               mb:'10px'
+              color: "white",
+              mb:'10px'
             }}
           >
              <AirlineSeatReclineExtraIcon sx={{color:COLORS.GREEN,}}/>
@@ -181,10 +188,14 @@ const SeatDetail = ({extraDetails}) => {
             sx={{
               width: "20px",
               height: "20px",
-              p: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              p: {lg:1 ,xs:2},
               border: "1px solid gray",
               borderRadius: "4px",
-               mb:'10px'
+              color: "white",
+              mb:'10px'
              
             }}
           >
@@ -197,7 +208,7 @@ const SeatDetail = ({extraDetails}) => {
             sx={{
               width: "20px",
               height: "20px",
-              p: 1,
+              p: {lg:1 ,xs:2},
               border: "1px solid gray",
               borderRadius: "4px",
               display: "flex",

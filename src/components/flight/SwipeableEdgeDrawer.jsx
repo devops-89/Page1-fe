@@ -1,3 +1,7 @@
+
+
+
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { Global } from '@emotion/react';
@@ -61,12 +65,8 @@ function SwipeableEdgeDrawer(props) {
       <Global
         styles={{
           '.MuiDrawer-root > .MuiPaper-root': {
-            height: `calc(50% - ${drawerBleeding}px)`,
-            overflow: 'visible',
-            marginBottom: "15PX"
-          
-
-           
+            height:'45%',
+            overflow: 'visible',         
           },
         }}
       />
@@ -100,21 +100,19 @@ function SwipeableEdgeDrawer(props) {
         <StyledBox
           sx={{
             position: 'absolute',
-            top: -drawerBleeding,
+            top: -65,
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
             visibility: 'visible',
             right: 0,
             left: 0,
-            
-            
           }}
         >
          {props.fairSummary}
           {/* <Typography sx={{ p: 2, color: 'text.secondary' }}>51 results</Typography> */}
         </StyledBox>
-        <StyledBox sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto' }}>
-          <Skeleton variant="rectangular" height="100%" />
+        <StyledBox sx={{ height: '100%', overflow: 'auto' }}>
+          {/* {props.fairSummary} */}
         </StyledBox>
       </SwipeableDrawer>
     </Root>

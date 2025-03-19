@@ -24,6 +24,7 @@ import {
   TableCell,
   TableBody,
   useMediaQuery,
+  Stack,
 } from "@mui/material";
 import Image from "next/image";
 import { flightController } from "@/api/flightController";
@@ -145,7 +146,7 @@ const FlightDetails = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            py: "10px",
+            py: "100px",
           }}
         >
           <Typography
@@ -193,8 +194,12 @@ const FlightDetails = () => {
             </Link>
           </Grid2>
         ) : flightDetails ? (
-          <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
-            <Container sx={{ mt: "-70px" }}>
+          <Grid2
+            size={{ xs: "12" }}
+            sx={{ width: "100%", py: 4 }}
+            className="myname"
+          >
+            <Container sx={{ mt: "-70px", px: 0 }}>
               <Grid2 container spacing={2}>
                 {/* Flight Details  */}
                 <Grid2 size={{ lg: 8, xs: 12 }} order={{ lg: 1, xs: 2 }}>
@@ -556,24 +561,31 @@ const FlightDetails = () => {
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <DialogTitle
-          sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
-          id="customized-dialog-title"
+        <Stack
+          justifyContent={"space-between"}
+          alignItems={"center"}
+         
         >
-          Fare Rules
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={(theme) => ({
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: theme.palette.grey[500],
-          })}
-        >
-          <CloseIcon />
-        </IconButton>
+          <DialogTitle
+            sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
+            id="customized-dialog-title"
+          >
+            Fare Rules
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={(theme) => ({
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: theme.palette.grey[500],
+            })}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Stack>
+
         <DialogContent dividers sx={{ minWidth: "500px" }}>
           <TableContainer component={Paper}>
             <Table>

@@ -40,7 +40,7 @@ export default function BaggageSelection({ baggageData, handleBaggageValue, sele
             >
               {singleBaggage?.map((baggage, baggageIndex) => {
                 return (
-                  <Grid2 size={6}>
+                  <Grid2 size={{lg:6 , xs:12}}>
                     <BaggageCard baggage={baggage} key={baggageIndex} handleBaggageValue={handleBaggageValue} isSelected={selectBaggage?.Code === baggage?.Code}/>
                   </Grid2>
                 );
