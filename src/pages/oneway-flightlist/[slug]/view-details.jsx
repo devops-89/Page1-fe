@@ -146,7 +146,7 @@ const FlightDetails = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            py: "10px",
+            py: "100px",
           }}
         >
           <Typography
@@ -194,9 +194,9 @@ const FlightDetails = () => {
             </Link>
           </Grid2>
         ) : flightDetails ? (
-          <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
-            <Container sx={{ mt: "-70px" }}>
-              <Grid2 container spacing={2}>
+          <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }} className="myname">
+            <Container sx={{ mt: "-70px"  ,px:0 }}>
+              <Grid2 container spacing={2} >
                 {/* Flight Details  */}
                 <Grid2 size={{ lg: 8, xs: 12 }} order={{ lg: 1, xs: 2 }}>
                   <Paper
@@ -205,6 +205,7 @@ const FlightDetails = () => {
                       backgroundColor: "#F4F4F4",
                       marginBottom: 2,
                     }}
+                    
                   >
                     {/* Card Section start */}
                     <Card sx={{ padding: "20px", marginBottom: "20px" }}>
@@ -511,7 +512,7 @@ const FlightDetails = () => {
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={{ lg: 4, xs: 12 }} order={{ lg: 2, xs: 1 }}>
+                <Grid2 size={{ lg: 4, xs: 12 }} order={{ lg: 2, xs: 1 }}   >
                   {smallScreen ? (
                     <SwipeableEdgeDrawer
                       toggleDrawer={toggleDrawer}

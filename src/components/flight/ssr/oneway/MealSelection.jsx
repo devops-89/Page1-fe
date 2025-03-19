@@ -41,7 +41,7 @@ export default function MealSelection({ mealData, handleMealValue, selectMeal })
             >
               {singleMeal?.map((meal, mealIndex) => {
                 return (
-                  <Grid2 size={6}>
+                  <Grid2 size={{lg:6 ,xs:12}}>
                     <MealCard meal={meal} key={mealIndex} handleMealValue={handleMealValue} isSelected={selectMeal?.Code === meal.Code}/>
                   </Grid2>
                 );
