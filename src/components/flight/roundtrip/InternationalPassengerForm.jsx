@@ -1,32 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
-import GstForm from "./GstForm";
 import { nunito } from "@/utils/fonts";
-import AddForm from "./AddForm";
 import { flightController } from "@/api/flightController";
 import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
-import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
 import { useDispatch } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
-import PassengerFields from "./PassengerFields";
+import ToastBar from "@/components/toastBar";
+import AddForm from "../AddForm";
+import GstForm from "../GstForm";
+import PassengerFields from "../PassengerFields";
+import FullScreenDialog from "../ssr/oneway/seats/FullScreenDialog";
 
-import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
-
-const PassengerForm = ({
-  flightDetails,
-  myState,
-  journey,
-  isLCC,
-  selectMeal,
-  selectBaggage,
-  setSelectBaggage,
-  setSelectMeal,
-}) => {
+const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,selectMeal,selectBaggage,setSelectBaggage,setSelectMeal }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -37,6 +27,8 @@ const PassengerForm = ({
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
+
+  console.log("flightDetails", flightDetails[1]?.Response)
 
   const {
     Currency,
@@ -246,6 +238,7 @@ const PassengerForm = ({
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
+        
         })) || [],
     };
 
@@ -268,13 +261,6 @@ const PassengerForm = ({
 
       bookingPromise
         .then((response) => {
-          console.log("Booking Response:", response);
-          // adding order_id and amount to the session storage for completing the paymount
-          sessionStorage.setItem("payment_info",JSON.stringify({
-            custom_order_id: response.data.response.custom_order_id,
-            amount: response.data.response.amount,
-          }));
-
           if (response) {
             dispatch(
               setToast({
@@ -404,7 +390,7 @@ const PassengerForm = ({
                     }}
                   >
                     <PassengerFields
-                      data={flightDetails[1]}
+                      data={flightDetails[1]?.Response}
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}
@@ -424,7 +410,7 @@ const PassengerForm = ({
                 {values.child.map((dataObj, index) => (
                   <Box key={`child-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
-                      data={flightDetails[1]}
+                      data={flightDetails[1]?.Response}
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}
@@ -511,4 +497,4 @@ const PassengerForm = ({
   );
 };
 
-export default PassengerForm;
+export default InternationalPassengerForm;

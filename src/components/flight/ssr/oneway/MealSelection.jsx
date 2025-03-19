@@ -5,32 +5,43 @@ import MealCard from "../../mealCard";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import { COLORS } from "@/utils/colors";
 
-export default function MealSelection({ mealData, handleMealValue, selectMeal }) {
-  // console.log("mealData", mealData);
-
+export default function MealSelection({
+  mealData,
+  handleMealValue,
+  selectMeal,
+}) {
+  console.log("mealData", mealData);
 
   return (
     <>
-      <Accordion sx={{mb:'10px'}}>
+      <Accordion sx={{ mb: "10px" }}>
         <AccordionSummary
           expandIcon={<KeyboardArrowDownIcon />}
           aria-controls="panel1-content"
           id="panel1-header"
-          sx={{backgroundColor:COLORS.SEMIGREY}}
+          sx={{ backgroundColor: COLORS.SEMIGREY }}
         >
           <Typography
             variant="body1"
-            sx={{ fontFamily: nunito.style, fontWeight: 700, display:'flex', alignItems:'center' }}
+            sx={{
+              fontFamily: nunito.style,
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+            }}
           >
-           <RestaurantMenuIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/> Meal 
+            <RestaurantMenuIcon
+              sx={{ color: COLORS.PRIMARY, marginRight: "10px" }}
+            />{" "}
+            Meal
           </Typography>
         </AccordionSummary>
-        <AccordionDetails  sx={{p:1,maxHeight:"240px",overflowY:"auto"}}>
-        {mealData?.map((singleMeal, mealIndex) => {
+        <AccordionDetails sx={{ p: 1, maxHeight: "240px", overflowY: "auto" }}>
+          {mealData?.map((singleMeal, mealIndex) => {
         return (
           <>
             <Grid2
