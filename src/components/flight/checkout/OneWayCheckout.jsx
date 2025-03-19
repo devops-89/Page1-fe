@@ -32,7 +32,10 @@ export default function OneWayCheckout() {
 
   const router = useRouter();
 
-  // checking the session storage payment credentials to continue
+ 
+
+
+
   useEffect(()=>{
       if(sessionStorage.getItem("payment_info")){
         let payment_credentials=JSON.parse(sessionStorage.getItem("payment_info"));
@@ -78,7 +81,10 @@ export default function OneWayCheckout() {
   // handling function to initiate the payment process
   function handlePay(){
       paymentController.paymentInit(paymentPayload).then((response)=>{
-              console.log("response: ",response);
+              console.log("payment response: ",response);
+              if(response.data.data.short_url){
+                router.push(`${response.data.data.short_url}`);
+              }
       }).catch((error)=>{
         console.log("Payment Response Error:",error.message)
       })

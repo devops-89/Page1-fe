@@ -17,7 +17,16 @@ import PassengerFields from "./PassengerFields";
 
 import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
 
-const PassengerForm = ({ flightDetails, myState, journey, isLCC,selectMeal,selectBaggage,setSelectBaggage,setSelectMeal }) => {
+const PassengerForm = ({
+  flightDetails,
+  myState,
+  journey,
+  isLCC,
+  selectMeal,
+  selectBaggage,
+  setSelectBaggage,
+  setSelectMeal,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -28,7 +37,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC,selectMeal,selec
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
-
 
   const {
     Currency,
@@ -238,7 +246,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC,selectMeal,selec
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-        
         })) || [],
     };
 
@@ -261,6 +268,13 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC,selectMeal,selec
 
       bookingPromise
         .then((response) => {
+          console.log("Booking Response:", response);
+          // adding order_id and amount to the session storage for completing the paymount
+          sessionStorage.setItem("payment_info",JSON.stringify({
+            custom_order_id: response.data.response.custom_order_id,
+            amount: response.data.response.amount,
+          }));
+
           if (response) {
             dispatch(
               setToast({
