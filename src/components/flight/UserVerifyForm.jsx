@@ -68,7 +68,7 @@ const UserVerifyForm = () => {
       if (response.statusText === "OK") {
         dispatch(setAuthenticated(true));
         localStorage.setItem(
-          "access_token",
+          "accesstoken",
           response?.data?.data?.access_token
         );
         setLoading(false);

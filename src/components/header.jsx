@@ -58,7 +58,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const changeRouter = (path) => { 
     if (path === "/login"){
-      localStorage.removeItem("access_token");
+      localStorage.removeItem("accesstoken");
       dispatch(removeUserDetails());
       router.push(path);
       setAnchorEl(null);
