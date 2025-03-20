@@ -55,18 +55,6 @@ const PassengerForm = ({
     ServiceFee,
   } = flightDetails?.[0]?.Results?.Fare || {};
 
-  // const mealAndBaggageData = (() => {
-  //   switch (journey?.journey_type) {
-  //     case JOURNEY_TYPE.ONEWAY:
-  //       return flightDetails[1];
-  //     case JOURNEY_TYPE.ROUNDTRIP:
-  //     case JOURNEY_TYPE.MULTIWAY:
-  //       return flightDetails[1]?.Response;
-  //     default:
-  //       return null;
-  //   }
-  // })();
-
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
     if (storedState) {
@@ -146,17 +134,23 @@ const PassengerForm = ({
   };
 
   const handleMealValue = (passengerType, index, meal) => {
-    setSelectMeal((prev) => ({
-      ...prev,
-      [`${passengerType}-${index}`]: meal,
-    }));
+    setSelectMeal((prev) => {
+      const key = `${passengerType}-${index}`;
+      return {
+        ...prev,
+        [key]: prev[key] === meal ? null : meal,  //toggle selection
+      };
+    });
   };
 
   const handleBaggageValue = (passengerType, index, baggage) => {
-    setSelectBaggage((prev) => ({
-      ...prev,
-      [`${passengerType}-${index}`]: baggage,
-    }));
+    setSelectBaggage((prev) => {
+      const key = `${passengerType}-${index}`;
+      return {
+        ...prev,
+        [key]: prev[key] === baggage ? null : baggage, //toggle selection
+      };
+    });
   };
 
   const handleSubmit = async (values) => {
@@ -270,10 +264,13 @@ const PassengerForm = ({
         .then((response) => {
           console.log("Booking Response:", response);
           // adding order_id and amount to the session storage for completing the paymount
-          sessionStorage.setItem("payment_info",JSON.stringify({
-            custom_order_id: response.data.response.custom_order_id,
-            amount: response.data.response.amount,
-          }));
+          sessionStorage.setItem(
+            "payment_info",
+            JSON.stringify({
+              custom_order_id: response.data.response.custom_order_id,
+              amount: response.data.response.amount,
+            })
+          );
 
           if (response) {
             dispatch(
@@ -285,19 +282,7 @@ const PassengerForm = ({
             );
             setLoading(false);
             setTimeout(() => {
-              const checkoutPath = (() => {
-                switch (journey?.journey_type) {
-                  case JOURNEY_TYPE.ONEWAY:
-                    return `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`;
-                  case JOURNEY_TYPE.ROUNDTRIP:
-                    return `/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`;
-                  case JOURNEY_TYPE.MULTIWAY:
-                    return `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`;
-                  default:
-                    return "/";
-                }
-              })();
-              router.push(checkoutPath);
+              router.push(`/oneway-flightlist/${payload?.trace_id}/oneway-checkout`);
             }, 1500);
           }
         })
