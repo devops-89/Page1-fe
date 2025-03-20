@@ -248,7 +248,30 @@ const Footer = () => {
                   
                 
               }}>
-                  <Image src={logo} width={100} textAlign={"center"} pr={{lg:0 , md:"71px" ,sm:"71px" ,xs:0}} pl={{lg:0 ,md:0 ,sm:0,xs:"20px"}}  />
+
+                <List>
+                  <ListItem>
+                    <ListItemAvatar
+                     sx={{
+                   
+                      marginTop:{lg:0, md:0,sm:2 , xs:2},
+                      minWidth: {lg:50 ,sm:40 ,xs:40},
+                      height: {lg:50 ,sm:40 ,xs:40},
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    
+                    }}
+                    >
+
+                  <Image src={logo} width={100} textAlign={"center"}  />
+
+                    </ListItemAvatar>
+
+                  </ListItem>
+
+                </List>
+
 
               </Grid2>
              

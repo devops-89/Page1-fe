@@ -5,12 +5,13 @@ import {
   Box,
   Button,
   FormControlLabel,
-  Grid,
+  Grid2,
   Radio,
   RadioGroup,
   Stack,
   Typography,
 } from "@mui/material";
+
 import { useEffect, useState } from "react";
 import TravellorCounter from "./travellorCounter";
 import { useRouter } from "next/router";
@@ -105,17 +106,17 @@ const TravellerSelector = ({
 
       <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, m: 1 }}>
         <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>Travellers</Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
+        <Grid2 container spacing={2}>
+          <Grid2 size ={{lg:4 , md:4, sm:4,xs:6}}>
             <TravellorCounter heading="Adults (12+ Yrs)" value={tempAdult} onIncrease={() => updateTravellerCount("adult", "increase")} onDecrease={() => updateTravellerCount("adult", "decrease")} />
-          </Grid>
-          <Grid item xs={12} sm={4}>
+          </Grid2>
+          <Grid2 size ={{lg:4 , md:4 , sm:4, xs:6}}>
             <TravellorCounter heading="Children (2-12 Yrs)" value={tempChild} onIncrease={() => updateTravellerCount("child", "increase")} onDecrease={() => updateTravellerCount("child", "decrease")} />
-          </Grid>
-          <Grid item xs={12} sm={4}>
+          </Grid2>
+          <Grid2 size ={{lg:4 , md:4,sm:4, xs:6}}>
             <TravellorCounter heading="Infants (0-2 Yrs)" value={tempInfant} onIncrease={() => updateTravellerCount("infant", "increase")} onDecrease={() => updateTravellerCount("infant", "decrease")} />
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
 
         {error.errorMessage && <Box sx={{ mt: 2, color: "red" }}><Typography>{error.errorMessage}</Typography></Box>}
       </Box>

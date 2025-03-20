@@ -92,7 +92,7 @@ const FlightList = () => {
                     />
                   </Button>
                   <Drawer open={open} onClose={toggleDrawer(false)}>
-                    <Grid2 size={12} sx={{ position: "relative" }}>
+                    <Grid2 size={12} sx={{ position:"relative" }}>
                       {/* filter card start */}
                       <Card
                         variant="outlined"
@@ -254,7 +254,7 @@ const FlightList = () => {
                     sx={{
                       position: "sticky",
                       top: "75px",
-                      height: "500px",
+                      height: "600px",
                       overflowY: "scroll",
                       "::-webkit-scrollbar": {
                         width: 5,

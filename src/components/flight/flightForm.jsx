@@ -44,9 +44,10 @@ const FlightForm = () => {
   };
 
   return (
-    <Box sx={{ p: 1  }}>
+    <Box sx={{ p: 1   }}>
+   
       <Stack
-        direction={!phone ? "row " :"column"}
+        direction={{lg:"row" ,md:"row",xs:"column"}}
         alignItems={"center"}
         justifyContent={"space-between"}
        
@@ -105,10 +106,11 @@ const FlightForm = () => {
             />
           ))}
         </Tabs>
-        <Typography sx={{ fontSize: 15, fontFamily: raleway.style, mr: 2 ,mb:{xs:1} ,textAlign:"center" }}>
+        <Typography sx={{ fontSize: {lg:15 , md:15 , sm:15 ,xs:14}, fontFamily: raleway.style, mr: 2 ,mb:{xs:1} ,textAlign:"center" }}>
           Millions of cheap flights. One simple search
         </Typography>
       </Stack>
+     
 
       <TabPanel value={flightValue} index={0} >
         <OnewayForm />

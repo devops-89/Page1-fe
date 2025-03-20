@@ -11,6 +11,7 @@ import {
   CardContent,
   Checkbox,
   FormControlLabel,
+  useMediaQuery,
   TextField,
   Button,
   Slider,
@@ -19,6 +20,7 @@ import {
 
 import SearchIcon from "@mui/icons-material/Search";
 import StarIcon from "@mui/icons-material/Star";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FlightForm from "@/components/flight/flightForm";
 import { COLORS } from "@/utils/colors";
 import RoundFlightListBox from "@/components/flight/roundFlightListBox";
@@ -27,6 +29,7 @@ import InternationalRoundFlightBox from "@/components/flight/internationalRoundF
 import moment from "moment";
 import { useRouter } from "next/router";
 import Loader from "@/utils/Loader";
+
 const FlightList = () => {
   const router = useRouter();
   const [flightList, setFlightList] = useState(null);
@@ -36,6 +39,8 @@ const FlightList = () => {
 
   const [selectedDeparture, setSelectedDeparture] = useState(null);
   const [selectedArrival, setSelectedArrival] = useState(null);
+
+   const phone = useMediaQuery("(max-width:1100px)");
 
   useEffect(() => {
     if (localStorage.getItem("roundflightData")) {
@@ -108,6 +113,9 @@ const FlightList = () => {
       {flightList ? (
         <Box sx={{ pt: 10, pb: 10, px: 4 }}>
           <Grid2 container spacing={4}>
+            {phone ? (
+                          <h1>hey</h1>
+                          ):
             <Grid2 size={3} sx={{ position: "relative" }}>
               {/* filter card start */}
               <Card
@@ -218,16 +226,18 @@ const FlightList = () => {
 
               {/* filter card end */}
             </Grid2>
+}
 
             {/* Round Flight List Data Domestic and International  */}
             {journey === "INTERNATIONAL" ? (
-              <Grid2 size={9} container>
-                <Grid2 size={12}>
+              <Grid2 size={9} container >
+                <Grid2 size={12} >
                   <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
+                      
                     }}
                   >
                     <Typography
@@ -260,8 +270,9 @@ const FlightList = () => {
                 </Grid2>
               </Grid2>
             ) : (
-              <Grid2 size={9} container>
-                <Grid2 size={6}>
+              <Grid2 size={{lg:9 , md:12 , sm:12 , xs:12}} container >
+                {/* box one */}
+                <Grid2 size={6} border={20} borderColor={"green"} >
                   <Box
                     sx={{
                       display: "flex",
@@ -287,10 +298,10 @@ const FlightList = () => {
                       }}
                     >{`${flightList.flight_list.departure_flights.flightData.length} flights available`}</Typography>
                   </Box>
-                  <Grid2 container spacing={6}>
+                  <Grid2 container spacing={6} border={1} borderColor={"red"}>
                     {flightList?.flight_list?.departure_flights?.flightData.map(
                       (val, i) => (
-                        <Grid2 size={12} key={i}>
+                        <Grid2 size={12} key={i} border={10}>
                           <RoundFlightListBox
                             details={val}
                             traceId={traceId}
@@ -306,7 +317,9 @@ const FlightList = () => {
                     )}
                   </Grid2>
                 </Grid2>
-                <Grid2 size={6}>
+
+                {/* box two */}
+                <Grid2 size={6} border={1}>
                   <Box
                     sx={{
                       display: "flex",
@@ -363,6 +376,7 @@ const FlightList = () => {
             justifyContent: "center",
             marginTop: "50px",
             marginBottom: "50px",
+           
           }}
         >
           <Loader open={true}/>
@@ -373,7 +387,7 @@ const FlightList = () => {
       {journey=== "DOMESTIC" ? (
         <Grid2
           container
-          sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 9999 }}
+          sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 9999  }}
         >
           <Grid2 size={3}></Grid2>
           <Grid2
@@ -387,6 +401,7 @@ const FlightList = () => {
               borderTopRightRadius: "15px",
               backgroundColor: COLORS.SEMIGREY,
               boxShadow: `0px 0px 10px #b2a8a8`,
+              
             }}
           >
             {/* Onward */}
@@ -396,7 +411,7 @@ const FlightList = () => {
                   variant="body1"
                   sx={{ fontFamily: nunito.style, fontWeight: 700, mb: 1 }}
                 >
-                  Onwards
+                  Onwards 
                 </Typography>
                 <Typography
                   sx={{

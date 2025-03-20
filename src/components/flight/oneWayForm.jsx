@@ -231,16 +231,13 @@ const OnewayForm = () => {
 
   return (
     <>
-      <Grid2 container alignItems={"center"}>
+      <Grid2 container alignItems={"center"} justifyContent={"center"} sx={{ display:"flex" , alignItems:"stretch"}}>
         <Grid2
-          size={{ lg: 2.4, xs: 6, sm: 6, md: 2.4 }}
+          size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
             borderBottomLeftRadius: 4,
-          
-           
-          
           }}
         >
           <Typography
@@ -312,22 +309,21 @@ const OnewayForm = () => {
             )}
             disableListWrap
             slotProps={{
-                  popper: {
-                    sx: {
-                      zIndex: 100
-                    }
-                  }
-               }}
+              popper: {
+                sx: {
+                  zIndex: 100,
+                },
+              },
+            }}
           />
         </Grid2>
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, md: 2.4, xs: 6, sm: 6 }}
+          size={{ lg: 3, md: 2.4, xs: 6, sm: 6 }}
           sx={{
             border: "1px solid #808080",
 
             position: "relative",
-          
           }}
         >
           <Typography
@@ -400,25 +396,21 @@ const OnewayForm = () => {
             slotProps={{
               popper: {
                 sx: {
-                  zIndex: 100
-                }
-              }
-           }}
+                  zIndex: 100,
+                },
+              },
+            }}
           />
         </Grid2>
 
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, md: 2.4, xs: 6, sm: 6 }}
+          size={{ lg: 3, md: 2.4, xs: 6, sm: 6 }}
           sx={{
             border: "1px solid #808080",
 
             position: "relative",
-            borderRight: "none",
-          
-
-             
-              
+            overflow: "visible",
           }}
         >
           <Typography
@@ -428,7 +420,6 @@ const OnewayForm = () => {
               color: COLORS.DARKGREY,
               px: 2,
               pt: 1,
-              
             }}
           >
             Departure
@@ -439,6 +430,10 @@ const OnewayForm = () => {
                 fieldset: {
                   border: "none",
                 },
+
+                ".MuiSvgIcon-root": {
+                  fontSize: "1.5rem", // Adjust icon size
+                },
               }}
               disablePast
               onChange={departureDateHandler}
@@ -447,23 +442,24 @@ const OnewayForm = () => {
               slotProps={{
                 popper: {
                   sx: {
-                    zIndex: 100
-                  }
-                }
-             }}
+                    zIndex: 100,
+                  },
+                },
+              }}
             />
           </LocalizationProvider>
         </Grid2>
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 2.4, md: 2.4, xs: 6, sm: 6 }}
+          size={{ lg: 3, md: 2.4, xs: 6, sm: 6 }}
           sx={{
             border: "1px solid #808080",
 
             position: "relative",
-           height:90,
+            alignItems:"stretch",
             borderTopRightRadius: 4,
             borderBottomRightRadius: 4,
+            flex:1
           }}
         >
           <Typography
@@ -563,7 +559,7 @@ const OnewayForm = () => {
         </Grid2>
         <Grid2
           //  size={{ lg: 2.4, xs: 12 }}
-          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 12 }}
+          size={{ lg: 12, md: 2.4, xs: 12, sm: 12 }}
           textAlign={"center"}
         >
           <Button
@@ -573,11 +569,10 @@ const OnewayForm = () => {
               color: COLORS.WHITE,
               width: 150,
               p: 2,
-              mt: { lg: 0, sm: 1, xs: 2 },
+              mt: { lg: 2, sm: 1, xs: 2 },
               cursor: buttonLoading ? "not-allowed" : "pointer",
-              fontSize:{lg:16 ,md:16 , sm:16 , xs:10} ,
-              py:1.5
-              
+              fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
+              py: 1.5,
             }}
             onClick={submitHandler}
           >

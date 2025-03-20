@@ -41,7 +41,7 @@ const SelectedList = () => {
     >
       {!selectedSeats || selectedSeats.length === 0 ? (
         // Show message when selectedSeats is undefined, null, or empty
-        <Typography variant="h6" sx={{ color: "gray", fontFamily:nunito.style }}>
+        <Typography variant="h6"  sx={{ color: "gray", fontFamily:nunito.style ,fontSize:{lg:20 ,xs:15} }}>
           There is no seat selected
         </Typography>
       ) : (

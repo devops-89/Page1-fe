@@ -28,6 +28,7 @@ const TravellorCounter = ({
         justifyContent={"center"}
         width={100}
         mt={1}
+
       >
         <IconButton
           sx={{
@@ -52,6 +53,7 @@ const TravellorCounter = ({
               padding: 0,
               textAlign: "center",
               fontSize: 14,
+             
             },
           }}
           fullWidth

@@ -67,10 +67,10 @@ export default function FullScreenDialog() {
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            <Typography sx={{ ml: 2, flex: 1 ,fontSize:{lg:20 , xs:15} }} variant="h6" component="div">
               Seats And Meal Selection
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
+            <Button autoFocus color="inherit" onClick={handleClose} sx={{fontSize:{lg:14 , md:14 ,xs:12}}}>
               Save
             </Button>
           </Toolbar>
