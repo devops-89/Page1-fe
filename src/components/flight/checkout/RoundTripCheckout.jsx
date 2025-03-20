@@ -216,6 +216,7 @@ export default function RoundTripCheckout() {
                     </Box>
 
                     {/* Journey Detail  */}
+
                     {roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
                       <>
                         {roundTrip[0]?.Results?.Segments.map(
@@ -302,6 +303,9 @@ export default function RoundTripCheckout() {
                       </>
                     ) : (
                       <>
+                      {roundTrip[0][0]?.Results?.Segments[0].map((segment, index)=>{
+                        return(
+                          
                       <Box
                         key={index}
                         sx={{
@@ -321,9 +325,9 @@ export default function RoundTripCheckout() {
                           }}
                         >
                           Journey Detail (
-                          {roundTrip[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityCode} -{" "}
+                          {segment?.Origin?.Airport?.CityCode} -{" "}
                           {
-                            roundTrip[0]?.Results?.Segments[0][roundTrip[0]?.Results?.Segments[0].length - 1]?.Destination?.Airport
+                            segment?.Destination?.Airport
                               ?.CityCode
                           }
                           )
@@ -342,7 +346,7 @@ export default function RoundTripCheckout() {
                           <Typography
                             sx={{ fontWeight: 500, fontFamily: nunito.style }}
                           >
-                            {moment(roundTrip[0]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
+                            {moment(segment?.Origin?.DepTime).format(
                               "D MMM, ddd"
                             )}
                           </Typography>
@@ -361,12 +365,20 @@ export default function RoundTripCheckout() {
                           <Typography
                             sx={{ fontWeight: 500, fontFamily: nunito.style }}
                           >
-                            {moment(roundTrip[0]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
+                            {moment(segment?.Origin?.DepTime).format(
                               "HH:mm"
                             )}
                           </Typography>
                         </Stack>
                       </Box>
+                        )
+                      })}
+
+                      
+
+                {roundTrip[1][0]?.Results?.Segments[0].map((segment, index)=>{
+                        return(
+                          
                        <Box
                        key={index}
                        sx={{
@@ -386,9 +398,9 @@ export default function RoundTripCheckout() {
                          }}
                        >
                          Journey Detail (
-                         {roundTrip[1]?.Results?.Segments[0][0]?.Origin?.Airport?.CityCode} -{" "}
+                         {segment?.Origin?.Airport?.CityCode} -{" "}
                          {
-                           roundTrip[1]?.Results?.Segments[0][roundTrip[0]?.Results?.Segments[0].length - 1]?.Destination?.Airport
+                           segment?.Destination?.Airport
                              ?.CityCode
                          }
                          )
@@ -407,7 +419,7 @@ export default function RoundTripCheckout() {
                          <Typography
                            sx={{ fontWeight: 500, fontFamily: nunito.style }}
                          >
-                           {moment(roundTrip[1]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
+                           {moment(segment?.Origin?.DepTime).format(
                              "D MMM, ddd"
                            )}
                          </Typography>
@@ -426,12 +438,14 @@ export default function RoundTripCheckout() {
                          <Typography
                            sx={{ fontWeight: 500, fontFamily: nunito.style }}
                          >
-                           {moment(roundTrip[1]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
+                           {moment(segment?.Origin?.DepTime).format(
                              "HH:mm"
                            )}
                          </Typography>
                        </Stack>
-                     </Box>
+                     </Box> )
+                      })}
+
                      </>
                     )}
 

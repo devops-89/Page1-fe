@@ -341,7 +341,7 @@ const DomesticPassengerForm = ({
             );
             setLoading(false);
             setTimeout(() => {
-              router.push(`/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`);
+              router.push(`/roundtrip-flightlist/${payload?.ob?.trace_id}/roundtrip-checkout`);
             }, 1500);
           }
         })

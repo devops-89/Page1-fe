@@ -47,17 +47,7 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
     ServiceFee,
   } = flightDetails?.[0]?.Results?.Fare || {};
 
-  // const mealAndBaggageData = (() => {
-  //   switch (journey?.journey_type) {
-  //     case JOURNEY_TYPE.ONEWAY:
-  //       return flightDetails[1];
-  //     case JOURNEY_TYPE.ROUNDTRIP:
-  //     case JOURNEY_TYPE.MULTIWAY:
-  //       return flightDetails[1]?.Response;
-  //     default:
-  //       return null;
-  //   }
-  // })();
+
 
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
@@ -271,19 +261,7 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
             );
             setLoading(false);
             setTimeout(() => {
-              const checkoutPath = (() => {
-                switch (journey?.journey_type) {
-                  case JOURNEY_TYPE.ONEWAY:
-                    return `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`;
-                  case JOURNEY_TYPE.ROUNDTRIP:
-                    return `/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`;
-                  case JOURNEY_TYPE.MULTIWAY:
-                    return `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`;
-                  default:
-                    return "/";
-                }
-              })();
-              router.push(checkoutPath);
+              router.push(`/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`);
             }, 1500);
           }
         })
