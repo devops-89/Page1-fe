@@ -57,7 +57,7 @@ const FlightForm = () => {
           sx={{
             
             "& .MuiTab-root": {
-              width: 115,
+              width: {lg:115 , xs:100},
               minHeight: 40,
               top: 5,
               borderRadius: 8,
@@ -84,8 +84,8 @@ const FlightForm = () => {
                         ? `${COLORS.SECONDARY}`
                         : "#d7d7d7",
                     borderRadius: "50%",
-                    width: 15,
-                    height: 15,
+                    width: {lg:15 , xs:10},
+                    height: {lg:15 , xs:10},
                     border:`4px solid ${COLORS.SEMIGREY}`,
                   }}
                 ></Box>
@@ -93,7 +93,7 @@ const FlightForm = () => {
               label={
                 <Typography
                   sx={{
-                    fontSize: 12,
+                    fontSize: {lg:12 , xs:10},
                     fontWeight: 500,
                     fontFamily: nunito.style,
                   }}

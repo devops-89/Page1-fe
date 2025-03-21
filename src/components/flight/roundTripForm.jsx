@@ -360,7 +360,7 @@ const RoundTrip = () => {
             border: "1px solid #808080",
 
             position: "relative",
-            borderRight: "none",
+          
           }}
         >
           <Typography
@@ -491,7 +491,7 @@ const RoundTrip = () => {
             border: "1px solid #808080",
 
             position: "relative",
-            borderRight: "none",
+           
           }}
         >
           <Typography
