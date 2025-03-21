@@ -23,37 +23,31 @@ import { useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import { paymentController } from "@/api/paymentController";
-
+import Loading from "react-loading";
 
 export default function OneWayCheckout() {
-
-  const [paymentPayload,setPaymentPayload]=useState(null);
-  
+  const [paymentPayload, setPaymentPayload] = useState(null);
 
   const router = useRouter();
 
- 
+  useEffect(() => {
+    if (sessionStorage.getItem("payment_info")) {
+      let payment_credentials = JSON.parse(
+        sessionStorage.getItem("payment_info")
+      );
+      console.log("payment_credentials on payment page:", payment_credentials);
+      setPaymentPayload({ ...payment_credentials, currency: "INR" });
+    } else {
+      router.back();
+    }
+  }, []);
 
-
-
-  useEffect(()=>{
-      if(sessionStorage.getItem("payment_info")){
-        let payment_credentials=JSON.parse(sessionStorage.getItem("payment_info"));
-        console.log("payment_credentials on payment page:",payment_credentials);
-        setPaymentPayload({...payment_credentials, currency: "INR"});
-      }
-      else{
-          router.back();
-      }
-  },[]);
-
-  
   const selector = useSelector((state) => state.USER);
   const { isAuthenticated } = selector;
   const [oneWay, setOneWay] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
-    const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = {
     open: drawerOpen, // Current state of the drawer
@@ -70,28 +64,32 @@ export default function OneWayCheckout() {
     }
     if (storedPassengerCount) {
       setPassengerCount(JSON.parse(storedPassengerCount));
-    }
-    if (!isAuthenticated || !storedFlightDetails) {
-      router.replace('/login');
     } else {
       setLoading(false);
     }
   }, [isAuthenticated, router]);
 
   // handling function to initiate the payment process
-  function handlePay(){
-      paymentController.paymentInit(paymentPayload).then((response)=>{
-              console.log("payment response: ",response);
-              if(response.data.data.short_url){
-                router.push(`${response.data.data.short_url}`);
-              }
-      }).catch((error)=>{
-        console.log("Payment Response Error:",error.message)
+  function handlePay() {
+    setLoading(true);
+    paymentController
+      .paymentInit(paymentPayload)
+      .then((response) => {
+        setLoading(false);
+        console.log("payment response: ", response);
+        if (response?.data?.data?.short_url) {
+          const url = response.data.data.short_url;
+          window.open(url, "_blank");
+        }
       })
+      .catch((error) => {
+        setLoading(false);
+        console.log("Payment Response Error:", error.message);
+      });
   }
 
   // console.log("checkout details:", oneWay);
-   const smallScreen = useMediaQuery("(max-width:1199px)");
+  const smallScreen = useMediaQuery("(max-width:1199px)");
   return (
     <>
       {isAuthenticated && oneWay ? (
@@ -142,7 +140,7 @@ export default function OneWayCheckout() {
                 alignItems={"flex-start"}
               >
                 <Grid2
-                  size={{ xs: 12, sm: 12, md: 12 ,lg:8 }}
+                  size={{ xs: 12, sm: 12, md: 12, lg: 8 }}
                   sx={{
                     backgroundColor: COLORS.SEMIGREY,
                     p: 2,
@@ -167,7 +165,12 @@ export default function OneWayCheckout() {
                             gutterBottom
                             sx={{
                               fontFamily: nunito.style,
-                              fontSize: {lg:"20px" ,md:"20px" ,sm:"20px",xs:"15px"  },
+                              fontSize: {
+                                lg: "20px",
+                                md: "20px",
+                                sm: "20px",
+                                xs: "15px",
+                              },
                               fontWeight: 700,
                             }}
                           >
@@ -547,7 +550,7 @@ export default function OneWayCheckout() {
                             fontFamily: nunito.style,
                           }}
                         >
-                          Departure Date 
+                          Departure Date
                         </Typography>
 
                         <Typography
@@ -556,7 +559,9 @@ export default function OneWayCheckout() {
                             fontFamily: nunito.style,
                           }}
                         >
-                          {moment((oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime)).format( "D MMM, ddd")}
+                          {moment(
+                            oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime
+                          ).format("D MMM, ddd")}
                         </Typography>
                       </Stack>
                       <Stack
@@ -571,7 +576,7 @@ export default function OneWayCheckout() {
                             fontFamily: nunito.style,
                           }}
                         >
-                          Departure Time 
+                          Departure Time
                         </Typography>
 
                         <Typography
@@ -580,7 +585,9 @@ export default function OneWayCheckout() {
                             fontFamily: nunito.style,
                           }}
                         >
-                          {moment((oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime)).format("HH:mm")}
+                          {moment(
+                            oneWay[0]?.Results?.Segments[0][0]?.Origin?.DepTime
+                          ).format("HH:mm")}
                         </Typography>
                       </Stack>
                     </Box>
@@ -593,7 +600,7 @@ export default function OneWayCheckout() {
                             fontSize: 14,
                             fontFamily: nunito.style,
                             textAlign: "left",
-                            mb:1
+                            mb: 1,
                           }}
                         >
                           I have read and accept Flight networks travel
@@ -609,7 +616,7 @@ export default function OneWayCheckout() {
                         alignItems: "flex-start",
                       }}
                     />
-                    <Grid2 container mt={2} spacing={{lg:2 , xs:3}}>
+                    <Grid2 container mt={2} spacing={{ lg: 2, xs: 3 }}>
                       <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Stack direction="row" alignItems={"center"}>
                           <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
@@ -639,25 +646,9 @@ export default function OneWayCheckout() {
                     </Grid2>
                   </Box>
                 </Grid2>
-                {/* order-box */}
-
-                {/* 
-
-
-               <Grid2 size={{lg:4 ,xs:12}} order={{lg:2 ,xs:1}} > 
-                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={commission} fareData={flightDetails[0]?.Results}     /> }/> :
-                 <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer} commission={commission} /> }
-
-                 size={{ xs: 12, sm: 12, md: 4 }}
-             
-                </Grid2>
-                
-                */}
-                
-
 
                 <Grid2
-                  size={{lg:4 ,xs:12}}
+                  size={{ lg: 4, xs: 12 }}
                   sx={{
                     backgroundColor: COLORS.WHITE,
                     borderRadius: 2,
@@ -667,17 +658,25 @@ export default function OneWayCheckout() {
                 >
                   {/* --------------fare Summary Start-----------------  */}
 
-                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={oneWay[2]}  fareData={oneWay[0]?.Results}      /> }/> :
+                  {smallScreen ? (
+                    <SwipeableEdgeDrawer
+                      toggleDrawer={toggleDrawer}
+                      fairSummary={
+                        <FareSummary
+                          toggleDrawer={toggleDrawer}
+                          commission={oneWay[2]}
+                          fareData={oneWay[0]?.Results}
+                        />
+                      }
+                    />
+                  ) : (
+                    <FareSummary
+                      fareData={oneWay[0]?.Results}
+                      commission={oneWay[2]}
+                      toggleDrawer={toggleDrawer}
+                    />
+                  )}
 
-                 <FareSummary  fareData={oneWay[0]?.Results}  commission={oneWay[2]}  toggleDrawer={toggleDrawer}  /> }
-
-
-
-                  {/* <FareSummary
-                    fareData={oneWay[0]?.Results}
-                    commission={oneWay[2]}
-                    toggleDrawer={toggleDrawer}
-                  /> */}
                   {/* --------------fare Summary End-----------------  */}
 
                   <Stack
@@ -694,12 +693,22 @@ export default function OneWayCheckout() {
                       sx={{
                         backgroundColor: COLORS.PRIMARY,
                         color: COLORS.WHITE,
-                        minWidth: 10,
+                        minWidth: "120px",
+                        cursor: loading ? "not-allowed" : "pointer",
                       }}
                       disabled={!paymentPayload}
                       onClick={handlePay}
                     >
-                      Pay Now
+                      {loading ? (
+                        <Loading
+                          type="spin"
+                          width={25}
+                          height={25}
+                          color={COLORS.WHITE}
+                        />
+                      ) : (
+                        "Pay Now"
+                      )}
                     </Button>
                   </Stack>
                 </Grid2>

@@ -18,25 +18,25 @@ const securedPaymentUrl=axios.create({
 })
 
 userSecuredApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accessToken = token;
+  const token = localStorage.getItem("accesstoken");
+  config.headers.accesstoken = token;
   return config;
 });
 
 securedApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accessToken = token;
+  const token = localStorage.getItem("accesstoken");
+  config.headers.accesstoken = token;
   return config;
 });
 
 securedFlightApi.interceptors.request.use((config)=>{
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("accesstoken");
   config.headers.accesstoken = token;
   return config;
 })
 
 securedPaymentUrl.interceptors.request.use((config)=>{
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("accesstoken");
   config.headers.accesstoken = token;
   return config;
 })

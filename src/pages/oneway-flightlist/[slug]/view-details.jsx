@@ -64,9 +64,12 @@ const FlightDetails = () => {
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectMeal, setSelectMeal] = useState({});
   const [selectBaggage, setSelectBaggage] = useState({});
+
+  // console.log("selectBaggage", selectBaggage)
+  // console.log("selectMeal", selectMeal)
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -199,8 +202,8 @@ const FlightDetails = () => {
             sx={{ width: "100%", py: 4 }}
             className="myname"
           >
-            <Container sx={{ mt: "-70px", px: 0 }}>
-              <Grid2 container spacing={2}>
+            <Container sx={{ mt: "-70px", px: 0, overflow: "visible" }}>
+              <Grid2 container spacing={2} sx={{ position: "relative" }}>
                 {/* Flight Details  */}
                 <Grid2 size={{ lg: 8, xs: 12 }} order={{ lg: 1, xs: 2 }}>
                   <Paper
@@ -515,7 +518,16 @@ const FlightDetails = () => {
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={{ lg: 4, xs: 12 }} order={{ lg: 2, xs: 1 }}>
+                <Grid2
+                  size={{ lg: 4, xs: 12 }}
+                  sx={{
+                    position: "sticky",
+                    top: "75px",
+                    alignSelf: "start",
+                    overflow: "visible",
+                  }}
+                  order={{ lg: 2, xs: 1 }}
+                >
                   {smallScreen ? (
                     <SwipeableEdgeDrawer
                       toggleDrawer={toggleDrawer}
@@ -561,11 +573,7 @@ const FlightDetails = () => {
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <Stack
-          justifyContent={"space-between"}
-          alignItems={"center"}
-         
-        >
+        <Stack justifyContent={"space-between"} alignItems={"center"}>
           <DialogTitle
             sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
             id="customized-dialog-title"

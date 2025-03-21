@@ -199,8 +199,8 @@ const FlightDetails = () => {
           </Grid2>
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
-            <Container sx={{ mt: "-70px" }}>
-              <Grid2 container spacing={2}>
+            <Container sx={{ mt: "-70px", overflow: "visible" }}>
+              <Grid2 container spacing={2} sx={{ position: "relative" }}>
                 <Grid2 size={8}>
                   <Paper
                     sx={{
@@ -267,7 +267,12 @@ const FlightDetails = () => {
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={4}>
+                <Grid2 size={4} sx={{
+                    position: "sticky",
+                    top: "75px",
+                    alignSelf: "start",
+                    overflow: "visible",
+                  }}>
                   {router.query.journey === JOURNEY.INTERNATIONAL ? (
                     <FareSummary
                       fareData={flightDetails[0]?.Results}

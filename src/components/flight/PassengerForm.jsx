@@ -11,7 +11,7 @@ import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import PassengerFields from "./PassengerFields";
 
@@ -38,6 +38,12 @@ const PassengerForm = ({
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
+  const selectedSeats = useSelector(
+    (state) => state.SeatsInformation?.seats || []
+  );
+
+  const adultSeats = selectedSeats.slice(0, adultCount);
+  const childSeats = selectedSeats.slice(adultCount, adultCount + childCount);
   const {
     Currency,
     BaseFare,
@@ -54,18 +60,6 @@ const PassengerForm = ({
     TdsOnIncentive,
     ServiceFee,
   } = flightDetails?.[0]?.Results?.Fare || {};
-
-  // const mealAndBaggageData = (() => {
-  //   switch (journey?.journey_type) {
-  //     case JOURNEY_TYPE.ONEWAY:
-  //       return flightDetails[1];
-  //     case JOURNEY_TYPE.ROUNDTRIP:
-  //     case JOURNEY_TYPE.MULTIWAY:
-  //       return flightDetails[1]?.Response;
-  //     default:
-  //       return null;
-  //   }
-  // })();
 
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
@@ -146,17 +140,23 @@ const PassengerForm = ({
   };
 
   const handleMealValue = (passengerType, index, meal) => {
-    setSelectMeal((prev) => ({
-      ...prev,
-      [`${passengerType}-${index}`]: meal,
-    }));
+    setSelectMeal((prev) => {
+      const key = `${passengerType}-${index}`;
+      return {
+        ...prev,
+        [key]: prev[key] === meal ? null : meal, //toggle selection
+      };
+    });
   };
 
   const handleBaggageValue = (passengerType, index, baggage) => {
-    setSelectBaggage((prev) => ({
-      ...prev,
-      [`${passengerType}-${index}`]: baggage,
-    }));
+    setSelectBaggage((prev) => {
+      const key = `${passengerType}-${index}`;
+      return {
+        ...prev,
+        [key]: prev[key] === baggage ? null : baggage, //toggle selection
+      };
+    });
   };
 
   const handleSubmit = async (values) => {
@@ -228,6 +228,7 @@ const PassengerForm = ({
           ff_number: null,
           MealDynamic: selectMeal[`adult-${index}`] || null,
           Baggage: selectBaggage[`adult-${index}`] || null,
+          SeatDynamic: adultSeats[index] || null,
         })) || [],
       child:
         values?.child?.map((passenger, index) => ({
@@ -238,6 +239,7 @@ const PassengerForm = ({
           ff_number: null,
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
+          SeatDynamic: childSeats[index] || null,
         })) || [],
       infant:
         values?.infant?.map((passenger, index) => ({
@@ -270,10 +272,13 @@ const PassengerForm = ({
         .then((response) => {
           console.log("Booking Response:", response);
           // adding order_id and amount to the session storage for completing the paymount
-          sessionStorage.setItem("payment_info",JSON.stringify({
-            custom_order_id: response.data.response.custom_order_id,
-            amount: response.data.response.amount,
-          }));
+          sessionStorage.setItem(
+            "payment_info",
+            JSON.stringify({
+              custom_order_id: response.data.response.custom_order_id,
+              amount: response.data.response.amount,
+            })
+          );
 
           if (response) {
             dispatch(
@@ -285,19 +290,8 @@ const PassengerForm = ({
             );
             setLoading(false);
             setTimeout(() => {
-              const checkoutPath = (() => {
-                switch (journey?.journey_type) {
-                  case JOURNEY_TYPE.ONEWAY:
-                    return `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`;
-                  case JOURNEY_TYPE.ROUNDTRIP:
-                    return `/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`;
-                  case JOURNEY_TYPE.MULTIWAY:
-                    return `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`;
-                  default:
-                    return "/";
-                }
-              })();
-              router.push(checkoutPath);
+              {(journey?.journey_type===JOURNEY_TYPE.ONEWAY) ?
+              router.push(`/oneway-flightlist/${payload?.trace_id}/oneway-checkout`):router.push(`/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`)}
             }, 1500);
           }
         })

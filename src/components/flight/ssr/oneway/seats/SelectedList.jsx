@@ -14,7 +14,7 @@ const SelectedList = () => {
   );
 
   useEffect(() => {
-    console.log("seats from reducer: ", selectedSeats);
+    // console.log("seats from reducer: ", selectedSeats);
   }, [selectedSeats]);
 
   function handleSeatRemove(seat) {

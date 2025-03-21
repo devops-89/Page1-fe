@@ -859,10 +859,10 @@ const FlightList = () => {
               <Typography
                 sx={{ fontSize: 24, fontWeight: 900, fontFamily: nunito.style }}
               >
-                {`${(
+                ₹ {`${(
                   selectedDeparture?.TotalFare + selectedArrival?.TotalFare
                 ).toFixed(2)}`}{" "}
-                ₹
+                
               </Typography>
               <Button
                 sx={{

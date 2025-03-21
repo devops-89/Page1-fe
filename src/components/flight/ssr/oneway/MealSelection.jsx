@@ -14,7 +14,7 @@ export default function MealSelection({
   handleMealValue,
   selectMeal,
 }) {
-  console.log("mealData", mealData);
+  // console.log("mealData", mealData);
 
   return (
     <>

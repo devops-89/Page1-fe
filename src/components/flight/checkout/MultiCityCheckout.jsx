@@ -20,14 +20,30 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
+import { paymentController } from "@/api/paymentController";
+import Loading from "react-loading";
 
 export default function OneWayCheckout() {
   const router = useRouter();
   const selector = useSelector((state) => state.USER);
   const { isAuthenticated } = selector;
   const [multiCity, setMultiCity] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
+  const [paymentPayload, setPaymentPayload] = useState(null);
+
+
+    useEffect(() => {
+      if (sessionStorage.getItem("payment_info")) {
+        let payment_credentials = JSON.parse(
+          sessionStorage.getItem("payment_info")
+        );
+        console.log("payment_credentials on payment page:", payment_credentials);
+        setPaymentPayload({ ...payment_credentials, currency: "INR" });
+      } else {
+        router.back();
+      }
+    }, []);
 
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("multitripflightDetails");
@@ -46,6 +62,26 @@ export default function OneWayCheckout() {
   }, [isAuthenticated, router]);
 
   // console.log("checkout details:", multiCity);
+
+
+    function handlePay() {
+      setLoading(true);
+      paymentController
+        .paymentInit(paymentPayload)
+        .then((response) => {
+          setLoading(false)
+          console.log("payment response: ", response);
+          if (response?.data?.data?.short_url) {
+            const url = response.data.data.short_url;
+            window.open(url, "_blank"); 
+          }
+        })
+        .catch((error) => {
+          setLoading(false)
+          console.log("Payment Response Error:", error.message);
+        });
+    }
+  
 
   return (
     <>
@@ -647,13 +683,23 @@ export default function OneWayCheckout() {
                   >
                     <Button
                       variant="contained"
+                      onClick={handlePay}
                       sx={{
                         backgroundColor: COLORS.PRIMARY,
                         color: COLORS.WHITE,
-                        minWidth: 10,
+                        minWidth: "120px",
+                        cursor: loading ? "not-allowed" : "pointer",
                       }}
                     >
-                      Pay Now
+                     {loading ? (
+                                   <Loading
+                                     type="spin"
+                                     width={25} height={25}
+                                     color={COLORS.WHITE}
+                                   />
+                                 ) : (
+                                   "Pay Now"
+                                 )}
                     </Button>
                   </Stack>
                 </Grid2>

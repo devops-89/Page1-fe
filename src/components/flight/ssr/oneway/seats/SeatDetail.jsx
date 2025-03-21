@@ -2,8 +2,7 @@ import React from "react";
 import { Grid2, Button, Typography, Box, Stack,Divider,Avatar } from "@mui/material";
 import SelectedList from "./SelectedList";
 import { COLORS } from "@/utils/colors.js";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import CancelIcon from "@mui/icons-material/Cancel";
+
 import moment from "moment";
 import { FlightTakeoff } from "@mui/icons-material";
 import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
@@ -11,7 +10,7 @@ import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineE
 import { nunito } from "@/utils/fonts";
 const SeatDetail = ({extraDetails}) => {
 
-   console.log("Seat Details",extraDetails);
+  //  console.log("Seat Details",extraDetails);
   return (
     <Box
       item

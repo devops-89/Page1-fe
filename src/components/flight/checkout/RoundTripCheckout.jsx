@@ -21,13 +21,30 @@ import DomesticDetail from "../domesticDetail";
 import { JOURNEY } from "@/utils/enum";
 import RoundFareSummary from "../RoundFareSummary";
 import moment from "moment";
+import { paymentController } from "@/api/paymentController";
+import Loading from "react-loading";
 
 export default function RoundTripCheckout() {
+  const [paymentPayload, setPaymentPayload] = useState(null);
   const router = useRouter();
+
+
+    useEffect(() => {
+      if (sessionStorage.getItem("payment_info")) {
+        let payment_credentials = JSON.parse(
+          sessionStorage.getItem("payment_info")
+        );
+        console.log("payment_credentials on payment page:", payment_credentials);
+        setPaymentPayload({ ...payment_credentials, currency: "INR" });
+      } else {
+        router.back();
+      }
+    }, []);
+  
   const selector = useSelector((state) => state.USER);
   const { isAuthenticated } = selector;
   const [roundTrip, setRoundTrip] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
 
   useEffect(() => {
@@ -40,11 +57,30 @@ export default function RoundTripCheckout() {
       setPassengerCount(JSON.parse(storedPassengerCount));
     }
     if (!isAuthenticated || !storedFlightDetails) {
-      router.replace('/login');
+      router.replace("/login");
     } else {
       setLoading(false);
     }
   }, [isAuthenticated, router]);
+
+  // handling function to initiate the payment process
+  function handlePay() {
+    setLoading(true);
+    paymentController
+      .paymentInit(paymentPayload)
+      .then((response) => {
+        setLoading(false);
+        console.log("payment response: ", response);
+        if (response?.data?.data?.short_url) {
+          const url = response.data.data.short_url;
+          window.open(url, "_blank");
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log("Payment Response Error:", error.message);
+      });
+  }
 
   // console.log("checkout details:", roundTrip);
 
@@ -216,6 +252,7 @@ export default function RoundTripCheckout() {
                     </Box>
 
                     {/* Journey Detail  */}
+
                     {roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
                       <>
                         {roundTrip[0]?.Results?.Segments.map(
@@ -302,137 +339,166 @@ export default function RoundTripCheckout() {
                       </>
                     ) : (
                       <>
-                      <Box
-                        key={index}
-                        sx={{
-                          borderBottom: 1,
-                          borderColor: COLORS.GREY,
-                          p: 1,
-                          pb: 2,
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontFamily: nunito.style,
-                            fontWeight: 600,
-                            mb: 1,
-                            color: COLORS.PRIMARY,
-                          }}
-                        >
-                          Journey Detail (
-                          {roundTrip[0]?.Results?.Segments[0][0]?.Origin?.Airport?.CityCode} -{" "}
-                          {
-                            roundTrip[0]?.Results?.Segments[0][roundTrip[0]?.Results?.Segments[0].length - 1]?.Destination?.Airport
-                              ?.CityCode
+                        {roundTrip[0][0]?.Results?.Segments[0].map(
+                          (segment, index) => {
+                            return (
+                              <Box
+                                key={index}
+                                sx={{
+                                  borderBottom: 1,
+                                  borderColor: COLORS.GREY,
+                                  p: 1,
+                                  pb: 2,
+                                }}
+                              >
+                                <Typography
+                                  variant="h6"
+                                  sx={{
+                                    fontFamily: nunito.style,
+                                    fontWeight: 600,
+                                    mb: 1,
+                                    color: COLORS.PRIMARY,
+                                  }}
+                                >
+                                  Journey Detail (
+                                  {segment?.Origin?.Airport?.CityCode} -{" "}
+                                  {segment?.Destination?.Airport?.CityCode})
+                                </Typography>
+                                <Stack
+                                  direction={"row"}
+                                  alignItems={"center"}
+                                  justifyContent={"space-between"}
+                                  sx={{ mb: "5px" }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    Departure Date
+                                  </Typography>
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    {moment(segment?.Origin?.DepTime).format(
+                                      "D MMM, ddd"
+                                    )}
+                                  </Typography>
+                                </Stack>
+                                <Stack
+                                  direction={"row"}
+                                  alignItems={"center"}
+                                  justifyContent={"space-between"}
+                                  sx={{ mb: "5px" }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    Departure Time
+                                  </Typography>
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    {moment(segment?.Origin?.DepTime).format(
+                                      "HH:mm"
+                                    )}
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            );
                           }
-                          )
-                        </Typography>
-                        <Stack
-                          direction={"row"}
-                          alignItems={"center"}
-                          justifyContent={"space-between"}
-                          sx={{ mb: "5px" }}
-                        >
-                          <Typography
-                            sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                          >
-                            Departure Date
-                          </Typography>
-                          <Typography
-                            sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                          >
-                            {moment(roundTrip[0]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
-                              "D MMM, ddd"
-                            )}
-                          </Typography>
-                        </Stack>
-                        <Stack
-                          direction={"row"}
-                          alignItems={"center"}
-                          justifyContent={"space-between"}
-                          sx={{ mb: "5px" }}
-                        >
-                          <Typography
-                            sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                          >
-                            Departure Time
-                          </Typography>
-                          <Typography
-                            sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                          >
-                            {moment(roundTrip[0]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
-                              "HH:mm"
-                            )}
-                          </Typography>
-                        </Stack>
-                      </Box>
-                       <Box
-                       key={index}
-                       sx={{
-                         borderBottom: 1,
-                         borderColor: COLORS.GREY,
-                         p: 1,
-                         pb: 2,
-                       }}
-                     >
-                       <Typography
-                         variant="h6"
-                         sx={{
-                           fontFamily: nunito.style,
-                           fontWeight: 600,
-                           mb: 1,
-                           color: COLORS.PRIMARY,
-                         }}
-                       >
-                         Journey Detail (
-                         {roundTrip[1]?.Results?.Segments[0][0]?.Origin?.Airport?.CityCode} -{" "}
-                         {
-                           roundTrip[1]?.Results?.Segments[0][roundTrip[0]?.Results?.Segments[0].length - 1]?.Destination?.Airport
-                             ?.CityCode
-                         }
-                         )
-                       </Typography>
-                       <Stack
-                         direction={"row"}
-                         alignItems={"center"}
-                         justifyContent={"space-between"}
-                         sx={{ mb: "5px" }}
-                       >
-                         <Typography
-                           sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                         >
-                           Departure Date
-                         </Typography>
-                         <Typography
-                           sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                         >
-                           {moment(roundTrip[1]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
-                             "D MMM, ddd"
-                           )}
-                         </Typography>
-                       </Stack>
-                       <Stack
-                         direction={"row"}
-                         alignItems={"center"}
-                         justifyContent={"space-between"}
-                         sx={{ mb: "5px" }}
-                       >
-                         <Typography
-                           sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                         >
-                           Departure Time
-                         </Typography>
-                         <Typography
-                           sx={{ fontWeight: 500, fontFamily: nunito.style }}
-                         >
-                           {moment(roundTrip[1]?.Results?.Segments[0][0]?.Origin?.DepTime).format(
-                             "HH:mm"
-                           )}
-                         </Typography>
-                       </Stack>
-                     </Box>
-                     </>
+                        )}
+
+                        {roundTrip[1][0]?.Results?.Segments[0].map(
+                          (segment, index) => {
+                            return (
+                              <Box
+                                key={index}
+                                sx={{
+                                  borderBottom: 1,
+                                  borderColor: COLORS.GREY,
+                                  p: 1,
+                                  pb: 2,
+                                }}
+                              >
+                                <Typography
+                                  variant="h6"
+                                  sx={{
+                                    fontFamily: nunito.style,
+                                    fontWeight: 600,
+                                    mb: 1,
+                                    color: COLORS.PRIMARY,
+                                  }}
+                                >
+                                  Journey Detail (
+                                  {segment?.Origin?.Airport?.CityCode} -{" "}
+                                  {segment?.Destination?.Airport?.CityCode})
+                                </Typography>
+                                <Stack
+                                  direction={"row"}
+                                  alignItems={"center"}
+                                  justifyContent={"space-between"}
+                                  sx={{ mb: "5px" }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    Departure Date
+                                  </Typography>
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    {moment(segment?.Origin?.DepTime).format(
+                                      "D MMM, ddd"
+                                    )}
+                                  </Typography>
+                                </Stack>
+                                <Stack
+                                  direction={"row"}
+                                  alignItems={"center"}
+                                  justifyContent={"space-between"}
+                                  sx={{ mb: "5px" }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    Departure Time
+                                  </Typography>
+                                  <Typography
+                                    sx={{
+                                      fontWeight: 500,
+                                      fontFamily: nunito.style,
+                                    }}
+                                  >
+                                    {moment(segment?.Origin?.DepTime).format(
+                                      "HH:mm"
+                                    )}
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            );
+                          }
+                        )}
+                      </>
                     )}
 
                     {/* Form Detail  */}
@@ -528,10 +594,22 @@ export default function RoundTripCheckout() {
                       sx={{
                         backgroundColor: COLORS.PRIMARY,
                         color: COLORS.WHITE,
-                        minWidth: 10,
+                        minWidth: "120px",
+                        cursor: loading ? "not-allowed" : "pointer",
                       }}
+                      disabled={!paymentPayload}
+                      onClick={handlePay}
                     >
-                      Pay Now
+                      {loading ? (
+                        <Loading
+                          type="spin"
+                          width={25}
+                          height={25}
+                          color={COLORS.WHITE}
+                        />
+                      ) : (
+                        "Pay Now"
+                      )}
                     </Button>
                   </Stack>
                 </Grid2>

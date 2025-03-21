@@ -8,7 +8,7 @@ import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import ToastBar from "@/components/toastBar";
 import AddForm from "../AddForm";
@@ -35,6 +35,13 @@ const DomesticPassengerForm = ({
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
+
+  const selectedSeats = useSelector(
+    (state) => state.SeatsInformation?.seats || []
+  );
+
+  const adultSeats = selectedSeats.slice(0, adultCount);
+  const childSeats = selectedSeats.slice(adultCount, adultCount + childCount);
 
   console.log("flightDetails", flightDetails);
 
@@ -71,8 +78,6 @@ const DomesticPassengerForm = ({
     TdsOnIncentive_ib,
     ServiceFee_ib,
   } = flightDetails?.[1][0]?.Results?.Fare || {};
-
-
 
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
@@ -181,6 +186,7 @@ const DomesticPassengerForm = ({
           ff_number: null,
           MealDynamic: selectMeal[`adult-${index}`] || null,
           Baggage: selectBaggage[`adult-${index}`] || null,
+          SeatDynamic: adultSeats[index] || null,
         })) || [],
       child:
         values?.child?.map((passenger, index) => ({
@@ -191,6 +197,7 @@ const DomesticPassengerForm = ({
           ff_number: null,
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
+          SeatDynamic: childSeats[index] || null,
         })) || [],
       infant:
         values?.infant?.map((passenger, index) => ({
@@ -202,120 +209,118 @@ const DomesticPassengerForm = ({
         })) || [],
     };
 
-
     const commonPayload = {
-        ob: {
-          result_index: flightDetails?.[0][0]?.Results?.ResultIndex || null,
-          trace_id: flightDetails?.[0][0]?.TraceId,
-          ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
-          cell_country_code: values?.cell_country_code || "",
-          country_code: values?.country_code || "",
-          city: values?.city || "",
-          journey_type: journey?.journey_type,
-          journey: journey?.journey,
-          is_LCC: flightDetails?.[0][0]?.Results?.isLCC,
-          contact_no: values?.contact_no || "",
-          country: values?.country || "",
-          house_number: values?.house_number || "",
-          postal_code: values?.postal_code || "",
-          street: values?.street || "",
-          state: values?.state || "",
-          nationality: values?.nationality || "",
-          email: values?.email || "",
-          gst_company_address: values?.gstForm?.gst_company_address || null,
-          gst_company_contact_number:
-            values?.gstForm?.gst_company_contact_number || null,
-          gst_company_name: values?.gstForm?.gst_company_name || null,
-          gst_number: values?.gstForm?.gst_number || null,
-          gst_company_email: values?.gstForm?.gst_company_email || null,
-          passenger_details: passengerDetails,
-          fare: [
-            {
-              Currency: Currency_ob || "INR",
-              BaseFare: BaseFare_ob || 0,
-              Tax: Tax_ob || 0,
-              YQTax: YQTax_ob || 0,
-              AdditionalTxnFeeOfrd: AdditionalTxnFeeOfrd_ob || 0,
-              AdditionalTxnFeePub: AdditionalTxnFeePub_ob || 0,
-              OtherCharges: OtherCharges_ob || 0,
-              Discount: Discount_ob || 0,
-              PublishedFare: PublishedFare_ob || 0,
-              OfferedFare: OfferedFare_ob || 0,
-              TdsOnCommission: TdsOnCommission_ob || 0,
-              TdsOnPLB: TdsOnPLB_ob || 0,
-              TdsOnIncentive: TdsOnIncentive_ob || 0,
-              ServiceFee: ServiceFee_ob || 0,
-            },
-          ],
-          fareBreakdown:
-            flightDetails?.[0][0]?.Results?.FareBreakdown?.map((fare) => ({
-              Currency: fare.Currency || "INR",
-              PassengerType: fare.PassengerType || 0,
-              PassengerCount: fare.PassengerCount || 0,
-              BaseFare: fare.BaseFare || 0,
-              Tax: fare.Tax || 0,
-              YQTax: fare.YQTax || 0,
-              AdditionalTxnFeeOfrd: fare.AdditionalTxnFeeOfrd || 0,
-              AdditionalTxnFeePub: fare.AdditionalTxnFeePub || 0,
-            })) || [],
-        },
-        ib: {
-          result_index: flightDetails?.[1][0]?.Results?.ResultIndex || null,
-          trace_id: flightDetails?.[1][0]?.TraceId,
-          ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
-          cell_country_code: values?.cell_country_code || "",
-          country_code: values?.country_code || "",
-          city: values?.city || "",
-          journey_type: journey?.journey_type,
-          journey: journey?.journey,
-          is_LCC: flightDetails?.[1][0]?.Results?.isLCC,
-          contact_no: values?.contact_no || "",
-          country: values?.country || "",
-          house_number: values?.house_number || "",
-          postal_code: values?.postal_code || "",
-          street: values?.street || "",
-          state: values?.state || "",
-          nationality: values?.nationality || "",
-          email: values?.email || "",
-          gst_company_address: values?.gstForm?.gst_company_address || null,
-          gst_company_contact_number:
-            values?.gstForm?.gst_company_contact_number || null,
-          gst_company_name: values?.gstForm?.gst_company_name || null,
-          gst_number: values?.gstForm?.gst_number || null,
-          gst_company_email: values?.gstForm?.gst_company_email || null,
-          passenger_details: passengerDetails,
-          fare: [
-            {
-              Currency: Currency_ib || "INR",
-              BaseFare: BaseFare_ib || 0,
-              Tax: Tax_ib || 0,
-              YQTax: YQTax_ib || 0,
-              AdditionalTxnFeeOfrd: AdditionalTxnFeeOfrd_ib || 0,
-              AdditionalTxnFeePub: AdditionalTxnFeePub_ib || 0,
-              OtherCharges: OtherCharges_ib || 0,
-              Discount: Discount_ib || 0,
-              PublishedFare: PublishedFare_ib || 0,
-              OfferedFare: OfferedFare_ib || 0,
-              TdsOnCommission: TdsOnCommission_ib || 0,
-              TdsOnPLB: TdsOnPLB_ib || 0,
-              TdsOnIncentive: TdsOnIncentive_ib || 0,
-              ServiceFee: ServiceFee_ib || 0,
-            },
-          ],
-          fareBreakdown:
-            flightDetails?.[1][0]?.Results?.FareBreakdown?.map((fare) => ({
-              Currency: fare.Currency || "INR",
-              PassengerType: fare.PassengerType || 0,
-              PassengerCount: fare.PassengerCount || 0,
-              BaseFare: fare.BaseFare || 0,
-              Tax: fare.Tax || 0,
-              YQTax: fare.YQTax || 0,
-              AdditionalTxnFeeOfrd: fare.AdditionalTxnFeeOfrd || 0,
-              AdditionalTxnFeePub: fare.AdditionalTxnFeePub || 0,
-            })) || [],
-        },
-      };
-
+      ob: {
+        result_index: flightDetails?.[0][0]?.Results?.ResultIndex || null,
+        trace_id: flightDetails?.[0][0]?.TraceId,
+        ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
+        cell_country_code: values?.cell_country_code || "",
+        country_code: values?.country_code || "",
+        city: values?.city || "",
+        journey_type: journey?.journey_type,
+        journey: journey?.journey,
+        is_LCC: flightDetails?.[0][0]?.Results?.IsLCC,
+        contact_no: values?.contact_no || "",
+        country: values?.country || "",
+        house_number: values?.house_number || "",
+        postal_code: values?.postal_code || "",
+        street: values?.street || "",
+        state: values?.state || "",
+        nationality: values?.nationality || "",
+        email: values?.email || "",
+        gst_company_address: values?.gstForm?.gst_company_address || null,
+        gst_company_contact_number:
+          values?.gstForm?.gst_company_contact_number || null,
+        gst_company_name: values?.gstForm?.gst_company_name || null,
+        gst_number: values?.gstForm?.gst_number || null,
+        gst_company_email: values?.gstForm?.gst_company_email || null,
+        passenger_details: passengerDetails,
+        fare: [
+          {
+            Currency: Currency_ob || "INR",
+            BaseFare: BaseFare_ob || 0,
+            Tax: Tax_ob || 0,
+            YQTax: YQTax_ob || 0,
+            AdditionalTxnFeeOfrd: AdditionalTxnFeeOfrd_ob || 0,
+            AdditionalTxnFeePub: AdditionalTxnFeePub_ob || 0,
+            OtherCharges: OtherCharges_ob || 0,
+            Discount: Discount_ob || 0,
+            PublishedFare: PublishedFare_ob || 0,
+            OfferedFare: OfferedFare_ob || 0,
+            TdsOnCommission: TdsOnCommission_ob || 0,
+            TdsOnPLB: TdsOnPLB_ob || 0,
+            TdsOnIncentive: TdsOnIncentive_ob || 0,
+            ServiceFee: ServiceFee_ob || 0,
+          },
+        ],
+        fareBreakdown:
+          flightDetails?.[0][0]?.Results?.FareBreakdown?.map((fare) => ({
+            Currency: fare.Currency || "INR",
+            PassengerType: fare.PassengerType || 0,
+            PassengerCount: fare.PassengerCount || 0,
+            BaseFare: fare.BaseFare || 0,
+            Tax: fare.Tax || 0,
+            YQTax: fare.YQTax || 0,
+            AdditionalTxnFeeOfrd: fare.AdditionalTxnFeeOfrd || 0,
+            AdditionalTxnFeePub: fare.AdditionalTxnFeePub || 0,
+          })) || [],
+      },
+      ib: {
+        result_index: flightDetails?.[1][0]?.Results?.ResultIndex || null,
+        trace_id: flightDetails?.[1][0]?.TraceId,
+        ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
+        cell_country_code: values?.cell_country_code || "",
+        country_code: values?.country_code || "",
+        city: values?.city || "",
+        journey_type: journey?.journey_type,
+        journey: journey?.journey,
+        is_LCC: flightDetails?.[1][0]?.Results?.IsLCC,
+        contact_no: values?.contact_no || "",
+        country: values?.country || "",
+        house_number: values?.house_number || "",
+        postal_code: values?.postal_code || "",
+        street: values?.street || "",
+        state: values?.state || "",
+        nationality: values?.nationality || "",
+        email: values?.email || "",
+        gst_company_address: values?.gstForm?.gst_company_address || null,
+        gst_company_contact_number:
+          values?.gstForm?.gst_company_contact_number || null,
+        gst_company_name: values?.gstForm?.gst_company_name || null,
+        gst_number: values?.gstForm?.gst_number || null,
+        gst_company_email: values?.gstForm?.gst_company_email || null,
+        passenger_details: passengerDetails,
+        fare: [
+          {
+            Currency: Currency_ib || "INR",
+            BaseFare: BaseFare_ib || 0,
+            Tax: Tax_ib || 0,
+            YQTax: YQTax_ib || 0,
+            AdditionalTxnFeeOfrd: AdditionalTxnFeeOfrd_ib || 0,
+            AdditionalTxnFeePub: AdditionalTxnFeePub_ib || 0,
+            OtherCharges: OtherCharges_ib || 0,
+            Discount: Discount_ib || 0,
+            PublishedFare: PublishedFare_ib || 0,
+            OfferedFare: OfferedFare_ib || 0,
+            TdsOnCommission: TdsOnCommission_ib || 0,
+            TdsOnPLB: TdsOnPLB_ib || 0,
+            TdsOnIncentive: TdsOnIncentive_ib || 0,
+            ServiceFee: ServiceFee_ib || 0,
+          },
+        ],
+        fareBreakdown:
+          flightDetails?.[1][0]?.Results?.FareBreakdown?.map((fare) => ({
+            Currency: fare.Currency || "INR",
+            PassengerType: fare.PassengerType || 0,
+            PassengerCount: fare.PassengerCount || 0,
+            BaseFare: fare.BaseFare || 0,
+            Tax: fare.Tax || 0,
+            YQTax: fare.YQTax || 0,
+            AdditionalTxnFeeOfrd: fare.AdditionalTxnFeeOfrd || 0,
+            AdditionalTxnFeePub: fare.AdditionalTxnFeePub || 0,
+          })) || [],
+      },
+    };
 
     setPayload(commonPayload);
     console.log("finalpayload", commonPayload);
@@ -324,13 +329,22 @@ const DomesticPassengerForm = ({
   const currentValidationSchema = validationSchema(isGSTMandatory);
 
   useEffect(() => {
-    console.log("api running")
-    console.log("payload", payload)
+    console.log("api running");
+    console.log("payload", payload);
     if (payload?.ob?.trace_id) {
       const bookingPromise = flightController.roundTripDomesticBooking(payload);
 
       bookingPromise
         .then((response) => {
+          console.log("Booking Response:", response);
+          // adding order_id and amount to the session storage for completing the paymount
+          sessionStorage.setItem(
+            "payment_info",
+            JSON.stringify({
+              custom_order_id: response.data.response.custom_order_id,
+              amount: response.data.response.amount,
+            })
+          );
           if (response) {
             dispatch(
               setToast({
@@ -341,7 +355,9 @@ const DomesticPassengerForm = ({
             );
             setLoading(false);
             setTimeout(() => {
-              router.push(`/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`);
+              router.push(
+                `/roundtrip-flightlist/${payload?.ob?.trace_id}/roundtrip-checkout`
+              );
             }, 1500);
           }
         })
