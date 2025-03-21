@@ -71,19 +71,19 @@ export default function OneWayCheckout() {
 
   // handling function to initiate the payment process
   function handlePay() {
-    setLoading(true)
+    setLoading(true);
     paymentController
       .paymentInit(paymentPayload)
       .then((response) => {
-        setLoading(false)
+        setLoading(false);
         console.log("payment response: ", response);
         if (response?.data?.data?.short_url) {
           const url = response.data.data.short_url;
-          window.open(url, "_blank"); 
+          window.open(url, "_blank");
         }
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         console.log("Payment Response Error:", error.message);
       });
   }
@@ -646,20 +646,6 @@ export default function OneWayCheckout() {
                     </Grid2>
                   </Box>
                 </Grid2>
-                {/* order-box */}
-
-                {/* 
-
-
-               <Grid2 size={{lg:4 ,xs:12}} order={{lg:2 ,xs:1}} > 
-                  {smallScreen ?   <SwipeableEdgeDrawer   toggleDrawer={toggleDrawer} fairSummary ={<FareSummary toggleDrawer={toggleDrawer} commission={commission} fareData={flightDetails[0]?.Results}     /> }/> :
-                 <FareSummary fareData={flightDetails[0]?.Results}   toggleDrawer={toggleDrawer} commission={commission} /> }
-
-                 size={{ xs: 12, sm: 12, md: 4 }}
-             
-                </Grid2>
-                
-                */}
 
                 <Grid2
                   size={{ lg: 4, xs: 12 }}
@@ -691,11 +677,6 @@ export default function OneWayCheckout() {
                     />
                   )}
 
-                  {/* <FareSummary
-                    fareData={oneWay[0]?.Results}
-                    commission={oneWay[2]}
-                    toggleDrawer={toggleDrawer}
-                  /> */}
                   {/* --------------fare Summary End-----------------  */}
 
                   <Stack

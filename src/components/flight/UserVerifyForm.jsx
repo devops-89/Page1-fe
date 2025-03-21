@@ -12,6 +12,7 @@ import Loading from "react-loading";
 const UserVerifyForm = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(null);
   const [enableOtpButton, setEnableOtpButton] = useState(false);
@@ -31,46 +32,54 @@ const UserVerifyForm = () => {
     setOtp(newValue);
   };
 
-  const handleSendOtp = () => {
-    setLoading(true);
-    if (email) {
-      let payload = {
-        email: email,
-        user_type: "USER",
-      };
+  const validateEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  };
 
-      authenticationController
-        .signUpLoginViaEmail(payload)
-        .then((response) => {
-          //  console.log("Response in the email verification: ",response.data);
-          setOtpSent(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          setLoading(false);
-          console.log("Error in email verification: ", error);
-        });
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    if (!validateEmail(value)) {
+      setEmailError("Please enter a valid email address.");
+    } else {
+      setEmailError("");
     }
+  };
+
+  const handleSendOtp = () => {
+    if (!validateEmail(email)) {
+      setEmailError("Invalid email. Please enter a valid email address.");
+      return;
+    }
+
+    setLoading(true);
+    let payload = { email: email, user_type: "USER" };
+
+    authenticationController
+      .signUpLoginViaEmail(payload)
+      .then((response) => {
+        setOtpSent(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log("Error in email verification: ", error);
+      });
   };
 
   const handleVerifyOtp = () => {
     setLoading(true);
-    console.log(otpSent.data);
     let payload = {
       reference_id: otpSent?.data?.reference_id,
       otp: otpSent?.data?.OTP,
     };
+
     authenticationController.verifyEmailOtp(payload).then((response) => {
-      console.log(
-        "Response after the email and otp verification: ",
-        response.data.data
-      );
       if (response.statusText === "OK") {
         dispatch(setAuthenticated(true));
-        localStorage.setItem(
-          "accesstoken",
-          response?.data?.data?.access_token
-        );
+        localStorage.setItem("accesstoken", response?.data?.data?.access_token);
         setLoading(false);
       }
     });
@@ -84,13 +93,16 @@ const UserVerifyForm = () => {
       >
         Enter Your Email to Continue Booking
       </Typography>
+
       <TextField
         fullWidth
         label="Email"
         variant="outlined"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleEmailChange}
         size="small"
+        error={!!emailError}
+        helperText={emailError}
         sx={{
           mb: 2,
           ...loginTextField,
@@ -101,9 +113,7 @@ const UserVerifyForm = () => {
 
       {otpSent ? (
         <>
-          <Typography sx={{ color: COLORS.GREEN }}>
-            {otpSent?.message}
-          </Typography>
+          <Typography sx={{ color: COLORS.GREEN }}>{otpSent?.message}</Typography>
           <MuiOtpInput
             className="custom-otp-input"
             value={otp}
@@ -139,16 +149,13 @@ const UserVerifyForm = () => {
             fullWidth
             onClick={handleVerifyOtp}
             disabled={!enableOtpButton}
-            sx={{ backgroundColor: COLORS.PRIMARY,
+            sx={{
+              backgroundColor: COLORS.PRIMARY,
               cursor: loading ? "not-allowed" : "pointer",
-             }}
+            }}
           >
             {loading ? (
-              <Loading
-                type="spin"
-                width={25} height={25}
-                color={COLORS.WHITE}
-              />
+              <Loading type="spin" width={25} height={25} color={COLORS.WHITE} />
             ) : (
               "Verify OTP"
             )}
@@ -159,11 +166,12 @@ const UserVerifyForm = () => {
           type="button"
           variant="contained"
           onClick={handleSendOtp}
-          disabled={!email}
-          sx={{ backgroundColor: COLORS.PRIMARY, width: "150px",
+          disabled={!email || emailError}
+          sx={{
+            backgroundColor: COLORS.PRIMARY,
+            width: "150px",
             cursor: loading ? "not-allowed" : "pointer",
-           }}
-          
+          }}
         >
           {loading ? (
             <Loading type="spin" width={25} height={25} color={COLORS.WHITE} />
