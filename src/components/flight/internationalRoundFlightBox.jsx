@@ -443,7 +443,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                     <Typography
                             sx={{ fontSize: 22, fontWeight: 900, fontFamily: nunito.style }}
                         >
-                            {flightDetails?.TotalFare} ₹
+                          ₹ {flightDetails?.TotalFare}
                         </Typography>
                         <Button
                             sx={{

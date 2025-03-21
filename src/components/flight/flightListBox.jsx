@@ -183,7 +183,7 @@ const FlightListBox = ({ details, traceId, journey }) => {
             <Typography
               sx={{ fontSize: {lg:25 , md:20 ,sm:20 ,xs:14} , fontWeight: 900, fontFamily: nunito.style }}
             >
-              {flightDetails?.TotalFare} ₹
+             ₹ {flightDetails?.TotalFare}
             </Typography>
             <Button
               sx={{

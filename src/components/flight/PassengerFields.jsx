@@ -253,6 +253,7 @@ const PassengerFields = ({
 
                   return (
                     <DatePicker
+                      format="DD/MM/YYYY"
                       disableFuture
                       value={field.value ? dayjs(field.value) : null}
                       onChange={(date) => {
@@ -441,6 +442,7 @@ const PassengerFields = ({
                 <Field name={`${formType}[${index}].passport_expiry`}>
                   {({ field, form }) => (
                     <DatePicker
+                    format="DD/MM/YYYY"
                       disablePast
                       id="passport.passport_expiry"
                       placeholder="Passport Expiry Date"

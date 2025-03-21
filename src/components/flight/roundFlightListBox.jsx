@@ -181,7 +181,7 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
             <Typography
               sx={{ fontSize: 20, fontWeight: 900, fontFamily: nunito.style }}
             >
-              {flightDetails?.TotalFare} ₹
+               ₹ {flightDetails?.TotalFare}
             </Typography>
           </Grid2>
         </Grid2>
