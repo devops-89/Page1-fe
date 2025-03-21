@@ -11,7 +11,7 @@ import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import PassengerFields from "./PassengerFields";
 
@@ -38,6 +38,12 @@ const PassengerForm = ({
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
+  const selectedSeats = useSelector(
+    (state) => state.SeatsInformation?.seats || []
+  );
+
+  const adultSeats = selectedSeats.slice(0, adultCount);
+  const childSeats = selectedSeats.slice(adultCount, adultCount + childCount);
   const {
     Currency,
     BaseFare,
@@ -138,7 +144,7 @@ const PassengerForm = ({
       const key = `${passengerType}-${index}`;
       return {
         ...prev,
-        [key]: prev[key] === meal ? null : meal,  //toggle selection
+        [key]: prev[key] === meal ? null : meal, //toggle selection
       };
     });
   };
@@ -222,6 +228,7 @@ const PassengerForm = ({
           ff_number: null,
           MealDynamic: selectMeal[`adult-${index}`] || null,
           Baggage: selectBaggage[`adult-${index}`] || null,
+          SeatDynamic: adultSeats[index] || null,
         })) || [],
       child:
         values?.child?.map((passenger, index) => ({
@@ -232,6 +239,7 @@ const PassengerForm = ({
           ff_number: null,
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
+          SeatDynamic: childSeats[index] || null,
         })) || [],
       infant:
         values?.infant?.map((passenger, index) => ({
@@ -282,7 +290,8 @@ const PassengerForm = ({
             );
             setLoading(false);
             setTimeout(() => {
-              router.push(`/oneway-flightlist/${payload?.trace_id}/oneway-checkout`);
+              {(journey?.journey_type===JOURNEY_TYPE.ONEWAY) ?
+              router.push(`/oneway-flightlist/${payload?.trace_id}/oneway-checkout`):router.push(`/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`)}
             }, 1500);
           }
         })

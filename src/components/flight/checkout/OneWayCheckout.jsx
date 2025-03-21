@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import { paymentController } from "@/api/paymentController";
+import Loading from "react-loading";
 
 export default function OneWayCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
@@ -44,7 +45,7 @@ export default function OneWayCheckout() {
   const selector = useSelector((state) => state.USER);
   const { isAuthenticated } = selector;
   const [oneWay, setOneWay] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -63,9 +64,6 @@ export default function OneWayCheckout() {
     }
     if (storedPassengerCount) {
       setPassengerCount(JSON.parse(storedPassengerCount));
-    }
-    if (!isAuthenticated || !storedFlightDetails) {
-      router.replace("/login");
     } else {
       setLoading(false);
     }
@@ -73,15 +71,19 @@ export default function OneWayCheckout() {
 
   // handling function to initiate the payment process
   function handlePay() {
+    setLoading(true)
     paymentController
       .paymentInit(paymentPayload)
       .then((response) => {
+        setLoading(false)
         console.log("payment response: ", response);
-        if (response.data.data.short_url) {
-          router.push(`${response.data.data.short_url}`);
+        if (response?.data?.data?.short_url) {
+          const url = response.data.data.short_url;
+          window.open(url, "_blank"); 
         }
       })
       .catch((error) => {
+        setLoading(false)
         console.log("Payment Response Error:", error.message);
       });
   }
@@ -710,12 +712,22 @@ export default function OneWayCheckout() {
                       sx={{
                         backgroundColor: COLORS.PRIMARY,
                         color: COLORS.WHITE,
-                        minWidth: 10,
+                        minWidth: "120px",
+                        cursor: loading ? "not-allowed" : "pointer",
                       }}
                       disabled={!paymentPayload}
                       onClick={handlePay}
                     >
-                      Pay Now
+                      {loading ? (
+                        <Loading
+                          type="spin"
+                          width={25}
+                          height={25}
+                          color={COLORS.WHITE}
+                        />
+                      ) : (
+                        "Pay Now"
+                      )}
                     </Button>
                   </Stack>
                 </Grid2>

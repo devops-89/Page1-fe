@@ -64,9 +64,12 @@ const FlightDetails = () => {
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectMeal, setSelectMeal] = useState({});
   const [selectBaggage, setSelectBaggage] = useState({});
+
+  // console.log("selectBaggage", selectBaggage)
+  // console.log("selectMeal", selectMeal)
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -200,11 +203,7 @@ const FlightDetails = () => {
             className="myname"
           >
             <Container sx={{ mt: "-70px", px: 0, overflow: "visible" }}>
-              <Grid2
-                container
-                spacing={2}
-                sx={{ position: "relative" }}
-              >
+              <Grid2 container spacing={2} sx={{ position: "relative" }}>
                 {/* Flight Details  */}
                 <Grid2 size={{ lg: 8, xs: 12 }} order={{ lg: 1, xs: 2 }}>
                   <Paper
@@ -521,13 +520,13 @@ const FlightDetails = () => {
                 {/* Fare Summary */}
                 <Grid2
                   size={{ lg: 4, xs: 12 }}
-                  order={{ lg: 2, xs: 1 }}
                   sx={{
                     position: "sticky",
                     top: "75px",
                     alignSelf: "start",
                     overflow: "visible",
                   }}
+                  order={{ lg: 2, xs: 1 }}
                 >
                   {smallScreen ? (
                     <SwipeableEdgeDrawer
@@ -537,8 +536,6 @@ const FlightDetails = () => {
                           toggleDrawer={toggleDrawer}
                           commission={commission}
                           fareData={flightDetails[0]?.Results}
-                          selectMeal={selectMeal}
-                          selectBaggage={selectBaggage}
                         />
                       }
                     />
@@ -547,10 +544,10 @@ const FlightDetails = () => {
                       fareData={flightDetails[0]?.Results}
                       toggleDrawer={toggleDrawer}
                       commission={commission}
-                      selectMeal={selectMeal}
-                      selectBaggage={selectBaggage}
                     />
                   )}
+                  {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
+                  {/* <FareSummary fareData={flightDetails[0]?.Results} /> */}
                 </Grid2>
               </Grid2>
             </Container>

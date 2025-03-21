@@ -1,3 +1,256 @@
+// import React, { useState } from "react";
+// import {
+//   Box,
+//   Stack,
+//   Button,
+//   Typography,
+//   useMediaQuery,
+//   Paper,
+//   Divider,
+//   List,
+//   ListItem,
+//   ListItemText,
+//   Collapse,
+//   ListItemIcon,
+//   boxShadow
+// } from "@mui/material";
+// import AddCircleIcon from "@mui/icons-material/AddCircle";
+// import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+// import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
+// import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
+// import { nunito } from "@/utils/fonts";
+// import { COMMISSION_TYPE } from "@/utils/enum";
+// import { COLORS } from "@/utils/colors";
+
+// const  FareSummary = ({ fareData, commission , toggleDrawer }) => {
+//   const [open, setOpen] = useState(false);
+//   // console.log("commission", commission)
+//   const toggleCollapse = () => {
+//     setOpen(!open);
+//   };
+//   let serviceFeeInFixed = parseFloat(commission?.percentage);
+//   let serviceFeeInPercent =
+//     (parseInt(fareData?.Fare?.BaseFare) * parseFloat(commission?.percentage)) /
+//     100;
+//   let publishFare = parseInt(fareData?.Fare?.PublishedFare);
+//    const smallScreen = useMediaQuery("(max-width:1199px)")
+//   return (
+//     <Paper sx={{padding: 2, height:"100%", boxShadow:{lg:0 , xs:10}}} className="bharti"   >
+//       <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}  >
+//       <Typography
+//         variant="h6"
+//         sx={{
+//           fontSize: 18,
+//           fontWeight: 800,
+//           color: "#000",
+//           fontFamily: nunito.style,
+//         }}
+//       >
+//         Fare Summary
+//       </Typography>
+//        {smallScreen ?  <Button onClick={toggleDrawer.toggle} variant="contained" color="primary">
+//         {!toggleDrawer.open ? <KeyboardDoubleArrowUpOutlinedIcon />: <KeyboardDoubleArrowDownOutlinedIcon/>}
+//       </Button>  : null}
+     
+//       </Stack>
+//       <Divider sx={{ marginY: 1 }} />
+//       <List component="nav" sx={{ p: 0 , backgroundColor:"red"  }} className="arti">
+//         <ListItem
+//           button
+//           sx={{ display: "flex", justifyContent: "space-between" }}
+//         >
+//           <ListItemIcon>
+//             {" "}
+//             <AddCircleIcon />
+//           </ListItemIcon>
+//           <ListItemText>
+//             <Typography sx={{ fontFamily: nunito.style, fontWeight: 700 }}>
+//               Base Amount
+//             </Typography>
+//           </ListItemText>
+//           <Box
+//             sx={{
+//               display: "flex",
+//               alignItems: "flex-start",
+//               justifyContent: "flex-end",
+              
+//             }}
+//           >
+//             <Typography
+//               variant="body1"
+//               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//             >
+//              ₹ {fareData?.Fare?.BaseFare} 
+//             </Typography>
+//           </Box>
+//         </ListItem>
+//       </List>
+
+//       {/* Taxes and Surcharges Section */}
+//       <List component="nav" sx={{ p: 0 }}>
+//         <ListItem
+//           button
+//           onClick={toggleCollapse}
+//           sx={{ display: "flex", justifyContent: "space-between" }}
+//         >
+//           <ListItemIcon>
+//             {" "}
+//             {open ? <RemoveCircleIcon /> : <AddCircleIcon />}
+//           </ListItemIcon>
+//           <ListItemText>
+//             <Typography sx={{ fontFamily: nunito.style, fontWeight: 700 }}>
+//               Taxes and Surcharges
+//             </Typography>
+//           </ListItemText>
+//           <Box
+//             sx={{
+//               display: "flex",
+//               alignItems: "flex-start",
+//               justifyContent: "flex-end",
+//             }}
+//           >
+//             <Typography
+//               variant="body1"
+//               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//             >
+//               ₹ {fareData?.Fare?.Tax}
+//             </Typography>
+//           </Box>
+//         </ListItem>
+//         <Collapse in={open} timeout="auto" unmountOnExit>
+//           <List component="div" disablePadding>
+//             {fareData?.Fare?.TaxBreakup?.map((tax, index) => (
+//               <ListItem
+//                 key={index}
+//                 sx={{
+//                   display: "flex",
+//                   justifyContent: "space-between",
+//                   paddingLeft: 4,
+//                   fontFamily: nunito.style,
+//                 }}
+//               >
+//                 <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
+//                   {tax.key}
+//                 </Typography>
+//                 <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
+//                   ₹ {tax.value}
+//                 </Typography>
+//               </ListItem>
+//             ))}
+//           </List>
+//         </Collapse>
+//       </List>
+
+//       <List component="nav" sx={{ p: 0 }}>
+//         <ListItem
+//           button
+//           sx={{ display: "flex", justifyContent: "space-between" }}
+//         >
+//           <ListItemIcon>
+//             {" "}
+//             <AddCircleIcon />
+//           </ListItemIcon>
+//           <ListItemText>
+//             <Typography sx={{ fontFamily: nunito.style, fontWeight: 700 }}>
+//               Discount
+//             </Typography>
+//           </ListItemText>
+//           <Box
+//             sx={{
+//               display: "flex",
+//               alignItems: "flex-start",
+//               justifyContent: "flex-end",
+//             }}
+//           >
+//             <Typography
+//               variant="body1"
+//               sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//             >
+//               ₹ {fareData?.Fare?.Discount} 
+//             </Typography>
+//           </Box>
+//         </ListItem>
+//       </List>
+
+//       <Divider sx={{ my: 1 }} />
+//       <Box
+//         sx={{
+//           display: "flex",
+//           justifyContent: "space-between",
+//           mb: "10px",
+//         }}
+//       >
+//         <Typography
+//           variant="body1"
+//           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//         >
+//           Amount
+//         </Typography>
+//         <Typography
+//           variant="body1"
+//           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//         >
+//          ₹ {fareData?.Fare?.PublishedFare} 
+//         </Typography>
+//       </Box>
+
+//       <Box
+//         sx={{
+//           display: "flex",
+//           justifyContent: "space-between",
+//         }}
+//       >
+//         <Typography
+//           variant="body1"
+//           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//         >
+//           Service Fee
+//         </Typography>
+//         <Typography
+//           variant="body1"
+//           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//         >
+//           ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
+//             ? serviceFeeInFixed.toFixed(2)
+//             : serviceFeeInPercent.toFixed(2)}{" "}
+          
+//         </Typography>
+//       </Box>
+
+//       <Divider sx={{ my: 1 }} />
+//       <Box
+//         sx={{
+//           display: "flex",
+//           justifyContent: "space-between",
+         
+        
+          
+//         }}
+//       >
+//         <Typography
+//           variant="h6"
+
+//           sx={{ fontFamily: nunito.style, fontWeight: 700  }}
+//         >
+//           Grand Total
+//         </Typography>
+//         <Typography
+//           variant="h6"
+//           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+//         >
+//           ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
+//             ? (publishFare + serviceFeeInFixed).toFixed(2)
+//             : (publishFare + serviceFeeInPercent).toFixed(2)}{" "}
+          
+//         </Typography>
+//       </Box>
+//     </Paper>
+//   );
+// };
+
+// export default FareSummary;
+
+
 import React, { useState } from "react";
 import {
   Box,
@@ -12,6 +265,7 @@ import {
   ListItemText,
   Collapse,
   ListItemIcon,
+  boxShadow
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -19,19 +273,11 @@ import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubl
 import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
 import { nunito } from "@/utils/fonts";
 import { COMMISSION_TYPE } from "@/utils/enum";
-import useMealAndBaggagePrice from "@/custom-hook/useMealAndBaggagePrice";
+import { COLORS } from "@/utils/colors";
 
-const  FareSummary = ({ fareData, commission , toggleDrawer, selectMeal, selectBaggage }) => {
+const  FareSummary = ({ fareData, commission , toggleDrawer }) => {
   const [open, setOpen] = useState(false);
-
-  const mealPrice =  useMealAndBaggagePrice(selectMeal)
-  const mealBaggage =  useMealAndBaggagePrice(selectBaggage)
-  
-  const extraPrice = {
-    mealPrice : mealPrice.reduce((acc, singleMeal) => acc + singleMeal, 0),
-    baggagePrice: mealBaggage.reduce((acc, singleBaggage) => acc + singleBaggage, 0)
-  }
-
+  // console.log("commission", commission)
   const toggleCollapse = () => {
     setOpen(!open);
   };
@@ -201,30 +447,6 @@ const  FareSummary = ({ fareData, commission , toggleDrawer, selectMeal, selectB
         </Typography>
       </Box>
 
-      {(extraPrice.mealPrice!=0 && extraPrice.baggagePrice!=0) &&
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: "10px"
-        }}
-      >
-        <Typography
-          variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
-        >
-          Extra <Typography variant="caption">(Meal, Baggage and Seat)</Typography>
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
-        >
-          ₹  {(parseFloat(extraPrice.mealPrice) + parseFloat(extraPrice.baggagePrice)).toFixed(2)}
-              
-        </Typography>
-      </Box>}
-
-
       <Box
         sx={{
           display: "flex",
@@ -270,8 +492,8 @@ const  FareSummary = ({ fareData, commission , toggleDrawer, selectMeal, selectB
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
           ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
-            ? (publishFare + serviceFeeInFixed +(parseFloat(extraPrice.mealPrice) + parseFloat(extraPrice.baggagePrice)) ).toFixed(2) 
-            : (publishFare + serviceFeeInPercent + (parseFloat(extraPrice.mealPrice) + parseFloat(extraPrice.baggagePrice))).toFixed(2)}{" "}
+            ? (publishFare + serviceFeeInFixed).toFixed(2)
+            : (publishFare + serviceFeeInPercent).toFixed(2)}{" "}
           
         </Typography>
       </Box>

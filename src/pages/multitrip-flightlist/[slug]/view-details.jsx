@@ -32,7 +32,7 @@ import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
 import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
@@ -52,12 +52,15 @@ const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [flightDetails, setFlightDetails] = useState(null);
+  const isAuthenticated = useSelector((state) => state.USER.isAuthenticated);
+  // console.log('isAuthenticated',isAuthenticated)
   const [commission, setCommission] = useState(null);
   const [isLCC, setIsLCC] = useState(null);
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [verifiedData, setVerifiedData] = useState(null);
+  const [selectMeal, setSelectMeal] = useState({});
+    const [selectBaggage, setSelectBaggage] = useState({});
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -82,10 +85,10 @@ const FlightDetails = () => {
         .then((response) => {
           if (response?.data?.data) {
             setFlightDetails(response?.data?.data);
-            setIsLCC(response?.data?.data[0]?.Results?.IsLCC)
+            setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             // setOtherDetails(response?.data?.data[1]);
             setCommission(response?.data?.data[2]);
-            setJourney(response?.data?.data[3])
+            setJourney(response?.data?.data[3]);
             // console.log("multidetail", response?.data?.data);
 
             localStorage.setItem(
@@ -183,7 +186,7 @@ const FlightDetails = () => {
           </Grid2>
         ) : flightDetails ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
-            <Container sx={{ mt: "-70px" }}>
+            <Container sx={{ mt: "-70px", overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>
                 <Grid2 size={8}>
                   <Paper
@@ -487,15 +490,11 @@ const FlightDetails = () => {
 
                     {/* OTP Verification Start */}
 
-                    {!verifiedData ? (
+                    {!isAuthenticated ? (
                       <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                        <UserVerifyForm setVerifiedData={setVerifiedData} />
+                        <UserVerifyForm />
                       </Card>
-                    ) : null}
-
-                    {/* OTP verification end */}
-
-                    {verifiedData ? (
+                    ) : (
                       <Card sx={{ mb: "20px" }}>
                         <PassengerForm
                           sx={{
@@ -506,13 +505,22 @@ const FlightDetails = () => {
                           myState="multistate"
                           journey={journey}
                           isLCC={isLCC}
+                          selectMeal={selectMeal}
+                          selectBaggage={selectBaggage}
+                          setSelectBaggage={setSelectBaggage}
+                          setSelectMeal={setSelectMeal}
                         />
                       </Card>
-                    ) : null}
+                    )}
                   </Paper>
                 </Grid2>
 
-                <Grid2 size={4} sx={{ position: "sticky", top: "70px" }}>
+                <Grid2 size={4} sx={{
+                    position: "sticky",
+                    top: "75px",
+                    alignSelf: "start",
+                    overflow: "visible",
+                  }}>
                   <FareSummary
                     fareData={flightDetails[0]?.Results}
                     commission={commission}

@@ -8,7 +8,7 @@ import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import ToastBar from "@/components/toastBar";
 import AddForm from "../AddForm";
@@ -16,7 +16,16 @@ import GstForm from "../GstForm";
 import PassengerFields from "../PassengerFields";
 import FullScreenDialog from "../ssr/oneway/seats/FullScreenDialog";
 
-const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,selectMeal,selectBaggage,setSelectBaggage,setSelectMeal }) => {
+const InternationalPassengerForm = ({
+  flightDetails,
+  myState,
+  journey,
+  isLCC,
+  selectMeal,
+  selectBaggage,
+  setSelectBaggage,
+  setSelectMeal,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -28,8 +37,14 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
-  console.log("flightDetails", flightDetails[1]?.Response)
+  console.log("flightDetails", flightDetails[1]?.Response);
 
+  const selectedSeats = useSelector(
+    (state) => state.SeatsInformation?.seats || []
+  );
+
+  const adultSeats = selectedSeats.slice(0, adultCount);
+  const childSeats = selectedSeats.slice(adultCount, adultCount + childCount);
   const {
     Currency,
     BaseFare,
@@ -46,8 +61,6 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
     TdsOnIncentive,
     ServiceFee,
   } = flightDetails?.[0]?.Results?.Fare || {};
-
-
 
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
@@ -210,6 +223,7 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
           ff_number: null,
           MealDynamic: selectMeal[`adult-${index}`] || null,
           Baggage: selectBaggage[`adult-${index}`] || null,
+          SeatDynamic: adultSeats[index] || null,
         })) || [],
       child:
         values?.child?.map((passenger, index) => ({
@@ -220,6 +234,7 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
           ff_number: null,
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
+          SeatDynamic: childSeats[index] || null,
         })) || [],
       infant:
         values?.infant?.map((passenger, index) => ({
@@ -228,7 +243,6 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-        
         })) || [],
     };
 
@@ -251,6 +265,15 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
 
       bookingPromise
         .then((response) => {
+          console.log("Booking Response:", response);
+          // adding order_id and amount to the session storage for completing the paymount
+          sessionStorage.setItem(
+            "payment_info",
+            JSON.stringify({
+              custom_order_id: response.data.response.custom_order_id,
+              amount: response.data.response.amount,
+            })
+          );
           if (response) {
             dispatch(
               setToast({
@@ -261,7 +284,9 @@ const InternationalPassengerForm = ({ flightDetails, myState, journey, isLCC,sel
             );
             setLoading(false);
             setTimeout(() => {
-              router.push(`/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`);
+              router.push(
+                `/roundtrip-flightlist/${payload?.trace_id}/roundtrip-checkout`
+              );
             }, 1500);
           }
         })
