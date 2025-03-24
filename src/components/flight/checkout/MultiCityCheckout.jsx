@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
 import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
+import Loader from "@/utils/Loader";
 
 export default function OneWayCheckout() {
   const router = useRouter();
@@ -32,18 +33,17 @@ export default function OneWayCheckout() {
   const [passengerCount, setPassengerCount] = useState(null);
   const [paymentPayload, setPaymentPayload] = useState(null);
 
-
-    useEffect(() => {
-      if (sessionStorage.getItem("payment_info")) {
-        let payment_credentials = JSON.parse(
-          sessionStorage.getItem("payment_info")
-        );
-        console.log("payment_credentials on payment page:", payment_credentials);
-        setPaymentPayload({ ...payment_credentials, currency: "INR" });
-      } else {
-        router.back();
-      }
-    }, []);
+  useEffect(() => {
+    if (sessionStorage.getItem("payment_info")) {
+      let payment_credentials = JSON.parse(
+        sessionStorage.getItem("payment_info")
+      );
+      console.log("payment_credentials on payment page:", payment_credentials);
+      setPaymentPayload({ ...payment_credentials, currency: "INR" });
+    } else {
+      router.back();
+    }
+  }, []);
 
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("multitripflightDetails");
@@ -55,7 +55,7 @@ export default function OneWayCheckout() {
       setPassengerCount(JSON.parse(storedPassengerCount));
     }
     if (!isAuthenticated || !storedFlightDetails) {
-      router.replace('/login');
+      router.replace("/login");
     } else {
       setLoading(false);
     }
@@ -63,24 +63,22 @@ export default function OneWayCheckout() {
 
   // console.log("checkout details:", multiCity);
 
-
-    function handlePay() {
-      setLoading(true);
-      paymentController
-        .paymentInit(paymentPayload)
-        .then((response) => {
-          setLoading(false)
-          console.log("payment response: ", response);
-          if (response?.data?.data?.short_url) {
-            router.replace(response?.data?.data?.short_url)
-          }
-        })
-        .catch((error) => {
-          setLoading(false)
-          console.log("Payment Response Error:", error.message);
-        });
-    }
-  
+  function handlePay() {
+    setLoading(true);
+    paymentController
+      .paymentInit(paymentPayload)
+      .then((response) => {
+        setLoading(false);
+        console.log("payment response: ", response);
+        if (response?.data?.data?.short_url) {
+          router.replace(response?.data?.data?.short_url);
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log("Payment Response Error:", error.message);
+      });
+  }
 
   return (
     <>
@@ -149,287 +147,283 @@ export default function OneWayCheckout() {
 
                     {/* fare details */}
 
-                    {multiCity[0]?.Results?.Segments?.map(
-                      (flight, index) => {
-                        return (
-                          <Card
-                            sx={{ padding: "20px", marginBottom: "20px" }}
-                            key={index}
-                          >
-                            <Grid2 container>
-                              <Grid2 size={{ xs: 8 }}>
-                                <Typography
-                                  variant="h6"
-                                  gutterBottom
-                                  sx={{
+                    {multiCity[0]?.Results?.Segments?.map((flight, index) => {
+                      return (
+                        <Card
+                          sx={{ padding: "20px", marginBottom: "20px" }}
+                          key={index}
+                        >
+                          <Grid2 container>
+                            <Grid2 size={{ xs: 8 }}>
+                              <Typography
+                                variant="h6"
+                                gutterBottom
+                                sx={{
+                                  fontFamily: nunito.style,
+                                  fontSize: "20px",
+                                  fontWeight: 700,
+                                }}
+                              >
+                                {`${flight[0]?.Origin?.Airport?.CityName}`} →{" "}
+                                {`${
+                                  flight[flight.length - 1]?.Destination
+                                    ?.Airport?.CityName
+                                }`}
+                              </Typography>
+                              <Typography
+                                variant="subtitle1"
+                                gutterBottomx
+                                sx={{ marginBottom: "10px" }}
+                              >
+                                <span
+                                  style={{
+                                    backgroundColor: "#FFEDD1",
+                                    padding: "5px",
+                                    borderRadius: "4px",
                                     fontFamily: nunito.style,
-                                    fontSize: "20px",
-                                    fontWeight: 700,
                                   }}
                                 >
-                                  {`${flight[0]?.Origin?.Airport?.CityName}`} →{" "}
-                                  {`${
-                                    flight[flight.length - 1]?.Destination
-                                      ?.Airport?.CityName
-                                  }`}
-                                </Typography>
-                                <Typography
-                                  variant="subtitle1"
-                                  gutterBottomx
-                                  sx={{ marginBottom: "10px" }}
-                                >
-                                  <span
-                                    style={{
-                                      backgroundColor: "#FFEDD1",
-                                      padding: "5px",
-                                      borderRadius: "4px",
-                                      fontFamily: nunito.style,
-                                    }}
-                                  >
-                                    {moment(
-                                      `${flight[0].Origin.DepTime}`
-                                    ).format("ddd, MMM D")}
-                                  </span>{" "}
-                                  {`${flight.length - 1} Stop.`}{" "}
-                                  {`${Math.floor(
-                                    moment
-                                      .duration(
-                                        flight[flight.length - 1]
-                                          .AccumulatedDuration,
-                                        "minutes"
-                                      )
-                                      .asHours()
-                                  )} hrs ${moment
+                                  {moment(`${flight[0].Origin.DepTime}`).format(
+                                    "ddd, MMM D"
+                                  )}
+                                </span>{" "}
+                                {`${flight.length - 1} Stop.`}{" "}
+                                {`${Math.floor(
+                                  moment
                                     .duration(
                                       flight[flight.length - 1]
                                         .AccumulatedDuration,
                                       "minutes"
                                     )
-                                    .minutes()} min`}
-                                </Typography>
-                              </Grid2>
-                              <Grid2
-                                size={{ xs: 4 }}
-                                sx={{
-                                  display: "flex",
-                                  alignItems: "flex-start",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                              </Grid2>
+                                    .asHours()
+                                )} hrs ${moment
+                                  .duration(
+                                    flight[flight.length - 1]
+                                      .AccumulatedDuration,
+                                    "minutes"
+                                  )
+                                  .minutes()} min`}
+                              </Typography>
                             </Grid2>
-                            <Divider />
+                            <Grid2
+                              size={{ xs: 4 }}
+                              sx={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                justifyContent: "flex-end",
+                              }}
+                            ></Grid2>
+                          </Grid2>
+                          <Divider />
 
-                            {flight?.map((singleFlight, index) => {
-                              return (
-                                <>
-                                  <Box key={index}>
+                          {flight?.map((singleFlight, index) => {
+                            return (
+                              <>
+                                <Box key={index}>
+                                  <Grid2
+                                    container
+                                    spacing={1}
+                                    sx={{ marginTop: "10px" }}
+                                  >
                                     <Grid2
-                                      container
-                                      spacing={1}
-                                      sx={{ marginTop: "10px" }}
+                                      size={{ xs: 12 }}
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "5px",
+                                      }}
                                     >
-                                      <Grid2
-                                        size={{ xs: 12 }}
+                                      <Image
+                                        src={singleFlight?.AirlineLogo}
+                                        alt="Image"
+                                        width={30}
+                                        height={30}
+                                      />
+                                      <Typography
+                                        variant="subtitle1"
+                                        gutterBottom
+                                        sx={{
+                                          fontFamily: nunito.style,
+                                          fontWeight: 600,
+                                        }}
+                                      >
+                                        {singleFlight?.Airline?.AirlineName}{" "}
+                                        {singleFlight?.Airline?.AirlineCode}{" "}
+                                        {singleFlight?.Airline?.FlightNumber}
+                                      </Typography>
+                                    </Grid2>
+                                    <Grid2
+                                      size={{ xs: 12 }}
+                                      sx={{
+                                        backgroundColor: "#F4F4F4",
+                                        padding: "15px",
+                                        borderRadius: "4px",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="body1"
+                                        sx={{
+                                          fontWeight: 700,
+                                          fontFamily: nunito.style,
+                                        }}
+                                      >
+                                        {moment(
+                                          singleFlight?.Origin?.DepTime
+                                        ).format("HH:mm")}{" "}
+                                        -{" "}
+                                        {
+                                          singleFlight?.Origin?.Airport
+                                            ?.CityName
+                                        }{" "}
+                                        (
+                                        {
+                                          singleFlight?.Origin?.Airport
+                                            ?.AirportCode
+                                        }
+                                        )
+                                      </Typography>
+                                      <Typography
+                                        variant="body1"
                                         sx={{
                                           display: "flex",
                                           alignItems: "center",
-                                          gap: "5px",
+                                          gap: "10px",
+                                          marginLeft: "65px",
                                         }}
                                       >
-                                        <Image
-                                          src={singleFlight?.AirlineLogo}
-                                          alt="Image"
-                                          width={30}
-                                          height={30}
-                                        />
-                                        <Typography
-                                          variant="subtitle1"
-                                          gutterBottom
-                                          sx={{
-                                            fontFamily: nunito.style,
-                                            fontWeight: 600,
-                                          }}
-                                        >
-                                          {singleFlight?.Airline?.AirlineName}{" "}
-                                          {singleFlight?.Airline?.AirlineCode}{" "}
-                                          {singleFlight?.Airline?.FlightNumber}
-                                        </Typography>
-                                      </Grid2>
-                                      <Grid2
-                                        size={{ xs: 12 }}
-                                        sx={{
-                                          backgroundColor: "#F4F4F4",
-                                          padding: "15px",
-                                          borderRadius: "4px",
-                                        }}
-                                      >
-                                        <Typography
-                                          variant="body1"
-                                          sx={{
-                                            fontWeight: 700,
-                                            fontFamily: nunito.style,
-                                          }}
-                                        >
-                                          {moment(
-                                            singleFlight?.Origin?.DepTime
-                                          ).format("HH:mm")}{" "}
-                                          -{" "}
-                                          {
-                                            singleFlight?.Origin?.Airport
-                                              ?.CityName
-                                          }{" "}
-                                          (
-                                          {
-                                            singleFlight?.Origin?.Airport
-                                              ?.AirportCode
-                                          }
-                                          )
-                                        </Typography>
-                                        <Typography
-                                          variant="body1"
-                                          sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "10px",
-                                            marginLeft: "65px",
-                                          }}
-                                        >
-                                          <img
-                                            src={pointerImage.src}
-                                            style={{ width: "16px" }}
-                                          />{" "}
-                                          {`${Math.floor(
-                                            moment
-                                              .duration(
-                                                singleFlight?.Duration,
-                                                "minutes"
-                                              )
-                                              .asHours()
-                                          )} hrs : ${moment
+                                        <img
+                                          src={pointerImage.src}
+                                          style={{ width: "16px" }}
+                                        />{" "}
+                                        {`${Math.floor(
+                                          moment
                                             .duration(
                                               singleFlight?.Duration,
                                               "minutes"
                                             )
-                                            .minutes()} min`}
-                                        </Typography>
-                                        <Typography
-                                          variant="body1"
-                                          sx={{
-                                            fontWeight: 700,
-                                            fontFamily: nunito.style,
-                                          }}
-                                        >
-                                          {moment(
-                                            singleFlight?.Destination?.ArrTime
-                                          ).format("HH:mm")}{" "}
-                                          -{" "}
-                                          {
-                                            singleFlight?.Destination?.Airport
-                                              ?.CityName
-                                          }{" "}
-                                          (
-                                          {
-                                            singleFlight?.Destination?.Airport
-                                              ?.AirportCode
-                                          }
+                                            .asHours()
+                                        )} hrs : ${moment
+                                          .duration(
+                                            singleFlight?.Duration,
+                                            "minutes"
                                           )
-                                        </Typography>
-                                      </Grid2>
-
-                                      <Grid2
-                                        size={{ xs: 12 }}
+                                          .minutes()} min`}
+                                      </Typography>
+                                      <Typography
+                                        variant="body1"
                                         sx={{
-                                          display: "flex",
-                                          gap: "20px",
-                                          flexWrap: "wrap",
-                                          backgroundColor: "#FFEDD1",
-                                          padding: "5px",
-                                          borderRadius: "4px",
+                                          fontWeight: 700,
+                                          fontFamily: nunito.style,
                                         }}
                                       >
-                                        <Typography
-                                          variant="body2"
-                                          sx={{
-                                            fontFamily: nunito.style,
-                                            fontWeight: 500,
-                                          }}
-                                        >
-                                          <strong>Baggage :</strong>{" "}
-                                          {singleFlight?.Baggage}
-                                        </Typography>
-                                        <Typography
-                                          variant="body2"
-                                          sx={{
-                                            fontFamily: nunito.style,
-                                            fontWeight: 500,
-                                          }}
-                                        >
-                                          <strong>Cabin Baggage :</strong>{" "}
-                                          {singleFlight?.CabinBaggage}
-                                        </Typography>
-                                      </Grid2>
+                                        {moment(
+                                          singleFlight?.Destination?.ArrTime
+                                        ).format("HH:mm")}{" "}
+                                        -{" "}
+                                        {
+                                          singleFlight?.Destination?.Airport
+                                            ?.CityName
+                                        }{" "}
+                                        (
+                                        {
+                                          singleFlight?.Destination?.Airport
+                                            ?.AirportCode
+                                        }
+                                        )
+                                      </Typography>
                                     </Grid2>
-                                    <Divider />
-                                  </Box>
 
-                                  {index == flight.length - 2 ? (
-                                    <>
-                                      <Box
+                                    <Grid2
+                                      size={{ xs: 12 }}
+                                      sx={{
+                                        display: "flex",
+                                        gap: "20px",
+                                        flexWrap: "wrap",
+                                        backgroundColor: "#FFEDD1",
+                                        padding: "5px",
+                                        borderRadius: "4px",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="body2"
                                         sx={{
-                                          marginBottom: "10px",
-                                          borderLeft: "2px dashed",
-                                          paddingLeft: "20px",
+                                          fontFamily: nunito.style,
+                                          fontWeight: 500,
                                         }}
                                       >
-                                        <Typography
-                                          variant="body2"
-                                          sx={{
-                                            marginTop: "10px",
-                                            color: "orange",
-                                            fontWeight: 600,
-                                            fontFamily: nunito.style,
-                                          }}
-                                        >
-                                          Change of Planes
-                                        </Typography>
-                                        <Typography
-                                          variant="body2"
-                                          sx={{
-                                            marginTop: "10px",
-                                            fontWeight: 700,
-                                            fontFamily: nunito.style,
-                                          }}
-                                        >
-                                          {`${moment
-                                            .utc(
+                                        <strong>Baggage :</strong>{" "}
+                                        {singleFlight?.Baggage}
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{
+                                          fontFamily: nunito.style,
+                                          fontWeight: 500,
+                                        }}
+                                      >
+                                        <strong>Cabin Baggage :</strong>{" "}
+                                        {singleFlight?.CabinBaggage}
+                                      </Typography>
+                                    </Grid2>
+                                  </Grid2>
+                                  <Divider />
+                                </Box>
+
+                                {index == flight.length - 2 ? (
+                                  <>
+                                    <Box
+                                      sx={{
+                                        marginBottom: "10px",
+                                        borderLeft: "2px dashed",
+                                        paddingLeft: "20px",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="body2"
+                                        sx={{
+                                          marginTop: "10px",
+                                          color: "orange",
+                                          fontWeight: 600,
+                                          fontFamily: nunito.style,
+                                        }}
+                                      >
+                                        Change of Planes
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{
+                                          marginTop: "10px",
+                                          fontWeight: 700,
+                                          fontFamily: nunito.style,
+                                        }}
+                                      >
+                                        {`${moment
+                                          .utc(
+                                            moment(
+                                              flight[index + 1]?.Origin.DepTime,
+                                              "YYYY-MM-DD HH:mm"
+                                            ).diff(
                                               moment(
-                                                flight[index + 1]?.Origin
-                                                  .DepTime,
+                                                flight[index]?.Destination
+                                                  .ArrTime,
                                                 "YYYY-MM-DD HH:mm"
-                                              ).diff(
-                                                moment(
-                                                  flight[index]?.Destination
-                                                    .ArrTime,
-                                                  "YYYY-MM-DD HH:mm"
-                                                )
                                               )
                                             )
-                                            .format("H[h] : m[m]")}`}{" "}
-                                          Layover in{" "}
-                                          {`${flight[index]?.Destination?.Airport?.AirportName}`}
-                                        </Typography>
-                                      </Box>
-                                      <Divider />
-                                    </>
-                                  ) : null}
-                                </>
-                              );
-                            })}
-                          </Card>
-                        );
-                      }
-                    )}
+                                          )
+                                          .format("H[h] : m[m]")}`}{" "}
+                                        Layover in{" "}
+                                        {`${flight[index]?.Destination?.Airport?.AirportName}`}
+                                      </Typography>
+                                    </Box>
+                                    <Divider />
+                                  </>
+                                ) : null}
+                              </>
+                            );
+                          })}
+                        </Card>
+                      );
+                    })}
 
                     <Box
                       sx={{
@@ -690,15 +684,16 @@ export default function OneWayCheckout() {
                         cursor: loading ? "not-allowed" : "pointer",
                       }}
                     >
-                     {loading ? (
-                                   <Loading
-                                     type="spin"
-                                     width={25} height={25}
-                                     color={COLORS.WHITE}
-                                   />
-                                 ) : (
-                                   "Pay Now"
-                                 )}
+                      {loading ? (
+                        <Loading
+                          type="spin"
+                          width={25}
+                          height={25}
+                          color={COLORS.WHITE}
+                        />
+                      ) : (
+                        "Pay Now"
+                      )}
                     </Button>
                   </Stack>
                 </Grid2>
@@ -706,7 +701,19 @@ export default function OneWayCheckout() {
             </Container>
           </Grid2>
         </Grid2>
-      ) : null}
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "50px",
+            marginBottom: "50px",
+          }}
+        >
+          <Loader open={true} />
+        </Box>
+      )}
     </>
   );
 }

@@ -100,7 +100,7 @@ export const data = {
     {
       img: flight,
       title: "Flight",
-      url: "/flight-list",
+      url: "/flight",
     },
     {
       img: hotels,
