@@ -10,13 +10,14 @@ import foodImage from "@/../public/images/food.png";
 export default function MealCard({ meal, handleMealValue, isSelected }) {
   return (
     <Grid2 container spacing={1} component={Card} sx={{ maxHeight: "150px" }}>
-      {/* <Grid2 size={12} sx={{px:2, pt:1}}>
+      <Grid2 size={12} sx={{px:2, pt:1}}>
+        {meal?.Origin &&
         <Typography variant="body1"
           sx={{
             fontFamily: nunito.style,
             fontWeight: 700,
-          }}>{`${meal?.Origin} - ${meal?.Destination}`}</Typography>
-      </Grid2> */}
+          }}>{`${meal?.Origin} - ${meal?.Destination}`}</Typography>}
+      </Grid2>
       <Grid2
         size={4}
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}

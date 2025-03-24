@@ -469,6 +469,7 @@ const PassengerForm = ({
                   touched={touched}
                 />
 
+                {(journey?.journey_type===JOURNEY_TYPE.ONEWAY)  &&
                 <Box
                   sx={{
                     display: "flex",
@@ -477,7 +478,7 @@ const PassengerForm = ({
                   }}
                 >
                   <FullScreenDialog />
-                </Box>
+                </Box>}
 
                 <Box
                   sx={{

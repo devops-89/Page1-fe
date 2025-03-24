@@ -13,6 +13,7 @@ export default function MealSelection({
   mealData,
   handleMealValue,
   selectMeal,
+  isLCC,
 }) {
   // console.log("mealData", mealData);
 
@@ -40,28 +41,61 @@ export default function MealSelection({
             Meal
           </Typography>
         </AccordionSummary>
-        <AccordionDetails sx={{ p: 1, maxHeight: "240px", overflowY: "auto" }}>
-          {mealData?.map((singleMeal, mealIndex) => {
-        return (
-          <>
-            <Grid2
-              container
-              spacing={2}
-              sx={{ flexWrap: "wrap" }}
-              key={mealIndex}
-            >
-              {singleMeal?.map((meal, mealIndex) => {
-                return (
-                  <Grid2 size={{lg:6 ,xs:12}}>
-                    <MealCard meal={meal} key={mealIndex} handleMealValue={handleMealValue} isSelected={selectMeal?.Code === meal.Code}/>
+        {isLCC ? (
+          <AccordionDetails
+            sx={{ p: 1, maxHeight: "240px", overflowY: "auto" }}
+          >
+            {mealData?.map((singleMeal, mealIndex) => {
+              return (
+                <>
+                  <Grid2
+                    container
+                    spacing={2}
+                    sx={{ flexWrap: "wrap" }}
+                    key={mealIndex}
+                  >
+                    {singleMeal?.map((meal, mealIndex) => {
+                      return (
+                        <Grid2 size={{ lg: 6, xs: 12 }}>
+                          <MealCard
+                            meal={meal}
+                            key={mealIndex}
+                            handleMealValue={handleMealValue}
+                            isSelected={selectMeal?.Code === meal.Code}
+                          />
+                        </Grid2>
+                      );
+                    })}
                   </Grid2>
-                );
-              })}
-            </Grid2>
-          </>
-        );
-      })}
-        </AccordionDetails>
+                </>
+              );
+            })}
+          </AccordionDetails>
+        ) : (
+          <AccordionDetails
+            sx={{ p: 1, maxHeight: "240px", overflowY: "auto" }}
+          >
+                  <Grid2
+                    container
+                    spacing={2}
+                    sx={{ flexWrap: "wrap" }}
+                  >
+                    {mealData?.map((meal, mealIndex) => {
+                      return (
+                        <Grid2 size={{ lg: 6, xs: 12 }}>
+                          <MealCard
+                            meal={meal}
+                            key={mealIndex}
+                            handleMealValue={handleMealValue}
+                            isSelected={selectMeal?.Code === meal.Code}
+                          />
+                        </Grid2>
+                      );
+                    })}
+                  </Grid2>
+              
+          </AccordionDetails>
+        )}
       </Accordion>
     </>
   );

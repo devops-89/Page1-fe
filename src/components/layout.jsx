@@ -16,7 +16,8 @@ const Layout = ({ children }) => {
       router.pathname === "/register" ||
       router.pathname === "/login" ||
       router.pathname === "/verifyOTP" ||
-      router.pathname === "/forget-password"
+      router.pathname === "/forget-password" ||
+      router.pathname === "/payment/success"
     ) {
       setShow(false);
     } else {

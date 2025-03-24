@@ -78,8 +78,7 @@ export default function OneWayCheckout() {
         setLoading(false);
         console.log("payment response: ", response);
         if (response?.data?.data?.short_url) {
-          const url = response.data.data.short_url;
-          window.open(url, "_blank");
+          router.replace(response.data.data.short_url)
         }
       })
       .catch((error) => {
