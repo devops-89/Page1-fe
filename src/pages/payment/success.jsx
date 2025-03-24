@@ -30,7 +30,7 @@ export default function PaymentSuccess() {
   const router = useRouter();
 
   const handleContinue = () => {
-    router.push("/");
+    router.replace("/");
   };
 
   return (
