@@ -275,9 +275,7 @@ const Multiway = () => {
             dispatch(
                 setToast({
                     open: true,
-                    message: `Please Enter the Required Fields : ${emptyFields.join(
-                        ", "
-                    )}`,
+                    message: `Please Enter the Required Fields`,
                     severity: TOAST_STATUS.ERROR,
                 })
             );

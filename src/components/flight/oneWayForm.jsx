@@ -176,7 +176,7 @@ const OnewayForm = () => {
       dispatch(
         setToast({
           open: true,
-          message: `Please Enter the Required Fields : ${emptyFields}`,
+          message: `Please Enter the Required Fields`,
           severity: TOAST_STATUS.ERROR,
         })
       );
