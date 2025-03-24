@@ -94,8 +94,8 @@ const RegistrationForm = () => {
   });
 
   return (
-    <div>
-      <Box sx={{ p: 2 }}>
+    <div >
+      <Box sx={{ p: 2  }}>
         <Typography
           sx={{
             fontSize: 20,

@@ -409,7 +409,7 @@ const FlightList = () => {
 
             {/* Round Flight List Data Domestic and International  */}
             {journey === "INTERNATIONAL" ? (
-              <Grid2 size={9} container>
+              <Grid2 size={{lg:9 , xs:12}} container>
                 <Grid2 size={12}>
                   <Box
                     sx={{
@@ -437,7 +437,7 @@ const FlightList = () => {
                     >{`${flightList.flight_list.departure_flights.length} flights available`}</Typography>
                   </Box>
                   {flightList?.flight_list?.departure_flights.map((val, i) => (
-                    <Grid2 size={12} key={i}>
+                    <Grid2 size={12} key={i} >
                       <InternationalRoundFlightBox
                         details={val}
                         traceId={traceId}
@@ -586,7 +586,7 @@ const FlightList = () => {
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                    <Grid2 size={12} border={1}>
+                    <Grid2 size={12} >
                     <Box
                       sx={{
                         display: "flex",
@@ -594,14 +594,7 @@ const FlightList = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: 700,
-                          fontFamily: nunito.style,
-                          mb: "20px",
-                        }}
-                      >{`${flightList.destination} - ${flightList.origin}`}</Typography>
+                      
 
                       <Typography
                         variant="body2"
@@ -706,7 +699,7 @@ const FlightList = () => {
         >
           <Grid2 size={3}></Grid2>
           <Grid2
-            size={9}
+            size={{lg:9 , xs:12}}
             spacing={3}
             container
             sx={{
@@ -719,7 +712,7 @@ const FlightList = () => {
             }}
           >
             {/* Onward */}
-            <Grid2 size={4} sx={{ borderRight: `1px solid` }}>
+            <Grid2 size={{lg:4 , md:4 ,sm:12 , xs:12}}  sx={{ borderRight: {lg:"`1px solid`" , sm:"none"} }}>
               <Stack direction={"row"} spacing={1} sx={{ mb: 1 }}>
                 <Typography
                   variant="body1"
@@ -784,7 +777,7 @@ const FlightList = () => {
             </Grid2>
 
             {/* Return  */}
-            <Grid2 size={4} sx={{ borderRight: `1px solid` }}>
+            <Grid2 size={{lg:4 , md:4 ,sm:12 , xs:12}} sx={{ borderRight: {lg:"`1px solid`" , sm:"none"} }}>
               <Stack direction={"row"} spacing={1} sx={{ mb: 1 }}>
                 <Typography
                   variant="body1"
@@ -848,12 +841,12 @@ const FlightList = () => {
             </Grid2>
 
             <Grid2
-              size={4}
+              size={{lg:4 , md:4 ,sm:12 , xs:12}}
               sx={{
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
-                justifyContent: "flex-end",
+                justifyContent: {lg:"flex-end" , xs:"space-between"},
               }}
             >
               <Typography
