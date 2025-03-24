@@ -53,16 +53,16 @@ const Banner = () => {
               sx={{
                 backgroundImage: `url(${val.img})`,
                
-                height: {xs:'130vh', sm:"140vh",md:'140vh', lg:'140vh'},
+                height: {xs:'1300vh', sm:"140vh",md:'140vh', lg:'140vh'},
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
                 "@media (max-width: 414px)": {
-                  height: "120vh", // Specific fix for 414px width
+                  height: "125vh", // Specific fix for 414px width
                 },
 
                 "@media (min-width: 415px) and (max-width: 768px)": {
-                   height: "170vh", // Adjustment for screens between 415px and 768px
+                   height: "100vh", // Adjustment for screens between 415px and 768px
                     },
 
                     "@media (min-width: 769px)": {
