@@ -24,6 +24,7 @@ import FareSummary from "../FareSummary";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
+import Loader from "@/utils/Loader";
 
 export default function OneWayCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
@@ -78,7 +79,7 @@ export default function OneWayCheckout() {
         setLoading(false);
         console.log("payment response: ", response);
         if (response?.data?.data?.short_url) {
-          router.replace(response.data.data.short_url)
+          router.replace(response.data.data.short_url);
         }
       })
       .catch((error) => {
@@ -715,7 +716,19 @@ export default function OneWayCheckout() {
             </Container>
           </Grid2>
         </Grid2>
-      ) : null}
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "50px",
+            marginBottom: "50px",
+          }}
+        >
+          <Loader open={true} />
+        </Box>
+      )}
     </>
   );
 }
