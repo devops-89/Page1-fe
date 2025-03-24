@@ -22,14 +22,14 @@ export default function Home() {
        <Box>
         
         <Banner />
-        <Box>
+        <Box >
           <Services />
         </Box>
         <Box sx={{ backgroundColor: COLORS.LIGHTBLUE }}>
           
          <AboutUs/>
         </Box>
-        <Box sx={{ pt: {lg:10,md:5} }}>
+        <Box sx={{ pt:10}}>
            <Festivals /> 
         </Box>
         <Box sx={{ pt: 10 }}>
@@ -38,10 +38,10 @@ export default function Home() {
         <Box  sx={{ pt:10 }}>
           <Hotel /> 
         </Box>
-        <Box sx={{ pt: {lg:10,md:5} }}>
+        <Box sx={{ pt: 10 }}>
           <Testimonials />
         </Box>
-        <Box sx={{ pt: {lg:10,md:5} }}>
+        <Box sx={{ pt:10 }}>
           <Faq />
         </Box>
       </Box> 
