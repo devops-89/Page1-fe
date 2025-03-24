@@ -1,8 +1,10 @@
+import {useState,useEffect} from "react";
 import { Container, Typography, Paper, Button, Box } from "@mui/material";
 import { CheckCircle } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { keyframes } from "@emotion/react";
 import { COLORS } from "@/utils/colors";
+
 
 const fadeInUp = keyframes`
   from {
@@ -27,7 +29,16 @@ const scaleIn = keyframes`
 `;
 
 export default function PaymentSuccess() {
+
+
   const router = useRouter();
+  const [paymentInfo,setPaymentInfo]=useState(null);
+  
+useEffect(()=>{
+  if(sessionStorage.getItem("payment_info")){
+       setPaymentInfo(JSON.parse(paymentInfo));
+  }
+})
 
   const handleContinue = () => {
     router.replace("/");
@@ -68,7 +79,7 @@ export default function PaymentSuccess() {
           {/* Payment Details */}
           <Paper sx={{ p: 2, mt: 2, bgcolor: "#f5f5f5", borderRadius: 2 }}>
             <Typography variant="body2"><strong>Transaction ID:</strong> #123456789</Typography>
-            <Typography variant="body2"><strong>Amount Paid:</strong> $399.99</Typography>
+            <Typography variant="body2"><strong>Amount Paid:</strong> ${paymentInfo?.amount}</Typography>
             <Typography variant="body2"><strong>Payment Method:</strong> Visa Card</Typography>
           </Paper>
 
