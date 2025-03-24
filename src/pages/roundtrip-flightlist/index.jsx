@@ -409,7 +409,7 @@ const FlightList = () => {
 
             {/* Round Flight List Data Domestic and International  */}
             {journey === "INTERNATIONAL" ? (
-              <Grid2 size={9} container>
+              <Grid2 size={{lg:9 , xs:12}} container>
                 <Grid2 size={12}>
                   <Box
                     sx={{
@@ -437,7 +437,7 @@ const FlightList = () => {
                     >{`${flightList.flight_list.departure_flights.length} flights available`}</Typography>
                   </Box>
                   {flightList?.flight_list?.departure_flights.map((val, i) => (
-                    <Grid2 size={12} key={i}>
+                    <Grid2 size={12} key={i} >
                       <InternationalRoundFlightBox
                         details={val}
                         traceId={traceId}
@@ -712,7 +712,7 @@ const FlightList = () => {
             }}
           >
             {/* Onward */}
-            <Grid2 size={{lg:4 , md:4 ,sm:12 , xs:12}} sx={{ borderRight: `1px solid` }}>
+            <Grid2 size={{lg:4 , md:4 ,sm:12 , xs:12}}  sx={{ borderRight: {lg:"`1px solid`" , sm:"none"} }}>
               <Stack direction={"row"} spacing={1} sx={{ mb: 1 }}>
                 <Typography
                   variant="body1"
@@ -777,7 +777,7 @@ const FlightList = () => {
             </Grid2>
 
             {/* Return  */}
-            <Grid2 size={{lg:4 , md:4 ,sm:12 , xs:12}} sx={{ borderRight: `1px solid` }}>
+            <Grid2 size={{lg:4 , md:4 ,sm:12 , xs:12}} sx={{ borderRight: {lg:"`1px solid`" , sm:"none"} }}>
               <Stack direction={"row"} spacing={1} sx={{ mb: 1 }}>
                 <Typography
                   variant="body1"
@@ -846,7 +846,7 @@ const FlightList = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "10px",
-                justifyContent: {lg:"flex-end" , xs:"flex-start"},
+                justifyContent: {lg:"flex-end" , xs:"space-between"},
               }}
             >
               <Typography

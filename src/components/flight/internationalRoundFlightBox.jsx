@@ -67,7 +67,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
             <Card sx={{ boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)", p: 2, mb:4 }}>
                 <Grid2 container spacing={3}>
                     {/* left  */}
-                    <Grid2 size={6}>
+                    <Grid2 size={{lg:6 , xs:12}}>
                     <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:'10px'}}>Onward</Typography>
                     <Stack
                     direction={"row"}
@@ -244,7 +244,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                     </Grid2>
 
                     {/* right */}
-                    <Grid2 size={6}>
+                    <Grid2 size={{lg:6 ,xs:12}}>
                     <Typography variant="h6" sx={{fontWeight:700, fontFamily:nunito.style, mb:'10px'}}>Return</Typography>
                     <Stack
                     direction={"row"}
@@ -378,6 +378,9 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                     <Tabs
                         value={valueRight}
                         onChange={tabChangeHandlerRight}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        aria-label="scrollable auto tabs example"
                         sx={{
                             "& .Mui-selected": {
                                 color: `${COLORS.BLACK} !important`,
@@ -422,7 +425,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                 </Collapse>
                     </Grid2>
 
-                    <Grid2 size={12} container>
+                    <Grid2 size={12} container >
 
                     <Grid2 size={6}>
                     <Typography
@@ -439,7 +442,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                         </Typography>
                         </Grid2>
 
-                    <Grid2 size={6} sx={{display:'flex', justifyContent:'flex-end', gap:'10px', alignItems:'center'}}>
+                    <Grid2 size={{lg:6 , xs:12}} sx={{display:'flex', justifyContent: {lg:"flex-end" ,xs:"space-between"}, gap:'10px', alignItems:'center'}}>
                     <Typography
                             sx={{ fontSize: 22, fontWeight: 900, fontFamily: nunito.style }}
                         >
