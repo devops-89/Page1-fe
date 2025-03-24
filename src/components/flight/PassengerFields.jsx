@@ -376,6 +376,7 @@ const PassengerFields = ({
             {data?.MealDynamic && (
               <MealSelection
                 mealData={data?.MealDynamic}
+                isLCC={data?.isLCC}
                 handleMealValue={(meal) =>
                   handleMealValue(formType, index, meal)
                 }
