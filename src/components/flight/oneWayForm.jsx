@@ -53,11 +53,7 @@ const OnewayForm = () => {
     journey_type: JOURNEY_TYPE.ONEWAY,
     preferred_time: PREFERRED_TIME.AnyTime,
     origin: "",
-    originAirport: "",
-    originCity: "",
     destination: "",
-    destinationAirport: "",
-    destinationCity: "",
     departure_date: "",
     cabin_class: "1",
     adult: 1,
@@ -68,8 +64,6 @@ const OnewayForm = () => {
   };
 
   const [state, setState] = useState(initialState);
-
- 
 
   const dispatch = useDispatch();
   const [origin, setOrigin] = useState(null);
@@ -82,20 +76,7 @@ const OnewayForm = () => {
       setState({
         ...state,
         origin: newValue.iata_code,
-        originAirport: newValue.airport_name,
-        originCity: newValue.city_name,
       });
-    //   if(router.pathname===defaultRoute){
-    //   setNewFormData((prev)=>{
-    //     return ({
-    //       ...prev,
-    //       origin: newValue.iata_code,
-    //       originAirport: newValue.airport_name,
-    //       originCity: newValue.city_name,
-    //   })
-    //   })
-
-    // }
     }
   };
   const destinationHandler = (e, newValue) => {
@@ -104,8 +85,6 @@ const OnewayForm = () => {
       setState({
         ...state,
         destination: newValue.iata_code,
-        destinationAirport: newValue.airport_name,
-        destinationCity: newValue.city_name,
       });
    
     }
@@ -496,9 +475,7 @@ const OnewayForm = () => {
             }}
           >
             <TravellerSelector
-              anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
-              initialState={initialState}
               state={state}
               setState={setState}
               adultValue={adultValue}
@@ -507,8 +484,6 @@ const OnewayForm = () => {
               setInfantValue={setInfantValue}
               childValue={childValue}
               setChildValue={setChildValue}
-              initialValue={initialValue}
-              setIntialValue={setIntialValue}
             />
           </Popover>
           {/* popover end */}

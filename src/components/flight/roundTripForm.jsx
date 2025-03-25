@@ -41,11 +41,7 @@ const RoundTrip = () => {
     journey_type: JOURNEY_TYPE.ROUNDTRIP,
     preferred_time: PREFERRED_TIME.AnyTime,
     origin: "",
-    originAirport: "",
-    originCity: "",
     destination: "",
-    destinationAirport: "",
-    destinationCity: "",
     departure_date: "",
     return_date:"",
     cabin_class: "1",
@@ -73,7 +69,6 @@ const RoundTrip = () => {
   const [returnDate, setReturnDate] = useState(null);
   const [cabin_class, setCabinClass] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [newFormData, setNewFormData] = useState(null);
   const [defaultRoute, setDefaultRoute]= useState('/roundtrip-flightlist')
   const [loading, setLoading] = useState(true);
 
@@ -88,17 +83,13 @@ const RoundTrip = () => {
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
     if (newValue) {
-      setState({ ...state, origin: newValue.iata_code,
-        originAirport: newValue.airport_name,
-        originCity: newValue.city_name, });
+      setState({ ...state, origin: newValue.iata_code });
     }
   };
   const destinationHandler = (e, newValue) => {
     setDestination(newValue);
     if (newValue) {
-      setState({ ...state, destination: newValue.iata_code,
-        destinationAirport: newValue.airport_name,
-        destinationCity: newValue.city_name, });
+      setState({ ...state, destination: newValue.iata_code });
     }
   };
 
@@ -135,13 +126,6 @@ const RoundTrip = () => {
   
   
 
-  useEffect(() => {
-    if (localStorage.getItem("state")) {
-      // console.log(localStorage.getItem("state"));
-      setNewFormData(JSON.parse(localStorage.getItem("roundState")));
-    }
-  }, []);
-
   const getAllAirport = () => {
     flightController
       .getAllAirports()
@@ -163,7 +147,7 @@ const RoundTrip = () => {
       .then((res) => {
         let response = res.data.data;
         dispatch(setFlightDetails({ ...response }));
-        console.log("response ", response)
+        // console.log("response ", response)
         localStorage.setItem("roundflightData", JSON.stringify(response));
         setButtonLoading(false);
         router.pathname !== defaultRoute
@@ -218,12 +202,7 @@ const RoundTrip = () => {
 
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      if(router.pathname===defaultRoute && newFormData){
-        return val.value == newFormData.cabin_class;
-      }
-      else{
-        return val.value == state.cabin_class;
-      }  
+      return val.value == state.cabin_class;
     });
 
       setCabinClass(cabinClass);
@@ -237,31 +216,7 @@ const RoundTrip = () => {
   };
 
 
-    useEffect(() => {
-      if (router.pathname === defaultRoute) {
-        if (newFormData) {
-          setOrigin({
-            airport_name: newFormData.originAirport,
-            city_name: newFormData.originCity,
-            iata_code: newFormData.origin,
-          });
-          setDestination({
-            airport_name: newFormData.destinationAirport,
-            city_name: newFormData.destinationCity,
-            iata_code: newFormData.destination,
-          });
-          setDepartureDate(moment(newFormData.departure_date));
-          setReturnDate(moment(newFormData.return_date));
-          setAdultValue(newFormData.adult);
-          setChildValue(newFormData.child);
-          setInfantValue(newFormData.infant);
-          setState((prev)=>({
-            ...prev,
-            cabin_class:newFormData.cabin_class
-          }))
-        }
-      }
-    }, [newFormData]);
+
   
 
   return (
@@ -554,32 +509,16 @@ const RoundTrip = () => {
             Travellers and cabin class
           </Typography>
                   <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
-            {router.pathname === defaultRoute && newFormData ? (
-              <Typography sx={{ fontSize:{lg:14 , md:13 ,sm:13 ,xs:12}, fontFamily: nunito.style }}>
-                {newFormData.adult + newFormData.child + newFormData.infant}{" "}
-                Persons
-              </Typography>
-            ) : (
-              <Typography sx={{ fontSize: {lg:14 , md:13 ,sm:10 ,xs:12}, fontFamily: nunito.style }}>
+                  <Typography sx={{ fontSize: {lg:14 , md:13 ,sm:10 ,xs:12}, fontFamily: nunito.style }}>
                 {state.adult + state.child + state.infant} Persons
               </Typography>
-            )}
 
-            {router.pathname === defaultRoute && newFormData ? (
-              <Typography fontSize={{lg:14 ,md:13 ,sm:10 ,xs:12}} fontFamily={nunito.style}>
-                {newFormData.adult}adult{" "}
-                {newFormData.child !== 0 && `,${newFormData.child} child`}{" "}
-                {newFormData.infant !== 0 && `,${newFormData.infant} infant`},{" "}
-                {`${cabin_class.label} Class`}
-              </Typography>
-            ) : (
               <Typography fontSize={{lg:14 ,md:13 ,sm:10,xs:12}} fontFamily={nunito.style}>
                 {state.adult}adult{" "}
                 {state.child !== 0 && `,${state.child} child`}{" "}
                 {state.infant !== 0 && `,${state.infant} infant`},{" "}
                 {`${cabin_class.label} Class`}
               </Typography>
-            )}
           </CardActionArea>
 
           {/* popover start */}
@@ -601,9 +540,7 @@ const RoundTrip = () => {
             }}
           >
             <TravellerSelector
-              anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
-              initialState={initialState}
               state={state}
               setState={setState}
               adultValue={adultValue}
@@ -612,10 +549,6 @@ const RoundTrip = () => {
               setInfantValue={setInfantValue}
               childValue={childValue}
               setChildValue={setChildValue}
-              initialValue={initialValue}
-              setIntialValue={setIntialValue}
-              newFormData={newFormData}
-              defaultRoute={defaultRoute}
             />
           </Popover>
           {/* popover end */}
