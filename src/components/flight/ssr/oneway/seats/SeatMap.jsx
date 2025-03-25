@@ -7,7 +7,7 @@ import flightBack from "@/assests/flight_image/flight_back.png";
 import { COLORS } from "@/utils/colors.js";
 import { nunito } from "@/utils/fonts";
 
-const SeatMap = () => {
+const SeatMap = ({initialFlightDetail}) => {
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [extraDetails, setExtraDetails] = useState(null);
   const handleSeatClick = (seat) => {
@@ -16,7 +16,7 @@ const SeatMap = () => {
   };
 
     useEffect(() => {
-      const flightDetails = localStorage.getItem("oneWayflightDetails");
+      const flightDetails = localStorage.getItem(initialFlightDetail);
       if (flightDetails) {
         setExtraDetails(JSON.parse(flightDetails));
       }
@@ -38,13 +38,13 @@ const SeatMap = () => {
         {/* Seat Detail Section */}
         <Box
          sx={{
-          height: { lg: "100vh", xs: "auto" }, // Full viewport height on lg, auto on small
+          height: { lg: "100vh", xs: "auto" }, 
           overflowY: "auto",
           flexShrink: 0,
           position: { lg: "sticky", xs: "relative" },
           top: "10px",
-          width: { lg: "450px", xs: "100%" }, // Fixed width on lg, full width on smaller screens
-          maxWidth: "100%", // Prevents overflow
+          width: { lg: "450px", xs: "100%" }, 
+          maxWidth: "100%", 
         }}
         >
           <Box sx={{ p: 2 ,  mx: "auto" }}>
