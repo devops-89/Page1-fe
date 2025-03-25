@@ -107,17 +107,6 @@ const OnewayForm = () => {
         destinationAirport: newValue.airport_name,
         destinationCity: newValue.city_name,
       });
-
-      // if(router.pathname===defaultRoute){
-      //   setNewFormData((prev)=>{
-      //     return ({
-      //       ...prev,
-      //       destination: newValue.iata_code,
-      //     destinationAirport: newValue.airport_name,
-      //     destinationCity: newValue.city_name,
-      //   })
-      //   })
-      // }
    
     }
   };
@@ -130,14 +119,6 @@ const OnewayForm = () => {
         ...state,
         departure_date: moment(newDate._d).format("YYYY-MM-DD"),
       });
-      // if(router.pathname===defaultRoute){
-      //   setNewFormData((prev)=>{
-      //     return ({
-      //       ...prev,
-      //       departure_date: moment(newDate._d).format("YYYY-MM-DD")
-      //   })
-      //   })
-      // }
     }
 
     
@@ -213,13 +194,6 @@ const OnewayForm = () => {
       searchFlight();
     }
   };
-
-  // useEffect(() => {
-  //   if (localStorage.getItem("state")) {
-  //     setNewFormData(JSON.parse(localStorage.getItem("state")));
-  //     console.log("set new form data useeffect is running");
-  //   }
-  // }, []);
 
 
 
@@ -535,7 +509,6 @@ const OnewayForm = () => {
               setChildValue={setChildValue}
               initialValue={initialValue}
               setIntialValue={setIntialValue}
-              defaultRoute={defaultRoute}
             />
           </Popover>
           {/* popover end */}
