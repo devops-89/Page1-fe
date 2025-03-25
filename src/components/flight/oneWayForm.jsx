@@ -27,6 +27,8 @@ import { data } from "@/assests/data";
 import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
 import { useRouter } from "next/router";
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import FlightLandIcon from '@mui/icons-material/FlightLand';
 
 const OnewayForm = () => {
   const router = useRouter();
@@ -113,6 +115,7 @@ const OnewayForm = () => {
         let response = res.data.data;
         setAirportList(response);
         setLoading(false);
+        // console.log("response",response)
       })
       .catch((err) => {
         console.log("err", err);
@@ -235,18 +238,17 @@ const OnewayForm = () => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
-                  justifyContent={"flex-start"}
-                  component="li"
-                >
-                  <Box>
+                <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
+                  <Grid2 size={{xs:2}}>
+                    <FlightTakeoffIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/>
+                  </Grid2>
+                 
+                  <Grid2 size={{xs:6}}>
                     <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: COLORS.BLACK,
                         textAlign: "start",
                       }}
@@ -258,14 +260,27 @@ const OnewayForm = () => {
                       sx={{
                         fontSize: 12,
                         fontFamily: nunito.style,
-                        fontWeight: 400,
+                        fontWeight: 500,
                         color: COLORS.DARKGREY,
                       }}
                     >
                       {option.airport_name}
                     </Typography>
-                  </Box>
-                </Stack>
+                  </Grid2>
+                  <Grid2 size={{xs:4}}>
+                  <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight:800,
+                        color: COLORS.BLACK,
+                        textAlign: "end",
+                      }}
+                    >
+                      {option.city_code}
+                    </Typography>
+                  </Grid2>
+                </Grid2>
               </Box>
             )}
             disableListWrap
@@ -321,18 +336,17 @@ const OnewayForm = () => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
-                  justifyContent={"flex-start"}
-                  component="li"
-                >
-                  <Box>
+                 <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
+                  <Grid2 size={{xs:2}}>
+                    <FlightLandIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/>
+                  </Grid2>
+                 
+                  <Grid2 size={{xs:6}}>
                     <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: COLORS.BLACK,
                         textAlign: "start",
                       }}
@@ -344,14 +358,27 @@ const OnewayForm = () => {
                       sx={{
                         fontSize: 12,
                         fontFamily: nunito.style,
-                        fontWeight: 400,
+                        fontWeight: 500,
                         color: COLORS.DARKGREY,
                       }}
                     >
                       {option.airport_name}
                     </Typography>
-                  </Box>
-                </Stack>
+                  </Grid2>
+                  <Grid2 size={{xs:4}}>
+                  <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight:800,
+                        color: COLORS.BLACK,
+                        textAlign: "end",
+                      }}
+                    >
+                      {option.city_code}
+                    </Typography>
+                  </Grid2>
+                </Grid2>
               </Box>
             )}
             slotProps={{

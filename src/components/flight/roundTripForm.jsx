@@ -30,6 +30,8 @@ import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import FlightLandIcon from '@mui/icons-material/FlightLand';
 
 const RoundTrip = () => {
   const router = useRouter();
@@ -266,18 +268,17 @@ const RoundTrip = () => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
-                  justifyContent={"flex-start"}
-                  component="li"
-                >
-                  <Box>
+                  <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
+                  <Grid2 size={{xs:2}}>
+                    <FlightTakeoffIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/>
+                  </Grid2>
+                 
+                  <Grid2 size={{xs:6}}>
                     <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: COLORS.BLACK,
                         textAlign: "start",
                       }}
@@ -289,14 +290,27 @@ const RoundTrip = () => {
                       sx={{
                         fontSize: 12,
                         fontFamily: nunito.style,
-                        fontWeight: 400,
+                        fontWeight: 500,
                         color: COLORS.DARKGREY,
                       }}
                     >
                       {option.airport_name}
                     </Typography>
-                  </Box>
-                </Stack>
+                  </Grid2>
+                  <Grid2 size={{xs:4}}>
+                  <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight:800,
+                        color: COLORS.BLACK,
+                        textAlign: "end",
+                      }}
+                    >
+                      {option.city_code}
+                    </Typography>
+                  </Grid2>
+                </Grid2>
               </Box>
             )}
             disableListWrap
@@ -352,18 +366,17 @@ const RoundTrip = () => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
-                  justifyContent={"flex-start"}
-                  component="li"
-                >
-                  <Box>
+                <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
+                  <Grid2 size={{xs:2}}>
+                    <FlightLandIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/>
+                  </Grid2>
+                 
+                  <Grid2 size={{xs:6}}>
                     <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight: 600,
+                        fontWeight: 700,
                         color: COLORS.BLACK,
                         textAlign: "start",
                       }}
@@ -375,14 +388,27 @@ const RoundTrip = () => {
                       sx={{
                         fontSize: 12,
                         fontFamily: nunito.style,
-                        fontWeight: 400,
+                        fontWeight: 500,
                         color: COLORS.DARKGREY,
                       }}
                     >
                       {option.airport_name}
                     </Typography>
-                  </Box>
-                </Stack>
+                  </Grid2>
+                  <Grid2 size={{xs:4}}>
+                  <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight:800,
+                        color: COLORS.BLACK,
+                        textAlign: "end",
+                      }}
+                    >
+                      {option.city_code}
+                    </Typography>
+                  </Grid2>
+                </Grid2>
               </Box>
             )}
             slotProps={{
