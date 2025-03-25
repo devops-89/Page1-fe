@@ -6,10 +6,10 @@ import { Box, Card, Container, Grid2, Typography } from "@mui/material";
 import Faq from "@/components/faq";
 import Testimonials from "@/components/testimonial/testimonials";
 import { nunito } from "@/utils/fonts";
-import SecurityIcon from '@mui/icons-material/Security';
+import SecurityIcon from "@mui/icons-material/Security";
 import { COLORS } from "@/utils/colors";
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 
 const FLight = () => {
   return (
@@ -23,27 +23,44 @@ const FLight = () => {
           </Card>
         </Container>
         <Box sx={{ pt: { lg: 10, md: 5 } }}>
-        <Container>
-          <Grid2 container spacing={2}>
-            <Grid2 size={{ xs: 12, sm: 6, md: 4 }} sx={{textAlign:"center"}}>
-                <SecurityIcon sx={{fontSize:'50px', mb:"10px", color:COLORS.PRIMARY}}/>
-              <Typography variant="body1" sx={{fontFamily:nunito.style}}>
-                Best Price Guarantee <br/> Book flight tickets at the best prices.
-              </Typography>
+          <Container>
+            <Grid2 container spacing={2}>
+              <Grid2
+                size={{ xs: 12, sm: 6, md: 4 }}
+                sx={{ textAlign: "center" }}
+              >
+                <SecurityIcon
+                  sx={{ fontSize: "50px", mb: "10px", color: COLORS.PRIMARY }}
+                />
+                <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
+                  Best Price Guarantee <br /> Book flight tickets at the best
+                  prices.
+                </Typography>
+              </Grid2>
+              <Grid2
+                size={{ xs: 12, sm: 6, md: 4 }}
+                sx={{ textAlign: "center" }}
+              >
+                <AirplaneTicketIcon
+                  sx={{ fontSize: "50px", mb: "10px", color: COLORS.PRIMARY }}
+                />
+                <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
+                  Easy & Quick Booking <br />
+                  We offer a hassle-free booking process.
+                </Typography>
+              </Grid2>
+              <Grid2
+                size={{ xs: 12, sm: 6, md: 4 }}
+                sx={{ textAlign: "center" }}
+              >
+                <SupportAgentIcon
+                  sx={{ fontSize: "50px", mb: "10px", color: COLORS.PRIMARY }}
+                />
+                <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
+                  Customer Care 24/7 <br /> We are here for you round-the-clock.
+                </Typography>
+              </Grid2>
             </Grid2>
-            <Grid2 size={{ xs: 12, sm: 6, md: 4 }} sx={{textAlign:"center"}}>
-            <AirplaneTicketIcon sx={{fontSize:'50px', mb:"10px", color:COLORS.PRIMARY}}/>
-            <Typography variant="body1" sx={{fontFamily:nunito.style}}>
-                Easy & Quick Booking <br/>We offer a hassle-free booking process.
-              </Typography>
-            </Grid2>
-            <Grid2 size={{ xs: 12, sm: 6, md: 4 }} sx={{textAlign:"center"}}>
-            <SupportAgentIcon sx={{fontSize:'50px', mb:"10px", color:COLORS.PRIMARY}}/>
-            <Typography variant="body1" sx={{fontFamily:nunito.style}}>
-            Customer Care 24/7 <br/> We are here for you round-the-clock.
-              </Typography>
-            </Grid2>
-          </Grid2>
           </Container>
         </Box>
         <Box sx={{ pt: { lg: 10, md: 5 } }}>
