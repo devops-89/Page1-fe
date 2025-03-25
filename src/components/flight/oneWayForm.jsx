@@ -23,7 +23,6 @@ import { useDispatch } from "react-redux";
 import VirtualList from "./fixedSizeList";
 import TravellerSelector from "./travellerSelector";
 import { setToast } from "@/redux/reducers/toast";
-import ToastBar from "../toastBar";
 import { data } from "@/assests/data";
 import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
@@ -70,13 +69,7 @@ const OnewayForm = () => {
 
   const [state, setState] = useState(initialState);
 
-  const [newFormData, setNewFormData] = useState(null);
-
-  useEffect(() => {
-    if (localStorage.getItem("state")) {
-      setNewFormData(JSON.parse(localStorage.getItem("state")));
-    }
-  }, []);
+ 
 
   const dispatch = useDispatch();
   const [origin, setOrigin] = useState(null);
@@ -92,6 +85,17 @@ const OnewayForm = () => {
         originAirport: newValue.airport_name,
         originCity: newValue.city_name,
       });
+    //   if(router.pathname===defaultRoute){
+    //   setNewFormData((prev)=>{
+    //     return ({
+    //       ...prev,
+    //       origin: newValue.iata_code,
+    //       originAirport: newValue.airport_name,
+    //       originCity: newValue.city_name,
+    //   })
+    //   })
+
+    // }
     }
   };
   const destinationHandler = (e, newValue) => {
@@ -103,6 +107,18 @@ const OnewayForm = () => {
         destinationAirport: newValue.airport_name,
         destinationCity: newValue.city_name,
       });
+
+      // if(router.pathname===defaultRoute){
+      //   setNewFormData((prev)=>{
+      //     return ({
+      //       ...prev,
+      //       destination: newValue.iata_code,
+      //     destinationAirport: newValue.airport_name,
+      //     destinationCity: newValue.city_name,
+      //   })
+      //   })
+      // }
+   
     }
   };
 
@@ -114,7 +130,17 @@ const OnewayForm = () => {
         ...state,
         departure_date: moment(newDate._d).format("YYYY-MM-DD"),
       });
+      // if(router.pathname===defaultRoute){
+      //   setNewFormData((prev)=>{
+      //     return ({
+      //       ...prev,
+      //       departure_date: moment(newDate._d).format("YYYY-MM-DD")
+      //   })
+      //   })
+      // }
     }
+
+    
   };
 
   const [airportList, setAirportList] = useState([]);
@@ -167,10 +193,12 @@ const OnewayForm = () => {
   };
 
   const submitHandler = () => {
-    const emptyFields = Object.keys(state).filter(
-      (key) =>
-        state[key] === "" || state[key] === null || state[key] === undefined
-    );
+       const emptyFields = Object.keys(state).filter(
+        (key) =>
+          state[key] === "" || state[key] === null || state[key] === undefined
+      );
+    // }
+
 
     if (emptyFields.length > 0) {
       dispatch(
@@ -186,6 +214,15 @@ const OnewayForm = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (localStorage.getItem("state")) {
+  //     setNewFormData(JSON.parse(localStorage.getItem("state")));
+  //     console.log("set new form data useeffect is running");
+  //   }
+  // }, []);
+
+
+
   const [cabin_class, setCabinClass] = useState("");
   useEffect(() => {
     getAllAirport();
@@ -194,40 +231,11 @@ const OnewayForm = () => {
 
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      if (router.pathname === defaultRoute && newFormData) {
-        return val.value == newFormData.cabin_class;
-      } else {
-        return val.value == state.cabin_class;
-      }
+      return val.value == state.cabin_class;
     });
 
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
-
-  useEffect(() => {
-    if (router.pathname === defaultRoute) {
-      if (newFormData) {
-        setOrigin({
-          airport_name: newFormData.originAirport,
-          city_name: newFormData.originCity,
-          iata_code: newFormData.origin,
-        });
-        setDestination({
-          airport_name: newFormData.destinationAirport,
-          city_name: newFormData.destinationCity,
-          iata_code: newFormData.destination,
-        });
-        setDepartureDate(moment(newFormData.departure_date));
-        setAdultValue(newFormData.adult);
-        setChildValue(newFormData.child);
-        setInfantValue(newFormData.infant);
-        setState((prev) => ({
-          ...prev,
-          cabin_class: newFormData.cabin_class,
-        }));
-      }
-    }
-  }, [newFormData]);
 
   return (
     <>
@@ -474,18 +482,7 @@ const OnewayForm = () => {
             Travellers and cabin class
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
-            {router.pathname === defaultRoute && newFormData ? (
-              <Typography
-                sx={{
-                  fontSize: { lg: 14, md: 13, sm: 13, xs: 12 },
-                  fontFamily: nunito.style,
-                }}
-              >
-                {newFormData.adult + newFormData.child + newFormData.infant}{" "}
-                Persons
-              </Typography>
-            ) : (
-              <Typography
+          <Typography
                 sx={{
                   fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
                   fontFamily: nunito.style,
@@ -493,19 +490,7 @@ const OnewayForm = () => {
               >
                 {state.adult + state.child + state.infant} Persons
               </Typography>
-            )}
 
-            {router.pathname === defaultRoute && newFormData ? (
-              <Typography
-                fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
-                fontFamily={nunito.style}
-              >
-                {newFormData.adult}adult{" "}
-                {newFormData.child !== 0 && `,${newFormData.child} child`}{" "}
-                {newFormData.infant !== 0 && `,${newFormData.infant} infant`},{" "}
-                {`${cabin_class.label} Class`}
-              </Typography>
-            ) : (
               <Typography
                 fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
                 fontFamily={nunito.style}
@@ -515,7 +500,6 @@ const OnewayForm = () => {
                 {state.infant !== 0 && `,${state.infant} infant`},{" "}
                 {`${cabin_class.label} Class`}
               </Typography>
-            )}
           </CardActionArea>
 
           {/* popover start */}
@@ -551,7 +535,6 @@ const OnewayForm = () => {
               setChildValue={setChildValue}
               initialValue={initialValue}
               setIntialValue={setIntialValue}
-              newFormData={newFormData}
               defaultRoute={defaultRoute}
             />
           </Popover>

@@ -27,8 +27,8 @@ const TravellerSelector = ({
   setInfantValue,
   childValue,
   setChildValue,
-  initialValue,
-  newFormData,
+  
+  
   defaultRoute,
 }) => {
   const router = useRouter();
@@ -40,15 +40,6 @@ const TravellerSelector = ({
   const [tempAdult, setTempAdult] = useState(adultValue);
   const [tempChild, setTempChild] = useState(childValue);
   const [tempInfant, setTempInfant] = useState(infantValue);
-
-  useEffect(() => {
-    if (router.pathname === defaultRoute && newFormData) {
-      setState((prevState) => ({
-        ...prevState,
-        cabin_class: newFormData.cabin_class || "",
-      }));
-    }
-  }, [router.pathname, defaultRoute, newFormData, setState]);
 
   useEffect(() => {
     let { errorMessage, errorStatus } = validateTravelers(tempAdult, tempChild, tempInfant);
