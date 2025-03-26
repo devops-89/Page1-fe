@@ -104,7 +104,7 @@ const TravellerSelector = ({
         Select Travelers & Class
       </Typography>
 
-      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, m: 1 }}>
+      <Box sx={{ border: "10px solid #808080", borderRadius: 2, p: 2, m: 1 }}>
         <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>Travellers</Typography>
         <Grid2 container spacing={2}>
           <Grid2 size ={{lg:4 , md:4, sm:4,xs:6}}>

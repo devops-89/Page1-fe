@@ -405,7 +405,7 @@ const OnewayForm = () => {
 
         <Grid2
           // size={{ lg: 2.4, xs: 6 }}
-          size={{ lg: 3, md: 2.4, xs: 6, sm: 6 }}
+          size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #808080",
 

@@ -29,19 +29,19 @@ export default function Home() {
           
          <AboutUs/>
         </Box>
-        <Box sx={{ pt:10}}>
+        <Box sx={{ pt:{lg:10 , xs:4}}}>
            <Festivals /> 
         </Box>
-        <Box sx={{ pt: 10 }}>
+        <Box sx={{ pt:{lg:10 , xs:4}}}>
            <SubscribeBanner /> 
         </Box>
-        <Box  sx={{ pt:10 }}>
+        <Box  sx={{ pt:{lg:10 , xs:6}}}>
           <Hotel /> 
         </Box>
-        <Box sx={{ pt: 10 }}>
+        <Box  sx={{ pt:{lg:10 , xs:6}}}>
           <Testimonials />
         </Box>
-        <Box sx={{ pt:10 }}>
+        <Box sx={{ mt:{lg:10 , xs:6}}} >
           <Faq />
         </Box>
       </Box> 

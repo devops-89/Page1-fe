@@ -81,6 +81,7 @@ const AboutUs = () => {
                   letterSpacing: 1,
                   textTransform: "capitalize",
                   mb: 1,
+                  mt:{lg:0,xs:2},
                   fontFamily: nunito.style,
                 }}
               >

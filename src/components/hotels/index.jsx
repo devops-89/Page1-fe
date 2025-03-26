@@ -18,9 +18,10 @@ const Hotel = () => {
     <div>
       <Container maxWidth="lg">
         <Stack
-          direction={"row"}
-          alignItems={"center"}
+          direction={"column"}
+          alignItems={"flex-start"}
           justifyContent={"space-between"}
+          sx={{ width: "100%" }}
         >
           <Box>
             <Typography
@@ -30,16 +31,30 @@ const Hotel = () => {
                 fontFamily: raleway.style,
                 fontWeight: 600,
                 letterSpacing: 1.2,
+                mb:{lg:1 , xs:2}
+              
               }}
             >
               Hotels
             </Typography>
+           
+              
+ 
+         
+          </Box>
+           <Stack
+             direction={"row"}
+             alignItems={"center"}
+             justifyContent={"space-between"}
+             sx={{ width: "100%" }}
+           >
+
+         
             <Typography
               sx={{ fontFamily: nunito.style, fontSize: {lg:40 ,md:16}, fontWeight: 700 }}
             >
               Our Exquisite Hotels
             </Typography>
-          </Box>
           <Button
             sx={{
               fontSize: {lg:14,md:13},
@@ -51,6 +66,9 @@ const Hotel = () => {
           >
             View All
           </Button>
+          </Stack>
+       
+        
         </Stack>
 
         <Grid2 container spacing={4} mt={3}>

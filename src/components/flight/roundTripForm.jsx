@@ -531,7 +531,7 @@ const RoundTrip = () => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 2.4, md:2.4, xs: 12,sm:6, }}
+          size={{ lg: 2.4, md:2.4, xs: 12,sm:12, }}
 
           sx={{
             border: "1px solid #808080",
@@ -596,7 +596,7 @@ const RoundTrip = () => {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                 p: 2,
-                width: "40%",
+                width: { xs: "100%", sm: "80%", md: "60%", lg: "40%" },
               },
             }}
           >
@@ -621,7 +621,7 @@ const RoundTrip = () => {
           {/* popover end */}
         </Grid2>
 
-        <Grid2   size={{ lg: 12, md:12, xs: 12,sm:6, }} textAlign={"center"} mt={{lg:2}} >
+        <Grid2   size={{ lg: 12, md:12, xs: 12,sm:12, }} textAlign={"center"} mt={{lg:2}} >
           <Button
             disabled={buttonLoading}
             sx={{

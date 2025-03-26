@@ -354,10 +354,13 @@ const Multiway = () => {
         {forms.map((form, index) => (
           <Grid2
             container
-            alignItems="center"
+            alignItems={"center"}
+            justifyContent={"center"}
             key={index}
+         
             sx={{
               marginBottom: 2,
+              display:"flex",
               alignItems: "stretch",
               borderRadius: 4,
               padding: 2,
@@ -366,13 +369,14 @@ const Multiway = () => {
             {/* From Field */}
             <Grid2
               // size={{lg:3 ,sm:6 ,xs:12}}
-              size={{ lg: 3, xs: 6, sm: 2.4, md: 2.4 }}
+              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
                 borderTopLeftRadius: 4,
                 borderBottomLeftRadius: 4,
                 display: "flex",
                 flexDirection: "column",
+                height:"100%",
 
                 justifyContent: "center",
               }}
@@ -459,12 +463,13 @@ const Multiway = () => {
 
             {/* To Field */}
             <Grid2
-              size={{ lg: 3, md: 2.4, xs: 6, sm: 2.4 }}
+             size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
                 position: "relative",
                 display: "flex",
                 flexDirection: "column",
+                height:"100%",
 
                 justifyContent: "center",
               }}
@@ -552,14 +557,12 @@ const Multiway = () => {
 
             {/* Departure Field */}
             <Grid2
-              size={{ lg: 3, md: 2.4, xs: 12, sm: 2.4 }}
+              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
                 position: "relative",
-                display: "flex",
-                flexDirection: "column",
-
-                justifyContent: "center",
+               
+               
               }}
             >
               <Typography
@@ -595,14 +598,15 @@ const Multiway = () => {
               </LocalizationProvider>
             </Grid2>
             <Grid2
-              size={{ lg: 3, md: 2.4, xs: 12, sm: 2.4 }}
+              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
               sx={{
                 border: index === 0 && "1px solid #808080",
                 position: "relative",
-                height: "100%",
-                pb: 2,
+               
+          
+                 pb:1
               }}
-              textAlign="center"
+              textAlign= {{lg:"center" ,xs:"start"}}
             >
               {index === 0 ? (
                 <>
@@ -755,7 +759,7 @@ const Multiway = () => {
               boxShadow:
                 " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
               p: 2,
-              width: "40%",
+              width: { xs: "100%", sm: "80%", md: "60%", lg: "40%" },
             },
           }}
         >
