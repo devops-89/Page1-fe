@@ -269,11 +269,11 @@ const RoundTrip = () => {
             renderOption={(props, option) => (
               <Box {...props}>
                   <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
-                  <Grid2 size={{xs:2}}>
-                    <FlightTakeoffIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/>
+                  <Grid2 size={{xs:0, sm:2}}>
+                    <FlightTakeoffIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
                   </Grid2>
                  
-                  <Grid2 size={{xs:6}}>
+                  <Grid2 size={{xs:12, sm:6}}>
                     <Typography
                       sx={{
                         fontSize: 14,
@@ -297,7 +297,8 @@ const RoundTrip = () => {
                       {option.airport_name}
                     </Typography>
                   </Grid2>
-                  <Grid2 size={{xs:4}}>
+
+                  <Grid2 size={{xs:0, sm:4}}>
                   <Typography
                       sx={{
                         fontSize: 14,
@@ -305,6 +306,7 @@ const RoundTrip = () => {
                         fontWeight:800,
                         color: COLORS.BLACK,
                         textAlign: "end",
+                        display:{xs:'none', sm:'block'}
                       }}
                     >
                       {option.city_code}
@@ -366,12 +368,12 @@ const RoundTrip = () => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
-                  <Grid2 size={{xs:2}}>
-                    <FlightLandIcon sx={{color:COLORS.PRIMARY, marginRight:'10px'}}/>
+                 <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
+                  <Grid2 size={{xs:0, sm:2}}>
+                    <FlightLandIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
                   </Grid2>
                  
-                  <Grid2 size={{xs:6}}>
+                  <Grid2 size={{xs:12, sm:6}}>
                     <Typography
                       sx={{
                         fontSize: 14,
@@ -395,7 +397,8 @@ const RoundTrip = () => {
                       {option.airport_name}
                     </Typography>
                   </Grid2>
-                  <Grid2 size={{xs:4}}>
+
+                  <Grid2 size={{xs:0, sm:4}}>
                   <Typography
                       sx={{
                         fontSize: 14,
@@ -403,6 +406,7 @@ const RoundTrip = () => {
                         fontWeight:800,
                         color: COLORS.BLACK,
                         textAlign: "end",
+                        display:{xs:'none', sm:'block'}
                       }}
                     >
                       {option.city_code}
