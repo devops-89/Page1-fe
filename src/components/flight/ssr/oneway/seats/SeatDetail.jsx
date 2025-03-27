@@ -8,7 +8,7 @@ import { FlightTakeoff } from "@mui/icons-material";
 import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
 
 import { nunito } from "@/utils/fonts";
-const SeatDetail = ({extraDetails}) => {
+const SeatDetail = ({extraDetails,planeIndex}) => {
 
   //  console.log("Seat Details",extraDetails);
   return (
@@ -129,7 +129,7 @@ const SeatDetail = ({extraDetails}) => {
           </Grid2>
          
           <Grid2 size={12} sx={{ display:"flex", alignItems:"center", justifyContent:'center'}}>
-          <SelectedList />
+          <SelectedList planeIndex={planeIndex} />
           </Grid2>
         </Grid2>
 

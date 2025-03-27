@@ -29,9 +29,11 @@ const AvailablityStatus = {
   5: "Empty Space",
 };
 
-const Seat = ({ extraDetails }) => {
+const Seat = ({ extraDetails,planeIndex }) => {
+
+  let [tempSeats,setTempSeats]=useState([]);
   // Use useSelector to directly access seats from Redux state
-  const reservedSeats = useSelector((state) => state.SeatsInformation.seats);
+  const reservedSeats = useSelector((state) => state.seats[planeIndex].selectedSeats);
   const dispatch = useDispatch();
   const [maxPassengerCount, setMaxPassengerCount] = useState(null);
   const [columns, setColumns] = useState([]); // State for columns
@@ -46,13 +48,13 @@ const Seat = ({ extraDetails }) => {
 
   useEffect(() => {
     // Dynamically determine columns based on seat data
-    if (!extraDetails?.SeatDynamic?.[0]?.SegmentSeat?.[0]?.RowSeats) {
+    if (!extraDetails?.RowSeats) {
       setColumns([]); // Set empty array if seat data is not available yet
       return;
     }
 
     let maxColumns = 0;
-    extraDetails.SeatDynamic[0].SegmentSeat[0].RowSeats.forEach(row => {
+    extraDetails?.RowSeats.forEach(row => {
       maxColumns = Math.max(maxColumns, row.Seats.length);
     });
 
@@ -98,10 +100,17 @@ const Seat = ({ extraDetails }) => {
       );
       return; // Prevent selecting more seats than allowed
     }
-
-    dispatch(setSeatDetails(seat)); // Allow seat selection/deselection
+   
+    dispatch(setSeatDetails({airplaneId:planeIndex, selected:seat}));
+   
   };
 
+
+  // useEffect(()=>{
+  //   dispatch(
+  //     setSeatDetails({airplaneId:planeIndex, selectedSeats:tempSeats})
+  //   )
+  // },[tempSeats])
 
 
   return (
@@ -123,7 +132,7 @@ const Seat = ({ extraDetails }) => {
       </Box>
       {extraDetails ? (
         <Stack direction="column" spacing={2} p={2}>
-          {extraDetails?.SeatDynamic[0]?.SegmentSeat[0]?.RowSeats?.map(
+          {extraDetails?.RowSeats?.map(
             (seats, rowIndex) => (
               <Stack key={rowIndex} direction="row" spacing={1.5}>
                 {seats.Seats.map((seat, colIndex) => {

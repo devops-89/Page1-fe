@@ -22,68 +22,78 @@ const SeatMap = ({initialFlightDetail}) => {
       }
     }, []);
 
+   console.log("extra Details:",extraDetails?.[1].SeatDynamic?.[0]?.SegmentSeat)
+
   return (
     <Box sx={{ backgroundColor: COLORS.BLUEOVERLAY, py: 2 }}>
-      <Stack
-        direction={{lg:"row" ,xs:"column"}}
-        px={{lg:10 , xs:2}}
-        sx={{
-          alignItems: {lg:"start" ,xs:"center"},
-          justifyContent:{lg:"space-between" ,xs:"center"},
-          position: "relative",
-          flexWrap:"wrap",
-          
-        }}
-      >
-        {/* Seat Detail Section */}
-        <Box
-         sx={{
-          height: { lg: "100vh", xs: "auto" }, 
-          overflowY: "auto",
-          flexShrink: 0,
-          position: { lg: "sticky", xs: "relative" },
-          top: "10px",
-          width: { lg: "450px", xs: "100%" }, 
-          maxWidth: "100%", 
-        }}
-        >
-          <Box sx={{ p: 2 ,  mx: "auto" }}>
-            <SeatDetail extraDetails={extraDetails?.[0]}/>
-            <Typography variant="body1" sx={{ p: 1, fontFamily:nunito.style }}>
-              Conveniently select your seats now for Free.
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Flight Map */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {/* Airplane Front Image */}
-          <Box
-            component="img"
-            src={flightFront.src}
-            alt="Airplane Front"
-            sx={{ maxWidth: "300px", mb: -2 }}
-          />
-
-          {/* Printing Seats */}
-          <Seat extraDetails={extraDetails?.[1]}/>
-
-          {/* Airplane Back Image */}
-          <Box
-            component="img"
-            src={flightBack.src}
-            alt="Airplane Back"
-            sx={{ maxWidth: "300px" }}
-          />
-        </Box>
-       
-      </Stack>
+      {
+        extraDetails?.[1].SeatDynamic?.[0]?.SegmentSeat.map((aeroplane,index)=>{
+          return (
+            <Stack
+            direction={{lg:"row" ,xs:"column"}}
+            px={{lg:10 , xs:2}}
+            sx={{
+              alignItems: {lg:"start" ,xs:"center"},
+              justifyContent:{lg:"space-between" ,xs:"center"},
+              position: "relative",
+              flexWrap:"wrap",
+              
+            }}
+          >
+            {/* Seat Detail Section */}
+            <Box
+             sx={{
+              height: { lg: "100vh", xs: "auto" }, 
+              overflowY: "auto",
+              flexShrink: 0,
+              position: { lg: "sticky", xs: "relative" },
+              top: "10px",
+              width: { lg: "450px", xs: "100%" }, 
+              maxWidth: "100%", 
+            }}
+            >
+              <Box sx={{ p: 2 ,  mx: "auto" }}>
+                <SeatDetail extraDetails={extraDetails?.[0]} planeIndex={index}/>
+                <Typography variant="body1" sx={{ p: 1, fontFamily:nunito.style }}>
+                  Conveniently select your seats now for Free.
+                </Typography>
+              </Box>
+            </Box>
+    
+            {/* Flight Map */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {/* Airplane Front Image */}
+              <Box
+                component="img"
+                src={flightFront.src}
+                alt="Airplane Front"
+                sx={{ maxWidth: "300px", mb: -2 }}
+              />
+    
+              {/* Printing Seats */}
+              <Seat extraDetails={aeroplane} planeIndex={index}/>
+    
+              {/* Airplane Back Image */}
+              <Box
+                component="img"
+                src={flightBack.src}
+                alt="Airplane Back"
+                sx={{ maxWidth: "300px" }}
+              />
+            </Box>
+           
+          </Stack>
+          )
+        })
+      
+      }
+    
     </Box>
   );
 };
