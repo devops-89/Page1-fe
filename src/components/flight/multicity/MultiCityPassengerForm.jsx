@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
-import GstForm from "./GstForm";
 import { nunito } from "@/utils/fonts";
-import AddForm from "./AddForm";
 import { flightController } from "@/api/flightController";
 import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
-import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
 import { setToast } from "@/redux/reducers/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
-import PassengerFields from "./PassengerFields";
+import ToastBar from "@/components/toastBar";
+import AddForm from "../AddForm";
+import GstForm from "../GstForm";
+import PassengerFields from "../PassengerFields";
+import FullScreenDialog from "../ssr/oneway/seats/FullScreenDialog";
 
-import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
-
-const PassengerForm = ({
+const MultiCityPassengerForm = ({
   flightDetails,
   myState,
   journey,
@@ -471,7 +470,7 @@ const PassengerForm = ({
                   touched={touched}
                 />
 
-                {flightDetails[1]?.SeatDynamic  &&
+                {flightDetails[1]?.Response?.SeatDynamic  &&
                 <Box
                   sx={{
                     display: "flex",
@@ -479,7 +478,7 @@ const PassengerForm = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <FullScreenDialog initialFlightDetail="oneWayflightDetails"/>
+                  <FullScreenDialog initialFlightDetail="multitripflightDetails"/>
                 </Box>}
 
                 <Box
@@ -508,4 +507,4 @@ const PassengerForm = ({
   );
 };
 
-export default PassengerForm;
+export default MultiCityPassengerForm;

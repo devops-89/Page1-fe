@@ -23,6 +23,7 @@ import RoundFareSummary from "../RoundFareSummary";
 import moment from "moment";
 import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
+import Loader from "@/utils/Loader";
 
 export default function RoundTripCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
@@ -616,7 +617,17 @@ export default function RoundTripCheckout() {
             </Container>
           </Grid2>
         </Grid2>
-      ) : null}
+      ) : <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "50px",
+                  marginBottom: "50px",
+                }}
+              >
+                <Loader open={true} />
+              </Box>}
     </>
   );
 }

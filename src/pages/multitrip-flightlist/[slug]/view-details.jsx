@@ -35,9 +35,9 @@ import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
-import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
+import MultiCityPassengerForm from "@/components/flight/multicity/MultiCityPassengerForm";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -496,7 +496,7 @@ const FlightDetails = () => {
                       </Card>
                     ) : (
                       <Card sx={{ mb: "20px" }}>
-                        <PassengerForm
+                        <MultiCityPassengerForm
                           sx={{
                             backgroundColor: COLORS.PRIMARY,
                             color: COLORS.WHITE,

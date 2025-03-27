@@ -27,6 +27,8 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import ToastBar from "../toastBar";
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import FlightLandIcon from '@mui/icons-material/FlightLand';
 
 const Multiway = () => {
   const router = useRouter();
@@ -274,24 +276,22 @@ const Multiway = () => {
       }
     }
 
-    if (emptyFields.length > 0) {
-      dispatch(
-        setToast({
-          open: true,
-          message: `Please Enter the Required Fields : ${emptyFields.join(
-            ", "
-          )}`,
-          severity: TOAST_STATUS.ERROR,
-        })
-      );
-    } else {
-      localStorage.setItem("multistate", JSON.stringify(state));
-      const modifiedState = { ...state };
-      modifiedState.multicity = modifiedState.multicity.map((city) => {
-        const cityWithCabinClass = { ...city, cabin_class: state.cabin_class };
-        delete cityWithCabinClass.cabin_class_top_level;
-        return cityWithCabinClass;
-      });
+        if (emptyFields.length > 0) {
+            dispatch(
+                setToast({
+                    open: true,
+                    message: `Please Enter the Required Fields`,
+                    severity: TOAST_STATUS.ERROR,
+                })
+            );
+        } else {
+            localStorage.setItem("multistate", JSON.stringify(state));
+            const modifiedState = { ...state };
+            modifiedState.multicity = modifiedState.multicity.map(city => {
+                const cityWithCabinClass = { ...city, cabin_class: state.cabin_class };
+                delete cityWithCabinClass.cabin_class_top_level;
+                return cityWithCabinClass;
+            });
 
       delete modifiedState.cabin_class;
 
@@ -419,36 +419,51 @@ const Multiway = () => {
                 }
                 renderOption={(props, option) => (
                   <Box {...props}>
-                    <Stack
-                      direction={"row"}
-                      alignItems={"center"}
-                      justifyContent={"flex-start"}
-                      component="li"
+                     <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
+                  <Grid2 size={{xs:0, sm:2}}>
+                    <FlightTakeoffIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
+                  </Grid2>
+                 
+                  <Grid2 size={{xs:12, sm:6}}>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight: 700,
+                        color: COLORS.BLACK,
+                        textAlign: "start",
+                      }}
                     >
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            fontFamily: nunito.style,
-                            fontWeight: 600,
-                            color: COLORS.BLACK,
-                            textAlign: "start",
-                          }}
-                        >
-                          {option.city_name}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: 12,
-                            fontFamily: nunito.style,
-                            fontWeight: 400,
-                            color: COLORS.DARKGREY,
-                          }}
-                        >
-                          {option.airport_name}
-                        </Typography>
-                      </Box>
-                    </Stack>
+                      {option.city_name}
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        fontFamily: nunito.style,
+                        fontWeight: 500,
+                        color: COLORS.DARKGREY,
+                      }}
+                    >
+                      {option.airport_name}
+                    </Typography>
+                  </Grid2>
+
+                  <Grid2 size={{xs:0, sm:4}}>
+                  <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight:800,
+                        color: COLORS.BLACK,
+                        textAlign: "end",
+                        display:{xs:'none', sm:'block'}
+                      }}
+                    >
+                      {option.city_code}
+                    </Typography>
+                  </Grid2>
+                </Grid2>
                   </Box>
                 )}
                 slotProps={{
@@ -513,36 +528,51 @@ const Multiway = () => {
                 }
                 renderOption={(props, option) => (
                   <Box {...props}>
-                    <Stack
-                      direction={"row"}
-                      alignItems={"center"}
-                      justifyContent={"flex-start"}
-                      component="li"
+                      <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
+                  <Grid2 size={{xs:0, sm:2}}>
+                    <FlightLandIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
+                  </Grid2>
+                 
+                  <Grid2 size={{xs:12, sm:6}}>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight: 700,
+                        color: COLORS.BLACK,
+                        textAlign: "start",
+                      }}
                     >
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            fontFamily: nunito.style,
-                            fontWeight: 600,
-                            color: COLORS.BLACK,
-                            textAlign: "start",
-                          }}
-                        >
-                          {option.city_name}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: 12,
-                            fontFamily: nunito.style,
-                            fontWeight: 400,
-                            color: COLORS.DARKGREY,
-                          }}
-                        >
-                          {option.airport_name}
-                        </Typography>
-                      </Box>
-                    </Stack>
+                      {option.city_name}
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        fontFamily: nunito.style,
+                        fontWeight: 500,
+                        color: COLORS.DARKGREY,
+                      }}
+                    >
+                      {option.airport_name}
+                    </Typography>
+                  </Grid2>
+
+                  <Grid2 size={{xs:0, sm:4}}>
+                  <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontFamily: nunito.style,
+                        fontWeight:800,
+                        color: COLORS.BLACK,
+                        textAlign: "end",
+                        display:{xs:'none', sm:'block'}
+                      }}
+                    >
+                      {option.city_code}
+                    </Typography>
+                  </Grid2>
+                </Grid2>
                   </Box>
                 )}
                 slotProps={{

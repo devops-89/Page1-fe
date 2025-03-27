@@ -25,7 +25,7 @@ function TabPanel({ children, value, index }) {
   );
 }
 
-export default function FullScreenDialog() {
+export default function FullScreenDialog({initialFlightDetail}) {
   const [open, setOpen] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(0);
 
@@ -42,7 +42,7 @@ export default function FullScreenDialog() {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Button
         variant="text"
         sx={{color:"darkgreen" , fontWeight:600,fontSize:"15px",borderBottom:"2px solid darkgreen",p:"0px",borderRadius:0}}
@@ -70,14 +70,11 @@ export default function FullScreenDialog() {
             <Typography sx={{ ml: 2, flex: 1 ,fontSize:{lg:20 , xs:15} }} variant="h6" component="div">
               Seats And Meal Selection
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose} sx={{fontSize:{lg:14 , md:14 ,xs:12}}}>
-              Save
-            </Button>
           </Toolbar>
         </AppBar>
 
-        <SeatMap />
+        <SeatMap initialFlightDetail={initialFlightDetail}/>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }

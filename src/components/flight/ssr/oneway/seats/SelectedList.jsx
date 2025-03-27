@@ -7,18 +7,17 @@ import { removeSeatDetails } from "@/redux/reducers/seatsInformation";
 import {COLORS} from "@/utils/colors.js";
 import { nunito } from "@/utils/fonts";
 
-const SelectedList = () => {
+const SelectedList = ({planeIndex}) => {
   const dispatch = useDispatch();
   const selectedSeats = useSelector(
     (state) => state.SeatsInformation?.seats || []
   );
 
-  useEffect(() => {
-    // console.log("seats from reducer: ", selectedSeats);
-  }, [selectedSeats]);
+  console.log("selected sEAT", selectedSeats[planeIndex]?.selectedSeats);
+  
 
   function handleSeatRemove(seat) {
-    dispatch(removeSeatDetails(seat));
+    dispatch(removeSeatDetails({ airplaneId:planeIndex,seatCode:seat.Code}));
   }
 
   return (
@@ -45,41 +44,42 @@ const SelectedList = () => {
           There is no seat selected
         </Typography>
       ) : (
-        selectedSeats.map((seat) => (
+        selectedSeats[planeIndex]?.selectedSeats.map((seat) => (
          
+          <Box
+            key={seat.Code || `${seat.row}-${seat.col}`}
+            sx={{
+              width: "50px",
+              height: "50px",
+              border: "1px solid black",
+              borderRadius: "4px",
+              background: COLORS.SECONDARY,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "white",
+              position: "relative",
+              fontFamily:nunito.style
+            }}
+          >
+            {seat.Code || `${seat.row}${seat.col}`}
             <Box
-              key={seat.Code || `${seat.row}-${seat.col}`}
+              onClick={() => handleSeatRemove(seat)}
               sx={{
-                width: "50px",
-                height: "50px",
-                border: "1px solid black",
-                borderRadius: "4px",
-                background: COLORS.SECONDARY,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                color: "white",
-                position: "relative",
-                fontFamily:nunito.style
+                cursor: "pointer",
+                width: "5px",
+                position: "absolute",
+                top: "-5px",
+                right: "8px",
+                color:"black"
               }}
             >
-              {seat.Code || `${seat.row}${seat.col}`}
-              <Box
-                onClick={() => handleSeatRemove(seat)}
-                sx={{
-                  cursor: "pointer",
-                  width: "5px",
-                  position: "absolute",
-                  top: "-5px",
-                  right: "8px",
-                  color:"black"
-                }}
-              >
-                <RiCloseCircleFill style={{fontSize:"20px",color:"white"}} />
-              </Box>
+              <RiCloseCircleFill style={{fontSize:"20px",color:"white"}} />
             </Box>
-         
-        ))
+          </Box>
+       
+      ))
+    
       )}
     </Stack>
   );
