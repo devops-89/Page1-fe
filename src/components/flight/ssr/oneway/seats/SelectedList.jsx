@@ -8,13 +8,16 @@ import {COLORS} from "@/utils/colors.js";
 import { nunito } from "@/utils/fonts";
 
 const SelectedList = ({planeIndex}) => {
-  const dispatch = useDispatch();
-  const selectedSeats = useSelector(
-    (state) => state.SeatsInformation?.seats || []
-  );
-
-  console.log("selected sEAT", selectedSeats[planeIndex]?.selectedSeats);
+  const dispatch=useDispatch();
+  const selectedSeats = useSelector((state) => {
+    // Find the airplane by ID
+    const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
   
+    // Return selectedSeats if the airplane exists, otherwise return an empty array
+    return airplane?.selectedSeats || [];
+  });
+  
+  console.log(`Selected seats for airplane ID ${planeIndex}:`, selectedSeats);
 
   function handleSeatRemove(seat) {
     dispatch(removeSeatDetails({ airplaneId:planeIndex,seatCode:seat.Code}));
@@ -44,7 +47,7 @@ const SelectedList = ({planeIndex}) => {
           There is no seat selected
         </Typography>
       ) : (
-        selectedSeats[planeIndex]?.selectedSeats.map((seat) => (
+        selectedSeats?.map((seat) => (
          
           <Box
             key={seat.Code || `${seat.row}-${seat.col}`}
@@ -59,7 +62,8 @@ const SelectedList = ({planeIndex}) => {
               alignItems: "center",
               color: "white",
               position: "relative",
-              fontFamily:nunito.style
+              fontFamily:nunito.style,
+
             }}
           >
             {seat.Code || `${seat.row}${seat.col}`}

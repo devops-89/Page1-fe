@@ -12,3 +12,16 @@ body {
   object-fit: cover;
 }
 
+
+.swiper-button-prev, .swiper-button-next{
+  background-color: #f2940c;
+  padding: 20px!important;
+  border-radius: 50%;
+  height: 20px!important;
+  width: 20px!important;
+}
+
+.swiper-button-prev::after, .swiper-button-next::after{
+  color: #fff;
+  font-size: 25px!important;
+}

@@ -31,9 +31,19 @@ const AvailablityStatus = {
 
 const Seat = ({ extraDetails,planeIndex }) => {
 
-  let [tempSeats,setTempSeats]=useState([]);
+  
   // Use useSelector to directly access seats from Redux state
-  const reservedSeats = useSelector((state) => state.seats[planeIndex].selectedSeats);
+  const reservedSeats = useSelector((state) => {
+    const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
+  
+    // Return selectedSeats if the airplane exists, otherwise return an empty array
+    return airplane?.selectedSeats || [];
+   
+  });
+
+  console.log("Seat :",reservedSeats);
+  
+ 
   const dispatch = useDispatch();
   const [maxPassengerCount, setMaxPassengerCount] = useState(null);
   const [columns, setColumns] = useState([]); // State for columns
@@ -84,8 +94,10 @@ const Seat = ({ extraDetails,planeIndex }) => {
     const totalAllowedSeats =
       parseInt(maxPassengerCount?.adult || 0) +
       parseInt(maxPassengerCount?.child || 0);
-    const currentSelectedSeatsCount = reservedSeats.length;
+    const currentSelectedSeatsCount = reservedSeats.length;                                                                                                     
     const isSeatAlreadyReserved = reservedSeats.some((s) => s.Code === seat.Code);
+
+    console.log("totalAllowedSeats",totalAllowedSeats, "currentSelectedSeatsCount",currentSelectedSeatsCount)
 
     if (
       currentSelectedSeatsCount >= totalAllowedSeats &&
@@ -112,7 +124,7 @@ const Seat = ({ extraDetails,planeIndex }) => {
   //   )
   // },[tempSeats])
 
-
+  
   return (
     <Box sx={{ backgroundColor: COLORS.WHITE, width:"100%", display:'flex', flexDirection:'column', alignItems:'center', py:2 }}>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 3, gap:1.5 }}>
