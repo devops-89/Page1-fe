@@ -27,6 +27,7 @@ import FlightListBox from "@/components/flight/flightListBox";
 import Loader from "@/utils/Loader";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
+import Loading from "react-loading";
 
 const FlightList = () => {
     const [flightList, setFlightList] = useState(null);
@@ -513,7 +514,7 @@ const FlightList = () => {
                                             height: "200px",
                                         }}
                                     >
-                                        <Loader type="bars" width={20} height={20} color={COLORS.PRIMARY} />
+                                        <Loading type="bars" width={20} height={20} color={COLORS.PRIMARY} />
                                     </Grid2>
                                 ) : filteredFlights.length > 0 ? (
                                     <FlightListResults />
@@ -535,7 +536,7 @@ const FlightList = () => {
                         marginBottom: "50px",
                     }}
                 >
-                    <Loader type="bars" width={40} height={40} color={COLORS.PRIMARY} />
+                     <Loader open={true}/>
                 </Box>
             )}
         </>
