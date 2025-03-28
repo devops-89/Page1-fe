@@ -36,7 +36,7 @@ const MultiList = () => {
   const [journey, setJourney] = useState("");
   const [open, setOpen] = useState(false);
   const [searchAirline, setSearchAirline] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 25000]);
+  const [priceRange, setPriceRange] = useState([0, 500000]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [selectedTime, setSelectedTime] = useState("Anytime");
   const [loading, setLoading] = useState(true);
@@ -121,7 +121,7 @@ const MultiList = () => {
 
   const handleResetFilters = () => {
     setSearchAirline("");
-    setPriceRange([0, 25000]);
+    setPriceRange([0, 500000]);
     setSelectedTime("Anytime");
   };
 
@@ -340,7 +340,7 @@ const MultiList = () => {
                             onChange={handleRangeChange}
                             valueLabelDisplay="auto"
                             min={0}
-                            max={25000}
+                            max={500000}
                             sx={{
                               color: "#ff5722",
                               "& .MuiSlider-thumb": {
@@ -496,7 +496,7 @@ const MultiList = () => {
                         onChange={handleRangeChange}
                         valueLabelDisplay="auto"
                         min={0}
-                        max={25000}
+                        max={500000}
                         sx={{
                           color: "#ff5722",
                           "& .MuiSlider-thumb": {

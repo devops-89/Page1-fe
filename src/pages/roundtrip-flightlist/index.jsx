@@ -45,7 +45,7 @@ const FlightList = () => {
   const [traceId, setTraceId] = useState("");
   const [journey, setJourney] = useState("");
   const [searchAirline, setSearchAirline] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 200000]);
+  const [priceRange, setPriceRange] = useState([0, 500000]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [selectedTime, setSelectedTime] = useState("Anytime");
   const [loading, setLoading] = useState(true);
@@ -218,7 +218,7 @@ const FlightList = () => {
 
   const handleResetFilters = () => {
     setSearchAirline("");
-    setPriceRange([0, 200000]);
+    setPriceRange([0, 500000]);
     setSelectedTime("Anytime");
   };
 
@@ -638,7 +638,7 @@ const FlightList = () => {
                           onChange={handleRangeChange}
                           valueLabelDisplay="auto"
                           min={0}
-                          max={200000}
+                          max={500000}
                           sx={{
                             color: "#ff5722",
                             "& .MuiSlider-thumb": {
@@ -801,7 +801,7 @@ const FlightList = () => {
                       onChange={handleRangeChange}
                       valueLabelDisplay="auto"
                       min={0}
-                      max={200000}
+                      max={500000}
                       sx={{
                         color: "#ff5722",
                         "& .MuiSlider-thumb": {
