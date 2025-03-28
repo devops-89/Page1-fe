@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { Typography, Box, Stack } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
+import "swiper/css/navigation"; 
 import SeatDetail from "./SeatDetail";
 import Seat from "./Seat";
 import flightFront from "@/assests/flight_image/flight_front.png";
@@ -13,39 +13,42 @@ import { nunito } from "@/utils/fonts";
 import { JOURNEY_TYPE } from "@/utils/enum";
 
 const SeatMap = ({ flightDetailType }) => {
+ 
   const [extraDetails, setExtraDetails] = useState(null);
 
-  useEffect(() => {
+ useEffect(() => {
     let flightDetails = localStorage.getItem(flightDetailType);
-
+   
     if (flightDetails) {
-      flightDetails = JSON.parse(flightDetails);
-
-      console.log("flight Details:", flightDetails);
-
-      setExtraDetails(flightDetails);
+      flightDetails=JSON.parse(flightDetails);
+      
+     
+      if(flightDetails?.[3]?.journey_type==JOURNEY_TYPE.ROUNDTRIP){
+        flightDetails[1]=flightDetails[1].Response;
+        console.log("flight Details:",flightDetails)
+        setExtraDetails(flightDetails);
+      }else{
+        setExtraDetails(flightDetails);
+      }
+      
+     
     }
   }, [flightDetailType]);
 
-  console.log(
-    "Seat Map Extra Details:",
-    extraDetails?.[3]?.journey_type == JOURNEY_TYPE.ROUNDTRIP
-  );
+  console.log("Seat Map Extra Details:",extraDetails?.[3]?.journey_type==JOURNEY_TYPE.ROUNDTRIP);
 
   return (
     <Box sx={{ backgroundColor: COLORS.BLUEOVERLAY, py: 2 }}>
       <Swiper
         spaceBetween={20}
         slidesPerView={1}
-        navigation={{ clickable: true }}
-        modules={[Navigation]}
+        navigation={{ clickable: true }} 
+        modules={[Navigation]} 
+      
       >
         {extraDetails?.[1]?.SeatDynamic?.[0]?.SegmentSeat.map(
           (aeroplane, index) => (
-            <SwiperSlide
-              key={index}
-              style={{ height: "100vh", overflow: "auto" }}
-            >
+            <SwiperSlide key={index} style={{ height: '100vh', overflow:'auto'}}>
               <Stack
                 direction={{ lg: "row", xs: "column" }}
                 px={{ lg: 10, xs: 2 }}
@@ -56,6 +59,7 @@ const SeatMap = ({ flightDetailType }) => {
                   flexWrap: "wrap",
                 }}
               >
+               
                 <Box
                   sx={{
                     flexShrink: 0,
@@ -85,7 +89,7 @@ const SeatMap = ({ flightDetailType }) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    paddingRight: "50px",
+                    paddingRight:'50px'
                   }}
                 >
                   {/* Airplane Front Image */}

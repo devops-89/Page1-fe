@@ -21,10 +21,13 @@ const SeatMap = ({ flightDetailType }) => {
     if (flightDetails) {
       flightDetails = JSON.parse(flightDetails);
 
-      console.log("flight Details:", flightDetails);
-
+      flightDetails[1] = flightDetails[1].Response;
+      console.log("flight Details roundtrip1:", flightDetails?.[1]?.SeatDynamic?.[0]);
+      console.log("flight Details roundtrip2:", flightDetails?.[1]?.SeatDynamic?.[1]);
       setExtraDetails(flightDetails);
     }
+
+
   }, [flightDetailType]);
 
   console.log(
