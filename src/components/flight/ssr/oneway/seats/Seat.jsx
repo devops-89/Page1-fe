@@ -33,7 +33,7 @@ const Seat = ({ extraDetails,planeIndex }) => {
 
   let [tempSeats,setTempSeats]=useState([]);
   // Use useSelector to directly access seats from Redux state
-  const reservedSeats = useSelector((state) => state.seats[planeIndex].selectedSeats);
+  const reservedSeats = useSelector((state) => state.SeatsInformation.seats);
   const dispatch = useDispatch();
   const [maxPassengerCount, setMaxPassengerCount] = useState(null);
   const [columns, setColumns] = useState([]); // State for columns
