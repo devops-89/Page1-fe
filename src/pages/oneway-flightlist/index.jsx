@@ -28,6 +28,8 @@ import Loader from "@/utils/Loader";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import Loading from "react-loading";
+import filterImage from '@/assests/flight_image/filter.svg'
+import Image from "next/image";
 
 const FlightList = () => {
     const [flightList, setFlightList] = useState(null);
@@ -118,12 +120,21 @@ const FlightList = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "200px",
+                flexDirection:'column'
             }}
         >
-            <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
-                No flights found matching your filters.
+            <Typography variant="h5" sx={{ fontFamily: nunito.style, fontWeight:700, mb:'10px' }}>
+                No flight available!
             </Typography>
+            <Typography variant="body1" sx={{ fontFamily: nunito.style}}>
+                Sorry, there are no flights matching this criteria. Please modify the filters & try again.
+            </Typography>
+            <Image
+                src={filterImage.src}
+                alt="Image"
+                width={300}
+                height={300}
+            />
         </Grid2>
     );
 
@@ -536,7 +547,7 @@ const FlightList = () => {
                         marginBottom: "50px",
                     }}
                 >
-                     <Loader open={true}/>
+                    <Loader open={true} />
                 </Box>
             )}
         </>

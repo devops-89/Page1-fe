@@ -27,6 +27,8 @@ import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Loading from "react-loading";
+import Image from "next/image";
+import filterImage from '@/assests/flight_image/filter.svg'
 
 const MultiList = () => {
   const [flightList, setFlightList] = useState(null);
@@ -127,18 +129,27 @@ const MultiList = () => {
 
   const NoFlightsFound = () => (
     <Grid2
-      size={12}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "200px",
-      }}
-    >
-      <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
-        No flights found matching your filters.
-      </Typography>
-    </Grid2>
+               size={12}
+               sx={{
+                   display: "flex",
+                   justifyContent: "center",
+                   alignItems: "center",
+                   flexDirection:'column'
+               }}
+           >
+               <Typography variant="h5" sx={{ fontFamily: nunito.style, fontWeight:700, mb:'10px' }}>
+                   No flight available!
+               </Typography>
+               <Typography variant="body1" sx={{ fontFamily: nunito.style}}>
+                   Sorry, there are no flights matching this criteria. Please modify the filters & try again.
+               </Typography>
+               <Image
+                   src={filterImage.src}
+                   alt="Image"
+                   width={300}
+                   height={300}
+               />
+           </Grid2>
   );
 
   const FlightListResults = () => (
