@@ -10,17 +10,32 @@ import flightFront from "@/assests/flight_image/flight_front.png";
 import flightBack from "@/assests/flight_image/flight_back.png";
 import { COLORS } from "@/utils/colors.js";
 import { nunito } from "@/utils/fonts";
+import { JOURNEY_TYPE } from "@/utils/enum";
 
-const SeatMap = ({ initialFlightDetail }) => {
+const SeatMap = ({ flightDetailType }) => {
  
   const [extraDetails, setExtraDetails] = useState(null);
 
  useEffect(() => {
-    const flightDetails = localStorage.getItem(initialFlightDetail);
+    let flightDetails = localStorage.getItem(flightDetailType);
+   
     if (flightDetails) {
-      setExtraDetails(JSON.parse(flightDetails));
+      flightDetails=JSON.parse(flightDetails);
+      
+     
+      if(flightDetails?.[3]?.journey_type==JOURNEY_TYPE.ROUNDTRIP){
+        flightDetails[1]=flightDetails[1].Response;
+        console.log("flight Details:",flightDetails)
+        setExtraDetails(flightDetails);
+      }else{
+        setExtraDetails(flightDetails);
+      }
+      
+     
     }
-  }, [initialFlightDetail]);
+  }, [flightDetailType]);
+
+  console.log("Seat Map Extra Details:",extraDetails?.[3]?.journey_type==JOURNEY_TYPE.ROUNDTRIP);
 
   return (
     <Box sx={{ backgroundColor: COLORS.BLUEOVERLAY, py: 2 }}>

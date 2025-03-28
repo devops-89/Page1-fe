@@ -479,7 +479,7 @@ const PassengerForm = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <FullScreenDialog initialFlightDetail="oneWayflightDetails"/>
+                  <FullScreenDialog flightDetailType="oneWayflightDetails"/>
                 </Box>}
 
                 <Box

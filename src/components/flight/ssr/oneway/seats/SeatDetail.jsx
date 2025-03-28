@@ -2,6 +2,7 @@ import React from "react";
 import { Grid2, Button, Typography, Box, Stack,Divider,Avatar } from "@mui/material";
 import SelectedList from "./SelectedList";
 import { COLORS } from "@/utils/colors.js";
+import chalk from "chalk";
 
 import moment from "moment";
 import { FlightTakeoff } from "@mui/icons-material";
@@ -10,7 +11,7 @@ import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineE
 import { nunito } from "@/utils/fonts";
 const SeatDetail = ({extraDetails,planeIndex}) => {
 
-  //  console.log("Seat Details",extraDetails);
+   console.log(chalk.green("Seat Details"),extraDetails.Results.Segments[0]);
   return (
     <Box
       item
@@ -35,20 +36,20 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
             <Typography
               sx={{ fontSize:{lg:22 , xs:15}, fontWeight: 700, fontFamily: nunito.style }}
             >
-              {moment(extraDetails?.Results?.Segments[0][0]?.Origin?.DepTime).format(
+              {moment(extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.DepTime).format(
                 "HH:mm"
               )}
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {extraDetails?.Results?.Segments[0][0]?.Origin?.Airport.AirportCode} -{" "}
-              {extraDetails?.Results?.Segments[0][0]?.Origin?.Airport.Terminal} Terminal
+              {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport.AirportCode} -{" "}
+              {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport.Terminal} Terminal
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {extraDetails?.Results?.Segments[0][0]?.Origin?.Airport?.CityName}
+              {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport?.CityName}
             </Typography>
           </Grid2>
           <Grid2 size={4} sx={{textAlign:'center'}}>
@@ -63,19 +64,12 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
              {`${Math.floor(
                                       moment
                                         .duration(
-                                          extraDetails?.Results?.Segments[0][
-                                            extraDetails?.Results?.Segments[0]
-                                              .length - 1
-                                          ].AccumulatedDuration,
+                                          extraDetails?.Results?.Segments[0][planeIndex].Duration,
                                           "minutes"
                                         )
                                         .asHours()
                                     )} hrs ${moment
-                                      .duration(
-                                        extraDetails?.Results?.Segments[0][
-                                          extraDetails?.Results?.Segments[0]
-                                            .length - 1
-                                        ].AccumulatedDuration,
+                                      .duration([planeIndex].Duration,
                                         "minutes"
                                       )
                                       .minutes()} min`}
@@ -92,27 +86,18 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
               sx={{ fontSize: {lg:22 , xs:14}, fontWeight: 700, fontFamily: nunito.style }}
             >
               {moment(
-                extraDetails?.Results?.Segments[0][
-                  extraDetails?.Results?.Segments[0]
-                    .length - 1
-                ]?.Destination.ArrTime
+                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.ArrTime
               ).format("HH:mm")}
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
               {
-                extraDetails?.Results?.Segments[0][
-                  extraDetails?.Results?.Segments[0]
-                    .length - 1
-                ]?.Destination.Airport.AirportCode
+                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.AirportCode
               }{" "}
               -{" "}
               {
-                extraDetails?.Results?.Segments[0][
-                  extraDetails?.Results?.Segments[0]
-                    .length - 1
-                ]?.Destination.Airport.Terminal
+                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.Terminal
               }{" "}
               Terminal
             </Typography>
@@ -120,10 +105,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
               {
-                extraDetails?.Results?.Segments[0][
-                  extraDetails?.Results?.Segments[0]
-                    .length - 1
-                ]?.Destination.Airport.CityName
+                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.CityName
               }
             </Typography>
           </Grid2>

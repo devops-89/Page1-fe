@@ -471,7 +471,7 @@ const InternationalPassengerForm = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <FullScreenDialog />
+                  <FullScreenDialog flightDetailType="roundTripflightDetails"/>
                 </Box>
 
                 <Box
