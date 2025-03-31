@@ -278,7 +278,7 @@ const Header = () => {
         </List>
       </Popover>
      
-     { !openMenu && <TabletNavbar onClose={handleOpenMenu}/> }
+     { !openMenu &&  <TabletNavbar onClose={handleOpenMenu}/> }
     </Box>
   );
 };
