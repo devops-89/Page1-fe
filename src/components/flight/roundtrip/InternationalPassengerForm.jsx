@@ -14,7 +14,8 @@ import ToastBar from "@/components/toastBar";
 import AddForm from "../AddForm";
 import GstForm from "../GstForm";
 import PassengerFields from "../PassengerFields";
-import FullScreenDialog from "../ssr/oneway/seats/FullScreenDialog";
+// import FullScreenDialog from "../ssr/oneway/seats/FullScreenDialog";
+import FullScreenDialog from "../ssr/roundtrip/international/seats/FullScreenDialog";
 
 const InternationalPassengerForm = ({
   flightDetails,
@@ -471,7 +472,7 @@ const InternationalPassengerForm = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <FullScreenDialog />
+                  <FullScreenDialog flightDetailType="roundTripflightDetails"/>
                 </Box>
 
                 <Box
