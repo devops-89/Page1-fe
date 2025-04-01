@@ -28,19 +28,21 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
 
   // Handle baggage click (select or remove)
   const handleBaggageClick = (baggage, flightNumber) => {
-    // console.log('baggage-----------', baggage, flightNumber);
+    console.log('baggage-----------', baggage, flightNumber);
     const passengerBaggages = selectedPassengerBaggages.baggages;
     const existingBaggage = passengerBaggages.find((b) => b.flightId === flightNumber);
 
     if (existingBaggage?.baggage.Code === baggage.Code) {
       // Deselect the baggage if it's already selected
-      dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: baggage.Code }));
+      console.log('--------select-------')
+      dispatch(removeBaggageDetails({ passengerType, passengerId, flightId: flightNumber, baggageCode: baggage.Code }));
     } else {
       // Ensure only one baggage is selected per flight
       if (existingBaggage) {
-        dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: existingBaggage.baggage.Code }));
+        console.log('existingBaggage-----------', passengerId, flightNumber, existingBaggage)
+        dispatch(removeBaggageDetails({ passengerType, passengerId, flightId: flightNumber, baggageCode: existingBaggage.baggage.Code }));
       }
-      dispatch(setBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, selected: baggage }));
+      dispatch(setBaggageDetails({ passengerType, passengerId, flightId: flightNumber, selected: baggage }));
     }
   };
 
