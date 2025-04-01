@@ -9,29 +9,21 @@ const baggagesInformation = createSlice({
   initialState,
   reducers: {
     setBaggageDetails: (state, action) => {
-      const { passengerId, flightNumber, selectedBaggage, passengerType } = action.payload;
+      const { passengerId, baggageId, selected, passengerType } = action.payload;
+      const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
-      console.log('action.payload---------',action.payload)
-
-      const uniquePassengerKey = `${passengerType}-${passengerId}`; // Unique key
-
-      // Initialize passenger baggage entry if not already present
       if (!state.baggages[uniquePassengerKey]) {
-        state.baggages[uniquePassengerKey] = { baggages: [], passengerType };
+        state.baggages[uniquePassengerKey] = { selectedBaggages: [], passengerType };
       }
 
-      // Check if the selected baggage is already added for this flight
-      const existingBaggageIndex = state.baggages[uniquePassengerKey].baggages.findIndex(
-        (baggage) => baggage.flightNumber === flightNumber && baggage.Code === selectedBaggage?.selected?.Code
+      const existingBaggageIndex = state.baggages[uniquePassengerKey].selectedBaggages.findIndex(
+        (baggage) => baggage.flightId === baggageId && baggage.baggage.Code === selected.Code
       );
 
       if (existingBaggageIndex === -1) {
-        // Add baggage if it's not already selected
-        state.baggages[uniquePassengerKey].baggages.push({ flightNumber, baggage: selectedBaggage?.selected });
-      } else {
-        // Deselect baggage if it's already selected (remove it from the array)
-        state.baggages[uniquePassengerKey].baggages.splice(existingBaggageIndex, 1);
+        state.baggages[uniquePassengerKey].selectedBaggages.push({ flightId: baggageId, selectedBaggage: selected });
       }
+      
     },
 
     removeBaggageDetails: (state, action) => {
@@ -40,12 +32,12 @@ const baggagesInformation = createSlice({
 
       if (state.baggages[uniquePassengerKey]) {
         // Remove baggage for the specified flight and baggage code
-        state.baggages[uniquePassengerKey].baggages = state.baggages[uniquePassengerKey].baggages.filter(
-          (baggage) => !(baggage.flightNumber === flightNumber && baggage.baggage.Code === baggageCode)
+        state.baggages[uniquePassengerKey].selectedBaggages = state.baggages[uniquePassengerKey].selectedBaggages.filter(
+          (baggage) => !(baggage.flightNumber === flightNumber && baggage.selectedBaggage.Code === baggageCode)
         );
 
         // If no baggage remains for the passenger, remove the passenger entry
-        if (state.baggages[uniquePassengerKey].baggages.length === 0) {
+        if (state.baggages[uniquePassengerKey].selectedBaggages.length === 0) {
           delete state.baggages[uniquePassengerKey];
         }
       }

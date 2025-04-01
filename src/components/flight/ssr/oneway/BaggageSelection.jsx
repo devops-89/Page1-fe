@@ -21,7 +21,7 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
   const selectedBaggages = useSelector((state) => state.BaggagesInformation.baggages || {});
 
   // Safe check to ensure that the selectedBaggages[uniquePassengerKey] is not undefined
-  const selectedPassengerBaggages = selectedBaggages[uniquePassengerKey] || { baggages: [] };
+  const selectedPassengerBaggages = selectedBaggages[uniquePassengerKey] || { selectedBaggages: [] };
 
     console.log('selectedPassengerBaggages------------',selectedPassengerBaggages)
 
@@ -29,16 +29,17 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
   // Handle baggage click (select or remove)
   const handleBaggageClick = (baggage, flightNumber) => {
     // console.log('baggage-----------', baggage, flightNumber);
-    const passengerBaggages = selectedPassengerBaggages.baggages;
+    const passengerBaggages = selectedPassengerBaggages.selectedBaggages;
     const existingBaggage = passengerBaggages.find((b) => b.flightId === flightNumber);
+    console.log('---------existingBaggage',existingBaggage)
 
-    if (existingBaggage?.baggage.Code === baggage.Code) {
+    if (existingBaggage?.selectedBaggage.Code === baggage.Code) {
       // Deselect the baggage if it's already selected
       dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: baggage.Code }));
     } else {
       // Ensure only one baggage is selected per flight
       if (existingBaggage) {
-        dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: existingBaggage.baggage.Code }));
+        dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: existingBaggage.selectedBaggage.Code }));
       }
       dispatch(setBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, selected: baggage }));
     }
@@ -79,9 +80,10 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
                     <BaggageCard
                       baggage={baggage}
                       handleBaggageValue={() => handleBaggageClick(baggage, baggage?.FlightNumber)}
-                      isSelected={selectedPassengerBaggages.baggages?.some(
-                        (b) => b.flightId === baggage.FlightNumber && b.baggage.Code === baggage.Code
+                      isSelected={selectedPassengerBaggages.selectedBaggages?.some(
+                        (b) => String(b.flightId) === String(baggage.FlightNumber) && b.selectedBaggage.Code === baggage.Code
                       )}
+                      
                     />
                   </Grid2>
                 );

@@ -20,7 +20,7 @@ export default configureStore({
     FormPayload:formPayloadReducer,
     FlightInformation: flightInformationReducer,
     SeatsInformation: seatsInformationReducer,
-    RoundInternationalSeatsInformation: roundInternationalSeatsInformationReducer
+    RoundInternationalSeatsInformation: roundInternationalSeatsInformationReducer,
     MealsInformation: mealsInformationReducer,
     BaggagesInformation: baggagesInformationReducer,
   },
