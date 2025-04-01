@@ -25,3 +25,22 @@ body {
   color: #fff;
   font-size: 25px!important;
 }
+
+
+
+
+/* ---------- for meal ---------- */
+
+
+#meal_box .swiper-button-prev, #meal_box .swiper-button-next,#baggage_box .swiper-button-prev, #baggage_box .swiper-button-next{
+  background-color: #f2940c;
+  padding: 10px!important;
+  border-radius: 50%;
+  height: 20px!important;
+  width: 20px!important;
+}
+
+#meal_box .swiper-button-prev::after, #meal_box .swiper-button-next::after, #baggage_box .swiper-button-prev::after, #baggage_box .swiper-button-next::after{
+  color: #fff;
+  font-size: 15px!important;
+}

@@ -30,6 +30,7 @@ const PassengerFields = ({
   const passengerKey = `${formType}-${index}`;
   // console.log("formType", formType, "index", index);
 
+  // console.log("selectMeal", selectMeal)
   const dispatch = useDispatch();
   return (
     <Accordion defaultExpanded={index === 0} key={passengerKey}>
@@ -372,24 +373,28 @@ const PassengerFields = ({
             />
           </Grid2>
 
-          <Grid2 size={{ xs: 12 }}>
+          {/* Meal Selection */}
+          <Grid2 size={12}>
             {data?.MealDynamic && (
               <MealSelection
+              passengerId={index} 
                 mealData={data?.MealDynamic}
                 isLCC={data?.isLCC}
-                handleMealValue={(meal) =>
-                  handleMealValue(formType, index, meal)
-                }
+                passengerType={formType}
+                handleMealValue={(meal) => handleMealValue(formType, index, meal)}
                 selectMeal={selectMeal[passengerKey]}
               />
             )}
+          </Grid2>
 
+          {/* Baggage Selection */}
+          <Grid2 size={12}>
             {data?.Baggage && (
               <BaggageSelection
+              passengerId={index} 
+              passengerType={formType}
                 baggageData={data?.Baggage}
-                handleBaggageValue={(baggage) =>
-                  handleBaggageValue(formType, index, baggage)
-                }
+                handleBaggageValue={(baggage) => handleBaggageValue(formType, index, baggage)}
                 selectBaggage={selectBaggage[passengerKey]}
               />
             )}

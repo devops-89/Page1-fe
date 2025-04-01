@@ -69,7 +69,7 @@ const FlightDetails = () => {
   const [selectBaggage, setSelectBaggage] = useState({});
 
   // console.log("selectBaggage", selectBaggage)
-  // console.log("selectMeal", selectMeal)
+  // console.log("viewDetail selectMeal", selectMeal)
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
