@@ -7,17 +7,28 @@ import { removeSeatDetails } from "@/redux/reducers/seatsInformation";
 import {COLORS} from "@/utils/colors.js";
 import { nunito } from "@/utils/fonts";
 
-const SelectedList = ({planeIndex}) => {
+const SelectedList = ({planeIndex,tabIndex}) => {
   const dispatch=useDispatch();
   const selectedSeats = useSelector((state) => {
-    // Find the airplane by ID
-    const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
   
-    // Return selectedSeats if the airplane exists, otherwise return an empty array
+    if(tabIndex===0)
+    {
+       // Find the airplane by ID
+      const airplane = state.RoundInternationalSeatsInformation?.outgoingSeats?.find((ap) => ap.id === planeIndex);
+       // Return selectedSeats if the airplane exists, otherwise return an empty array
     return airplane?.selectedSeats || [];
+    }else{
+   // Find the airplane by ID
+      const airplane = state.RoundInternationalSeatsInformation?.incomingSeats?.find((ap) => ap.id === planeIndex);
+       // Return selectedSeats if the airplane exists, otherwise return an empty array
+    return airplane?.selectedSeats || [];
+    }
+   
+  
+   
   });
   
-  console.log(`Selected seats for airplane ID ${planeIndex}:`, selectedSeats);
+  console.log(`Selected seats for airplane ID ${planeIndex} and tabIndex ${tabIndex}:`, selectedSeats);
 
   function handleSeatRemove(seat) {
     dispatch(removeSeatDetails({ airplaneId:planeIndex,seatCode:seat.Code}));

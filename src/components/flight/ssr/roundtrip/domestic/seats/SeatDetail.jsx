@@ -9,9 +9,9 @@ import { FlightTakeoff } from "@mui/icons-material";
 import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
 
 import { nunito } from "@/utils/fonts";
-const SeatDetail = ({extraDetails,planeIndex}) => {
+const SeatDetail = ({extraDetails,planeIndex,tabIndex}) => {
 
-   console.log(chalk.green("Seat Details"),extraDetails.Results.Segments[0]);
+  
   return (
     <Box
       item
@@ -36,20 +36,20 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
             <Typography
               sx={{ fontSize:{lg:22 , xs:15}, fontWeight: 700, fontFamily: nunito.style }}
             >
-              {moment(extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.DepTime).format(
+              {moment(extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Origin?.DepTime).format(
                 "HH:mm"
               )}
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport.AirportCode} -{" "}
-              {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport.Terminal} Terminal
+              {extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Origin?.Airport.AirportCode} -{" "}
+              {extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Origin?.Airport.Terminal} Terminal
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
-              {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport?.CityName}
+              {extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Origin?.Airport?.CityName}
             </Typography>
           </Grid2>
           <Grid2 size={4} sx={{textAlign:'center'}}>
@@ -64,7 +64,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
              {`${Math.floor(
                                       moment
                                         .duration(
-                                          extraDetails?.Results?.Segments[0][planeIndex].Duration,
+                                          extraDetails?.Results?.Segments[tabIndex][planeIndex].Duration,
                                           "minutes"
                                         )
                                         .asHours()
@@ -86,18 +86,18 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
               sx={{ fontSize: {lg:22 , xs:14}, fontWeight: 700, fontFamily: nunito.style }}
             >
               {moment(
-                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.ArrTime
+                extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Destination.ArrTime
               ).format("HH:mm")}
             </Typography>
             <Typography
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
               {
-                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.AirportCode
+                extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Destination.Airport.AirportCode
               }{" "}
               -{" "}
               {
-                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.Terminal
+                extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Destination.Airport.Terminal
               }{" "}
               Terminal
             </Typography>
@@ -105,13 +105,13 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
               sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
             >
               {
-                extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.CityName
+                extraDetails?.Results?.Segments[tabIndex][planeIndex]?.Destination.Airport.CityName
               }
             </Typography>
           </Grid2>
          
           <Grid2 size={12} sx={{ display:"flex", alignItems:"center", justifyContent:'center'}}>
-          <SelectedList planeIndex={planeIndex} />
+          <SelectedList planeIndex={planeIndex} tabIndex={tabIndex} />
           </Grid2>
         </Grid2>
 

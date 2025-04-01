@@ -5,6 +5,7 @@ import travellerInformationReducer from "../reducers/travellerInformation";
 import flightInformationReducer from "../reducers/flightInformation";
 import formPayloadReducer from "../reducers/formPayload";
 import seatsInformationReducer from "../reducers/seatsInformation";
+import roundInternationalSeatsInformationReducer from "../reducers/roundInternationalSeatsInformation";
 export default configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -17,6 +18,7 @@ export default configureStore({
     FormPayload:formPayloadReducer,
     FlightInformation: flightInformationReducer,
     SeatsInformation: seatsInformationReducer,
+    RoundInternationalSeatsInformation: roundInternationalSeatsInformationReducer
   },
  
 });
