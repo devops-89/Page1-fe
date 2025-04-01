@@ -38,7 +38,7 @@ const InternationalPassengerForm = ({
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
 
-  console.log("flightDetails", flightDetails[1]?.Response);
+ 
 
   const selectedSeats = useSelector(
     (state) => state.SeatsInformation?.seats || []

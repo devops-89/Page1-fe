@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SeatMap from "./SeatMap";
 import { COLORS } from "@/utils/colors.js";
 import { useDispatch } from "react-redux";
-import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
+import { resetSeatDetails } from "@/redux/reducers/roundInternationalSeatsInformation";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,6 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 export default function FullScreenDialog({flightDetailType}) {
+ 
   const dispatch=useDispatch();
   const [open, setOpen] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(0);
