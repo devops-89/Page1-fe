@@ -19,6 +19,7 @@ import {
   TableCell,
   TableBody,
   Button,
+  useMediaQuery
 } from "@mui/material";
 
 import { flightController } from "@/api/flightController";
@@ -38,7 +39,7 @@ import UserVerifyForm from "@/components/flight/UserVerifyForm";
 import Loader from "@/utils/Loader";
 import InternationalPassengerForm from "@/components/flight/roundtrip/InternationalPassengerForm";
 import DomesticPassengerForm from "@/components/flight/roundtrip/DomesticPassengerForm";
-
+import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -60,6 +61,8 @@ const FlightDetails = () => {
   const [open, setOpen] = useState(false);
   const [selectMeal, setSelectMeal] = useState({});
   const [selectBaggage, setSelectBaggage] = useState({});
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const smallScreen = useMediaQuery("(max-width:1199px)");
 
   // console.log("router", router)
   const handleClose = () => {
@@ -138,6 +141,11 @@ const FlightDetails = () => {
     }
   }, []);
 
+  const toggleDrawer = {
+    open: drawerOpen, // Current state of the drawer
+    toggle: () => setDrawerOpen((prev) => !prev), // Function to toggle the state
+  };
+
   return (
     <>
       <Grid2 container>
@@ -201,7 +209,7 @@ const FlightDetails = () => {
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px", overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>
-                <Grid2 size={8}>
+                <Grid2 size={{lg:8 ,xs:12}} order={{lg:1 , xs:2}}>
                   <Paper
                     sx={{
                       padding: 2,
@@ -267,23 +275,64 @@ const FlightDetails = () => {
                 </Grid2>
 
                 {/* Fare Summary */}
-                <Grid2 size={4} sx={{
+                <Grid2 size={{lg:4 , xs:12}} sx={{
                     position: "sticky",
                     top: "75px",
                     alignSelf: "start",
                     overflow: "visible",
-                  }}>
-                  {router.query.journey === JOURNEY.INTERNATIONAL ? (
+                  }}
+                  order={{lg:2 ,xs:1}}
+                  >
+
+{smallScreen ? (
+  <SwipeableEdgeDrawer
+    toggleDrawer={toggleDrawer}
+    fairSummary={
+      router.query.journey === JOURNEY.INTERNATIONAL ? (
+        <FareSummary
+          toggleDrawer={toggleDrawer}
+          commission={commission}
+          fareData={flightDetails[0]?.Results}
+        />
+      ) : (
+        <RoundFareSummary
+          toggleDrawer={toggleDrawer}
+          commission={commission}
+          fareData={flightDetails}
+        />
+      )
+    }
+  />
+) : (
+  router.query.journey === JOURNEY.INTERNATIONAL ? (
+    <FareSummary
+      fareData={flightDetails[0]?.Results}
+      toggleDrawer={toggleDrawer}
+      commission={commission}
+    />
+  ) : (
+    <RoundFareSummary
+      fareData={flightDetails}
+      toggleDrawer={toggleDrawer}
+      commission={commission}
+    />
+  )
+)}
+
+                  {/* {router.query.journey === JOURNEY.INTERNATIONAL ? (
                     <FareSummary
                       fareData={flightDetails[0]?.Results}
                       commission={commission}
                     />
                   ) : (
+
+                  
+                     
                     <RoundFareSummary
                       fareData={flightDetails}
                       commission={commission}
                     />
-                  )}
+                  )} */}
                 </Grid2>
               </Grid2>
             </Container>

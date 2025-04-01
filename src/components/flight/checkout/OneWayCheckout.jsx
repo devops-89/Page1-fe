@@ -141,6 +141,7 @@ export default function OneWayCheckout() {
               >
                 <Grid2
                   size={{ xs: 12, sm: 12, md: 12, lg: 8 }}
+                  
                   sx={{
                     backgroundColor: COLORS.SEMIGREY,
                     p: 2,
@@ -648,7 +649,7 @@ export default function OneWayCheckout() {
                 </Grid2>
 
                 <Grid2
-                  size={{ lg: 4, xs: 12 }}
+                  size={{ lg: 4, md:4 , sm:12, xs: 12 }}
                   sx={{
                     backgroundColor: COLORS.WHITE,
                     borderRadius: 2,

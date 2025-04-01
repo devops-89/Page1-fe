@@ -22,6 +22,8 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  useMediaQuery,
+  Stack
 } from "@mui/material";
 import Image from "next/image";
 import { flightController } from "@/api/flightController";
@@ -38,6 +40,7 @@ import ToastBar from "@/components/toastBar";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
 import MultiCityPassengerForm from "@/components/flight/multicity/MultiCityPassengerForm";
+import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -59,8 +62,10 @@ const FlightDetails = () => {
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectMeal, setSelectMeal] = useState({});
-    const [selectBaggage, setSelectBaggage] = useState({});
+  const [selectBaggage, setSelectBaggage] = useState({});
+  const smallScreen = useMediaQuery("(max-width:1199px)");
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -125,6 +130,11 @@ const FlightDetails = () => {
     }
   }, []);
 
+  const toggleDrawer = {
+    open: drawerOpen, // Current state of the drawer
+    toggle: () => setDrawerOpen((prev) => !prev), // Function to toggle the state
+  };
+
   return (
     <>
       <Grid2 container>
@@ -188,7 +198,7 @@ const FlightDetails = () => {
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px", overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>
-                <Grid2 size={8}>
+                <Grid2 size={{ lg: 8, xs: 12 }} order={{ lg: 1, xs: 2 }}>
                   <Paper
                     sx={{
                       padding: 2,
@@ -514,17 +524,35 @@ const FlightDetails = () => {
                     )}
                   </Paper>
                 </Grid2>
+                {/* Fare summary */}
 
-                <Grid2 size={4} sx={{
+                <Grid2
+                  size={{ lg: 4, xs: 12 }}
+                  order={{ lg: 2, xs: 1 }}
+                  sx={{
                     position: "sticky",
                     top: "75px",
                     alignSelf: "start",
                     overflow: "visible",
-                  }}>
-                  <FareSummary
-                    fareData={flightDetails[0]?.Results}
-                    commission={commission}
-                  />
+                  }}
+                >
+                  {smallScreen ? (
+                    <SwipeableEdgeDrawer
+                      toggleDrawer={toggleDrawer}
+                      fairSummary={
+                        <FareSummary
+                          toggleDrawer={toggleDrawer}
+                          commission={commission}
+                          fareData={flightDetails[0]?.Results}
+                        />
+                      }
+                    />
+                  ) : (
+                    <FareSummary
+                      fareData={flightDetails[0]?.Results}
+                      commission={commission}
+                    />
+                  )}
                 </Grid2>
               </Grid2>
             </Container>

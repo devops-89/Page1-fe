@@ -9,13 +9,18 @@ import {
   ListItemText,
   Collapse,
   ListItemIcon,
+  useMediaQuery,
+ Stack
+ ,Button
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { nunito } from "@/utils/fonts";
 import { COMMISSION_TYPE } from "@/utils/enum";
+import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
+import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
 
-const RoundFareSummary = ({ fareData, commission }) => {
+const RoundFareSummary = ({ fareData, commission ,toggleDrawer }) => {
   const [onwardTaxBreakup, setOnwardTaxBreakup] = useState(
     fareData[0][0]?.Results?.Fare?.TaxBreakup || []
   );
@@ -56,21 +61,27 @@ const RoundFareSummary = ({ fareData, commission }) => {
   const toggleCollapse = () => {
     setOpen(!open);
   };
-
+   const smallScreen = useMediaQuery("(max-width:1199px)")
   // console.log("fareData", fareData)
   return (
     <Paper sx={{ padding: 2, backgroundColor: "#F4F4F4", height: "auto" }}>
-      <Typography
-        variant="h6"
-        sx={{
-          fontSize: 18,
-          fontWeight: 800,
-          color: "#000",
-          fontFamily: nunito.style,
-        }}
-      >
-        Fare Summary
-      </Typography>
+      <Stack direction={"row"} alignItems={"center"} justifyContent={"space-between"}  >
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: 18,
+                fontWeight: 800,
+                color: "#000",
+                fontFamily: nunito.style,
+              }}
+            >
+              Fare Summary
+            </Typography>
+             {smallScreen ?  <Button onClick={toggleDrawer.toggle} variant="contained" color="primary">
+              {!toggleDrawer.open ? <KeyboardDoubleArrowUpOutlinedIcon />: <KeyboardDoubleArrowDownOutlinedIcon/>}
+            </Button>  : null}
+           
+            </Stack>
       <Divider sx={{ marginY: 1 }} />
       <List component="nav" sx={{ p: 0 }}>
         <ListItem

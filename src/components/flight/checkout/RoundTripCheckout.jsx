@@ -8,6 +8,8 @@ import {
   Button,
   Checkbox,
   Grid2,
+ 
+  useMediaQuery
 } from "@mui/material";
 import { COLORS } from "@/utils/colors";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
@@ -24,6 +26,7 @@ import moment from "moment";
 import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
 import Loader from "@/utils/Loader";
+import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 
 export default function RoundTripCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
@@ -47,6 +50,12 @@ export default function RoundTripCheckout() {
   const [roundTrip, setRoundTrip] = useState(null);
   const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+   const smallScreen = useMediaQuery("(max-width:1199px)");
+  const toggleDrawer = {
+    open: drawerOpen, 
+    toggle: () => setDrawerOpen((prev) => !prev), 
+  };
 
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("roundTripflightDetails");
@@ -132,19 +141,26 @@ export default function RoundTripCheckout() {
                 container
                 spacing={3}
                 alignItems={"flex-start"}
+                
               >
                 <Grid2
-                  size={{ xs: 12, sm: 12, md: 8 }}
+                  size={{ xs: 12, sm: 12, md: 12 ,lg:8 }}
+              
                   sx={{
                     backgroundColor: COLORS.SEMIGREY,
                     p: 2,
                     borderRadius: 2,
+                 
+                    
+                    
+                    
                   }}
                 >
                   <Box
                     sx={{
                       backgroundColor: COLORS.WHITE,
                       p: 2,
+                      
                     }}
                   >
                     {/* form for payment option */}
@@ -558,16 +574,45 @@ export default function RoundTripCheckout() {
                 {/* order-box */}
 
                 <Grid2
-                  size={{ xs: 12, sm: 12, md: 4 }}
+                  size={{ xs: 12, sm: 12, md: 12 ,lg:4 }}
+                
+                  
                   sx={{
                     backgroundColor: COLORS.WHITE,
                     borderRadius: 2,
                     position: "sticky",
                     top: "75px",
+                    
                   }}
                 >
                   {/* --------------fare Summary Start-----------------  */}
-                  {roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
+                {
+                  smallScreen ?(
+                    <SwipeableEdgeDrawer
+                    toggleDrawer={toggleDrawer}
+                    fairSummary ={
+                      roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
+                        <FareSummary
+                          fareData={roundTrip[0]?.Results}
+                          commission={roundTrip[2]}
+                          toggleDrawer={toggleDrawer}
+                        />
+                      ) : (
+                        <RoundFareSummary
+                          fareData={roundTrip}
+                          commission={roundTrip[2]}
+                          toggleDrawer={toggleDrawer}
+                        />
+                      )
+
+                    }
+
+                    />
+                      
+                  
+
+                  ):(
+                      roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
                     <FareSummary
                       fareData={roundTrip[0]?.Results}
                       commission={roundTrip[2]}
@@ -577,7 +622,22 @@ export default function RoundTripCheckout() {
                       fareData={roundTrip}
                       commission={roundTrip[2]}
                     />
-                  )}
+                  )
+
+                  )
+                }
+
+                  {/* {roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
+                    <FareSummary
+                      fareData={roundTrip[0]?.Results}
+                      commission={roundTrip[2]}
+                    />
+                  ) : (
+                    <RoundFareSummary
+                      fareData={roundTrip}
+                      commission={roundTrip[2]}
+                    />
+                  )} */}
                   {/* --------------fare Summary End-----------------  */}
 
                   <Stack
@@ -595,6 +655,7 @@ export default function RoundTripCheckout() {
                         backgroundColor: COLORS.PRIMARY,
                         color: COLORS.WHITE,
                         minWidth: "120px",
+                        
                         cursor: loading ? "not-allowed" : "pointer",
                       }}
                       disabled={!paymentPayload}

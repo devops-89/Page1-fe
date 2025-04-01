@@ -200,7 +200,7 @@ const FlightDetails = () => {
           <Grid2
             size={{ xs: "12" }}
             sx={{ width: "100%", py: 4 }}
-            className="myname"
+            
           >
             <Container sx={{ mt: "-70px", px: 0, overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>
