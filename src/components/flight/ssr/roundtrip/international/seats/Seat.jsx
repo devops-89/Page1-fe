@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Typography, Box, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setSeatDetails, resetSeatDetails } from "@/redux/reducers/seatsInformation.js";
+import { setSeatDetails } from "@/redux/reducers/roundInternationalSeatsInformation";
 import { COLORS } from "@/utils/colors.js";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
@@ -29,24 +29,32 @@ const AvailablityStatus = {
   5: "Empty Space",
 };
 
-const Seat = ({ extraDetails,planeIndex }) => {
+const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
 
   
   // Use useSelector to directly access seats from Redux state
   const reservedSeats = useSelector((state) => {
-    const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
-  
-    // Return selectedSeats if the airplane exists, otherwise return an empty array
+    console.log("hello",state.RoundInternationalSeatsInformation?.outgoingSeats)
+    // const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
+    if(tabIndex===0)
+    {
+       const airplane = state.RoundInternationalSeatsInformation?.outgoingSeats?.find((ap) => ap.id === planeIndex);
+        // Return selectedSeats if the airplane exists, otherwise return an empty array
     return airplane?.selectedSeats || [];
-   
+    }
+    else{
+      const airplane = state.RoundInternationalSeatsInformation?.incomingSeats?.find((ap) => ap.id === planeIndex);
+      // Return selectedSeats if the airplane exists, otherwise return an empty array
+  return airplane?.selectedSeats || [];
+    } 
   });
 
-  console.log("Seat :",reservedSeats);
+  
   
  
   const dispatch = useDispatch();
   const [maxPassengerCount, setMaxPassengerCount] = useState(null);
-  const [columns, setColumns] = useState([]); // State for columns
+  const [columns, setColumns] = useState([]); 
 
   useEffect(() => {
     const storedState = localStorage.getItem("state");
@@ -97,7 +105,7 @@ const Seat = ({ extraDetails,planeIndex }) => {
     const currentSelectedSeatsCount = reservedSeats.length;                                                                                                     
     const isSeatAlreadyReserved = reservedSeats.some((s) => s.Code === seat.Code);
 
-    console.log("totalAllowedSeats",totalAllowedSeats, "currentSelectedSeatsCount",currentSelectedSeatsCount)
+    console.log("reservedSeats:",reservedSeats);
 
     if (
       currentSelectedSeatsCount >= totalAllowedSeats &&
@@ -112,17 +120,18 @@ const Seat = ({ extraDetails,planeIndex }) => {
       );
       return; // Prevent selecting more seats than allowed
     }
-   
-    dispatch(setSeatDetails({airplaneId:planeIndex, selected:seat}));
+  
+    dispatch(
+      setSeatDetails({
+        airplaneId: planeIndex,
+        selected: seat,
+        journeyType: tabIndex === 0 ? "outgoing" : "incoming", 
+      })
+    );
    
   };
 
 
-  // useEffect(()=>{
-  //   dispatch(
-  //     setSeatDetails({airplaneId:planeIndex, selectedSeats:tempSeats})
-  //   )
-  // },[tempSeats])
 
   
   return (
