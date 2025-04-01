@@ -1,115 +1,95 @@
-import * as React from "react";
-import { Typography, Grid2 } from "@mui/material";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Grid2, Typography } from "@mui/material";
 import { nunito } from "@/utils/fonts";
+import BaggageCard from "../../baggageCard";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LuggageIcon from '@mui/icons-material/Luggage';
 import { COLORS } from "@/utils/colors";
-import BaggageCard from "../../baggageCard";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import { removeBaggageDetails, setBaggageDetails } from "@/redux/reducers/baggagesInformation";
 
-export default function BaggageSelection({ baggageData }) {
-    const dispatch = useDispatch();
-    const selectedBaggages = useSelector((state) => state?.BaggagesInformation?.baggages || []);
-    
-    console.log("selectedBaggages---------", selectedBaggages)
-    // Organize baggage data by flight number
-    let filtereddata = {};
+export default function BaggageSelection({ baggageData, passengerId, passengerType }) {
+  const dispatch = useDispatch();
 
-    baggageData?.forEach((singleBaggage) => {
-        singleBaggage?.forEach((data) => {
-            if (!filtereddata[data.FlightNumber]) {
-                filtereddata[data.FlightNumber] = [];
-            }
-            filtereddata[data.FlightNumber].push(data);
-        });
-    });
+  // Create a unique passenger key
+  const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
-    // Handle baggage click (select or remove)
-    const handleBaggageClick = (baggage, flightNumber) => {
-        const baggageExists = selectedBaggages?.some(
-            (flight) => flight.id === flightNumber && flight.selectedBaggage?.Code === baggage.Code
-        );
+  // Get selected baggage items from the store
+  const selectedBaggages = useSelector((state) => state.BaggagesInformation.baggages || {});
 
-        if (baggageExists) {
-            // Remove baggage from selection
-            dispatch(removeBaggageDetails({ flightNumber, baggageCode: baggage.Code }));
-        } else {
-            // Select baggage
-            dispatch(setBaggageDetails({ flightNumber, selectedBaggage: baggage }));
-        }
-    };
+  // Safe check to ensure that the selectedBaggages[uniquePassengerKey] is not undefined
+  const selectedPassengerBaggages = selectedBaggages[uniquePassengerKey] || { baggages: [] };
 
-    return (
-        <>
-            <Accordion sx={{ mb: '10px' }}>
-                <AccordionSummary
-                    expandIcon={<KeyboardArrowDownIcon />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{ backgroundColor: COLORS.SEMIGREY }}
-                >
-                    <Typography
-                        variant="body1"
-                        sx={{ fontFamily: nunito.style, fontWeight: 700, display: 'flex', alignItems: 'center' }}
-                    >
-                        <LuggageIcon sx={{ color: COLORS.PRIMARY, marginRight: '10px' }} /> Baggage
-                    </Typography>
-                </AccordionSummary>
-                <AccordionDetails sx={{ p: 1, maxHeight: "240px", overflowY: "auto" }}>
+    console.log('selectedPassengerBaggages------------',selectedPassengerBaggages)
 
-                    <Swiper
-                        spaceBetween={20}
-                        slidesPerView={1}
-                        navigation={{ clickable: true }}
-                        modules={[Navigation]}
-                        id="baggage_box"
-                    >
-                        {Object.keys(filtereddata).map((flightNumber) => {
-                            return (
-                                <SwiperSlide key={flightNumber} style={{ overflow: "auto", maxHeight: "240px", position: 'relative' }}>
-                                    <Typography
-                                        variant="body1"
-                                        sx={{
-                                            fontFamily: nunito.style,
-                                            fontWeight: 800,
-                                            mb: '20px',
-                                            p: '10px',
-                                            position: 'sticky',
-                                            top: '0',
-                                            width: '100%',
-                                            backgroundColor: COLORS.SEMIGREY,
-                                            zIndex: 99
-                                        }}
-                                    >
-                                        {`${filtereddata[flightNumber][0]?.Origin} - ${filtereddata[flightNumber][0]?.Destination}`}
-                                    </Typography>
-                                    <Grid2 container spacing={2} sx={{ flexWrap: "wrap" }}>
-                                        {filtereddata[flightNumber]?.map((baggage, baggageIndex) => (
-                                            <Grid2 key={baggageIndex} size={{ lg: 6, xs: 12 }}>
-                                                <BaggageCard
-                                                    baggage={baggage}
-                                                    handleBaggageValue={() => handleBaggageClick(baggage, flightNumber)}
-                                                    isSelected={selectedBaggages?.some(
-                                                        (flight) => flight.id === flightNumber && flight.selectedBaggage?.Code === baggage.Code
-                                                    )}
-                                                />
-                                            </Grid2>
-                                        ))}
-                                    </Grid2>
-                                </SwiperSlide>
-                            );
-                        })}
-                    </Swiper>
-                </AccordionDetails>
-            </Accordion>
-        </>
-    );
+
+  // Handle baggage click (select or remove)
+  const handleBaggageClick = (baggage, flightNumber) => {
+    // console.log('baggage-----------', baggage, flightNumber);
+    const passengerBaggages = selectedPassengerBaggages.baggages;
+    const existingBaggage = passengerBaggages.find((b) => b.flightId === flightNumber);
+
+    if (existingBaggage?.baggage.Code === baggage.Code) {
+      // Deselect the baggage if it's already selected
+      dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: baggage.Code }));
+    } else {
+      // Ensure only one baggage is selected per flight
+      if (existingBaggage) {
+        dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: existingBaggage.baggage.Code }));
+      }
+      dispatch(setBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, selected: baggage }));
+    }
+  };
+
+  return (
+    <Accordion sx={{ mb: "10px" }}>
+      <AccordionSummary
+        expandIcon={<KeyboardArrowDownIcon />}
+        aria-controls="panel1-content"
+        id="panel1-header"
+        sx={{ backgroundColor: COLORS.SEMIGREY }}
+      >
+        <Typography
+          variant="body1"
+          sx={{
+            fontFamily: nunito.style,
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <LuggageIcon sx={{ color: COLORS.PRIMARY, marginRight: '10px' }} /> Baggage
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 1, overflowY: "auto", maxHeight: "240px" }}>
+        {baggageData?.map((singleBaggage, baggageIndex) => {
+          return (
+            <Grid2
+              container
+              spacing={2}
+              sx={{ flexWrap: "wrap", mb: '10px' }}
+              key={baggageIndex}
+            >
+              {singleBaggage?.map((baggage, baggageIndex) => {
+                return (
+                  <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                    <BaggageCard
+                      baggage={baggage}
+                      handleBaggageValue={() => handleBaggageClick(baggage, baggage?.FlightNumber)}
+                      isSelected={selectedPassengerBaggages.baggages?.some(
+                        (b) => b.flightId === baggage.FlightNumber && b.baggage.Code === baggage.Code
+                      )}
+                    />
+                  </Grid2>
+                );
+              })}
+            </Grid2>
+          );
+        })}
+      </AccordionDetails>
+    </Accordion>
+  );
 }

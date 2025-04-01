@@ -9,6 +9,8 @@ import foodImage from "@/../public/images/food.png";
 
 export default function MealCard({ meal, handleMealValue, isSelected }) {
 
+  // console.log("isSelected", isSelected)
+
   return (
     <Grid2 container spacing={1} component={Card} sx={{ maxHeight: "150px" }}>
       <Grid2

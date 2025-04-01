@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  meals: [],
+  meals: {},
 };
 
 const mealsInformation = createSlice({
@@ -9,25 +9,47 @@ const mealsInformation = createSlice({
   initialState,
   reducers: {
     setMealDetails: (state, action) => {
-      const { mealsId, selected } = action.payload;
-      const mealIndex = state.meals.findIndex((meal) => meal.id === mealsId);
+      const { passengerId, mealsId, selected, passengerType } = action.payload;
+      const uniquePassengerKey = `${passengerType}-${passengerId}`; // Unique key
 
-      if (mealIndex !== -1) {
-        // Replace the selected meal instead of adding to an array
-        state.meals[mealIndex].selectedMeals = [{ ...selected }];
-      } else {
-        state.meals.push({
-          id: mealsId,
-          selectedMeals: [{ ...selected }],
-        });
+      if (!state.meals[uniquePassengerKey]) {
+        state.meals[uniquePassengerKey] = { meals: [], passengerType };
+      }
+
+      const existingMealIndex = state.meals[uniquePassengerKey].meals.findIndex(
+        (meal) => meal.flightId === mealsId && meal.meal.Code === selected.Code
+      );
+
+      if (existingMealIndex === -1) {
+        state.meals[uniquePassengerKey].meals.push({ flightId: mealsId, meal: selected });
       }
     },
+
     removeMealDetails: (state, action) => {
-      const { mealsId } = action.payload;
-      state.meals = state.meals.filter((meal) => meal.id !== mealsId);
+      const { passengerId, mealsId, mealCode, passengerType } = action.payload;
+      const uniquePassengerKey = `${passengerType}-${passengerId}`;
+
+      if (state.meals[uniquePassengerKey]) {
+        state.meals[uniquePassengerKey].meals = state.meals[uniquePassengerKey].meals.filter(
+          (meal) => !(meal.flightId === mealsId && meal.meal.Code === mealCode)
+        );
+
+        // If no meals remain, remove the passenger entry
+        if (state.meals[uniquePassengerKey].meals.length === 0) {
+          delete state.meals[uniquePassengerKey];
+        }
+      }
     },
-    resetMealDetails: (state) => {
-      state.meals = [];
+
+    resetMealDetails: (state, action) => {
+      const { passengerId, passengerType } = action.payload;
+      const uniquePassengerKey = `${passengerType}-${passengerId}`;
+
+      if (passengerId) {
+        delete state.meals[uniquePassengerKey];
+      } else {
+        state.meals = {};
+      }
     },
   },
 });
