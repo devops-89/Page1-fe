@@ -10,14 +10,6 @@ import baggageImage from "@/../public/images/baggage.png";
 export default function BaggageCard({ baggage, handleBaggageValue, isSelected }) {
   return (
     <Grid2 container spacing={2} component={Card} sx={{ maxHeight: "150px" }}>
-      <Grid2 size={{xs:12}} sx={{px:2, pt:1}}>
-         {baggage?.Origin &&
-                <Typography variant="body1"
-                  sx={{
-                    fontFamily: nunito.style,
-                    fontWeight: 700,
-                  }}>{`${baggage?.Origin} - ${baggage?.Destination}`}</Typography>}
-      </Grid2>
       <Grid2
         size={4}
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}

@@ -30,6 +30,7 @@ const PassengerFields = ({
   const passengerKey = `${formType}-${index}`;
   // console.log("formType", formType, "index", index);
 
+  // console.log("selectMeal", selectMeal)
   const dispatch = useDispatch();
   return (
     <Accordion defaultExpanded={index === 0} key={passengerKey}>
