@@ -50,7 +50,7 @@ const FlightListBox = ({ details, traceId, journey }) => {
     let cabinData = data.FLIGHT_CLASS_DATA.find((fligtClass) => {
       return fligtClass.value == flightDetails?.departure[0]?.CabinClass;
     });
-    setCabin(cabinData.label);
+    setCabin(cabinData?.label);
   }, [flightDetails, data.FLIGHT_CLASS_DATA]);
 
   const routetoAnotherPage = () => {
