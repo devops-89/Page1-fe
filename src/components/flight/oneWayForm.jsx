@@ -33,7 +33,7 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
 
-const OnewayForm = () => {
+const OnewayForm = () =>  {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [adultValue, setAdultValue] = useState(1);
