@@ -35,14 +35,13 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
 
     if (existingBaggage?.selectedBaggage.Code === baggage.Code) {
       // Deselect the baggage if it's already selected
-      console.log('--------select-------')
-      dispatch(removeBaggageDetails({ passengerType, passengerId, flightId: flightNumber, baggageCode: baggage.Code }));
+      dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: baggage.Code }));
     } else {
       // Ensure only one baggage is selected per flight
       if (existingBaggage) {
         dispatch(removeBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, baggageCode: existingBaggage.selectedBaggage.Code }));
       }
-      dispatch(setBaggageDetails({ passengerType, passengerId, flightId: flightNumber, selected: baggage }));
+      dispatch(setBaggageDetails({ passengerType, passengerId, baggageId: flightNumber, selected: baggage }));
     }
   };
 
