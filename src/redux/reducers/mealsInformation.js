@@ -41,16 +41,9 @@ const mealsInformation = createSlice({
       }
     },
 
-    resetMealDetails: (state, action) => {
-      const { passengerId, passengerType } = action.payload;
-      const uniquePassengerKey = `${passengerType}-${passengerId}`;
-
-      if (passengerId) {
-        delete state.meals[uniquePassengerKey];
-      } else {
-        state.meals = {};
-      }
-    },
+    resetMealDetails: (state) => {
+      state.meals = {};
+    }
   },
 });
 

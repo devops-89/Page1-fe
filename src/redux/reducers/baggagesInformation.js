@@ -43,17 +43,10 @@ const baggagesInformation = createSlice({
       }
     },
 
-    resetBaggageDetails: (state, action) => {
-      const { passengerId, passengerType } = action.payload;
-      const uniquePassengerKey = `${passengerType}-${passengerId}`;
-
-      if (passengerId) {
-        // Remove baggage details for a specific passenger
-        delete state.baggages[uniquePassengerKey];
-      } else {
-        // Reset baggage details for all passengers
+    resetBaggageDetails: (state) => {
+     
         state.baggages = {};
-      }
+     
     },
   },
 });

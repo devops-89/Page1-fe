@@ -41,7 +41,10 @@ const InternationalPassengerForm = ({
  
 
   const selectedSeats = useSelector(
-    (state) => state.SeatsInformation?.seats || []
+    (state) =>{
+      console.log("Passenger Form:",state.SeatsInformation);
+     return state.SeatsInformation?.seats || []
+    }
   );
 
   const adultSeats = selectedSeats.slice(0, adultCount);
