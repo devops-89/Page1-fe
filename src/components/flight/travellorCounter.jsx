@@ -41,7 +41,7 @@ const TravellorCounter = ({
           onClick={onDecrease}
           disabled={value === initialValue}
         >
-          <Remove sx={{ fontSize: { lg: 20, md: 20, sm: 20, xs: 10 } }} />
+          <Remove sx={{ fontSize: { lg: 20, md: 20, sm: 20, xs: 15 } }} />
         </IconButton>
         <TextField
           sx={{

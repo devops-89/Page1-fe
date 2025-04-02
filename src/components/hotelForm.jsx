@@ -27,14 +27,14 @@ const HotelForm = () => {
       <Typography sx={{ fontSize: 16, fontFamily: raleway.style, mb: 2 }}>
         Book Hotel - Villas, Apartments & more.
       </Typography>
-      <Grid2 container alignItems={"center"}> 
+      <Grid2 container alignItems={"center"} sx={{ display:"flex" , alignItems:"stretch"}}> 
         <Grid2
-            size={{ lg: 2.4, xs: 12,sm:6 }}
+            size={{ lg: 3, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
             borderBottomLeftRadius: 4,
-            borderRight: "none",
+         
           }}
         >
           <Typography
@@ -100,12 +100,12 @@ const HotelForm = () => {
           />
         </Grid2>
         <Grid2
-             size={{ lg: 2.4, xs: 12,sm:6 }}
+             size={{ lg: 3, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
             position: "relative",
-            borderRight: "none",
+            
           }}
         >
           <Typography
@@ -131,12 +131,12 @@ const HotelForm = () => {
           </LocalizationProvider>
         </Grid2>
         <Grid2
-             size={{ lg: 2.4, xs: 12,sm:6 }}
+             size={{ lg: 3, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
             position: "relative",
-            borderRight: "none",
+           
           }}
         >
           <Typography
@@ -162,7 +162,7 @@ const HotelForm = () => {
           </LocalizationProvider>
         </Grid2>
         <Grid2
-            size={{ lg: 2.4, xs: 12,sm:6 }}
+            size={{ lg: 3, xs: 12,sm:6 }}
           sx={{
             border: "1px solid #808080",
 
@@ -215,14 +215,14 @@ const HotelForm = () => {
           </Popover>
           {/* popover end */}
         </Grid2>
-        <Grid2    size={{ lg: 2.4, xs: 12,sm:12 }} sx={{ textAlign: "center" }}>
+        <Grid2    size={{ lg: 12 , xs: 12,sm:12 }} sx={{ textAlign: "center" }}>
           <Button
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
-              width: 150,
-              p: 2,
-              mt: { lg: 0, sm: 1 ,xs:2 },
+              width: {lg:150 , md:150 , sm:120 ,xs:120},
+              py: {lg:1.5 , md:1.5,sm:1 , xs:1},
+              mt: 2
             }}
           >
             Search

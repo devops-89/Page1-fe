@@ -101,16 +101,16 @@ const MultiTravellerSelector = ({
 
     return (
         <div>
-            <Typography sx={{ fontFamily: nunito.style, fontSize: 20, fontWeight: 600 }}>
+            <Typography sx={{  textAlign: { xs: "center" },fontFamily: nunito.style,  fontSize: { lg: 20, xs: 15, sm: 20, md: 20 },fontWeight: 600 }}>
                 Select Travelers & Class
             </Typography>
 
-            <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2 }}>
+            <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2 ,m:1 }}>
                 <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
                     Travellers
                 </Typography>
-                <Grid2 container spacing={4}>
-                    <Grid2 size={{ xs: 4 }}>
+                <Grid2 container spacing={2}>
+                    <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 6 }}>
                         <TravellorCounter
                             heading={"Adults ( 12+ Yrs )"}
                             value={adultValue}
@@ -120,7 +120,7 @@ const MultiTravellerSelector = ({
                             initialValue={initialValue.adult}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 4 }}>
+                    <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 6 }}>
                         <TravellorCounter
                             heading={"Childrens ( 2-12 Yrs )"}
                             value={childValue}
@@ -130,7 +130,7 @@ const MultiTravellerSelector = ({
                             initialValue={initialValue.child}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 4 }}>
+                    <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 6 }}>
                         <TravellorCounter
                             heading={"Infants( 0-2 Yrs )"}
                             value={infantValue}
@@ -143,7 +143,7 @@ const MultiTravellerSelector = ({
                 </Grid2>
             </Box>
 
-            <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2 }}>
+            <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2 ,m:1 }}>
                 <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>
                     Flight Class
                 </Typography>
@@ -163,7 +163,7 @@ const MultiTravellerSelector = ({
                 </RadioGroup>
             </Box>
 
-            <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={4} mt={2}>
+            <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2} m={2}>
                 <Button
                     sx={{
                         backgroundColor: COLORS.GREY,

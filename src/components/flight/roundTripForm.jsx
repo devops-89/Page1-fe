@@ -564,7 +564,8 @@ const RoundTrip = () => {
               "& .MuiPopover-paper": {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-                p: 2,
+                  p: { lg: 2 },
+                  py: { xs: 2, sm: 2, md: 2, lg: 2 },
                 width: { xs: "100%", sm: "80%", md: "60%", lg: "40%" },
               },
             }}
@@ -590,8 +591,8 @@ const RoundTrip = () => {
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
-              width: 150,
-              p: 2,
+              width: {lg:150 , md:150 , sm:120 ,xs:120},
+              py: {lg:1.5 , md:1.5,sm:1 , xs:1},
               mt: { lg: 0, sm: 1 ,xs:2 },
               cursor: buttonLoading ? "not-allowed" : "pointer",
             }}

@@ -85,7 +85,7 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
             </Typography>
           </Stack>
           <Typography
-            sx={{ fontSize: {lg:15 , md:15 , sm:15 , xs:12}, fontFamily: nunito.style, fontWeight: 550 }}
+            sx={{ fontSize: {lg:15 , md:15 , sm:15 , xs:12}, fontFamily: nunito.style, fontWeight: 550, ml:2 }}
           >
             {/* Travel Class: {flightDetails?.departure[0].CabinClass} */}
             Travel Class : {cabin ? cabin : undefined}
@@ -94,20 +94,20 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
         <Grid2 container sx={{ mt: 3 }} spacing={4} alignItems={"flex-start"}>
           <Grid2 size={{lg:3 ,md:3 , sm:4 , xs:4}}>
             <Typography
-              sx={{ fontSize: {lg:22 , xs:15}, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize: { lg: 22, md: 22, sm: 20, xs: 18 }, fontWeight: 700, fontFamily: nunito.style }}
             >
               {moment(flightDetails?.departure[0].Origin.DepTime).format(
                 "HH:mm"
               )}
             </Typography>
             <Typography
-              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{fontSize: { lg: 14, md: 14, sm: 13, xs: 12 }, fontWeight: 600, fontFamily: nunito.style }}
             >
               {flightDetails?.departure[0].Origin.Airport.AirportCode} -{" "}
               {flightDetails?.departure[0].Origin.Airport.Terminal} Terminal
             </Typography>
             <Typography
-              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{  fontSize: { lg: 14, md: 14, sm: 13, xs: 12 }, fontWeight: 600, fontFamily: nunito.style }}
             >
               {flightDetails?.departure[0].Origin.Airport.CityName}
             </Typography>
@@ -115,7 +115,7 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
           <Grid2 size={{lg:3 ,md:3 , sm:4 , xs:4}}>
             <Typography
               sx={{
-                fontSize: 16,
+                fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
                 fontWeight: 700,
                 fontFamily: nunito.style,
                 textAlign: "center",
@@ -140,14 +140,20 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
             </Typography>
 
             <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
-              <Avatar sx={{ backgroundColor: COLORS.PRIMARY }}>
+              <Avatar sx={{ backgroundColor: COLORS.PRIMARY ,width: { lg: "40px", md: "40px", sm: "24px", xs: "24px" },
+                      height: {
+                        lg: "40px",
+                        md: "40px",
+                        sm: "24px",
+                        xs: "24px",
+                      }, }}>
                 <FlightTakeoff sx={{ fontSize: {lg:17 ,md:17,sm:17 , xs:15} }} />
               </Avatar>
             </Divider>
           </Grid2>
           <Grid2 size={{lg:3 ,md:3 , sm:4 , xs:4}}>
             <Typography
-              sx={{ fontSize: {lg:22 , xs:15}, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize: { lg: 22, md: 22, sm: 20, xs: 18 }, fontWeight: 700, fontFamily: nunito.style }}
             >
               {moment(
                 flightDetails?.departure[flightDetails?.departure.length - 1]
@@ -155,7 +161,7 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
               ).format("HH:mm")}
             </Typography>
             <Typography
-              sx={{ fontSize: 13, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{   fontSize: { lg: 14, md: 14, sm: 13, xs: 12 }, fontWeight: 600, fontFamily: nunito.style }}
             >
               {
                 flightDetails?.departure[flightDetails?.departure.length - 1]
@@ -169,7 +175,7 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
               Terminal
             </Typography>
             <Typography
-              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },fontWeight: 600, fontFamily: nunito.style }}
             >
               {
                 flightDetails?.departure[flightDetails?.departure.length - 1]
@@ -179,7 +185,7 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
           </Grid2>
           <Grid2 size={{lg:3 , md:3 ,sm:12 ,xs:12}} textAlign={"center"}>
             <Typography
-              sx={{ fontSize: 20, fontWeight: 900, fontFamily: nunito.style }}
+              sx={{ fontSize: {lg:20 , xs:18}, fontWeight: 900, fontFamily: nunito.style }}
             >
                ₹ {flightDetails?.TotalFare}
             </Typography>

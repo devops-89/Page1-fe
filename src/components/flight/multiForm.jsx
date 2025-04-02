@@ -35,6 +35,7 @@ const Multiway = () => {
   const dispatch = useDispatch();
 
   const initialState = {
+
     ip_address: "",
     journey_type: JOURNEY_TYPE.MULTIWAY,
     preferred_time: PREFERRED_TIME.AnyTime,
@@ -586,8 +587,9 @@ const Multiway = () => {
             </Grid2>
 
             {/* Departure Field */}
+            
             <Grid2
-              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
+              size={{ lg: 3, xs: index== 0 ? 6 :12 , md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
                 position: "relative",
@@ -741,7 +743,7 @@ const Multiway = () => {
                   variant="contained"
                   onClick={addForm}
                   sx={{
-                    fontSize: { lg: 15, md: 14, sm: 10, xs: 10 },
+                    fontSize: { lg: 15, md: 14, sm: 10, xs: 9.5 },
                   }}
                 >
                   Add Another Flight
@@ -755,8 +757,8 @@ const Multiway = () => {
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
-              width: 150,
-              p: 2,
+              width: {lg:150 , md:150 , sm:120 ,xs:120},
+              py: {lg:1.5 , md:1.5,sm:1 , xs:1},
               cursor: buttonLoading ? "not-allowed" : "pointer",
             }}
             onClick={submitHandler}
@@ -788,7 +790,8 @@ const Multiway = () => {
             "& .MuiPopover-paper": {
               boxShadow:
                 " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-              p: 2,
+              
+              py:2,
               width: { xs: "100%", sm: "80%", md: "60%", lg: "40%" },
             },
           }}

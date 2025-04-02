@@ -31,7 +31,7 @@ const FlightBox = ({ tableData }) => {
 
     return (
         <>
-            <Card sx={{ p: 1, mt: 2 }}>
+            <Card sx={{ p: 1, mt: 2 ,}}>
                 <TableContainer>
                     <Table>
 

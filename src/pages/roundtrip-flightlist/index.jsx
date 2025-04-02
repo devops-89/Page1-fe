@@ -483,20 +483,23 @@ const FlightList = () => {
                 display: "flex",
                 justifyContent: "flex-end",
                 marginLeft: "auto",
+               
               }}
             >
               <Button onClick={toggleDrawer(true)}>
                 <FilterAltIcon sx={{ fontSize: 30, color: COLORS.PRIMARY }} />
               </Button>
               <Drawer open={open} onClose={toggleDrawer(false)}>
-                <Grid2 size={12} sx={{ position: "relative" }}>
+                <Grid2 size={12} sx={{ position: "relative" ,width:"100vw" }}  >
                   {/* filter card start */}
                   <Card
                     variant="outlined"
+                   
+                   
                     sx={{
                       position: "sticky",
                       top: "75px",
-                      width: "100%",
+                      width: "100vw",
                       overflowY: "scroll",
                       "::-webkit-scrollbar": {
                         width: 5,

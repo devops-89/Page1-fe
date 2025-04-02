@@ -529,12 +529,12 @@ const OnewayForm = () => {
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
-              width: 150,
-              p: 2,
+              width: {lg:150 , md:150 , sm:120 ,xs:120},
+             
               mt: { lg: 2, sm: 1, xs: 2 },
               cursor: buttonLoading ? "not-allowed" : "pointer",
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
-              py: 1.5,
+              py: {lg:1.5 , md:1.5,sm:1 , xs:1},
             }}
             onClick={submitHandler}
           >

@@ -617,7 +617,8 @@ export default function OneWayCheckout() {
                         alignItems: "flex-start",
                       }}
                     />
-                    <Grid2 container mt={2} spacing={{ lg: 2, xs: 3 }}>
+                    <Container>
+                    <Grid2 container mt={2} spacing={{ lg: 2, xs: 3 }} >
                       <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Stack direction="row" alignItems={"center"}>
                           <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
@@ -645,6 +646,7 @@ export default function OneWayCheckout() {
                         </Stack>
                       </Grid2>
                     </Grid2>
+                    </Container>
                   </Box>
                 </Grid2>
 

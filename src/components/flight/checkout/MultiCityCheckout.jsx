@@ -9,6 +9,8 @@ import {
   Checkbox,
   Grid2,
   Card,
+  useMediaQuery
+  
 } from "@mui/material";
 import moment from "moment";
 import pointerImage from "@/../public/images/pointer.png";
@@ -22,6 +24,7 @@ import { useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
 import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
+import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import Loader from "@/utils/Loader";
 
 export default function OneWayCheckout() {
@@ -32,6 +35,11 @@ export default function OneWayCheckout() {
   const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
   const [paymentPayload, setPaymentPayload] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const toggleDrawer = {
+    open: drawerOpen, // Current state of the drawer
+    toggle: () => setDrawerOpen((prev) => !prev), // Function to toggle the state
+  };
 
   useEffect(() => {
     if (sessionStorage.getItem("payment_info")) {
@@ -79,6 +87,7 @@ export default function OneWayCheckout() {
         console.log("Payment Response Error:", error.message);
       });
   }
+  const smallScreen = useMediaQuery("(max-width:1199px)");
 
   return (
     <>
@@ -659,10 +668,25 @@ export default function OneWayCheckout() {
                   }}
                 >
                   {/* --------------fare Summary Start-----------------  */}
-                  <FareSummary
-                    fareData={multiCity[0]?.Results}
-                    commission={multiCity[2]}
-                  />
+                  {smallScreen ? (
+                    <SwipeableEdgeDrawer
+                      toggleDrawer={toggleDrawer}
+                      fairSummary={
+                        <FareSummary
+                        toggleDrawer={toggleDrawer}
+                      fareData={multiCity[0]?.Results}
+                      commission={multiCity[2]}
+                    />
+                      }
+                    />
+                  ) : (
+                    <FareSummary
+                    toggleDrawer={toggleDrawer}
+                      fareData={multiCity[0]?.Results}
+                      commission={multiCity[2]}
+                    />
+                  )}
+
                   {/* --------------fare Summary End-----------------  */}
 
                   <Stack

@@ -174,7 +174,7 @@ const Banner = () => {
                   },
                   "& .MuiTab-root": {
                     width: 120,
-                    minHeight: 40,
+                    minHeight: {lg:40 , md:40 ,sm:35 , xs:35},
                     top: 5,
                     borderRadius: 8,
                     padding: 0,
