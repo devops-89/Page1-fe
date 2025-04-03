@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { setAuthenticated } from "@/redux/reducers/user.js";
 import { nunito } from "@/utils/fonts";
 import Loading from "react-loading";
+import { setToast } from "@/redux/reducers/toast";
+import { TOAST_STATUS } from "@/utils/enum";
 
 const UserVerifyForm = () => {
   const dispatch = useDispatch();
@@ -62,10 +64,17 @@ const UserVerifyForm = () => {
       .then((response) => {
         setOtpSent(response.data);
         setLoading(false);
+        // console.log("response.data", response.data);
       })
       .catch((error) => {
         setLoading(false);
-        console.log("Error in email verification: ", error);
+        dispatch(
+          setToast({
+            open: true,
+            message: error,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
       });
   };
 
@@ -73,7 +82,7 @@ const UserVerifyForm = () => {
     setLoading(true);
     let payload = {
       reference_id: otpSent?.data?.reference_id,
-      otp: otpSent?.data?.OTP,
+      otp: otp,
     };
 
     authenticationController.verifyEmailOtp(payload).then((response) => {
@@ -81,6 +90,23 @@ const UserVerifyForm = () => {
         dispatch(setAuthenticated(true));
         localStorage.setItem("accesstoken", response?.data?.data?.access_token);
         setLoading(false);
+        dispatch(
+          setToast({
+            open: true,
+            message: response?.data?.message,
+            severity: TOAST_STATUS.SUCCESS,
+          })
+        );
+      } else {
+        setLoading(false)
+        dispatch(
+          setToast({
+            open: true,
+            message: response?.response?.data?.message,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+        setOtp('')
       }
     });
   };
@@ -113,7 +139,9 @@ const UserVerifyForm = () => {
 
       {otpSent ? (
         <>
-          <Typography sx={{ color: COLORS.GREEN }}>{otpSent?.message}</Typography>
+          <Typography sx={{ color: COLORS.GREEN }}>
+            {otpSent?.message}
+          </Typography>
           <MuiOtpInput
             className="custom-otp-input"
             value={otp}
@@ -155,7 +183,12 @@ const UserVerifyForm = () => {
             }}
           >
             {loading ? (
-              <Loading type="spin" width={25} height={25} color={COLORS.WHITE} />
+              <Loading
+                type="spin"
+                width={25}
+                height={25}
+                color={COLORS.WHITE}
+              />
             ) : (
               "Verify OTP"
             )}
