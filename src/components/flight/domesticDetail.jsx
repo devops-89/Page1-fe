@@ -31,7 +31,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
       {flightDetails?.map((singleFlightDetail)=>{
         return(
           <>
-          {singleFlightDetail[0]?.Results?.Segments?.map(
+          {singleFlightDetail[0]?.Results &&  singleFlightDetail[0]?.Results?.Segments?.map(
             (segmentGroup, groupIndex) => (
               <Card key={groupIndex} sx={{ padding: "20px", marginBottom: "20px" }}>
                 <Grid2 container>

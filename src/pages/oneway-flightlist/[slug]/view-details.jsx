@@ -42,6 +42,7 @@ import PassengerForm from "@/components/flight/PassengerForm";
 import Link from "next/link";
 import Loader from "@/utils/Loader";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
+import errorImage from "@/assests/flight_image/filter.svg";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -174,6 +175,7 @@ const FlightDetails = () => {
               textAlign: "center",
             }}
           >
+             <Image src={errorImage.src} alt="Image" width={200} height={200} />
             <Typography
               variant="h6"
               sx={{
@@ -183,6 +185,7 @@ const FlightDetails = () => {
                 mb: "10px",
               }}
             >
+             
               {error?.message == null && error?.message == undefined
                 ? "An unexpected error occurred. Please try again later."
                 : "The Session is expired"}
@@ -196,7 +199,7 @@ const FlightDetails = () => {
               </Button>
             </Link>
           </Grid2>
-        ) : flightDetails ? (
+        ) : flightDetails?.[0]?.Results ? (
           <Grid2
             size={{ xs: "12" }}
             sx={{ width: "100%", py: 4 }}

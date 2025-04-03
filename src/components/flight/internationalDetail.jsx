@@ -34,7 +34,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
         View Fare Rules
       </Button>
 
-      {flightDetails?.[0]?.Results?.Segments?.map(
+      {flightDetails?.[0]?.Results && flightDetails?.[0]?.Results?.Segments?.map(
         (segmentGroup, groupIndex) => (
           <Card key={groupIndex} sx={{ padding: "20px", marginBottom: "20px" }}>
             <Grid2 container>
