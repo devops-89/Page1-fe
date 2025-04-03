@@ -214,7 +214,7 @@ const FlightDetails = () => {
                             key={index}
                           >
                             <Grid2 container>
-                              <Grid2 size={{ xs: 8 }}>
+                              <Grid2 size={{lg:8 , md:8 , sm:8 , xs:12 }}>
                                 <Typography
                                   variant="h6"
                                   gutterBottom
@@ -266,11 +266,11 @@ const FlightDetails = () => {
                                 </Typography>
                               </Grid2>
                               <Grid2
-                                size={{ xs: 4 }}
+                                size={{ lg:4 , md:4 , sm:4 , xs:12}}
                                 sx={{
                                   display: "flex",
                                   alignItems: "flex-start",
-                                  justifyContent: "flex-end",
+                                  justifyContent: {lg:"flex-end" ,md:"flex-end" , sm:"flex-end", xs:"flex-start"},
                                 }}
                               >
                                 <Button

@@ -490,7 +490,7 @@ const FlightList = () => {
                 <FilterAltIcon sx={{ fontSize: 30, color: COLORS.PRIMARY }} />
               </Button>
               <Drawer open={open} onClose={toggleDrawer(false)}>
-                <Grid2 size={12} sx={{ position: "relative" ,width:"100vw" }}  >
+                <Grid2 size={12} sx={{ position: "relative" ,width:"100vw" ,position:"relative", zIndex:9999 }}  >
                   {/* filter card start */}
                   <Card
                     variant="outlined"
@@ -925,7 +925,7 @@ const FlightList = () => {
       {journey === "DOMESTIC" ? (
         <Grid2
           container
-          sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 9999 }}
+          sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 999 }}
         >
           <Grid2 size={3}></Grid2>
           <Grid2
@@ -939,6 +939,7 @@ const FlightList = () => {
               borderTopRightRadius: "15px",
               backgroundColor: COLORS.SEMIGREY,
               boxShadow: `0px 0px 10px #b2a8a8`,
+            
             }}
           >
             {/* Onward */}
@@ -1083,6 +1084,7 @@ const FlightList = () => {
                 alignItems: "center",
                 gap: "10px",
                 justifyContent: { lg: "flex-end", xs: "space-between" },
+                
               }}
             >
               <Typography

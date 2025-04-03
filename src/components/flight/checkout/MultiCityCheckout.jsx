@@ -163,7 +163,7 @@ export default function OneWayCheckout() {
                           key={index}
                         >
                           <Grid2 container>
-                            <Grid2 size={{ xs: 8 }}>
+                            <Grid2 size={{ lg:8 , md:8 ,sm:8 , xs:12 }}>
                               <Typography
                                 variant="h6"
                                 gutterBottom
