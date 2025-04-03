@@ -29,6 +29,12 @@ const AvailablityStatus = {
   5: "Empty Space",
 };
 
+const SEAT_TYPE = {
+  1 : 'Window',
+  2 : 'Aisle',
+  3 : 'Middle'
+}
+
 const Seat = ({ extraDetails,planeIndex }) => {
 
   
@@ -162,11 +168,11 @@ const Seat = ({ extraDetails,planeIndex }) => {
                                   fontFamily: nunito.style,
                                 }}
                               >
-                                {seat.Code}
+                                {seat.Code} | 
                               </Typography>
 
                               <Typography color="inherit">
-                                Status: {AvailablityStatus[seat.AvailablityType]}
+                              {SEAT_TYPE[seat?.SeatType]} | {AvailablityStatus[seat.AvailablityType]}
                               </Typography>
                             </Stack>
 

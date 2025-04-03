@@ -246,7 +246,7 @@ const FlightList = () => {
     </Grid2>
   );
 
-  console.log("filteredFlights", filteredFlights);
+  // console.log("filteredFlights", filteredFlights);
 
   const FlightListResults = () => (
     <>
