@@ -39,7 +39,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
       {flightDetails?.map((singleFlightDetail) => {
         return (
           <>
-            {singleFlightDetail[0]?.Results?.Segments?.map(
+            {singleFlightDetail[0]?.Results &&  singleFlightDetail[0]?.Results?.Segments?.map(
               (segmentGroup, groupIndex) => (
                 <Card
                   key={groupIndex}

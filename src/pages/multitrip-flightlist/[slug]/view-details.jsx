@@ -41,6 +41,7 @@ import Link from "next/link";
 import Loader from "@/utils/Loader";
 import MultiCityPassengerForm from "@/components/flight/multicity/MultiCityPassengerForm";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
+import errorImage from "@/assests/flight_image/filter.svg";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -172,6 +173,7 @@ const FlightDetails = () => {
               textAlign: "center",
             }}
           >
+            <Image src={errorImage.src} alt="Image" width={200} height={200} />
             <Typography
               variant="h6"
               sx={{
@@ -194,7 +196,7 @@ const FlightDetails = () => {
               </Button>
             </Link>
           </Grid2>
-        ) : flightDetails ? (
+        ) : flightDetails?.[0]?.Results ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px", overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>

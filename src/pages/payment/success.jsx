@@ -241,6 +241,7 @@ export default function PaymentSuccess() {
           >
             {orderedEntries.map(([key, value]) => {
               const displayKey = keyMapping[key] || key;
+              // console.log("value----------------", value, key)
 
               return (
                 <>
@@ -278,73 +279,15 @@ export default function PaymentSuccess() {
                         variant="body2"
                         sx={{ fontFamily: nunito.style, textAlign: "start" , wordBreak:"break-word"  }}
                       >
-                        {value === null ? "NA" : value}
+                        {value === null ? "NA" : key=='amount' ? value/100 : value}
                       </Typography>
                     </Grid2>
                   </Grid2>
-
-                  {/* <Box
-        key={key}
-        sx={{
-          padding: 1,
-          boxSizing: "border-box",
-          textAlign: "left",
-        }}
-      >
-
-        <Typography
-          variant="body1"
-          sx={{
-            fontWeight: 600,
-            textTransform: "capitalize",
-            fontFamily:nunito.style
-            
-          }}
-        >
-          { displayKey} :
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ minWidth: "120px", flex: 1,  fontFamily:nunito.style }}
-        >
-          {value === null ? "NA" : value}
-        </Typography>
-      </Box> */}
                 </>
               );
             })}
           </Box>
 
-          {/* <Box p={1} border={2}>
-
-             
-
-              <Box sx={{backgroundColor:COLORS.PRIMARY ,p:1 ,borderRadius:1 ,mb:1 }}>
-                <Typography sx={{}}>
-
-                Payment Details
-                </Typography>
-                </Box>
-                <ul style={{listStyleType :"none" }}>
-             { orderedEntries.map(([key, value]) => (
-               <li key={key}>
-            
-            <Stack
-                direction={"row"}
-                alignItems={"center"}
-                justifyContent={"space-between"}
-                width={"100%"}
-              >
-                <Box>{key}</Box>
-                <Box>{value}</Box>
-              </Stack>
-          </li>
-        ))}
-      </ul>
-               
-             
-
-            </Box> */}
 
           {/* Continue Button */}
           <Box sx={{ mt: 2, animation: `${fadeInUp} 0.6s ease-in-out` }}>

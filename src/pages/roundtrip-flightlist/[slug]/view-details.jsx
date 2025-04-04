@@ -40,6 +40,8 @@ import Loader from "@/utils/Loader";
 import InternationalPassengerForm from "@/components/flight/roundtrip/InternationalPassengerForm";
 import DomesticPassengerForm from "@/components/flight/roundtrip/DomesticPassengerForm";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
+import errorImage from "@/assests/flight_image/filter.svg";
+import Image from "next/image";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -183,6 +185,7 @@ const FlightDetails = () => {
               textAlign: "center",
             }}
           >
+            <Image src={errorImage.src} alt="Image" width={200} height={200} />
             <Typography
               variant="h6"
               sx={{
@@ -205,7 +208,7 @@ const FlightDetails = () => {
               </Button>
             </Link>
           </Grid2>
-        ) : flightDetails ? (
+        ) : (router.query.journey === JOURNEY.INTERNATIONAL ? flightDetails?.[0]?.Results:flightDetails?.[0]?.[0]?.Results) ? (
           <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px", overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>
@@ -345,8 +348,7 @@ const FlightDetails = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              padding: "50px",
-            }}
+              padding: "50px",}}
           >
             <Loader open={true} />
           </Grid2>
