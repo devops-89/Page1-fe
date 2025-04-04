@@ -197,11 +197,7 @@ const FlightDetails = () => {
             </Link>
           </Grid2>
         ) : flightDetails ? (
-          <Grid2
-            size={{ xs: "12" }}
-            sx={{ width: "100%", py: 4 }}
-            
-          >
+          <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px", px: 0, overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>
                 {/* Flight Details  */}

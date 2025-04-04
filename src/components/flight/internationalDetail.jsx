@@ -5,6 +5,7 @@ import React from "react";
 import pointerImage from "@/../public/images/pointer.png";
 import { nunito } from "@/utils/fonts";
 import { useRouter } from "next/router";
+import { Grid } from "swiper/modules";
 
 const InternationalDetail = ({ flightDetails, setOpen }) => {
   const handleClickOpen = () => {
@@ -17,12 +18,13 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
 
   return (
     <>
-      <Button
+      {/* <Button
         size="small"
         sx={{
           fontFamily: nunito.style,
           fontWeight: 800,
           position: "absolute",
+          
           right: "30px",
           top: "30px",
           display: {
@@ -32,13 +34,13 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
         onClick={handleClickOpen}
       >
         View Fare Rules
-      </Button>
+      </Button> */}
 
       {flightDetails?.[0]?.Results?.Segments?.map(
         (segmentGroup, groupIndex) => (
           <Card key={groupIndex} sx={{ padding: "20px", marginBottom: "20px" }}>
             <Grid2 container>
-              <Grid2 size={{ xs: 8 }}>
+              <Grid2 size={{ lg:8, md:8 , sm:8,xs:12 }}>
                 <Typography
                   variant="h6"
                   gutterBottom
@@ -89,6 +91,28 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                     .minutes()} min`}
                 </Typography>
               </Grid2>
+             {/* write btn */}
+             <Grid2  size={{ lg: 4, md: 4, sm: 4, xs: 12 }}
+               sx={{ display: "flex", justifyContent: {lg:"flex-end" ,md:"flex-end", sm:"flex-end" ,xs:"flex-start"} }}
+             >
+             <Button
+        size="small"
+        sx={{
+          fontFamily: nunito.style,
+          fontWeight: 800,
+         
+          display: {
+            xs: router.query.slug === flightDetails?.[0]?.TraceId ? "none" : "block",
+          },
+        }}
+        onClick={handleClickOpen}
+      >
+        View Fare Rules
+      </Button>
+
+             </Grid2>
+
+
             </Grid2>
             <Divider />
 

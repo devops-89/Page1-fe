@@ -38,7 +38,7 @@ const Banner = () => {
   };
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative" ,width:"100%"  }}>
       <Swiper
         modules={[EffectFade, Autoplay]}
         effect="fade"
@@ -46,44 +46,52 @@ const Banner = () => {
         autoplay={{
           delay: 4000,
         }}
+        style={{ width: "100%" }}
       >
         {data.heroSectionData.map((val, i) => (
           <SwiperSlide>
             <Box
               sx={{
                 backgroundImage: `url(${val.img})`,
-               
-                height: {xs:'1300vh', sm:"140vh",md:'140vh', lg:'140vh'},
+                width:"100%",
+                height:"500px",
+                // height: {xs:'1300vh', sm:"140vh",md:'140vh', lg:'140vh'},
+
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
-                "@media (max-width: 414px)": {
-                  height: "125vh", // Specific fix for 414px width
-                },
 
-                "@media (min-width: 415px) and (max-width: 768px)": {
-                   height: "100vh", // Adjustment for screens between 415px and 768px
-                    },
+                // "@media (max-width: 414px)": {
+                //   height: "125vh", // Specific fix for 414px width
+                // },
 
-                    "@media (min-width: 769px)": {
-                      height: "140vh", // Adjustment for 769px and above
-                    },
-                    "@media (min-width: 769px) and (max-width: 1024px)": {
-                      height: "100vh", // Small desktops
-                    },
+                // "@media (min-width: 415px) and (max-width: 768px)": {
+                //    height: "100vh", // Adjustment for screens between 415px and 768px
+                //     },
 
+                //     "@media (min-width: 769px)": {
+                //       height: "140vh", // Adjustment for 769px and above
+                //     },
+                //     "@media (min-width: 769px) and (max-width: 1024px)": {
+                //       height: "100vh", // Small desktops
+                //     },
               }}
             >
               <Box
                 sx={{
                   backgroundColor: "#00000030",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "start",
-                  justifyContent: "center",
+                  border: 1,
+                 
+                 
+              width: "100%",
+              height: "100%",
+              zIndex:1,
+
+                  // alignItems: "start",
+                  // justifyContent: "center",
                 }}
               >
-                <Grid2 container sx={{ mt: 15}}>
+                <Grid2 container sx={{ mt: 15 }}>
                   <Grid2
                     size={10}
                     margin="auto"
@@ -103,7 +111,7 @@ const Banner = () => {
                     </Typography>
                     <Typography
                       sx={{
-                        fontSize: {xs:20, sm:30, md:40, lg:50},
+                        fontSize: { xs: 20, sm: 30, md: 40, lg: 50 },
                         color: COLORS.WHITE,
                         textAlign: "center",
                         fontFamily: raleway.style,
@@ -114,16 +122,99 @@ const Banner = () => {
                     </Typography>
                   </Grid2>
                 </Grid2>
+                {/* form */}
               </Box>
             </Box>
           </SwiperSlide>
         ))}
       </Swiper>
 
+      <Box
+        sx={{
+          width: "100%",
+        transform:"translateY(-300px)",
+          position:"relative",
+       
+          zIndex: 99,
+        }}
+      >
+        <Grid2 container>
+          <Grid2
+            size={11}
+            margin={"auto"}
+            sx={{
+              boxShadow: "0px 0px 1px 1px #d7d7d7",
+              bgcolor: COLORS.WHITE,
+              borderRadius: 4,
+              pb: 2,
+              mt: 3,
+            }}
+          >
+            <Box>
+              <Tabs
+                value={value}
+                onChange={tabChangeHandler}
+                sx={{
+                  "& .Mui-selected": {
+                    color: `${COLORS.WHITE} !important`,
+                    backgroundColor: COLORS.SECONDARY,
+                  },
+                  "& .MuiTabs-indicator": {
+                    display: "none !important",
+                    // backgroundColor: COLORS.PRIMARY,
+                  },
+                  "& .MuiTab-root": {
+                    width: 120,
+                    minHeight: { lg: 40, md: 40, sm: 35, xs: 35 },
+                    top: 5,
+                    borderRadius: 8,
+                    padding: 0,
+                    transition: "0.5s ease all",
+                  },
 
+                  "& .MuiTab-root:hover": {
+                    color: `${COLORS.WHITE} !important`,
+                    backgroundColor: COLORS.SECONDARY,
+                  },
+                }}
+              >
+                {tabs.map((val, i) => (
+                  <Tab
+                    label={
+                      <Typography
+                        fontSize={12}
+                        fontWeight={800}
+                        fontFamily={nunito.style}
+                      >
+                        {val.label}
+                      </Typography>
+                    }
+                    icon={val.icon}
+                    iconPosition="start"
+                    sx={{
+                      mx: 1,
+                    }}
+                    key={i}
+                  />
+                ))}
+              </Tabs>
+              <Divider />
+              <Box>
+                <TabPanel value={value} index={0}>
+                  <FlightForm />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <HotelForm />
+                </TabPanel>
+              </Box>
+            </Box>
+          </Grid2>
+        </Grid2>
+      </Box>
 
       {/* Search  */}
-      <Box sx={{ position: "absolute", width: "100%", 
+
+      {/* <Box sx={{  width: "100%", 
       top: {xs:'30%', sm:"34%", md:'37%', lg:"40%"}, 
 
       "@media (max-width: 414px)": {
@@ -219,7 +310,7 @@ const Banner = () => {
             </Box>
           </Grid2>
         </Grid2>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
