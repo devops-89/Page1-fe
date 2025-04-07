@@ -3,8 +3,9 @@ import { TextField, Typography, Grid2, Box, Autocomplete } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { data } from "@/assests/data";
+import { MuiTelInput } from "mui-tel-input";
 
-const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
+const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldValue }) => {
   // console.log("value", values);
 
   return (
@@ -30,43 +31,55 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
         </Typography>
         <Grid2 container spacing={1}>
           {/* Cell Country Code */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Typography
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+          <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
             >
-              Cell Code
+              Phone No
             </Typography>
+            <Box sx={{display:'grid',gridTemplateColumns:'30% 70%' }} >
+
+         
             <Autocomplete
               disablePortal
               options={data.countries || []}
               getOptionLabel={(option) => `${option.phone}`}
-              sx={{ width: "100%" }}
+              sx={{ width: "100%" ,fontSize:"16px" }}
               value={
                 data.countries.find(
-                  (country) => country.code === values?.cell_country_code
+                  (country) => country.phone === values?.cell_country_code
                 ) || null
               }
-              onChange={(event, newValue) =>
-                handleChange({
-                  target: {
-                    name: "cell_country_code",
-                    value: newValue?.code || "",
-                  },
-                })
-              }
+              
+
+              onChange={(event, newValue) => {
+                setFieldValue("cell_country_code", newValue?.phone || ""); 
+                setFieldValue("country_code", newValue?.code || "");      
+                setFieldValue("country", newValue?.label || "");          
+              }}
+              
+              
+              // onChange={(event, newValue) =>
+              //   handleChange({
+              //     target: {
+              //       name: "cell_country_code",
+              //       value: newValue?.code || "",
+              //     },
+              //   })
+              // }
               onBlur={handleBlur}
               renderOption={(props, option) => (
                 <li {...props} key={option.code}>
                   <img
                     loading="lazy"
-                    width="20"
+                    width="18"
                     srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
                     src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
                     alt={option.label}
-                    style={{ marginRight: 10 }}
+                    style={{ marginRight: 10  }}
                   />
-                  {option.phone}
+                   <span style={{ fontSize: "14px" }}>{option.phone}</span>
                 </li>
               )}
               renderInput={(params) => (
@@ -80,6 +93,20 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                   helperText={
                     touched?.cell_country_code && errors?.cell_country_code
                   }
+                  InputProps={{
+                    ...params.InputProps,
+                    sx: {
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderRight: "none",        // remove right border
+                       borderTopRightRadius:0,
+                       borderBottomRightRadius:0
+                        
+                        
+                                   
+                      },
+                    },
+                  }}
+
                 />
               )}
               slotProps={{
@@ -90,10 +117,58 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                 },
               }}
             />
+             <TextField
+              fullWidth
+              size="small"
+              id="contact_no"
+              name="contact_no"
+              placeholder="Enter Phone No"
+              value={values?.contact_no}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.contact_no && !!errors?.contact_no}
+              helperText={touched?.contact_no && errors?.contact_no}
+              inputProps={{ maxLength: 10 }}
+              variant="outlined"
+              InputProps={{
+                sx: {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    
+                    borderTopLeftRadius:0,
+                    borderBottomLeftRadius:0
+                     // remove left border
+                  },
+                },
+              }}
+            />
+               </Box>
           </Grid2>
 
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+            >
+              Phone No
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              id="contact_no"
+              name="contact_no"
+              placeholder="Enter Phone No"
+              value={values?.contact_no}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.contact_no && !!errors?.contact_no}
+              helperText={touched?.contact_no && errors?.contact_no}
+              inputProps={{ maxLength: 10 }}
+              variant="outlined"
+            />
+          </Grid2> */}
+
           {/* Country Code */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, mb: "5px", fontFamily: nunito.style }}
@@ -149,10 +224,13 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                 },
               }}
             />
-          </Grid2>
+          </Grid2> */}
+         
+         
+
 
           {/* City */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -175,7 +253,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
           </Grid2>
 
           {/* Contact No */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -196,10 +274,10 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
               inputProps={{ maxLength: 10 }}
               variant="outlined"
             />
-          </Grid2>
+          </Grid2> */}
 
           {/* Country */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -230,7 +308,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                     srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
                     src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
                     alt={option.label}
-                    style={{ marginRight: 10, fontFamily:nunito.style }}
+                    style={{ marginRight: 10, fontFamily: nunito.style }}
                   />
                   {option.label}
                 </li>
@@ -252,33 +330,33 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
                 },
               }}
             />
-          </Grid2>
+          </Grid2> */}
 
           {/* House Number */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
             >
-              House Number
+              Address
             </Typography>
             <TextField
               fullWidth
               size="small"
-              id="house_number"
-              name="house_number"
-              placeholder="Enter House No"
-              value={values?.house_number}
+              id="address"
+              name="address"
+              placeholder="address"
+              value={values?.address}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched?.house_number && !!errors?.house_number}
-              helperText={touched?.house_number && errors?.house_number}
+              error={touched?.address && !!errors?.address}
+              helperText={touched?.address && errors?.address}
               variant="outlined"
             />
           </Grid2>
 
           {/* Postal Code */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -298,10 +376,10 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
               helperText={touched?.postal_code && errors?.postal_code}
               variant="outlined"
             />
-          </Grid2>
+          </Grid2> */}
 
           {/* Street */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -321,10 +399,10 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
               helperText={touched?.street && errors?.street}
               variant="outlined"
             />
-          </Grid2>
+          </Grid2> */}
 
           {/* State */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -344,7 +422,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors }) => {
               helperText={touched?.state && errors?.state}
               variant="outlined"
             />
-          </Grid2>
+          </Grid2> */}
 
           {/* Nationality */}
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>

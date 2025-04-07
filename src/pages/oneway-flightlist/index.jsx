@@ -1,3 +1,5 @@
+
+"use client";
 import InnerBanner from "@/components/innerBanner";
 import React, { useEffect, useState } from "react";
 import banner from "@/banner/flight.jpg";
@@ -52,6 +54,8 @@ const FlightList = () => {
           setFlightList(flightData);
           setTraceId(flightData.trace_id);
           setJourney(flightData.type);
+          console.log("bharti", flightData.type)
+         
         } else {
           console.log("No valid flight data found in localStorage");
         }

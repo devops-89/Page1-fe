@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import { Grid2, TextField, Typography, MenuItem } from "@mui/material";
+import { Grid2, TextField, Typography, MenuItem, Box } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -25,6 +25,7 @@ const PassengerFields = ({
   selectBaggage,
   handleBaggageValue,
   isPassportRequired,
+  isBirthdayRequired,
   values, // Added the missing values prop
 }) => {
   const passengerKey = `${formType}-${index}`;
@@ -49,7 +50,7 @@ const PassengerFields = ({
 
       <AccordionDetails>
         <Grid2 container spacing={1} sx={{ mb: "20px" }}>
-          <Grid2 size={{ xs: 12, sm: 6, md: 2 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 2}}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -58,6 +59,9 @@ const PassengerFields = ({
             </Typography>
 
             <Field
+              sx={{
+                borderRight: "none",
+              }}
               as={TextField}
               size="small"
               select
@@ -85,8 +89,43 @@ const PassengerFields = ({
               <MenuItem value="Ms">Ms.</MenuItem>
               <MenuItem value="Mrs">Mrs.</MenuItem>
             </Field>
-          </Grid2>
+          </Grid2> */}
 
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+            <Box>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+            >
+              First Name
+            </Typography>
+
+            <Field
+              as={TextField}
+              size="small"
+              fullWidth
+              name={`${formType}[${index}].first_name`}
+              variant="outlined"
+              placeholder="Enter First Name"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values[formType][index]?.first_name || ""}
+              error={
+                errors &&
+                errors[formType] &&
+                errors[formType][index] &&
+                errors[formType][index].first_name
+              }
+              helperText={
+                errors &&
+                errors[formType] &&
+                errors[formType][index] &&
+                errors[formType][index].first_name
+              }
+            />
+            </Box>
+          </Grid2> */}
+          {/* gender */}
           {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography
               variant="body1"
@@ -124,8 +163,8 @@ const PassengerFields = ({
               <MenuItem value="Other">Other</MenuItem>
             </Field>
           </Grid2> */}
-
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+         
+           <Grid2 size={{ xs: 12, sm: 6, md: 6}}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -133,6 +172,47 @@ const PassengerFields = ({
               First Name
             </Typography>
 
+            <Box sx={{display:'grid',gridTemplateColumns:'30% 70%' }}>
+            <Field
+              sx={{
+                borderRight: "none",
+              }}
+              as={TextField}
+              size="small"
+              select
+              fullWidth
+              name={`${formType}[${index}].title`}
+              placeholder="Enter title"
+              variant="outlined"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values[formType][index]?.title || ""}
+              error={
+                errors &&
+                errors[formType] &&
+                errors[formType][index] &&
+                errors[formType][index].title
+              }
+              helperText={
+                errors &&
+                errors[formType] &&
+                errors[formType][index] &&
+                errors[formType][index].title
+              }
+              InputProps={{
+                sx: {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderRight: "none",
+                    borderTopRightRadius:0 ,
+                    borderBottomRightRadius:0
+                  },
+                },
+              }}
+            >
+              <MenuItem value="Mr">Mr.</MenuItem>
+              <MenuItem value="Ms">Ms.</MenuItem>
+              <MenuItem value="Mrs">Mrs.</MenuItem>
+            </Field>
             <Field
               as={TextField}
               size="small"
@@ -155,10 +235,22 @@ const PassengerFields = ({
                 errors[formType][index] &&
                 errors[formType][index].first_name
               }
-            />
-          </Grid2>
+              InputProps={{
+                sx: {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                  
+                    borderTopLeftRadius:0 ,
+                    borderBottomLeftRadius:0
+                  },
+                },
+              }}
 
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+
+            />
+            </Box>
+          </Grid2> 
+
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -191,7 +283,7 @@ const PassengerFields = ({
             />
           </Grid2>
 
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -224,7 +316,7 @@ const PassengerFields = ({
             />
           </Grid2>
 
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, mb: "5px", fontFamily: nunito.style }}
@@ -307,7 +399,9 @@ const PassengerFields = ({
             </LocalizationProvider>
           </Grid2>
 
-          <Grid2 size={{ xs: 12, sm: 6 }}>
+          {/* email */}
+
+          {/* <Grid2 size={{ xs: 12, sm: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -338,9 +432,10 @@ const PassengerFields = ({
                 errors[formType][index].email
               }
             />
-          </Grid2>
+          </Grid2> */}
+          {/* phone number */}
 
-          <Grid2 size={{ xs: 12, sm: 6 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -371,17 +466,19 @@ const PassengerFields = ({
                 errors[formType][index].contact_no
               }
             />
-          </Grid2>
+          </Grid2> */}
 
           {/* Meal Selection */}
           <Grid2 size={12}>
             {data?.MealDynamic && (
               <MealSelection
-              passengerId={index} 
+                passengerId={index}
                 mealData={data?.MealDynamic}
                 isLCC={data?.isLCC}
                 passengerType={formType}
-                handleMealValue={(meal) => handleMealValue(formType, index, meal)}
+                handleMealValue={(meal) =>
+                  handleMealValue(formType, index, meal)
+                }
                 selectMeal={selectMeal[passengerKey]}
               />
             )}
@@ -391,10 +488,12 @@ const PassengerFields = ({
           <Grid2 size={12}>
             {data?.Baggage && (
               <BaggageSelection
-              passengerId={index} 
-              passengerType={formType}
+                passengerId={index}
+                passengerType={formType}
                 baggageData={data?.Baggage}
-                handleBaggageValue={(baggage) => handleBaggageValue(formType, index, baggage)}
+                handleBaggageValue={(baggage) =>
+                  handleBaggageValue(formType, index, baggage)
+                }
                 selectBaggage={selectBaggage[passengerKey]}
               />
             )}
@@ -448,7 +547,7 @@ const PassengerFields = ({
                 <Field name={`${formType}[${index}].passport_expiry`}>
                   {({ field, form }) => (
                     <DatePicker
-                    format="DD/MM/YYYY"
+                      format="DD/MM/YYYY"
                       disablePast
                       id="passport.passport_expiry"
                       placeholder="Passport Expiry Date"
