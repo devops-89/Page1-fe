@@ -7,7 +7,6 @@ import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
 import { setToast } from "@/redux/reducers/toast";
 import VirtualList from "./fixedSizeList";
-import MultiTravellerSelector from "./multiTravellerSelector";
 import { useDispatch } from "react-redux";
 import Loading from "react-loading";
 import moment from "moment";
@@ -20,7 +19,6 @@ import {
   CardActionArea,
   Grid2,
   Popover,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -29,6 +27,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import ToastBar from "../toastBar";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
+import TravellerSelector from "./travellerSelector";
 
 const Multiway = () => {
   const router = useRouter();
@@ -63,7 +62,7 @@ const Multiway = () => {
     },
   ]);
   const maxForms = 4;
-
+  const [state, setState] = useState(initialState);
   const [anchorEl, setAnchorEl] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [adultValue, setAdultValue] = useState(1);
@@ -77,8 +76,6 @@ const Multiway = () => {
   });
   const [airportList, setAirportList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [state, setState] = useState(initialState);
-  const [newFormData, setNewFormData] = useState(null);
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [departureDate, setDepartureDate] = useState(null);
@@ -291,39 +288,10 @@ const Multiway = () => {
 
   useEffect(() => {
     let cabinClass = data.FLIGHT_CLASS_DATA.find((val) => {
-      if (router.pathname === defaultRoute && newFormData) {
-        return val.value == newFormData.cabin_class;
-      } else {
-        return val.value == state.cabin_class;
-      }
+      return val.value == state.cabin_class;
     });
     setCabinClass(cabinClass);
-  }, [state.cabin_class, newFormData, router.pathname, defaultRoute]);
-
-  useEffect(() => {
-    if (router.pathname === defaultRoute) {
-      if (newFormData) {
-        setOrigin({
-          airport_name: newFormData.originAirport,
-          city_name: newFormData.destinationCity,
-          iata_code: newFormData.origin,
-        });
-        setDestination({
-          airport_name: newFormData.destinationAirport,
-          city_name: newFormData.destinationCity,
-          iata_code: newFormData.destination,
-        });
-        setDepartureDate(moment(newFormData.departure_date));
-        setAdultValue(newFormData.adult);
-        setChildValue(newFormData.child);
-        setInfantValue(newFormData.infant);
-        setState((prev) => ({
-          ...prev,
-          cabin_class: newFormData.cabin_class,
-        }));
-      }
-    }
-  }, [newFormData, router.pathname, defaultRoute]);
+  }, [state.cabin_class]);
 
   return (
     <>
@@ -659,51 +627,24 @@ const Multiway = () => {
                     Travellers and cabin class
                   </Typography>
                   <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
-                    {router.pathname === defaultRoute && newFormData ? (
-                      <Typography
-                        sx={{
-                          fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {newFormData.adult +
-                          newFormData.child +
-                          newFormData.infant}
-                        Persons
-                      </Typography>
-                    ) : (
-                      <Typography
-                        sx={{
-                          fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {state.adult + state.child + state.infant} Persons
-                      </Typography>
-                    )}
-                    {router.pathname === defaultRoute && newFormData ? (
-                      <Typography
-                        fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
-                        fontFamily={nunito.style}
-                      >
-                        {newFormData.adult}adult
-                        {newFormData.child !== 0 &&
-                          `,${newFormData.child} child`}
-                        {newFormData.infant !== 0 &&
-                          `,${newFormData.infant} infant`}
-                        , {`${cabin_class?.label || ""} Class`}
-                      </Typography>
-                    ) : (
-                      <Typography
-                        fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
-                        fontFamily={nunito.style}
-                      >
-                        {state.adult}adult
-                        {state.child !== 0 && `,${state.child} child`}
-                        {state.infant !== 0 && `,${state.infant} infant`},
-                        {`${cabin_class?.label || ""} Class`}
-                      </Typography>
-                    )}
+                    <Typography
+                      sx={{
+                        fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
+                        fontFamily: nunito.style,
+                      }}
+                    >
+                      {state.adult + state.child + state.infant} Persons
+                    </Typography>
+
+                    <Typography
+                      fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
+                      fontFamily={nunito.style}
+                    >
+                      {state.adult}adult
+                      {state.child !== 0 && `,${state.child} child`}
+                      {state.infant !== 0 && `,${state.infant} infant`},
+                      {`${cabin_class?.label || ""} Class`}
+                    </Typography>
                   </CardActionArea>
                 </>
               ) : (
@@ -801,23 +742,17 @@ const Multiway = () => {
             },
           }}
         >
-          <MultiTravellerSelector
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            initialState={initialState}
-            state={state}
-            setState={setState}
-            adultValue={adultValue}
-            setAdultValue={setAdultValue}
-            infantValue={infantValue}
-            setInfantValue={setInfantValue}
-            childValue={childValue}
-            setChildValue={setChildValue}
-            initialValue={initialValue}
-            setIntialValue={setIntialValue}
-            newFormData={newFormData}
-            defaultRoute={defaultRoute}
-          />
+          <TravellerSelector
+              setAnchorEl={setAnchorEl}
+              state={state}
+              setState={setState}
+              adultValue={adultValue}
+              setAdultValue={setAdultValue}
+              infantValue={infantValue}
+              setInfantValue={setInfantValue}
+              childValue={childValue}
+              setChildValue={setChildValue}
+            />
         </Popover>
         {/* Popover End */}
       </Box>
