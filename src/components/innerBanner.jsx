@@ -2,11 +2,10 @@ import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import Services from "./services";
 
 const InnerBanner = ({ img, heading }) => {
   return (
-    <div>
+    <>
       <Box
         sx={{
           backgroundImage: `url(${img})`,
@@ -37,37 +36,10 @@ const InnerBanner = ({ img, heading }) => {
             >
               {heading}
             </Typography>
-            {/* <Breadcrumbs
-              separator=">"
-              sx={{
-                ".MuiBreadcrumbs-separator": {
-                  color: COLORS.WHITE,
-                  fontWeight: 600,
-                },
-              }}
-            >
-              <Link href={"/"}>
-                <Home htmlColor={COLORS.WHITE} sx={{ fontSize: 25 }} />
-              </Link>
-              <Link href={"/cabs"} style={{ textDecoration: "none" }}>
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    color: COLORS.WHITE,
-                    textDecoration: "none !important",
-                    fontFamily: nunito.style,
-                    fontWeight: 550,
-                  }}
-                >
-                  Cabs
-                </Typography>
-              </Link>
-            </Breadcrumbs> */}
           </Box>
         </Box>
       </Box>
-      <Services />
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import {
   Box,
   Card,
+  Container,
   Divider,
   Grid2,
   Tab,
@@ -147,9 +148,10 @@ const Banner = () => {
 
       zIndex: 99 }}
       >
+        <Container>
         <Grid2 container>
           <Grid2
-            size={11}
+            size={12}
             margin={"auto"}
             sx={{
               boxShadow: "0px 0px 1px 1px #d7d7d7",
@@ -219,6 +221,7 @@ const Banner = () => {
             </Box>
           </Grid2>
         </Grid2>
+        </Container>
       </Box>
     </Box>
   );
