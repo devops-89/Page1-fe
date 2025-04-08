@@ -79,7 +79,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
                     alt={option.label}
                     style={{ marginRight: 10  }}
                   />
-                   <span style={{ fontSize: "14px" }}>{option.phone}</span>
+                   <span style={{ fontSize: "13px" }}>{option.phone}</span>
                 </li>
               )}
               renderInput={(params) => (

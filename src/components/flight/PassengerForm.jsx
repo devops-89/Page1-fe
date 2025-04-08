@@ -262,8 +262,31 @@ const PassengerForm = ({
         }) || [],
         
       child:
-        values?.child?.map((passenger, index) => ({
+        values?.child?.map((passenger, index) =>    {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+          return{
           ...passenger,
+          email: contactEmail,
+          contact_no: phoneNumber,
+        
+          date_of_birth: isBirthdayRequired
+            ? passenger.date_of_birth
+            : passenger.date_of_birth || null,
+
+          gender: gender,
           
           pax_type: 2,
           is_lead_pax: false,
@@ -272,15 +295,43 @@ const PassengerForm = ({
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
           SeatDynamic: childSeats[index] || null,
-        })) || [],
+          }       
+        }) || [],
       infant:
-        values?.infant?.map((passenger, index) => ({
+        values?.infant?.map((passenger, index) =>   {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+
+      
           ...passenger,
+          email: contactEmail,
+          contact_no: phoneNumber,
+        
+          date_of_birth: isBirthdayRequired
+            ? passenger.date_of_birth
+            : passenger.date_of_birth || null,
+
+          gender: gender,
           pax_type: 3,
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-        })) || [],
+        }
+    })|| [],
     };
 
     const finalPayload = {

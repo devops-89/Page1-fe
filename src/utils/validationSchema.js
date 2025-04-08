@@ -74,7 +74,7 @@ export const holidayPackageSchema = Yup.object({
 // Validation schema for passenger fields (used for adult, child, infant)
 const passengerSchema = (isPassportRequired ,isBirthdayRequired) =>
   Yup.object({
-    title: Yup.string().required("Title is required"),
+    title: Yup.string().required("Title"),
     // gender: Yup.string().required("Gender is required"),
     first_name: Yup.string().required("First Name is required"),
     last_name: Yup.string().required("Last Name is required"),
@@ -144,7 +144,7 @@ const gstFormSchema = (isGSTMandatory) => {
 
 // Validation schema for AddForm (contact details form)
 const addFormSchema = Yup.object({
-  cell_country_code: Yup.string().required("Cell Country Code is required"),
+  cell_country_code: Yup.string().required("Cell Code "),
   country_code: Yup.string().required("Country Code is required"),
   city: Yup.string().required("City required"),
   contact_no: Yup.string()

@@ -163,8 +163,8 @@ const PassengerFields = ({
               <MenuItem value="Other">Other</MenuItem>
             </Field>
           </Grid2> */}
-         
-           <Grid2 size={{ xs: 12, sm: 6, md: 6}}>
+
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -172,83 +172,81 @@ const PassengerFields = ({
               First Name
             </Typography>
 
-            <Box sx={{display:'grid',gridTemplateColumns:'30% 70%' }}>
-            <Field
-              sx={{
-                borderRight: "none",
-              }}
-              as={TextField}
-              size="small"
-              select
-              fullWidth
-              name={`${formType}[${index}].title`}
-              placeholder="Enter title"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values[formType][index]?.title || ""}
-              error={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].title
-              }
-              helperText={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].title
-              }
-              InputProps={{
-                sx: {
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderRight: "none",
-                    borderTopRightRadius:0 ,
-                    borderBottomRightRadius:0
+            <Box sx={{ display: "grid", gridTemplateColumns: "30% 70%" }}>
+              <Field
+                sx={{
+                  borderRight: "none",
+                }}
+                as={TextField}
+                size="small"
+                select
+                fullWidth
+                name={`${formType}[${index}].title`}
+                placeholder="Enter title"
+                variant="outlined"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values[formType][index]?.title || ""}
+                error={
+                  errors &&
+                  errors[formType] &&
+                  errors[formType][index] &&
+                  errors[formType][index].title
+                }
+                helperText={
+                  errors &&
+                  errors[formType] &&
+                  errors[formType][index] &&
+                  errors[formType][index].title
+                }
+                InputProps={{
+                  sx: {
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderRight: "none",
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    },
                   },
-                },
-              }}
-            >
-              <MenuItem value="Mr">Mr.</MenuItem>
-              <MenuItem value="Ms">Ms.</MenuItem>
-              <MenuItem value="Mrs">Mrs.</MenuItem>
-            </Field>
-            <Field
-              as={TextField}
-              size="small"
-              fullWidth
-              name={`${formType}[${index}].first_name`}
-              variant="outlined"
-              placeholder="Enter First Name"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values[formType][index]?.first_name || ""}
-              error={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].first_name
-              }
-              helperText={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].first_name
-              }
-              InputProps={{
-                sx: {
-                  "& .MuiOutlinedInput-notchedOutline": {
-                  
-                    borderTopLeftRadius:0 ,
-                    borderBottomLeftRadius:0
+                }}
+               
+              >
+                <MenuItem value="Mr">Mr.</MenuItem>
+                <MenuItem value="Ms">Ms.</MenuItem>
+                <MenuItem value="Mrs">Mrs.</MenuItem>
+              </Field>
+              <Field
+                as={TextField}
+                size="small"
+                fullWidth
+                name={`${formType}[${index}].first_name`}
+                variant="outlined"
+                placeholder="Enter First Name"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values[formType][index]?.first_name || ""}
+                error={
+                  errors &&
+                  errors[formType] &&
+                  errors[formType][index] &&
+                  errors[formType][index].first_name
+                }
+                helperText={
+                  errors &&
+                  errors[formType] &&
+                  errors[formType][index] &&
+                  errors[formType][index].first_name
+                }
+                InputProps={{
+                  sx: {
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                    },
                   },
-                },
-              }}
-
-
-            />
+                }}
+              />
             </Box>
-          </Grid2> 
+          </Grid2>
 
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
