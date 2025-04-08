@@ -743,7 +743,7 @@ export const data = {
     },
     {
       icon: <Wallet sx={{ fontSize: 30 }} />,
-      number: "$5965",
+      number: "₹5965",
       title: "Average Value",
     },
   ],
@@ -783,9 +783,9 @@ export const data = {
   ],
   fightFareData: [
     {
-      value1: "$36,500",
-      value2: "$1050",
-      value3: "$37,550",
+      value1: "₹36,500",
+      value2: "₹1050",
+      value3: "₹37,550",
     },
   ],
   flightBaggageHead: [
@@ -817,7 +817,7 @@ export const data = {
     },
     {
       value1: "24 hours to 365 days",
-      value2: "	$16,325 + $250",
+      value2: "	₹16,325 + ₹250",
     },
   ],
 
@@ -970,7 +970,7 @@ export const data = {
       price: {
         original: 698,
         discounted: 598,
-        taxesInfo: "$598 taxes & fees Per Night",
+        taxesInfo: "₹598 taxes & fees Per Night",
       },
       additionalInfo: "Login to book Now & Pay Later!",
     },
@@ -1001,7 +1001,7 @@ export const data = {
       price: {
         original: 1200,
         discounted: 950,
-        taxesInfo: "$950 taxes & fees Per Night",
+        taxesInfo: "₹950 taxes & fees Per Night",
       },
       additionalInfo: "Free cancellation available!",
     },
@@ -1036,7 +1036,7 @@ export const data = {
       price: {
         original: 450,
         discounted: 399,
-        taxesInfo: "$399 taxes & fees Per Night",
+        taxesInfo: "₹399 taxes & fees Per Night",
       },
       additionalInfo: "Special discount for trekkers!",
     },
@@ -1072,7 +1072,7 @@ export const data = {
       price: {
         original: 800,
         discounted: 750,
-        taxesInfo: "$750 taxes & fees Per Night",
+        taxesInfo: "₹750 taxes & fees Per Night",
       },
       additionalInfo: "Book now for a free dinner voucher!",
     },
@@ -1108,7 +1108,7 @@ export const data = {
       price: {
         original: 900,
         discounted: 850,
-        taxesInfo: "$850 taxes & fees Per Night",
+        taxesInfo: "₹850 taxes & fees Per Night",
       },
       additionalInfo: "Business packages available on request!",
     },

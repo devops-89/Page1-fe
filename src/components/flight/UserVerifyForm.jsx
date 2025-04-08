@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Typography, Button, TextField } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Typography, Button, TextField, Box } from "@mui/material";
 import { authenticationController } from "@/api/auth";
 import { COLORS } from "@/utils/colors";
 import { loginTextField } from "@/utils/styles";
@@ -18,36 +18,40 @@ const UserVerifyForm = () => {
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(null);
   const [enableOtpButton, setEnableOtpButton] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingVerify, setLoadingVerify] = useState(false);
+  const [loadingResend, setLoadingResend] = useState(false);
+  const [timer, setTimer] = useState(0);
 
-  function matchIsNumeric(text) {
+  useEffect(() => {
+    let interval;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const matchIsNumeric = (text) => {
     const isNumber = typeof text === "number";
     const isString = typeof text === "string";
     return (isNumber || (isString && text !== "")) && !isNaN(Number(text));
-  }
-
-  const validateChar = (value, index) => {
-    return matchIsNumeric(value);
   };
 
-  const handleChange = (newValue) => {
-    setOtp(newValue);
-  };
+  const validateChar = (value) => matchIsNumeric(value);
+
+  const handleChange = (newValue) => setOtp(newValue);
 
   const validateEmail = (email) => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const emailPattern =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
   };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
-
-    if (!validateEmail(value)) {
-      setEmailError("Please enter a valid email address.");
-    } else {
-      setEmailError("");
-    }
+    setEmailError(validateEmail(value) ? "" : "Please enter a valid email address.");
   };
 
   const handleSendOtp = () => {
@@ -56,18 +60,19 @@ const UserVerifyForm = () => {
       return;
     }
 
-    setLoading(true);
+    setLoadingResend(true);
     let payload = { email: email, user_type: "USER" };
 
     authenticationController
       .signUpLoginViaEmail(payload)
       .then((response) => {
         setOtpSent(response.data);
-        setLoading(false);
-        // console.log("response.data", response.data);
+        setLoadingResend(false);
+        setEnableOtpButton(false);
+        setTimer(90);
       })
       .catch((error) => {
-        setLoading(false);
+        setLoadingResend(false);
         dispatch(
           setToast({
             open: true,
@@ -79,7 +84,7 @@ const UserVerifyForm = () => {
   };
 
   const handleVerifyOtp = () => {
-    setLoading(true);
+    setLoadingVerify(true);
     let payload = {
       reference_id: otpSent?.data?.reference_id,
       otp: otp,
@@ -89,7 +94,7 @@ const UserVerifyForm = () => {
       if (response.statusText === "OK") {
         dispatch(setAuthenticated(true));
         localStorage.setItem("accesstoken", response?.data?.data?.access_token);
-        setLoading(false);
+        setLoadingVerify(false);
         dispatch(
           setToast({
             open: true,
@@ -98,7 +103,7 @@ const UserVerifyForm = () => {
           })
         );
       } else {
-        setLoading(false)
+        setLoadingVerify(false);
         dispatch(
           setToast({
             open: true,
@@ -106,9 +111,15 @@ const UserVerifyForm = () => {
             severity: TOAST_STATUS.ERROR,
           })
         );
-        setOtp('')
+        setOtp("");
       }
     });
+  };
+
+  const formatTime = (seconds) => {
+    const m = String(Math.floor(seconds / 60)).padStart(1, "0");
+    const s = String(seconds % 60).padStart(2, "0");
+    return `${m}:${s}`;
   };
 
   return (
@@ -142,6 +153,11 @@ const UserVerifyForm = () => {
           <Typography sx={{ color: COLORS.GREEN }}>
             {otpSent?.message}
           </Typography>
+          {timer > 0 && (
+            <Typography sx={{ mt: 1 }}>
+              Time remaining: {formatTime(timer)}
+            </Typography>
+          )}
           <MuiOtpInput
             className="custom-otp-input"
             value={otp}
@@ -168,45 +184,72 @@ const UserVerifyForm = () => {
             onComplete={() => setEnableOtpButton(true)}
             length={6}
             validateChar={validateChar}
-            disabled={otpSent ? false : true}
+            disabled={!otpSent}
           />
-          <Button
-            variant="contained"
-            type="button"
-            size="small"
-            fullWidth
-            onClick={handleVerifyOtp}
-            disabled={!enableOtpButton}
-            sx={{
-              backgroundColor: COLORS.PRIMARY,
-              cursor: loading ? "not-allowed" : "pointer",
-            }}
-          >
-            {loading ? (
-              <Loading
-                type="spin"
-                width={25}
-                height={25}
-                color={COLORS.WHITE}
-              />
-            ) : (
-              "Verify OTP"
-            )}
-          </Button>
+
+          <Box sx={{ display: "flex", gap: "10px" }}>
+            <Button
+              variant="contained"
+              type="button"
+              size="small"
+              onClick={handleVerifyOtp}
+              disabled={!enableOtpButton || loadingVerify}
+              sx={{
+                width: "150px",
+                backgroundColor:COLORS.PRIMARY,
+                cursor: loadingVerify ? "not-allowed" : "pointer",
+              }}
+            >
+              {loadingVerify ? (
+                <Loading
+                  type="spin"
+                  width={25}
+                  height={25}
+                  color={COLORS.WHITE}
+                />
+              ) : (
+                "Verify OTP"
+              )}
+            </Button>
+
+            <Button
+              variant="contained"
+              type="button"
+              size="small"
+              onClick={handleSendOtp}
+              disabled={timer > 0 || loadingResend}
+              sx={{
+                width: "150px",
+                backgroundColor: COLORS.SECONDARY,
+                cursor: loadingResend ? "not-allowed" : "pointer",
+              }}
+            >
+              {loadingResend ? (
+                <Loading
+                  type="spin"
+                  width={25}
+                  height={25}
+                  color={COLORS.WHITE}
+                />
+              ) : (
+                "Resend Code"
+              )}
+            </Button>
+          </Box>
         </>
       ) : (
         <Button
           type="button"
           variant="contained"
           onClick={handleSendOtp}
-          disabled={!email || emailError}
+          disabled={!email || emailError || loadingResend}
           sx={{
             backgroundColor: COLORS.PRIMARY,
             width: "150px",
-            cursor: loading ? "not-allowed" : "pointer",
+            cursor: loadingResend ? "not-allowed" : "pointer",
           }}
         >
-          {loading ? (
+          {loadingResend ? (
             <Loading type="spin" width={25} height={25} color={COLORS.WHITE} />
           ) : (
             "Send OTP"
