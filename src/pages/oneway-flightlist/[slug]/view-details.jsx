@@ -199,7 +199,7 @@ const FlightDetails = () => {
               </Button>
             </Link>
           </Grid2>
-        ) : flightDetails?.[0]?.Results ? (
+        ) : flightDetails ? (
           <Grid2
             size={{ xs: "12" }}
             sx={{ width: "100%", py: 4 }}

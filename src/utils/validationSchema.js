@@ -72,17 +72,26 @@ export const holidayPackageSchema = Yup.object({
 });
 
 // Validation schema for passenger fields (used for adult, child, infant)
-const passengerSchema = (isPassportRequired) =>
+const passengerSchema = (isPassportRequired ,isBirthdayRequired) =>
   Yup.object({
-    title: Yup.string().required("Title is required"),
-    gender: Yup.string().required("Gender is required"),
+    title: Yup.string().required("Title"),
+    // gender: Yup.string().required("Gender is required"),
     first_name: Yup.string().required("First Name is required"),
     last_name: Yup.string().required("Last Name is required"),
-    date_of_birth: Yup.date().required("Date of Birth is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    contact_no: Yup.string()
-      .matches(/^[0-9]{10}$/, "10 digits required")
-      .required("Phone No. is required"),
+
+    // date_of_birth:Yup.date().required("Date of Birth is required"),
+    date_of_birth: Yup.date().when([], {
+      is: () => isBirthdayRequired,
+      then: (schema) => schema.required("Date of Birth is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+    // email: Yup.string().email("Invalid email").required("Email is required"),
+
+    // contact_no: Yup.string()
+    //   .matches(/^[0-9]{10}$/, "10 digits required")
+    //   .required("Phone No. is required"),
+
     passport_no: Yup.string()
       .matches(/^[A-Z0-9]{6,9}$/, "Invalid format")
       .when([], {
@@ -135,26 +144,26 @@ const gstFormSchema = (isGSTMandatory) => {
 
 // Validation schema for AddForm (contact details form)
 const addFormSchema = Yup.object({
-  cell_country_code: Yup.string().required("Cell Country Code is required"),
+  cell_country_code: Yup.string().required("Cell Code "),
   country_code: Yup.string().required("Country Code is required"),
   city: Yup.string().required("City required"),
   contact_no: Yup.string()
     .matches(/^[0-9]{10}$/, "10 digits required")
     .required("Phone No. is required"),
   country: Yup.string().required("Country required"),
-  house_number: Yup.string().required("House No. required"),
-  postal_code: Yup.string().required("Postal code required"),
-  street: Yup.string().required("Street required"),
-  state: Yup.string().required("State required"),
+  address: Yup.string().required("Address is required"),
+  // postal_code: Yup.string().required("Postal code required"),
+  // street: Yup.string().required("Street required"),
+  // state: Yup.string().required("State required"),
   nationality: Yup.string().required("Nationality required"),
   email: Yup.string().email("Invalid email").required("Email required"),
 });
 
-export const validationSchema = (isGSTMandatory, isPassportRequired) => {
+export const validationSchema = (isGSTMandatory, isPassportRequired ,isBirthdayRequired) => {
   return Yup.object().shape({
-    adult: Yup.array().of(passengerSchema(isPassportRequired)),
-    child: Yup.array().of(passengerSchema(isPassportRequired)),
-    infant: Yup.array().of(passengerSchema(isPassportRequired)),
+    adult: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
+    child: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
+    infant: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
     gstForm: isGSTMandatory ? gstFormSchema(true) : Yup.object().optional(),
     ...addFormSchema.fields,
   });

@@ -5,7 +5,7 @@ import GstForm from "./GstForm";
 import { nunito } from "@/utils/fonts";
 import AddForm from "./AddForm";
 import { flightController } from "@/api/flightController";
-import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
@@ -14,6 +14,7 @@ import { setToast } from "@/redux/reducers/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import PassengerFields from "./PassengerFields";
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
 
@@ -37,6 +38,7 @@ const PassengerForm = ({
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
+  const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
   // console.log("flightDetails ----", flightDetails[1]?.SeatDynamic)
 
@@ -75,8 +77,10 @@ const PassengerForm = ({
     setIsPassportRequired(
       results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
+    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState]);
+  }, [myState, journey, flightDetails]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
@@ -130,13 +134,10 @@ const PassengerForm = ({
     },
     cell_country_code: "",
     country_code: "",
-    city: "",
     contact_no: "",
     country: "",
-    house_number: "",
-    postal_code: "",
-    street: "",
-    state: "",
+    address: "",
+    city: "",
     nationality: "",
     email: "",
   };
@@ -162,6 +163,9 @@ const PassengerForm = ({
   };
 
   const handleSubmit = async (values) => {
+    const contactEmail = values.email;
+    const phoneNumber = values.contact_no;
+
     console.log("submit value", values);
     setLoading(true);
     const storedState = localStorage.getItem(myState);
@@ -169,18 +173,15 @@ const PassengerForm = ({
       journey_type: journey?.journey_type,
       journey: journey?.journey,
       is_LCC: isLCC,
+      address: values?.address || "",
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
       cell_country_code: values?.cell_country_code || "",
       country_code: values?.country_code || "",
-      city: values?.city || "",
       contact_no: values?.contact_no || "",
+      city: values?.city || "",
       country: values?.country || "",
-      house_number: values?.house_number || "",
-      postal_code: values?.postal_code || "",
-      street: values?.street || "",
-      state: values?.state || "",
       nationality: values?.nationality || "",
       email: values?.email || "",
       gst_company_address: values?.gstForm?.gst_company_address || null,
@@ -222,19 +223,71 @@ const PassengerForm = ({
 
     const passengerDetails = {
       adult:
-        values?.adult?.map((passenger, index) => ({
-          ...passenger,
-          pax_type: 1,
-          is_lead_pax: index === 0,
-          ff_airline_code: null,
-          ff_number: null,
-          MealDynamic: selectMeal[`adult-${index}`] || null,
-          Baggage: selectBaggage[`adult-${index}`] || null,
-          SeatDynamic: adultSeats[index] || null,
-        })) || [],
+        values?.adult?.map((passenger, index) => {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return {
+            ...passenger,
+           
+            email: contactEmail,
+            contact_no: phoneNumber,
+          
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+
+            gender: gender,
+
+            pax_type: 1,
+            is_lead_pax: index === 0,
+            ff_airline_code: null,
+            ff_number: null,
+            MealDynamic: selectMeal[`adult-${index}`] || null,
+            Baggage: selectBaggage[`adult-${index}`] || null,
+            SeatDynamic: adultSeats[index] || null,
+          };
+        }) || [],
+        
       child:
-        values?.child?.map((passenger, index) => ({
+        values?.child?.map((passenger, index) =>    {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+          return{
           ...passenger,
+          email: contactEmail,
+          contact_no: phoneNumber,
+        
+          date_of_birth: isBirthdayRequired
+            ? passenger.date_of_birth
+            : passenger.date_of_birth || null,
+
+          gender: gender,
+          
           pax_type: 2,
           is_lead_pax: false,
           ff_airline_code: null,
@@ -242,15 +295,43 @@ const PassengerForm = ({
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
           SeatDynamic: childSeats[index] || null,
-        })) || [],
+          }       
+        }) || [],
       infant:
-        values?.infant?.map((passenger, index) => ({
+        values?.infant?.map((passenger, index) =>   {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+
+      
           ...passenger,
+          email: contactEmail,
+          contact_no: phoneNumber,
+        
+          date_of_birth: isBirthdayRequired
+            ? passenger.date_of_birth
+            : passenger.date_of_birth || null,
+
+          gender: gender,
           pax_type: 3,
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-        })) || [],
+        }
+    })|| [],
     };
 
     const finalPayload = {
@@ -262,7 +343,11 @@ const PassengerForm = ({
     console.log("finalpayload", finalPayload);
   };
 
-  const currentValidationSchema = validationSchema(isGSTMandatory);
+  const currentValidationSchema = validationSchema(
+    isGSTMandatory,
+    isBirthdayRequired,
+    isPassportRequired
+  );
 
   useEffect(() => {
     if (payload.trace_id) {
@@ -292,8 +377,15 @@ const PassengerForm = ({
             );
             setLoading(false);
             setTimeout(() => {
-              {(journey?.journey_type===JOURNEY_TYPE.ONEWAY) ?
-              router.push(`/oneway-flightlist/${payload?.trace_id}/oneway-checkout`):router.push(`/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`)}
+              {
+                journey?.journey_type === JOURNEY_TYPE.ONEWAY
+                  ? router.push(
+                      `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`
+                    )
+                  : router.push(
+                      `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`
+                    );
+              }
             }, 1500);
           }
         })
@@ -338,7 +430,7 @@ const PassengerForm = ({
                 fontSize: { lg: 16, xs: 12 },
               }}
             >
-              * Sorry, the fare is not refundable.
+              * Sorry, the fare is not refundable.      
             </Typography>
           )}
         </Box>
@@ -385,6 +477,7 @@ const PassengerForm = ({
             errors,
             touched,
             handleSubmit,
+            setFieldValue
           }) => {
             // console.log("all values", values);
             // console.log("all errors", errors)
@@ -412,6 +505,7 @@ const PassengerForm = ({
                       selectBaggage={selectBaggage}
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
+                      isBirthdayRequired={isBirthdayRequired}
                       values={values}
                     />
                   </Box>
@@ -469,18 +563,20 @@ const PassengerForm = ({
                   handleBlur={handleBlur}
                   errors={errors}
                   touched={touched}
+                  setFieldValue={setFieldValue}
                 />
 
-                {flightDetails[1]?.SeatDynamic  &&
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <FullScreenDialog flightDetailType="oneWayflightDetails"/>
-                </Box>}
+                {flightDetails[1]?.SeatDynamic && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <FullScreenDialog flightDetailType="oneWayflightDetails" />
+                  </Box>
+                )}
 
                 <Box
                   sx={{

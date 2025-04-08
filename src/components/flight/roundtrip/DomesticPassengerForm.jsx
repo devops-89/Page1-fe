@@ -3,7 +3,7 @@ import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import { nunito } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
-import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY,JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
@@ -35,6 +35,7 @@ const DomesticPassengerForm = ({
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
+   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
   const selectedSeats = useSelector(
     (state) => state.SeatsInformation?.seats || []
@@ -91,8 +92,9 @@ const DomesticPassengerForm = ({
     setIsPassportRequired(
       results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
+     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState]);
+  }, [myState ,journey]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
@@ -149,10 +151,10 @@ const DomesticPassengerForm = ({
     city: "",
     contact_no: "",
     country: "",
-    house_number: "",
-    postal_code: "",
-    street: "",
-    state: "",
+    // house_number: "",
+    // postal_code: "",
+    // street: "",
+    // state: "",
     nationality: "",
     email: "",
   };
@@ -172,14 +174,45 @@ const DomesticPassengerForm = ({
   };
 
   const handleSubmit = async (values) => {
+    const contactEmail = values.email;
+    const phoneNumber = values.contact_no;
+
     console.log("submit value", values);
     setLoading(true);
     const storedState = localStorage.getItem(myState);
 
     const passengerDetails = {
+
       adult:
-        values?.adult?.map((passenger, index) => ({
+        values?.adult?.map((passenger, index) => {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+
+         
+
           ...passenger,
+          email: contactEmail,
+          contact_no: phoneNumber,
+        
+          date_of_birth: isBirthdayRequired
+            ? passenger.date_of_birth
+            : passenger.date_of_birth || null,
+
+          gender: gender,
           pax_type: 1,
           is_lead_pax: index === 0,
           ff_airline_code: null,
@@ -187,10 +220,38 @@ const DomesticPassengerForm = ({
           MealDynamic: selectMeal[`adult-${index}`] || null,
           Baggage: selectBaggage[`adult-${index}`] || null,
           SeatDynamic: adultSeats[index] || null,
-        })) || [],
+        }
+        }  ) || [],
       child:
-        values?.child?.map((passenger, index) => ({
-          ...passenger,
+        values?.child?.map((passenger, index) =>  {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
+          
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+  
+            gender: gender,
+            
+          
+        
           pax_type: 2,
           is_lead_pax: false,
           ff_airline_code: null,
@@ -198,15 +259,43 @@ const DomesticPassengerForm = ({
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
           SeatDynamic: childSeats[index] || null,
-        })) || [],
+          }
+        }  ) || [],
       infant:
-        values?.infant?.map((passenger, index) => ({
-          ...passenger,
+        values?.infant?.map((passenger, index) =>  {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
+          
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+  
+            gender: gender,
+        
+        
           pax_type: 3,
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-        })) || [],
+          }
+        }  ) || [],
     };
 
     const commonPayload = {
@@ -217,15 +306,16 @@ const DomesticPassengerForm = ({
         cell_country_code: values?.cell_country_code || "",
         country_code: values?.country_code || "",
         city: values?.city || "",
+        address: values?.address || "",
         journey_type: journey?.journey_type,
         journey: journey?.journey,
         is_LCC: flightDetails?.[0][0]?.Results?.IsLCC,
         contact_no: values?.contact_no || "",
         country: values?.country || "",
-        house_number: values?.house_number || "",
-        postal_code: values?.postal_code || "",
-        street: values?.street || "",
-        state: values?.state || "",
+        // house_number: values?.house_number || "",
+        // postal_code: values?.postal_code || "",
+        // street: values?.street || "",
+        // state: values?.state || "",
         nationality: values?.nationality || "",
         email: values?.email || "",
         gst_company_address: values?.gstForm?.gst_company_address || null,
@@ -272,15 +362,16 @@ const DomesticPassengerForm = ({
         cell_country_code: values?.cell_country_code || "",
         country_code: values?.country_code || "",
         city: values?.city || "",
+        address: values?.address || "",
         journey_type: journey?.journey_type,
         journey: journey?.journey,
         is_LCC: flightDetails?.[1][0]?.Results?.IsLCC,
         contact_no: values?.contact_no || "",
         country: values?.country || "",
-        house_number: values?.house_number || "",
-        postal_code: values?.postal_code || "",
-        street: values?.street || "",
-        state: values?.state || "",
+        // house_number: values?.house_number || "",
+        // postal_code: values?.postal_code || "",
+        // street: values?.street || "",
+        // state: values?.state || "",
         nationality: values?.nationality || "",
         email: values?.email || "",
         gst_company_address: values?.gstForm?.gst_company_address || null,
@@ -326,7 +417,8 @@ const DomesticPassengerForm = ({
     console.log("finalpayload", commonPayload);
   };
 
-  const currentValidationSchema = validationSchema(isGSTMandatory);
+  const currentValidationSchema = validationSchema(isGSTMandatory ,isBirthdayRequired,
+    isPassportRequired);
 
   useEffect(() => {
     console.log("api running");
@@ -427,13 +519,13 @@ const DomesticPassengerForm = ({
           <Typography
             variant="body1"
             sx={{
-              fontSize: { lg: 18, xs: 14 },
+              fontSize: {lg: 18, xs: 14 },
               fontFamily: nunito.style,
               fontWeight: 600,
               mb: "10px",
             }}
           >
-            Total Passengers: {totalPassengers}
+            Total Passengers:{totalPassengers}
           </Typography>
         </Box>
         <Formik
@@ -449,6 +541,8 @@ const DomesticPassengerForm = ({
             errors,
             touched,
             handleSubmit,
+            setFieldValue
+
           }) => {
             // console.log("all values", values);
             // console.log("all errors", errors)
@@ -533,6 +627,7 @@ const DomesticPassengerForm = ({
                   handleBlur={handleBlur}
                   errors={errors}
                   touched={touched}
+                  setFieldValue={setFieldValue}
                 />
 
                 <Box

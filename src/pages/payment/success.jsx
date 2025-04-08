@@ -164,7 +164,7 @@ export default function PaymentSuccess() {
             sx={{
               backgroundColor: COLORS.PRIMARY,
               pl: 2,
-              pt: 1,
+              pt: 1                                                                ,
               pb: 1,
               borderTopLeftRadius: "10px",
               borderTopRightRadius: "10px",
@@ -187,7 +187,7 @@ export default function PaymentSuccess() {
                 Payment Details
               </Typography>
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={6} sx={{visibility:{lg:"visible" ,md:"visible" ,sm:"visible", xs:"hidden"}}}>
               <Box
                 component="img"
                 position={"relative"}
@@ -279,7 +279,7 @@ export default function PaymentSuccess() {
                         variant="body2"
                         sx={{ fontFamily: nunito.style, textAlign: "start" , wordBreak:"break-word"  }}
                       >
-                        {value === null ? "NA" : key=='amount' ? value/100 : value}
+                        {value === null ? "NA" : key=='amount' ? value/100 : key=='tax' ? value/100 : value}
                       </Typography>
                     </Grid2>
                   </Grid2>
