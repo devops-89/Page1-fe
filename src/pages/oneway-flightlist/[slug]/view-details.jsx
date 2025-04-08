@@ -566,6 +566,7 @@ const FlightDetails = () => {
               padding: "50px",
             }}
           >
+            
             <Loader open={true} />
           </Grid2>
         )}
