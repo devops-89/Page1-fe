@@ -56,7 +56,8 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               onChange={(event, newValue) => {
                 setFieldValue("cell_country_code", newValue?.phone || ""); 
                 setFieldValue("country_code", newValue?.code || "");      
-                setFieldValue("country", newValue?.label || "");          
+                setFieldValue("country", newValue?.label || "");  
+                setFieldValue("nationality", newValue?.nationality || "");        
               }}
               
               
@@ -343,7 +344,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
             <TextField
               fullWidth
               size="small"
-              id="address"
+              id="address" 
               name="address"
               placeholder="address"
               value={values?.address}
@@ -425,7 +426,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
           </Grid2> */}
 
           {/* Nationality */}
-          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+          {/* <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
@@ -445,7 +446,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               helperText={touched?.nationality && errors?.nationality}
               variant="outlined"
             />
-          </Grid2>
+          </Grid2> */}
 
           {/* Email */}
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>

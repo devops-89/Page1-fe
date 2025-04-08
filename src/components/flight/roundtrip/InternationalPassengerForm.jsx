@@ -3,7 +3,7 @@ import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import { nunito } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
-import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY,JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
@@ -37,7 +37,7 @@ const InternationalPassengerForm = ({
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
-
+    const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
  
 
   const selectedSeats = useSelector(
@@ -78,6 +78,7 @@ const InternationalPassengerForm = ({
     setIsPassportRequired(
       results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
+      setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [myState]);
 
@@ -136,10 +137,10 @@ const InternationalPassengerForm = ({
     city: "",
     contact_no: "",
     country: "",
-    house_number: "",
-    postal_code: "",
-    street: "",
-    state: "",
+    // house_number: "",
+    // postal_code: "",
+    // street: "",
+    // state: "",
     nationality: "",
     email: "",
   };
@@ -159,6 +160,9 @@ const InternationalPassengerForm = ({
   };
 
   const handleSubmit = async (values) => {
+    const contactEmail = values.email;
+    const phoneNumber = values.contact_no;
+    console.log("hey" ,contactEmail)
     console.log("submit value", values);
     setLoading(true);
     const storedState = localStorage.getItem(myState);
@@ -166,6 +170,7 @@ const InternationalPassengerForm = ({
       journey_type: journey?.journey_type,
       journey: journey?.journey,
       is_LCC: isLCC,
+      address: values?.address || "",
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
@@ -174,10 +179,10 @@ const InternationalPassengerForm = ({
       city: values?.city || "",
       contact_no: values?.contact_no || "",
       country: values?.country || "",
-      house_number: values?.house_number || "",
-      postal_code: values?.postal_code || "",
-      street: values?.street || "",
-      state: values?.state || "",
+      // house_number: values?.house_number || "",
+      // postal_code: values?.postal_code || "",
+      // street: values?.street || "",
+      // state: values?.state || "",
       nationality: values?.nationality || "",
       email: values?.email || "",
       gst_company_address: values?.gstForm?.gst_company_address || null,
@@ -219,8 +224,33 @@ const InternationalPassengerForm = ({
 
     const passengerDetails = {
       adult:
-        values?.adult?.map((passenger, index) => ({
-          ...passenger,
+        values?.adult?.map((passenger, index) =>   {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
+          
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+  
+            gender: gender,
           pax_type: 1,
           is_lead_pax: index === 0,
           ff_airline_code: null,
@@ -228,10 +258,35 @@ const InternationalPassengerForm = ({
           MealDynamic: selectMeal[`adult-${index}`] || null,
           Baggage: selectBaggage[`adult-${index}`] || null,
           SeatDynamic: adultSeats[index] || null,
-        })) || [],
+        }
+    }) || [],
       child:
-        values?.child?.map((passenger, index) => ({
-          ...passenger,
+        values?.child?.map((passenger, index) =>  {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+             ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
+          
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+  
+            gender: gender,
           pax_type: 2,
           is_lead_pax: false,
           ff_airline_code: null,
@@ -239,15 +294,43 @@ const InternationalPassengerForm = ({
           MealDynamic: selectMeal[`child-${index}`] || null,
           Baggage: selectBaggage[`child-${index}`] || null,
           SeatDynamic: childSeats[index] || null,
-        })) || [],
+          
+        }
+        }) || [],
       infant:
-        values?.infant?.map((passenger, index) => ({
+        values?.infant?.map((passenger, index) =>   {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return{
+
           ...passenger,
+            email: contactEmail,
+          contact_no: phoneNumber,
+        
+          date_of_birth: isBirthdayRequired
+            ? passenger.date_of_birth
+            : passenger.date_of_birth || null,
+
+          gender: gender,
           pax_type: 3,
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-        })) || [],
+        }
+        }) || [],
     };
 
     const finalPayload = {
@@ -259,7 +342,8 @@ const InternationalPassengerForm = ({
     console.log("finalpayload", finalPayload);
   };
 
-  const currentValidationSchema = validationSchema(isGSTMandatory);
+  const currentValidationSchema = validationSchema(isGSTMandatory ,
+   );
 
   useEffect(() => {
     if (payload.trace_id) {
@@ -382,6 +466,7 @@ const InternationalPassengerForm = ({
             errors,
             touched,
             handleSubmit,
+            setFieldValue
           }) => {
             // console.log("all values", values);
             // console.log("all errors", errors)
@@ -466,6 +551,7 @@ const InternationalPassengerForm = ({
                   handleBlur={handleBlur}
                   errors={errors}
                   touched={touched}
+                  setFieldValue={setFieldValue}
                 />
 
                 <Box

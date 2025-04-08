@@ -155,7 +155,7 @@ const addFormSchema = Yup.object({
   // postal_code: Yup.string().required("Postal code required"),
   // street: Yup.string().required("Street required"),
   // state: Yup.string().required("State required"),
-  nationality: Yup.string().required("Nationality required"),
+  // nationality: Yup.string().required("Nationality required"),
   email: Yup.string().email("Invalid email").required("Email required"),
 });
 
