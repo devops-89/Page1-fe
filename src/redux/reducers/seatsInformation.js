@@ -67,7 +67,7 @@ const seatsInformation = createSlice({
 
     resetSeatDetails: (state) => {
       state.seats = [];
-    },
+    },       
   },
 });
 

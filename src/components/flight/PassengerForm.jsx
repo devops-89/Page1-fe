@@ -80,7 +80,7 @@ const PassengerForm = ({
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
 
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState, journey, flightDetails]);
+  }, [myState]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 

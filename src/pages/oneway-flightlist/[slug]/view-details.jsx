@@ -547,7 +547,7 @@ const FlightDetails = () => {
                       fareData={flightDetails[0]?.Results}
                       toggleDrawer={toggleDrawer}
                       commission={commission}
-                    />
+                    /> 
                   )}
                   {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
                   {/* <FareSummary fareData={flightDetails[0]?.Results} /> */}

@@ -113,13 +113,12 @@ export default function PaymentSuccess() {
 
   const orderedEntries = keyTOShow.map((key) => [key, PaymentSuccessData[key]]);
 
-  console.log("my-order" , orderedEntries)
+  console.log("my-order", orderedEntries);
 
   return (
     <Box
       sx={{
-      
-        width:"100vw",
+        width: "100vw",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -128,14 +127,10 @@ export default function PaymentSuccess() {
       }}
     >
       <Box
-       
         component="img"
         src={background.src}
         alt="Airplane Front"
-        sx={{ width: "100vw", 
-          height: { lg: "35vh", md:"35%", xs: "56%" }
-         }}
-        
+        sx={{ width: "100vw", height: { lg: "35vh", md: "35%", xs: "56%" } }}
       />
       <Container
         sx={{
@@ -155,22 +150,20 @@ export default function PaymentSuccess() {
             pb: 4,
             borderRadius: "10px",
             animation: `${fadeInUp} 0.5s ease-in-out`,
-            
           }}
         >
           <Grid2
             container
-           
             sx={{
               backgroundColor: COLORS.PRIMARY,
               pl: 2,
-              pt: 1                                                                ,
+              pt: 1,
               pb: 1,
               borderTopLeftRadius: "10px",
               borderTopRightRadius: "10px",
-              display:"flex",
-              alignItems:"center",
-              justifyContent:"space-between"
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
             <Grid2 sx={6}>
@@ -181,13 +174,22 @@ export default function PaymentSuccess() {
                   color: COLORS.WHITE,
                   fontFamily: nunito.style,
                   textAlign: "center",
-                 
                 }}
               >
                 Payment Details
               </Typography>
             </Grid2>
-            <Grid2 size={6} sx={{visibility:{lg:"visible" ,md:"visible" ,sm:"visible", xs:"hidden"}}}>
+            <Grid2
+              size={6}
+              sx={{
+                visibility: {
+                  lg: "visible",
+                  md: "visible",
+                  sm: "visible",
+                  xs: "hidden",
+                },
+              }}
+            >
               <Box
                 component="img"
                 position={"relative"}
@@ -253,18 +255,17 @@ export default function PaymentSuccess() {
                     spacing={2}
                   >
                     <Grid2
-                      size={{ xs: 6, sm: 6, md: 6  , }}
+                      size={{ xs: 6, sm: 6, md: 6 }}
                       sx={{ paddingX: "5px" }}
                     >
                       <Typography
                         variant="body2"
                         sx={{
-                          fontWeight: 600,
+                          fontWeight: 700,
                           textTransform: "capitalize",
                           fontFamily: nunito.style,
                           textAlign: "start",
                           mb: 0.8,
-                        
                         }}
                       >
                         {displayKey}
@@ -277,9 +278,25 @@ export default function PaymentSuccess() {
                       {" "}
                       <Typography
                         variant="body2"
-                        sx={{ fontFamily: nunito.style, textAlign: "start" , wordBreak:"break-word"  }}
+                        sx={{
+                          fontFamily: nunito.style,
+                          textAlign: "start",
+                          wordBreak: "break-word",
+                        }}
                       >
-                        {value === null ? "NA" : key=='amount' ? value/100 : key=='tax' ? value/100 : value}
+                        {/* {value === null ? "NA" : key=='amount' ? value/100 : key=='tax' ? value/100 : value} */}
+                        {value === null
+                          ? "NA"
+                          : key === "amount" ||
+                            key === "tax" ||
+                            key === "fee" ||
+                            key === "amount_refunded"
+                            
+                          ? ` ₹ ${value/100}`
+                          : key === "bank"
+                          ? `${value} Bank`
+                          
+                          : value}
                       </Typography>
                     </Grid2>
                   </Grid2>
@@ -288,15 +305,14 @@ export default function PaymentSuccess() {
             })}
           </Box>
 
-
           {/* Continue Button */}
           <Box sx={{ mt: 2, animation: `${fadeInUp} 0.6s ease-in-out` }}>
             <Button
               variant="subtitle2"
               sx={{
-                borderRadius: 2,
-                px: 2,
-                py: 0.8,
+                borderRadius: 1,
+                px: 1,
+                py: 0.5,
                 color: COLORS.WHITE,
 
                 backgroundColor: COLORS.PRIMARY,
