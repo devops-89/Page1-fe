@@ -21,16 +21,16 @@ const SeatMap = ({ flightDetailType }) => {
     if (flightDetails) {
       flightDetails = JSON.parse(flightDetails);
 
-      console.log("flight Details:", flightDetails);
+      // console.log("flight Details:", flightDetails);
 
       setExtraDetails(flightDetails);
     }
   }, [flightDetailType]);
 
-  console.log(
-    "Seat Map Extra Details:",
-    extraDetails?.[3]?.journey_type == JOURNEY_TYPE.ROUNDTRIP
-  );
+  // console.log(
+  //   "Seat Map Extra Details:",
+  //   extraDetails?.[3]?.journey_type == JOURNEY_TYPE.ROUNDTRIP
+  // );
 
   return (
     <Box sx={{ backgroundColor: COLORS.BLUEOVERLAY, py: 2 }}>

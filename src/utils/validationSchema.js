@@ -72,39 +72,29 @@ export const holidayPackageSchema = Yup.object({
 });
 
 // Validation schema for passenger fields (used for adult, child, infant)
-const passengerSchema = (isPassportRequired ,isBirthdayRequired) =>
+const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
   Yup.object({
-    title: Yup.string().required("Title"),
-    // gender: Yup.string().required("Gender is required"),
+    title: Yup.string().required("Title is required"),
     first_name: Yup.string().required("First Name is required"),
     last_name: Yup.string().required("Last Name is required"),
 
-    // date_of_birth:Yup.date().required("Date of Birth is required"),
-    date_of_birth: Yup.date().when([], {
-      is: () => isBirthdayRequired,
-      then: (schema) => schema.required("Date of Birth is required"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+  // date_of_birth:Yup.date().required("Date of Birth is required"),
+  date_of_birth: Yup.date().when([], {
+    is: () => isBirthdayRequired,
+    then: (schema) => schema.required("Date of Birth is required"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+    passport_no: isPassportRequired
+      ? Yup.string()
+          .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport No. format")
+          .required("Passport No. is required")
+      : Yup.string().notRequired(),
 
-    // email: Yup.string().email("Invalid email").required("Email is required"),
-
-    // contact_no: Yup.string()
-    //   .matches(/^[0-9]{10}$/, "10 digits required")
-    //   .required("Phone No. is required"),
-
-    passport_no: Yup.string()
-      .matches(/^[A-Z0-9]{6,9}$/, "Invalid format")
-      .when([], {
-        is: () => isPassportRequired,
-        then: (schema) => schema.required("Passport No. required"),
-        otherwise: (schema) => schema.notRequired(),
-      }),
-    passport_expiry: Yup.date().when([], {
-      is: () => isPassportRequired,
-      then: (schema) => schema.required("Expiry Date required"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+    passport_expiry: isPassportRequired
+      ? Yup.date().required("Passport Expiry Date is required")
+      : Yup.date().notRequired(),
   });
+
 
 const baseGstSchema = {
   gst_company_email: Yup.string()
@@ -152,10 +142,6 @@ const addFormSchema = Yup.object({
     .required("Phone No. is required"),
   country: Yup.string().required("Country required"),
   address: Yup.string().required("Address is required"),
-  // postal_code: Yup.string().required("Postal code required"),
-  // street: Yup.string().required("Street required"),
-  // state: Yup.string().required("State required"),
-  nationality: Yup.string().required("Nationality required"),
   email: Yup.string().email("Invalid email").required("Email required"),
 });
 

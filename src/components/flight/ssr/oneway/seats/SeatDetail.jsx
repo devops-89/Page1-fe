@@ -11,7 +11,7 @@ import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineE
 import { nunito } from "@/utils/fonts";
 const SeatDetail = ({extraDetails,planeIndex}) => {
 
-   console.log(chalk.green("Seat Details"),extraDetails.Results.Segments[0]);
+  //  console.log(chalk.green("Seat Details"),extraDetails.Results.Segments[0]);
   return (
     <Box
       item

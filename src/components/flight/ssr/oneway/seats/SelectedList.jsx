@@ -17,7 +17,7 @@ const SelectedList = ({planeIndex}) => {
     return airplane?.selectedSeats || [];
   });
   
-  console.log(`Selected seats for airplane ID ${planeIndex}:`, selectedSeats);
+  // console.log(`Selected seats for airplane ID ${planeIndex}:`, selectedSeats);
 
   function handleSeatRemove(seat) {
     dispatch(removeSeatDetails({ airplaneId:planeIndex,seatCode:seat.Code}));

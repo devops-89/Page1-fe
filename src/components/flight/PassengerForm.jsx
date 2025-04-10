@@ -5,7 +5,7 @@ import GstForm from "./GstForm";
 import { nunito } from "@/utils/fonts";
 import AddForm from "./AddForm";
 import { flightController } from "@/api/flightController";
-import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY, TOAST_STATUS } from "@/utils/enum";
 import ToastBar from "../toastBar";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
@@ -14,7 +14,6 @@ import { setToast } from "@/redux/reducers/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import PassengerFields from "./PassengerFields";
-import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
 
@@ -23,10 +22,6 @@ const PassengerForm = ({
   myState,
   journey,
   isLCC,
-  selectMeal,
-  selectBaggage,
-  setSelectBaggage,
-  setSelectMeal,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -40,14 +35,35 @@ const PassengerForm = ({
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
-  // console.log("flightDetails ----", flightDetails[1]?.SeatDynamic)
+  const selectedBaggages = useSelector((state) => state.BaggagesInformation.baggages || {});
+  const selectedMeals = useSelector((state) => state.MealsInformation.meals || {});
+  const selectedSeats = useSelector((state) => state.SeatsInformation?.seats || []);
 
-  const selectedSeats = useSelector(
-    (state) => state.SeatsInformation?.seats || []
-  );
 
-  const adultSeats = selectedSeats.slice(0, adultCount);
-  const childSeats = selectedSeats.slice(adultCount, adultCount + childCount);
+  const finalSeat = selectedSeats?.map((singleSeat, index) => {
+    return singleSeat?.selectedSeats?.map((seat) => {
+        return seat
+    });
+  });
+  
+
+  // console.log("finalSeat------------",finalSeat)
+
+  let adultSeats = [];
+  let childSeats = [];
+  
+  finalSeat.forEach((singleSeatArray) => {
+    singleSeatArray.slice(0, adultCount).forEach(seat => {
+      adultSeats.push(seat);
+    });
+  
+    singleSeatArray.slice(adultCount, adultCount + childCount).forEach(seat => {
+      childSeats.push(seat);
+    });
+  });
+
+  // console.log("adultSeats-----------",adultSeats)
+  // console.log("childSeats---------------",childSeats)
   const {
     Currency,
     BaseFare,
@@ -77,10 +93,13 @@ const PassengerForm = ({
     setIsPassportRequired(
       results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
+
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
 
+    // console.log("------------", isBirthdayRequired)
+
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState, journey, flightDetails]);
+  }, [myState]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
@@ -142,26 +161,6 @@ const PassengerForm = ({
     email: "",
   };
 
-  const handleMealValue = (passengerType, index, meal) => {
-    setSelectMeal((prev) => {
-      const key = `${passengerType}-${index}`;
-      return {
-        ...prev,
-        [key]: prev[key] === meal ? null : meal, //toggle selection
-      };
-    });
-  };
-
-  const handleBaggageValue = (passengerType, index, baggage) => {
-    setSelectBaggage((prev) => {
-      const key = `${passengerType}-${index}`;
-      return {
-        ...prev,
-        [key]: prev[key] === baggage ? null : baggage, //toggle selection
-      };
-    });
-  };
-
   const handleSubmit = async (values) => {
     const contactEmail = values.email;
     const phoneNumber = values.contact_no;
@@ -182,7 +181,7 @@ const PassengerForm = ({
       contact_no: values?.contact_no || "",
       city: values?.city || "",
       country: values?.country || "",
-      nationality: values?.nationality || "",
+      nationality: values?.country_code || "",
       email: values?.email || "",
       gst_company_address: values?.gstForm?.gst_company_address || null,
       gst_company_contact_number:
@@ -255,9 +254,9 @@ const PassengerForm = ({
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectMeal[`adult-${index}`] || null,
-            Baggage: selectBaggage[`adult-${index}`] || null,
-            SeatDynamic: adultSeats[index] || null,
+            MealDynamic: selectedMeals[`adult-${index}`]?.meals?.map(single =>single?.meal) || null,
+            Baggage: selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(single =>single?.selectedBaggage) || null,
+            SeatDynamic: adultSeats || null,
           };
         }) || [],
         
@@ -292,9 +291,9 @@ const PassengerForm = ({
           is_lead_pax: false,
           ff_airline_code: null,
           ff_number: null,
-          MealDynamic: selectMeal[`child-${index}`] || null,
-          Baggage: selectBaggage[`child-${index}`] || null,
-          SeatDynamic: childSeats[index] || null,
+          MealDynamic: selectedMeals[`child-${index}`]?.meals?.map(single =>single?.meal) || null,
+          Baggage: selectedBaggages[`child-${index}`]?.selectedBaggages?.map(single =>single?.selectedBaggage) || null,
+          SeatDynamic: childSeats || null,
           }       
         }) || [],
       infant:
@@ -376,17 +375,17 @@ const PassengerForm = ({
               })
             );
             setLoading(false);
-            setTimeout(() => {
-              {
-                journey?.journey_type === JOURNEY_TYPE.ONEWAY
-                  ? router.push(
-                      `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`
-                    )
-                  : router.push(
-                      `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`
-                    );
-              }
-            }, 1500);
+            // setTimeout(() => {
+            //   {
+            //     journey?.journey_type === JOURNEY_TYPE.ONEWAY
+            //       ? router.push(
+            //           `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`
+            //         )
+            //       : router.push(
+            //           `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`
+            //         );
+            //   }
+            // }, 1500);
           }
         })
         .catch((error) => {
@@ -479,8 +478,8 @@ const PassengerForm = ({
             handleSubmit,
             setFieldValue
           }) => {
-            // console.log("all values", values);
-            // console.log("all errors", errors)
+            console.log("all values", values);
+            console.log("all errors", errors)
             return (
               <Form onSubmit={handleSubmit}>
                 {values.adult.map((dataObj, index) => (
@@ -500,12 +499,7 @@ const PassengerForm = ({
                       handleBlur={handleBlur}
                       errors={errors}
                       formType="adult"
-                      handleMealValue={handleMealValue}
-                      selectMeal={selectMeal}
-                      selectBaggage={selectBaggage}
-                      handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
-                      isBirthdayRequired={isBirthdayRequired}
                       values={values}
                     />
                   </Box>
@@ -521,10 +515,6 @@ const PassengerForm = ({
                       handleBlur={handleBlur}
                       errors={errors}
                       formType="child"
-                      handleMealValue={handleMealValue}
-                      selectMeal={selectMeal}
-                      selectBaggage={selectBaggage}
-                      handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
                     />

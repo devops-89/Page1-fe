@@ -47,7 +47,7 @@ const Seat = ({ extraDetails,planeIndex }) => {
    
   });
 
-  console.log("Seat :",reservedSeats);
+  // console.log("Seat :",reservedSeats);
   
  
   const dispatch = useDispatch();
@@ -103,7 +103,7 @@ const Seat = ({ extraDetails,planeIndex }) => {
     const currentSelectedSeatsCount = reservedSeats.length;                                                                                                     
     const isSeatAlreadyReserved = reservedSeats.some((s) => s.Code === seat.Code);
 
-    console.log("totalAllowedSeats",totalAllowedSeats, "currentSelectedSeatsCount",currentSelectedSeatsCount)
+    // console.log("totalAllowedSeats",totalAllowedSeats, "currentSelectedSeatsCount",currentSelectedSeatsCount)
 
     if (
       currentSelectedSeatsCount >= totalAllowedSeats &&

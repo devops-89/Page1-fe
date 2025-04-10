@@ -66,11 +66,7 @@ const FlightDetails = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectMeal, setSelectMeal] = useState({});
-  const [selectBaggage, setSelectBaggage] = useState({});
 
-  // console.log("selectBaggage", selectBaggage)
-  // console.log("viewDetail selectMeal", selectMeal)
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -510,10 +506,6 @@ const FlightDetails = () => {
                           myState="state"
                           journey={journey}
                           isLCC={isLCC}
-                          selectMeal={selectMeal}
-                          selectBaggage={selectBaggage}
-                          setSelectBaggage={setSelectBaggage}
-                          setSelectMeal={setSelectMeal}
                         />
                       </Card>
                     )}
