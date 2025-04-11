@@ -14,15 +14,11 @@ import { setToast } from "@/redux/reducers/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import PassengerFields from "./PassengerFields";
+import { JOURNEY_TYPE } from "@/utils/enum";
 
 import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
 
-const PassengerForm = ({
-  flightDetails,
-  myState,
-  journey,
-  isLCC,
-}) => {
+const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -35,31 +31,37 @@ const PassengerForm = ({
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
-  const selectedBaggages = useSelector((state) => state.BaggagesInformation.baggages || {});
-  const selectedMeals = useSelector((state) => state.MealsInformation.meals || {});
-  const selectedSeats = useSelector((state) => state.SeatsInformation?.seats || []);
-
+  const selectedBaggages = useSelector(
+    (state) => state.Flight.BaggagesInformation.baggages || {}
+  );
+  const selectedMeals = useSelector(
+    (state) => state.Flight.MealsInformation.meals || {}
+  );
+  const selectedSeats = useSelector(
+    (state) => state.Flight.SeatsInformation?.seats || []
+  );
 
   const finalSeat = selectedSeats?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
-        return seat
+      return seat;
     });
   });
-  
 
   // console.log("finalSeat------------",finalSeat)
 
   let adultSeats = [];
   let childSeats = [];
-  
+
   finalSeat.forEach((singleSeatArray) => {
-    singleSeatArray.slice(0, adultCount).forEach(seat => {
+    singleSeatArray.slice(0, adultCount).forEach((seat) => {
       adultSeats.push(seat);
     });
-  
-    singleSeatArray.slice(adultCount, adultCount + childCount).forEach(seat => {
-      childSeats.push(seat);
-    });
+
+    singleSeatArray
+      .slice(adultCount, adultCount + childCount)
+      .forEach((seat) => {
+        childSeats.push(seat);
+      });
   });
 
   // console.log("adultSeats-----------",adultSeats)
@@ -94,12 +96,16 @@ const PassengerForm = ({
       results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
 
-    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
-
     // console.log("------------", isBirthdayRequired)
 
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState]);
+  }, [myState, journey?.journey]);
+
+  useEffect(() => {
+   
+    
+    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+  }, [journey?.journey]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
@@ -240,10 +246,10 @@ const PassengerForm = ({
 
           return {
             ...passenger,
-           
+
             email: contactEmail,
             contact_no: phoneNumber,
-          
+
             date_of_birth: isBirthdayRequired
               ? passenger.date_of_birth
               : passenger.date_of_birth || null,
@@ -254,14 +260,20 @@ const PassengerForm = ({
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectedMeals[`adult-${index}`]?.meals?.map(single =>single?.meal) || null,
-            Baggage: selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(single =>single?.selectedBaggage) || null,
+            MealDynamic:
+              selectedMeals[`adult-${index}`]?.meals?.map(
+                (single) => single?.meal
+              ) || null,
+            Baggage:
+              selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(
+                (single) => single?.selectedBaggage
+              ) || null,
             SeatDynamic: adultSeats || null,
           };
         }) || [],
-        
+
       child:
-        values?.child?.map((passenger, index) =>    {
+        values?.child?.map((passenger, index) => {
           let gender = "Other";
 
           switch (passenger.title) {
@@ -276,28 +288,34 @@ const PassengerForm = ({
             default:
               gender = "Other";
           }
-          return{
-          ...passenger,
-          email: contactEmail,
-          contact_no: phoneNumber,
-        
-          date_of_birth: isBirthdayRequired
-            ? passenger.date_of_birth
-            : passenger.date_of_birth || null,
+          return {
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
 
-          gender: gender,
-          
-          pax_type: 2,
-          is_lead_pax: false,
-          ff_airline_code: null,
-          ff_number: null,
-          MealDynamic: selectedMeals[`child-${index}`]?.meals?.map(single =>single?.meal) || null,
-          Baggage: selectedBaggages[`child-${index}`]?.selectedBaggages?.map(single =>single?.selectedBaggage) || null,
-          SeatDynamic: childSeats || null,
-          }       
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+
+            gender: gender,
+
+            pax_type: 2,
+            is_lead_pax: false,
+            ff_airline_code: null,
+            ff_number: null,
+            MealDynamic:
+              selectedMeals[`child-${index}`]?.meals?.map(
+                (single) => single?.meal
+              ) || null,
+            Baggage:
+              selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
+                (single) => single?.selectedBaggage
+              ) || null,
+            SeatDynamic: childSeats || null,
+          };
         }) || [],
       infant:
-        values?.infant?.map((passenger, index) =>   {
+        values?.infant?.map((passenger, index) => {
           let gender = "Other";
 
           switch (passenger.title) {
@@ -313,24 +331,22 @@ const PassengerForm = ({
               gender = "Other";
           }
 
-          return{
+          return {
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
 
-      
-          ...passenger,
-          email: contactEmail,
-          contact_no: phoneNumber,
-        
-          date_of_birth: isBirthdayRequired
-            ? passenger.date_of_birth
-            : passenger.date_of_birth || null,
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
 
-          gender: gender,
-          pax_type: 3,
-          is_lead_pax: false,
-          ff_airline_code: null,
-          ff_number: null,
-        }
-    })|| [],
+            gender: gender,
+            pax_type: 3,
+            is_lead_pax: false,
+            ff_airline_code: null,
+            ff_number: null,
+          };
+        }) || [],
     };
 
     const finalPayload = {
@@ -341,12 +357,6 @@ const PassengerForm = ({
     setPayload(finalPayload);
     console.log("finalpayload", finalPayload);
   };
-
-  const currentValidationSchema = validationSchema(
-    isGSTMandatory,
-    isBirthdayRequired,
-    isPassportRequired
-  );
 
   useEffect(() => {
     if (payload.trace_id) {
@@ -375,17 +385,17 @@ const PassengerForm = ({
               })
             );
             setLoading(false);
-            // setTimeout(() => {
-            //   {
-            //     journey?.journey_type === JOURNEY_TYPE.ONEWAY
-            //       ? router.push(
-            //           `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`
-            //         )
-            //       : router.push(
-            //           `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`
-            //         );
-            //   }
-            // }, 1500);
+            setTimeout(() => {
+              {
+                journey?.journey_type === JOURNEY_TYPE.ONEWAY
+                  ? router.push(
+                      `/oneway-flightlist/${payload?.trace_id}/oneway-checkout`
+                    )
+                  : router.push(
+                      `/multitrip-flightlist/${payload?.trace_id}/multitrip-checkout`
+                    );
+              }
+            }, 1500);
           }
         })
         .catch((error) => {
@@ -429,7 +439,7 @@ const PassengerForm = ({
                 fontSize: { lg: 16, xs: 12 },
               }}
             >
-              * Sorry, the fare is not refundable.      
+              * Sorry, the fare is not refundable.
             </Typography>
           )}
         </Box>
@@ -464,8 +474,13 @@ const PassengerForm = ({
           </Typography>
         </Box>
         <Formik
+          key={`${isGSTMandatory}-${isPassportRequired}-${isBirthdayRequired}`}
           initialValues={initialValues}
-          validationSchema={currentValidationSchema}
+          validationSchema={validationSchema(
+            isGSTMandatory,
+            isPassportRequired,
+            isBirthdayRequired
+          )}
           onSubmit={handleSubmit}
           enableReinitialize
         >
@@ -476,10 +491,10 @@ const PassengerForm = ({
             errors,
             touched,
             handleSubmit,
-            setFieldValue
+            setFieldValue,
           }) => {
             console.log("all values", values);
-            console.log("all errors", errors)
+            console.log("all errors", errors);
             return (
               <Form onSubmit={handleSubmit}>
                 {values.adult.map((dataObj, index) => (

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 const ToastBar = () => {
   const dispatch = useDispatch();
 
-  const toast = useSelector((state) => state.Toast);
+  const toast = useSelector((state) => state.Toast.ToastMessages);
 
   const handleClose = () => {
     dispatch(removeToast());

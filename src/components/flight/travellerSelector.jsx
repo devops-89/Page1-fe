@@ -14,7 +14,6 @@ import {
 
 import { useEffect, useState } from "react";
 import TravellorCounter from "./travellorCounter";
-import { useRouter } from "next/router";
 import useTravellerValidation from "@/custom-hook/useTravellerValidation";
 
 const TravellerSelector = ({

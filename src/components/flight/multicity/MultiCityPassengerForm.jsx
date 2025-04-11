@@ -41,7 +41,7 @@ const MultiCityPassengerForm = ({
   // console.log("flightDetails ----", flightDetails[1]?.SeatDynamic)
 
   const selectedSeats = useSelector(
-    (state) => state.SeatsInformation?.seats || []
+    (state) => state.Flight?.SeatsInformation?.seats || []
   );
 
   const adultSeats = selectedSeats.slice(0, adultCount);

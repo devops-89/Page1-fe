@@ -56,7 +56,7 @@ const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [flightDetails, setFlightDetails] = useState(null);
-  const isAuthenticated = useSelector((state) => state.USER.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
   // console.log('isAuthenticated',isAuthenticated)
   const [commission, setCommission] = useState(null);
   const [isLCC, setIsLCC] = useState(null);

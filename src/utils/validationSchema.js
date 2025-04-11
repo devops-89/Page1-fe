@@ -73,6 +73,7 @@ export const holidayPackageSchema = Yup.object({
 
 // Validation schema for passenger fields (used for adult, child, infant)
 const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
+  
   Yup.object({
     title: Yup.string().required("Title is required"),
     first_name: Yup.string().required("First Name is required"),
@@ -93,7 +94,8 @@ const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
     passport_expiry: isPassportRequired
       ? Yup.date().required("Passport Expiry Date is required")
       : Yup.date().notRequired(),
-  });
+  }
+);
 
 
 const baseGstSchema = {
@@ -146,6 +148,7 @@ const addFormSchema = Yup.object({
 });
 
 export const validationSchema = (isGSTMandatory, isPassportRequired ,isBirthdayRequired) => {
+  console.log("yup:",isBirthdayRequired);
   return Yup.object().shape({
     adult: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
     child: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),

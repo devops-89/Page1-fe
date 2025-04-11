@@ -54,7 +54,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const FlightDetails = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.USER.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
   const [flightDetails, setFlightDetails] = useState(null);
   const [isLCC, setIsLCC] = useState(null);
   const [commission, setCommission] = useState(null);

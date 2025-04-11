@@ -38,7 +38,7 @@ const DomesticPassengerForm = ({
    const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
   const selectedSeats = useSelector(
-    (state) => state.SeatsInformation?.seats || []
+    (state) => state.Flight?.SeatsInformation?.seats || []
   );
 
   const adultSeats = selectedSeats.slice(0, adultCount);

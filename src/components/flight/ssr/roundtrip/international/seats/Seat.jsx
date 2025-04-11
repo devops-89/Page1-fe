@@ -40,7 +40,7 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
   
   // Use useSelector to directly access seats from Redux state
   const reservedSeats = useSelector((state) => {
-    console.log("hello",state.RoundInternationalSeatsInformation?.outgoingSeats)
+    console.log("hello",state.Flight?.RoundInternationalSeatsInformation?.outgoingSeats)
     // const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
     if(tabIndex===0)
     {

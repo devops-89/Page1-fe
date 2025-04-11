@@ -45,7 +45,7 @@ export default function RoundTripCheckout() {
       }
     }, []);
   
-  const selector = useSelector((state) => state.USER);
+  const selector = useSelector((state) => state.USER.UserData);
   const { isAuthenticated } = selector;
   const [roundTrip, setRoundTrip] = useState(null);
   const [loading, setLoading] = useState(false);

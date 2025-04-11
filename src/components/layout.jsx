@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
       setShow(true);
     }
   }, [router.pathname]);
-  const isAuthenticated = useSelector((state) => state.USER.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
 
   const getDetails = () => {
     if (isAuthenticated || localStorage.getItem("accesstoken")) {

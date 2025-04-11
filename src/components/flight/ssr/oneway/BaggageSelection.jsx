@@ -18,7 +18,7 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
   // Get selected baggage items from the store
-  const selectedBaggages = useSelector((state) => state.BaggagesInformation.baggages || {});
+  const selectedBaggages = useSelector((state) => state.Flight.BaggagesInformation.baggages || {});
 
   // Safe check to ensure that the selectedBaggages[uniquePassengerKey] is not undefined
   const selectedPassengerBaggages = selectedBaggages[uniquePassengerKey] || { selectedBaggages: [] };
