@@ -3,7 +3,7 @@ import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import { nunito } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
-import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
