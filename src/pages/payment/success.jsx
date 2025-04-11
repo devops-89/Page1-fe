@@ -10,6 +10,7 @@ import {
   Stack,
   Divider,
   Chip,
+  Skeleton
 } from "@mui/material";
 import { CheckCircle } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -22,6 +23,8 @@ import airplan from "@/assests/payment_image/airPlan.png";
 import { nunito } from "@/utils/fonts";
 import axios from "axios";
 import { baseUrl } from "@/api/serverConstant";
+
+import Loader from "@/utils/Loader";
 
 const fadeInUp = keyframes`
   from {
@@ -49,6 +52,7 @@ export default function PaymentSuccess() {
   const router = useRouter();
   const [paymentInfo, setPaymentInfo] = useState(null);
   const [PaymentSuccessData, setPaymentSuccesData] = useState({});
+  const [loading , setLoading] = useState(true)
 
   const params = useSearchParams();
 
@@ -71,6 +75,7 @@ export default function PaymentSuccess() {
         )
         .then((response) => {
           setPaymentSuccesData(response.data);
+          setLoading(false)
           console.log("Payment success response:", response?.data);
         })
         .catch((error) => {
@@ -132,7 +137,20 @@ export default function PaymentSuccess() {
         alt="Airplane Front"
         sx={{ width: "100vw", height: { lg: "35vh", md: "35%", xs: "56%" } }}
       />
-      <Container
+   
+      {loading?<Grid2
+                  size={{ xs: "12" }}
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "50px",
+                  }}
+                >
+                  
+                  <Loader open={true} />
+                </Grid2> : <Container
         sx={{
           width: { lg: "60%", md: "50%", sm: "100%", xs: "100%" },
           textAlign: "center",
@@ -284,7 +302,6 @@ export default function PaymentSuccess() {
                           wordBreak: "break-word",
                         }}
                       >
-                        {/* {value === null ? "NA" : key=='amount' ? value/100 : key=='tax' ? value/100 : value} */}
                         {value === null
                           ? "NA"
                           : key === "amount" ||
@@ -297,6 +314,7 @@ export default function PaymentSuccess() {
                           ? `${value} Bank`
                           
                           : value}
+                   
                       </Typography>
                     </Grid2>
                   </Grid2>
@@ -324,7 +342,9 @@ export default function PaymentSuccess() {
             </Button>
           </Box>
         </Paper>
-      </Container>
+      </Container>}
+      
+      
     </Box>
   );
 }
