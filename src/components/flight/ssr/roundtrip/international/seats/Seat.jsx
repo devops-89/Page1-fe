@@ -44,12 +44,12 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
     // const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
     if(tabIndex===0)
     {
-       const airplane = state.RoundInternationalSeatsInformation?.outgoingSeats?.find((ap) => ap.id === planeIndex);
+       const airplane = state.Flight?.RoundInternationalSeatsInformation?.outgoingSeats?.find((ap) => ap.id === planeIndex);
         // Return selectedSeats if the airplane exists, otherwise return an empty array
     return airplane?.selectedSeats || [];
     }
     else{
-      const airplane = state.RoundInternationalSeatsInformation?.incomingSeats?.find((ap) => ap.id === planeIndex);
+      const airplane = state.Flight?.RoundInternationalSeatsInformation?.incomingSeats?.find((ap) => ap.id === planeIndex);
       // Return selectedSeats if the airplane exists, otherwise return an empty array
   return airplane?.selectedSeats || [];
     } 
