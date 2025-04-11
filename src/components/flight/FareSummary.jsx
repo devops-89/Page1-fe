@@ -28,9 +28,28 @@ import { COLORS } from "@/utils/colors";
 const FareSummary = ({ fareData, commission, toggleDrawer }) => {
   const meals = useSelector((state) => state.MealsInformation.meals);
   const baggages = useSelector((state) => state.BaggagesInformation.baggages);
+  const seats = useSelector((state)=>state. SeatsInformation. seats);
+  // console.log("seatsBharti" , seats)
 
   const [open, setOpen] = useState(false);
-  console.log("mealsBharti", baggages);
+  // console.log("mealsBharti", baggages);
+
+  const calculateTotalSeatPrice = (seats) => {
+    let totalprice = 0;
+    Object.values(seats).forEach((seatData) => {
+      const { selectedSeats } = seatData;
+  
+      const totalSeatPrice = selectedSeats.reduce((total, seat) => {
+        return total + seat.Price; 
+      }, 0);
+  
+      totalprice += totalSeatPrice;
+    });
+  
+    return totalprice;
+    
+  };
+ 
 
   const calculateTotalBaggagePrice = (data) => {
     let totalPrice = 0;
@@ -68,7 +87,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
   };
 
   const extraTotal =
-    calculateTotalMealPrice(meals) + calculateTotalBaggagePrice(baggages);
+    calculateTotalMealPrice(meals) + calculateTotalBaggagePrice(baggages) + calculateTotalSeatPrice(seats)
 
   // console.log("mealpriceBharti" ,calculateTotalPrice(meals))
 
@@ -256,7 +275,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
       </Box>
       {/* extra */}
       <Divider sx={{ my: 1 }} />
-      <Box
+      {extraTotal <=0 ?"" :<Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -267,7 +286,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
           variant="body1"
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
-          Extra(meal , baggage)
+          Extra<span style={{fontSize:"15px" ,fontWeight:600}}>(meal ,seat,baggage)  </span>
         </Typography>
         <Typography
           variant="body1"
@@ -275,8 +294,8 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
         >
           ₹ {extraTotal}
         </Typography>
-      </Box>
-
+      </Box>}
+      
       <Box
         sx={{
           display: "flex",
