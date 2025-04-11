@@ -40,16 +40,16 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
   
   // Use useSelector to directly access seats from Redux state
   const reservedSeats = useSelector((state) => {
-    console.log("hello",state.RoundInternationalSeatsInformation?.outgoingSeats)
+    console.log("hello",state.Flight.RoundInternationalSeatsInformation?.outgoingSeats)
     // const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
     if(tabIndex===0)
     {
-       const airplane = state.RoundInternationalSeatsInformation?.outgoingSeats?.find((ap) => ap.id === planeIndex);
+       const airplane = state.Flight.RoundInternationalSeatsInformation?.outgoingSeats?.find((ap) => ap.id === planeIndex);
         // Return selectedSeats if the airplane exists, otherwise return an empty array
     return airplane?.selectedSeats || [];
     }
     else{
-      const airplane = state.RoundInternationalSeatsInformation?.incomingSeats?.find((ap) => ap.id === planeIndex);
+      const airplane = state.Flight.RoundInternationalSeatsInformation?.incomingSeats?.find((ap) => ap.id === planeIndex);
       // Return selectedSeats if the airplane exists, otherwise return an empty array
   return airplane?.selectedSeats || [];
     } 

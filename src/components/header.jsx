@@ -88,7 +88,7 @@ const Header = () => {
     }
   }, [router]);
 
-  const user = useSelector((state) => state.USER);
+  const user = useSelector((state) => state.USER.UserData);
 
   // console.log("user", user)
 

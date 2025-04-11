@@ -11,13 +11,13 @@ const SelectedList = ({planeIndex}) => {
   const dispatch=useDispatch();
   const selectedSeats = useSelector((state) => {
     // Find the airplane by ID
-    const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
+    const airplane = state.Flight?.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
   
     // Return selectedSeats if the airplane exists, otherwise return an empty array
     return airplane?.selectedSeats || [];
   });
   
-  console.log(`Selected seats for airplane ID ${planeIndex}:`, selectedSeats);
+  // console.log(`Selected seats for airplane ID ${planeIndex}:`, selectedSeats);
 
   function handleSeatRemove(seat) {
     dispatch(removeSeatDetails({ airplaneId:planeIndex,seatCode:seat.Code}));

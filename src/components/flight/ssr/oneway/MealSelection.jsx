@@ -21,7 +21,7 @@ export default function MealSelection({ mealData, isLCC, passengerId, passengerT
   // Create unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
-  const selectedMeals = useSelector((state) => state.MealsInformation.meals || {});
+  const selectedMeals = useSelector((state) => state.Flight.MealsInformation.meals || {});
 
   // console.log("selectedMeals----------", selectedMeals);
 

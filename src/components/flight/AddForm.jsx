@@ -60,15 +60,6 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
                 setFieldValue("nationality", newValue?.nationality || "");        
               }}
               
-              
-              // onChange={(event, newValue) =>
-              //   handleChange({
-              //     target: {
-              //       name: "cell_country_code",
-              //       value: newValue?.code || "",
-              //     },
-              //   })
-              // }
               onBlur={handleBlur}
               renderOption={(props, option) => (
                 <li {...props} key={option.code}>
@@ -98,12 +89,8 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
                     ...params.InputProps,
                     sx: {
                       "& .MuiOutlinedInput-notchedOutline": {
-                        borderRight: "none",        // remove right border
                        borderTopRightRadius:0,
-                       borderBottomRightRadius:0
-                        
-                        
-                                   
+                       borderBottomRightRadius:0           
                       },
                     },
                   }}
@@ -144,90 +131,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
             />
                </Box>
           </Grid2>
-
-          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              Phone No
-            </Typography>
-            <TextField
-              fullWidth
-              size="small"
-              id="contact_no"
-              name="contact_no"
-              placeholder="Enter Phone No"
-              value={values?.contact_no}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched?.contact_no && !!errors?.contact_no}
-              helperText={touched?.contact_no && errors?.contact_no}
-              inputProps={{ maxLength: 10 }}
-              variant="outlined"
-            />
-          </Grid2> */}
-
-          {/* Country Code */}
-          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, mb: "5px", fontFamily: nunito.style }}
-            >
-              Country Code
-            </Typography>
-            <Autocomplete
-              options={data.countries || []}
-              getOptionLabel={(option) => `${option.code}`}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  size="small"
-                  id="country_code"
-                  name="country_code"
-                  placeholder="Select Country Code"
-                  value={values?.country_code}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched?.country_code && !!errors?.country_code}
-                  helperText={touched?.country_code && errors?.country_code}
-                  variant="outlined"
-                />
-              )}
-              onChange={(event, newValue) => {
-                handleChange({
-                  target: {
-                    name: "country_code",
-                    value: newValue ? `+${newValue.phone}` : "",
-                  },
-                });
-              }}
-              onBlur={handleBlur}
-              renderOption={(props, option) => (
-                <li {...props} key={option.code}>
-                  <img
-                    loading="lazy"
-                    width="20"
-                    srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                    src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                    alt={option.label}
-                    style={{ marginRight: 10 }}
-                  />
-                  {option.code}
-                </li>
-              )}
-              slotProps={{
-                popper: {
-                  sx: {
-                    zIndex: 100,
-                  },
-                },
-              }}
-            />
-          </Grid2> */}
-         
-         
+      
 
 
           {/* City */}
@@ -253,87 +157,9 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
             />
           </Grid2>
 
-          {/* Contact No */}
-          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              Phone No
-            </Typography>
-            <TextField
-              fullWidth
-              size="small"
-              id="contact_no"
-              name="contact_no"
-              placeholder="Enter Phone No"
-              value={values?.contact_no}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched?.contact_no && !!errors?.contact_no}
-              helperText={touched?.contact_no && errors?.contact_no}
-              inputProps={{ maxLength: 10 }}
-              variant="outlined"
-            />
-          </Grid2> */}
+  
 
-          {/* Country */}
-          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              Country
-            </Typography>
-            <Autocomplete
-              disablePortal
-              options={data.countries || []}
-              getOptionLabel={(option) => option.label}
-              sx={{ width: "100%" }}
-              value={
-                data.countries.find(
-                  (country) => country.code === values?.country
-                ) || null
-              }
-              onChange={(event, newValue) =>
-                handleChange({
-                  target: { name: "country", value: newValue?.code || "" },
-                })
-              }
-              onBlur={handleBlur}
-              renderOption={(props, option) => (
-                <li {...props} key={option.code}>
-                  <img
-                    loading="lazy"
-                    width="20"
-                    srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                    src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                    alt={option.label}
-                    style={{ marginRight: 10, fontFamily: nunito.style }}
-                  />
-                  {option.label}
-                </li>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  placeholder="Select Country"
-                  error={touched?.country && !!errors?.country}
-                  helperText={touched?.country && errors?.country}
-                />
-              )}
-              slotProps={{
-                popper: {
-                  sx: {
-                    zIndex: 100,
-                  },
-                },
-              }}
-            />
-          </Grid2> */}
-
-          {/* House Number */}
+          {/* Address */}
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
@@ -346,7 +172,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               size="small"
               id="address" 
               name="address"
-              placeholder="address"
+              placeholder="Enter Address"
               value={values?.address}
               onChange={handleChange}
               onBlur={handleBlur}

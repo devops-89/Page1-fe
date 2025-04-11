@@ -20,18 +20,12 @@ const PassengerFields = ({
   handleBlur,
   errors,
   formType,
-  handleMealValue,
-  selectMeal,
-  selectBaggage,
-  handleBaggageValue,
   isPassportRequired,
-  isBirthdayRequired,
   values, // Added the missing values prop
 }) => {
   const passengerKey = `${formType}-${index}`;
   // console.log("formType", formType, "index", index);
 
-  // console.log("selectMeal", selectMeal)
   const dispatch = useDispatch();
   return (
     <Accordion defaultExpanded={index === 0} key={passengerKey}>
@@ -50,120 +44,6 @@ const PassengerFields = ({
 
       <AccordionDetails>
         <Grid2 container spacing={1} sx={{ mb: "20px" }}>
-          {/* <Grid2 size={{ xs: 12, sm: 6, md: 2}}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              Title
-            </Typography>
-
-            <Field
-              sx={{
-                borderRight: "none",
-              }}
-              as={TextField}
-              size="small"
-              select
-              fullWidth
-              name={`${formType}[${index}].title`}
-              placeholder="Enter title"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values[formType][index]?.title || ""}
-              error={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].title
-              }
-              helperText={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].title
-              }
-            >
-              <MenuItem value="Mr">Mr.</MenuItem>
-              <MenuItem value="Ms">Ms.</MenuItem>
-              <MenuItem value="Mrs">Mrs.</MenuItem>
-            </Field>
-          </Grid2> */}
-
-          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Box>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              First Name
-            </Typography>
-
-            <Field
-              as={TextField}
-              size="small"
-              fullWidth
-              name={`${formType}[${index}].first_name`}
-              variant="outlined"
-              placeholder="Enter First Name"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values[formType][index]?.first_name || ""}
-              error={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].first_name
-              }
-              helperText={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].first_name
-              }
-            />
-            </Box>
-          </Grid2> */}
-          {/* gender */}
-          {/* <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              Gender
-            </Typography>
-
-            <Field
-              as={TextField}
-              size="small"
-              select
-              fullWidth
-              name={`${formType}[${index}].gender`}
-              variant="outlined"
-              placeholder="Enter Gender"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values[formType][index]?.gender || ""}
-              error={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].gender
-              }
-              helperText={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].gender
-              }
-            >
-              <MenuItem value="Male">Male</MenuItem>
-              <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-            </Field>
-          </Grid2> */}
-
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
@@ -174,9 +54,6 @@ const PassengerFields = ({
 
             <Box sx={{ display: "grid", gridTemplateColumns: "30% 70%" }}>
               <Field
-                sx={{
-                  borderRight: "none",
-                }}
                 as={TextField}
                 size="small"
                 select
@@ -202,7 +79,6 @@ const PassengerFields = ({
                 InputProps={{
                   sx: {
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderRight: "none",
                       borderTopRightRadius: 0,
                       borderBottomRightRadius: 0,
                     },
@@ -397,75 +273,6 @@ const PassengerFields = ({
             </LocalizationProvider>
           </Grid2>
 
-          {/* email */}
-
-          {/* <Grid2 size={{ xs: 12, sm: 6 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              Email
-            </Typography>
-
-            <Field
-              as={TextField}
-              size="small"
-              fullWidth
-              name={`${formType}[${index}].email`}
-              variant="outlined"
-              placeholder="Enter Email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values[formType][index]?.email || ""}
-              error={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].email
-              }
-              helperText={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].email
-              }
-            />
-          </Grid2> */}
-          {/* phone number */}
-
-          {/* <Grid2 size={{ xs: 12, sm: 6 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
-            >
-              Phone Number
-            </Typography>
-
-            <Field
-              as={TextField}
-              fullWidth
-              name={`${formType}[${index}].contact_no`}
-              size="small"
-              variant="outlined"
-              placeholder="Enter Phone No"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values[formType][index]?.contact_no || ""}
-              error={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].contact_no
-              }
-              helperText={
-                errors &&
-                errors[formType] &&
-                errors[formType][index] &&
-                errors[formType][index].contact_no
-              }
-            />
-          </Grid2> */}
-
           {/* Meal Selection */}
           <Grid2 size={12}>
             {data?.MealDynamic && (
@@ -474,10 +281,6 @@ const PassengerFields = ({
                 mealData={data?.MealDynamic}
                 isLCC={data?.isLCC}
                 passengerType={formType}
-                handleMealValue={(meal) =>
-                  handleMealValue(formType, index, meal)
-                }
-                selectMeal={selectMeal[passengerKey]}
               />
             )}
           </Grid2>
@@ -489,10 +292,6 @@ const PassengerFields = ({
                 passengerId={index}
                 passengerType={formType}
                 baggageData={data?.Baggage}
-                handleBaggageValue={(baggage) =>
-                  handleBaggageValue(formType, index, baggage)
-                }
-                selectBaggage={selectBaggage[passengerKey]}
               />
             )}
           </Grid2>

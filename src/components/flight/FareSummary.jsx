@@ -26,9 +26,9 @@ import { COMMISSION_TYPE } from "@/utils/enum";
 import { COLORS } from "@/utils/colors";
 
 const FareSummary = ({ fareData, commission, toggleDrawer }) => {
-  const meals = useSelector((state) => state.MealsInformation.meals);
-  const baggages = useSelector((state) => state.BaggagesInformation.baggages);
-  const seats = useSelector((state)=>state. SeatsInformation. seats);
+  const meals = useSelector((state) => state.Flight.MealsInformation.meals);
+  const baggages = useSelector((state) => state.Flight.BaggagesInformation.baggages);
+  const seats = useSelector((state)=>state.Flight.SeatsInformation.seats);
   // console.log("seatsBharti" , seats)
 
   const [open, setOpen] = useState(false);

@@ -29,7 +29,7 @@ import Loader from "@/utils/Loader";
 
 export default function OneWayCheckout() {
   const router = useRouter();
-  const selector = useSelector((state) => state.USER);
+  const selector = useSelector((state) => state.USER.UserData);
   const { isAuthenticated } = selector;
   const [multiCity, setMultiCity] = useState(null);
   const [loading, setLoading] = useState(false);

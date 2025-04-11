@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const Sidebar = () => {
-  const user = useSelector((state) => state.USER);
+  const user = useSelector((state) => state.USER.UserData);
   const router = useRouter();
 
   return (

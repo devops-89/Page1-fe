@@ -40,14 +40,14 @@ const Seat = ({ extraDetails,planeIndex }) => {
   
   // Use useSelector to directly access seats from Redux state
   const reservedSeats = useSelector((state) => {
-    const airplane = state.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
+    const airplane = state.Flight.SeatsInformation?.seats?.find((ap) => ap.id === planeIndex);
   
     // Return selectedSeats if the airplane exists, otherwise return an empty array
     return airplane?.selectedSeats || [];
    
   });
 
-  console.log("Seat :",reservedSeats);
+  // console.log("Seat :",reservedSeats);
   
  
   const dispatch = useDispatch();
@@ -103,7 +103,7 @@ const Seat = ({ extraDetails,planeIndex }) => {
     const currentSelectedSeatsCount = reservedSeats.length;                                                                                                     
     const isSeatAlreadyReserved = reservedSeats.some((s) => s.Code === seat.Code);
 
-    console.log("totalAllowedSeats",totalAllowedSeats, "currentSelectedSeatsCount",currentSelectedSeatsCount)
+    // console.log("totalAllowedSeats",totalAllowedSeats, "currentSelectedSeatsCount",currentSelectedSeatsCount)
 
     if (
       currentSelectedSeatsCount >= totalAllowedSeats &&

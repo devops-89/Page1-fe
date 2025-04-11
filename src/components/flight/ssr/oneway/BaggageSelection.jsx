@@ -18,12 +18,12 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
   // Get selected baggage items from the store
-  const selectedBaggages = useSelector((state) => state.BaggagesInformation.baggages || {});
+  const selectedBaggages = useSelector((state) => state.Flight.BaggagesInformation.baggages || {});
 
   // Safe check to ensure that the selectedBaggages[uniquePassengerKey] is not undefined
   const selectedPassengerBaggages = selectedBaggages[uniquePassengerKey] || { selectedBaggages: [] };
 
-    console.log('selectedPassengerBaggages------------',selectedPassengerBaggages)
+    // console.log('selectedPassengerBaggages------------',selectedPassengerBaggages)
 
 
   // Handle baggage click (select or remove)
@@ -31,7 +31,7 @@ export default function BaggageSelection({ baggageData, passengerId, passengerTy
     // console.log('baggage-----------', baggage, flightNumber);
     const passengerBaggages = selectedPassengerBaggages.selectedBaggages;
     const existingBaggage = passengerBaggages.find((b) => b.flightId === flightNumber);
-    console.log('---------existingBaggage',existingBaggage)
+    // console.log('---------existingBaggage',existingBaggage)
 
     if (existingBaggage?.selectedBaggage.Code === baggage.Code) {
       // Deselect the baggage if it's already selected

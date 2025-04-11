@@ -43,7 +43,7 @@ export default function OneWayCheckout() {
     }
   }, []);
 
-  const selector = useSelector((state) => state.USER);
+  const selector = useSelector((state) => state.USER.UserData);
   const { isAuthenticated } = selector;
   const [oneWay, setOneWay] = useState(null);
   const [loading, setLoading] = useState(false);
