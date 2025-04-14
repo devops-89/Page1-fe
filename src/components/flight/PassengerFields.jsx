@@ -9,11 +9,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
-import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import InternationalMealSelection from "./ssr/roundtrip/international/InternationalMealSelection";
 import InternationalBaggageSelection from "./ssr/roundtrip/international/InternationalBaggageSelection";
 import MealSelection from "./ssr/oneway/MealSelection";
 import BaggageSelection from "./ssr/oneway/BaggageSelection";
+import DomesticMealSelection from "./ssr/roundtrip/domestic/DomesticMealSelection";
+import DomesticBaggageSelection from "./ssr/roundtrip/domestic/DomesticBaggageSelection";
 
 const PassengerFields = ({
   data,
@@ -89,7 +91,6 @@ const PassengerFields = ({
                     },
                   },
                 }}
-               
               >
                 <MenuItem value="Mr">Mr.</MenuItem>
                 <MenuItem value="Ms">Ms.</MenuItem>
@@ -278,58 +279,75 @@ const PassengerFields = ({
             </LocalizationProvider>
           </Grid2>
 
-          
-          {journey?.journey_type===JOURNEY_TYPE.ONEWAY ? (
+          {journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP &&
+          journey?.journey === JOURNEY.DOMESTIC ? (
             <>
-          {/* Meal Selection */}
-          <Grid2 size={12}>
-            {data?.MealDynamic && (
-              <MealSelection
-                passengerId={index}
-                mealData={data?.MealDynamic}
-                isLCC={data?.isLCC}
-                passengerType={formType}
-              />
-            )}
-          </Grid2>
-          {/* Baggage Selection */}
-          <Grid2 size={12}>
-            {data?.Baggage && (
-              <BaggageSelection
-                passengerId={index}
-                passengerType={formType}
-                baggageData={data?.Baggage}
-              />
-            )}
-          </Grid2>
-          </>
-          ) :(
-            <>
-            
-            {/* Meal Selection */}
-          <Grid2 size={12}>
-            {data?.MealDynamic && (
-              <InternationalMealSelection
-                passengerId={index}
-                mealData={data?.MealDynamic}
-                isLCC={data?.isLCC}
-                passengerType={formType}
-              />
-            )}
-          </Grid2>
-          {/* Baggage Selection */}
-          <Grid2 size={12}>
-            {data?.Baggage && (
-              <InternationalBaggageSelection
-                passengerId={index}
-                passengerType={formType}
-                baggageData={data?.Baggage}
-              />
-            )}
-          </Grid2>
+              <Grid2 size={12}>
+                {data?.MealDynamic && (
+                  <DomesticMealSelection
+                    passengerId={index}
+                    mealData={data?.MealDynamic}
+                    isLCC={data?.isLCC}
+                    passengerType={formType}
+                  />
+                )}
+              </Grid2>
+              <Grid2 size={12}>
+                {data?.Baggage && (
+                  <DomesticBaggageSelection
+                    passengerId={index}
+                    passengerType={formType}
+                    baggageData={data?.Baggage}
+                  />
+                )}
+              </Grid2>
             </>
-          )
-        }
+          ) : journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP &&
+            journey?.journey === JOURNEY.INTERNATIONAL ? (
+            <>
+              <Grid2 size={12}>
+                {data?.MealDynamic && (
+                  <InternationalMealSelection
+                    passengerId={index}
+                    mealData={data?.MealDynamic}
+                    isLCC={data?.isLCC}
+                    passengerType={formType}
+                  />
+                )}
+              </Grid2>
+              <Grid2 size={12}>
+                {data?.Baggage && (
+                  <InternationalBaggageSelection
+                    passengerId={index}
+                    passengerType={formType}
+                    baggageData={data?.Baggage}
+                  />
+                )}
+              </Grid2>
+            </>
+          ) : (
+            <>
+              <Grid2 size={12}>
+                {data?.MealDynamic && (
+                  <MealSelection
+                    passengerId={index}
+                    mealData={data?.MealDynamic}
+                    isLCC={data?.isLCC}
+                    passengerType={formType}
+                  />
+                )}
+              </Grid2>
+              <Grid2 size={12}>
+                {data?.Baggage && (
+                  <BaggageSelection
+                    passengerId={index}
+                    passengerType={formType}
+                    baggageData={data?.Baggage}
+                  />
+                )}
+              </Grid2>
+            </>
+          )}
 
           {/* Passport Number */}
           {isPassportRequired && (

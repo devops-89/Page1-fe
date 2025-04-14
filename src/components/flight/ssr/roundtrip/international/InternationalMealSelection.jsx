@@ -27,7 +27,7 @@ export default function InternationalMealSelection({
   const dispatch = useDispatch();
   const [tabIndex, setTabIndex] = useState(0);
 
-//   console.log("mealData-------------", mealData);
+  // console.log("mealData-------------", mealData);
 
   // Create unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
@@ -280,7 +280,7 @@ export default function InternationalMealSelection({
               </Swiper>
             ) : (
               <Grid2 container spacing={2}>
-                {mealData?.[1]?.map((meal, mealIndex) => (
+                {mealData?.map((meal, mealIndex) => (
                   <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                     <MealCard
                       meal={meal}

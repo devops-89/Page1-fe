@@ -26,6 +26,8 @@ export default function MealSelection({
 }) {
   const dispatch = useDispatch();
 
+  // console.log('mealData------------',mealData)
+
   // Create unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
