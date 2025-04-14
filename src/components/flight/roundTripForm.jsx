@@ -32,6 +32,9 @@ import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
+import { resetMealDetails } from "@/redux/reducers/mealsInformation";
+import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
+import { resetSeatDetails } from "@/redux/reducers/roundInternationalSeatsInformation";
 
 const RoundTrip = () => {
   const router = useRouter();
@@ -178,6 +181,9 @@ const RoundTrip = () => {
 
 
   const submitHandler = () => {
+       dispatch(resetSeatDetails());
+          dispatch(resetMealDetails());
+          dispatch(resetBaggageDetails());
     const emptyFields = Object.keys(state).filter(
       (key) =>
         state[key] === "" || state[key] === null || state[key] === undefined

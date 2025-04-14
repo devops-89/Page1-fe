@@ -495,6 +495,7 @@ const InternationalPassengerForm = ({
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      journey={journey}
                     />
                   </Box>
                 ))}
@@ -515,6 +516,7 @@ const InternationalPassengerForm = ({
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      journey={journey}
                     />
                   </Box>
                 ))}
@@ -530,6 +532,7 @@ const InternationalPassengerForm = ({
                       formType="infant"
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      journey={journey}
                     />
                   </Box>
                 ))}

@@ -4,14 +4,16 @@ import { Grid2, TextField, Typography, MenuItem, Box } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import MealSelection from "./ssr/oneway/MealSelection";
-import BaggageSelection from "./ssr/oneway/BaggageSelection";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
-import { TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import InternationalMealSelection from "./ssr/roundtrip/international/InternationalMealSelection";
+import InternationalBaggageSelection from "./ssr/roundtrip/international/InternationalBaggageSelection";
+import MealSelection from "./ssr/oneway/MealSelection";
+import BaggageSelection from "./ssr/oneway/BaggageSelection";
 
 const PassengerFields = ({
   data,
@@ -21,12 +23,15 @@ const PassengerFields = ({
   errors,
   formType,
   isPassportRequired,
+  journey,
   values, // Added the missing values prop
 }) => {
   const passengerKey = `${formType}-${index}`;
   // console.log("formType", formType, "index", index);
 
   const dispatch = useDispatch();
+  // console.log("journey---------",journey)
+
   return (
     <Accordion defaultExpanded={index === 0} key={passengerKey}>
       <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
@@ -273,6 +278,9 @@ const PassengerFields = ({
             </LocalizationProvider>
           </Grid2>
 
+          
+          {journey?.journey_type===JOURNEY_TYPE.ONEWAY ? (
+            <>
           {/* Meal Selection */}
           <Grid2 size={12}>
             {data?.MealDynamic && (
@@ -284,7 +292,6 @@ const PassengerFields = ({
               />
             )}
           </Grid2>
-
           {/* Baggage Selection */}
           <Grid2 size={12}>
             {data?.Baggage && (
@@ -295,6 +302,34 @@ const PassengerFields = ({
               />
             )}
           </Grid2>
+          </>
+          ) :(
+            <>
+            
+            {/* Meal Selection */}
+          <Grid2 size={12}>
+            {data?.MealDynamic && (
+              <InternationalMealSelection
+                passengerId={index}
+                mealData={data?.MealDynamic}
+                isLCC={data?.isLCC}
+                passengerType={formType}
+              />
+            )}
+          </Grid2>
+          {/* Baggage Selection */}
+          <Grid2 size={12}>
+            {data?.Baggage && (
+              <InternationalBaggageSelection
+                passengerId={index}
+                passengerType={formType}
+                baggageData={data?.Baggage}
+              />
+            )}
+          </Grid2>
+            </>
+          )
+        }
 
           {/* Passport Number */}
           {isPassportRequired && (
