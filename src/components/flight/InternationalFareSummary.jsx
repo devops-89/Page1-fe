@@ -22,10 +22,13 @@ import KeyboardDoubleArrowDownOutlinedIcon from "@mui/icons-material/KeyboardDou
 import { nunito } from "@/utils/fonts";
 import { COMMISSION_TYPE } from "@/utils/enum";
 
-const FareSummary = ({ fareData, commission, toggleDrawer }) => {
+const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
   const meals = useSelector((state) => state.Flight.MealsInformation.meals);
   const baggages = useSelector((state) => state.Flight.BaggagesInformation.baggages);
-  const seats = useSelector((state)=>state.Flight.SeatsInformation.seats);
+  const seatsOutgoing = useSelector((state)=>state.Flight.RoundInternationalSeatsInformation.outgoingSeats);
+  const seatsReturn = useSelector((state)=>state.Flight.RoundInternationalSeatsInformation.incomingSeats);
+
+//   console.log('seats--------', seatsOutgoing)
 
   const [open, setOpen] = useState(false);
 
@@ -82,11 +85,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
   };
 
   const extraTotal =
-    calculateTotalMealPrice(meals) + calculateTotalBaggagePrice(baggages) + calculateTotalSeatPrice(seats)
-
-  // console.log("mealpriceBharti" ,calculateTotalPrice(meals))
-
-  // console.log("mealBharti", meals);
+    calculateTotalMealPrice(meals) + calculateTotalBaggagePrice(baggages) + calculateTotalSeatPrice(seatsOutgoing) + calculateTotalSeatPrice(seatsReturn)
 
   const toggleCollapse = () => {
     setOpen(!open);
@@ -332,9 +331,6 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
           sx={{ fontFamily: nunito.style, fontWeight: 700 }}
         >
           ₹{" "}
-          {/* {commission?.commission_type === COMMISSION_TYPE.FIXED
-            ? (publishFare + serviceFeeInFixed).toFixed(2)
-            : (publishFare + serviceFeeInPercent).toFixed(2)}{" "} */}
           {commission?.commission_type === COMMISSION_TYPE.FIXED
             ? (publishFare + serviceFeeInFixed + extraTotal).toFixed(2)
             : (publishFare + serviceFeeInPercent + extraTotal).toFixed(2)}{" "}
@@ -344,4 +340,4 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
   );
 };
 
-export default FareSummary;
+export default InternationalFareSummary;

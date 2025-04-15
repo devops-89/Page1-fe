@@ -24,7 +24,6 @@ import {
 
 import { flightController } from "@/api/flightController";
 import { useRouter } from "next/router";
-import FareSummary from "@/components/flight/FareSummary";
 import RoundFareSummary from "@/components/flight/RoundFareSummary";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
@@ -42,6 +41,7 @@ import DomesticPassengerForm from "@/components/flight/roundtrip/DomesticPasseng
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import errorImage from "@/assests/flight_image/filter.svg";
 import Image from "next/image";
+import InternationalFareSummary from "@/components/flight/InternationalFareSummary";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -61,8 +61,6 @@ const FlightDetails = () => {
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-  const [selectMeal, setSelectMeal] = useState({});
-  const [selectBaggage, setSelectBaggage] = useState({});
   const [drawerOpen, setDrawerOpen] = useState(false);
   const smallScreen = useMediaQuery("(max-width:1199px)");
 
@@ -251,10 +249,6 @@ const FlightDetails = () => {
                             myState="roundState"
                             journey={journey}
                             isLCC={isLCC}
-                            selectMeal={selectMeal}
-                            selectBaggage={selectBaggage}
-                            setSelectBaggage={setSelectBaggage}
-                            setSelectMeal={setSelectMeal}
                           />
                         ) : (
                           <DomesticPassengerForm
@@ -265,10 +259,6 @@ const FlightDetails = () => {
                             flightDetails={flightDetails}
                             myState="roundState"
                             journey={journey}
-                            selectMeal={selectMeal}
-                            selectBaggage={selectBaggage}
-                            setSelectBaggage={setSelectBaggage}
-                            setSelectMeal={setSelectMeal}
                           />
                         )}
                       </Card>
@@ -292,7 +282,7 @@ const FlightDetails = () => {
     toggleDrawer={toggleDrawer}
     fairSummary={
       router.query.journey === JOURNEY.INTERNATIONAL ? (
-        <FareSummary
+        <InternationalFareSummary
           toggleDrawer={toggleDrawer}
           commission={commission}
           fareData={flightDetails[0]?.Results}
@@ -308,7 +298,7 @@ const FlightDetails = () => {
   />
 ) : (
   router.query.journey === JOURNEY.INTERNATIONAL ? (
-    <FareSummary
+    <InternationalFareSummary
       fareData={flightDetails[0]?.Results}
       toggleDrawer={toggleDrawer}
       commission={commission}
