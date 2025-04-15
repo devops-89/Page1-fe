@@ -28,7 +28,7 @@ const SelectedList = ({planeIndex,tabIndex}) => {
    
   });
   
-  console.log(`Selected seats for airplane ID ${planeIndex} and tabIndex ${tabIndex}:`, selectedSeats);
+  // console.log(`Selected seats for airplane ID ${planeIndex} and tabIndex ${tabIndex}:`, selectedSeats);
 
   function handleSeatRemove(seat) {
     dispatch(removeSeatDetails({ airplaneId:planeIndex,seatCode:seat.Code}));

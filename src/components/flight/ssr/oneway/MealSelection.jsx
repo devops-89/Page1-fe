@@ -13,15 +13,27 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { removeMealDetails, setMealDetails } from "@/redux/reducers/mealsInformation";
+import {
+  removeMealDetails,
+  setMealDetails,
+} from "@/redux/reducers/mealsInformation";
 
-export default function MealSelection({ mealData, isLCC, passengerId, passengerType }) {
+export default function MealSelection({
+  mealData,
+  isLCC,
+  passengerId,
+  passengerType,
+}) {
   const dispatch = useDispatch();
-  
+
+  // console.log('mealData------------',mealData)
+
   // Create unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
-  const selectedMeals = useSelector((state) => state.Flight.MealsInformation.meals || {});
+  const selectedMeals = useSelector(
+    (state) => state.Flight.MealsInformation.meals || {}
+  );
 
   // console.log("selectedMeals----------", selectedMeals);
 
@@ -30,17 +42,40 @@ export default function MealSelection({ mealData, isLCC, passengerId, passengerT
   const handleMealClick = (meal, flightNumber) => {
     // console.log('meal-----',meal)
     const passengerMeals = selectedMeals[uniquePassengerKey]?.meals || [];
-    const existingMeal = passengerMeals.find((m) => m.flightId === flightNumber);
+    const existingMeal = passengerMeals.find(
+      (m) => m.flightId === flightNumber
+    );
 
     if (existingMeal?.meal.Code === meal.Code) {
       // Deselect the meal if it's already selected
-      dispatch(removeMealDetails({ passengerType, passengerId, mealsId: flightNumber, mealCode: meal.Code }));
+      dispatch(
+        removeMealDetails({
+          passengerType,
+          passengerId,
+          mealsId: flightNumber,
+          mealCode: meal.Code,
+        })
+      );
     } else {
       // Ensure only one meal is selected per flight
       if (existingMeal) {
-        dispatch(removeMealDetails({ passengerType, passengerId, mealsId: flightNumber, mealCode: existingMeal.meal.Code }));
+        dispatch(
+          removeMealDetails({
+            passengerType,
+            passengerId,
+            mealsId: flightNumber,
+            mealCode: existingMeal.meal.Code,
+          })
+        );
       }
-      dispatch(setMealDetails({ passengerType, passengerId, mealsId: flightNumber, selected: meal }));
+      dispatch(
+        setMealDetails({
+          passengerType,
+          passengerId,
+          mealsId: flightNumber,
+          selected: meal,
+        })
+      );
     }
   };
 
@@ -57,20 +92,48 @@ export default function MealSelection({ mealData, isLCC, passengerId, passengerT
 
   return (
     <Accordion sx={{ mb: "10px" }}>
-      <AccordionSummary expandIcon={<KeyboardArrowDownIcon />} sx={{ backgroundColor: COLORS.SEMIGREY }}>
-        <Typography variant="body1" sx={{ fontFamily: nunito.style, fontWeight: 700, display: "flex", alignItems: "center" }}>
-          <RestaurantMenuIcon sx={{ color: COLORS.PRIMARY, marginRight: "10px" }} />
+      <AccordionSummary
+        expandIcon={<KeyboardArrowDownIcon />}
+        sx={{ backgroundColor: COLORS.SEMIGREY }}
+      >
+        <Typography
+          variant="body1"
+          sx={{
+            fontFamily: nunito.style,
+            fontWeight: 700,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RestaurantMenuIcon
+            sx={{ color: COLORS.PRIMARY, marginRight: "10px" }}
+          />
           Meal
         </Typography>
       </AccordionSummary>
       <AccordionDetails sx={{ p: 1, overflowY: "auto", maxHeight: "240px" }}>
         {isLCC ? (
-          <Swiper spaceBetween={20} slidesPerView={1} navigation={{ clickable: true }} modules={[Navigation]} id="meal_box">
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={1}
+            navigation={{ clickable: true }}
+            modules={[Navigation]}
+            id="meal_box"
+          >
             {Object.keys(filteredData).map((flightNumber) => (
-              <SwiperSlide key={flightNumber} style={{ overflow: "auto", maxHeight: "240px" }}>
+              <SwiperSlide
+                key={flightNumber}
+                style={{ overflow: "auto", maxHeight: "240px" }}
+              >
                 <Typography
                   variant="body1"
-                  sx={{ fontFamily: nunito.style, fontWeight: 800, mb: "20px", p: "10px", backgroundColor: COLORS.SEMIGREY }}
+                  sx={{
+                    fontFamily: nunito.style,
+                    fontWeight: 800,
+                    mb: "20px",
+                    p: "10px",
+                    backgroundColor: COLORS.SEMIGREY,
+                  }}
                 >
                   {`${filteredData[flightNumber][0]?.Origin} - ${filteredData[flightNumber][0]?.Destination}`}
                 </Typography>
@@ -79,10 +142,14 @@ export default function MealSelection({ mealData, isLCC, passengerId, passengerT
                     <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                       <MealCard
                         meal={meal}
-                        handleMealValue={() => handleMealClick(meal, flightNumber)}
+                        handleMealValue={() =>
+                          handleMealClick(meal, flightNumber)
+                        }
                         isSelected={
                           selectedMeals[uniquePassengerKey]?.meals?.some(
-                            (m) => m.flightId === flightNumber && m.meal.Code === meal.Code
+                            (m) =>
+                              m.flightId === flightNumber &&
+                              m.meal.Code === meal.Code
                           ) || false
                         }
                       />
@@ -98,10 +165,14 @@ export default function MealSelection({ mealData, isLCC, passengerId, passengerT
               <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                 <MealCard
                   meal={meal}
-                  handleMealValue={() => handleMealClick(meal, meal.FlightNumber)}
+                  handleMealValue={() =>
+                    handleMealClick(meal, meal.FlightNumber)
+                  }
                   isSelected={
                     selectedMeals[uniquePassengerKey]?.meals?.some(
-                      (m) => m.flightId === meal.FlightNumber && m.meal.Code === meal.Code
+                      (m) =>
+                        m.flightId === meal.FlightNumber &&
+                        m.meal.Code === meal.Code
                     ) || false
                   }
                 />

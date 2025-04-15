@@ -516,6 +516,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       formType="adult"
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      journey={journey}
                     />
                   </Box>
                 ))}
@@ -532,6 +533,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       formType="child"
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      journey={journey}
                     />
                   </Box>
                 ))}
@@ -547,6 +549,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       formType="infant"
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      journey={journey}
                     />
                   </Box>
                 ))}

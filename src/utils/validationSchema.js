@@ -152,7 +152,7 @@ const addFormSchema = Yup.object({
 });
 
 export const validationSchema = (isGSTMandatory, isPassportRequired ,isBirthdayRequired) => {
-  console.log("yup:",isBirthdayRequired);
+  // console.log("yup:",isBirthdayRequired);
   return Yup.object().shape({
     adult: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
     child: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),

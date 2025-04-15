@@ -20,8 +20,6 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import {resetSeatDetails} from "@/redux/reducers/seatsInformation";
-import {resetMealDetails} from "@/redux/reducers/mealsInformation";
 import VirtualList from "./fixedSizeList";
 import TravellerSelector from "./travellerSelector";
 import { setToast } from "@/redux/reducers/toast";
@@ -31,6 +29,8 @@ import { setFlightDetails } from "@/redux/reducers/flightInformation";
 import { useRouter } from "next/router";
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
+import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
+import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
 
 const OnewayForm = () =>  {
