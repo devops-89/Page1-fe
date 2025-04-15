@@ -37,6 +37,7 @@ const roundDomesticMealsInformation=createSlice({
             
                   const existingMealIndex = state.incomingMeal[uniquePassengerKey].meals.findIndex(
                     (meal) => meal.flightId === mealsId && meal.meal.Code === selected.Code
+                    
                   );
             
                   if (existingMealIndex === -1) {
