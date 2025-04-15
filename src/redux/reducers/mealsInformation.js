@@ -10,7 +10,7 @@ const mealsInformation = createSlice({
   reducers: {
     setMealDetails: (state, action) => {
       const { passengerId, mealsId, selected, passengerType } = action.payload;
-      const uniquePassengerKey = `${passengerType}-${passengerId}`; // Unique key
+      const uniquePassengerKey = `${passengerType}-${passengerId}`; 
 
       if (!state.meals[uniquePassengerKey]) {
         state.meals[uniquePassengerKey] = { meals: [], passengerType };

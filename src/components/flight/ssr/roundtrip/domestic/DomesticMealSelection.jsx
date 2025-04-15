@@ -15,7 +15,7 @@ import "swiper/css/navigation";
 import {
   removeMealDetails,
   setMealDetails,
-} from "@/redux/reducers/mealsInformation";
+} from "@/redux/reducers/roundDomesticMealsInformation";
 import MealCard from "@/components/flight/mealCard";
 
 export default function DomesticMealSelection({
@@ -32,8 +32,10 @@ export default function DomesticMealSelection({
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
   const selectedMeals = useSelector(
-    (state) => state.Flight.MealsInformation.meals || {}
+    (state) => state.Flight.RoundDomesticMealsInformation|| {}
   );
+
+  console.log("Selected Meals are:",selectedMeals);
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -44,9 +46,11 @@ export default function DomesticMealSelection({
   let filteredDataOutgoing = {};
   let filteredDataReturn = {};
 
-  const handleMealClick = (meal, flightNumber) => {
+  const handleMealClick = (meal, flightNumber, tabIndex) => {
+    let wayType="";
+    tabIndex===0?wayType="outgoingMeal":wayType="incomingMeal";
     // console.log('meal-----',meal)
-    const passengerMeals = selectedMeals[uniquePassengerKey]?.meals || [];
+    const passengerMeals = selectedMeals?.[wayType]?.[uniquePassengerKey]?.meals || [];
     const existingMeal = passengerMeals.find(
       (m) => m.flightId === flightNumber
     );
@@ -59,6 +63,7 @@ export default function DomesticMealSelection({
           passengerId,
           mealsId: flightNumber,
           mealCode: meal.Code,
+          tabIndex: tabIndex
         })
       );
     } else {
@@ -70,6 +75,7 @@ export default function DomesticMealSelection({
             passengerId,
             mealsId: flightNumber,
             mealCode: existingMeal.meal.Code,
+            tabIndex: tabIndex
           })
         );
       }
@@ -79,6 +85,7 @@ export default function DomesticMealSelection({
           passengerId,
           mealsId: flightNumber,
           selected: meal,
+          tabIndex: tabIndex
         })
       );
     }
@@ -183,11 +190,14 @@ export default function DomesticMealSelection({
                    <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                      <MealCard
                        meal={meal}
-                       handleMealValue={() =>
-                         handleMealClick(meal, flightNumber)
+                       handleMealValue={(meal) =>{
+                        console.log("Meal Value is: ",meal,flightNumber,tabIndex);
+                        handleMealClick(meal, flightNumber,tabIndex )
+                       }
+                        
                        }
                        isSelected={
-                         selectedMeals[uniquePassengerKey]?.meals?.some(
+                         selectedMeals?.outgoingMeal?.[uniquePassengerKey]?.meals?.some(
                            (m) =>
                              m.flightId === flightNumber &&
                              m.meal.Code === meal.Code
@@ -235,11 +245,16 @@ export default function DomesticMealSelection({
                  <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                    <MealCard
                      meal={meal}
-                     handleMealValue={() =>
-                       handleMealClick(meal, flightNumber)
+
+                     handleMealValue={(meal) =>
+                     {
+                      console.log("Meal Value is: ",meal,flightNumber,tabIndex);
+                      handleMealClick(meal, flightNumber,tabIndex)
+                     }
+                  
                      }
                      isSelected={
-                       selectedMeals[uniquePassengerKey]?.meals?.some(
+                       selectedMeals?.incomingMeal?.[uniquePassengerKey]?.meals?.some(
                          (m) =>
                            m.flightId === flightNumber &&
                            m.meal.Code === meal.Code
