@@ -17,6 +17,7 @@ import roundInternationalSeatsInformationReducer from "../roundInternationalSeat
 import mealsInformationReducer from "../mealsInformation";
 import baggagesInformationReducer from "../baggagesInformation";
 
+
 const flightReducer = combineReducers({
   TravellerInformation: travellerInformationReducer,
   FlightInformation: flightInformationReducer,

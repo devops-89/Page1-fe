@@ -3,7 +3,7 @@ import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import { nunito } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
-import { JOURNEY,JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
+import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import Loader from "@/utils/Loader";
 import { useRouter } from "next/router";
 import { COLORS } from "@/utils/colors";
@@ -33,8 +33,7 @@ const InternationalPassengerForm = ({
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
-    const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
- 
+  const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
   const selectedBaggages = useSelector(
     (state) => state.Flight.BaggagesInformation.baggages || {}
@@ -43,13 +42,12 @@ const InternationalPassengerForm = ({
     (state) => state.Flight.MealsInformation.meals || {}
   );
   const selectedSeatsOutgoing = useSelector(
-    (state) =>state.Flight.RoundInternationalSeatsInformation?.outgoingSeats
+    (state) => state.Flight.RoundInternationalSeatsInformation?.outgoingSeats
   );
 
   const selectedSeatsReturn = useSelector(
-    (state) =>state.Flight.RoundInternationalSeatsInformation?.incomingSeats
+    (state) => state.Flight.RoundInternationalSeatsInformation?.incomingSeats
   );
-
 
   const finalSeatOutGoing = selectedSeatsOutgoing?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
@@ -62,7 +60,6 @@ const InternationalPassengerForm = ({
       return seat;
     });
   });
-
 
   let adultSeatsOutgoing = [];
   let childSeatsOutgoing = [];
@@ -79,10 +76,10 @@ const InternationalPassengerForm = ({
       });
   });
 
-  // Return Trip 
+  // Return Trip
 
   let adultSeatsReturn = [];
-  let childSeatsReturn  = [];
+  let childSeatsReturn = [];
 
   finalSeatReturn.forEach((singleSeatArray) => {
     singleSeatArray.slice(0, adultCount).forEach((seat) => {
@@ -95,7 +92,6 @@ const InternationalPassengerForm = ({
         childSeatsReturn.push(seat);
       });
   });
-
 
   const {
     Currency,
@@ -126,7 +122,7 @@ const InternationalPassengerForm = ({
     setIsPassportRequired(
       results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
-      setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [myState]);
 
@@ -189,7 +185,6 @@ const InternationalPassengerForm = ({
     email: "",
   };
 
-
   const handleSubmit = async (values) => {
     const contactEmail = values.email;
     const phoneNumber = values.contact_no;
@@ -209,7 +204,7 @@ const InternationalPassengerForm = ({
       city: values?.city || "",
       contact_no: values?.contact_no || "",
       country: values?.country || "",
-      nationality: values?.nationality || "",
+      nationality: values?.country_code || "",
       email: values?.email || "",
       gst_company_address: values?.gstForm?.gst_company_address || null,
       gst_company_contact_number:
@@ -250,7 +245,7 @@ const InternationalPassengerForm = ({
 
     const passengerDetails = {
       adult:
-        values?.adult?.map((passenger, index) =>   {
+        values?.adult?.map((passenger, index) => {
           let gender = "Other";
 
           switch (passenger.title) {
@@ -266,22 +261,21 @@ const InternationalPassengerForm = ({
               gender = "Other";
           }
 
-          return{
-
+          return {
             ...passenger,
             email: contactEmail,
             contact_no: phoneNumber,
-          
+
             date_of_birth: isBirthdayRequired
               ? passenger.date_of_birth
               : passenger.date_of_birth || null,
-  
+
             gender: gender,
-          pax_type: 1,
-          is_lead_pax: index === 0,
-          ff_airline_code: null,
-          ff_number: null,
-          MealDynamic:
+            pax_type: 1,
+            is_lead_pax: index === 0,
+            ff_airline_code: null,
+            ff_number: null,
+            MealDynamic:
               selectedMeals[`adult-${index}`]?.meals?.map(
                 (single) => single?.meal
               ) || null,
@@ -290,10 +284,10 @@ const InternationalPassengerForm = ({
                 (single) => single?.selectedBaggage
               ) || null,
             SeatDynamic: [...adultSeatsOutgoing, ...adultSeatsReturn] || null,
-        }
-    }) || [],
+          };
+        }) || [],
       child:
-        values?.child?.map((passenger, index) =>  {
+        values?.child?.map((passenger, index) => {
           let gender = "Other";
 
           switch (passenger.title) {
@@ -309,34 +303,33 @@ const InternationalPassengerForm = ({
               gender = "Other";
           }
 
-          return{
-             ...passenger,
+          return {
+            ...passenger,
             email: contactEmail,
             contact_no: phoneNumber,
-          
+
             date_of_birth: isBirthdayRequired
               ? passenger.date_of_birth
               : passenger.date_of_birth || null,
-  
+
             gender: gender,
-          pax_type: 2,
-          is_lead_pax: false,
-          ff_airline_code: null,
-          ff_number: null,
-          MealDynamic:
-          selectedMeals[`child-${index}`]?.meals?.map(
-            (single) => single?.meal
-          ) || null,
-        Baggage:
-          selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
-            (single) => single?.selectedBaggage
-          ) || null,
-        SeatDynamic: [...childSeatsOutgoing, ...childSeatsReturn] || null,
-          
-        }
+            pax_type: 2,
+            is_lead_pax: false,
+            ff_airline_code: null,
+            ff_number: null,
+            MealDynamic:
+              selectedMeals[`child-${index}`]?.meals?.map(
+                (single) => single?.meal
+              ) || null,
+            Baggage:
+              selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
+                (single) => single?.selectedBaggage
+              ) || null,
+            SeatDynamic: [...childSeatsOutgoing, ...childSeatsReturn] || null,
+          };
         }) || [],
       infant:
-        values?.infant?.map((passenger, index) =>   {
+        values?.infant?.map((passenger, index) => {
           let gender = "Other";
 
           switch (passenger.title) {
@@ -352,22 +345,21 @@ const InternationalPassengerForm = ({
               gender = "Other";
           }
 
-          return{
-
-          ...passenger,
+          return {
+            ...passenger,
             email: contactEmail,
-          contact_no: phoneNumber,
-        
-          date_of_birth: isBirthdayRequired
-            ? passenger.date_of_birth
-            : passenger.date_of_birth || null,
+            contact_no: phoneNumber,
 
-          gender: gender,
-          pax_type: 3,
-          is_lead_pax: false,
-          ff_airline_code: null,
-          ff_number: null,
-        }
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+
+            gender: gender,
+            pax_type: 3,
+            is_lead_pax: false,
+            ff_airline_code: null,
+            ff_number: null,
+          };
         }) || [],
     };
 
@@ -380,8 +372,7 @@ const InternationalPassengerForm = ({
     console.log("finalpayload", finalPayload);
   };
 
-  const currentValidationSchema = validationSchema(isGSTMandatory ,
-   );
+  const currentValidationSchema = validationSchema(isGSTMandatory);
 
   useEffect(() => {
     if (payload.trace_id) {
@@ -504,7 +495,7 @@ const InternationalPassengerForm = ({
             errors,
             touched,
             handleSubmit,
-            setFieldValue
+            setFieldValue,
           }) => {
             // console.log("all values", values);
             // console.log("all errors", errors)
@@ -594,7 +585,7 @@ const InternationalPassengerForm = ({
                     justifyContent: "space-between",
                   }}
                 >
-                  <FullScreenDialog flightDetailType="roundTripflightDetails"/>
+                  <FullScreenDialog flightDetailType="roundTripflightDetails" />
                 </Box>
 
                 <Box

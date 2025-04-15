@@ -1,6 +1,6 @@
 const useRoundTripDomesticMealAndBaggage = (flightDetails) => {
 
-    console.log('flightDetails---------------',flightDetails)
+    // console.log('flightDetails---------------',flightDetails)
     const customMealAndBaggage = {
         MealDynamic: [],
         Baggage: [],

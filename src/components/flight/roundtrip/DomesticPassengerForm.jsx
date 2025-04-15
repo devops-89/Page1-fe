@@ -38,6 +38,21 @@ const DomesticPassengerForm = ({
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
+
+ const selectedMeals = useSelector(
+    (state) => state.Flight.MealsInformation.meals || {}
+  );
+
+  // console.log('selectedMeals--------------',selectedMeals)
+
+
+
+
+
+
+
+
+
   const selectedSeats = useSelector(
     (state) => state.Flight?.SeatsInformation?.seats || []
   );
@@ -49,10 +64,6 @@ const DomesticPassengerForm = ({
 
   const customMealAndBaggage =
     useRoundTripDomesticMealAndBaggage(flightDetails);
-
-  const handleTabChange = (event, newIndex) => {
-    setTabIndex(newIndex);
-  };
 
   const {
     Currency_ob,
@@ -159,10 +170,6 @@ const DomesticPassengerForm = ({
     city: "",
     contact_no: "",
     country: "",
-    // house_number: "",
-    // postal_code: "",
-    // street: "",
-    // state: "",
     nationality: "",
     email: "",
   };
@@ -313,11 +320,7 @@ const DomesticPassengerForm = ({
         is_LCC: flightDetails?.[0][0]?.Results?.IsLCC,
         contact_no: values?.contact_no || "",
         country: values?.country || "",
-        // house_number: values?.house_number || "",
-        // postal_code: values?.postal_code || "",
-        // street: values?.street || "",
-        // state: values?.state || "",
-        nationality: values?.nationality || "",
+        nationality: values?.country_code || "",
         email: values?.email || "",
         gst_company_address: values?.gstForm?.gst_company_address || null,
         gst_company_contact_number:
@@ -369,11 +372,7 @@ const DomesticPassengerForm = ({
         is_LCC: flightDetails?.[1][0]?.Results?.IsLCC,
         contact_no: values?.contact_no || "",
         country: values?.country || "",
-        // house_number: values?.house_number || "",
-        // postal_code: values?.postal_code || "",
-        // street: values?.street || "",
-        // state: values?.state || "",
-        nationality: values?.nationality || "",
+        nationality: values?.country_code || "",
         email: values?.email || "",
         gst_company_address: values?.gstForm?.gst_company_address || null,
         gst_company_contact_number:
