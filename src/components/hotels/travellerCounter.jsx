@@ -11,7 +11,7 @@ const TravellorCounter = ({
   initialValue,
 }) => {
   return (
-    <Stack direction={"column"} alignItems={"start"} justifyContent={"start"}>
+    <Stack  direction={"column"} alignItems={"center"} justifyContent={"center"}>
       <Typography
         sx={{
           fontSize: { lg: 13, xs: 12 },

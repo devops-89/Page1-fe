@@ -17,6 +17,20 @@ const securedPaymentUrl=axios.create({
   baseURL: APIURL.authPaymentUrl
 })
 
+const flightPublicApi = axios.create({
+  baseURL: APIURL.flightUrl,
+});
+
+const publicApi = axios.create({
+  baseURL: APIURL.authenticationUrl,
+});
+
+const hotelPublicApi=axios.create({
+  baseURL:APIURL.hotelUrl
+})
+
+
+
 userSecuredApi.interceptors.request.use((config) => {
   const token = localStorage.getItem("accesstoken");
   config.headers.accesstoken = token;
@@ -41,14 +55,6 @@ securedPaymentUrl.interceptors.request.use((config)=>{
   return config;
 })
 
-const flightPublicApi = axios.create({
-  baseURL: APIURL.flightUrl,
-});
-
-const publicApi = axios.create({
-  baseURL: APIURL.authenticationUrl,
-});
-
 
 
 
@@ -69,5 +75,6 @@ module.exports = {
   securedFlightApi,
   userSecuredApi,
   flightPublicApi,
-  securedPaymentUrl
+  securedPaymentUrl,
+  hotelPublicApi
 };

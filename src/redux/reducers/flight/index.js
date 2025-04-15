@@ -27,4 +27,8 @@ const flightReducer = combineReducers({
   BaggagesInformation: baggagesInformationReducer,
 });
 
+
+
+
+
 export default flightReducer;

@@ -22,8 +22,6 @@ const TravellerSelector = ({
   state,
   adultValue,
   setAdultValue,
-  infantValue,
-  setInfantValue,
   childValue,
   setChildValue,
 }) => {
@@ -31,19 +29,21 @@ const TravellerSelector = ({
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState({ errorStatus: false, errorMessage: "" });
 
+ 
+
   // Temporary state for traveler counts
   const [tempAdult, setTempAdult] = useState(adultValue);
   const [tempChild, setTempChild] = useState(childValue);
-  const [tempInfant, setTempInfant] = useState(infantValue);
+  
 
   useEffect(() => {
     let { errorMessage, errorStatus } = validateTravelers(
       tempAdult,
       tempChild,
-      tempInfant
+ 
     );
     setError((prev) => ({ ...prev, errorStatus, errorMessage }));
-  }, [tempAdult, tempChild, tempInfant]);
+  }, [tempAdult, tempChild]);
 
   const flightClassHandler = (e) => {
     setState((prevState) => ({
@@ -51,6 +51,8 @@ const TravellerSelector = ({
       cabin_class: e.target.value,
     }));
   };
+
+  console.log(tempAdult,tempChild);
 
   const updateTravellerCount = (type, action) => {
     let updatedValue = 0;
@@ -61,23 +63,20 @@ const TravellerSelector = ({
     } else if (type === "child") {
       updatedValue = action === "increase" ? tempChild + 1 : tempChild - 1;
       if (updatedValue >= 0) setTempChild(updatedValue);
-    } else if (type === "infant") {
-      updatedValue = action === "increase" ? tempInfant + 1 : tempInfant - 1;
-      if (updatedValue >= 0) setTempInfant(updatedValue);
-    }
+    } 
   };
 
   const handleApply = () => {
     if (!error.errorStatus) {
       setAdultValue(tempAdult);
       setChildValue(tempChild);
-      setInfantValue(tempInfant);
+    
 
       setState((prev) => ({
         ...prev,
         adult: tempAdult,
         child: tempChild,
-        infant: tempInfant,
+     
       }));
 
       setAnchorEl(null);
@@ -98,13 +97,13 @@ const TravellerSelector = ({
           textAlign: { xs: "center" },
         }}
       >
-        Select Travelers & Class
+        Select Travelers
       </Typography>
 
-      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, m: 1 }}>
+      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 1, m: 1 }}>
         <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>Travellers</Typography>
         <Grid2 container spacing={2}>
-          <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 6 }}>
+          <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 6,margin:"auto"}} >
             <TravellorCounter
               heading="Adults (12+ Yrs)"
               value={tempAdult}
@@ -112,7 +111,7 @@ const TravellerSelector = ({
               onDecrease={() => updateTravellerCount("adult", "decrease")}
             />
           </Grid2>
-          <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 6 }}>
+          <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 6 }} >
             <TravellorCounter
               heading="Children (2-12 Yrs)"
               value={tempChild}
@@ -120,14 +119,7 @@ const TravellerSelector = ({
               onDecrease={() => updateTravellerCount("child", "decrease")}
             />
           </Grid2>
-          <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 6 }}>
-            <TravellorCounter
-              heading="Infants (0-2 Yrs)"
-              value={tempInfant}
-              onIncrease={() => updateTravellerCount("infant", "increase")}
-              onDecrease={() => updateTravellerCount("infant", "decrease")}
-            />
-          </Grid2>
+        
         </Grid2>
 
         {error.errorMessage && (
@@ -137,25 +129,7 @@ const TravellerSelector = ({
         )}
       </Box>
 
-      <Box
-        sx={{ border: "1px solid #808080", borderRadius: 2, p: 2, mt: 2, m: 1 }}
-      >
-        <Typography
-          sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}
-        >
-          Flight Class
-        </Typography>
-        <RadioGroup row value={state.cabin_class} onChange={flightClassHandler}>
-          {data.FLIGHT_CLASS_DATA.map((val, i) => (
-            <FormControlLabel
-              key={i}
-              value={val.value}
-              control={<Radio />}
-              label={<Typography sx={{ fontSize: 14 }}>{val.label}</Typography>}
-            />
-          ))}
-        </RadioGroup>
-      </Box>
+     
 
       <Stack
         direction="row"

@@ -54,7 +54,7 @@ const FlightList = () => {
           setFlightList(flightData);
           setTraceId(flightData.trace_id);
           setJourney(flightData.type);
-          console.log("bharti", flightData.type)
+      
          
         } else {
           console.log("No valid flight data found in localStorage");

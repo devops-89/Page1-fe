@@ -5,7 +5,8 @@ export const APIURL = {
   userUrl: `${baseUrl}/user/api/users`,
   flightUrl: `${baseUrl}/flight/api/`,
   authFlightUrl:`${baseUrl}/flight/api/`,
-  authPaymentUrl:`${baseUrl}/payment/api/`
+  authPaymentUrl:`${baseUrl}/payment/api/`,
+  hotelUrl:`${baseUrl}/hotel/api/`
 
 };
 

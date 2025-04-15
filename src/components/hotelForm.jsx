@@ -1,10 +1,11 @@
-import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
 import TravellerSelector from "./hotels/travellerSelector";
-import ApartmentIcon from '@mui/icons-material/Apartment';
-import { createFilterOptions } from "@mui/material";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import { hotelController } from "@/api/hotelController";
 import { hotelslist } from "@/utils/hotelcitycodes";
+import { useDispatch } from "react-redux";
+import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList";
 import {
   Autocomplete,
   Box,
@@ -16,22 +17,31 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import useFetchIP  from "@/custom-hook/useFetchIp";
+
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { useState,useMemo } from "react";
-
+import { useState, useMemo } from "react";
 
 const HotelForm = () => {
-  const [selectedCity,setSelectedCity]=useState(null);
+  const dispatch=useDispatch();
+  const [selectedCity, setSelectedCity] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [adultValue, setAdultValue] = useState(1);
   const [childValue, setChildValue] = useState(0);
-  const [infantValue, setInfantValue] = useState(0);
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
+  const [userIp,setUserIp]=useState("");
+
+  useFetchIP(setUserIp);
+
   const open = Boolean(anchorEl);
   const openPopover = (e) => {
     setAnchorEl(e.currentTarget);
   };
 
+   
+  
   const initialState = {
     ip_address: "",
     preferred_time: "",
@@ -46,8 +56,6 @@ const HotelForm = () => {
 
   const [state, setState] = useState(initialState);
 
-
-
   const [inputValue, setInputValue] = useState(null);
 
   // const [options, setOptions] = useState(hotelslist.slice(0, 20)); // Show top 20 initially
@@ -57,13 +65,66 @@ const HotelForm = () => {
     if (!inputValue) return hotelslist.slice(0, 20); // popular/trending
 
     const lower = inputValue.toLowerCase();
-    return hotelslist.filter(
-      (item) =>
-        item.city_name?.toLowerCase().includes(lower) ||
-        item.country_name?.toLowerCase().includes(lower) ||
-        item.country_code?.toLowerCase().includes(lower)
-    ).slice(0, 100); // limit results to avoid lag
+    return hotelslist
+      .filter(
+        (item) =>
+          item.city_name?.toLowerCase().includes(lower) ||
+          item.country_name?.toLowerCase().includes(lower) ||
+          item.country_code?.toLowerCase().includes(lower)
+      )
+      .slice(0, 100); // limit results to avoid lag
   }, [inputValue]);
+
+  async function handleSearch() {
+    if (!checkIn || !checkOut || !selectedCity || !userIp) {
+      alert("Please fill all required fields.");
+      return;
+    }
+  
+    const payload = {
+      CheckIn: checkIn.format("YYYY-MM-DD"),
+      CheckOut: checkOut.format("YYYY-MM-DD"),
+      CityCodes: selectedCity.city_code,
+      GuestNationality: selectedCity.country_code,
+      EndUserIp: userIp,
+      PaxRooms: [
+        {
+          Adults: adultValue,
+          Children: childValue,
+          ChildrenAges: childValue > 0 ? [/* fill ages */] : [],
+        },
+      ],
+      ResponseTime: 23.0,
+      IsDetailedResponse: true,
+      Filters: {
+        Refundable: false,
+        NoOfRooms: 1,
+        MealType: 0,
+        OrderBy: 0,
+        StarRating: 0,
+        HotelName: null,
+      },
+    };
+  
+    try {
+      const response = await hotelController.searchHotel(payload);
+      console.log("Response from API: ", response);
+      if(response){
+        dispatch(setHotelList(response.data.data));
+      }
+    } catch (error) {
+      console.error("There is an error:", error);
+    }
+  }
+  
+
+  function handleCheckin(newvalue) {
+    setCheckIn(newvalue);
+  }
+
+  function handleCheckout(newvalue) {
+    setCheckOut(newvalue);
+  }
 
   return (
     <Box sx={{ p: 2 }}>
@@ -96,63 +157,62 @@ const HotelForm = () => {
           </Typography>
 
           <Autocomplete
-  options={filteredOptions}
-  onchan
-  inputValue={inputValue}
-  onChange={(event,value)=> setSelectedCity(value)}
-  onInputChange={(_, value) => setInputValue(value)}
-  getOptionLabel={(option) =>
-    typeof option === "string" ? option : option?.city_name || ""
-  }
-  isOptionEqualToValue={(option, value) =>
-    option.city_code === value.city_code
-  }
-  renderInput={(params) => (
-    <TextField
-      {...params}
-      placeholder="Search.."
-      sx={{
-        fieldset: { border: "none" },
-        input: { textAlign: "start" },
-      }}
-    />
-  )}
-  renderOption={(props, option) => (
-    <Box component="li" {...props}>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{ width: "100%" }}
-      >
-        {/* Left: icon and city details */}
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <ApartmentIcon sx={{ color: COLORS.PRIMARY }} />
-          <Box>
-            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
-              {option.city_name}
-            </Typography>
-            <Typography sx={{ fontSize: 12, color: COLORS.DARKGREY }}>
-              {option.country_name}
-            </Typography>
-          </Box>
-        </Stack>
+            options={filteredOptions}
+            onchan
+            inputValue={inputValue}
+            onChange={(event, value) => setSelectedCity(value)}
+            onInputChange={(_, value) => setInputValue(value)}
+            getOptionLabel={(option) =>
+              typeof option === "string" ? option : option?.city_name || ""
+            }
+            isOptionEqualToValue={(option, value) =>
+              option.city_code === value.city_code
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Search.."
+                sx={{
+                  fieldset: { border: "none" },
+                  input: { textAlign: "start" },
+                }}
+              />
+            )}
+            renderOption={(props, option) => (
+              <Box component="li" {...props}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  sx={{ width: "100%" }}
+                >
+                  {/* Left: icon and city details */}
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <ApartmentIcon sx={{ color: COLORS.PRIMARY }} />
+                    <Box>
+                      <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
+                        {option.city_name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 12, color: COLORS.DARKGREY }}>
+                        {option.country_name}
+                      </Typography>
+                    </Box>
+                  </Stack>
 
-        {/* Right: country code */}
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: 500,
-            color: COLORS.DARKGREY,
-          }}
-        >
-          {option.country_code}
-        </Typography>
-      </Stack>
-    </Box>
-  )}
-/>
-
+                  {/* Right: country code */}
+                  <Typography
+                    sx={{
+                      fontSize: 13,
+                      fontWeight: 500,
+                      color: COLORS.DARKGREY,
+                    }}
+                  >
+                    {option.country_code}
+                  </Typography>
+                </Stack>
+              </Box>
+            )}
+          />
         </Grid2>
         <Grid2
           size={{ lg: 3, xs: 12, sm: 6 }}
@@ -181,6 +241,8 @@ const HotelForm = () => {
                 },
               }}
               disablePast
+              value={checkIn}
+              onChange={handleCheckin}
             />
           </LocalizationProvider>
         </Grid2>
@@ -210,6 +272,8 @@ const HotelForm = () => {
                   border: "none",
                 },
               }}
+              value={checkOut}
+              onChange={handleCheckout}
               disablePast
             />
           </LocalizationProvider>
@@ -234,14 +298,14 @@ const HotelForm = () => {
               pt: 1,
             }}
           >
-            Travellers and cabin class
+            Travellers Selection
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
             <Typography sx={{ fontSize: 17, fontFamily: nunito.style }}>
-              4 Persons
+              {adultValue + childValue} Person
             </Typography>
             <Typography fontSize={13} fontFamily={nunito.style}>
-              1 Adult, Economy
+              {adultValue} Adult, {childValue} children
             </Typography>
           </CardActionArea>
 
@@ -259,7 +323,7 @@ const HotelForm = () => {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                 p: 2,
-                width: "40%",
+                width: "25%",
               },
             }}
           >
@@ -271,8 +335,6 @@ const HotelForm = () => {
               setState={setState}
               adultValue={adultValue}
               setAdultValue={setAdultValue}
-              infantValue={infantValue}
-              setInfantValue={setInfantValue}
               childValue={childValue}
               setChildValue={setChildValue}
             />
@@ -289,8 +351,7 @@ const HotelForm = () => {
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
               mt: 2,
             }}
-
-            onClick={()=>console.log(selectedCity)}
+            onClick={handleSearch}
           >
             Search
           </Button>

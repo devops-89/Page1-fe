@@ -1,7 +1,7 @@
 import InnerBanner from "@/components/innerBanner";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import banner from "@/banner/hotel.jpg";
-
+import { useSelector } from "react-redux";
 import {
   Box,
   Drawer,
@@ -31,6 +31,24 @@ import { COLORS } from "@/utils/colors";
 const HotelList = () => {
   const [priceRange, setPriceRange] = useState([500, 2000]);
   const [open, setOpen] = useState(false);
+  const [hotels,setHotels]=useState([]);
+
+  let hotellist=useSelector((state)=>state.HOTEL.HotelList.hotelList);
+    
+
+    useEffect(() => {
+  if (Array.isArray(hotellist) && hotellist.length > 0) {
+    const filteredHotelList = hotellist
+      .filter((datalist) => datalist?.Status?.Code === 200)
+      .map((datalist) => datalist.HotelResult)
+      .flat();
+
+    console.log(filteredHotelList);
+    setHotels(filteredHotelList);
+  }
+}, [hotellist]);
+
+ 
 
   const handleRangeChange = (event, newValue) => {
     setPriceRange(newValue);
@@ -45,6 +63,7 @@ const HotelList = () => {
     }
     setOpen(openState);
   };
+   
 
   return (
     <div>
