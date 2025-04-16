@@ -1,4 +1,10 @@
-import { Nunito, Playfair_Display, Raleway } from "next/font/google";
+import {
+  Nunito,
+  Playfair_Display,
+  Raleway,
+  Roboto,
+  Roboto_Slab,
+} from "next/font/google";
 export const raleway = Raleway({
   weight: "variable",
   subsets: ["latin"],
@@ -10,6 +16,11 @@ export const display = Playfair_Display({
 });
 
 export const nunito = Nunito({
+  weight: "variable",
+  subsets: ["latin"],
+});
+
+export const roboto = Roboto_Slab({
   weight: "variable",
   subsets: ["latin"],
 });

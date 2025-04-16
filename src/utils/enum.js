@@ -21,8 +21,8 @@ export const JOURNEY_TYPE = {
 };
 
 export const COMMISSION_TYPE = {
-  FIXED : "FIXED",
-  PERCENTAGE : "PERCENTAGE"
+  FIXED: "FIXED",
+  PERCENTAGE: "PERCENTAGE",
 };
 
 export const PREFERRED_TIME = {
@@ -45,4 +45,13 @@ export const FLIGHT_CLASS = {
   BUSINESS: "Business",
   PREMIUMBUSINESS: "Premium Business",
   FIRST: "First Class",
+};
+
+export const BOOKING_ENQUIRY = {
+  HELICOPTER: "Helicopter",
+  DESTINATION_WEDDING: "Destination Wedding",
+  CABS: "CABS",
+  SELF_DRIVE: "Self Drive",
+  OUTSTATION_CABS: "Outstation Cabs",
+  ACTIVITIES: "Activities",
 };

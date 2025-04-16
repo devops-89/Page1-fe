@@ -73,18 +73,17 @@ export const holidayPackageSchema = Yup.object({
 
 // Validation schema for passenger fields (used for adult, child, infant)
 const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
-  
   Yup.object({
     title: Yup.string().required("Title is required"),
     first_name: Yup.string().required("First Name is required"),
     last_name: Yup.string().required("Last Name is required"),
 
-  // date_of_birth:Yup.date().required("Date of Birth is required"),
-  date_of_birth: Yup.date().when([], {
-    is: () => isBirthdayRequired,
-    then: (schema) => schema.required("Date of Birth is required"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
+    // date_of_birth:Yup.date().required("Date of Birth is required"),
+    date_of_birth: Yup.date().when([], {
+      is: () => isBirthdayRequired,
+      then: (schema) => schema.required("Date of Birth is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
     passport_no: isPassportRequired
       ? Yup.string()
           .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport No. format")
@@ -94,9 +93,7 @@ const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
     passport_expiry: isPassportRequired
       ? Yup.date().required("Passport Expiry Date is required")
       : Yup.date().notRequired(),
-  }
-);
-
+  });
 
 const baseGstSchema = {
   gst_company_email: Yup.string()
@@ -151,15 +148,40 @@ const addFormSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email required"),
 });
 
-export const validationSchema = (isGSTMandatory, isPassportRequired ,isBirthdayRequired) => {
+export const validationSchema = (
+  isGSTMandatory,
+  isPassportRequired,
+  isBirthdayRequired
+) => {
   // console.log("yup:",isBirthdayRequired);
   return Yup.object().shape({
-    adult: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
-    child: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
-    infant: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
+    adult: Yup.array().of(
+      passengerSchema(isPassportRequired, isBirthdayRequired)
+    ),
+    child: Yup.array().of(
+      passengerSchema(isPassportRequired, isBirthdayRequired)
+    ),
+    infant: Yup.array().of(
+      passengerSchema(isPassportRequired, isBirthdayRequired)
+    ),
     gstForm: isGSTMandatory ? gstFormSchema(true) : Yup.object().optional(),
     ...addFormSchema.fields,
   });
 };
+
+export const helicopterBookingValidationSchema = Yup.object({
+  fullName: Yup.string().required("Please Enter Full Name"),
+  phoneNumber: Yup.string().required("Please Enter Phone Number"),
+  email: Yup.string()
+    .required("Please Enter Email")
+    .email("Please Enter Valid Email"),
+  from: Yup.string().required("Please Enter Origin"),
+  to: Yup.string().required("Please Enter Destination"),
+  date: Yup.string().required("Please Enter Date"),
+  time: Yup.string().required("Please Enter Time"),
+  adults: Yup.number().required("Please Enter Number of Adults").positive(),
+  message: Yup.string().required("Please Enter Message"),
+  children: Yup.number().notRequired().positive(),
+});
 
 export { passengerSchema, gstFormSchema, addFormSchema };

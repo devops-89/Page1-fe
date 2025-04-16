@@ -615,7 +615,7 @@ export const data = {
     },
     {
       label: "Logout",
-      url: "/login"
+      url: "/login",
     },
   ],
   toursData: [
@@ -1538,47 +1538,52 @@ export const data = {
     { code: "ZM", label: "Zambia", phone: "260" },
     { code: "ZW", label: "Zimbabwe", phone: "263" },
   ],
-  payment:{
+  payment: {
+    id: "pay_QAdPuYorh3U9cw",
+    entity: "payment",
+    amount: 1277455,
+    currency: "INR",
+    status: "captured",
+    order_id: "order_QAdPntmMXFnpXu",
+    invoice_id: null,
+    international: false,
+    method: "netbanking",
+    amount_refunded: 0,
+    refund_status: null,
+    captured: true,
+    description: "#QAdPSEQcP5moug",
+    card_id: null,
+    bank: "CNRB",
+    wallet: null,
+    vpa: null,
+    email: "void@razorpay.com",
+    contact: "+918081137994",
+    notes: [],
+    fee: 30150,
+    tax: 4600,
+    error_code: null,
+    error_description: null,
+    error_source: null,
+    error_step: null,
+    error_reason: null,
+    acquirer_data: {
+      bank_transaction_id: "1028635",
+    },
+    created_at: 1742820866,
+  },
 
-    
-      id: "pay_QAdPuYorh3U9cw",
-      entity: "payment",
-      amount: 1277455,
-      currency: "INR",
-      status: "captured",
-      order_id: "order_QAdPntmMXFnpXu",
-      invoice_id: null,
-      international: false,
-      method: "netbanking",
-      amount_refunded: 0,
-      refund_status: null,
-      captured: true,
-      description: "#QAdPSEQcP5moug",
-      card_id: null,
-      bank: "CNRB",
-      wallet: null,
-      vpa: null,
-      email: "void@razorpay.com",
-      contact: "+918081137994",
-      notes: [],
-      fee: 30150,
-      tax: 4600,
-      error_code: null,
-      error_description: null,
-      error_source: null,
-      error_step: null,
-      error_reason: null,
-      acquirer_data: {
-          bank_transaction_id: "1028635"
-      },
-      created_at: 1742820866
-  
-  
-
-
-
-    
-  }
+  heliBenefits: [
+    {
+      heading: "Traffic Free Experience",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+    {
+      heading: "Travel Better",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+    {
+      heading: "Chauffeur service",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+  ],
 };
-
-

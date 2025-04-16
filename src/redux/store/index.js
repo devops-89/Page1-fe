@@ -16,14 +16,12 @@ import flightReducer from "../reducers/flight";
 import userReducer from "../reducers/userReducer";
 import toastReducer from "../reducers/toastReducer";
 import hotelReducer from "../reducers/hotel";
-
-
-const storage = createIndexedDBStorage("TRDB"); 
-
+import modalReducer from "../reducers/modal";
+const storage = createIndexedDBStorage("TRDB");
 
 const persistConfig = {
   key: "root",
-  storage, 
+  storage,
   whitelist: ["HOTEL"],
 };
 
@@ -32,6 +30,7 @@ const rootReducer = combineReducers({
   Toast: toastReducer,
   Flight: flightReducer,
   HOTEL: hotelReducer,
+  modal: modalReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
