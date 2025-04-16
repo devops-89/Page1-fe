@@ -6,7 +6,7 @@ const initialState={
 }
 
 const roundDomesticBaggagesInformation=createSlice({
-    name:"roundDomesticlBaggagesInformation",
+    name:"roundDomesticBaggagesInformation",
     initialState:initialState,
     reducers:{
           setBaggageDetails:(state,action)=>{
@@ -87,7 +87,7 @@ const roundDomesticBaggagesInformation=createSlice({
             
           },
 
-          resetBaggageDetails:(state,action)=>{
+          domesticBaggageReset:(state,action)=>{
              state.outgoingBaggage={};
              state.incomingBaggage={};
           }
@@ -95,5 +95,5 @@ const roundDomesticBaggagesInformation=createSlice({
     }
 });
 
-export const { setBaggageDetails, removeBaggageDetails, resetBaggageDetails } =roundDomesticBaggagesInformation.actions;
+export const { setBaggageDetails, removeBaggageDetails, domesticBaggageReset } =roundDomesticBaggagesInformation.actions;
 export default roundDomesticBaggagesInformation.reducer;

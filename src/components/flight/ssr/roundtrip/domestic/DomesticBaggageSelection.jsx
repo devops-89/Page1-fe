@@ -8,11 +8,8 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { COLORS } from "@/utils/colors";
-import {
-  removeBaggageDetails,
-  setBaggageDetails,
-} from "@/redux/reducers/RoundDomesticBaggageInformation";
 import BaggageCard from "@/components/flight/baggageCard";
+import { removeBaggageDetails, setBaggageDetails } from "@/redux/reducers/roundDomesticBaggagesInformation";
 
 export default function DomesticBaggageSelection({
   baggageData,
@@ -31,21 +28,20 @@ export default function DomesticBaggageSelection({
   );
 
    
-  console.log('selectedPassengerBaggages------------',selectedBaggages);
+  // console.log('selectedPassengerBaggages------------',selectedBaggages);
  
 
   // Handle baggage click (select or remove)
   const handleBaggageClick = (baggage, flightNumber,tabIndex) => {
-    // console.log('baggage-----------', baggage, flightNumber);
-    console.log("TabIndex: ",tabIndex);
-    console.log('selectedPassengerBaggages------------',selectedBaggages);
-    const passengerBaggages = selectedBaggages?.[tabIndex===0?"outgoingBaggage":"incomingBaggage"];
+    // console.log("my data --------------",baggage, flightNumber,tabIndex)
+    const passengerBaggages = selectedBaggages?.[tabIndex==0?"outgoingBaggage":"incomingBaggage"]?.[uniquePassengerKey] || [];
+    // console.log("passengerBaggages--------",passengerBaggages)
     const existingBaggage = passengerBaggages?.baggages?.find(
       (b) => b.flightId === flightNumber
     );
     // console.log('---------existingBaggage',existingBaggage)
 
-    if (existingBaggage?.selectedBaggage.Code === baggage.Code) {
+    if (existingBaggage?.baggage.Code === baggage.Code) {
       // Deselect the baggage if it's already selected
       dispatch(
         removeBaggageDetails({
@@ -64,7 +60,7 @@ export default function DomesticBaggageSelection({
             passengerType,
             passengerId,
             baggageId: flightNumber,
-            baggageCode: existingBaggage.selectedBaggage.Code,
+            baggageCode: existingBaggage.baggage.Code,
             tabIndex:tabIndex
           })
         );
@@ -82,7 +78,7 @@ export default function DomesticBaggageSelection({
     }
   };
 
-    console.log("baggageData-----------------", baggageData);
+    // console.log("baggageData-----------------", baggageData);
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -154,14 +150,17 @@ export default function DomesticBaggageSelection({
                   <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                     <BaggageCard
                       baggage={baggage}
-                      handleBaggageValue={() =>
+                      handleBaggageValue={(baggage) =>{
+                        // console.log("baggage: ",baggage,baggage?.FlightNumber,tabIndex);
                         handleBaggageClick(baggage, baggage?.FlightNumber,tabIndex)
                       }
-                      isSelected={selectedBaggages?.outgoingBaggage?.baggages?.some(
+                      }
+                      isSelected={selectedBaggages?.outgoingBaggage?.[uniquePassengerKey]?.baggages?.some(
                         (b) =>
-                          String(b.flightId) === String(baggage.FlightNumber) &&
-                          b.selectedBaggage.Code === baggage.Code
+                          b.flightId === baggage?.FlightNumber &&
+                          b.baggage.Code === baggage?.Code
                       )}
+                      
                     />
                   </Grid2>
                 );
@@ -192,16 +191,17 @@ export default function DomesticBaggageSelection({
                     baggage={baggage}
                     handleBaggageValue={(baggage) =>
                     {
-                      console.log("Baggage Details: ",baggage);
+                      // console.log("Baggage Details: ",baggage);
                       handleBaggageClick(baggage, baggage?.FlightNumber,tabIndex);
                     }
                      
                     }
-                    isSelected={selectedBaggages?.incomingBaggage?.baggages?.some(
+                    isSelected={selectedBaggages?.incomingBaggage?.[uniquePassengerKey]?.baggages?.some(
                       (b) =>
-                        String(b.flightId) === String(baggage.FlightNumber) &&
-                        b.selectedBaggage.Code === baggage.Code
+                        b.flightId === baggage?.FlightNumber &&
+                        b.baggage.Code === baggage?.Code
                     )}
+                    
                   />
                 </Grid2>
               );

@@ -19,8 +19,83 @@ import { nunito } from "@/utils/fonts";
 import { COMMISSION_TYPE } from "@/utils/enum";
 import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 import KeyboardDoubleArrowDownOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
+import { useSelector } from "react-redux";
 
 const RoundFareSummary = ({ fareData, commission ,toggleDrawer }) => {
+
+
+const meals = useSelector((state) => state.Flight.RoundDomesticMealsInformation);
+  const baggages = useSelector((state) => state.Flight.RoundDomesticBaggagesInformation);
+  const seatsOutgoing = useSelector((state)=>state.Flight.RoundInternationalSeatsInformation.outgoingSeats);
+  const seatsReturn = useSelector((state)=>state.Flight.RoundInternationalSeatsInformation.incomingSeats);
+
+  // console.log("baggage-----------",baggages)
+  // console.log("meals------------", meals)
+
+
+  const calculateTotalSeatPrice = (seats) => {
+    let totalprice = 0;
+    Object.values(seats).forEach((seatData) => {
+      const { selectedSeats } = seatData;
+  
+      const totalSeatPrice = selectedSeats.reduce((total, seat) => {
+        return total + seat.Price; 
+      }, 0);
+  
+      totalprice += totalSeatPrice;
+    });
+  
+    return totalprice;
+    
+  };
+
+
+  
+  const calculateTotalBaggagePrice = (data) => {
+    let totalPrice = 0;
+  
+    Object.keys(data).forEach((direction) => {
+      const passengers = data[direction];
+      if (passengers) {
+        Object.values(passengers).forEach((passenger) => {
+          if (Array.isArray(passenger.baggages)) {
+            passenger.baggages.forEach((baggage) => {
+              totalPrice += baggage.baggage?.Price || 0;
+            });
+          }
+        });
+      }
+    });
+  
+    return totalPrice;
+  };
+  
+
+
+  const calculateTotalMealPrice = (mealsData) => {
+    let totalPrice = 0;
+
+    Object.keys(mealsData).forEach((direction) => {
+      const directionData = mealsData[direction];
+  
+      if (directionData) {
+        Object.values(directionData).forEach((passengerData) => {
+          const { meals } = passengerData;
+  
+          if (Array.isArray(meals)) {
+            meals.forEach((mealEntry) => {
+              totalPrice += mealEntry.meal?.Price || 0;
+            });
+          }
+        });
+      }
+    });
+  
+    return totalPrice;
+  };
+  
+
+
   const [onwardTaxBreakup, setOnwardTaxBreakup] = useState(
     fareData[0][0]?.Results?.Fare?.TaxBreakup || []
   );
@@ -49,6 +124,12 @@ const RoundFareSummary = ({ fareData, commission ,toggleDrawer }) => {
     taxBreakup : mergedTaxBreakup
   };
 
+
+  const extraTotal =
+  calculateTotalMealPrice(meals) +
+  calculateTotalBaggagePrice(baggages) +
+  calculateTotalSeatPrice(seatsOutgoing) +
+  calculateTotalSeatPrice(seatsReturn);
 
   let serviceFeeInFixed = parseFloat(commission?.percentage);
   let serviceFeeInPercent =
@@ -223,6 +304,38 @@ const RoundFareSummary = ({ fareData, commission ,toggleDrawer }) => {
       </Box>
 
 
+
+{/* extra */}
+      <Divider sx={{ my: 1 }} />
+      {extraTotal <= 0 ? (
+        ""
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: "10px",
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          >
+            Extra
+            <span style={{ fontSize: "15px", fontWeight: 600 }}>
+              (meal ,seat,baggage){" "}
+            </span>
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          >
+            ₹ {extraTotal}
+          </Typography>
+        </Box>
+      )}
+
+
       <Box
               sx={{
                 display: "flex",
@@ -264,8 +377,8 @@ const RoundFareSummary = ({ fareData, commission ,toggleDrawer }) => {
                 sx={{ fontFamily: nunito.style, fontWeight: 700 }}
               >
                ₹ {commission?.commission_type === COMMISSION_TYPE.FIXED
-                  ? publishFare + serviceFeeInFixed
-                  : publishFare + serviceFeeInPercent}{" "}
+                  ? (publishFare + serviceFeeInFixed + extraTotal).toFixed(2)
+                  : (publishFare + serviceFeeInPercent + extraTotal).toFixed(2)}{" "}
                 
               </Typography>
             </Box>

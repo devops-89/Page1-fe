@@ -6,7 +6,7 @@ const initialState={
 }
 
 const roundDomesticMealsInformation=createSlice({
-    name:"roundDomesticlMealsInformation",
+    name:"roundDomesticMealsInformation",
     initialState:initialState,
     reducers:{
           setMealDetails:(state,action)=>{
@@ -86,7 +86,7 @@ const roundDomesticMealsInformation=createSlice({
             
           },
 
-          resetMealDetails:(state,action)=>{
+          domesticMealReset:(state)=>{
              state.outgoingMeal={};
              state.incomingMeal={};
           }
@@ -94,5 +94,5 @@ const roundDomesticMealsInformation=createSlice({
     }
 });
 
-export const { setMealDetails, removeMealDetails, resetMealDetails } =roundDomesticMealsInformation.actions;
+export const { setMealDetails, removeMealDetails, domesticMealReset } =roundDomesticMealsInformation.actions;
 export default roundDomesticMealsInformation.reducer;
