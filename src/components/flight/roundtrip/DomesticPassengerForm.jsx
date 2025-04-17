@@ -38,8 +38,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
     (state) => state.Flight.RoundDomesticBaggagesInformation || {}
   );
 
-  // console.log("selectedMeals-----------------",selectedMeals)
-  // console.log("selectedBaggages-------------", selectedBaggages)
+  // console.log("selectedMeals-----------------",selectedMeals?.outgoingMeal?.[`adult-${0}`]?.meals)
+  // console.log("selectedBaggages-------------", selectedBaggages?.outgoingBaggage?.[`adult-${0}`])
 
 
 
@@ -99,8 +99,16 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
       });
   });
 
-  const customMealAndBaggage =
-    useRoundTripDomesticMealAndBaggage(flightDetails);
+  // const customMealAndBaggage =
+  //   useRoundTripDomesticMealAndBaggage(flightDetails);
+
+  //   console.log("finalSeatOutGoing---------------",finalSeatOutGoing)
+
+  //   console.log("adultSeatsOutgoing-----------------", adultSeatsOutgoing)
+  //   console.log("childSeatsOutgoing-------------", childSeatsOutgoing)
+
+  //   console.log("adultSeatsReturn-----------------", adultSeatsReturn)
+  //   console.log("childSeatsOutgoing-------------", childSeatsOutgoing)
 
   const {
     Currency_ob,
@@ -251,8 +259,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: [...selectedMeals?.outgoingMeal?.[`adult-${index}`]?.meal],
-            Baggage: [...selectedBaggages?.outgoingBaggage?.[`adult-${index}`]?.baggages],
+            MealDynamic: selectedMeals?.outgoingMeal?.[`adult-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
+            Baggage: selectedBaggages?.outgoingBaggage?.[`adult-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
             SeatDynamic: adultSeatsOutgoing || null,
           };
         }) || [],
@@ -288,8 +296,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: false,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: [...selectedMeals?.outgoingMeal?.[`child-${index}`]?.meal],
-            Baggage: [...selectedBaggages?.outgoingBaggage?.[`child-${index}`]?.baggages],
+            MealDynamic: selectedMeals?.outgoingMeal?.[`child-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
+            Baggage: selectedBaggages?.outgoingBaggage?.[`child-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
             SeatDynamic: childSeatsOutgoing || null,
           };
         }) || [],
@@ -361,8 +369,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: [...selectedMeals?.incomingMeal?.[`adult-${index}`]?.meal],
-            Baggage: [...selectedBaggages?.incomingBaggage?.[`adult-${index}`]?.baggages],
+            MealDynamic: selectedMeals?.incomingMeal?.[`adult-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
+            Baggage: selectedBaggages?.incomingBaggage?.[`adult-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
             SeatDynamic: adultSeatsReturn || null,
           };
         }) || [],
@@ -398,8 +406,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: false,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: [...selectedMeals?.incomingMeal?.[`child-${index}`]?.meal],
-            Baggage: [...selectedBaggages?.incomingBaggage?.[`child-${index}`]?.baggages],
+            MealDynamic: selectedMeals?.incomingMeal?.[`child-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
+            Baggage: selectedBaggages?.incomingBaggage?.[`child-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
             SeatDynamic: childSeatsReturn || null,
           };
         }) || [],
