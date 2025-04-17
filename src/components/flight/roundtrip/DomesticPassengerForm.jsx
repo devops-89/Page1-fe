@@ -17,15 +17,7 @@ import PassengerFields from "../PassengerFields";
 import FullScreenDialog from "../ssr/roundtrip/domestic/seats/FullScreenDialog";
 import useRoundTripDomesticMealAndBaggage from "@/custom-hook/useRoundTripDomesticMealAndBaggage";
 
-const DomesticPassengerForm = ({
-  flightDetails,
-  myState,
-  journey,
-  selectMeal,
-  selectBaggage,
-  setSelectBaggage,
-  setSelectMeal,
-}) => {
+const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -38,29 +30,74 @@ const DomesticPassengerForm = ({
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
-
- const selectedMeals = useSelector(
-    (state) => state.Flight.MealsInformation.meals || {}
+  const selectedMeals = useSelector(
+    (state) => state.Flight.RoundDomesticMealsInformation || {}
   );
 
-  // console.log('selectedMeals--------------',selectedMeals)
-
-
-
-
-
-
-
-
-
-  const selectedSeats = useSelector(
-    (state) => state.Flight?.SeatsInformation?.seats || []
+  const selectedBaggages = useSelector(
+    (state) => state.Flight.RoundDomesticBaggagesInformation || {}
   );
 
-  const adultSeats = selectedSeats.slice(0, adultCount);
-  const childSeats = selectedSeats.slice(adultCount, adultCount + childCount);
+  // console.log("selectedMeals-----------------",selectedMeals)
+  // console.log("selectedBaggages-------------", selectedBaggages)
 
-  // console.log("flightDetails", flightDetails);
+
+
+
+  // -------------------Seat----------------------
+  const selectedSeatsOutgoing = useSelector(
+    (state) => state.Flight.RoundInternationalSeatsInformation?.outgoingSeats
+  );
+
+  const selectedSeatsReturn = useSelector(
+    (state) => state.Flight.RoundInternationalSeatsInformation?.incomingSeats
+  );
+
+  const finalSeatOutGoing = selectedSeatsOutgoing?.map((singleSeat, index) => {
+    return singleSeat?.selectedSeats?.map((seat) => {
+      return seat;
+    });
+  });
+
+  const finalSeatReturn = selectedSeatsReturn?.map((singleSeat, index) => {
+    return singleSeat?.selectedSeats?.map((seat) => {
+      return seat;
+    });
+  });
+
+  // Outgoing
+
+  let adultSeatsOutgoing = [];
+  let childSeatsOutgoing = [];
+
+  finalSeatOutGoing.forEach((singleSeatArray) => {
+    singleSeatArray.slice(0, adultCount).forEach((seat) => {
+      adultSeatsOutgoing.push(seat);
+    });
+
+    singleSeatArray
+      .slice(adultCount, adultCount + childCount)
+      .forEach((seat) => {
+        childSeatsOutgoing.push(seat);
+      });
+  });
+
+  // Return Trip
+
+  let adultSeatsReturn = [];
+  let childSeatsReturn = [];
+
+  finalSeatReturn.forEach((singleSeatArray) => {
+    singleSeatArray.slice(0, adultCount).forEach((seat) => {
+      adultSeatsReturn.push(seat);
+    });
+
+    singleSeatArray
+      .slice(adultCount, adultCount + childCount)
+      .forEach((seat) => {
+        childSeatsReturn.push(seat);
+      });
+  });
 
   const customMealAndBaggage =
     useRoundTripDomesticMealAndBaggage(flightDetails);
@@ -174,29 +211,15 @@ const DomesticPassengerForm = ({
     email: "",
   };
 
-  const handleMealValue = (passengerType, index, meal) => {
-    setSelectMeal((prev) => ({
-      ...prev,
-      [`${passengerType}-${index}`]: meal,
-    }));
-  };
-
-  const handleBaggageValue = (passengerType, index, baggage) => {
-    setSelectBaggage((prev) => ({
-      ...prev,
-      [`${passengerType}-${index}`]: baggage,
-    }));
-  };
-
   const handleSubmit = async (values) => {
     const contactEmail = values.email;
     const phoneNumber = values.contact_no;
 
-    console.log("submit value", values);
+    // console.log("submit value", values);
     setLoading(true);
     const storedState = localStorage.getItem(myState);
 
-    const passengerDetails = {
+    const passengerDetails_OB = {
       adult:
         values?.adult?.map((passenger, index) => {
           let gender = "Other";
@@ -228,9 +251,9 @@ const DomesticPassengerForm = ({
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectMeal[`adult-${index}`] || null,
-            Baggage: selectBaggage[`adult-${index}`] || null,
-            SeatDynamic: adultSeats[index] || null,
+            MealDynamic: [...selectedMeals?.outgoingMeal?.[`adult-${index}`]?.meal],
+            Baggage: [...selectedBaggages?.outgoingBaggage?.[`adult-${index}`]?.baggages],
+            SeatDynamic: adultSeatsOutgoing || null,
           };
         }) || [],
       child:
@@ -265,9 +288,119 @@ const DomesticPassengerForm = ({
             is_lead_pax: false,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectMeal[`child-${index}`] || null,
-            Baggage: selectBaggage[`child-${index}`] || null,
-            SeatDynamic: childSeats[index] || null,
+            MealDynamic: [...selectedMeals?.outgoingMeal?.[`child-${index}`]?.meal],
+            Baggage: [...selectedBaggages?.outgoingBaggage?.[`child-${index}`]?.baggages],
+            SeatDynamic: childSeatsOutgoing || null,
+          };
+        }) || [],
+      infant:
+        values?.infant?.map((passenger, index) => {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return {
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
+
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+
+            gender: gender,
+
+            pax_type: 3,
+            is_lead_pax: false,
+            ff_airline_code: null,
+            ff_number: null,
+          };
+        }) || [],
+    };
+
+    const passengerDetails_IB = {
+      adult:
+        values?.adult?.map((passenger, index) => {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return {
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
+
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+
+            gender: gender,
+            pax_type: 1,
+            is_lead_pax: index === 0,
+            ff_airline_code: null,
+            ff_number: null,
+            MealDynamic: [...selectedMeals?.incomingMeal?.[`adult-${index}`]?.meal],
+            Baggage: [...selectedBaggages?.incomingBaggage?.[`adult-${index}`]?.baggages],
+            SeatDynamic: adultSeatsReturn || null,
+          };
+        }) || [],
+      child:
+        values?.child?.map((passenger, index) => {
+          let gender = "Other";
+
+          switch (passenger.title) {
+            case "Mr":
+              gender = "Male";
+              break;
+            case "Mrs":
+            case "Miss":
+            case "Ms":
+              gender = "Female";
+              break;
+            default:
+              gender = "Other";
+          }
+
+          return {
+            ...passenger,
+            email: contactEmail,
+            contact_no: phoneNumber,
+
+            date_of_birth: isBirthdayRequired
+              ? passenger.date_of_birth
+              : passenger.date_of_birth || null,
+
+            gender: gender,
+
+            pax_type: 2,
+            is_lead_pax: false,
+            ff_airline_code: null,
+            ff_number: null,
+            MealDynamic: [...selectedMeals?.incomingMeal?.[`child-${index}`]?.meal],
+            Baggage: [...selectedBaggages?.incomingBaggage?.[`child-${index}`]?.baggages],
+            SeatDynamic: childSeatsReturn || null,
           };
         }) || [],
       infant:
@@ -328,7 +461,7 @@ const DomesticPassengerForm = ({
         gst_company_name: values?.gstForm?.gst_company_name || null,
         gst_number: values?.gstForm?.gst_number || null,
         gst_company_email: values?.gstForm?.gst_company_email || null,
-        passenger_details: passengerDetails,
+        passenger_details: passengerDetails_OB,
         fare: [
           {
             Currency: Currency_ob || "INR",
@@ -380,7 +513,7 @@ const DomesticPassengerForm = ({
         gst_company_name: values?.gstForm?.gst_company_name || null,
         gst_number: values?.gstForm?.gst_number || null,
         gst_company_email: values?.gstForm?.gst_company_email || null,
-        passenger_details: passengerDetails,
+        passenger_details: passengerDetails_IB,
         fare: [
           {
             Currency: Currency_ib || "INR",
@@ -567,10 +700,6 @@ const DomesticPassengerForm = ({
                       handleBlur={handleBlur}
                       errors={errors}
                       formType="adult"
-                      handleMealValue={handleMealValue}
-                      selectMeal={selectMeal}
-                      selectBaggage={selectBaggage}
-                      handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
@@ -588,10 +717,6 @@ const DomesticPassengerForm = ({
                       handleBlur={handleBlur}
                       errors={errors}
                       formType="child"
-                      handleMealValue={handleMealValue}
-                      selectMeal={selectMeal}
-                      selectBaggage={selectBaggage}
-                      handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}

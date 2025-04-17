@@ -11,11 +11,11 @@ const roundInternationalSeatsInformation = createSlice({
   reducers: {
     setSeatDetails: (state, action) => {
       const { airplaneId, selected, journeyType } = action.payload;
-     console.log("-----------",journeyType)
+    //  console.log("-----------",journeyType)
      if(journeyType==="outgoing"){
  // Find the airplane in the selected journey type
  const airplane = state.outgoingSeats.find((ap) => ap.id === airplaneId);
-  console.log("outgoing airplane:",airplane);
+  // console.log("outgoing airplane:",airplane);
  if (airplane) {
  
    if (!airplane.selectedSeats) {
