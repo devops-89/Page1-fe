@@ -184,28 +184,39 @@ export default function DomesticMealSelection({
                   </Typography>
                 )}
                 <Grid2 container spacing={2}>
-                  {filteredDataOutgoing[flightNumber]?.map(
-                    (meal, mealIndex) => (
-                      <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
-                        <MealCard
-                          meal={meal}
-                          handleMealValue={(meal) => {
-                            // console.log("Meal Value is: ",meal,flightNumber,tabIndex);
-                            handleMealClick(meal, flightNumber, tabIndex);
-                          }}
-                          isSelected={
-                            selectedMeals?.outgoingMeal?.[
-                              uniquePassengerKey
-                            ]?.meals?.some((m) => {
-                              return (
-                                m.flightId === flightNumber &&
-                                m.meal.Code === meal.Code
-                              );
-                            }) || false
-                          }
-                        />
-                      </Grid2>
+                  {filteredDataOutgoing[flightNumber][0]?.FlightNumber ? (
+                    filteredDataOutgoing[flightNumber]?.map(
+                      (meal, mealIndex) => (
+                        <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                          <MealCard
+                            meal={meal}
+                            handleMealValue={(meal) => {
+                              // console.log("Meal Value is: ",meal,flightNumber,tabIndex);
+                              handleMealClick(meal, flightNumber, tabIndex);
+                            }}
+                            isSelected={
+                              selectedMeals?.outgoingMeal?.[
+                                uniquePassengerKey
+                              ]?.meals?.some((m) => {
+                                return (
+                                  m.flightId === flightNumber &&
+                                  m.meal.Code === meal.Code
+                                );
+                              }) || false
+                            }
+                          />
+                        </Grid2>
+                      )
                     )
+                  ) : (
+                    <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ textAlign: "center", fontFamily: nunito.style }}
+                      >
+                        No Meal Available
+                      </Typography>
+                    </Grid2>
                   )}
                 </Grid2>
               </SwiperSlide>
@@ -242,26 +253,37 @@ export default function DomesticMealSelection({
                   </Typography>
                 )}
                 <Grid2 container spacing={2}>
-                  {filteredDataReturn[flightNumber]?.map((meal, mealIndex) => (
-                    <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
-                      <MealCard
-                        meal={meal}
-                        handleMealValue={(meal) => {
-                          // console.log("Meal Value is: ",meal,flightNumber,tabIndex);
-                          handleMealClick(meal, flightNumber, tabIndex);
-                        }}
-                        isSelected={
-                          selectedMeals?.incomingMeal?.[
-                            uniquePassengerKey
-                          ]?.meals?.some(
-                            (m) =>
-                              m.flightId === flightNumber &&
-                              m.meal.Code === meal.Code
-                          ) || false
-                        }
-                      />
+                  {filteredDataReturn[flightNumber][0]?.FlightNumber ? (
+                    filteredDataReturn[flightNumber]?.map((meal, mealIndex) => (
+                      <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                        <MealCard
+                          meal={meal}
+                          handleMealValue={(meal) => {
+                            // console.log("Meal Value is: ",meal,flightNumber,tabIndex);
+                            handleMealClick(meal, flightNumber, tabIndex);
+                          }}
+                          isSelected={
+                            selectedMeals?.incomingMeal?.[
+                              uniquePassengerKey
+                            ]?.meals?.some(
+                              (m) =>
+                                m.flightId === flightNumber &&
+                                m.meal.Code === meal.Code
+                            ) || false
+                          }
+                        />
+                      </Grid2>
+                    ))
+                  ) : (
+                    <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ textAlign: "center", fontFamily: nunito.style }}
+                      >
+                        No Meal Available
+                      </Typography>
                     </Grid2>
-                  ))}
+                  )}
                 </Grid2>
               </SwiperSlide>
             ))}

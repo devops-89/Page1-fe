@@ -144,60 +144,84 @@ export default function InternationalBaggageSelection({
               {`${baggageData?.[0][0]?.Origin} - ${baggageData?.[0][0]?.Destination}`}
             </Typography>
             <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
-              {baggageData?.[0]?.map((baggage, baggageIndex) => {
-                return (
-                  <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
-                    <BaggageCard
-                      baggage={baggage}
-                      handleBaggageValue={() =>
-                        handleBaggageClick(baggage, baggage?.FlightNumber)
-                      }
-                      isSelected={selectedPassengerBaggages.selectedBaggages?.some(
-                        (b) =>
-                          String(b.flightId) === String(baggage.FlightNumber) &&
-                          b.selectedBaggage.Code === baggage.Code
-                      )}
-                    />
-                  </Grid2>
-                );
-              })}
+              {baggageData?.[0][0]?.FlightNumber ? (
+                baggageData?.[0]?.map((baggage, baggageIndex) => {
+                  return (
+                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                      <BaggageCard
+                        baggage={baggage}
+                        handleBaggageValue={() =>
+                          handleBaggageClick(baggage, baggage?.FlightNumber)
+                        }
+                        isSelected={selectedPassengerBaggages.selectedBaggages?.some(
+                          (b) =>
+                            String(b.flightId) ===
+                              String(baggage.FlightNumber) &&
+                            b.selectedBaggage.Code === baggage.Code
+                        )}
+                      />
+                    </Grid2>
+                  );
+                })
+              ) : (
+                <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ textAlign: "center", fontFamily: nunito.style }}
+                  >
+                    No Baggage Available
+                  </Typography>
+                </Grid2>
+              )}
             </Grid2>
           </>
         )}
         {tabIndex === 1 && (
           <>
-          <Typography
-            variant="body1"
-            sx={{
-              fontFamily: nunito.style,
-              fontWeight: 800,
-              mb: "20px",
-              p: "10px",
-              backgroundColor: COLORS.SEMIGREY,
-            }}
-          >
-            {`${baggageData?.[1][0]?.Origin} - ${baggageData?.[1][0]?.Destination}`}
-          </Typography>
-          <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
-            {baggageData?.[1]?.map((baggage, baggageIndex) => {
-              return (
-                <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
-                  <BaggageCard
-                    baggage={baggage}
-                    handleBaggageValue={() =>
-                      handleBaggageClick(baggage, baggage?.FlightNumber)
-                    }
-                    isSelected={selectedPassengerBaggages.selectedBaggages?.some(
-                      (b) =>
-                        String(b.flightId) === String(baggage.FlightNumber) &&
-                        b.selectedBaggage.Code === baggage.Code
-                    )}
-                  />
+            <Typography
+              variant="body1"
+              sx={{
+                fontFamily: nunito.style,
+                fontWeight: 800,
+                mb: "20px",
+                p: "10px",
+                backgroundColor: COLORS.SEMIGREY,
+              }}
+            >
+              {`${baggageData?.[1][0]?.Origin} - ${baggageData?.[1][0]?.Destination}`}
+            </Typography>
+            <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
+              {baggageData?.[1][0]?.FlightNumber ? (
+                baggageData?.[1]?.map((baggage, baggageIndex) => {
+                  return (
+                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                      <BaggageCard
+                        baggage={baggage}
+                        handleBaggageValue={() =>
+                          handleBaggageClick(baggage, baggage?.FlightNumber)
+                        }
+                        isSelected={selectedPassengerBaggages.selectedBaggages?.some(
+                          (b) =>
+                            String(b.flightId) ===
+                              String(baggage.FlightNumber) &&
+                            b.selectedBaggage.Code === baggage.Code
+                        )}
+                      />
+                    </Grid2>
+                  );
+                })
+              ) : (
+                <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ textAlign: "center", fontFamily: nunito.style }}
+                  >
+                    No Baggage Available
+                  </Typography>
                 </Grid2>
-              );
-            })}
-          </Grid2>
-        </>
+              )}
+            </Grid2>
+          </>
         )}
       </AccordionDetails>
     </Accordion>
