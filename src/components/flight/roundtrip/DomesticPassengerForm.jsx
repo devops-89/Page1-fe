@@ -30,85 +30,100 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
+  let adultSeatsOutgoing = [];
+  let childSeatsOutgoing = [];
+  let adultSeatsReturn = [];
+  let childSeatsReturn = [];
+
+  // -------------Meal Value from Redux---------------
   const selectedMeals = useSelector(
     (state) => state.Flight.RoundDomesticMealsInformation || {}
   );
 
+  // -----------Baggage Value from redux--------------
   const selectedBaggages = useSelector(
     (state) => state.Flight.RoundDomesticBaggagesInformation || {}
   );
 
-  // console.log("selectedMeals-----------------",selectedMeals?.outgoingMeal?.[`adult-${0}`]?.meals)
-  // console.log("selectedBaggages-------------", selectedBaggages?.outgoingBaggage?.[`adult-${0}`])
-
-
-
-
-  // -------------------Seat----------------------
+  // ----------------OutGoing Seat Value----------------
   const selectedSeatsOutgoing = useSelector(
     (state) => state.Flight.RoundInternationalSeatsInformation?.outgoingSeats
   );
 
+  // ----------------Return Seat Value----------------
   const selectedSeatsReturn = useSelector(
     (state) => state.Flight.RoundInternationalSeatsInformation?.incomingSeats
   );
 
+  // ----------Find All OutGoing Seat Value -------------
   const finalSeatOutGoing = selectedSeatsOutgoing?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
       return seat;
     });
   });
 
+  // ----------Find All Return Seat Value -------------
   const finalSeatReturn = selectedSeatsReturn?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
       return seat;
     });
   });
 
-  // Outgoing
+  // -----------Transposing Outgoing value----------------
+  const maxLengthOutgoing = Math.max(
+    ...finalSeatOutGoing.map((row) => row.length)
+  );
 
-  let adultSeatsOutgoing = [];
-  let childSeatsOutgoing = [];
+  const transposedOutGoing = Array.from({ length: maxLengthOutgoing }, (_, i) =>
+    finalSeatOutGoing.map((row) => row?.[i] || [])
+  );
 
-  finalSeatOutGoing.forEach((singleSeatArray) => {
-    singleSeatArray.slice(0, adultCount).forEach((seat) => {
-      adultSeatsOutgoing.push(seat);
-    });
-
-    singleSeatArray
-      .slice(adultCount, adultCount + childCount)
-      .forEach((seat) => {
-        childSeatsOutgoing.push(seat);
-      });
+  transposedOutGoing.slice(0, adultCount).forEach((seat) => {
+    adultSeatsOutgoing.push(seat);
   });
 
-  // Return Trip
-
-  let adultSeatsReturn = [];
-  let childSeatsReturn = [];
-
-  finalSeatReturn.forEach((singleSeatArray) => {
-    singleSeatArray.slice(0, adultCount).forEach((seat) => {
-      adultSeatsReturn.push(seat);
+  transposedOutGoing
+    .slice(adultCount, adultCount + childCount)
+    .forEach((seat) => {
+      childSeatsOutgoing.push(seat);
     });
 
-    singleSeatArray
-      .slice(adultCount, adultCount + childCount)
-      .forEach((seat) => {
-        childSeatsReturn.push(seat);
-      });
+ // -----------Transposing Return value----------------
+
+  const maxLengthReturn = Math.max(...finalSeatReturn.map((row) => row.length));
+
+  const transposedOutReturn = Array.from({ length: maxLengthReturn }, (_, i) =>
+    finalSeatReturn.map((row) => row?.[i] || [])
+  );
+
+  transposedOutReturn.slice(0, adultCount).forEach((seat) => {
+    adultSeatsReturn.push(seat);
   });
 
-  // const customMealAndBaggage =
-  //   useRoundTripDomesticMealAndBaggage(flightDetails);
+  transposedOutReturn
+    .slice(adultCount, adultCount + childCount)
+    .forEach((seat) => {
+      childSeatsReturn.push(seat);
+    });
 
-  //   console.log("finalSeatOutGoing---------------",finalSeatOutGoing)
 
-  //   console.log("adultSeatsOutgoing-----------------", adultSeatsOutgoing)
-  //   console.log("childSeatsOutgoing-------------", childSeatsOutgoing)
+  // -------------Send data to custom to fix the format of meal & baggage-----------------
+  const customMealAndBaggage =
+    useRoundTripDomesticMealAndBaggage(flightDetails);
 
-  //   console.log("adultSeatsReturn-----------------", adultSeatsReturn)
-  //   console.log("childSeatsOutgoing-------------", childSeatsOutgoing)
+
+
+
+
+// console.log("selectedSeatsOutgoing------------------", selectedSeatsOutgoing)
+//     console.log("selectedSeatsReturn------------------", selectedSeatsReturn)
+//     console.log("transposedOutGoing------------------", transposedOutGoing)
+//     console.log("transposedOutReturn----------------", transposedOutReturn)
+//     console.log("adultSeatsOutgoing---------------", adultSeatsOutgoing)
+//     console.log("childSeatsOutgoing---------------", childSeatsOutgoing)
+//     console.log("adultSeatsReturn---------------", adultSeatsReturn)
+//     console.log("childSeatsReturn---------------", childSeatsReturn)
+
 
   const {
     Currency_ob,
@@ -259,9 +274,13 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectedMeals?.outgoingMeal?.[`adult-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
-            Baggage: selectedBaggages?.outgoingBaggage?.[`adult-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
-            SeatDynamic: adultSeatsOutgoing || null,
+            MealDynamic: selectedMeals?.outgoingMeal?.[
+              `adult-${index}`
+            ]?.meals?.map((singleMeal) => singleMeal?.meal),
+            Baggage: selectedBaggages?.outgoingBaggage?.[
+              `adult-${index}`
+            ]?.baggages?.map((singleBaggage) => singleBaggage?.baggage),
+            SeatDynamic: adultSeatsOutgoing[index] || null,
           };
         }) || [],
       child:
@@ -296,9 +315,13 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: false,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectedMeals?.outgoingMeal?.[`child-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
-            Baggage: selectedBaggages?.outgoingBaggage?.[`child-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
-            SeatDynamic: childSeatsOutgoing || null,
+            MealDynamic: selectedMeals?.outgoingMeal?.[
+              `child-${index}`
+            ]?.meals?.map((singleMeal) => singleMeal?.meal),
+            Baggage: selectedBaggages?.outgoingBaggage?.[
+              `child-${index}`
+            ]?.baggages?.map((singleBaggage) => singleBaggage?.baggage),
+            SeatDynamic: childSeatsOutgoing[index] || null,
           };
         }) || [],
       infant:
@@ -369,9 +392,13 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectedMeals?.incomingMeal?.[`adult-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
-            Baggage: selectedBaggages?.incomingBaggage?.[`adult-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
-            SeatDynamic: adultSeatsReturn || null,
+            MealDynamic: selectedMeals?.incomingMeal?.[
+              `adult-${index}`
+            ]?.meals?.map((singleMeal) => singleMeal?.meal),
+            Baggage: selectedBaggages?.incomingBaggage?.[
+              `adult-${index}`
+            ]?.baggages?.map((singleBaggage) => singleBaggage?.baggage),
+            SeatDynamic: adultSeatsReturn[index] || null,
           };
         }) || [],
       child:
@@ -406,9 +433,13 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             is_lead_pax: false,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectedMeals?.incomingMeal?.[`child-${index}`]?.meals?.map((singleMeal)=>singleMeal?.meal),
-            Baggage: selectedBaggages?.incomingBaggage?.[`child-${index}`]?.baggages?.map((singleBaggage)=>singleBaggage?.baggage),
-            SeatDynamic: childSeatsReturn || null,
+            MealDynamic: selectedMeals?.incomingMeal?.[
+              `child-${index}`
+            ]?.meals?.map((singleMeal) => singleMeal?.meal),
+            Baggage: selectedBaggages?.incomingBaggage?.[
+              `child-${index}`
+            ]?.baggages?.map((singleBaggage) => singleBaggage?.baggage),
+            SeatDynamic: childSeatsReturn[index] || null,
           };
         }) || [],
       infant:

@@ -19,7 +19,7 @@ import FullScreenDialog from "../ssr/roundtrip/international/seats/FullScreenDia
 const InternationalPassengerForm = ({
   flightDetails,
   myState,
-  journey,
+  journey, 
   isLCC,
 }) => {
   const dispatch = useDispatch();
