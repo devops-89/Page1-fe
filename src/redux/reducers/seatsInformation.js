@@ -58,10 +58,7 @@ const seatsInformation = createSlice({
           airplaneIndex
         ].selectedSeats.filter((seat) => seat.Code !== seatCode);
 
-        // If no seats remain, remove the airplane entry
-        // if (state.seats[airplaneIndex].selectedSeats.length === 0) {
-        //   state.seats.splice(airplaneIndex, 1);
-        // }
+      
       }
     },
 

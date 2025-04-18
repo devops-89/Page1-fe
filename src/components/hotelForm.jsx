@@ -18,12 +18,16 @@ import {
   Typography,
 } from "@mui/material";
 import useFetchIP  from "@/custom-hook/useFetchIp";
+import { useRouter } from "next/router";
 
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { useState, useMemo } from "react";
+import Loading from "react-loading";
 
 const HotelForm = () => {
+
+  const router=useRouter();
   const dispatch=useDispatch();
   const [selectedCity, setSelectedCity] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -32,6 +36,7 @@ const HotelForm = () => {
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [userIp,setUserIp]=useState("");
+    const [buttonLoading, setButtonLoading] = useState(false);
 
   useFetchIP(setUserIp);
 
@@ -76,6 +81,7 @@ const HotelForm = () => {
   }, [inputValue]);
 
   async function handleSearch() {
+    
     if (!checkIn || !checkOut || !selectedCity || !userIp) {
       alert("Please fill all required fields.");
       return;
@@ -84,7 +90,7 @@ const HotelForm = () => {
     const payload = {
       CheckIn: checkIn.format("YYYY-MM-DD"),
       CheckOut: checkOut.format("YYYY-MM-DD"),
-      CityCodes: selectedCity.city_code,
+      CityCodes: "144306" || selectedCity.city_code,
       GuestNationality: selectedCity.country_code,
       EndUserIp: userIp,
       PaxRooms: [
@@ -107,14 +113,19 @@ const HotelForm = () => {
     };
   
     try {
+      setButtonLoading(true);
       const response = await hotelController.searchHotel(payload);
-      console.log("Response from API: ", response);
+      console.log("Response from API: ", response.data.data);
       if(response){
         dispatch(setHotelList(response.data.data));
+        router.push("/hotel-list");
       }
+      setButtonLoading(false)
     } catch (error) {
       console.error("There is an error:", error);
+      setButtonLoading(false)
     }
+   
   }
   
 
@@ -343,18 +354,31 @@ const HotelForm = () => {
           {/* popover end */}
         </Grid2>
         <Grid2 size={{ lg: 12, xs: 12, sm: 12 }} sx={{ textAlign: "center" }}>
-          <Button
-            sx={{
-              color: COLORS.WHITE,
-              backgroundColor: COLORS.SECONDARY,
-              width: { lg: 150, md: 150, sm: 120, xs: 120 },
-              py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
-              mt: 2,
-            }}
-            onClick={handleSearch}
-          >
-            Search
-          </Button>
+         <Button
+                     disabled={buttonLoading}
+                     sx={{
+                       backgroundColor: COLORS.SECONDARY,
+                       color: COLORS.WHITE,
+                       width: {lg:150 , md:150 , sm:120 ,xs:120},
+                      
+                       mt: { lg: 2, sm: 1, xs: 2 },
+                       cursor: buttonLoading ? "not-allowed" : "pointer",
+                       fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
+                       py: {lg:1.5 , md:1.5,sm:1 , xs:1},
+                     }}
+                     onClick={handleSearch}
+                   >
+                     {buttonLoading ? (
+                       <Loading
+                         type="bars"
+                         width={20}
+                         height={20}
+                         color={COLORS.WHITE}
+                       />
+                     ) : (
+                       "Search"
+                     )}
+                   </Button>
         </Grid2>
       </Grid2>
     </Box>

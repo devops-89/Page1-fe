@@ -1,212 +1,155 @@
-import hotel1 from "@/hotel/hotel-1.webp";
-import { COLORS } from "@/utils/colors";
-import { nunito, raleway } from "@/utils/fonts";
+import React from 'react';
 import {
-  AspectRatioOutlined,
-  BathtubOutlined,
-  FavoriteBorderOutlined,
-  KingBedOutlined,
-  LocationOnOutlined,
-} from "@mui/icons-material";
-import {
-  Box,
   Card,
   CardContent,
-  Divider,
-  IconButton,
-  Rating,
-  Stack,
+  CardMedia,
   Typography,
-} from "@mui/material";
-const HotelCard = ({
-  img,
-  price,
-  hotelName,
-  rooms,
-  bathroom,
-  rating,
-  follower,
-  location,
-}) => {
+  Box,
+  Button,
+  Stack,
+  Grid
+} from '@mui/material';
+import { COLORS } from "@/utils/colors";
+import { Wifi, Pool, Restaurant, LocalParking } from '@mui/icons-material';
+import { nunito } from '@/utils/fonts';
+import Link from 'next/link';
+
+const HotelCard = ({ hotel, hotelID }) => {
+
+
   return (
-    <div>
-      <Card
-        sx={{
-          position: "relative",
-          ":hover": {
-            ".image": {
-              transform: "scale(1.1)",
-            },
-          },
-          overflow: "hidden",
-          ".image": {
-            transition: "0.5s ease all",
-          },
-          boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
-          height: 400,
-        }}
-      >
-        <Box sx={{ position: "relative", overflow: "hiden" }}>
+    <Card
+      sx={{
+        mb: 3,
+        border: "1px solid white",
+        "&:hover": { borderColor: COLORS.PRIMARY },
+        fontFamily: nunito.style
+      }}
+    >
+      <Grid container>
+        {/* Image Section */}
+        <Grid item xs={12} md={3}>
           <Box
             sx={{
-              backgroundImage: `url(${img})`,
-              height: 200,
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
+              width: '100%',
+              height: '100%',
+              maxHeight: { xs: 250, md: '100%' },
+              overflow: 'hidden',
             }}
-            className="image"
-          ></Box>
-        </Box>
-        <Box sx={{ position: "absolute", top: 0, width: "100%" }}>
-          <Stack
-            direction={"row"}
-            alignItems={"center"}
-            justifyContent={"space-between"}
-            p={2}
           >
-            <Box
+            <CardMedia
+              component="img"
+              image="https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg"
+              alt={hotel?.HotelName}
               sx={{
-                color: COLORS.WHITE,
-                backgroundColor: COLORS.SECONDARY,
-                width: 60,
-                fontSize: 12,
-                p: 1,
-                borderRadius: 2,
-                fontWeight: 550,
-                fontFamily: raleway.style,
-                textAlign: "center",
-              }}
-            >
-              Featured
-            </Box>
-
-            <IconButton
-              sx={{
-                backgroundColor: COLORS.WHITE,
-                borderRadius: 2,
-                ":hover": {
-                  backgroundColor: COLORS.WHITE,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                transition: 'transform 0.3s ease-in-out',
+                '&:hover': {
+                  transform: 'scale(1.05)',
                 },
               }}
-            >
-              <FavoriteBorderOutlined sx={{ fontSize: 15 }} />
-            </IconButton>
-          </Stack>
-        </Box>
-        <CardContent>
-          <Typography
-            sx={{
-              fontSize: 20,
-              fontFamily: nunito.style,
-              color: COLORS.SECONDARY,
-              fontWeight: 600,
-            }}
-          >
-            ₹ {price}{" "}
-            <Typography
-              component={"span"}
-              sx={{
-                fontSize: 13,
-                fontFamily: nunito.style,
-                color: COLORS.DARKGREY,
-                fontWeight: 550,
-              }}
-            >
-              Start From
-            </Typography>
-          </Typography>
-          <Typography
-            sx={{
-              mt: 1,
-              fontSize: 18,
-              fontFamily: nunito.style,
-              fontWeight: 600,
-              mb: 1,
-            }}
-          >
-            {hotelName}
-          </Typography>
-          <Stack direction={"row"} alignItems={"center"} spacing={2} mt={1}>
-            <Stack direction={"row"} spacing={1} alignItems={"center"}>
-              <KingBedOutlined
-                htmlColor={COLORS.SECONDARY}
-                sx={{ fontSize: 20 }}
-              />
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 550,
-                  color: COLORS.DARKGREY,
-                  fontFamily: nunito.style,
-                }}
-              >
-                {rooms}
-              </Typography>
-            </Stack>
-            <Stack direction={"row"} spacing={1} alignItems={"center"}>
-              <BathtubOutlined
-                htmlColor={COLORS.SECONDARY}
-                sx={{ fontSize: 20 }}
-              />
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 550,
-                  color: COLORS.DARKGREY,
-                  fontFamily: nunito.style,
-                }}
-              >
-                {bathroom}
-              </Typography>
-            </Stack>
-          </Stack>
-          <Box sx={{ position: "absolute", width: "90%", bottom: 10 }}>
-            <Divider sx={{ mt: 1, mb: 1 }} />
-            <Stack
-              direction={"row"}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <LocationOnOutlined
-                  htmlColor={COLORS.SECONDARY}
-                  sx={{ fontSize: 20 }}
-                />
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 550,
-                    color: COLORS.DARKGREY,
-                    fontFamily: nunito.style,
-                  }}
-                >
-                  {location}
-                </Typography>
-              </Stack>
-              <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <Rating
-                  size="small"
-                  defaultValue={rating}
-                  precision={0.5}
-                  readOnly
-                />
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 550,
-                    color: COLORS.DARKGREY,
-                    fontFamily: nunito.style,
-                  }}
-                >
-                  {follower}
-                </Typography>
-              </Stack>
-            </Stack>
+            />
           </Box>
-        </CardContent>
-      </Card>
-    </div>
+        </Grid>
+
+        {/* Info Section */}
+        <Grid item xs={12} md={6} sx={{ borderRight: { md: "1px solid gray" } }}>
+          <CardContent>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography component="h2" sx={{ fontWeight: "bold" }} variant="h6">
+                {hotel?.HotelName}
+              </Typography>
+            </Stack>
+
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              {hotel?.CityName}, {hotel?.PinCode}, {hotel?.CountryCode}
+            </Typography>
+
+            {/* Facility Icons */}
+            <Stack direction="row" spacing={2} mt={2}>
+              {hotel?.HotelFacilities?.includes('Free WiFi') && <Wifi fontSize="small" />}
+              {hotel?.HotelFacilities?.includes('Laundry facilities') && <Pool fontSize="small" />}
+              {hotel?.HotelFacilities?.includes('Terrace') && <Restaurant fontSize="small" />}
+              {hotel?.HotelFacilities?.includes('Free continental breakfast') && <LocalParking fontSize="small" />}
+            </Stack>
+
+            {/* Attractions with clipping */}
+            {hotel?.Attractions && hotel.Attractions.length > 0 && (
+              <Box mt={2}>
+               
+                <Box
+                  sx={{
+                    fontSize: '0.875rem',
+                    color: 'text.secondary',
+                    maxHeight: '60px',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    lineHeight: '1.4',
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '1.2em',
+                      background: 'linear-gradient(to bottom, transparent, #fff)',
+                    },
+                  }}
+                  dangerouslySetInnerHTML={{ __html: hotel?.Attractions[0] }}
+                />
+              </Box>
+            )}
+          </CardContent>
+        </Grid>
+
+        {/* Sidebar Section */}
+        <Grid item xs={12} md={3}>
+          <Box
+            sx={{
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'start',
+              gap: 1,
+              height: '100%'
+            }}
+          >
+            <Box mt={1}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography variant="subtitle2" sx={{ color: '#1a237e', fontSize: "20px", fontWeight: 'bold' }}>
+                  Very Good
+                </Typography>
+                <Box
+                  sx={{
+                    backgroundColor: '#2196f3',
+                    color: 'white',
+                    px: 1,
+                    py: 0.3,
+                    borderRadius: '4px',
+                    fontSize: '0.875rem',
+                    fontWeight: 600,
+                  }}
+                >
+                  4.2
+                </Box>
+              </Stack>
+              <Typography variant="caption" color="text.secondary" mt={1}>
+                Based on <strong>1241</strong> Ratings and <strong>788</strong> Reviews
+              </Typography>
+            </Box>
+
+            <Typography variant="h6" mt={2}>
+              ₹{hotel?.Rooms[0]?.TotalFare} {hotel?.Currency}
+            </Typography>
+            <Link href={`/hotel-list/${hotelID}/hotel-details`} style={{ textDecoration: "none" }}><Button variant="contained" size="small" sx={{ bgcolor: COLORS.PRIMARY }}>
+              Book Now
+            </Button></Link>
+          </Box>
+        </Grid>
+      </Grid>
+    </Card>
   );
 };
 

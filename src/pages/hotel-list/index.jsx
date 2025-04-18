@@ -1,5 +1,5 @@
 import InnerBanner from "@/components/innerBanner";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import banner from "@/banner/hotel.jpg";
 import { useSelector } from "react-redux";
 import {
@@ -7,7 +7,6 @@ import {
   Drawer,
   Card,
   Container,
-  Grid2,
   Typography,
   CardHeader,
   CardContent,
@@ -16,7 +15,10 @@ import {
   TextField,
   Button,
   Slider,
+  Grid2,
   useMediaQuery,
+  useTheme,
+  CircularProgress,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -25,35 +27,64 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CloseIcon from "@mui/icons-material/Close";
 
 import HotelCard from "@/components/hotels/hotelCard";
-import { data } from "@/assests/data";
 import Link from "next/link";
 import { COLORS } from "@/utils/colors";
+import Loading from "react-loading";
+
+
 const HotelList = () => {
   const [priceRange, setPriceRange] = useState([500, 2000]);
   const [open, setOpen] = useState(false);
-  const [hotels,setHotels]=useState([]);
+  const [hotels, setHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  let hotellist=useSelector((state)=>state.HOTEL.HotelList.hotelList);
-    
+  const [visibleCount, setVisibleCount] = useState(10);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-    useEffect(() => {
-  if (Array.isArray(hotellist) && hotellist.length > 0) {
-    const filteredHotelList = hotellist
-      .filter((datalist) => datalist?.Status?.Code === 200)
-      .map((datalist) => datalist.HotelResult)
-      .flat();
+  const hotellist = useSelector((state) => state.HOTEL.HotelList.hotelList);
 
-    console.log(filteredHotelList);
-    setHotels(filteredHotelList);
-  }
-}, [hotellist]);
+  useEffect(() => {
+    if (Array.isArray(hotellist)) {
+      setLoading(false);
+      setHotels(hotellist);
+      setHasMore(hotellist.length > visibleCount);
+    }
+  }, [hotellist]);
 
- 
+  const observer = useRef();
+
+  const lastBookElementRef = useCallback(
+    (node) => {
+      if (loadingMore || !hasMore) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setLoadingMore(true);
+          setTimeout(() => {
+            setVisibleCount((prev) => {
+              const newCount = prev + 10;
+              setHasMore(newCount < hotels.length);
+              return newCount;
+            });
+            setLoadingMore(false);
+          }, 1000);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [loadingMore, hasMore, hotels.length]
+  );
 
   const handleRangeChange = (event, newValue) => {
     setPriceRange(newValue);
   };
-  const phone = useMediaQuery("(max-width:899px)");
+
+  const theme = useTheme();
+  const phone = useMediaQuery(theme.breakpoints.down("sm"));
+
   const toggleDrawer = (openState) => (event) => {
     if (
       event.type === "keydown" &&
@@ -63,7 +94,6 @@ const HotelList = () => {
     }
     setOpen(openState);
   };
-   
 
   return (
     <div>
@@ -71,60 +101,21 @@ const HotelList = () => {
 
       <Box sx={{ pt: { lg: 10, xs: 5 }, pb: 10 }}>
         <Container>
-          <Grid2 container spacing={4}>
+          <Grid2 container spacing={3}>
+            {/* Filters Section */}
             {phone ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginLeft: "auto",
-                }}
-              >
+              <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
                 <Button onClick={toggleDrawer(true)}>
                   <FilterAltIcon sx={{ fontSize: 30, color: COLORS.PRIMARY }} />
                 </Button>
 
                 <Drawer open={open} onClose={toggleDrawer(false)}>
-                  <Grid2 size={12} sx={{ position: "relative" }}>
-                    {/* filter card start */}
-                    <Card
-                      variant="outlined"
-                      sx={{
-                        position: "sticky",
-                        top: "75px",
-                        width: "100%",
-                        height: "100vh",
-                        overflowY: "scroll",
-                        "::-webkit-scrollbar": {
-                          width: 5,
-                          borderRadius: 4,
-                          // backgroundColor: COLORS.PRIMARY,
-                        },
-                        "::-webkit-scrollbar-thumb": {
-                          backgroundColor: "#A8A8A8",
-                          borderRadius: 4,
-                          height: 20,
-                          width: 20,
-                        },
-                      }}
-                      style={{
-                        marginBottom: "1rem",
-                        width: "100%",
-                        boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
-                      }}
-                    >
+                  <Box sx={{ width: 300, p: 2 }}>
+                    <Card>
                       <CardHeader
                         action={
                           <Button onClick={toggleDrawer(false)}>
-                            <CloseIcon
-                              sx={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                marginLeft: "auto",
-                                fontSize: 30,
-                                fontWeight: "bold",
-                              }}
-                            />
+                            <CloseIcon sx={{ fontSize: 30 }} />
                           </Button>
                         }
                       />
@@ -136,7 +127,7 @@ const HotelList = () => {
                           </Button>
                         }
                       />
-                      <CardContent sx={{marginTop:"-18px"}}>
+                      <CardContent>
                         <Typography variant="subtitle1" gutterBottom>
                           Search by Hotel Names
                         </Typography>
@@ -151,35 +142,20 @@ const HotelList = () => {
                             ),
                           }}
                         />
-
-                        {/* Popular Section */}
-                        <div style={{ marginTop: "1rem" }}>
+                        <Box mt={2}>
                           <Typography variant="subtitle1">Popular</Typography>
-                          {[
-                            "Breakfast Included",
-                            "Budget",
-                            "4 Star Hotels",
-                            "5 Star Hotels",
-                          ].map((label) => (
-                            <FormControlLabel
-                              key={label}
-                              control={
-                                <Checkbox
-                                  defaultChecked={
-                                    label === "Breakfast Included"
-                                  }
-                                />
-                              }
-                              label={label}
-                            />
-                          ))}
-                        </div>
-
-                        {/* Price Range Section */}
-                        <div style={{ marginTop: "1rem" }}>
-                          <Typography variant="subtitle1">
-                            Price Per Night
-                          </Typography>
+                          {["Breakfast Included", "Budget", "4 Star Hotels", "5 Star Hotels"].map(
+                            (label) => (
+                              <FormControlLabel
+                                key={label}
+                                control={<Checkbox defaultChecked={label === "Breakfast Included"} />}
+                                label={label}
+                              />
+                            )
+                          )}
+                        </Box>
+                        <Box mt={2}>
+                          <Typography variant="subtitle1">Price Per Night</Typography>
                           <Slider
                             value={priceRange}
                             onChange={handleRangeChange}
@@ -190,81 +166,26 @@ const HotelList = () => {
                           <Typography>
                             Range: ${priceRange[0]} - ${priceRange[1]}
                           </Typography>
-                        </div>
-
-                        {/* Airline Names Section */}
-                        <div style={{ marginTop: "1rem" }}>
-                          <Typography variant="subtitle1">
-                            Hotel Names
-                          </Typography>
-                          {[
-                            "American Hotel",
-                            "Delta Hotel",
-                            "Emirates",
-                            "Air France",
-                          ].map((label) => (
-                            <FormControlLabel
-                              key={label}
-                              control={<Checkbox />}
-                              label={label}
-                            />
-                          ))}
-                        </div>
-
-                        {/* Reviews Section */}
-                        <div style={{ marginTop: "1rem" }}>
-                          <Typography variant="subtitle1">Reviews</Typography>
-                          {[5, 4, 3, 2, 1].map((stars) => (
-                            <FormControlLabel
-                              key={stars}
-                              control={<Checkbox />}
-                              label={
-                                <Typography>
-                                  {[...Array(stars)].map((_, i) => (
-                                    <StarIcon
-                                      key={i}
-                                      style={{ color: "gold" }}
-                                    />
-                                  ))}
-                                </Typography>
-                              }
-                            />
-                          ))}
-                        </div>
+                        </Box>
                       </CardContent>
                     </Card>
-
-                    {/* filter card end */}
-                  </Grid2>
+                  </Box>
                 </Drawer>
               </Box>
             ) : (
-              <Grid2 size={4} sx={{ position: "relative" }}>
-                {/* filter card start */}
+              <Grid2 size={{xs:12, md:3}}>
                 <Card
-                  variant="outlined"
                   sx={{
                     position: "sticky",
                     top: "75px",
-                    width: "100%",
-                    height: "100vh",
                     overflowY: "scroll",
-                    "::-webkit-scrollbar": {
-                      width: 5,
-                      borderRadius: 4,
-                      // backgroundColor: COLORS.PRIMARY,
-                    },
+                    boxShadow: "0px 0px 3px 3px rgba(0,0,0,0.1)",
+                    p: 2,
+                    "::-webkit-scrollbar": { width: 5 },
                     "::-webkit-scrollbar-thumb": {
                       backgroundColor: "#A8A8A8",
                       borderRadius: 4,
-                      height: 20,
-                      width: 20,
                     },
-                  }}
-                  style={{
-                    marginBottom: "1rem",
-                    width: "100%",
-                    boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
                   }}
                 >
                   <CardHeader
@@ -275,7 +196,7 @@ const HotelList = () => {
                       </Button>
                     }
                   />
-                  <CardContent >
+                  <CardContent>
                     <Typography variant="subtitle1" gutterBottom>
                       Search by Hotel Names
                     </Typography>
@@ -290,109 +211,58 @@ const HotelList = () => {
                         ),
                       }}
                     />
-
-                    {/* Popular Section */}
-                    <div style={{ marginTop: "1rem" }}>
+                    <Box mt={2}>
                       <Typography variant="subtitle1">Popular</Typography>
-                      {[
-                        "Breakfast Included",
-                        "Budget",
-                        "4 Star Hotels",
-                        "5 Star Hotels",
-                      ].map((label) => (
-                        <FormControlLabel
-                          key={label}
-                          control={
-                            <Checkbox
-                              defaultChecked={label === "Breakfast Included"}
-                            />
-                          }
-                          label={label}
-                        />
-                      ))}
-                    </div>
-
-                    {/* Price Range Section */}
-                    <div style={{ marginTop: "1rem" }}>
-                      <Typography variant="subtitle1">
-                        Price Per Night
-                      </Typography>
-                      <Slider
-                        value={priceRange}
-                        onChange={handleRangeChange}
-                        valueLabelDisplay="auto"
-                        min={200}
-                        max={5695}
-                      />
-                      <Typography>
-                        Range: ${priceRange[0]} - ${priceRange[1]}
-                      </Typography>
-                    </div>
-
-                    {/* Airline Names Section */}
-                    <div style={{ marginTop: "1rem" }}>
-                      <Typography variant="subtitle1">Hotel Names</Typography>
-                      {[
-                        "American Hotel",
-                        "Delta Hotel",
-                        "Emirates",
-                        "Air France",
-                      ].map((label) => (
-                        <FormControlLabel
-                          key={label}
-                          control={<Checkbox />}
-                          label={label}
-                        />
-                      ))}
-                    </div>
-
-                    {/* Reviews Section */}
-                    <div style={{ marginTop: "1rem" }}>
-                      <Typography variant="subtitle1">Reviews</Typography>
-                      {[5, 4, 3, 2, 1].map((stars) => (
-                        <FormControlLabel
-                          key={stars}
-                          control={<Checkbox />}
-                          label={
-                            <Typography>
-                              {[...Array(stars)].map((_, i) => (
-                                <StarIcon key={i} style={{ color: "gold" }} />
-                              ))}
-                            </Typography>
-                          }
-                        />
-                      ))}
-                    </div>
+                      {["Breakfast Included", "Budget", "4 Star Hotels", "5 Star Hotels"].map(
+                        (label) => (
+                          <FormControlLabel
+                            key={label}
+                            control={<Checkbox defaultChecked={label === "Breakfast Included"} />}
+                            label={label}
+                          />
+                        )
+                      )}
+                    </Box>
                   </CardContent>
                 </Card>
-
-                {/* filter card end */}
               </Grid2>
             )}
 
-            <Grid2
-              size={{ lg: 8, md: 8, sm: 12, xs: 12 }}
-              sx={{ display: "flex", flexWrap: "wrap", gap: "20px" }}
-            >
-              {data.hotelName.map((val, i) => (
-                <Grid2 size={{ lg: 6, md: 6, xs: 6, xs: 12 }} key={i}>
-                  <Link
-                    href={`/hotel-list/${i}/hotel-details`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <HotelCard
-                      img={val.img}
-                      hotelName={val.hotelName}
-                      rooms={val.rooms}
-                      rating={val.rating}
-                      bathroom={val.bathroom}
-                      location={val.location}
-                      price={val.price}
-                      follower={val.follower}
-                    />
-                  </Link>
-                </Grid2>
-              ))}
+            {/* Hotel List Section */}
+            <Grid2 size={{xs:12, md:9}} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {loading ? (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+                  <CircularProgress />
+                </Box>
+              ) : hotels.length === 0 ? (
+                <Typography variant="h6" sx={{ textAlign: "center", mt: 5 }}>
+                  No hotels available.
+                </Typography>
+              ) : (
+                hotels.slice(0, visibleCount).map((val, i) => {
+                  const isLast = i === visibleCount - 1;
+                  return (
+                    <Grid2
+                      xs={12}
+                      key={i}
+                      ref={isLast ? lastBookElementRef : null}
+                    >
+                      
+                        <HotelCard hotel={val} hotelID={i}/>
+                    </Grid2>
+                  );
+                })
+              )}
+              {hasMore && (
+                <Box sx={{ textAlign: "center", mt: 2, mx:'auto' }}>
+                  {loadingMore && <Loading
+                                  type="bars"
+                                  width={50}
+                                  height={50}
+                                  color={COLORS.PRIMARY}
+                                />}
+                </Box>
+              )}
             </Grid2>
           </Grid2>
         </Container>
