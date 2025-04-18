@@ -141,7 +141,6 @@ export default function OneWayCheckout() {
               >
                 <Grid2
                   size={{ xs: 12, sm: 12, md: 12, lg: 8 }}
-                  
                   sx={{
                     backgroundColor: COLORS.SEMIGREY,
                     p: 2,
@@ -203,23 +202,26 @@ export default function OneWayCheckout() {
                             {`${
                               oneWay[0]?.Results?.Segments[0].length - 1
                             } Stop.`}{" "}
-                            {`${Math.floor(
-                              moment
+                            {oneWay[0]?.Results?.Segments[0][
+                              oneWay[0]?.Results?.Segments[0].length - 1
+                            ].AccumulatedDuration != undefined &&
+                              `${Math.floor(
+                                moment
+                                  .duration(
+                                    oneWay[0]?.Results?.Segments[0][
+                                      oneWay[0]?.Results?.Segments[0].length - 1
+                                    ].AccumulatedDuration,
+                                    "minutes"
+                                  )
+                                  .asHours()
+                              )} hrs ${moment
                                 .duration(
                                   oneWay[0]?.Results?.Segments[0][
                                     oneWay[0]?.Results?.Segments[0].length - 1
                                   ].AccumulatedDuration,
                                   "minutes"
                                 )
-                                .asHours()
-                            )} hrs ${moment
-                              .duration(
-                                oneWay[0]?.Results?.Segments[0][
-                                  oneWay[0]?.Results?.Segments[0].length - 1
-                                ].AccumulatedDuration,
-                                "minutes"
-                              )
-                              .minutes()} min`}
+                                .minutes()} min`}
                           </Typography>
                         </Grid2>
                         <Grid2
@@ -618,40 +620,40 @@ export default function OneWayCheckout() {
                       }}
                     />
                     <Container>
-                    <Grid2 container mt={2} spacing={{ lg: 2, xs: 3 }} >
-                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                        <Stack direction="row" alignItems={"center"}>
-                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                          <Typography sx={{ fontFamily: nunito.style }}>
-                            100% secure booking
-                          </Typography>
-                        </Stack>
-                      </Grid2>
+                      <Grid2 container mt={2} spacing={{ lg: 2, xs: 3 }}>
+                        <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                          <Stack direction="row" alignItems={"center"}>
+                            <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                            <Typography sx={{ fontFamily: nunito.style }}>
+                              100% secure booking
+                            </Typography>
+                          </Stack>
+                        </Grid2>
 
-                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                        <Stack direction="row" alignItems={"center"}>
-                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                          <Typography sx={{ fontFamily: nunito.style }}>
-                            100% secure booking
-                          </Typography>
-                        </Stack>
-                      </Grid2>
+                        <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                          <Stack direction="row" alignItems={"center"}>
+                            <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                            <Typography sx={{ fontFamily: nunito.style }}>
+                              100% secure booking
+                            </Typography>
+                          </Stack>
+                        </Grid2>
 
-                      <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
-                        <Stack direction="row" alignItems={"center"}>
-                          <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                          <Typography sx={{ fontFamily: nunito.style }}>
-                            100% secure booking
-                          </Typography>
-                        </Stack>
+                        <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+                          <Stack direction="row" alignItems={"center"}>
+                            <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
+                            <Typography sx={{ fontFamily: nunito.style }}>
+                              100% secure booking
+                            </Typography>
+                          </Stack>
+                        </Grid2>
                       </Grid2>
-                    </Grid2>
                     </Container>
                   </Box>
                 </Grid2>
 
                 <Grid2
-                  size={{ lg: 4, md:4 , sm:12, xs: 12 }}
+                  size={{ lg: 4, md: 4, sm: 12, xs: 12 }}
                   sx={{
                     backgroundColor: COLORS.WHITE,
                     borderRadius: 2,

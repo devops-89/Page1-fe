@@ -197,7 +197,10 @@ export default function OneWayCheckout() {
                                   )}
                                 </span>{" "}
                                 {`${flight.length - 1} Stop.`}{" "}
-                                {`${Math.floor(
+
+
+                                {flight[flight.length - 1]
+                                        .AccumulatedDuration!=undefined && `${Math.floor(
                                   moment
                                     .duration(
                                       flight[flight.length - 1]

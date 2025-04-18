@@ -2,9 +2,7 @@ import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import moment from "moment";
-import {
-  FlightTakeoff,
-} from "@mui/icons-material";
+import { FlightTakeoff } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
@@ -24,7 +22,7 @@ import { useRouter } from "next/router";
 
 const MultiListBox = ({ details, traceId, journey }) => {
   const [cabin, setCabin] = useState(null);
-    const router = useRouter();
+  const router = useRouter();
 
   const [flightDetails, setFlightDetails] = useState(details);
 
@@ -41,7 +39,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
       query: {
         ResultIndex: flightDetails?.ResultIndex,
         traceId: traceId,
-        journey:journey
+        journey: journey,
       },
     });
   };
@@ -142,7 +140,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                         </Typography>
                         <Typography
                           sx={{
-                            fontSize:  { lg: 14, md: 14, sm: 13, xs: 12 },
+                            fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
                             fontWeight: 600,
                             fontFamily: nunito.style,
                           }}
@@ -152,40 +150,55 @@ const MultiListBox = ({ details, traceId, journey }) => {
                       </Grid2>
 
                       <Grid2 size={4}>
-                        <Typography
-                          sx={{
-                            fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
-                            fontWeight: 700,
-                            fontFamily: nunito.style,
-                            textAlign: "center",
-                          }}
-                        >
-                          {`${Math.floor(
-                            moment
+                        {flight[flight.length - 1].AccumulatedDuration !=
+                          undefined && (
+                          <Typography
+                            sx={{
+                              fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
+                              fontWeight: 700,
+                              fontFamily: nunito.style,
+                              textAlign: "center",
+                            }}
+                          >
+                            {`${Math.floor(
+                              moment
+                                .duration(
+                                  flight[flight.length - 1].AccumulatedDuration,
+                                  "minutes"
+                                )
+                                .asHours()
+                            )} hrs ${moment
                               .duration(
                                 flight[flight.length - 1].AccumulatedDuration,
                                 "minutes"
                               )
-                              .asHours()
-                          )} hrs ${moment
-                            .duration(
-                              flight[flight.length - 1].AccumulatedDuration,
-                              "minutes"
-                            )
-                            .minutes()} min`}
-                        </Typography>
+                              .minutes()} min`}
+                          </Typography>
+                        )}
 
                         <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
-                          <Avatar sx={{ backgroundColor: COLORS.PRIMARY ,width: { lg: "40px", md: "40px", sm: "24px", xs: "24px" },
-                           height: {
-                            lg: "40px",
-                            md: "40px",
-                            sm: "24px",
-                            xs: "24px",
-                          },
-
-                         }}>
-                            <FlightTakeoff sx={{ fontSize:  {lg:17 ,md:17,sm:17 , xs:15} }} />
+                          <Avatar
+                            sx={{
+                              backgroundColor: COLORS.PRIMARY,
+                              width: {
+                                lg: "40px",
+                                md: "40px",
+                                sm: "24px",
+                                xs: "24px",
+                              },
+                              height: {
+                                lg: "40px",
+                                md: "40px",
+                                sm: "24px",
+                                xs: "24px",
+                              },
+                            }}
+                          >
+                            <FlightTakeoff
+                              sx={{
+                                fontSize: { lg: 17, md: 17, sm: 17, xs: 15 },
+                              }}
+                            />
                           </Avatar>
                         </Divider>
                       </Grid2>
@@ -193,7 +206,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                       <Grid2 size={4}>
                         <Typography
                           sx={{
-                            fontSize:{ lg: 22, md: 22, sm: 20, xs: 18 },
+                            fontSize: { lg: 22, md: 22, sm: 20, xs: 18 },
                             fontWeight: 700,
                             fontFamily: nunito.style,
                             textAlign: "end",
@@ -224,7 +237,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                         </Typography>
                         <Typography
                           sx={{
-                            fontSize:{ lg: 14, md: 14, sm: 13, xs: 12 },
+                            fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
                             fontWeight: 600,
                             fontFamily: nunito.style,
                             textAlign: "end",
@@ -245,10 +258,10 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           paddingTop: "10px",
                         }}
                       >
-                        <Grid2 size={{lg:6 , md:6 ,sm:12 , xs:12}}>
+                        <Grid2 size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
                           <Typography
                             sx={{
-                              fontSize:{ lg: 15, md: 14, sm: 13, xs: 13 },
+                              fontSize: { lg: 15, md: 14, sm: 13, xs: 13 },
                               color: COLORS.DANGER,
                               fontFamiy: nunito.style,
                               fontWeight: 500,
@@ -257,7 +270,17 @@ const MultiListBox = ({ details, traceId, journey }) => {
                             Only {flight[0]?.NoOfSeatAvailable} seats left
                           </Typography>
                         </Grid2>
-                        <Grid2 size={{lg:6 ,md:6 , sm:12 , xs:12}} sx={{ textAlign: {lg:"right" ,md:"right" , sm:"left" ,xs:"left"} }}>
+                        <Grid2
+                          size={{ lg: 6, md: 6, sm: 12, xs: 12 }}
+                          sx={{
+                            textAlign: {
+                              lg: "right",
+                              md: "right",
+                              sm: "left",
+                              xs: "left",
+                            },
+                          }}
+                        >
                           <Typography
                             sx={{
                               fontSize: { lg: 15, md: 14, sm: 13, xs: 13 },
@@ -279,7 +302,10 @@ const MultiListBox = ({ details, traceId, journey }) => {
 
           {/* second  */}
           <Grid2 size={12} container>
-            <Grid2  size={{lg:6 , md:6 , sm:12 ,xs:12}} sx={{ display: "flex", alignItems: "center" }}>
+            <Grid2
+              size={{ lg: 6, md: 6, sm: 12, xs: 12 }}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <Typography
                 sx={{
                   fontSize: 15,
@@ -291,16 +317,21 @@ const MultiListBox = ({ details, traceId, journey }) => {
               </Typography>
             </Grid2>
             <Grid2
-              size={{lg:6 , md:6 , sm:12 ,xs:12}}
+              size={{ lg: 6, md: 6, sm: 12, xs: 12 }}
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: {lg:"flex-end" ,md:"flex-end" ,sm:"flex-start" ,xs:"space-between"},
+                justifyContent: {
+                  lg: "flex-end",
+                  md: "flex-end",
+                  sm: "flex-start",
+                  xs: "space-between",
+                },
               }}
             >
               <Typography
                 sx={{
-                  fontSize: {lg:28 , md:28 , sm:22 ,xs:20},
+                  fontSize: { lg: 28, md: 28, sm: 22, xs: 20 },
                   fontWeight: 900,
                   fontFamily: nunito.style,
                   marginRight: "10px",

@@ -589,6 +589,7 @@ const Multiway = () => {
                     },
                   }}
                   disablePast
+                  maxDate={moment().add(90, 'days')}
                   format="DD/MM/YYYY"
                   onChange={(newDate) => departureDateHandler(newDate, index)}
                   value={form.departure_date}

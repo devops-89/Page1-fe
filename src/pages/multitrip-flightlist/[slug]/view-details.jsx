@@ -23,7 +23,7 @@ import {
   TableCell,
   TableBody,
   useMediaQuery,
-  Stack
+  Stack,
 } from "@mui/material";
 import Image from "next/image";
 import { flightController } from "@/api/flightController";
@@ -56,14 +56,16 @@ const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [flightDetails, setFlightDetails] = useState(null);
-  const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state) => state.USER.UserData.isAuthenticated
+  );
   // console.log('isAuthenticated',isAuthenticated)
   const [commission, setCommission] = useState(null);
   const [isLCC, setIsLCC] = useState(null);
   const [journey, setJourney] = useState(null);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
-    const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectMeal, setSelectMeal] = useState({});
   const [selectBaggage, setSelectBaggage] = useState({});
   const smallScreen = useMediaQuery("(max-width:1199px)");
@@ -216,7 +218,7 @@ const FlightDetails = () => {
                             key={index}
                           >
                             <Grid2 container>
-                              <Grid2 size={{lg:8 , md:8 , sm:8 , xs:12 }}>
+                              <Grid2 size={{ lg: 8, md: 8, sm: 8, xs: 12 }}>
                                 <Typography
                                   variant="h6"
                                   gutterBottom
@@ -250,29 +252,36 @@ const FlightDetails = () => {
                                     ).format("ddd, MMM D")}
                                   </span>{" "}
                                   {`${flight.length - 1} Stop.`}{" "}
-                                  {`${Math.floor(
-                                    moment
+                                  {flight[flight.length - 1]
+                                    .AccumulatedDuration != undefined &&
+                                    `${Math.floor(
+                                      moment
+                                        .duration(
+                                          flight[flight.length - 1]
+                                            .AccumulatedDuration,
+                                          "minutes"
+                                        )
+                                        .asHours()
+                                    )} hrs ${moment
                                       .duration(
                                         flight[flight.length - 1]
                                           .AccumulatedDuration,
                                         "minutes"
                                       )
-                                      .asHours()
-                                  )} hrs ${moment
-                                    .duration(
-                                      flight[flight.length - 1]
-                                        .AccumulatedDuration,
-                                      "minutes"
-                                    )
-                                    .minutes()} min`}
+                                      .minutes()} min`}
                                 </Typography>
                               </Grid2>
                               <Grid2
-                                size={{ lg:4 , md:4 , sm:4 , xs:12}}
+                                size={{ lg: 4, md: 4, sm: 4, xs: 12 }}
                                 sx={{
                                   display: "flex",
                                   alignItems: "flex-start",
-                                  justifyContent: {lg:"flex-end" ,md:"flex-end" , sm:"flex-end", xs:"flex-start"},
+                                  justifyContent: {
+                                    lg: "flex-end",
+                                    md: "flex-end",
+                                    sm: "flex-end",
+                                    xs: "flex-start",
+                                  },
                                 }}
                               >
                                 <Button

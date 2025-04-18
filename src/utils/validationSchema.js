@@ -79,7 +79,7 @@ export const holidayPackageSchema = Yup.object({
 
 const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
   Yup.object({
-    title: Yup.string().trim().required("Title is required"),
+    title: Yup.string().trim(),
     first_name: Yup.string().trim().required("First Name is required"),
     last_name: Yup.string().trim().required("Last Name is required"),
     date_of_birth: Yup.date().when([], {
@@ -143,14 +143,14 @@ const gstFormSchema = (isGSTMandatory) => {
 
 // Validation schema for AddForm (contact details form)
 const addFormSchema = Yup.object({
-  cell_country_code: Yup.string().trim().required("Cell Code "),
-  country_code: Yup.string().trim().required("Country Code is required"),
+  cell_country_code: Yup.string().trim(),
+  country_code: Yup.string().trim(),
   city: Yup.string().trim().required("City required"),
   contact_no: Yup.string()
     .trim()
     .matches(/^[0-9]{10}$/, "10 digits required")
     .required("Phone No. is required"),
-  country: Yup.string().trim().required("Country required"),
+  country: Yup.string().trim(),
   address: Yup.string().trim().required("Address is required"),
   email: Yup.string()
     .trim()

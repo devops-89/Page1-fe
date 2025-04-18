@@ -84,7 +84,7 @@ const MultiCityPassengerForm = ({
   // Define initialValues inside the component to be recalculated on each render
   const initialValues = {
     adult: Array.from({ length: adultCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -97,7 +97,7 @@ const MultiCityPassengerForm = ({
       passport_expiry: null,
     })),
     child: Array.from({ length: childCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -110,7 +110,7 @@ const MultiCityPassengerForm = ({
       passport_expiry: null,
     })),
     infant: Array.from({ length: infantCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -129,16 +129,13 @@ const MultiCityPassengerForm = ({
       gst_company_contact_number: "",
       gst_company_email: "",
     },
-    cell_country_code: "",
-    country_code: "",
-    city: "",
+    cell_country_code: "91",
+    country_code: "In",
     contact_no: "",
-    country: "",
-    house_number: "",
-    postal_code: "",
-    street: "",
-    state: "",
-    nationality: "",
+    country: "India",
+    address: "",
+    city: "",
+    nationality: "In",
     email: "",
   };
 
@@ -181,10 +178,6 @@ const MultiCityPassengerForm = ({
       city: values?.city || "",
       contact_no: values?.contact_no || "",
       country: values?.country || "",
-      // house_number: values?.house_number || "",
-      // postal_code: values?.postal_code || "",
-      // street: values?.street || "",
-      // state: values?.state || "",
       nationality: values?.nationality || "",
       email: values?.email || "",
       gst_company_address: values?.gstForm?.gst_company_address || null,

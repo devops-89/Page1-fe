@@ -74,7 +74,10 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                     )}
                   </span>{" "}
                   {`${segmentGroup.length - 1} Stop.`}{" "}
-                  {`${Math.floor(
+
+
+                  {segmentGroup[segmentGroup.length - 1]
+                          ?.AccumulatedDuration!=undefined &&  `${Math.floor(
                     moment
                       .duration(
                         segmentGroup[segmentGroup.length - 1]

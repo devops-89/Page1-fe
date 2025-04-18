@@ -166,12 +166,12 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       gst_company_email: "",
     },
     cell_country_code: "91",
-    country_code: "",
+    country_code: "In",
     contact_no: "",
-    country: "",
+    country: "India",
     address: "",
     city: "",
-    nationality: "",
+    nationality: "In",
     email: "",
   };
 
