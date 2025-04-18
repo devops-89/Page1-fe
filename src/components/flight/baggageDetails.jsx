@@ -10,7 +10,7 @@ const BaggageDetails = ({ tableData }) => {
   return (
     <Card sx={{ mt: 2 }}>
       <Stack direction={"row"} alignItems={"center"} spacing={2} sx={{ p: 1 }}>
-        <Image src={tableData.AirlineLogo} width={30} height={30} alt={tableData.AirlineCode} />
+        <img src={tableData.AirlineLogo} width={30} height={30} alt={tableData.AirlineCode} />
         <Typography
           sx={{ fontSize: 15, fontFamily: nunito.style, fontWeight: 550 }}
         >

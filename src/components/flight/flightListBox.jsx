@@ -73,7 +73,7 @@ const FlightListBox = ({ details, traceId, journey }) => {
           justifyContent={"space-between"}
         >
           <Stack direction={"row"} alignItems={"center"} spacing={2}>
-            <Image
+            <img
               src={flightDetails.AirlineLogo}
               alt="Image"
               width={phone ? 20 : 30}
