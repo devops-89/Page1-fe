@@ -78,82 +78,118 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
               height={30}
             />
             <Typography
-              sx={{ fontSize: {lg:15 , md:15 , sm:15 , xs:12}, fontFamily: nunito.style, fontWeight: 550,}}
+              sx={{
+                fontSize: { lg: 15, md: 15, sm: 15, xs: 12 },
+                fontFamily: nunito.style,
+                fontWeight: 550,
+              }}
             >
               {`${flightDetails.departure[0].Airline.AirlineName} Airline`}{" "}
               {`(${flightDetails.AirlineCode} ${flightDetails?.departure[0].Airline.FlightNumber})`}
             </Typography>
           </Stack>
           <Typography
-            sx={{ fontSize: {lg:15 , md:15 , sm:15 , xs:12}, fontFamily: nunito.style, fontWeight: 550, ml:2 }}
+            sx={{
+              fontSize: { lg: 15, md: 15, sm: 15, xs: 12 },
+              fontFamily: nunito.style,
+              fontWeight: 550,
+              ml: 2,
+            }}
           >
             {/* Travel Class: {flightDetails?.departure[0].CabinClass} */}
             Travel Class : {cabin ? cabin : undefined}
           </Typography>
         </Stack>
         <Grid2 container sx={{ mt: 3 }} spacing={4} alignItems={"flex-start"}>
-          <Grid2 size={{lg:3 ,md:3 , sm:4 , xs:4}}>
+          <Grid2 size={{ lg: 3, md: 3, sm: 4, xs: 4 }}>
             <Typography
-              sx={{ fontSize: { lg: 22, md: 22, sm: 20, xs: 18 }, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{
+                fontSize: { lg: 22, md: 22, sm: 20, xs: 18 },
+                fontWeight: 700,
+                fontFamily: nunito.style,
+              }}
             >
               {moment(flightDetails?.departure[0].Origin.DepTime).format(
                 "HH:mm"
               )}
             </Typography>
             <Typography
-              sx={{fontSize: { lg: 14, md: 14, sm: 13, xs: 12 }, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{
+                fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
+                fontWeight: 600,
+                fontFamily: nunito.style,
+              }}
             >
               {flightDetails?.departure[0].Origin.Airport.AirportCode} -{" "}
               {flightDetails?.departure[0].Origin.Airport.Terminal} Terminal
             </Typography>
             <Typography
-              sx={{  fontSize: { lg: 14, md: 14, sm: 13, xs: 12 }, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{
+                fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
+                fontWeight: 600,
+                fontFamily: nunito.style,
+              }}
             >
               {flightDetails?.departure[0].Origin.Airport.CityName}
             </Typography>
           </Grid2>
-          <Grid2 size={{lg:3 ,md:3 , sm:4 , xs:4}}>
-            <Typography
-              sx={{
-                fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
-                fontWeight: 700,
-                fontFamily: nunito.style,
-                textAlign: "center",
-              }}
-            >
-              {`${Math.floor(
-                moment
+          <Grid2 size={{ lg: 3, md: 3, sm: 4, xs: 4 }}>
+            {flightDetails?.departure[flightDetails?.departure.length - 1]
+              .AccumulatedDuration != undefined && (
+              <Typography
+                sx={{
+                  fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
+                  fontWeight: 700,
+                  fontFamily: nunito.style,
+                  textAlign: "center",
+                }}
+              >
+                {`${Math.floor(
+                  moment
+                    .duration(
+                      flightDetails?.departure[
+                        flightDetails?.departure.length - 1
+                      ].AccumulatedDuration,
+                      "minutes"
+                    )
+                    .asHours()
+                )} hrs ${moment
                   .duration(
                     flightDetails?.departure[
                       flightDetails?.departure.length - 1
                     ].AccumulatedDuration,
                     "minutes"
                   )
-                  .asHours()
-              )} hrs ${moment
-                .duration(
-                  flightDetails?.departure[flightDetails?.departure.length - 1]
-                    .AccumulatedDuration,
-                  "minutes"
-                )
-                .minutes()} min`}
-            </Typography>
+                  .minutes()} min`}
+              </Typography>
+            )}
 
             <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
-              <Avatar sx={{ backgroundColor: COLORS.PRIMARY ,width: { lg: "40px", md: "40px", sm: "24px", xs: "24px" },
-                      height: {
-                        lg: "40px",
-                        md: "40px",
-                        sm: "24px",
-                        xs: "24px",
-                      }, }}>
-                <FlightTakeoff sx={{ fontSize: {lg:17 ,md:17,sm:17 , xs:15} }} />
+              <Avatar
+                sx={{
+                  backgroundColor: COLORS.PRIMARY,
+                  width: { lg: "40px", md: "40px", sm: "24px", xs: "24px" },
+                  height: {
+                    lg: "40px",
+                    md: "40px",
+                    sm: "24px",
+                    xs: "24px",
+                  },
+                }}
+              >
+                <FlightTakeoff
+                  sx={{ fontSize: { lg: 17, md: 17, sm: 17, xs: 15 } }}
+                />
               </Avatar>
             </Divider>
           </Grid2>
-          <Grid2 size={{lg:3 ,md:3 , sm:4 , xs:4}}>
+          <Grid2 size={{ lg: 3, md: 3, sm: 4, xs: 4 }}>
             <Typography
-              sx={{ fontSize: { lg: 22, md: 22, sm: 20, xs: 18 }, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{
+                fontSize: { lg: 22, md: 22, sm: 20, xs: 18 },
+                fontWeight: 700,
+                fontFamily: nunito.style,
+              }}
             >
               {moment(
                 flightDetails?.departure[flightDetails?.departure.length - 1]
@@ -161,7 +197,11 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
               ).format("HH:mm")}
             </Typography>
             <Typography
-              sx={{   fontSize: { lg: 14, md: 14, sm: 13, xs: 12 }, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{
+                fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
+                fontWeight: 600,
+                fontFamily: nunito.style,
+              }}
             >
               {
                 flightDetails?.departure[flightDetails?.departure.length - 1]
@@ -175,7 +215,11 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
               Terminal
             </Typography>
             <Typography
-              sx={{fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },fontWeight: 600, fontFamily: nunito.style }}
+              sx={{
+                fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
+                fontWeight: 600,
+                fontFamily: nunito.style,
+              }}
             >
               {
                 flightDetails?.departure[flightDetails?.departure.length - 1]
@@ -183,11 +227,15 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
               }
             </Typography>
           </Grid2>
-          <Grid2 size={{lg:3 , md:3 ,sm:12 ,xs:12}} textAlign={"center"}>
+          <Grid2 size={{ lg: 3, md: 3, sm: 12, xs: 12 }} textAlign={"center"}>
             <Typography
-              sx={{ fontSize: {lg:20 , xs:18}, fontWeight: 900, fontFamily: nunito.style }}
+              sx={{
+                fontSize: { lg: 20, xs: 18 },
+                fontWeight: 900,
+                fontFamily: nunito.style,
+              }}
             >
-               ₹ {flightDetails?.TotalFare}
+              ₹ {flightDetails?.TotalFare}
             </Typography>
           </Grid2>
         </Grid2>
@@ -196,59 +244,55 @@ const RoundFlightListBox = ({ details, isSelected, onSelect }) => {
           sx={{ boxShadow: "0px 0px 2px 2px rgb(0,0,0,0.10)", p: 1, mt: 2 }}
         >
           <Grid2
-           container
+            container
             spacing={1}
             alignItems={"center"}
             justifyContent={"space-between"}
           >
-            <Grid2 size ={{lg:4 , md:4 , sm:4 , xs:12}}>
-            <Typography
-              sx={{
-                fontSize: {lg:15 , md:15 ,sm:15 , xs:12},
-                color: COLORS.DANGER,
-                fontFamiy: nunito.style,
-                fontWeight: 500,
-              }}
-            >
-              Only {flightDetails?.departure[0].NoOfSeatAvailable} seats left
-            </Typography>
-
+            <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 12 }}>
+              <Typography
+                sx={{
+                  fontSize: { lg: 15, md: 15, sm: 15, xs: 12 },
+                  color: COLORS.DANGER,
+                  fontFamiy: nunito.style,
+                  fontWeight: 500,
+                }}
+              >
+                Only {flightDetails?.departure[0].NoOfSeatAvailable} seats left
+              </Typography>
             </Grid2>
 
-            <Grid2 size ={{lg:4 , md:4 , sm:4 , xs:12}}>
-
-            <Typography
-              sx={{
-                fontSize: {lg:15 , md:15 ,sm:15 , xs:12},
-                color: flightDetails.IsRefundable
-                  ? COLORS.SUCCESS
-                  : COLORS.DANGER,
-                fontFamiy: nunito.style,
-                fontWeight: 500,
-              }}
-            >
-              {flightDetails.IsRefundable ? "Refundable" : "Non Refundable"}
-            </Typography>
+            <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 12 }}>
+              <Typography
+                sx={{
+                  fontSize: { lg: 15, md: 15, sm: 15, xs: 12 },
+                  color: flightDetails.IsRefundable
+                    ? COLORS.SUCCESS
+                    : COLORS.DANGER,
+                  fontFamiy: nunito.style,
+                  fontWeight: 500,
+                }}
+              >
+                {flightDetails.IsRefundable ? "Refundable" : "Non Refundable"}
+              </Typography>
             </Grid2>
 
-            <Grid2 size ={{lg:4 , md:4 , sm:4 , xs:12}}>
-
-            <Button
-              sx={{
-                fontSize: {lg:15 , md:15 ,sm:15 , xs:12},
-                p: 0.4,
-                fontFamiy: nunito.style,
-                fontWeight: 500,
-                color: COLORS.BLACK,
-                textTransform: "initial",
-              }}
-              endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-              onClick={handleOpenFlightDetails}
-            >
-              Flight Details
-            </Button>
+            <Grid2 size={{ lg: 4, md: 4, sm: 4, xs: 12 }}>
+              <Button
+                sx={{
+                  fontSize: { lg: 15, md: 15, sm: 15, xs: 12 },
+                  p: 0.4,
+                  fontFamiy: nunito.style,
+                  fontWeight: 500,
+                  color: COLORS.BLACK,
+                  textTransform: "initial",
+                }}
+                endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                onClick={handleOpenFlightDetails}
+              >
+                Flight Details
+              </Button>
             </Grid2>
-
           </Grid2>
         </Card>
         <Collapse in={open} sx={{ mt: 2 }}>

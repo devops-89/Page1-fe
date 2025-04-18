@@ -16,25 +16,6 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
   const router = useRouter();
   return (
     <>
-      {/* <Button
-        size="small"
-        sx={{
-          fontFamily: nunito.style,
-          fontWeight: 800,
-          position: "absolute",
-          right: "30px",
-          top: "30px",
-          display: {
-            xs:
-              router.query.slug === flightDetails?.[0][0]?.TraceId
-                ? "none"
-                : "block",
-          },
-        }}
-        onClick={handleClickOpen}
-      >
-        View Fare Rules
-      </Button> */}
 
       {flightDetails?.map((singleFlightDetail) => {
         return (

@@ -465,6 +465,7 @@ const RoundTrip = () => {
                   
                 },
               }}
+              maxDate={moment().add(90, 'days')}
               minDate={moment()}
               onChange={departureDateHandler}
               value={departureDate}
@@ -510,6 +511,7 @@ const RoundTrip = () => {
                 },
 
               }}
+              maxDate={moment().add(90, 'days')}
               minDate={departureDate ? moment(departureDate).add(1, "day") : moment()}
               onChange={returnDateHandler}
               value={returnDate}

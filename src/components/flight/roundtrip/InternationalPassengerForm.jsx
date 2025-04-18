@@ -166,7 +166,7 @@ const InternationalPassengerForm = ({
   // Define initialValues inside the component to be recalculated on each render
   const initialValues = {
     adult: Array.from({ length: adultCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -179,7 +179,7 @@ const InternationalPassengerForm = ({
       passport_expiry: null,
     })),
     child: Array.from({ length: childCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -192,7 +192,7 @@ const InternationalPassengerForm = ({
       passport_expiry: null,
     })),
     infant: Array.from({ length: infantCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -211,12 +211,12 @@ const InternationalPassengerForm = ({
       gst_company_contact_number: "",
       gst_company_email: "",
     },
-    cell_country_code: "",
-    country_code: "",
+    cell_country_code: "91",
+    country_code: "In",
     city: "",
     contact_no: "",
-    country: "",
-    nationality: "",
+    country: "India",
+    nationality: "In",
     email: "",
   };
 

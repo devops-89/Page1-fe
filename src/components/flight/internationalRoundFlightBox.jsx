@@ -147,32 +147,35 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                 </Typography>
               </Grid2>
               <Grid2 size={4}>
-                <Typography
-                  sx={{
-                    fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
-                    fontWeight: 700,
-                    fontFamily: nunito.style,
-                    textAlign: "center",
-                  }}
-                >
-                  {`${Math.floor(
-                    moment
+                {flightDetails?.departure[flightDetails?.departure.length - 1]
+                  ?.AccumulatedDuration != undefined && (
+                  <Typography
+                    sx={{
+                      fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
+                      fontWeight: 700,
+                      fontFamily: nunito.style,
+                      textAlign: "center",
+                    }}
+                  >
+                    {`${Math.floor(
+                      moment
+                        .duration(
+                          flightDetails?.departure[
+                            flightDetails?.departure.length - 1
+                          ]?.AccumulatedDuration,
+                          "minutes"
+                        )
+                        .asHours()
+                    )} hrs ${moment
                       .duration(
                         flightDetails?.departure[
                           flightDetails?.departure.length - 1
                         ]?.AccumulatedDuration,
                         "minutes"
                       )
-                      .asHours()
-                  )} hrs ${moment
-                    .duration(
-                      flightDetails?.departure[
-                        flightDetails?.departure.length - 1
-                      ]?.AccumulatedDuration,
-                      "minutes"
-                    )
-                    .minutes()} min`}
-                </Typography>
+                      .minutes()} min`}
+                  </Typography>
+                )}
 
                 <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
                   <Avatar
@@ -411,7 +414,9 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                 </Typography>
               </Grid2>
               <Grid2 size={4}>
-                <Typography
+               {flightDetails?.arrival[
+                          flightDetails?.arrival.length - 1
+                        ]?.AccumulatedDuration!=undefined && <Typography
                   sx={{
                     fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
                     fontWeight: 700,
@@ -435,7 +440,7 @@ const InternationalRoundFlightBox = ({ details, traceId, journey }) => {
                       "minutes"
                     )
                     .minutes()} min`}
-                </Typography>
+                </Typography>}
 
                 <Divider sx={{ borderColor: COLORS.BLACK, mt: 1 }}>
                   <Avatar

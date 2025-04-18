@@ -18,23 +18,6 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
 
   return (
     <>
-      {/* <Button
-        size="small"
-        sx={{
-          fontFamily: nunito.style,
-          fontWeight: 800,
-          position: "absolute",
-          
-          right: "30px",
-          top: "30px",
-          display: {
-            xs: router.query.slug === flightDetails?.[0]?.TraceId ? "none" : "block",
-          },
-        }}
-        onClick={handleClickOpen}
-      >
-        View Fare Rules
-      </Button> */}
 
       {flightDetails?.[0]?.Results && flightDetails?.[0]?.Results?.Segments?.map(
         (segmentGroup, groupIndex) => (
