@@ -429,6 +429,7 @@ const OnewayForm = () =>  {
                 },
               }}
               disablePast
+              maxDate={moment().add(90, 'days')}
               onChange={departureDateHandler}
               value={departureDate}
               format="DD/MM/YYYY"

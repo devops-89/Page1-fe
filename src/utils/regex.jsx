@@ -7,14 +7,13 @@ export const handleClose = ({ toast, setToast }) => {
 
 
 export const customFilter = (options, { inputValue }) => {
-    return options.filter((option) => {
-      const query = inputValue.toLowerCase();
-      return (
-        option.airport_name.toLowerCase().includes(query) ||
-        option.city_code.toLowerCase().includes(query) ||
-        option.city_name.toLowerCase().includes(query) ||
-        option.country_code.toLowerCase().includes(query) ||
-        option.iata_code.toLowerCase().includes(query)
-      );
-    });
-  };
+  const query = inputValue.toLowerCase();
+  return options.filter((option) => 
+    option.airport_name.toLowerCase().startsWith(query) ||
+    option.city_code.toLowerCase().startsWith(query) ||
+    option.city_name.toLowerCase().startsWith(query) ||
+    option.country_code.toLowerCase().startsWith(query) ||
+    option.iata_code.toLowerCase().startsWith(query)
+  );
+};
+

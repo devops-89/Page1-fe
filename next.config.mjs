@@ -10,7 +10,8 @@ const nextConfig = {
     remotePatterns:[
       {
         hostname:"dev.page1travels.com",
-        protocol:"https"
+        protocol:"https",
+        pathname: "/**"
       }
     ]
   }
