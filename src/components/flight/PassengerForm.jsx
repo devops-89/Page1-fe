@@ -74,9 +74,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       });
   
 
-  // console.log("adultSeats-----------",adultSeats)
-  // console.log("childSeats---------------",childSeats)
-  // console.log("finalSeat-----------------",finalSeat)
   const {
     Currency,
     BaseFare,
@@ -123,7 +120,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   // Define initialValues inside the component to be recalculated on each render
   const initialValues = {
     adult: Array.from({ length: adultCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -136,7 +133,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       passport_expiry: null,
     })),
     child: Array.from({ length: childCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -149,7 +146,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       passport_expiry: null,
     })),
     infant: Array.from({ length: infantCount }, (_, index) => ({
-      title: "",
+      title: "Mr",
       gender: "",
       first_name: "",
       last_name: "",
@@ -168,7 +165,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       gst_company_contact_number: "",
       gst_company_email: "",
     },
-    cell_country_code: "",
+    cell_country_code: "91",
     country_code: "",
     contact_no: "",
     country: "",

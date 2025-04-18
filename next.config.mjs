@@ -11,7 +11,6 @@ const nextConfig = {
       {
         hostname:"dev.page1travels.com",
         protocol:"https",
-        pathname: "/**"
       }
     ]
   }

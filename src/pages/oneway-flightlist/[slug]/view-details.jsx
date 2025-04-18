@@ -254,7 +254,12 @@ const FlightDetails = () => {
                             {`${
                               flightDetails[0]?.Results?.Segments[0].length - 1
                             } Stop.`}{" "}
-                            {`${Math.floor(
+
+
+                            {flightDetails[0]?.Results?.Segments[0][
+                                    flightDetails[0]?.Results?.Segments[0]
+                                      .length - 1
+                                  ].AccumulatedDuration!=undefined && `${Math.floor(
                               moment
                                 .duration(
                                   flightDetails[0]?.Results?.Segments[0][
@@ -273,7 +278,10 @@ const FlightDetails = () => {
                                 "minutes"
                               )
                               .minutes()} min`}
+
+
                           </Typography>
+
                         </Grid2>
                         <Grid2
                           size={{ xs: 4 }}
