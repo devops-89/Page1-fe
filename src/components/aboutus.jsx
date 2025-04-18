@@ -110,9 +110,9 @@ const AboutUs = () => {
                 At Page1 Travels, you can find the best deals to visit your
                 dream destinations that fit just right in your budget. Nowadays
                 going on a trip is much more than just visiting a new
-                destination. So here we are to enhance your traveling experience
+                destination. So here we are to enhance your travelling experience
                 with our exquisite tour and travel packages. Explore Page1
-                Travels and go visit your dream destination today.
+                Travels and visit your dream destination today.
               </Typography>
               <List>
                 {listAbout.map((val, i) => (

@@ -89,7 +89,7 @@ const SubscribeBanner = () => {
                   sx={{ mt: {lg:3 ,sm:2}, fontSize:{ lg:20 ,xs:15} ,color: COLORS.WHITE, fontFamily: raleway.style }}
                 >
                   Love is in the air! Fall in love with a romantic getaway with
-                  Page1 Travels special offer for newlywed couples. We include
+                  Page1 Travels' special offer for newlywed couples. We include
                   the most romantic destinations in our honeymoon package to
                   ensure you a once-in-a-lifetime experience.
                 </Typography>

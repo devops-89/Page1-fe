@@ -640,10 +640,10 @@ const Multiway = () => {
                       fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
                       fontFamily={nunito.style}
                     >
-                      {state.adult}adult
-                      {state.child !== 0 && `,${state.child} child`}
-                      {state.infant !== 0 && `,${state.infant} infant`},
-                      {`${cabin_class?.label || ""} Class`}
+                      {state.adult} adult
+                      {state.child !== 0 && `, ${state.child} child`}
+                      {state.infant !== 0 && `, ${state.infant} infant`},
+                      {` ${cabin_class?.label || ""} Class`}
                     </Typography>
                   </CardActionArea>
                 </>
