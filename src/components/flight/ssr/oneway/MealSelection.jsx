@@ -138,7 +138,7 @@ export default function MealSelection({
                   {`${filteredData[flightNumber][0]?.Origin} - ${filteredData[flightNumber][0]?.Destination}`}
                 </Typography>
                 <Grid2 container spacing={2}>
-                  {filteredData[flightNumber]?.map((meal, mealIndex) => (
+                  {filteredData[flightNumber]?.[0].FlightNumber ? filteredData[flightNumber]?.map((meal, mealIndex) => (
                     <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                       <MealCard
                         meal={meal}
@@ -154,14 +154,20 @@ export default function MealSelection({
                         }
                       />
                     </Grid2>
-                  ))}
+                  )):
+                  
+                  <Grid2 size={{ xs: 12 }} sx={{py:'20px'}}>
+                      <Typography variant="body1" sx={{textAlign:'center', fontFamily:nunito.style}}>No Meal Available</Typography>
+                  </Grid2>
+                  
+                  }
                 </Grid2>
               </SwiperSlide>
             ))}
           </Swiper>
         ) : (
           <Grid2 container spacing={2}>
-            {mealData?.map((meal, mealIndex) => (
+            {mealData?.[0]?.FlightNumber ? mealData?.map((meal, mealIndex) => (
               <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                 <MealCard
                   meal={meal}
@@ -177,7 +183,11 @@ export default function MealSelection({
                   }
                 />
               </Grid2>
-            ))}
+            )) :
+            <Grid2 size={{ xs: 12 }} sx={{py:'20px'}}>
+            <Typography variant="body1" sx={{textAlign:'center', fontFamily:nunito.style}}>No Meal Available</Typography>
+        </Grid2>
+            }
           </Grid2>
         )}
       </AccordionDetails>

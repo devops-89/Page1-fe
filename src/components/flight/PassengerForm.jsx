@@ -52,20 +52,31 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   let adultSeats = [];
   let childSeats = [];
 
-  finalSeat.forEach((singleSeatArray) => {
-    singleSeatArray.slice(0, adultCount).forEach((seat) => {
+
+  const maxLength = Math.max(...finalSeat.map(row => row.length));
+
+  const transposed = Array.from({ length: maxLength }, (_, i) =>
+    finalSeat.map(row => row?.[i] || []) 
+  );
+  
+  // console.log(transposed);
+  
+
+
+  transposed.slice(0, adultCount).forEach((seat) => {
       adultSeats.push(seat);
     });
 
-    singleSeatArray
+    transposed
       .slice(adultCount, adultCount + childCount)
       .forEach((seat) => {
         childSeats.push(seat);
       });
-  });
+  
 
   // console.log("adultSeats-----------",adultSeats)
   // console.log("childSeats---------------",childSeats)
+  // console.log("finalSeat-----------------",finalSeat)
   const {
     Currency,
     BaseFare,
@@ -268,7 +279,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(
                 (single) => single?.selectedBaggage
               ) || null,
-            SeatDynamic: adultSeats || null,
+            SeatDynamic: adultSeats[index] || null,
           };
         }) || [],
 
@@ -311,7 +322,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
                 (single) => single?.selectedBaggage
               ) || null,
-            SeatDynamic: childSeats || null,
+            SeatDynamic: childSeats[index] || null,
           };
         }) || [],
       infant:
@@ -493,8 +504,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             handleSubmit,
             setFieldValue,
           }) => {
-            console.log("all values", values);
-            console.log("all errors", errors);
+            // console.log("all values", values);
+            // console.log("all errors", errors);
             return (
               <Form onSubmit={handleSubmit}>
                 {values.adult.map((dataObj, index) => (

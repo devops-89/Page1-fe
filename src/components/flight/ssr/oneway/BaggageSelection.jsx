@@ -122,24 +122,35 @@ export default function BaggageSelection({
                 sx={{ flexWrap: "wrap", mb: "10px" }}
                 key={baggageIndex}
               >
-                {singleBaggage?.map((baggage, baggageIndex) => {
-                  return (
-                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
-                      <BaggageCard
-                        baggage={baggage}
-                        handleBaggageValue={() =>
-                          handleBaggageClick(baggage, baggage?.FlightNumber)
-                        }
-                        isSelected={selectedPassengerBaggages.selectedBaggages?.some(
-                          (b) =>
-                            String(b.flightId) ===
-                              String(baggage.FlightNumber) &&
-                            b.selectedBaggage.Code === baggage.Code
-                        )}
-                      />
-                    </Grid2>
-                  );
-                })}
+                {singleBaggage[0]?.FlightNumber ? (
+                  singleBaggage?.map((baggage, baggageIndex) => {
+                    return (
+                      <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                        <BaggageCard
+                          baggage={baggage}
+                          handleBaggageValue={() =>
+                            handleBaggageClick(baggage, baggage?.FlightNumber)
+                          }
+                          isSelected={selectedPassengerBaggages.selectedBaggages?.some(
+                            (b) =>
+                              String(b.flightId) ===
+                                String(baggage.FlightNumber) &&
+                              b.selectedBaggage.Code === baggage.Code
+                          )}
+                        />
+                      </Grid2>
+                    );
+                  })
+                ) : (
+                  <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                    <Typography
+                      variant="body1"
+                      sx={{ textAlign: "center", fontFamily: nunito.style }}
+                    >
+                      No Baggage Available
+                    </Typography>
+                  </Grid2>
+                )}
               </Grid2>
             </>
           );

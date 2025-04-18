@@ -27,7 +27,11 @@ import {
 import footer from "@/banner/footer.svg";
 import { TiSocialFacebook } from "react-icons/ti";
 import { RiLinkedinFill } from "react-icons/ri";
+import { useRouter } from "next/router";
+import Link from "next/link";
 const Footer = () => {
+
+  const router = useRouter();
   const phone = useMediaQuery("(max-width:600px)");
  const tablet =  useMediaQuery("(max-width:900px)");
   const fontSize = phone ? 15 : tablet ? 15 : 18;
@@ -35,17 +39,26 @@ const Footer = () => {
   const socialIcons = [
     {
       icon: <TiSocialFacebook style={{ fontSize: `${fontSize}px` }}  />,
+      link : 'https://www.facebook.com/people/Pageone-Travels/100091821528894/?mibextid=ZbWKwL'
     },
     {
       icon: <X sx={{ fontSize:{lg:18,sm:15 ,xs:15}  }} />,
+      link : 'https://twitter.com/Page1Travels?t=ntA0KfIF-a1vfBr4py7tNw&s=09'
     },
     {
       icon: <Instagram sx={{ fontSize: {lg:18,sm:15 ,xs:15}}} />,
+      link : 'https://www.instagram.com/page1travels/?igshid=ZGUzMzM3NWJiOQ%3D%3D'
     },
     {
       icon: <RiLinkedinFill style={{ fontSize: `${fontSize}px` }}  />,
+      link : 'https://www.linkedin.com/in/page1-travels-0a01b7273'
     },
   ];
+
+
+  const handlePage = (path) => {
+    router.push(path);
+  };
  
   return (
     <Box sx={{ pt: 10, backgroundColor: COLORS.LIGHTBLUE }}>
@@ -62,34 +75,11 @@ const Footer = () => {
             >
               Our Services
             </Typography>
-            {/* <Grid2 container columnSpacing={2}>
-              {data.services.map((val, i) => (
-                <Grid2 size={6} key={i}>
-                  <List>
-                    <ListItemButton sx={{ padding: 0 }}>
-                      <ListItemText
-                        primary={
-                          <Typography
-                            sx={{
-                              fontSize: 14,
-                              textTransform: "capitalize",
-                              fontFamily: nunito.style,
-                              fontWeight: 550,
-                            }}
-                          >
-                            {val.label}
-                          </Typography>
-                        }
-                      />
-                    </ListItemButton>
-                  </List>
-                </Grid2>
-              ))}
-            </Grid2> */}
+    
             <List>
               {data.services.slice(0, 5).map((val, i) => (
                 <ListItemButton key={i} sx={{ padding: 0, mb: 1 }}>
-                  <ListItemText
+                  <ListItemText  onClick={() => handlePage(val.url)}
                     primary={
                       <Typography
                         sx={{
@@ -124,7 +114,7 @@ const Footer = () => {
             <List>
               {data.company.map((val, i) => (
                 <ListItemButton key={i} sx={{ padding: 0, mb: 1 }}>
-                  <ListItemText
+                  <ListItemText onClick={() => handlePage(val.url)}
                     primary={
                       <Typography
                         sx={{
@@ -225,22 +215,6 @@ const Footer = () => {
           }}
         >
           <Grid2 container spacing={4}>
-            {/* <Grid2
-             size={{lg:3 ,sm:6,xs:12}}
-
-            //  pl={{lg:0 ,sm:0 ,xs:2}} 
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                alignItems:"center",
-                justifyContent: "center",
-                
-
-
-              }}
-            >
-              <Image src={logo} width={100} textAlign={"center"} pl={{lg:0 ,sm:0 ,xs:0}} />
-            </Grid2> */}
               <Grid2 size={{lg:3 ,sm:6,xs:12}} textAlign={"start"}    sx={{
                 display: "flex",
                 alignItems:{lg:"center" ,sm:"center" ,xs:"start"},
@@ -264,7 +238,7 @@ const Footer = () => {
                     }}
                     >
 
-                  <Image src={logo} width={100} textAlign={"center"}  />
+                  <Image src={logo} width={100} textAlign={"center"} style={{cursor:'pointer'}} onClick={() => handlePage('/')} />
 
                     </ListItemAvatar>
 
@@ -324,7 +298,7 @@ const Footer = () => {
                           fontWeight: 600,
                         }}
                       >
-                        +91 7977512494
+                        <Link href={"tel:+917977512494"} style={{textDecoration:"none", color:COLORS.BLACK}}>+91 7977512494</Link>
                       </Typography>
                     }
                     sx={{ ml: 2 }}
@@ -372,7 +346,7 @@ const Footer = () => {
                           fontWeight: 600,
                         }}
                       >
-                        info@page1travels.com
+                        <Link href={"mailto:info@page1travels.com"} style={{textDecoration:"none", color:COLORS.BLACK}}>info@page1travels.com</Link>
                       </Typography>
                     }
                     sx={{ ml: 2 }}
@@ -460,7 +434,7 @@ const Footer = () => {
               justifyContent={"center"}
             >
               {socialIcons.map((val, i) => (
-                <IconButton
+                <Link href={val.link} target="_blank" rel="nofollow"><IconButton
                   sx={{
                     backgroundColor: COLORS.SECONDARY,
                     color: COLORS.PRIMARY,
@@ -472,7 +446,7 @@ const Footer = () => {
                   key={i}
                 >
                   {val.icon}
-                </IconButton>
+                </IconButton></Link>
               ))}
             </Stack>
           </Grid2>

@@ -35,6 +35,8 @@ import FlightLandIcon from '@mui/icons-material/FlightLand';
 import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
 import { resetSeatDetails } from "@/redux/reducers/roundInternationalSeatsInformation";
+import {domesticBaggageReset} from "@/redux/reducers/roundDomesticBaggagesInformation";
+import {domesticMealReset} from "@/redux/reducers/roundDomesticMealsInformation";
 
 const RoundTrip = () => {
   const router = useRouter();
@@ -184,6 +186,8 @@ const RoundTrip = () => {
        dispatch(resetSeatDetails());
           dispatch(resetMealDetails());
           dispatch(resetBaggageDetails());
+          dispatch(domesticBaggageReset());
+          dispatch(domesticMealReset());
     const emptyFields = Object.keys(state).filter(
       (key) =>
         state[key] === "" || state[key] === null || state[key] === undefined
@@ -550,9 +554,9 @@ const RoundTrip = () => {
               </Typography>
 
               <Typography fontSize={{lg:14 ,md:13 ,sm:10,xs:12}} fontFamily={nunito.style}>
-                {state.adult}adult{" "}
-                {state.child !== 0 && `,${state.child} child`}{" "}
-                {state.infant !== 0 && `,${state.infant} infant`},{" "}
+                {state.adult} adult
+                {state.child !== 0 &&`, ${state.child} child`}
+                {state.infant !== 0 &&`, ${state.infant} infant`},{" "}
                 {`${cabin_class.label} Class`}
               </Typography>
           </CardActionArea>

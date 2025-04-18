@@ -63,7 +63,7 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
   const [columns, setColumns] = useState([]); 
 
   useEffect(() => {
-    const storedState = localStorage.getItem("state");
+    const storedState = localStorage.getItem("roundState");
     if (storedState) {
       const passengerData = JSON.parse(storedState);
       setMaxPassengerCount(passengerData);

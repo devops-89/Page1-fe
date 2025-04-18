@@ -47,7 +47,7 @@ const Testimonials = () => {
               }}
             >
               Page1Travels, a tour operator specializing in dream destinations,
-              offers a variety of benefits for travelers.
+              offers a variety of benefits for travellers.
             </Typography>
 
             </Container>

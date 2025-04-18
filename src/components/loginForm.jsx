@@ -96,7 +96,7 @@ const LoginForm = () => {
             fontWeight: 500,
           }}
         >
-          Sign in to Start Manage your Page1Travels Account
+          Sign in to Start to Manage your Page1Travels Account
         </Typography>
       </Box>
       <Divider />
@@ -157,7 +157,7 @@ const LoginForm = () => {
                 onClick={() => router.push("/forget-password")}
               >
                 {" "}
-                Forgot Password ?
+                Forgot Password?
               </Typography>
             </Grid2>
             <Grid2 size={12}>
@@ -194,7 +194,7 @@ const LoginForm = () => {
                   fontFamily: nunito.style,
                 }}
               >
-                Don't you have an account ?{" "}
+                Don't you have an account?{" "}
                 <Typography
                   component={"span"}
                   sx={{

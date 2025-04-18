@@ -14,13 +14,12 @@ import ToastBar from "@/components/toastBar";
 import AddForm from "../AddForm";
 import GstForm from "../GstForm";
 import PassengerFields from "../PassengerFields";
-// import FullScreenDialog from "../ssr/oneway/seats/FullScreenDialog";
 import FullScreenDialog from "../ssr/roundtrip/international/seats/FullScreenDialog";
 
 const InternationalPassengerForm = ({
   flightDetails,
   myState,
-  journey,
+  journey, 
   isLCC,
 }) => {
   const dispatch = useDispatch();
@@ -35,63 +34,99 @@ const InternationalPassengerForm = ({
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
+
+  let adultSeatsOutgoing = [];
+  let childSeatsOutgoing = [];
+  let adultSeatsReturn = [];
+  let childSeatsReturn = [];
+
+  // -----------Baggage Value from redux--------------
   const selectedBaggages = useSelector(
     (state) => state.Flight.BaggagesInformation.baggages || {}
   );
+
+  // -------------Meal Value from Redux---------------
   const selectedMeals = useSelector(
     (state) => state.Flight.MealsInformation.meals || {}
   );
+
+
+  // ----------------OutGoing Seat Value----------------
   const selectedSeatsOutgoing = useSelector(
     (state) => state.Flight.RoundInternationalSeatsInformation?.outgoingSeats
   );
 
+    // ----------------Return Seat Value----------------
   const selectedSeatsReturn = useSelector(
     (state) => state.Flight.RoundInternationalSeatsInformation?.incomingSeats
   );
 
+
+  // ----------Find All OutGoing Seat Value -------------
   const finalSeatOutGoing = selectedSeatsOutgoing?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
       return seat;
     });
   });
 
+    // ----------Find All Return Seat Value -------------
   const finalSeatReturn = selectedSeatsReturn?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
       return seat;
     });
   });
 
-  let adultSeatsOutgoing = [];
-  let childSeatsOutgoing = [];
 
-  finalSeatOutGoing.forEach((singleSeatArray) => {
-    singleSeatArray.slice(0, adultCount).forEach((seat) => {
-      adultSeatsOutgoing.push(seat);
-    });
+  // -----------Transposing Outgoing value----------------
+  const maxLengthOutgoing = Math.max(
+    ...finalSeatOutGoing.map((row) => row.length)
+  );
 
-    singleSeatArray
-      .slice(adultCount, adultCount + childCount)
-      .forEach((seat) => {
-        childSeatsOutgoing.push(seat);
-      });
+  const transposedOutGoing = Array.from({ length: maxLengthOutgoing }, (_, i) =>
+    finalSeatOutGoing.map((row) => row?.[i] || [])
+  );
+
+  transposedOutGoing.slice(0, adultCount).forEach((seat) => {
+    adultSeatsOutgoing.push(seat);
   });
 
-  // Return Trip
-
-  let adultSeatsReturn = [];
-  let childSeatsReturn = [];
-
-  finalSeatReturn.forEach((singleSeatArray) => {
-    singleSeatArray.slice(0, adultCount).forEach((seat) => {
-      adultSeatsReturn.push(seat);
+  transposedOutGoing
+    .slice(adultCount, adultCount + childCount)
+    .forEach((seat) => {
+      childSeatsOutgoing.push(seat);
     });
 
-    singleSeatArray
-      .slice(adultCount, adultCount + childCount)
-      .forEach((seat) => {
-        childSeatsReturn.push(seat);
-      });
+
+
+  // -----------Transposing Return value----------------
+
+  const maxLengthReturn = Math.max(...finalSeatReturn.map((row) => row.length));
+
+  const transposedOutReturn = Array.from({ length: maxLengthReturn }, (_, i) =>
+    finalSeatReturn.map((row) => row?.[i] || [])
+  );
+
+  
+
+  transposedOutReturn.slice(0, adultCount).forEach((seat) => {
+    adultSeatsReturn.push(seat);
   });
+
+  transposedOutReturn
+    .slice(adultCount, adultCount + childCount)
+    .forEach((seat) => {
+      childSeatsReturn.push(seat);
+    });
+
+
+    // console.log("selectedSeatsOutgoing------------------", selectedSeatsOutgoing)
+    // console.log("selectedSeatsReturn------------------", selectedSeatsReturn)
+    // console.log("transposedOutGoing------------------", transposedOutGoing)
+    // console.log("transposedOutReturn----------------", transposedOutReturn)
+    // console.log("adultSeatsOutgoing---------------", adultSeatsOutgoing)
+    // console.log("childSeatsOutgoing---------------", childSeatsOutgoing)
+    // console.log("adultSeatsReturn---------------", adultSeatsReturn)
+    // console.log("childSeatsReturn---------------", childSeatsReturn)
 
   const {
     Currency,
@@ -283,7 +318,7 @@ const InternationalPassengerForm = ({
               selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(
                 (single) => single?.selectedBaggage
               ) || null,
-            SeatDynamic: [...adultSeatsOutgoing, ...adultSeatsReturn] || null,
+            SeatDynamic: [...adultSeatsOutgoing[index], ...adultSeatsReturn[index]] || null,
           };
         }) || [],
       child:
@@ -325,7 +360,7 @@ const InternationalPassengerForm = ({
               selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
                 (single) => single?.selectedBaggage
               ) || null,
-            SeatDynamic: [...childSeatsOutgoing, ...childSeatsReturn] || null,
+            SeatDynamic: [...childSeatsOutgoing[index], ...childSeatsReturn[index]] || null,
           };
         }) || [],
       infant:

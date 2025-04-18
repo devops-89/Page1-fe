@@ -35,15 +35,15 @@ const SeatMap = ({ flightDetailType }) => {
       let ssrData=useRoundDomesticSSRMerge(flightParsedData);
         if(ssrData)
         {
-          console.log("ssrData:", ssrData);
+          // console.log("ssrData:", ssrData);
         }
        setExtraDetails(flightDetails); 
      
       flightDetails = JSON.parse(flightDetails);
       flightDetails[1] = flightDetails[1].Response;
 
-      console.log("Going Flight Seats:", flightDetails?.[1]?.SeatDynamic?.[0]);
-      console.log("Coming Flight Seats:", flightDetails?.[1]?.SeatDynamic?.[1]);
+      // console.log("Going Flight Seats:", flightDetails?.[1]?.SeatDynamic?.[0]);
+      // console.log("Coming Flight Seats:", flightDetails?.[1]?.SeatDynamic?.[1]);
 
       setExtraDetails(ssrData);
     }
@@ -92,7 +92,7 @@ const SeatMap = ({ flightDetailType }) => {
 
 
 const FlightSeatSection = ({ seatData, extraDetails,tabIndex }) => {
-  console.log(`Flight section ${tabIndex} data:`,seatData);
+  // console.log(`Flight section ${tabIndex} data:`,seatData);
   return (
     <Swiper spaceBetween={20} slidesPerView={1} navigation={{ clickable: true }} modules={[Navigation]}>
       {seatData?.map((aeroplane, index) => (

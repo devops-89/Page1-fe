@@ -181,7 +181,7 @@ export const data = {
     },
     {
       img: hotel3.src,
-      hotelName: "Hyatt | Mumbai , Maharashtra",
+      hotelName: "Hyatt | Mumbai, Maharashtra",
       rooms: "2 Rooms",
       bathroom: "1 Bathroom",
       location: "Maharashtra",
@@ -267,22 +267,22 @@ export const data = {
     {
       img: user1,
       description:
-        "Had my best trip ever with Page 1 Travels. The planning, the stay, the food, the staff everything was just on point. Couldn't appreciate Page1 Travels enough. The trip was safe and all the services were great too. Looking forward to planning more trips with Page1 Travels.",
+        "Had my best trip ever with Page 1 Travels. The planning, the stay, the food, the staff everything was on point. Couldn't appreciate Page 1 Travels enough. The trip was safe and all the services were great too. Looking forward to planning more trips with Page1 Travels.",
       name: "Emma Bryan",
       heading: "Unforgettable Journey",
     },
     {
       img: user2,
       description:
-        "Had a unique and memorable experience with Page1 Travels. The stay was beautiful and the whole trip was amazingly organized.Loved my first experience with Page1 Travels. Loved our hotel  and meals, and the credit goes to Page1 Travels.",
+        "Had a unique and memorable experience with Page1 Travels. The stay was beautiful and the whole trip was amazingly organized. Loved my first experience with Page1 Travels. Loved our hotel  and meals, and the credit goes to Page1 Travels.",
       name: "Andrew Fetcher",
       heading: "Memorable Experience",
     },
     {
       img: user3,
       description:
-        "Kudos to Page1 Travels for organizing the perfect trip for us.The stay was comfortable, and the food was great too. Apart from that, the drivers and tour guides were polite and professional too. Thank you Page1 Travels for this amazing experience.",
-      name: "james Andrew",
+        "Kudos to Page1 Travels for organizing the perfect trip for us. The stay was comfortable, and the food was great too. Apart from that, the drivers and tour guides were polite and professional too. Thank you Page1 Travels for this amazing experience.",
+      name: "James Andrew",
       heading: "Perfect Getaway",
     },
     {
@@ -318,12 +318,12 @@ export const data = {
   ],
   services: [
     {
-      label: "Helicopter",
-      url: "/helicopter",
+      label: "Flight",
+      url: "/flight",
     },
     {
       label: "hotels",
-      url: "/hotels",
+      url: "/hotel-list",
     },
     {
       label: "Helicopter",
@@ -331,7 +331,7 @@ export const data = {
     },
     {
       label: "holiday Packages",
-      url: "/holiday-packages",
+      url: "/packages",
     },
     {
       label: "Cabs",

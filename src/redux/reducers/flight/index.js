@@ -15,7 +15,7 @@ import formPayloadReducer from "../formPayload";
 import seatsInformationReducer from "../seatsInformation";
 import roundInternationalSeatsInformationReducer from "../roundInternationalSeatsInformation";
 import roundDomesticMealsInformationReducer from "../roundDomesticMealsInformation";
-import roundDomesticBaggagesInformationReducer from "../RoundDomesticBaggageInformation";
+import roundDomesticBaggagesInformationReducer from "../roundDomesticBaggagesInformation"
 import mealsInformationReducer from "../mealsInformation";
 import baggagesInformationReducer from "../baggagesInformation";
 

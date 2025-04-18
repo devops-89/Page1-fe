@@ -17,8 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { matchIsValidTel, MuiTelInput } from "mui-tel-input";
-import Head from "next/head";
+import { matchIsValidTel } from "mui-tel-input";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ToastBar from "./toastBar";
@@ -64,6 +63,7 @@ const RegistrationForm = () => {
         localStorage.setItem("reference_id", res.data.data.reference_id);
         setLoading(false);
         router.push("/verifyOTP");
+        
       })
       .catch((err) => {
         let errMessage =
@@ -114,7 +114,7 @@ const RegistrationForm = () => {
             fontWeight: 500,
           }}
         >
-          Signup to keep exploring amazing destinations around the World.
+          Sign up to keep exploring amazing destinations around the World.
         </Typography>
       </Box>
       <Divider />
@@ -143,18 +143,6 @@ const RegistrationForm = () => {
                 helperText={form.touched.email && form.errors.email}
               />
             </Grid2>
-            {/* <Grid2 size={12}>
-              <MuiTelInput
-                label="Phone Number"
-                sx={{ ...phonetextField, width: "100%" }}
-                defaultCountry="IN"
-                onChange={handlePhoneHandler}
-                value={phone}
-                id="phone_number"
-                error={Boolean(form.errors.phone_number)}
-                helperText={form.errors.phone_number}
-              />
-            </Grid2> */}
             <Grid2 size={12}>
               <TextField
                 label="Password*"
@@ -212,7 +200,7 @@ const RegistrationForm = () => {
                   fontFamily: nunito.style,
                 }}
               >
-                Already have an account ?{" "}
+                Already have an account?{" "}
                 <Typography
                   component={"span"}
                   sx={{

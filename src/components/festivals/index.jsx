@@ -57,8 +57,8 @@ const Festivals = () => {
               <FestivalCard
                 img={janmasthmi.src}
                 height={"35vh"}
-                title={"Janmashtmi"}
-                promo={"Get 40% off on Janmashtmi"}
+                title={"Janmashtami"}
+                promo={"Get 40% off on Janmashtami"}
                 top={"10%"}
               />
             </Stack>

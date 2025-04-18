@@ -32,9 +32,7 @@ const VerifyOtp = () => {
             severity: TOAST_STATUS.SUCCESS,
           })
         );
-        setTimeout(()=>{
-          router.replace('/login')
-        },1500)
+        router.replace("/login");
       })
       .catch((err) => {
         let errMessage =

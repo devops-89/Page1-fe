@@ -311,21 +311,6 @@ const FlightDetails = () => {
     />
   )
 )}
-
-                  {/* {router.query.journey === JOURNEY.INTERNATIONAL ? (
-                    <FareSummary
-                      fareData={flightDetails[0]?.Results}
-                      commission={commission}
-                    />
-                  ) : (
-
-                  
-                     
-                    <RoundFareSummary
-                      fareData={flightDetails}
-                      commission={commission}
-                    />
-                  )} */}
                 </Grid2>
               </Grid2>
             </Container>

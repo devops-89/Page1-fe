@@ -8,7 +8,7 @@ import Image from "next/image";
 import baggageImage from "@/../public/images/baggage.png";
 
 export default function BaggageCard({ baggage, handleBaggageValue, isSelected }) {
-  // console.log("myCod-----", baggage)
+  // console.log("myCod-----", isSelected)
   return (
     <Grid2 container spacing={2} component={Card} sx={{ maxHeight: "150px" }}>
       <Grid2

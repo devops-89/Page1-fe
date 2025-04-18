@@ -8,11 +8,11 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LuggageIcon from "@mui/icons-material/Luggage";
 import { COLORS } from "@/utils/colors";
+import BaggageCard from "@/components/flight/baggageCard";
 import {
   removeBaggageDetails,
   setBaggageDetails,
-} from "@/redux/reducers/RoundDomesticBaggageInformation";
-import BaggageCard from "@/components/flight/baggageCard";
+} from "@/redux/reducers/roundDomesticBaggagesInformation";
 
 export default function DomesticBaggageSelection({
   baggageData,
@@ -30,22 +30,22 @@ export default function DomesticBaggageSelection({
     (state) => state.Flight.RoundDomesticBaggagesInformation || []
   );
 
-   
-  console.log('selectedPassengerBaggages------------',selectedBaggages);
- 
+  // console.log('selectedPassengerBaggages------------',selectedBaggages);
 
   // Handle baggage click (select or remove)
-  const handleBaggageClick = (baggage, flightNumber,tabIndex) => {
-    // console.log('baggage-----------', baggage, flightNumber);
-    console.log("TabIndex: ",tabIndex);
-    console.log('selectedPassengerBaggages------------',selectedBaggages);
-    const passengerBaggages = selectedBaggages?.[tabIndex===0?"outgoingBaggage":"incomingBaggage"];
+  const handleBaggageClick = (baggage, flightNumber, tabIndex) => {
+    // console.log("my data --------------",baggage, flightNumber,tabIndex)
+    const passengerBaggages =
+      selectedBaggages?.[
+        tabIndex == 0 ? "outgoingBaggage" : "incomingBaggage"
+      ]?.[uniquePassengerKey] || [];
+    // console.log("passengerBaggages--------",passengerBaggages)
     const existingBaggage = passengerBaggages?.baggages?.find(
       (b) => b.flightId === flightNumber
     );
     // console.log('---------existingBaggage',existingBaggage)
 
-    if (existingBaggage?.selectedBaggage.Code === baggage.Code) {
+    if (existingBaggage?.baggage.Code === baggage.Code) {
       // Deselect the baggage if it's already selected
       dispatch(
         removeBaggageDetails({
@@ -53,7 +53,7 @@ export default function DomesticBaggageSelection({
           passengerId,
           baggageId: flightNumber,
           baggageCode: baggage.Code,
-          tabIndex:tabIndex
+          tabIndex: tabIndex,
         })
       );
     } else {
@@ -64,25 +64,25 @@ export default function DomesticBaggageSelection({
             passengerType,
             passengerId,
             baggageId: flightNumber,
-            baggageCode: existingBaggage.selectedBaggage.Code,
-            tabIndex:tabIndex
+            baggageCode: existingBaggage.baggage.Code,
+            tabIndex: tabIndex,
           })
         );
       }
-     
+
       dispatch(
         setBaggageDetails({
           passengerType,
           passengerId,
           baggageId: flightNumber,
           selected: baggage,
-          tabIndex:tabIndex
+          tabIndex: tabIndex,
         })
       );
     }
   };
 
-    console.log("baggageData-----------------", baggageData);
+  // console.log("baggageData-----------------", baggageData);
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -134,80 +134,114 @@ export default function DomesticBaggageSelection({
         {/* Tab Content */}
         {tabIndex === 0 && (
           <>
-            {baggageData?.[0][0]?.Origin &&
-            <Typography
-              variant="body1"
-              sx={{
-                fontFamily: nunito.style,
-                fontWeight: 800,
-                mb: "20px",
-                p: "10px",
-                backgroundColor: COLORS.SEMIGREY,
-              }}
-            >
-              {`${baggageData?.[0][0]?.Origin} - ${baggageData?.[0][0]?.Destination}`}
-            </Typography>}
+            {baggageData?.[0][0]?.Origin && (
+              <Typography
+                variant="body1"
+                sx={{
+                  fontFamily: nunito.style,
+                  fontWeight: 800,
+                  mb: "20px",
+                  p: "10px",
+                  backgroundColor: COLORS.SEMIGREY,
+                }}
+              >
+                {`${baggageData?.[0][0]?.Origin} - ${baggageData?.[0][0]?.Destination}`}
+              </Typography>
+            )}
 
             <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
-              {baggageData?.[0]?.map((baggage, baggageIndex) => {
-                return (
-                  <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
-                    <BaggageCard
-                      baggage={baggage}
-                      handleBaggageValue={() =>
-                        handleBaggageClick(baggage, baggage?.FlightNumber,tabIndex)
-                      }
-                      isSelected={selectedBaggages?.outgoingBaggage?.baggages?.some(
-                        (b) =>
-                          String(b.flightId) === String(baggage.FlightNumber) &&
-                          b.selectedBaggage.Code === baggage.Code
-                      )}
-                    />
-                  </Grid2>
-                );
-              })}
+              {baggageData?.[0][0]?.FlightNumber ? (
+                baggageData?.[0]?.map((baggage, baggageIndex) => {
+                  return (
+                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                      <BaggageCard
+                        baggage={baggage}
+                        handleBaggageValue={(baggage) => {
+                          // console.log("baggage: ",baggage,baggage?.FlightNumber,tabIndex);
+                          handleBaggageClick(
+                            baggage,
+                            baggage?.FlightNumber,
+                            tabIndex
+                          );
+                        }}
+                        isSelected={selectedBaggages?.outgoingBaggage?.[
+                          uniquePassengerKey
+                        ]?.baggages?.some(
+                          (b) =>
+                            b.flightId === baggage?.FlightNumber &&
+                            b.baggage.Code === baggage?.Code
+                        )}
+                      />
+                    </Grid2>
+                  );
+                })
+              ) : (
+                <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ textAlign: "center", fontFamily: nunito.style }}
+                  >
+                    No Baggage Available
+                  </Typography>
+                </Grid2>
+              )}
             </Grid2>
           </>
         )}
         {tabIndex === 1 && (
           <>
-          {baggageData?.[1][0]?.Origin &&
-          <Typography
-            variant="body1"
-            sx={{
-              fontFamily: nunito.style,
-              fontWeight: 800,
-              mb: "20px",
-              p: "10px",
-              backgroundColor: COLORS.SEMIGREY,
-            }}
-          >
-            {`${baggageData?.[1][0]?.Origin} - ${baggageData?.[1][0]?.Destination}`}
-          </Typography>}
-          <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
-            {baggageData?.[1]?.map((baggage, baggageIndex) => {
-              return (
-                <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
-                  <BaggageCard
-                    baggage={baggage}
-                    handleBaggageValue={(baggage) =>
-                    {
-                      console.log("Baggage Details: ",baggage);
-                      handleBaggageClick(baggage, baggage?.FlightNumber,tabIndex);
-                    }
-                     
-                    }
-                    isSelected={selectedBaggages?.incomingBaggage?.baggages?.some(
-                      (b) =>
-                        String(b.flightId) === String(baggage.FlightNumber) &&
-                        b.selectedBaggage.Code === baggage.Code
-                    )}
-                  />
+            {baggageData?.[1][0]?.Origin && (
+              <Typography
+                variant="body1"
+                sx={{
+                  fontFamily: nunito.style,
+                  fontWeight: 800,
+                  mb: "20px",
+                  p: "10px",
+                  backgroundColor: COLORS.SEMIGREY,
+                }}
+              >
+                {`${baggageData?.[1][0]?.Origin} - ${baggageData?.[1][0]?.Destination}`}
+              </Typography>
+            )}
+            <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
+              {baggageData?.[1][0]?.FlightNumber ? (
+                baggageData?.[1]?.map((baggage, baggageIndex) => {
+                  return (
+                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                      <BaggageCard
+                        baggage={baggage}
+                        handleBaggageValue={(baggage) => {
+                          // console.log("Baggage Details: ",baggage);
+                          handleBaggageClick(
+                            baggage,
+                            baggage?.FlightNumber,
+                            tabIndex
+                          );
+                        }}
+                        isSelected={selectedBaggages?.incomingBaggage?.[
+                          uniquePassengerKey
+                        ]?.baggages?.some(
+                          (b) =>
+                            b.flightId === baggage?.FlightNumber &&
+                            b.baggage.Code === baggage?.Code
+                        )}
+                      />
+                    </Grid2>
+                  );
+                })
+              ) : (
+                <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ textAlign: "center", fontFamily: nunito.style }}
+                  >
+                    No Baggage Available
+                  </Typography>
                 </Grid2>
-              );
-            })}
-          </Grid2>
-        </>
+              )}
+            </Grid2>
+          </>
         )}
       </AccordionDetails>
     </Accordion>

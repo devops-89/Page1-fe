@@ -24,11 +24,17 @@ import { COMMISSION_TYPE } from "@/utils/enum";
 
 const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
   const meals = useSelector((state) => state.Flight.MealsInformation.meals);
-  const baggages = useSelector((state) => state.Flight.BaggagesInformation.baggages);
-  const seatsOutgoing = useSelector((state)=>state.Flight.RoundInternationalSeatsInformation.outgoingSeats);
-  const seatsReturn = useSelector((state)=>state.Flight.RoundInternationalSeatsInformation.incomingSeats);
+  const baggages = useSelector(
+    (state) => state.Flight.BaggagesInformation.baggages
+  );
+  const seatsOutgoing = useSelector(
+    (state) => state.Flight.RoundInternationalSeatsInformation.outgoingSeats
+  );
+  const seatsReturn = useSelector(
+    (state) => state.Flight.RoundInternationalSeatsInformation.incomingSeats
+  );
 
-//   console.log('seats--------', seatsOutgoing)
+  //   console.log('seats--------', seatsOutgoing)
 
   const [open, setOpen] = useState(false);
 
@@ -36,18 +42,16 @@ const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
     let totalprice = 0;
     Object.values(seats).forEach((seatData) => {
       const { selectedSeats } = seatData;
-  
+
       const totalSeatPrice = selectedSeats.reduce((total, seat) => {
-        return total + seat.Price; 
+        return total + seat.Price;
       }, 0);
-  
+
       totalprice += totalSeatPrice;
     });
-  
+
     return totalprice;
-    
   };
- 
 
   const calculateTotalBaggagePrice = (data) => {
     let totalPrice = 0;
@@ -85,7 +89,10 @@ const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
   };
 
   const extraTotal =
-    calculateTotalMealPrice(meals) + calculateTotalBaggagePrice(baggages) + calculateTotalSeatPrice(seatsOutgoing) + calculateTotalSeatPrice(seatsReturn)
+    calculateTotalMealPrice(meals) +
+    calculateTotalBaggagePrice(baggages) +
+    calculateTotalSeatPrice(seatsOutgoing) +
+    calculateTotalSeatPrice(seatsReturn);
 
   const toggleCollapse = () => {
     setOpen(!open);
@@ -269,27 +276,34 @@ const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
       </Box>
       {/* extra */}
       <Divider sx={{ my: 1 }} />
-      {extraTotal <=0 ?"" :<Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: "10px",
-        }}
-      >
-        <Typography
-          variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+      {extraTotal <= 0 ? (
+        ""
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: "10px",
+          }}
         >
-          Extra<span style={{fontSize:"15px" ,fontWeight:600}}>(meal ,seat,baggage)  </span>
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
-        >
-          ₹ {extraTotal}
-        </Typography>
-      </Box>}
-      
+          <Typography
+            variant="body1"
+            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          >
+            Extra
+            <span style={{ fontSize: "15px", fontWeight: 600 }}>
+              (meal ,seat,baggage){" "}
+            </span>
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          >
+            ₹ {extraTotal}
+          </Typography>
+        </Box>
+      )}
+
       <Box
         sx={{
           display: "flex",

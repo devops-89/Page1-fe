@@ -32,10 +32,10 @@ export default function DomesticMealSelection({
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
   const selectedMeals = useSelector(
-    (state) => state.Flight.RoundDomesticMealsInformation|| {}
+    (state) => state.Flight.RoundDomesticMealsInformation || {}
   );
 
-  console.log("Selected Meals are:",selectedMeals);
+  // console.log("Selected Meals are:",selectedMeals);
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -47,14 +47,17 @@ export default function DomesticMealSelection({
   let filteredDataReturn = {};
 
   const handleMealClick = (meal, flightNumber, tabIndex) => {
-    let wayType="";
-    tabIndex===0?wayType="outgoingMeal":wayType="incomingMeal";
+    let wayType = "";
+    tabIndex === 0 ? (wayType = "outgoingMeal") : (wayType = "incomingMeal");
     // console.log('meal-----',meal)
-    const passengerMeals = selectedMeals?.[wayType]?.[uniquePassengerKey]?.meals || [];
+    const passengerMeals =
+      selectedMeals?.[wayType]?.[uniquePassengerKey]?.meals || [];
+    // console.log("passengerMeals----------",passengerMeals)
     const existingMeal = passengerMeals.find(
       (m) => m.flightId === flightNumber
     );
 
+    // console.log("existingMeal--------",existingMeal)
     if (existingMeal?.meal.Code === meal.Code) {
       // Deselect the meal if it's already selected
       dispatch(
@@ -63,7 +66,7 @@ export default function DomesticMealSelection({
           passengerId,
           mealsId: flightNumber,
           mealCode: meal.Code,
-          tabIndex: tabIndex
+          tabIndex: tabIndex,
         })
       );
     } else {
@@ -75,7 +78,7 @@ export default function DomesticMealSelection({
             passengerId,
             mealsId: flightNumber,
             mealCode: existingMeal.meal.Code,
-            tabIndex: tabIndex
+            tabIndex: tabIndex,
           })
         );
       }
@@ -85,32 +88,27 @@ export default function DomesticMealSelection({
           passengerId,
           mealsId: flightNumber,
           selected: meal,
-          tabIndex: tabIndex
+          tabIndex: tabIndex,
         })
       );
     }
   };
 
-
-    mealData?.[0]?.forEach((singleMeal) => {
+  mealData?.[0]?.forEach((singleMeal) => {
     //   console.log("singleMeal----------------", singleMeal);
-      if (!filteredDataOutgoing[singleMeal.FlightNumber]) {
-        filteredDataOutgoing[singleMeal.FlightNumber] = [];
-      }
-      filteredDataOutgoing[singleMeal.FlightNumber].push(singleMeal);
-    });
-  
+    if (!filteredDataOutgoing[singleMeal?.FlightNumber]) {
+      filteredDataOutgoing[singleMeal?.FlightNumber] = [];
+    }
+    filteredDataOutgoing[singleMeal?.FlightNumber].push(singleMeal);
+  });
 
-
-    mealData?.[1]?.forEach((singleMeal) => {
+  mealData?.[1]?.forEach((singleMeal) => {
     //   console.log("singleMeal----------------", singleMeal);
-      if (!filteredDataReturn[singleMeal.FlightNumber]) {
-        filteredDataReturn[singleMeal.FlightNumber] = [];
-      }
-      filteredDataReturn[singleMeal.FlightNumber].push(singleMeal);
-    });
-  
-
+    if (!filteredDataReturn[singleMeal?.FlightNumber]) {
+      filteredDataReturn[singleMeal?.FlightNumber] = [];
+    }
+    filteredDataReturn[singleMeal?.FlightNumber].push(singleMeal);
+  });
 
   return (
     <Accordion sx={{ mb: "10px" }}>
@@ -158,115 +156,138 @@ export default function DomesticMealSelection({
 
         {/* Tab Content */}
         {tabIndex === 0 && (
-         <Swiper
-         spaceBetween={20}
-         slidesPerView={1}
-         navigation={{ clickable: true }}
-         modules={[Navigation]}
-         id="meal_box"
-         tabIndex={tabIndex}
-       >
-         {Object.keys(filteredDataOutgoing).map((flightNumber) => (
-           <SwiperSlide
-             key={flightNumber}
-             style={{ overflow: "auto", maxHeight: "240px" }}
-           >
-            {filteredDataOutgoing[flightNumber][0]?.Origin &&
-             <Typography
-               variant="body1"
-               sx={{
-                 fontFamily: nunito.style,
-                 fontWeight: 800,
-                 mb: "20px",
-                 p: "10px",
-                 backgroundColor: COLORS.SEMIGREY,
-               }}
-             >
-               {`${filteredDataOutgoing[flightNumber][0]?.Origin} - ${filteredDataOutgoing[flightNumber][0]?.Destination}`}
-             </Typography>}
-             <Grid2 container spacing={2}>
-               {filteredDataOutgoing[flightNumber]?.map(
-                 (meal, mealIndex) => (
-                   <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
-                     <MealCard
-                       meal={meal}
-                       handleMealValue={(meal) =>{
-                        console.log("Meal Value is: ",meal,flightNumber,tabIndex);
-                        handleMealClick(meal, flightNumber,tabIndex )
-                       }
-                        
-                       }
-                       isSelected={
-                         selectedMeals?.outgoingMeal?.[uniquePassengerKey]?.meals?.some(
-                           (m) =>
-                             m.flightId === flightNumber &&
-                             m.meal.Code === meal.Code
-                         ) || false
-                       }
-                     />
-                   </Grid2>
-                 )
-               )}
-             </Grid2>
-           </SwiperSlide>
-         ))}
-       </Swiper>
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={1}
+            navigation={{ clickable: true }}
+            modules={[Navigation]}
+            id="meal_box"
+            tabIndex={tabIndex}
+          >
+            {Object.keys(filteredDataOutgoing).map((flightNumber) => (
+              <SwiperSlide
+                key={flightNumber}
+                style={{ overflow: "auto", maxHeight: "240px" }}
+              >
+                {filteredDataOutgoing[flightNumber][0]?.Origin && (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: nunito.style,
+                      fontWeight: 800,
+                      mb: "20px",
+                      p: "10px",
+                      backgroundColor: COLORS.SEMIGREY,
+                    }}
+                  >
+                    {`${filteredDataOutgoing[flightNumber][0]?.Origin} - ${filteredDataOutgoing[flightNumber][0]?.Destination}`}
+                  </Typography>
+                )}
+                <Grid2 container spacing={2}>
+                  {filteredDataOutgoing[flightNumber][0]?.FlightNumber ? (
+                    filteredDataOutgoing[flightNumber]?.map(
+                      (meal, mealIndex) => (
+                        <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                          <MealCard
+                            meal={meal}
+                            handleMealValue={(meal) => {
+                              // console.log("Meal Value is: ",meal,flightNumber,tabIndex);
+                              handleMealClick(meal, flightNumber, tabIndex);
+                            }}
+                            isSelected={
+                              selectedMeals?.outgoingMeal?.[
+                                uniquePassengerKey
+                              ]?.meals?.some((m) => {
+                                return (
+                                  m.flightId === flightNumber &&
+                                  m.meal.Code === meal.Code
+                                );
+                              }) || false
+                            }
+                          />
+                        </Grid2>
+                      )
+                    )
+                  ) : (
+                    <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ textAlign: "center", fontFamily: nunito.style }}
+                      >
+                        No Meal Available
+                      </Typography>
+                    </Grid2>
+                  )}
+                </Grid2>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         )}
 
         {tabIndex === 1 && (
-         <Swiper
-         spaceBetween={20}
-         slidesPerView={1}
-         navigation={{ clickable: true }}
-         modules={[Navigation]}
-         id="meal_box"
-         tabIndex={tabIndex}
-       >
-         {Object.keys(filteredDataReturn).map((flightNumber) => (
-           <SwiperSlide
-             key={flightNumber}
-             style={{ overflow: "auto", maxHeight: "240px" }}
-           >
-              {filteredDataReturn[flightNumber][0]?.Origin &&
-             <Typography
-               variant="body1"
-               sx={{
-                 fontFamily: nunito.style,
-                 fontWeight: 800,
-                 mb: "20px",
-                 p: "10px",
-                 backgroundColor: COLORS.SEMIGREY,
-               }}
-             >
-               {`${filteredDataReturn[flightNumber][0]?.Destination} - ${filteredDataReturn[flightNumber][0]?.Origin}`}
-             </Typography>}
-             <Grid2 container spacing={2}>
-               {filteredDataReturn[flightNumber]?.map((meal, mealIndex) => (
-                 <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
-                   <MealCard
-                     meal={meal}
-
-                     handleMealValue={(meal) =>
-                     {
-                      console.log("Meal Value is: ",meal,flightNumber,tabIndex);
-                      handleMealClick(meal, flightNumber,tabIndex)
-                     }
-                  
-                     }
-                     isSelected={
-                       selectedMeals?.incomingMeal?.[uniquePassengerKey]?.meals?.some(
-                         (m) =>
-                           m.flightId === flightNumber &&
-                           m.meal.Code === meal.Code
-                       ) || false
-                     }
-                   />
-                 </Grid2>
-               ))}
-             </Grid2>
-           </SwiperSlide>
-         ))}
-       </Swiper>
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={1}
+            navigation={{ clickable: true }}
+            modules={[Navigation]}
+            id="meal_box"
+            tabIndex={tabIndex}
+          >
+            {Object.keys(filteredDataReturn).map((flightNumber) => (
+              <SwiperSlide
+                key={flightNumber}
+                style={{ overflow: "auto", maxHeight: "240px" }}
+              >
+                {filteredDataReturn[flightNumber][0]?.Origin && (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: nunito.style,
+                      fontWeight: 800,
+                      mb: "20px",
+                      p: "10px",
+                      backgroundColor: COLORS.SEMIGREY,
+                    }}
+                  >
+                    {`${filteredDataReturn[flightNumber][0]?.Destination} - ${filteredDataReturn[flightNumber][0]?.Origin}`}
+                  </Typography>
+                )}
+                <Grid2 container spacing={2}>
+                  {filteredDataReturn[flightNumber][0]?.FlightNumber ? (
+                    filteredDataReturn[flightNumber]?.map((meal, mealIndex) => (
+                      <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                        <MealCard
+                          meal={meal}
+                          handleMealValue={(meal) => {
+                            // console.log("Meal Value is: ",meal,flightNumber,tabIndex);
+                            handleMealClick(meal, flightNumber, tabIndex);
+                          }}
+                          isSelected={
+                            selectedMeals?.incomingMeal?.[
+                              uniquePassengerKey
+                            ]?.meals?.some(
+                              (m) =>
+                                m.flightId === flightNumber &&
+                                m.meal.Code === meal.Code
+                            ) || false
+                          }
+                        />
+                      </Grid2>
+                    ))
+                  ) : (
+                    <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ textAlign: "center", fontFamily: nunito.style }}
+                      >
+                        No Meal Available
+                      </Typography>
+                    </Grid2>
+                  )}
+                </Grid2>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         )}
       </AccordionDetails>
     </Accordion>
