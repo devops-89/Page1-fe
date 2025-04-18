@@ -131,20 +131,6 @@ const OTPVerify = ({ submitOtp, loading, onClose, show }) => {
             }}
           />
         )}
-        {/* <Button
-          sx={{
-            fontSize: 12,
-            backgroundColor: COLORS.PRIMARY,
-            mt: 3,
-            fontFamily: nunito.style,
-            p: 1,
-            color: COLORS.SECONDARY,
-          }}
-          fullWidth
-          onClick={submitHander}
-        >
-          Resend OTP
-        </Button> */}
         <Button
           sx={{
             fontSize: 12,
