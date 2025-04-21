@@ -103,7 +103,7 @@ const HotelCard = ({
               fontWeight: 600,
             }}
           >
-            $ {price}{" "}
+            ₹ {price}{" "}
             <Typography
               component={"span"}
               sx={{
