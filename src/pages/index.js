@@ -2,7 +2,8 @@ import AboutUs from "@/components/aboutus";
 import Banner from "@/components/banner";
 import Faq from "@/components/faq";
 import Festivals from "@/components/festivals";
-import Hotel from "@/components/hotels";
+
+import Hotel from "@/components/hotels/HomepageHotels";
 import Services from "@/components/services";
 import SubscribeBanner from "@/components/subscribeBanner";
 import Testimonials from "@/components/testimonial/testimonials";
