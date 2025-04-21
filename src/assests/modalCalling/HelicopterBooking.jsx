@@ -1,5 +1,8 @@
+import { authenticationController } from "@/api/auth";
 import { hideModal } from "@/redux/reducers/modal";
+import { setToast } from "@/redux/reducers/toast";
 import { COLORS } from "@/utils/colors";
+import { BOOKING_ENQUIRY, TOAST_STATUS } from "@/utils/enum";
 import { roboto } from "@/utils/fonts";
 import { loginTextField } from "@/utils/styles";
 import { helicopterBookingValidationSchema } from "@/utils/validationSchema";
@@ -24,6 +27,7 @@ import { useFormik } from "formik";
 import moment from "moment";
 import { matchIsValidTel, MuiTelInput } from "mui-tel-input";
 import React, { useState } from "react";
+import Loading from "react-loading";
 import { useDispatch } from "react-redux";
 import { Grid } from "swiper/modules";
 
@@ -49,7 +53,12 @@ const HelicopterBooking = () => {
     },
     validationSchema: helicopterBookingValidationSchema,
     onSubmit: (values) => {
-      console.log("values", values);
+      // console.log("values", values);
+      const body = {
+        enquiry_type: BOOKING_ENQUIRY.HELICOPTER,
+        enquiry_description: values,
+      };
+      sendEnquiry(body);
     },
   });
   const [phone, setPhone] = useState(null);
@@ -81,6 +90,29 @@ const HelicopterBooking = () => {
   const handleTimeChangeHandler = (newTime) => {
     setTime(newTime);
     formik.setFieldValue("time", moment(newTime).format("HH:mm A"));
+  };
+  const [loading, setLoading] = useState(false);
+
+  const sendEnquiry = (body) => {
+    setLoading(true);
+    authenticationController
+      .sendEnquiry(body)
+      .then((res) => {
+        console.log("res", res);
+        dispatch(
+          setToast({
+            open: true,
+            message: "Enquiry Submitted Successfully",
+            severity: TOAST_STATUS.SUCCESS,
+          })
+        );
+        closeModal();
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("err", err);
+        setLoading(false);
+      });
   };
   return (
     <Box sx={{ width: 800 }}>
@@ -251,7 +283,16 @@ const HelicopterBooking = () => {
                 fullWidth
                 type="submit"
               >
-                Submit
+                {loading ? (
+                  <Loading
+                    type="bars"
+                    width={20}
+                    height={20}
+                    color={COLORS.BLACK}
+                  />
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </Grid2>
             <Grid2 size={6}>

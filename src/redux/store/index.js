@@ -17,6 +17,7 @@ import userReducer from "../reducers/userReducer";
 import toastReducer from "../reducers/toastReducer";
 import hotelReducer from "../reducers/hotel";
 import modalReducer from "../reducers/modal";
+import destinationReducer from "../reducers/destinationWedding";
 const storage = createIndexedDBStorage("TRDB");
 
 const persistConfig = {
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   Flight: flightReducer,
   HOTEL: hotelReducer,
   modal: modalReducer,
+  destinationWedding: destinationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

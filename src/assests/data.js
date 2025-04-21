@@ -36,6 +36,7 @@ import {
   BeenhereOutlined,
   CalendarMonth,
   CalendarMonthOutlined,
+  ContactMail,
   Dashboard,
   Email,
   Favorite,
@@ -44,6 +45,7 @@ import {
   LocationOn,
   PersonOutlineOutlined,
   Phone,
+  PhoneAndroid,
   PublicOutlined,
   Reviews,
   TourOutlined,
@@ -63,6 +65,7 @@ import tour6 from "@/tours/nevada.jpg";
 import tour7 from "@/tours/virginia.jpg";
 import tour8 from "@/tours/wilmington.jpg";
 import { FLIGHT_CLASS, FLIGHT_DETAILS } from "@/utils/enum";
+import { RiInformation2Line } from "react-icons/ri";
 export const data = {
   headerLinks: [
     {
@@ -1584,6 +1587,21 @@ export const data = {
     {
       heading: "Chauffeur service",
       description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+  ],
+
+  destinationWeddingSteps: [
+    {
+      label: "Contact Information",
+      icon: <PhoneAndroid />,
+    },
+    {
+      label: "Basic Information",
+      icon: <ContactMail />,
+    },
+    {
+      label: "Additional Information",
+      icon: <RiInformation2Line />,
     },
   ],
 };

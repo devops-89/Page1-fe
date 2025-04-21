@@ -184,4 +184,22 @@ export const helicopterBookingValidationSchema = Yup.object({
   children: Yup.number().notRequired().positive(),
 });
 
+export const destinationWeddingFirstStep = Yup.object({
+  fullName: Yup.string().required("Please Enter Full Name"),
+  phoneNumber: Yup.string().required("Please Enter Phone Number"),
+  email: Yup.string()
+    .required("Please Enter Email")
+    .email("Please Enter Valid Email"),
+  date: Yup.string().required("Please Enter Date"),
+});
+
+export const taxiFormValidationSchema = Yup.object({
+  fullName: Yup.string().required("Please Enter Your Full Name"),
+  email: Yup.string()
+    .email("Please Enter Valid Email")
+    .required("Please Enter Email"),
+  phoneNumber: Yup.string().required("Please Enter Phone Number"),
+  taxiType: Yup.string().required("Please Select Taxi Type"),
+});
+
 export { passengerSchema, gstFormSchema, addFormSchema };
