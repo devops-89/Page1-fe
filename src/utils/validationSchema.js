@@ -161,12 +161,51 @@ const addFormSchema = Yup.object({
 
 export const validationSchema = (isGSTMandatory, isPassportRequired ,isBirthdayRequired) => {
   return Yup.object().shape({
-    adult: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
-    child: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
-    infant: Yup.array().of(passengerSchema(isPassportRequired ,isBirthdayRequired)),
+    adult: Yup.array().of(
+      passengerSchema(isPassportRequired, isBirthdayRequired)
+    ),
+    child: Yup.array().of(
+      passengerSchema(isPassportRequired, isBirthdayRequired)
+    ),
+    infant: Yup.array().of(
+      passengerSchema(isPassportRequired, isBirthdayRequired)
+    ),
     gstForm: isGSTMandatory ? gstFormSchema(true) : Yup.object().optional(),
     ...addFormSchema.fields,
   });
 };
+
+export const helicopterBookingValidationSchema = Yup.object({
+  fullName: Yup.string().required("Please Enter Full Name"),
+  phoneNumber: Yup.string().required("Please Enter Phone Number"),
+  email: Yup.string()
+    .required("Please Enter Email")
+    .email("Please Enter Valid Email"),
+  from: Yup.string().required("Please Enter Origin"),
+  to: Yup.string().required("Please Enter Destination"),
+  date: Yup.string().required("Please Enter Date"),
+  time: Yup.string().required("Please Enter Time"),
+  adults: Yup.number().required("Please Enter Number of Adults").positive(),
+  message: Yup.string().required("Please Enter Message"),
+  children: Yup.number().notRequired().positive(),
+});
+
+export const destinationWeddingFirstStep = Yup.object({
+  fullName: Yup.string().required("Please Enter Full Name"),
+  phoneNumber: Yup.string().required("Please Enter Phone Number"),
+  email: Yup.string()
+    .required("Please Enter Email")
+    .email("Please Enter Valid Email"),
+  date: Yup.string().required("Please Enter Date"),
+});
+
+export const taxiFormValidationSchema = Yup.object({
+  fullName: Yup.string().required("Please Enter Your Full Name"),
+  email: Yup.string()
+    .email("Please Enter Valid Email")
+    .required("Please Enter Email"),
+  phoneNumber: Yup.string().required("Please Enter Phone Number"),
+  taxiType: Yup.string().required("Please Select Taxi Type"),
+});
 
 export { passengerSchema, gstFormSchema, addFormSchema };
