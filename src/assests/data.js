@@ -1541,67 +1541,153 @@ export const data = {
     { code: "ZM", label: "Zambia", phone: "260" },
     { code: "ZW", label: "Zimbabwe", phone: "263" },
   ],
-  payment: {
-    id: "pay_QAdPuYorh3U9cw",
-    entity: "payment",
-    amount: 1277455,
-    currency: "INR",
-    status: "captured",
-    order_id: "order_QAdPntmMXFnpXu",
-    invoice_id: null,
-    international: false,
-    method: "netbanking",
-    amount_refunded: 0,
-    refund_status: null,
-    captured: true,
-    description: "#QAdPSEQcP5moug",
-    card_id: null,
-    bank: "CNRB",
-    wallet: null,
-    vpa: null,
-    email: "void@razorpay.com",
-    contact: "+918081137994",
-    notes: [],
-    fee: 30150,
-    tax: 4600,
-    error_code: null,
-    error_description: null,
-    error_source: null,
-    error_step: null,
-    error_reason: null,
-    acquirer_data: {
-      bank_transaction_id: "1028635",
-    },
-    created_at: 1742820866,
+  payment:{
+
+    
+      id: "pay_QAdPuYorh3U9cw",
+      entity: "payment",
+      amount: 1277455,
+      currency: "INR",
+      status: "captured",
+      order_id: "order_QAdPntmMXFnpXu",
+      invoice_id: null,
+      international: false,
+      method: "netbanking",
+      amount_refunded: 0,
+      refund_status: null,
+      captured: true,
+      description: "#QAdPSEQcP5moug",
+      card_id: null,
+      bank: "CNRB",
+      wallet: null,
+      vpa: null,
+      email: "void@razorpay.com",
+      contact: "+918081137994",
+      notes: [],
+      fee: 30150,
+      tax: 4600,
+      error_code: null,
+      error_description: null,
+      error_source: null,
+      error_step: null,
+      error_reason: null,
+      acquirer_data: {
+          bank_transaction_id: "1028635"
+      },
+      created_at: 1742820866
+  
+  
+
+
+
+    
   },
-
-  heliBenefits: [
-    {
-      heading: "Traffic Free Experience",
-      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+ hotelPreBook : {
+    Status: {
+      Code: 200,
+      Description: "Successful"
     },
-    {
-      heading: "Travel Better",
-      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
-    },
-    {
-      heading: "Chauffeur service",
-      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
-    },
-  ],
-
-  destinationWeddingSteps: [
-    {
-      label: "Contact Information",
-      icon: <PhoneAndroid />,
-    },
-    {
-      label: "Basic Information",
-      icon: <ContactMail />,
-    },
-    {
-      label: "Additional Information",
-      icon: <RiInformation2Line />,
-    },
-  ],
+    HotelResult: [
+      {
+        HotelCode: "1144184",
+        Currency: "INR",
+        Rooms: [
+          {
+            Name: [
+              "Deluxe Double Room,1 Double Bed,NonSmoking"
+            ],
+            BookingCode: "1144184!TB!4!TB!469e3e2a-1e9b-11f0-88c1-3ad144d360dd!TB!N!TB!AFF!",
+            Inclusion: "Free self parking",
+            DayRates: [
+              [
+                {
+                  BasePrice: 2867.66
+                },
+                {
+                  BasePrice: 2867.66
+                }
+              ]
+            ],
+            TotalFare: 6450.64,
+            TotalTax: 715.33,
+            NetAmount: 6451.469283257001,
+            NetTax: 716.1611116069998,
+            CancelPolicies: [
+              {
+                FromDate: "20-04-2025 00:00:00",
+                ChargeType: "Percentage",
+                CancellationCharge: 100
+              }
+            ],
+            MealType: "Room_Only",
+            IsRefundable: false,
+            WithTransfers: false,
+            Amenities: [
+              "Towels provided",
+              "Hair dryer (on request)",
+              "Premium TV channels",
+              "Non-Smoking",
+              "Shower only",
+              "Slippers",
+              "Private bathroom",
+              "Free toiletries",
+              "Daily housekeeping",
+              "Air conditioning",
+              "Free WiFi",
+              "Rollaway/extra beds (surcharge)",
+              "Desk",
+              "Room service (24 hours)",
+              "Cable TV service"
+            ],
+            LastCancellationDeadline: "19-04-2025 23:59:59",
+            PriceBreakUp: [
+              {
+                RoomRate: 5776.880352,
+                RoomTax: 715.3296679999999,
+                AgentCommission: 41.572180350000004,
+                TaxBreakup: [
+                  {
+                    TaxType: "Tax_TDS",
+                    TaxableAmount: 41.572180350000004,
+                    TaxPercentage: 2,
+                    TaxAmount: 0.8314436070000001
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        RateConditions: [
+          "Early check out will attract full cancellation charge unless otherwise specified",
+          "CheckIn Time-Begin: 12:00 PM",
+          "CheckOut Time: 12:00 PM",
+          "CheckIn Instructions: <ul>  <li>Extra-person charges may apply and vary depending on property policy</li><li>Government-issued photo identification and a credit card, debit card, or cash deposit may be required at check-in for incidental charges</li><li>Special requests are subject to availability upon check-in and may incur additional charges; special requests cannot be guaranteed</li><li>This property accepts credit cards</li>  </ul> ",
+          " Special Instructions : Front desk staff will greet guests on arrival at the property.",
+          "Minimum CheckIn Age : 18",
+          "Optional Fees: <ul> <li>Airport shuttle fee: INR 2000 per vehicle (roundtrip)</li><li>Rollaway bed fee: INR 500 per night</li></ul> <p>The above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. </p>",
+          "Cards Accepted: Visa,Mastercard",
+          "Pets not allowed,Professional property host/manager,No cribs (infant beds) available"
+        ]
+      }
+    ],
+    ValidationInfo: {
+      PanMandatory: false,
+      PassportMandatory: false,
+      CorporateBookingAllowed: false,
+      PanCountRequired: 0,
+      SamePaxNameAllowed: true,
+      SpaceAllowed: true,
+      SpecialCharAllowed: false,
+      PaxNameMinLength: 0,
+      PaxNameMaxLength: 50,
+      CharLimit: true,
+      PackageFare: false,
+      PackageDetailsMandatory: false,
+      DepartureDetailsMandatory: false,
+      GSTAllowed: false
+    }
+  }
+  
 };
+
+

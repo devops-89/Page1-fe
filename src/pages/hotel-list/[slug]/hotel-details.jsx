@@ -30,6 +30,7 @@ import {
   MenuItem,
  
 } from "@mui/material";
+
 import { display, nunito } from "@/utils/fonts";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -56,6 +57,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const HotelDetails = () => {
+  const router=useRouter();
   const { query } = useRouter();
 
   // extracting data from redux of hotel details
@@ -498,6 +500,7 @@ const HotelDetails = () => {
                 </Typography>
 
                 <Button
+                  onClick={()=>router.push(`/hotel-list/${selectedHotel.HotelCode}/hotel-prebook`)}
                   variant="contained"
                   sx={{ backgroundColor: COLORS.PRIMARY }}
                 >
