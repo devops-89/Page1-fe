@@ -77,7 +77,7 @@ export default function OneWayCheckout() {
       .paymentInit(paymentPayload)
       .then((response) => {
         setLoading(false);
-        console.log("payment response: ", response);
+        console.log("payment response: -------", response);
         if (response?.data?.data?.short_url) {
           router.replace(response.data.data.short_url);
         }

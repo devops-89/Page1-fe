@@ -93,7 +93,7 @@ const HotelForm = () => {
     const payload = {
       CheckIn: checkIn.format("YYYY-MM-DD"),
       CheckOut: checkOut.format("YYYY-MM-DD"),
-      CityCodes: "144306" || selectedCity.city_code,
+      CityCodes: selectedCity?.city_code,
       GuestNationality: selectedCity.country_code,
       EndUserIp: userIp,
       PaxRooms: [
