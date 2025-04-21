@@ -239,8 +239,8 @@ const RoundTrip = () => {
            size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
           sx={{
             border: "1px solid #808080",
-            borderTopLeftRadius: 4,
-            borderBottomLeftRadius: 4,
+            borderTopLeftRadius: {xs:0, sm:4},
+            borderBottomLeftRadius: {xs:0, sm:4},
             borderRight: "none",
           }}
         >
@@ -535,8 +535,8 @@ const RoundTrip = () => {
 
             position: "relative",
             height: 90,
-            borderTopRightRadius: 4,
-            borderBottomRightRadius: 4,
+            borderTopRightRadius: {xs:0, sm:4},
+            borderBottomRightRadius: {xs:0, sm:4},
           }}
         >
           <Typography

@@ -299,8 +299,7 @@ const Multiway = () => {
         sx={{
           maxHeight: "400px",
           overflowY: "auto",
-          padding: { xs: 1 },
-
+          padding: { xs: 0, sm:1 },
           borderRadius: 4,
         }}
       >
@@ -324,8 +323,8 @@ const Multiway = () => {
               size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
-                borderTopLeftRadius: 4,
-                borderBottomLeftRadius: 4,
+                borderTopLeftRadius: {xs:0, sm:4},
+                borderBottomLeftRadius: {xs:0, sm:4},
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",

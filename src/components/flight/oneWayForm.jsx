@@ -201,8 +201,8 @@ const OnewayForm = () =>  {
           size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #808080",
-            borderTopLeftRadius: 4,
-            borderBottomLeftRadius: 4,
+            borderTopLeftRadius: {xs:0, sm:4},
+            borderBottomLeftRadius: {xs:0, sm:4},
           }}
         >
           <Typography
@@ -451,8 +451,8 @@ const OnewayForm = () =>  {
 
             position: "relative",
             alignItems:"stretch",
-            borderTopRightRadius: 4,
-            borderBottomRightRadius: 4,
+            borderBottomLeftRadius: {xs:0, sm:4},
+            borderBottomRightRadius: {xs:0, sm:4},
             flex:1
           }}
         >
