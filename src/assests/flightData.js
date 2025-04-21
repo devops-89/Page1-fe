@@ -27,25 +27,7 @@ export const flightData = [
     seatsLeft: "10",
     fareType: FARE_TYPE.NONREFUNDABLE,
     flightDetails: {
-      //   flightInformation: {
-      //     logo: logo1,
-      //     airlineName: "Blogzine Airline",
-      //     flightNumber: "FFR-5682",
-      //     travelClass: "Economy",
-      //     departureDetails: {
-      //       departureTime: "14:50",
-      //       departureAirportCode: "BOM",
-      //       departureTerminal: "Terminal 2",
-      //       departureLocation: "Mumbai, India",
-      //     },
-      //     timeTaken: "9hr 50min",
-      //     arrivalDetails: {
-      //       arrivalTime: "07:35",
-      //       arrivalAirportCode: "JFK",
-      //       arrivalTerminal: "Terminal 2",
-      //       arrivalLocation: "New York, USA",
-      //     },
-      //   },
+     
       fareDetail: [
         {
           value1: "$36,500",

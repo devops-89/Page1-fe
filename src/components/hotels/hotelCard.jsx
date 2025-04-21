@@ -14,7 +14,7 @@ import { Wifi, Pool, Restaurant, LocalParking } from '@mui/icons-material';
 import { nunito } from '@/utils/fonts';
 import Link from 'next/link';
 
-const HotelCard = ({ hotel, hotelID }) => {
+const HotelCard = ({ hotel }) => {
 
 
   return (
@@ -143,7 +143,7 @@ const HotelCard = ({ hotel, hotelID }) => {
             <Typography variant="h6" mt={2}>
               ₹{hotel?.Rooms[0]?.TotalFare} {hotel?.Currency}
             </Typography>
-            <Link href={`/hotel-list/${hotelID}/hotel-details`} style={{ textDecoration: "none" }}><Button variant="contained" size="small" sx={{ bgcolor: COLORS.PRIMARY }}>
+            <Link href={`/hotel-list/${hotel?.HotelCode}/hotel-details`} style={{ textDecoration: "none" }}><Button variant="contained" size="small" sx={{ bgcolor: COLORS.PRIMARY }}>
               Book Now
             </Button></Link>
           </Box>

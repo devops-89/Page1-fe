@@ -6,6 +6,9 @@ import { hotelController } from "@/api/hotelController";
 import { hotelslist } from "@/utils/hotelcitycodes";
 import { useDispatch } from "react-redux";
 import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList";
+import ToastBar from "./toastBar";
+import { TOAST_STATUS } from "@/utils/enum";
+import { setToast } from "@/redux/reducers/toast";
 import {
   Autocomplete,
   Box,
@@ -115,14 +118,18 @@ const HotelForm = () => {
     try {
       setButtonLoading(true);
       const response = await hotelController.searchHotel(payload);
-      console.log("Response from API: ", response.data.data);
-      if(response){
-        dispatch(setHotelList(response.data.data));
+      console.log("Response from API: ", response.data.data.length);
+      if(response.data.data.length>0){
+        dispatch(setHotelList(response?.data?.data));
         router.push("/hotel-list");
+      }
+      else{
+
+        throw new Error("No Hotels Available!");
       }
       setButtonLoading(false)
     } catch (error) {
-      console.error("There is an error:", error);
+     dispatch(setToast({open:true,message:"No Hotels Found!",severity:TOAST_STATUS.ERROR}))
       setButtonLoading(false)
     }
    
@@ -381,6 +388,7 @@ const HotelForm = () => {
                    </Button>
         </Grid2>
       </Grid2>
+      <ToastBar/>
     </Box>
   );
 };

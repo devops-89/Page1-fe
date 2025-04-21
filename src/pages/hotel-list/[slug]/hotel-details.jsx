@@ -1,4 +1,8 @@
 import banner from "@/banner/hotel.jpg";
+import LanguageIcon from "@mui/icons-material/Language";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+
 import {
   Box,
   Typography,
@@ -24,6 +28,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+ 
 } from "@mui/material";
 import { display, nunito } from "@/utils/fonts";
 import React from "react";
@@ -35,6 +40,11 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { HOTEL_RATING } from "@/utils/enum";
+import Link from "next/link";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -46,8 +56,24 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const HotelDetails = () => {
+  const { query } = useRouter();
+
+  // extracting data from redux of hotel details
+  const hotels = useSelector((state) => state.HOTEL.HotelList.hotelList || []);
+
+  console.log("Total Hotels: ", hotels);
+
   const [open, setOpen] = React.useState(false);
   const [roomType, setRoomType] = React.useState("");
+  const [selectedHotel, setSelectedHotel] = useState({});
+
+  useEffect(() => {
+    setSelectedHotel(
+      hotels.find((hotel) => hotel.HotelCode === query.slug) || {}
+    );
+  }, [query.slug]);
+
+  console.log("selected Hotel Data:", selectedHotel);
 
   const handleChange = (event) => {
     setRoomType(event.target.value);
@@ -59,6 +85,39 @@ const HotelDetails = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  // =============================== address truncation logic start===============================
+  const [openAddress, setOpenAddress] = useState(false);
+
+  const handleOpenAddress = () => setOpenAddress(true);
+  const handleCloseAddress = () => setOpenAddress(false);
+
+  const maxLength = 50;
+  const address = selectedHotel?.Address || "";
+
+  const shouldTruncate = address.length > maxLength;
+  const displayedAddress = shouldTruncate
+    ? `${selectedHotel.Address.substring(0, maxLength)}...`
+    : `${selectedHotel.Address}`;
+
+  // ====================== address truncation logic end ============================================
+
+  //====================== facilities truncation logic start ========================================
+  const [openFacilites, setOpenFacilities] = useState(false);
+
+  const handleOpenFacilities = () => setOpenFacilities(true);
+  const handleCloseFacilities = () => setOpenFacilities(false);
+
+  const maxFacilitiesLength = 5;
+  const facilities = selectedHotel?.HotelFacilities || "";
+
+  const shouldTruncateFacilities = facilities.length > maxFacilitiesLength;
+  const displayedFacilities = shouldTruncateFacilities
+    ? selectedHotel?.HotelFacilities?.slice(0, maxFacilitiesLength)
+    : selectedHotel.HotelFacilities;
+
+  // ======================= facilities truncation logic end =======================================
+
   return (
     <Grid2 container>
       <Grid2
@@ -91,7 +150,7 @@ const HotelDetails = () => {
         <Container
           sx={{
             backgroundColor: COLORS.WHITE,
-            borderRadius: "18px",
+            
             py: "30px",
             mb: "20px",
           }}
@@ -100,168 +159,194 @@ const HotelDetails = () => {
             <Grid2 size={{ xs: 12, md: 12, lg: 8 }}>
               {/* here */}
               <Container>
-
-              <Typography
-                variant="h5"
-                sx={{
-                  fontFamily: nunito.style,
-                  fontWeight: 700,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent:"space-between",
-                  gap: "10px",
-                  mb: "15px",
-                  fontSize:{lg:"24px",md:"24px",xs:"18px"},
-                 
-                   
-                }}
-              >
-                Taj Fort Aguada Resort & Spa, Goa{" "}
-                <Rating name="read-only" value={4} readOnly fontSize={{lg:"30px",md:"24px",xs:"10px"}} />
-              </Typography>
-              <img
-                src={banner.src}
-                style={{
-                  width: "100%",
-                  borderRadius: "16px",
-                  height: "auto",
-                  display: "block",
-                }}
-              />
-              <Typography
-                variant="h6"
-                sx={{ marginTop: "10px", fontFamily: nunito.style ,fontSize:{ lg:24, md:24,sm:24,xs:18} }}
-              >
-                Award-winning Seafront Resort Frequented by Celebrities
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ fontFamily: nunito.style, mb: "15px" }}
-              >
-                Stay in a scenic property built on the 16th-century Fort Aguada
-                offering stunning views of the Arabian Sea.{" "}
-                <Button variant="text" sx={{ fontWeight: 600 }}>
-                  More
-                </Button>
-              </Typography>
-              {/* here */}
-              
-
-              </Container>
-
-              <Container>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "15px",
-                  mb: "25px",
-                 
-                }}
-              >
-                <Button
-                  variant="outlined"
-                  color="warning"
-                  sx={{ fontFamily: nunito.style, 
-                    fontWeight: 600 , 
-                    fontSize:{lg:16 ,md:16 , sm:16 , xs:10} ,
-                    py :{lg:0.5 , }
-
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontFamily: nunito.style,
+                    fontWeight: 700,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                    mb: "15px",
+                    fontSize: { lg: "24px", md: "24px", xs: "18px" },
                   }}
-                  onClick={handleClickOpen}
-                  
+                >
+                  {selectedHotel?.HotelName}
+                  <Rating
+                    name="read-only"
+                    value={HOTEL_RATING[selectedHotel?.HotelRating] || 5}
+                    readOnly
+                    fontSize={{ lg: "30px", md: "24px", xs: "10px" }}
+                  />
+                </Typography>
+                <img
+                  src={banner.src}
+                  style={{
+                    width: "100%",
+                    borderRadius: "16px",
+                    height: "auto",
+                    display: "block",
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    marginTop: "10px",
+                    fontFamily: nunito.style,
+                    fontSize: { lg: 24, md: 24, sm: 24, xs: 18 },
+                  }}
+                >
+                  Award-winning Seafront Resort Frequented by Celebrities
+                </Typography>
 
+                {/* Hotel Address  start*/}
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontFamily: nunito.style,
+                    mb: "15px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
-                  Food And Dinning
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  sx={{ fontFamily: nunito.style, fontWeight: 600 }}
-                  onClick={handleClickOpen}
+                  <LocationOnIcon sx={{ mr: 1, color: COLORS.PRIMARY }} />
+                  {displayedAddress}, {selectedHotel?.CityName},{" "}
+                  {selectedHotel.PinCode}, {selectedHotel?.CountryName}
+                  {shouldTruncate && (
+                    <Typography
+                      component="span"
+                      onClick={handleOpenAddress}
+                      sx={{
+                        ml: 1,
+                        color: COLORS.PRIMARY,
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Read More
+                    </Typography>
+                  )}
+                </Typography>
+
+                {/* Dialog component for Address */}
+                <CustomDialog
+                  data={selectedHotel.Address}
+                  open={openAddress}
+                  handleClose={handleCloseAddress}
+                />
+
+                {/* Hotel address end */}
+
+                {/* Website URL start */}
+                <Link href={`${selectedHotel.HotelWebsiteUrl}`}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontFamily: nunito.style,
+                      mb: "15px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <LanguageIcon sx={{ mr: 1, color: COLORS.PRIMARY }} />
+                    {selectedHotel.HotelWebsiteUrl}
+                  </Typography>
+                </Link>
+                {/* Website URL end */}
+
+                {/* Phone Number start */}
+
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontFamily: nunito.style,
+                    mb: "15px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
-                  Location & Surroundings
-                </Button>
-              </Box>
+                  <LocalPhoneIcon sx={{ mr: 1, color: COLORS.PRIMARY }} />
+                  {selectedHotel.PhoneNumber}
+                </Typography>
+                {/* Phone Number end */}
+              </Container>
+
+
+              <Container>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "15px" }}
+                >
+                  Amenities
+                </Typography>
               </Container>
 
               <Container>
-
-              <Typography
-                variant="h5"
-                sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "15px" }}
-              >
-                Amenities
-              </Typography>
-              </Container>
-
-              <Container>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap:"wrap",
-                  gap: "20px",
-                  mb: "25px",
-                }}
-              >
-                <Box>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: nunito.style,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <FilterVintageIcon /> Spa
-                  </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "20px",
+                    mb: "25px",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: nunito.style,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <FilterVintageIcon /> Spa
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: nunito.style,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <PoolIcon /> Swimming Pool
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: nunito.style,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <FitnessCenterIcon /> Gym
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: nunito.style,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        cursor: "pointer",
+                      }}
+                      onClick={handleClickOpen}
+                    >
+                      88+ amenities
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: nunito.style,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <PoolIcon /> Swimming Pool
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: nunito.style,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <FitnessCenterIcon /> Gym
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: nunito.style,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      cursor: "pointer",
-                    }}
-                    onClick={handleClickOpen}
-                  >
-                    88+ amenities
-                  </Typography>
-                </Box>
-              </Box>
               </Container>
             </Grid2>
             <Grid2
@@ -406,14 +491,12 @@ const HotelDetails = () => {
                   variant="h4"
                   sx={{ fontWeight: 700, fontFamily: nunito.style, mb: "15px" }}
                 >
-                  ₹ 42,300+{" "}
-                  <Typography
-                    component={"span"}
-                    sx={{ color: COLORS.DARKGREY }}
-                  >
-                    ₹ 7,614 taxes & fees
+                  ₹ {selectedHotel?.Rooms?.[0]?.TotalFare}+{" "}
+                  <Typography component={"div"} sx={{ color: COLORS.DARKGREY }}>
+                    ₹ {selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
                   </Typography>
                 </Typography>
+
                 <Button
                   variant="contained"
                   sx={{ backgroundColor: COLORS.PRIMARY }}
@@ -442,7 +525,7 @@ const HotelDetails = () => {
                       fontSize: "20px",
                     }}
                   >
-                    4.6
+                    {HOTEL_RATING[selectedHotel.HotelRating]}.0
                   </Typography>
                 </Grid2>
                 <Grid2
@@ -474,7 +557,10 @@ const HotelDetails = () => {
                   size={{ xs: 3 }}
                   sx={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  <Button variant="text" sx={{ fontWeight:700, fontFamily:nunito.style }}>
+                  <Button
+                    variant="text"
+                    sx={{ fontWeight: 700, fontFamily: nunito.style }}
+                  >
                     see all
                   </Button>
                 </Grid2>
@@ -486,12 +572,11 @@ const HotelDetails = () => {
         <Container
           sx={{
             backgroundColor: COLORS.WHITE,
-            borderRadius: "18px",
+           
             py: "30px",
-            
           }}
         >
-          <Box  >
+          <Box>
             <FormControl sx={{ width: 180 }}>
               <InputLabel
                 id="demo-simple-select-label"
@@ -523,522 +608,199 @@ const HotelDetails = () => {
               </Select>
             </FormControl>
           </Box>
-          <Grid2 container sx={{ mb: 4 }} >
-            <Grid2
-              size={{ xs: 12 }}
-              sx={{
-                backgroundColor: COLORS.LIGHTBLUE,
-                border: `1px solid ${COLORS.GREY}`,
-                padding: "15px 25px",
-              }}
-            >
-              <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
-                Enjoy Free Breakfast + Lunch/Dinner throughout your stay for
-                just ₹7700 more!
-              </Typography>
-            </Grid2>
-            {/* hey */}
-            <Grid2
-              size={{ xs: 12, sm: 12, md: 4 }}
-              sx={{ border: `1px solid ${COLORS.GREY}`, padding: "15px" }}
-            >
-              <Card
-                sx={{
-                  position: "relative",
-                  ":hover": {
-                    ".image": {
-                      transform: "scale(1.1)",
-                    },
-                  },
-                  overflow: "hidden",
-                  ".image": {
-                    transition: "0.5s ease all",
-                  },
-                  boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
-                  height: {lg:500 , md:530 ,xs:540},
-                }}
-                
-              >
-                <Box sx={{ position: "relative", overflow: "hiden" }} border={10}>
-                  <Box
-                    sx={{
-                      backgroundImage: `url(${banner.src})`,
-                      height: 200,
-                      backgroundPosition: "center",
-                      backgroundSize: "cover",
-                      backgroundRepeat: "no-repeat",
-                    }}
-                    className="image"
-                  ></Box>
-                </Box>
-                {/* <Box sx={{ position: "absolute", top: 0, width: "100%" , border:10  }}>
-                  <Stack
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    p={2}
-                  ></Stack>
-                </Box> */}
-                <CardContent>
-                  <Typography
-                    sx={{
-                      mt: 1,
-                      fontSize: 18,
-                      fontFamily: nunito.style,
-                      fontWeight: 600,
-                      mb: 1,
-                    }}
-                  >
-                    Premium Suite Sea View with Terrace - King Bed
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      fontFamily: nunito.style,
-                      color: COLORS.DARKGREY,
-                      fontWeight: 600,
-                    }}
-                  >
-                    603 sq.ft (56 sq.mt) | Sea View | King Bed
-                  </Typography>
-                  <Stack
-                    direction={"column"}
-                    alignItems={"flex-start"}
-                    spacing={2}
-                    mt={1}
-                  
-                    
-                  >
-                    <Grid2 container sx={{pb:10}}  >
-                      <Grid2 size={{ xs: 6 }} >
-                        <List>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Mineral Water
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Housekeeping
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Iron/Ironing Board
-                            </Typography>
-                          </ListItem>
-                        </List>
-                      </Grid2>
-                      <Grid2 size={{ xs: 6 }}>
-                        <List>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Mineral Water
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Housekeeping
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Iron/Ironing Board
-                            </Typography>
-                          </ListItem>
-                        </List>
-                      </Grid2>
-                    <Button
-                      variant="contained"
-                      sx={{ backgroundColor: COLORS.PRIMARY }}
-                      onClick={handleClickOpen}
-                    >
-                      More Details
-                    </Button>
-                    </Grid2>
-                  </Stack>
-                 
-                </CardContent>
-            
-              </Card>
-            </Grid2>
-            {/* hey */}
 
-            <Grid2
-              size={{ xs: 12, sm: 12, md: 8 }}
-              sx={{
-                border: `1px solid ${COLORS.GREY}`,
-                padding: "15px",
-                display: "flex",
-              }}
-            >
-              <Grid2 container spacing={2}>
-                <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: 600, fontFamily: nunito.style }}
-                  >
-                    Room with Breakfast + Lunch/Dinner
+          {/* Rooms Information */}
+          {selectedHotel?.Rooms?.map((room, index) => {
+            return (
+              <Grid2 key={index} container sx={{ mb: 4 }}>
+                <Grid2
+                  size={{ xs: 12 }}
+                  sx={{
+                    backgroundColor: COLORS.LIGHTBLUE,
+                    border: `1px solid ${COLORS.GREY}`,
+                    padding: "15px 25px",
+                  }}
+                >
+                  <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
+                    Enjoy Free Breakfast + Lunch/Dinner throughout your stay for
+                    just ₹7700 more!
                   </Typography>
-                  <List sx={{ listStyleType: "disc", ml: 2 }}>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Free Breakfast
-                      </Typography>
-                    </ListItem>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Free Lunch Or Dinner
-                      </Typography>
-                    </ListItem>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Make My Trip Special Promotion - Taj Holidays Winter
-                      </Typography>
-                    </ListItem>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Non-Refundable
-                      </Typography>
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                    onClick={handleClickOpen}
-                  >
-                    More Details
-                  </Button>
                 </Grid2>
-                <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
-                  <Typography
+                {/* hey */}
+                <Grid2
+                  size={{ xs: 12, sm: 12, md: 4 }}
+                  sx={{ border: `1px solid ${COLORS.GREY}`, padding: "15px" }}
+                >
+                  <Card
                     sx={{
-                      textDecoration: "line-through",
-                      color: COLORS.DARKGREY,
+                      position: "relative",
+                      ":hover": {
+                        ".image": {
+                          transform: "scale(1.1)",
+                        },
+                      },
+                      overflow: "hidden",
+                      ".image": {
+                        transition: "0.5s ease all",
+                      },
+                      boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
+                      height: { lg: 360, md: 380, xs: 400 },
+                    
                     }}
                   >
-                    ₹ 13,000
-                  </Typography>
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 700, fontFamily: nunito.style }}
-                  >
-                    ₹ 42,300+
-                  </Typography>
-                  <Typography sx={{ color: COLORS.DARKGREY, mb: 1 }}>
-                    ₹ 7,614 taxes & fees
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
-                    <Typography
-                      component={"span"}
-                      sx={{ color: COLORS.SECONDARY, cursor: "pointer" }}
+                    <Box
+                      sx={{ position: "relative", overflow: "hiden" }}
+                      border={10}
                     >
-                      Login Now
-                    </Typography>{" "}
-                    and get this for ₹10,940 or less
-                  </Typography>
+                      <Box
+                        sx={{
+                          backgroundImage: `url(${banner.src})`,
+                          height: 200,
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                        }}
+                        className="image"
+                      ></Box>
+                    </Box>
+                   
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          mt: 1,
+                          fontSize: 18,
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          mb: 1,
+                        }}
+                      >
+                        {room.Name[0]}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 16,
+                          fontFamily: nunito.style,
+                          color: COLORS.DARKGREY,
+                          fontWeight: 600,
+                        }}
+                      >
+                        603 sq.ft (56 sq.mt) | Sea View | King Bed
+                      </Typography>
+                      <Stack
+                        direction={"column"}
+                        alignItems={"flex-start"}
+                        spacing={2}
+                        mt={1}
+                      >
+                      
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                </Grid2>
+                {/* hey */}
+
+                <Grid2
+                  size={{ xs: 12, sm: 12, md: 8 }}
+                  sx={{
+                    border: `1px solid ${COLORS.GREY}`,
+                    padding: "15px",
+                    display: "flex",
+                  }}
+                >
+                  <Grid2 container spacing={2}>
+                    <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, fontFamily: nunito.style }}
+                      >
+                        Room with Breakfast + Lunch/Dinner
+                      </Typography>
+                      <List sx={{ listStyleType: "disc", ml: 2 }}>
+                        {displayedFacilities?.map((facilities, index) => {
+                          return (
+                            <ListItem
+                              key={index}
+                              sx={{ display: "list-item", py: 0 }}
+                            >
+                              <Typography
+                                sx={{
+                                  fontSize: "15px",
+                                  fontFamily: nunito.style,
+                                }}
+                              >
+                                {facilities}
+                              </Typography>
+                            </ListItem>
+                          );
+                        })}
+                      </List>
+                      {/* Dialog component for Facilities Read More */}
+                      <CustomDialogFacilities
+                        data={selectedHotel?.HotelFacilities}
+                        open={openFacilites}
+                        handleClose={handleCloseFacilities}
+                      />
+                      {shouldTruncateFacilities && (
+                        <Typography
+                          component="span"
+                          onClick={handleOpenFacilities}
+                          sx={{
+                            ml: 1,
+                            color: COLORS.PRIMARY,
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          View All Facilities..
+                        </Typography>
+                      )}
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 700,
+                          color: COLORS.DARKGREY,
+                          mb: "10px",
+                        }}
+                      >
+                        Per Night:
+                      </Typography>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          fontWeight: 700,
+                          fontFamily: nunito.style,
+                          mb: "15px",
+                        }}
+                      >
+                        ₹ {selectedHotel?.Rooms?.[index]?.TotalFare}+{" "}
+                        <Typography
+                          component={"div"}
+                          sx={{ color: COLORS.DARKGREY }}
+                        >
+                          ₹ {selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
+                        </Typography>
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ fontFamily: nunito.style }}
+                      >
+                        <Typography
+                          component={"span"}
+                          sx={{ color: COLORS.SECONDARY, cursor: "pointer" }}
+                        >
+                          Login Now
+                        </Typography>{" "}
+                        and get this for ₹10,940 or less
+                      </Typography>
+                    </Grid2>
+                  </Grid2>
                 </Grid2>
               </Grid2>
-            </Grid2>
-          </Grid2>
-
-          <Grid2 container sx={{ mb: 4 }} >
-            <Grid2
-              size={{ xs: 12 }}
-              sx={{
-                backgroundColor: COLORS.LIGHTBLUE,
-                border: `1px solid ${COLORS.GREY}`,
-                padding: "15px 25px",
-              }}
-            >
-              <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
-                Enjoy Free Breakfast + Lunch/Dinner throughout your stay for
-                just ₹7700 more!
-              </Typography>
-            </Grid2>
-            {/* hey */}
-            <Grid2
-              size={{ xs: 12, sm: 12, md: 4 }}
-              sx={{ border: `1px solid ${COLORS.GREY}`, padding: "15px" }}
-            >
-              <Card
-                sx={{
-                  position: "relative",
-                  ":hover": {
-                    ".image": {
-                      transform: "scale(1.1)",
-                    },
-                  },
-                  overflow: "hidden",
-                  ".image": {
-                    transition: "0.5s ease all",
-                  },
-                  boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
-                  height: {lg:500 , md:530 ,xs:540},
-                }}
-                
-              >
-                <Box sx={{ position: "relative", overflow: "hiden" }} border={10}>
-                  <Box
-                    sx={{
-                      backgroundImage: `url(${banner.src})`,
-                      height: 200,
-                      backgroundPosition: "center",
-                      backgroundSize: "cover",
-                      backgroundRepeat: "no-repeat",
-                    }}
-                    className="image"
-                  ></Box>
-                </Box>
-                {/* <Box sx={{ position: "absolute", top: 0, width: "100%" , border:10  }}>
-                  <Stack
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                    p={2}
-                  ></Stack>
-                </Box> */}
-                <CardContent>
-                  <Typography
-                    sx={{
-                      mt: 1,
-                      fontSize: 18,
-                      fontFamily: nunito.style,
-                      fontWeight: 600,
-                      mb: 1,
-                    }}
-                  >
-                    Premium Suite Sea View with Terrace - King Bed
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      fontFamily: nunito.style,
-                      color: COLORS.DARKGREY,
-                      fontWeight: 600,
-                    }}
-                  >
-                    603 sq.ft (56 sq.mt) | Sea View | King Bed
-                  </Typography>
-                  <Stack
-                    direction={"column"}
-                    alignItems={"flex-start"}
-                    spacing={2}
-                    mt={1}
-                  
-                    
-                  >
-                    <Grid2 container sx={{pb:10}}  >
-                      <Grid2 size={{ xs: 6 }} >
-                        <List>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Mineral Water
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Housekeeping
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Iron/Ironing Board
-                            </Typography>
-                          </ListItem>
-                        </List>
-                      </Grid2>
-                      <Grid2 size={{ xs: 6 }}>
-                        <List>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Mineral Water
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Housekeeping
-                            </Typography>
-                          </ListItem>
-                          <ListItem sx={{ display: "list-item", pl: 2, py: 0 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "14px",
-                                fontFamily: nunito.style,
-                              }}
-                            >
-                              Iron/Ironing Board
-                            </Typography>
-                          </ListItem>
-                        </List>
-                      </Grid2>
-                    <Button
-                      variant="contained"
-                      sx={{ backgroundColor: COLORS.PRIMARY }}
-                      onClick={handleClickOpen}
-                    >
-                      More Details
-                    </Button>
-                    </Grid2>
-                  </Stack>
-                 
-                </CardContent>
-            
-              </Card>
-            </Grid2>
-            {/* hey */}
-
-            <Grid2
-              size={{ xs: 12, sm: 12, md: 8 }}
-              sx={{
-                border: `1px solid ${COLORS.GREY}`,
-                padding: "15px",
-                display: "flex",
-              }}
-            >
-              <Grid2 container spacing={2}>
-                <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: 600, fontFamily: nunito.style }}
-                  >
-                    Room with Breakfast + Lunch/Dinner
-                  </Typography>
-                  <List sx={{ listStyleType: "disc", ml: 2 }}>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Free Breakfast
-                      </Typography>
-                    </ListItem>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Free Lunch Or Dinner
-                      </Typography>
-                    </ListItem>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Make My Trip Special Promotion - Taj Holidays Winter
-                      </Typography>
-                    </ListItem>
-                    <ListItem sx={{ display: "list-item", py: 0 }}>
-                      <Typography
-                        sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                      >
-                        Non-Refundable
-                      </Typography>
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                    onClick={handleClickOpen}
-                  >
-                    More Details
-                  </Button>
-                </Grid2>
-                <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
-                  <Typography
-                    sx={{
-                      textDecoration: "line-through",
-                      color: COLORS.DARKGREY,
-                    }}
-                  >
-                    ₹ 13,000
-                  </Typography>
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 700, fontFamily: nunito.style }}
-                  >
-                    ₹ 42,300+
-                  </Typography>
-                  <Typography sx={{ color: COLORS.DARKGREY, mb: 1 }}>
-                    ₹ 7,614 taxes & fees
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
-                    <Typography
-                      component={"span"}
-                      sx={{ color: COLORS.SECONDARY, cursor: "pointer" }}
-                    >
-                      Login Now
-                    </Typography>{" "}
-                    and get this for ₹10,940 or less
-                  </Typography>
-                </Grid2>
-              </Grid2>
-            </Grid2>
-          </Grid2>
-
-
-         
+            );
+          })}
         </Container>
       </Grid2>
 
@@ -1085,3 +847,88 @@ const HotelDetails = () => {
 };
 
 export default HotelDetails;
+
+function CustomDialog({ data, open, handleClose }) {
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          color: COLORS.PRIMARY,
+        }}
+      >
+        Address
+        <IconButton onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent>
+        <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
+          {data}
+        </Typography>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CustomDialogFacilities({ data, open, handleClose }) {
+  function getRandomColor() {
+    const colors = [
+      "#FFD700",
+      "#90EE90",
+      "#ADD8E6",
+      "#FFB6C1",
+      "#FFA07A",
+      "#DDA0DD",
+      "#87CEEB",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          color: COLORS.PRIMARY,
+        }}
+      >
+        Facilities
+        <IconButton onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 1,
+            mt: 1,
+          }}
+        >
+          {data.map((facility, index) => (
+            <Box
+              key={index}
+              sx={{
+                backgroundColor: getRandomColor(),
+                padding: "6px 12px",
+                borderRadius: "16px",
+                fontSize: "0.875rem",
+                fontFamily: nunito.style,
+                color: "#000",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {facility}
+            </Box>
+          ))}
+        </Box>
+      </DialogContent>
+    </Dialog>
+  );
+}
