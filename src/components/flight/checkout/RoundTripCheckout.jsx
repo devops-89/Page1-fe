@@ -27,6 +27,7 @@ import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
 import Loader from "@/utils/Loader";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
+import InternationalFareSummary from "../InternationalFareSummary";
 
 export default function RoundTripCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
@@ -592,7 +593,7 @@ export default function RoundTripCheckout() {
                     toggleDrawer={toggleDrawer}
                     fairSummary ={
                       roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
-                        <FareSummary
+                        <InternationalFareSummary
                           fareData={roundTrip[0]?.Results}
                           commission={roundTrip[2]}
                           toggleDrawer={toggleDrawer}
@@ -613,7 +614,7 @@ export default function RoundTripCheckout() {
 
                   ):(
                       roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
-                    <FareSummary
+                    <InternationalFareSummary
                       fareData={roundTrip[0]?.Results}
                       commission={roundTrip[2]}
                     />

@@ -97,7 +97,7 @@ export default function InternationalMealSelection({
 
   if (isLCC) {
     mealData?.[1]?.forEach((singleMeal) => {
-      //   console.log("singleMeal----------------", singleMeal);
+      // console.log("singleMeal----------------", singleMeal);
       if (!filteredDataReturn[singleMeal.FlightNumber]) {
         filteredDataReturn[singleMeal.FlightNumber] = [];
       }
@@ -179,6 +179,7 @@ export default function InternationalMealSelection({
                       {`${filteredDataOutgoing[flightNumber][0]?.Origin} - ${filteredDataOutgoing[flightNumber][0]?.Destination}`}
                     </Typography>
                     <Grid2 container spacing={2}>
+                      {/* {console.log("filteredDataOutgoing------------", filteredDataOutgoing)} */}
                       {filteredDataOutgoing[flightNumber][0].FlightNumber ? (
                         filteredDataOutgoing[flightNumber]?.map(
                           (meal, mealIndex) => (
@@ -264,67 +265,82 @@ export default function InternationalMealSelection({
                 id="meal_box"
                 tabIndex={tabIndex}
               >
-                {Object.keys(filteredDataReturn).map((flightNumber) => (
-                  <SwiperSlide
-                    key={flightNumber}
-                    style={{ overflow: "auto", maxHeight: "240px" }}
-                  >
+                {Object.keys(filteredDataReturn).length > 0 ? (
+                  Object.keys(filteredDataReturn).map((flightNumber) => (
+                    <SwiperSlide
+                      key={flightNumber}
+                      style={{ overflow: "auto", maxHeight: "240px" }}
+                    >
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 800,
+                          mb: "20px",
+                          p: "10px",
+                          backgroundColor: COLORS.SEMIGREY,
+                        }}
+                      >
+                        {`${filteredDataReturn[flightNumber][0]?.Destination} - ${filteredDataReturn[flightNumber][0]?.Origin}`}
+                      </Typography>
+
+                      <Grid2 container spacing={2}>
+                        {filteredDataReturn[flightNumber]?.length > 0 ? (
+                          filteredDataReturn[flightNumber].map(
+                            (meal, mealIndex) => (
+                              <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                                <MealCard
+                                  meal={meal}
+                                  handleMealValue={() =>
+                                    handleMealClick(meal, flightNumber)
+                                  }
+                                  isSelected={
+                                    selectedMeals[
+                                      uniquePassengerKey
+                                    ]?.meals?.some(
+                                      (m) =>
+                                        m.flightId === flightNumber &&
+                                        m.meal.Code === meal.Code
+                                    ) || false
+                                  }
+                                />
+                              </Grid2>
+                            )
+                          )
+                        ) : (
+                          <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                textAlign: "center",
+                                fontFamily: nunito.style,
+                              }}
+                            >
+                              No Meal Available
+                            </Typography>
+                          </Grid2>
+                        )}
+                      </Grid2>
+                    </SwiperSlide>
+                  ))
+                ) : (
+                  <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
                     <Typography
                       variant="body1"
                       sx={{
+                        textAlign: "center",
                         fontFamily: nunito.style,
-                        fontWeight: 800,
-                        mb: "20px",
-                        p: "10px",
-                        backgroundColor: COLORS.SEMIGREY,
                       }}
                     >
-                      {`${filteredDataReturn[flightNumber][0]?.Destination} - ${filteredDataReturn[flightNumber][0]?.Origin}`}
+                      No Meal Available
                     </Typography>
-                    <Grid2 container spacing={2}>
-                      {filteredDataReturn[flightNumber][0].FlightNumber ? (
-                        filteredDataReturn[flightNumber]?.map(
-                          (meal, mealIndex) => (
-                            <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
-                              <MealCard
-                                meal={meal}
-                                handleMealValue={() =>
-                                  handleMealClick(meal, flightNumber)
-                                }
-                                isSelected={
-                                  selectedMeals[
-                                    uniquePassengerKey
-                                  ]?.meals?.some(
-                                    (m) =>
-                                      m.flightId === flightNumber &&
-                                      m.meal.Code === meal.Code
-                                  ) || false
-                                }
-                              />
-                            </Grid2>
-                          )
-                        )
-                      ) : (
-                        <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              textAlign: "center",
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            No Meal Available
-                          </Typography>
-                        </Grid2>
-                      )}
-                    </Grid2>
-                  </SwiperSlide>
-                ))}
+                  </Grid2>
+                )}
               </Swiper>
             ) : (
               <Grid2 container spacing={2}>
                 {mealData?.[0]?.FlightNumber ? (
-                  mealData?.map((meal, mealIndex) => (
+                  mealData.map((meal, mealIndex) => (
                     <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                       <MealCard
                         meal={meal}
