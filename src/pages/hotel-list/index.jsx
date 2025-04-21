@@ -43,7 +43,7 @@ const HotelList = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const hotellist = useSelector((state) => state.HOTEL.HotelList.hotelList);
-
+   console.log("hotel-list:",hotellist)
   useEffect(() => {
     if (Array.isArray(hotellist)) {
       setLoading(false);
@@ -248,7 +248,7 @@ const HotelList = () => {
                       ref={isLast ? lastBookElementRef : null}
                     >
                       
-                        <HotelCard hotel={val} hotelID={i}/>
+                        <HotelCard hotel={val} />
                     </Grid2>
                   );
                 })
