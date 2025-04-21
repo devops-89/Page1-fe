@@ -609,198 +609,254 @@ const HotelDetails = () => {
             </FormControl>
           </Box>
 
-          {/* Rooms Information */}
           {selectedHotel?.Rooms?.map((room, index) => {
-            return (
-              <Grid2 key={index} container sx={{ mb: 4 }}>
-                <Grid2
-                  size={{ xs: 12 }}
-                  sx={{
-                    backgroundColor: COLORS.LIGHTBLUE,
-                    border: `1px solid ${COLORS.GREY}`,
-                    padding: "15px 25px",
-                  }}
-                >
-                  <Typography variant="body1" sx={{ fontFamily: nunito.style }}>
-                    Enjoy Free Breakfast + Lunch/Dinner throughout your stay for
-                    just ₹7700 more!
-                  </Typography>
-                </Grid2>
-                {/* hey */}
-                <Grid2
-                  size={{ xs: 12, sm: 12, md: 4 }}
-                  sx={{ border: `1px solid ${COLORS.GREY}`, padding: "15px" }}
-                >
-                  <Card
-                    sx={{
-                      position: "relative",
-                      ":hover": {
-                        ".image": {
-                          transform: "scale(1.1)",
-                        },
-                      },
-                      overflow: "hidden",
-                      ".image": {
-                        transition: "0.5s ease all",
-                      },
-                      boxShadow: "rgba(0, 0, 0, 0.15) 0px 5px 15px 0px",
-                      height: { lg: 360, md: 380, xs: 400 },
-                    
-                    }}
-                  >
-                    <Box
-                      sx={{ position: "relative", overflow: "hiden" }}
-                      border={10}
-                    >
-                      <Box
-                        sx={{
-                          backgroundImage: `url(${banner.src})`,
-                          height: 200,
-                          backgroundPosition: "center",
-                          backgroundSize: "cover",
-                          backgroundRepeat: "no-repeat",
-                        }}
-                        className="image"
-                      ></Box>
-                    </Box>
-                   
-                    <CardContent>
-                      <Typography
-                        sx={{
-                          mt: 1,
-                          fontSize: 18,
-                          fontFamily: nunito.style,
-                          fontWeight: 600,
-                          mb: 1,
-                        }}
-                      >
-                        {room.Name[0]}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: 16,
-                          fontFamily: nunito.style,
-                          color: COLORS.DARKGREY,
-                          fontWeight: 600,
-                        }}
-                      >
-                        603 sq.ft (56 sq.mt) | Sea View | King Bed
-                      </Typography>
-                      <Stack
-                        direction={"column"}
-                        alignItems={"flex-start"}
-                        spacing={2}
-                        mt={1}
-                      >
-                      
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                </Grid2>
-                {/* hey */}
+  return (
+    <Grid2 key={index} container sx={{ mb: 4 }}>
+      <Grid2
+        size={{ xs: 12 }}
+        sx={{
+          backgroundColor: COLORS.LIGHTBLUE,
+          border: `1px solid ${COLORS.GREY}`,
+          padding: "15px 25px",
+          borderRadius: "12px 12px 0 0",
+        }}
+      >
+        <Typography variant="body1" sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
+          Enjoy Free Breakfast + Lunch/Dinner throughout your stay for just ₹7700 more!
+        </Typography>
+      </Grid2>
 
-                <Grid2
-                  size={{ xs: 12, sm: 12, md: 8 }}
-                  sx={{
-                    border: `1px solid ${COLORS.GREY}`,
-                    padding: "15px",
-                    display: "flex",
-                  }}
+      {/* Left: Room Image */}
+      <Grid2
+        size={{ xs: 12, sm: 12, md: 4 }}
+        sx={{
+          border: `1px solid ${COLORS.GREY}`,
+          padding: "15px",
+          borderRight: { md: "none" },
+          borderRadius: "0 0 0 12px",
+        }}
+      >
+        <Card
+          sx={{
+            position: "relative",
+            overflow: "hidden",
+            borderRadius: 2,
+            boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+            height: { lg: 360, md: 380, xs: 400 },
+            ":hover .image": {
+              transform: "scale(1.1)",
+            },
+            ".image": {
+              transition: "0.5s ease all",
+            },
+          }}
+        >
+          <Box sx={{ position: "relative" }}>
+            <Box
+              sx={{
+                backgroundImage: `url(${banner.src})`,
+                height: 200,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+              }}
+              className="image"
+            ></Box>
+          </Box>
+
+          <CardContent>
+            <Typography
+              sx={{
+                mt: 1,
+                fontSize: 18,
+                fontFamily: nunito.style,
+                fontWeight: 600,
+                mb: 1,
+              }}
+            >
+              {room.Name[0]}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid2>
+
+      {/* Right: Room Details */}
+      <Grid2
+        size={{ xs: 12, sm: 12, md: 8 }}
+        sx={{
+          border: `1px solid ${COLORS.GREY}`,
+          padding: "15px",
+          borderRadius: "0 0 12px 0",
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        <Grid2 container spacing={2} sx={{ width: "100%" }}>
+          {/* Facilities and Info */}
+          <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: 1 }}
+            >
+              Room with Breakfast + Lunch/Dinner
+            </Typography>
+
+            <List sx={{ listStyleType: "disc", ml: 2 }}>
+              {displayedFacilities?.map((facilities, index) => (
+                <ListItem key={index} sx={{ display: "list-item", py: 0 }}>
+                  <Typography
+                    sx={{ fontSize: "15px", fontFamily: nunito.style }}
+                  >
+                    {facilities}
+                  </Typography>
+                </ListItem>
+              ))}
+            </List>
+
+            <CustomDialogFacilities
+              data={selectedHotel?.HotelFacilities}
+              open={openFacilites}
+              handleClose={handleCloseFacilities}
+            />
+
+            {shouldTruncateFacilities && (
+              <Typography
+                component="span"
+                onClick={handleOpenFacilities}
+                sx={{
+                  ml: 1,
+                  color: COLORS.PRIMARY,
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                View All Facilities..
+              </Typography>
+            )}
+
+            {/* Cancellation Policy */}
+            {room?.CancelPolicies?.length > 0 && (
+              <Box mt={2}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontWeight: 600, fontFamily: nunito.style, mb: 1 }}
                 >
-                  <Grid2 container spacing={2}>
-                    <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: 600, fontFamily: nunito.style }}
-                      >
-                        Room with Breakfast + Lunch/Dinner
-                      </Typography>
-                      <List sx={{ listStyleType: "disc", ml: 2 }}>
-                        {displayedFacilities?.map((facilities, index) => {
-                          return (
-                            <ListItem
-                              key={index}
-                              sx={{ display: "list-item", py: 0 }}
-                            >
-                              <Typography
-                                sx={{
-                                  fontSize: "15px",
-                                  fontFamily: nunito.style,
-                                }}
-                              >
-                                {facilities}
-                              </Typography>
-                            </ListItem>
-                          );
-                        })}
-                      </List>
-                      {/* Dialog component for Facilities Read More */}
-                      <CustomDialogFacilities
-                        data={selectedHotel?.HotelFacilities}
-                        open={openFacilites}
-                        handleClose={handleCloseFacilities}
-                      />
-                      {shouldTruncateFacilities && (
-                        <Typography
-                          component="span"
-                          onClick={handleOpenFacilities}
-                          sx={{
-                            ml: 1,
-                            color: COLORS.PRIMARY,
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          View All Facilities..
-                        </Typography>
-                      )}
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontFamily: nunito.style,
-                          fontWeight: 700,
-                          color: COLORS.DARKGREY,
-                          mb: "10px",
-                        }}
-                      >
-                        Per Night:
-                      </Typography>
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          fontWeight: 700,
-                          fontFamily: nunito.style,
-                          mb: "15px",
-                        }}
-                      >
-                        ₹ {selectedHotel?.Rooms?.[index]?.TotalFare}+{" "}
-                        <Typography
-                          component={"div"}
-                          sx={{ color: COLORS.DARKGREY }}
-                        >
-                          ₹ {selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
-                        </Typography>
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontFamily: nunito.style }}
-                      >
-                        <Typography
-                          component={"span"}
-                          sx={{ color: COLORS.SECONDARY, cursor: "pointer" }}
-                        >
-                          Login Now
-                        </Typography>{" "}
-                        and get this for ₹10,940 or less
-                      </Typography>
-                    </Grid2>
-                  </Grid2>
-                </Grid2>
-              </Grid2>
-            );
-          })}
+                  Cancellation Policy:
+                </Typography>
+                {room.CancelPolicies.map((policy, i) => (
+                  <Typography
+                    key={i}
+                    variant="body2"
+                    sx={{ fontFamily: nunito.style, color: COLORS.DARKGREY }}
+                  >
+                    From <strong>{policy.FromDate}</strong> –{" "}
+                    {policy.ChargeType === "Fixed"
+                      ? `₹${policy.CancellationCharge} charge`
+                      : `${policy.CancellationCharge}% charge`}
+                  </Typography>
+                ))}
+
+                {/* Additional Info */}
+                <Box mt={3}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ fontWeight: 600, fontFamily: nunito.style, mb: 1 }}
+                  >
+                    Room Details:
+                  </Typography>
+
+                  {room.Inclusion && (
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: nunito.style, mt: 1 }}
+                    >
+                      <strong>Inclusion:</strong> {room.Inclusion}
+                    </Typography>
+                  )}
+
+                  {room.MealType && (
+                    <Typography
+                      variant="body2"
+                      sx={{ fontFamily: nunito.style }}
+                    >
+                      <strong>Meal Type:</strong>{" "}
+                      {room.MealType.replace(/_/g, " ")}
+                    </Typography>
+                  )}
+
+                  <Typography
+                    variant="body2"
+                    sx={{ fontFamily: nunito.style }}
+                  >
+                    <strong>Refundable:</strong>{" "}
+                    {room.IsRefundable ? "Yes" : "No"}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+          </Grid2>
+
+          {/* Price Column */}
+          <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                fontFamily: nunito.style,
+                fontWeight: 700,
+                color: COLORS.DARKGREY,
+                mb: "10px",
+              }}
+            >
+              Per Night:
+            </Typography>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                fontFamily: nunito.style,
+                mb: "5px",
+              }}
+            >
+              ₹ {selectedHotel?.Rooms?.[index]?.TotalFare}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: COLORS.DARKGREY, fontFamily: nunito.style }}
+            >
+              + ₹{selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
+            </Typography>
+
+            {/* Day Rates */}
+            {room.DayRates?.[0]?.length > 0 && (
+              <Box mt={2}>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 500, fontFamily: nunito.style }}
+                >
+                  Day-wise Base Prices:
+                </Typography>
+                <List sx={{ listStyleType: "disc", ml: 3 }}>
+                  {room.DayRates[0].map((rate, i) => (
+                    <ListItem
+                      key={i}
+                      sx={{
+                        display: "list-item",
+                        py: 0,
+                        fontFamily: nunito.style,
+                      }}
+                    >
+                      ₹ {rate.BasePrice}
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            )}
+          </Grid2>
+        </Grid2>
+      </Grid2>
+    </Grid2>
+  );
+})}
+
         </Container>
       </Grid2>
 
