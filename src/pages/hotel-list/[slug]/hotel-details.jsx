@@ -6,18 +6,14 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
   Box,
   Typography,
-  Paper,
   Container,
   Grid2,
-  Stack,
   Button,
   Dialog,
   Rating,
   DialogTitle,
   IconButton,
   DialogContent,
-  DialogActions,
-  Divider,
   List,
   ListItem,
   ListItemIcon,
@@ -28,24 +24,22 @@ import {
   InputLabel,
   Select,
   MenuItem,
- 
 } from "@mui/material";
 
-import { display, nunito } from "@/utils/fonts";
+import { nunito } from "@/utils/fonts";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { COLORS } from "@/utils/colors";
 import { styled } from "@mui/material/styles";
-import PoolIcon from "@mui/icons-material/Pool";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import FilterVintageIcon from "@mui/icons-material/FilterVintage";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { HOTEL_RATING } from "@/utils/enum";
+import { HOTEL_RATING, HOTEL_RATING_IN_WORDS } from "@/utils/enum";
 import Link from "next/link";
+import useRandomColor from "@/custom-hook/useRandomColor";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -57,7 +51,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const HotelDetails = () => {
-  const router=useRouter();
+  const router = useRouter();
   const { query } = useRouter();
 
   // extracting data from redux of hotel details
@@ -81,12 +75,12 @@ const HotelDetails = () => {
     setRoomType(event.target.value);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
     setOpen(false);
   };
+
+
+
 
   // =============================== address truncation logic start===============================
   const [openAddress, setOpenAddress] = useState(false);
@@ -121,7 +115,7 @@ const HotelDetails = () => {
   // ======================= facilities truncation logic end =======================================
 
   return (
-    <Grid2 container >
+    <Grid2 container>
       <Grid2
         size={{ xs: "12" }}
         sx={{
@@ -152,7 +146,7 @@ const HotelDetails = () => {
         <Container
           sx={{
             backgroundColor: COLORS.WHITE,
-            
+
             py: "30px",
             mb: "20px",
           }}
@@ -175,12 +169,24 @@ const HotelDetails = () => {
                   }}
                 >
                   {selectedHotel?.HotelName}
+                  <Box sx={{display:'flex', alignItems:'center', gap:"10px"}}>
                   <Rating
                     name="read-only"
                     value={HOTEL_RATING[selectedHotel?.HotelRating] || 5}
                     readOnly
                     fontSize={{ lg: "30px", md: "24px", xs: "10px" }}
                   />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontFamily: nunito.style,
+                      fontWeight: 700,
+                      color: COLORS.BLACK,
+                    }}
+                  >
+                    {HOTEL_RATING_IN_WORDS[selectedHotel?.HotelRating]}
+                  </Typography>
+                  </Box>
                 </Typography>
                 <img
                   src={banner.src}
@@ -274,7 +280,6 @@ const HotelDetails = () => {
                 {/* Phone Number end */}
               </Container>
 
-
               <Container>
                 <Typography
                   variant="h5"
@@ -298,55 +303,76 @@ const HotelDetails = () => {
                     <Typography
                       variant="body1"
                       sx={{
-                        fontWeight: nunito.style,
+                        fontFamily: nunito.style,
+                        padding:'6px 16px',
+                        backgroundColor:useRandomColor(),
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
+                        borderRadius:'23px',
+                        fontWeight:600,
+                         textTransform:'capitalize'
                       }}
                     >
-                      <FilterVintageIcon /> Spa
+                      {facilities[0]}
                     </Typography>
                   </Box>
                   <Box>
                     <Typography
                       variant="body1"
                       sx={{
-                        fontWeight: nunito.style,
+                        fontFamily: nunito.style,
+                        padding:'6px 16px',
+                        backgroundColor:useRandomColor(),
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
+                        borderRadius:'23px',
+                        fontWeight:600,
+                         textTransform:'capitalize'
                       }}
                     >
-                      <PoolIcon /> Swimming Pool
+                      {facilities[1]}
                     </Typography>
                   </Box>
                   <Box>
                     <Typography
                       variant="body1"
                       sx={{
-                        fontWeight: nunito.style,
+                        fontFamily: nunito.style,
+                        padding:'6px 16px',
+                        backgroundColor:useRandomColor(),
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
+                        borderRadius:'23px',
+                        fontWeight:600,
+                         textTransform:'capitalize'
                       }}
                     >
-                      <FitnessCenterIcon /> Gym
+                      {facilities[2]}
                     </Typography>
                   </Box>
                   <Box>
-                    <Typography
-                      variant="body1"
+                    {shouldTruncateFacilities && <Typography
+                      variant="subtitle1"
                       sx={{
-                        fontWeight: nunito.style,
+                        fontFamily: nunito.style,
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
                         cursor: "pointer",
+                        fontWeight:'bold',
+                        color:COLORS.GREEN,
+                        '&:hover' :{
+                          color:COLORS.PRIMARY
+                        }
                       }}
-                      onClick={handleClickOpen}
+                      onClick={handleOpenFacilities}
                     >
-                      88+ amenities
-                    </Typography>
+                      {facilities.length-3}+ amenities
+                    </Typography>}
+
                   </Box>
                 </Box>
               </Container>
@@ -500,74 +526,17 @@ const HotelDetails = () => {
                 </Typography>
 
                 <Button
-                  onClick={()=>router.push(`/hotel-list/${selectedHotel.HotelCode}/hotel-prebook`)}
+                  onClick={() =>
+                    router.push(
+                      `/hotel-list/${selectedHotel.HotelCode}/hotel-prebook`
+                    )
+                  }
                   variant="contained"
                   sx={{ backgroundColor: COLORS.PRIMARY }}
                 >
                   Book Now
                 </Button>
               </Box>
-
-              <Grid2
-                container
-                sx={{
-                  border: `1px solid ${COLORS.GREY}`,
-                  borderRadius: "10px",
-                  padding: "15px",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Grid2 size={{ xs: 2 }} sx={{ textAlign: "center" }}>
-                  <Typography
-                    sx={{
-                      backgroundColor: COLORS.PRIMARY,
-                      color: COLORS.WHITE,
-                      padding: "10px",
-                      borderRadius: "5px",
-                      fontSize: "20px",
-                    }}
-                  >
-                    {HOTEL_RATING[selectedHotel.HotelRating]}.0
-                  </Typography>
-                </Grid2>
-                <Grid2
-                  size={{ xs: 7 }}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontFamily: nunito.style,
-                      fontWeight: 700,
-                      color: COLORS.SECONDARY,
-                    }}
-                  >
-                    Excellent
-                  </Typography>
-                  <Typography
-                    sx={{ fontSize: "12px", fontFamily: nunito.style }}
-                  >
-                    (3001 RATINGS)
-                  </Typography>
-                </Grid2>
-                <Grid2
-                  size={{ xs: 3 }}
-                  sx={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  <Button
-                    variant="text"
-                    sx={{ fontWeight: 700, fontFamily: nunito.style }}
-                  >
-                    see all
-                  </Button>
-                </Grid2>
-              </Grid2>
             </Grid2>
           </Grid2>
         </Container>
@@ -575,7 +544,7 @@ const HotelDetails = () => {
         <Container
           sx={{
             backgroundColor: COLORS.WHITE,
-           
+
             py: "30px",
           }}
         >
@@ -613,253 +582,280 @@ const HotelDetails = () => {
           </Box>
 
           {selectedHotel?.Rooms?.map((room, index) => {
-  return (
-    <Grid2 key={index} container sx={{ mb: 4 }}>
-      <Grid2
-        size={{ xs: 12 }}
-        sx={{
-          backgroundColor: COLORS.LIGHTBLUE,
-          border: `1px solid ${COLORS.GREY}`,
-          padding: "15px 25px",
-          borderRadius: "12px 12px 0 0",
-        }}
-      >
-        <Typography variant="body1" sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
-          Enjoy Free Breakfast + Lunch/Dinner throughout your stay for just ₹7700 more!
-        </Typography>
-      </Grid2>
-
-      {/* Left: Room Image */}
-      <Grid2
-        size={{ xs: 12, sm: 12, md: 4 }}
-        sx={{
-          border: `1px solid ${COLORS.GREY}`,
-          padding: "15px",
-          borderRight: { md: "none" },
-          borderRadius: "0 0 0 12px",
-        }}
-      >
-        <Card
-          sx={{
-            position: "relative",
-            overflow: "hidden",
-            borderRadius: 2,
-            boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
-            height: { lg: 360, md: 380, xs: 400 },
-            ":hover .image": {
-              transform: "scale(1.1)",
-            },
-            ".image": {
-              transition: "0.5s ease all",
-            },
-          }}
-        >
-          <Box sx={{ position: "relative" }}>
-            <Box
-              sx={{
-                backgroundImage: `url(${banner.src})`,
-                height: 200,
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-              }}
-              className="image"
-            ></Box>
-          </Box>
-
-          <CardContent>
-            <Typography
-              sx={{
-                mt: 1,
-                fontSize: 18,
-                fontFamily: nunito.style,
-                fontWeight: 600,
-                mb: 1,
-              }}
-            >
-              {room.Name[0]}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid2>
-
-      {/* Right: Room Details */}
-      <Grid2
-        size={{ xs: 12, sm: 12, md: 8 }}
-        sx={{
-          border: `1px solid ${COLORS.GREY}`,
-          padding: "15px",
-          borderRadius: "0 0 12px 0",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
-        <Grid2 container spacing={2} sx={{ width: "100%" }}>
-          {/* Facilities and Info */}
-          <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: 1 }}
-            >
-              Room with Breakfast + Lunch/Dinner
-            </Typography>
-
-            <List sx={{ listStyleType: "disc", ml: 2 }}>
-              {displayedFacilities?.map((facilities, index) => (
-                <ListItem key={index} sx={{ display: "list-item", py: 0 }}>
-                  <Typography
-                    sx={{ fontSize: "15px", fontFamily: nunito.style }}
-                  >
-                    {facilities}
-                  </Typography>
-                </ListItem>
-              ))}
-            </List>
-
-            <CustomDialogFacilities
-              data={selectedHotel?.HotelFacilities}
-              open={openFacilites}
-              handleClose={handleCloseFacilities}
-            />
-
-            {shouldTruncateFacilities && (
-              <Typography
-                component="span"
-                onClick={handleOpenFacilities}
-                sx={{
-                  ml: 1,
-                  color: COLORS.PRIMARY,
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                View All Facilities..
-              </Typography>
-            )}
-
-            {/* Cancellation Policy */}
-            {room?.CancelPolicies?.length > 0 && (
-              <Box mt={2}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{ fontWeight: 600, fontFamily: nunito.style, mb: 1 }}
+            return (
+              <Grid2 key={index} container sx={{ mb: 4 }}>
+                <Grid2
+                  size={{ xs: 12 }}
+                  sx={{
+                    backgroundColor: COLORS.LIGHTBLUE,
+                    border: `1px solid ${COLORS.GREY}`,
+                    padding: "15px 25px",
+                    borderRadius: "12px 12px 0 0",
+                  }}
                 >
-                  Cancellation Policy:
-                </Typography>
-                {room.CancelPolicies.map((policy, i) => (
                   <Typography
-                    key={i}
-                    variant="body2"
-                    sx={{ fontFamily: nunito.style, color: COLORS.DARKGREY }}
+                    variant="body1"
+                    sx={{ fontFamily: nunito.style, fontWeight: 500 }}
                   >
-                    From <strong>{policy.FromDate}</strong> –{" "}
-                    {policy.ChargeType === "Fixed"
-                      ? `₹${policy.CancellationCharge} charge`
-                      : `${policy.CancellationCharge}% charge`}
+                    Enjoy Free Breakfast + Lunch/Dinner throughout your stay for
+                    just ₹7700 more!
                   </Typography>
-                ))}
+                </Grid2>
 
-                {/* Additional Info */}
-                <Box mt={3}>
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ fontWeight: 600, fontFamily: nunito.style, mb: 1 }}
-                  >
-                    Room Details:
-                  </Typography>
-
-                  {room.Inclusion && (
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: nunito.style, mt: 1 }}
-                    >
-                      <strong>Inclusion:</strong> {room.Inclusion}
-                    </Typography>
-                  )}
-
-                  {room.MealType && (
-                    <Typography
-                      variant="body2"
-                      sx={{ fontFamily: nunito.style }}
-                    >
-                      <strong>Meal Type:</strong>{" "}
-                      {room.MealType.replace(/_/g, " ")}
-                    </Typography>
-                  )}
-
-                  <Typography
-                    variant="body2"
-                    sx={{ fontFamily: nunito.style }}
-                  >
-                    <strong>Refundable:</strong>{" "}
-                    {room.IsRefundable ? "Yes" : "No"}
-                  </Typography>
-                </Box>
-              </Box>
-            )}
-          </Grid2>
-
-          {/* Price Column */}
-          <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
-            <Typography
-              variant="body2"
-              sx={{
-                fontFamily: nunito.style,
-                fontWeight: 700,
-                color: COLORS.DARKGREY,
-                mb: "10px",
-              }}
-            >
-              Per Night:
-            </Typography>
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 700,
-                fontFamily: nunito.style,
-                mb: "5px",
-              }}
-            >
-              ₹ {selectedHotel?.Rooms?.[index]?.TotalFare}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: COLORS.DARKGREY, fontFamily: nunito.style }}
-            >
-              + ₹{selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
-            </Typography>
-
-            {/* Day Rates */}
-            {room.DayRates?.[0]?.length > 0 && (
-              <Box mt={2}>
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: 500, fontFamily: nunito.style }}
+                {/* Left: Room Image */}
+                <Grid2
+                  size={{ xs: 12, sm: 12, md: 4 }}
+                  sx={{
+                    border: `1px solid ${COLORS.GREY}`,
+                    padding: "15px",
+                    borderRight: { md: "none" },
+                    borderRadius: "0 0 0 12px",
+                  }}
                 >
-                  Day-wise Base Prices:
-                </Typography>
-                <List sx={{ listStyleType: "disc", ml: 3 }}>
-                  {room.DayRates[0].map((rate, i) => (
-                    <ListItem
-                      key={i}
-                      sx={{
-                        display: "list-item",
-                        py: 0,
-                        fontFamily: nunito.style,
-                      }}
-                    >
-                      ₹ {rate.BasePrice}
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
-          </Grid2>
-        </Grid2>
-      </Grid2>
-    </Grid2>
-  );
-})}
+                  <Card
+                    sx={{
+                      position: "relative",
+                      overflow: "hidden",
+                      borderRadius: 2,
+                      boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+                      height: { lg: 360, md: 380, xs: 400 },
+                      ":hover .image": {
+                        transform: "scale(1.1)",
+                      },
+                      ".image": {
+                        transition: "0.5s ease all",
+                      },
+                    }}
+                  >
+                    <Box sx={{ position: "relative" }}>
+                      <Box
+                        sx={{
+                          backgroundImage: `url(${banner.src})`,
+                          height: 200,
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                        }}
+                        className="image"
+                      ></Box>
+                    </Box>
 
+                    <CardContent>
+                      <Typography
+                        sx={{
+                          mt: 1,
+                          fontSize: 18,
+                          fontFamily: nunito.style,
+                          fontWeight: 600,
+                          mb: 1,
+                        }}
+                      >
+                        {room.Name[0]}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid2>
+
+                {/* Right: Room Details */}
+                <Grid2
+                  size={{ xs: 12, sm: 12, md: 8 }}
+                  sx={{
+                    border: `1px solid ${COLORS.GREY}`,
+                    padding: "15px",
+                    borderRadius: "0 0 12px 0",
+                    backgroundColor: "#f9f9f9",
+                  }}
+                >
+                  <Grid2 container spacing={2} sx={{ width: "100%" }}>
+                    {/* Facilities and Info */}
+                    <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 600,
+                          fontFamily: nunito.style,
+                          mb: 1,
+                        }}
+                      >
+                        Room with Breakfast + Lunch/Dinner
+                      </Typography>
+
+                      <List sx={{ listStyleType: "disc", ml: 2 }}>
+                        {displayedFacilities?.map((facilities, index) => (
+                          <ListItem
+                            key={index}
+                            sx={{ display: "list-item", py: 0 }}
+                          >
+                            <Typography
+                              sx={{
+                                fontSize: "15px",
+                                fontFamily: nunito.style,
+                              }}
+                            >
+                              {facilities}
+                            </Typography>
+                          </ListItem>
+                        ))}
+                      </List>
+
+                      <CustomDialogFacilities
+                        data={selectedHotel?.HotelFacilities}
+                        open={openFacilites}
+                        handleClose={handleCloseFacilities}
+                      />
+
+                      {shouldTruncateFacilities && (
+                        <Typography
+                          component="span"
+                          onClick={handleOpenFacilities}
+                          sx={{
+                            ml: 1,
+                            color: COLORS.PRIMARY,
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          View All Facilities..
+                        </Typography>
+                      )}
+
+                      {/* Cancellation Policy */}
+                      {room?.CancelPolicies?.length > 0 && (
+                        <Box mt={2}>
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontWeight: 600,
+                              fontFamily: nunito.style,
+                              mb: 1,
+                            }}
+                          >
+                            Cancellation Policy:
+                          </Typography>
+                          {room.CancelPolicies.map((policy, i) => (
+                            <Typography
+                              key={i}
+                              variant="body2"
+                              sx={{
+                                fontFamily: nunito.style,
+                                color: COLORS.DARKGREY,
+                              }}
+                            >
+                              From <strong>{policy.FromDate}</strong> –{" "}
+                              {policy.ChargeType === "Fixed"
+                                ? `₹${policy.CancellationCharge} charge`
+                                : `${policy.CancellationCharge}% charge`}
+                            </Typography>
+                          ))}
+
+                          {/* Additional Info */}
+                          <Box mt={3}>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                fontWeight: 600,
+                                fontFamily: nunito.style,
+                                mb: 1,
+                              }}
+                            >
+                              Room Details:
+                            </Typography>
+
+                            {room.Inclusion && (
+                              <Typography
+                                variant="body2"
+                                sx={{ fontFamily: nunito.style, mt: 1 }}
+                              >
+                                <strong>Inclusion:</strong> {room.Inclusion}
+                              </Typography>
+                            )}
+
+                            {room.MealType && (
+                              <Typography
+                                variant="body2"
+                                sx={{ fontFamily: nunito.style }}
+                              >
+                                <strong>Meal Type:</strong>{" "}
+                                {room.MealType.replace(/_/g, " ")}
+                              </Typography>
+                            )}
+
+                            <Typography
+                              variant="body2"
+                              sx={{ fontFamily: nunito.style }}
+                            >
+                              <strong>Refundable:</strong>{" "}
+                              {room.IsRefundable ? "Yes" : "No"}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                    </Grid2>
+
+                    {/* Price Column */}
+                    <Grid2 size={{ xs: 12, sm: 4, md: 4 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 700,
+                          color: COLORS.DARKGREY,
+                          mb: "10px",
+                        }}
+                      >
+                        Per Night:
+                      </Typography>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          fontWeight: 700,
+                          fontFamily: nunito.style,
+                          mb: "5px",
+                        }}
+                      >
+                        ₹ {selectedHotel?.Rooms?.[index]?.TotalFare}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: COLORS.DARKGREY,
+                          fontFamily: nunito.style,
+                        }}
+                      >
+                        + ₹{selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
+                      </Typography>
+
+                      {/* Day Rates */}
+                      {room.DayRates?.[0]?.length > 0 && (
+                        <Box mt={2}>
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 500, fontFamily: nunito.style }}
+                          >
+                            Day-wise Base Prices:
+                          </Typography>
+                          <List sx={{ listStyleType: "disc", ml: 3 }}>
+                            {room.DayRates[0].map((rate, i) => (
+                              <ListItem
+                                key={i}
+                                sx={{
+                                  display: "list-item",
+                                  py: 0,
+                                  fontFamily: nunito.style,
+                                }}
+                              >
+                                ₹ {rate.BasePrice}
+                              </ListItem>
+                            ))}
+                          </List>
+                        </Box>
+                      )}
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </Grid2>
+            );
+          })}
         </Container>
       </Grid2>
 
@@ -933,19 +929,6 @@ function CustomDialog({ data, open, handleClose }) {
 }
 
 function CustomDialogFacilities({ data, open, handleClose }) {
-  function getRandomColor() {
-    const colors = [
-      "#FFD700",
-      "#90EE90",
-      "#ADD8E6",
-      "#FFB6C1",
-      "#FFA07A",
-      "#DDA0DD",
-      "#87CEEB",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle
@@ -974,7 +957,7 @@ function CustomDialogFacilities({ data, open, handleClose }) {
             <Box
               key={index}
               sx={{
-                backgroundColor: getRandomColor(),
+                backgroundColor: useRandomColor(),
                 padding: "6px 12px",
                 borderRadius: "16px",
                 fontSize: "0.875rem",

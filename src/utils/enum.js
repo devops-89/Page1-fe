@@ -63,3 +63,11 @@ export const HOTEL_RATING={
   FourStar:4,
   FiveStar:5
 }
+
+export const HOTEL_RATING_IN_WORDS = {
+  OneStar: 'Bad',
+  TwoStar:'Average',
+  ThreeStar:'Good',
+  FourStar:'Very Good',
+  FiveStar:'Excellent'
+}
