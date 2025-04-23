@@ -21,28 +21,63 @@ import { COLORS } from "@/utils/colors";
 import { useDispatch } from "react-redux";
 import { showModal,hideModal } from "@/redux/reducers/modal";
 
+
 const GuestForm = () => {
   const dispatch = useDispatch();
-  
+  const [selectedGuests, setSelectedGuests] = useState([]);
+  // State for guest-specific fields
+  const [guestFields, setGuestFields] = useState({
+    title: "mr",
+    firstName: "",
+    lastName: "",
+    isBelow12: false,
+    guardianPan: "",
+  });
+
+  // State for common fields
+  const [commonFields, setCommonFields] = useState({
+    email: "",
+    mobile: "",
+  });
+
+  const handleGuestChange = (field) => (event) => {
+    setGuestFields({ ...guestFields, [field]: event.target.value });
+  };
+
+  const handleCommonChange = (field) => (event) => {
+    setCommonFields({ ...commonFields, [field]: event.target.value });
+  };
 
   const openAddGuestForm = () => {
-    dispatch(showModal(<GuestAdditionDialog />));
+     let {firstName,lastName}=guestFields;
+     let {email, mobile}=commonFields;
+     if(firstName==="" || lastName==="" || email==="" || mobile==="") {
+      alert("Please Fill This Form");
+      return;
+     };
+     
+    dispatch(showModal(<GuestAdditionDialog selectedGuests={selectedGuests} setSelectedGuests={setSelectedGuests} />));
   };
+
+  console.log("Guest Fields: ",guestFields.firstName,guestFields.lastName,guestFields.title);
+  console.log("Common Fields: ",commonFields.email,commonFields.mobile);
+
   return (
     <Box>
       <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
         Guest Details
       </Typography>
-      <Stack spacing={2} direction={"row"} sx={{ mb: 2 }}>
-        {/* Mr and Ms Selection */}
+      <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
+        {/* Title */}
         <Box>
           <Typography variant="subtitle1">Title</Typography>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <Select
               size="small"
-              value={"mr"}
+              value={guestFields.title}
+              onChange={handleGuestChange("title")}
               displayEmpty
-              inputProps={{ "aria-label": "Without label" }}
+              inputProps={{ "aria-label": "Title" }}
               sx={{
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                   borderColor: COLORS.PRIMARY,
@@ -52,21 +87,22 @@ const GuestForm = () => {
                 },
               }}
             >
-              <MenuItem value={"mr"}>Mr</MenuItem>
-              <MenuItem value={"mrs"}>Mrs</MenuItem>
-              <MenuItem value={"ms"}>Ms</MenuItem>
+              <MenuItem value="mr">Mr</MenuItem>
+              <MenuItem value="mrs">Mrs</MenuItem>
+              <MenuItem value="ms">Ms</MenuItem>
             </Select>
           </FormControl>
         </Box>
-        {/* FirstName */}
+
+        {/* First Name */}
         <Box>
           <Typography sx={{ mb: 1 }}>First Name</Typography>
           <TextField
-            id="outlined-firstname-input"
             size="small"
             type="text"
             placeholder="FIRST NAME"
-            autoComplete="current-firstname"
+            value={guestFields.firstName}
+            onChange={handleGuestChange("firstName")}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused fieldset": {
@@ -80,15 +116,15 @@ const GuestForm = () => {
           />
         </Box>
 
-        {/* Lastname */}
+        {/* Last Name */}
         <Box>
           <Typography sx={{ mb: 1 }}>Last Name</Typography>
           <TextField
-            id="outlined-lastname-input"
             size="small"
             type="text"
             placeholder="LAST NAME"
-            autoComplete="current-lastname"
+            value={guestFields.lastName}
+            onChange={handleGuestChange("lastName")}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused fieldset": {
@@ -102,16 +138,17 @@ const GuestForm = () => {
           />
         </Box>
       </Stack>
-      <Stack spacing={2} direction={"row"}>
+
+      <Stack spacing={2} direction="row">
         {/* Email */}
         <Box>
           <Typography sx={{ mb: 1 }}>EMAIL ADDRESS</Typography>
           <TextField
-            id="outlined-email-input"
             size="small"
             type="email"
             placeholder="EMAIL ADDRESS"
-            autoComplete="current-email"
+            value={commonFields.email}
+            onChange={handleCommonChange("email")}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused fieldset": {
@@ -129,11 +166,11 @@ const GuestForm = () => {
         <Box>
           <Typography sx={{ mb: 1 }}>MOBILE NUMBER</Typography>
           <TextField
-            id="outlined-mobile-input"
             size="small"
-            type="number"
+            type="tel"
             placeholder="MOBILE NUMBER"
-            autoComplete="current-password"
+            value={commonFields.mobile}
+            onChange={handleCommonChange("mobile")}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused fieldset": {
@@ -147,6 +184,7 @@ const GuestForm = () => {
           />
         </Box>
       </Stack>
+
       <Button
         variant="contained"
         size="small"
@@ -163,9 +201,8 @@ export default GuestForm;
 
 
 
-
 // Modal for adding more guests component
-const GuestAdditionDialog = () => {
+const GuestAdditionDialog = ({selectedGuests,setSelectedGuests}) => {
   const dispatch = useDispatch();
 
   const [guestData, setGuestData] = useState({
@@ -176,7 +213,7 @@ const GuestAdditionDialog = () => {
     guardianPan: "",
   });
 
-  const [selectedGuests, setSelectedGuests] = useState([]);
+ 
   const [showList,setShowList]=useState(false);
 
   const handleChange = (e) => {
@@ -189,6 +226,7 @@ const GuestAdditionDialog = () => {
   };
 
   const handleAddGuest = () => {
+    if(guestData.firstName==="" || guestData.lastName==="" || guestData.isBelow12) return;
     setSelectedGuests((prev) => [...prev, guestData]);
     console.log("selected Guests: ", [...selectedGuests, guestData]);
     // reseting the guest data for adding next guest
@@ -202,6 +240,14 @@ const GuestAdditionDialog = () => {
     setShowList(true);
 
   };
+
+  // handling the deletion of the perticular guest
+  function handleDelete(itemId){
+     const filteredGuests=selectedGuests.filter((guest,index)=>{
+          return index!==itemId;
+     });
+     setSelectedGuests(filteredGuests);
+  }
 
   return (
     <Box className="addEditGuestScrollSection" p={2}>
@@ -383,13 +429,13 @@ const GuestAdditionDialog = () => {
               (selectedGuests.length>0)?(
                 selectedGuests.map((guest,index)=>{
                     return (
-                      <Box display="flex" justifyContent="space-between" sx={{width:"400px",borderBottom:`1px solid ${COLORS.PRIMARY}`}} mb={2}>
+                      <Box key={index} display="flex" justifyContent="space-between" sx={{width:"400px",borderBottom:`1px solid ${COLORS.PRIMARY}`}} mb={2}>
                       <Typography sx={{px:1}}>
                        {guest.firstName} {guest.lastName}
                       </Typography>
                       <Box>
                         <EditIcon sx={{color:COLORS.PRIMARY,px:1}} />
-                        <DeleteIcon sx={{color:COLORS.PRIMARY,px:1}} />
+                        <DeleteIcon sx={{color:COLORS.PRIMARY,px:1}} onClick={()=>handleDelete(index)} />
                       </Box>
                   </Box>
                     )
