@@ -121,7 +121,7 @@ const HotelDetails = () => {
   // ======================= facilities truncation logic end =======================================
 
   return (
-    <Grid2 container>
+    <Grid2 container >
       <Grid2
         size={{ xs: "12" }}
         sx={{

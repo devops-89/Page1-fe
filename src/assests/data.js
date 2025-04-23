@@ -1582,6 +1582,36 @@ export const data = {
 
     
   },
+
+  heliBenefits: [
+    {
+      heading: "Traffic Free Experience",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+    {
+      heading: "Travel Better",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+    {
+      heading: "Chauffeur service",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+  ],
+  destinationWeddingSteps: [
+    {
+      label: "Contact Information",
+      icon: <PhoneAndroid />,
+    },
+    {
+      label: "Basic Information",
+      icon: <ContactMail />,
+    },
+    {
+      label: "Additional Information",
+      icon: <RiInformation2Line />,
+    },
+  ],
+
  hotelPreBook : {
     Status: {
       Code: 200,
