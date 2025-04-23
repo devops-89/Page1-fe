@@ -1,4 +1,3 @@
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -6,11 +5,11 @@ const initialState = {
 };
 
 const guestSlice = createSlice({
-  name: 'guests',
+  name: 'guestSlice',
   initialState,
   reducers: {
     addGuest: (state, action) => {
-      state.selectedGuests.push(action.payload);
+      state.selectedGuests.push(action.payload);  // Corrected here
     },
     removeGuest: (state, action) => {
       state.selectedGuests = state.selectedGuests.filter((_, idx) => idx !== action.payload);
