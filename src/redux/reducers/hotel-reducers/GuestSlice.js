@@ -10,6 +10,8 @@ const guestSlice = createSlice({
   initialState,
   reducers: {
     addGuest: (state, action) => {
+        
+    
       state.selectedGuests.push(action.payload);
     },
     removeGuest: (state, action) => {
