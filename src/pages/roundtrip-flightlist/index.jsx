@@ -670,7 +670,7 @@ const FlightList = () => {
               </Drawer>
             </Box>
           ) : (
-            <Grid2 size={3} sx={{ position: "relative" }}>
+            <Grid2 size={3} sx={{ position: "relative", zIndex:99 }}>
               {/* filter card start */}
               <Card
                 variant="outlined"
@@ -925,7 +925,7 @@ const FlightList = () => {
       {journey === "DOMESTIC" ? (
         <Grid2
           container
-          sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 999 }}
+          sx={{ position: "fixed", bottom: "0", width: "100%", zIndex: 9 }}
         >
           <Grid2 size={3}></Grid2>
           <Grid2
@@ -1013,7 +1013,7 @@ const FlightList = () => {
             {/* Return  */}
             <Grid2
               size={{ lg: 4, md: 4, sm: 12, xs: 12 }}
-              sx={{ borderRight: { lg: "`1px solid`", sm: "none" } }}
+              sx={{ borderRight: { lg: "`1px solid`", sm: "none" }, position:'relative', zIndex:99 }}
             >
               <Stack direction={"row"} spacing={1} sx={{ mb: 1 }}>
                 <Typography

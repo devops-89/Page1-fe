@@ -77,7 +77,7 @@ const MultiCityPassengerForm = ({
     );
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState ,]);
+  }, [myState]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
@@ -275,11 +275,11 @@ const MultiCityPassengerForm = ({
             ...passenger,
             email: contactEmail,
             contact_no: phoneNumber,
-          
+
             date_of_birth: isBirthdayRequired
               ? passenger.date_of_birth
               : passenger.date_of_birth || null,
-  
+
             gender: gender,
             pax_type: 2,
             is_lead_pax: false,
@@ -307,16 +307,15 @@ const MultiCityPassengerForm = ({
               gender = "Other";
           }
 
-
           return {
             ...passenger,
             email: contactEmail,
             contact_no: phoneNumber,
-          
+
             date_of_birth: isBirthdayRequired
               ? passenger.date_of_birth
               : passenger.date_of_birth || null,
-  
+
             gender: gender,
             pax_type: 3,
             is_lead_pax: false,
@@ -457,8 +456,13 @@ const MultiCityPassengerForm = ({
           </Typography>
         </Box>
         <Formik
+          key={`${isGSTMandatory}-${isPassportRequired}-${isBirthdayRequired}`}
           initialValues={initialValues}
-          validationSchema={currentValidationSchema}
+          validationSchema={validationSchema(
+            isGSTMandatory,
+            isPassportRequired,
+            isBirthdayRequired
+          )}
           onSubmit={handleSubmit}
           enableReinitialize
         >
@@ -472,7 +476,7 @@ const MultiCityPassengerForm = ({
             setFieldValue,
           }) => {
             // console.log("all values", values);
-            // console.log("all errors", errors)
+            // console.log("all errors", errors);
             return (
               <Form onSubmit={handleSubmit}>
                 {values.adult.map((dataObj, index) => (
