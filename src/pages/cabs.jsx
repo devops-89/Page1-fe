@@ -37,68 +37,9 @@ const Cabs = () => {
   ];
   return (
     <div>
-      {/* <Box
-        sx={{
-          backgroundImage: `url(${banner.src})`,
-          height: 200,
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-      >
-        <Box
-          sx={{
-            backgroundColor: COLORS.BLACKDARKOVERLAY,
-            height: "100%",
-            display: "grid",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Box>
-            <Typography
-              sx={{
-                textTransform: "capitalize",
-                fontSize: 30,
-                fontFamily: nunito.style,
-                color: COLORS.WHITE,
-                fontWeight: 700,
-              }}
-            >
-              Cabs{" "}
-            </Typography>
-            <Breadcrumbs
-              separator=">"
-              sx={{
-                ".MuiBreadcrumbs-separator": {
-                  color: COLORS.WHITE,
-                  fontWeight: 600,
-                },
-              }}
-            >
-              <Link href={"/"}>
-                <Home htmlColor={COLORS.WHITE} sx={{ fontSize: 25 }} />
-              </Link>
-              <Link href={"/cabs"} style={{ textDecoration: "none" }}>
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    color: COLORS.WHITE,
-                    textDecoration: "none !important",
-                    fontFamily: nunito.style,
-                    fontWeight: 550,
-                  }}
-                >
-                  Cabs
-                </Typography>
-              </Link>
-            </Breadcrumbs>
-          </Box>
-        </Box>
-      </Box> */}
       <InnerBanner img={banner.src} heading={"Cabs"} />
 
-      <Box sx={{ pt:{lg:10 , xs:5}, pb: 10 }}>
+      <Box sx={{ pt: { lg: 10, xs: 5 }, pb: 10 }}>
         <Container>
           <Grid2 container spacing={5}>
             <Grid2 size={{ lg: 6, xs: 12 }}>
@@ -115,7 +56,7 @@ const Cabs = () => {
                   <Box
                     sx={{
                       width: "100%",
-                      height: { lg: 600, xs: 600 }, // Match the height of the combined second and third images
+                      height: { lg: 600, xs: 600 },
                       display: "flex",
                     }}
                   >
@@ -124,14 +65,13 @@ const Cabs = () => {
                       className="img-fluid"
                       style={{
                         maxWidth: "100%",
-                        height: "100%", // Fill parent height
-                        objectFit: "cover", // Maintain aspect ratio
+                        height: "100%",
+                        objectFit: "cover",
                       }}
                     />
                   </Box>
                 </Grid2>
 
-                {/* Second and Third Images */}
                 <Grid2
                   size={6}
                   sx={{
@@ -252,10 +192,10 @@ const Cabs = () => {
             </Grid2>
           </Grid2>
         </Container>
-        <Box sx={{pt:{lg:10 , xs:5}, pb: {lg:10 , xs:5} }}>
+        <Box sx={{ pt: { lg: 10, xs: 5 }, pb: { lg: 10, xs: 5 } }}>
           <Taxiform />
         </Box>
-        <Box sx={{ pt: 5, pb: {lg:10 , xs:5}}}>
+        <Box sx={{ pt: 5, pb: { lg: 10, xs: 5 } }}>
           <Services />
         </Box>
         <Box sx={{ pt: 5 }}>

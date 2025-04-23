@@ -1,10 +1,15 @@
-import { publicApi, userSecuredApi,securedApi } from "./config";
+import {
+  publicApi,
+  userSecuredApi,
+  securedApi,
+  basicPublicApi,
+} from "./config";
 
 export const authenticationController = {
   registerUser: async (data) => {
     try {
       let result = await publicApi.post("/register", data);
-      console.log("result",result)
+      console.log("result", result);
       return result;
     } catch (error) {
       throw error;
@@ -50,22 +55,29 @@ export const authenticationController = {
       throw error;
     }
   },
-  signUpLoginViaEmail:async (data)=>{
-    try{
-       let result=await securedApi.post("/signup_login_via_email",data);
-       return result;
-    }
-    catch(error){
+  signUpLoginViaEmail: async (data) => {
+    try {
+      let result = await securedApi.post("/signup_login_via_email", data);
+      return result;
+    } catch (error) {
       throw error;
     }
   },
-  verifyEmailOtp:async (data)=>{
-    try{
-      let result=await securedApi.post("/verify",data);
+  verifyEmailOtp: async (data) => {
+    try {
+      let result = await securedApi.post("/verify", data);
       return result;
-    }
-    catch(error){
+    } catch (error) {
       return error;
     }
-  }
+  },
+
+  sendEnquiry: async (data) => {
+    try {
+      let result = await basicPublicApi.post("/page-one-travels", data);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
 };

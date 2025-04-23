@@ -36,6 +36,7 @@ import {
   BeenhereOutlined,
   CalendarMonth,
   CalendarMonthOutlined,
+  ContactMail,
   Dashboard,
   Email,
   Favorite,
@@ -44,6 +45,7 @@ import {
   LocationOn,
   PersonOutlineOutlined,
   Phone,
+  PhoneAndroid,
   PublicOutlined,
   Reviews,
   TourOutlined,
@@ -63,6 +65,7 @@ import tour6 from "@/tours/nevada.jpg";
 import tour7 from "@/tours/virginia.jpg";
 import tour8 from "@/tours/wilmington.jpg";
 import { FLIGHT_CLASS, FLIGHT_DETAILS } from "@/utils/enum";
+import { RiInformation2Line } from "react-icons/ri";
 export const data = {
   headerLinks: [
     {
@@ -615,7 +618,7 @@ export const data = {
     },
     {
       label: "Logout",
-      url: "/login"
+      url: "/login",
     },
   ],
   toursData: [
@@ -1538,153 +1541,169 @@ export const data = {
     { code: "ZM", label: "Zambia", phone: "260" },
     { code: "ZW", label: "Zimbabwe", phone: "263" },
   ],
-  payment:{
-
-    
-      id: "pay_QAdPuYorh3U9cw",
-      entity: "payment",
-      amount: 1277455,
-      currency: "INR",
-      status: "captured",
-      order_id: "order_QAdPntmMXFnpXu",
-      invoice_id: null,
-      international: false,
-      method: "netbanking",
-      amount_refunded: 0,
-      refund_status: null,
-      captured: true,
-      description: "#QAdPSEQcP5moug",
-      card_id: null,
-      bank: "CNRB",
-      wallet: null,
-      vpa: null,
-      email: "void@razorpay.com",
-      contact: "+918081137994",
-      notes: [],
-      fee: 30150,
-      tax: 4600,
-      error_code: null,
-      error_description: null,
-      error_source: null,
-      error_step: null,
-      error_reason: null,
-      acquirer_data: {
-          bank_transaction_id: "1028635"
-      },
-      created_at: 1742820866
-  
-  
-
-
-
-    
-  },
- hotelPreBook : {
-    Status: {
-      Code: 200,
-      Description: "Successful"
+  payment: {
+    id: "pay_QAdPuYorh3U9cw",
+    entity: "payment",
+    amount: 1277455,
+    currency: "INR",
+    status: "captured",
+    order_id: "order_QAdPntmMXFnpXu",
+    invoice_id: null,
+    international: false,
+    method: "netbanking",
+    amount_refunded: 0,
+    refund_status: null,
+    captured: true,
+    description: "#QAdPSEQcP5moug",
+    card_id: null,
+    bank: "CNRB",
+    wallet: null,
+    vpa: null,
+    email: "void@razorpay.com",
+    contact: "+918081137994",
+    notes: [],
+    fee: 30150,
+    tax: 4600,
+    error_code: null,
+    error_description: null,
+    error_source: null,
+    error_step: null,
+    error_reason: null,
+    acquirer_data: {
+      bank_transaction_id: "1028635",
     },
-    HotelResult: [
-      {
-        HotelCode: "1144184",
-        Currency: "INR",
-        Rooms: [
-          {
-            Name: [
-              "Deluxe Double Room,1 Double Bed,NonSmoking"
-            ],
-            BookingCode: "1144184!TB!4!TB!469e3e2a-1e9b-11f0-88c1-3ad144d360dd!TB!N!TB!AFF!",
-            Inclusion: "Free self parking",
-            DayRates: [
-              [
+    created_at: 1742820866,
+  },
+
+  heliBenefits: [
+    {
+      heading: "Traffic Free Experience",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+    {
+      heading: "Travel Better",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+    {
+      heading: "Chauffeur service",
+      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+    },
+  ],
+
+  destinationWeddingSteps: [
+    {
+      label: "Contact Information",
+      icon: <PhoneAndroid />,
+    },
+    {
+      label: "Basic Information",
+      icon: <ContactMail />,
+    },
+    {
+      label: "Additional Information",
+      icon: <RiInformation2Line />,
+    },
+  ],
+  hotelPreBook : {
+    message: "Hotel Pre Book fetched successfully",
+    data: {
+      Status: {
+        Code: 200,
+        Description: "Successful"
+      },
+      HotelResult: [
+        {
+          HotelCode: "1512292",
+          Currency: "INR",
+          Rooms: [
+            {
+              Name: ["Double or Twin Room,1 Double Bed,Smoking"],
+              BookingCode: "1512292!TB!1!TB!c363e5ed-1f7b-11f0-88c1-3ad144d360dd!TB!N!TB!AFF!",
+              Inclusion: "Free breakfast,Free self parking Free breakfast",
+              DayRates: [
+                [
+                  { BasePrice: 1332.37 },
+                  { BasePrice: 1509.51 }
+                ]
+              ],
+              TotalFare: 3171.57,
+              TotalTax: 329.7,
+              NetAmount: 3172.2743432830002,
+              NetTax: 330.40687493300004,
+              RoomPromotion: ["Private sale"],
+              CancelPolicies: [
                 {
-                  BasePrice: 2867.66
-                },
+                  FromDate: "21-04-2025 00:00:00",
+                  ChargeType: "Percentage",
+                  CancellationCharge: 100
+                }
+              ],
+              MealType: "BreakFast",
+              IsRefundable: false,
+              WithTransfers: false,
+              Amenities: [
+                "Towels provided",
+                "Bathtub or shower",
+                "Free toiletries",
+                "Daily housekeeping",
+                "Air conditioning",
+                "Free WiFi",
+                "Smoking",
+                "Television",
+                "Private bathroom"
+              ],
+              BeddingGroup: "Bedding type is not guaranteed and it will be allocated by hotel based on availability",
+              LastCancellationDeadline: "20-04-2025 23:59:59",
+              PriceBreakUp: [
                 {
-                  BasePrice: 2867.66
+                  RoomRate: 2877.422065,
+                  RoomTax: 329.69578300000006,
+                  AgentCommission: 35.55459665,
+                  TaxBreakup: [
+                    {
+                      TaxType: "Tax_TDS",
+                      TaxableAmount: 35.55459665,
+                      TaxPercentage: 2,
+                      TaxAmount: 0.7110919330000002
+                    }
+                  ]
                 }
               ]
-            ],
-            TotalFare: 6450.64,
-            TotalTax: 715.33,
-            NetAmount: 6451.469283257001,
-            NetTax: 716.1611116069998,
-            CancelPolicies: [
-              {
-                FromDate: "20-04-2025 00:00:00",
-                ChargeType: "Percentage",
-                CancellationCharge: 100
-              }
-            ],
-            MealType: "Room_Only",
-            IsRefundable: false,
-            WithTransfers: false,
-            Amenities: [
-              "Towels provided",
-              "Hair dryer (on request)",
-              "Premium TV channels",
-              "Non-Smoking",
-              "Shower only",
-              "Slippers",
-              "Private bathroom",
-              "Free toiletries",
-              "Daily housekeeping",
-              "Air conditioning",
-              "Free WiFi",
-              "Rollaway/extra beds (surcharge)",
-              "Desk",
-              "Room service (24 hours)",
-              "Cable TV service"
-            ],
-            LastCancellationDeadline: "19-04-2025 23:59:59",
-            PriceBreakUp: [
-              {
-                RoomRate: 5776.880352,
-                RoomTax: 715.3296679999999,
-                AgentCommission: 41.572180350000004,
-                TaxBreakup: [
-                  {
-                    TaxType: "Tax_TDS",
-                    TaxableAmount: 41.572180350000004,
-                    TaxPercentage: 2,
-                    TaxAmount: 0.8314436070000001
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        RateConditions: [
-          "Early check out will attract full cancellation charge unless otherwise specified",
-          "CheckIn Time-Begin: 12:00 PM",
-          "CheckOut Time: 12:00 PM",
-          "CheckIn Instructions: <ul>  <li>Extra-person charges may apply and vary depending on property policy</li><li>Government-issued photo identification and a credit card, debit card, or cash deposit may be required at check-in for incidental charges</li><li>Special requests are subject to availability upon check-in and may incur additional charges; special requests cannot be guaranteed</li><li>This property accepts credit cards</li>  </ul> ",
-          " Special Instructions : Front desk staff will greet guests on arrival at the property.",
-          "Minimum CheckIn Age : 18",
-          "Optional Fees: <ul> <li>Airport shuttle fee: INR 2000 per vehicle (roundtrip)</li><li>Rollaway bed fee: INR 500 per night</li></ul> <p>The above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. </p>",
-          "Cards Accepted: Visa,Mastercard",
-          "Pets not allowed,Professional property host/manager,No cribs (infant beds) available"
-        ]
+            }
+          ],
+          RateConditions: [
+            "Early check out will attract full cancellation charge unless otherwise specified",
+            "CheckIn Time-Begin: 12:00 PM ",
+            " CheckIn Time-End: 10:00 PM",
+            "CheckOut Time: 11:00 AM",
+            "CheckIn Instructions: <ul>  <li>Extra-person charges may apply and vary depending on property policy</li><li>Government-issued photo identification and a credit card, debit card, or cash deposit may be required at check-in for incidental charges</li><li>Special requests are subject to availability upon check-in and may incur additional charges; special requests cannot be guaranteed</li><li>This property accepts credit cards, debit cards, and cash</li><li>Only bookings from non-local guests are accepted; guests whose residence is within the same city as the property will not be allowed to check in</li><li>Please note that cultural norms and guest policies may differ by country and by property; the policies listed are provided by the property</li>  </ul> ",
+            " Special Instructions : There is no front desk at this property. To make arrangements for check-in please contact the property ahead of time using the information on the booking confirmation. Guests must contact the property for check-in instructions.  To register at this property, guests who are Indian citizens must provide a valid photo identity card issued by the Government of India. PAN cards are not accepted. Travelers who are not citizens of India must present a valid passport and visa.",
+            "Cards Accepted: Visa,Debit cards,Cash,Mastercard",
+            "<ul>  <li>Only registered guests are allowed in the guestrooms. </li>  </ul>,Pets not allowed,Professional property host/manager,No cribs (infant beds) available,No rollaway/extra beds available"
+          ],
+          HotelName: "Oyo 12671 Hotel Prithvi Palace",
+          HotelAddress: "221 Nehru Nagar Ambedkar Road, Nehru NagarNear LOC Petrol PumpGhaziabad, Ghaziabad, 201001, India",
+          HotelHotelRating: 2
+        }
+      ],
+      ValidationInfo: {
+        PanMandatory: false,
+        PassportMandatory: false,
+        CorporateBookingAllowed: false,
+        PanCountRequired: 0,
+        SamePaxNameAllowed: true,
+        SpaceAllowed: true,
+        SpecialCharAllowed: false,
+        PaxNameMinLength: 0,
+        PaxNameMaxLength: 50,
+        CharLimit: true,
+        PackageFare: false,
+        PackageDetailsMandatory: false,
+        DepartureDetailsMandatory: false,
+        GSTAllowed: false
       }
-    ],
-    ValidationInfo: {
-      PanMandatory: false,
-      PassportMandatory: false,
-      CorporateBookingAllowed: false,
-      PanCountRequired: 0,
-      SamePaxNameAllowed: true,
-      SpaceAllowed: true,
-      SpecialCharAllowed: false,
-      PaxNameMinLength: 0,
-      PaxNameMaxLength: 50,
-      CharLimit: true,
-      PackageFare: false,
-      PackageDetailsMandatory: false,
-      DepartureDetailsMandatory: false,
-      GSTAllowed: false
     }
   }
   
+  
 };
-
-
