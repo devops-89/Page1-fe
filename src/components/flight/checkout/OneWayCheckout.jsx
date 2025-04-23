@@ -19,12 +19,14 @@ import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import { nunito } from "@/utils/fonts";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FareSummary from "../FareSummary";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
 import Loader from "@/utils/Loader";
+import { setToast } from "@/redux/reducers/toast";
+import { TOAST_STATUS } from "@/utils/enum";
 
 export default function OneWayCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
@@ -49,6 +51,8 @@ export default function OneWayCheckout() {
   const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   const toggleDrawer = {
     open: drawerOpen, // Current state of the drawer
@@ -84,7 +88,14 @@ export default function OneWayCheckout() {
       })
       .catch((error) => {
         setLoading(false);
-        console.log("Payment Response Error:", error.message);
+        dispatch(
+          setToast({
+            open: true,
+            message: error.message,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+        console.log("Payment Response Error:", error);
       });
   }
 

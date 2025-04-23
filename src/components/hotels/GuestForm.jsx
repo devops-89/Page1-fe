@@ -14,17 +14,16 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import ClearIcon from '@mui/icons-material/Clear';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ClearIcon from "@mui/icons-material/Clear";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { COLORS } from "@/utils/colors";
-import { useDispatch } from "react-redux";
-import { showModal,hideModal } from "@/redux/reducers/modal";
-
+import { useDispatch, useSelector } from "react-redux";
+import { showModal, hideModal } from "@/redux/reducers/modal";
+import { addGuest, removeGuest } from "@/redux/reducers/hotel-reducers/GuestSlice";
 
 const GuestForm = () => {
   const dispatch = useDispatch();
-  const [selectedGuests, setSelectedGuests] = useState([]);
   // State for guest-specific fields
   const [guestFields, setGuestFields] = useState({
     title: "mr",
@@ -49,18 +48,29 @@ const GuestForm = () => {
   };
 
   const openAddGuestForm = () => {
-     let {firstName,lastName}=guestFields;
-     let {email, mobile}=commonFields;
-     if(firstName==="" || lastName==="" || email==="" || mobile==="") {
+    let { firstName, lastName } = guestFields;
+    let { email, mobile } = commonFields;
+    if (firstName === "" || lastName === "" || email === "" || mobile === "") {
       alert("Please Fill This Form");
       return;
-     };
-     
-    dispatch(showModal(<GuestAdditionDialog selectedGuests={selectedGuests} setSelectedGuests={setSelectedGuests} />));
+    }
+
+    dispatch(addGuest(guestFields))
+    dispatch(
+      showModal(
+        <GuestAdditionDialog
+        />
+      )
+    );
   };
 
-  console.log("Guest Fields: ",guestFields.firstName,guestFields.lastName,guestFields.title);
-  console.log("Common Fields: ",commonFields.email,commonFields.mobile);
+  console.log(
+    "Guest Fields: ",
+    guestFields.firstName,
+    guestFields.lastName,
+    guestFields.title
+  );
+  console.log("Common Fields: ", commonFields.email, commonFields.mobile);
 
   return (
     <Box>
@@ -70,7 +80,7 @@ const GuestForm = () => {
       <Stack spacing={2} direction="row" sx={{ mb: 2 }}>
         {/* Title */}
         <Box>
-          <Typography variant="subtitle1">Title</Typography>
+          <Typography variant="subtitle1">TITLE</Typography>
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <Select
               size="small"
@@ -96,7 +106,7 @@ const GuestForm = () => {
 
         {/* First Name */}
         <Box>
-          <Typography sx={{ mb: 1 }}>First Name</Typography>
+          <Typography sx={{ mb: 1 }}>FIRST NAME</Typography>
           <TextField
             size="small"
             type="text"
@@ -118,7 +128,7 @@ const GuestForm = () => {
 
         {/* Last Name */}
         <Box>
-          <Typography sx={{ mb: 1 }}>Last Name</Typography>
+          <Typography sx={{ mb: 1 }}>LAST NAME</Typography>
           <TextField
             size="small"
             type="text"
@@ -199,11 +209,13 @@ const GuestForm = () => {
 
 export default GuestForm;
 
-
-
 // Modal for adding more guests component
-const GuestAdditionDialog = ({selectedGuests,setSelectedGuests}) => {
+const GuestAdditionDialog = () => {
   const dispatch = useDispatch();
+
+  const guestList = useSelector((state)=>state.HOTEL.GuestList);
+
+  console.log("guestList---------------", guestList.selectedGuests)
 
   const [guestData, setGuestData] = useState({
     title: "Mr",
@@ -213,8 +225,7 @@ const GuestAdditionDialog = ({selectedGuests,setSelectedGuests}) => {
     guardianPan: "",
   });
 
- 
-  const [showList,setShowList]=useState(false);
+  const [showList, setShowList] = useState(true);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -226,9 +237,17 @@ const GuestAdditionDialog = ({selectedGuests,setSelectedGuests}) => {
   };
 
   const handleAddGuest = () => {
-    if(guestData.firstName==="" || guestData.lastName==="" || guestData.isBelow12) return;
-    setSelectedGuests((prev) => [...prev, guestData]);
-    console.log("selected Guests: ", [...selectedGuests, guestData]);
+    if (
+      guestData.firstName === "" ||
+      guestData.lastName === "" ||
+      guestData.isBelow12
+    )
+      return;
+      setShowList(true);
+      dispatch(addGuest(guestData))
+      
+    // setSelectedGuests((prev) => [...prev, guestData]);
+    // console.log("selected Guests: ", [...selectedGuests, guestData]);
     // reseting the guest data for adding next guest
     setGuestData({
       title: "Mr",
@@ -237,144 +256,78 @@ const GuestAdditionDialog = ({selectedGuests,setSelectedGuests}) => {
       isBelow12: false,
       guardianPan: "",
     });
-    setShowList(true);
-
+    
   };
 
   // handling the deletion of the perticular guest
-  function handleDelete(itemId){
-     const filteredGuests=selectedGuests.filter((guest,index)=>{
-          return index!==itemId;
-     });
-     setSelectedGuests(filteredGuests);
+  function handleDelete(itemId) {
+    dispatch(removeGuest(itemId))
   }
 
   return (
     <Box className="addEditGuestScrollSection" p={2}>
-       {/* Adding guest Form Showing Conditionally */}
-      {
-         (!showList && (
-          <Box className="addGuestForm add">
+      {/* Adding guest Form Showing Conditionally */}
+      {!showList && (
+        <Box className="addGuestForm add">
           <Box display="flex" justifyContent="space-between" mb={1}>
-            <Typography variant="h6" fontWeight="bold">Add Guests</Typography>
-            <Button onClick={() => dispatch(hideModal())} sx={{ color: COLORS.BLACK, borderRadius: 50 }}>
+            <Typography variant="h6" fontWeight="bold">
+              Add Guests
+            </Typography>
+            <Button
+              onClick={() => dispatch(hideModal())}
+              sx={{ color: COLORS.BLACK, borderRadius: 50 }}
+            >
               <ClearIcon sx={{ fontWeight: "bold" }} />
             </Button>
           </Box>
-           
-          
-           
-              <Typography variant="body2" color="textSecondary" mb={2}>
-                Name should be as per official govt. ID & travelers below 18 years of
-                age cannot travel alone
-              </Typography>
-      
-              <form>
-                <Box className="addGuestForm__cont" mb={2}>
-                  <Grid2 container spacing={2} alignItems="center">
-                    <Grid2 item xs={12} sm={3}>
-                      {/* Title Selection */}
-                      <Box>
-                        <Typography variant="subtitle1">Title</Typography>
-                        <FormControl sx={{ m: 1, minWidth: 120 }}>
-                          <Select
-                            size="small"
-                            value={guestData.title}
-                            name="title"
-                            onChange={handleChange}
-                            displayEmpty
-                            inputProps={{ "aria-label": "Without label" }}
-                            sx={{
-                              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                borderColor: COLORS.PRIMARY,
-                              },
-                              "&.Mui-focused .MuiOutlinedInput-input": {
-                                color: "black",
-                              },
-                            }}
-                          >
-                            <MenuItem value={"Mr"}>Mr</MenuItem>
-                            <MenuItem value={"Mrs"}>Mrs</MenuItem>
-                            <MenuItem value={"Ms"}>Ms</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Grid2>
-      
-                    <Grid2 item xs={12} sm={9}>
-                      <Grid2 container spacing={2}>
-                        <Grid2 item xs={6}>
-                          <Typography sx={{ mb: 1 }}>First Name</Typography>
-                          <TextField
-                            name="firstName"
-                            value={guestData.firstName}
-                            onChange={handleChange}
-                            size="small"
-                            placeholder="FIRST NAME"
-                            sx={{
-                              "& .MuiOutlinedInput-root": {
-                                "&.Mui-focused fieldset": {
-                                  borderColor: COLORS.PRIMARY,
-                                },
-                                "&.Mui-focused input": {
-                                  color: "black",
-                                },
-                              },
-                            }}
-                          />
-                        </Grid2>
-                        <Grid2 item xs={6}>
-                          <Typography sx={{ mb: 1 }}>Last Name</Typography>
-                          <TextField
-                            name="lastName"
-                            value={guestData.lastName}
-                            onChange={handleChange}
-                            size="small"
-                            placeholder="LAST NAME"
-                            sx={{
-                              "& .MuiOutlinedInput-root": {
-                                "&.Mui-focused fieldset": {
-                                  borderColor: COLORS.PRIMARY,
-                                },
-                                "&.Mui-focused input": {
-                                  color: "black",
-                                },
-                              },
-                            }}
-                          />
-                        </Grid2>
-                      </Grid2>
-                    </Grid2>
-                  </Grid2>
-      
-                  <Box mt={2}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          size="small"
-                          checked={guestData.isBelow12}
-                          onChange={handleChange}
-                          name="isBelow12"
-                        />
-                      }
-                      label={
-                        <Typography variant="body2" fontWeight="bold">
-                          Below 12 years of age
-                        </Typography>
-                      }
-                    />
+
+          <Typography variant="body2" color="textSecondary" mb={2}>
+            Name should be as per official govt. ID & travelers below 18 years
+            of age cannot travel alone
+          </Typography>
+
+          <form>
+            <Box className="addGuestForm__cont" mb={2}>
+              <Grid2 container spacing={2} alignItems="center">
+                <Grid2 item xs={12} sm={3}>
+                  {/* Title Selection */}
+                  <Box>
+                    <Typography variant="subtitle1">Title</Typography>
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                      <Select
+                        size="small"
+                        value={guestData.title}
+                        name="title"
+                        onChange={handleChange}
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                        sx={{
+                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            borderColor: COLORS.PRIMARY,
+                          },
+                          "&.Mui-focused .MuiOutlinedInput-input": {
+                            color: "black",
+                          },
+                        }}
+                      >
+                        <MenuItem value={"Mr"}>Mr</MenuItem>
+                        <MenuItem value={"Mrs"}>Mrs</MenuItem>
+                        <MenuItem value={"Ms"}>Ms</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Box>
-      
-                  {/* Conditional PAN Card Field */}
-                  {guestData.isBelow12 && (
-                    <Box mt={2}>
-                      <Typography sx={{ mb: 1 }}>Guardian PAN Card</Typography>
+                </Grid2>
+
+                <Grid2 item xs={12} sm={9}>
+                  <Grid2 container spacing={2}>
+                    <Grid2 item xs={6}>
+                      <Typography sx={{ mb: 1 }}>First Name</Typography>
                       <TextField
-                        name="guardianPan"
-                        value={guestData.guardianPan}
+                        name="firstName"
+                        value={guestData.firstName}
                         onChange={handleChange}
                         size="small"
-                        placeholder="Enter Guardian PAN"
+                        placeholder="FIRST NAME"
                         sx={{
                           "& .MuiOutlinedInput-root": {
                             "&.Mui-focused fieldset": {
@@ -386,79 +339,153 @@ const GuestAdditionDialog = ({selectedGuests,setSelectedGuests}) => {
                           },
                         }}
                       />
-                    </Box>
-                  )}
+                    </Grid2>
+                    <Grid2 item xs={6}>
+                      <Typography sx={{ mb: 1 }}>Last Name</Typography>
+                      <TextField
+                        name="lastName"
+                        value={guestData.lastName}
+                        onChange={handleChange}
+                        size="small"
+                        placeholder="LAST NAME"
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: COLORS.PRIMARY,
+                            },
+                            "&.Mui-focused input": {
+                              color: "black",
+                            },
+                          },
+                        }}
+                      />
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </Grid2>
+
+              <Box mt={2}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={guestData.isBelow12}
+                      onChange={handleChange}
+                      name="isBelow12"
+                    />
+                  }
+                  label={
+                    <Typography variant="body2" fontWeight="bold">
+                      Below 12 years of age
+                    </Typography>
+                  }
+                />
+              </Box>
+
+              {/* Conditional PAN Card Field */}
+              {guestData.isBelow12 && (
+                <Box mt={2}>
+                  <Typography sx={{ mb: 1 }}>Guardian PAN Card</Typography>
+                  <TextField
+                    name="guardianPan"
+                    value={guestData.guardianPan}
+                    onChange={handleChange}
+                    size="small"
+                    placeholder="Enter Guardian PAN"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          borderColor: COLORS.PRIMARY,
+                        },
+                        "&.Mui-focused input": {
+                          color: "black",
+                        },
+                      },
+                    }}
+                  />
                 </Box>
-      
-                <Button
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  onClick={handleAddGuest}
-                  data-testid="saveGuests"
-                  sx={{ bgcolor: COLORS.PRIMARY }}
-                >
-                  ADD TO SAVED GUESTS
-                </Button>
-              </form>
-            
-  
-         
-         
+              )}
+            </Box>
+
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={handleAddGuest}
+              data-testid="saveGuests"
+              sx={{ bgcolor: COLORS.PRIMARY }}
+            >
+              ADD TO SAVED GUESTS
+            </Button>
+          </form>
         </Box>
-         ))
-      }
-    
+      )}
+
       {/* showing the added guests list to the user after adding the user */}
-        {
-              (showList && (
-                <Box className="addGuestForm add">
-          <Box display="flex" justifyContent="space-between" sx={{width:"400px"}} mb={2}>
-            <Typography variant="h6" fontWeight="bold">Saved Guests</Typography>
-            <Button size="small" sx={{bgcolor:COLORS.PRIMARY,color:COLORS.WHITE,p:1}} onClick={() =>setShowList(false)} >
-            
-             Add New Guests
-           
+      {showList && (
+        <Box className="addGuestForm add">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            sx={{ width: "400px" }}
+            mb={2}
+          >
+            <Typography variant="h6" fontWeight="bold">
+              Saved Guests
+            </Typography>
+            <Button
+              size="small"
+              sx={{ bgcolor: COLORS.PRIMARY, color: COLORS.WHITE, p: 1 }}
+              onClick={() => setShowList(false)}
+            >
+              Add New Guests
             </Button>
           </Box>
 
           {/* showing the added guests list */}
-          <Box sx={{height:"200px",overflow:"auto",py:2}}>
+          <Box sx={{ height: "200px", overflow: "auto", py: 2 }}>
             {/* mapping the selected guests list here */}
-           {
-              (selectedGuests.length>0)?(
-                selectedGuests.map((guest,index)=>{
-                    return (
-                      <Box key={index} display="flex" justifyContent="space-between" sx={{width:"400px",borderBottom:`1px solid ${COLORS.PRIMARY}`}} mb={2}>
-                      <Typography sx={{px:1}}>
-                       {guest.firstName} {guest.lastName}
-                      </Typography>
-                      <Box>
-                        <EditIcon sx={{color:COLORS.PRIMARY,px:1}} />
-                        <DeleteIcon sx={{color:COLORS.PRIMARY,px:1}} onClick={()=>handleDelete(index)} />
-                      </Box>
+            {guestList.selectedGuests.length > 0 ? (
+              guestList.selectedGuests.map((guest, index) => {
+                return (
+                  <Box
+                    key={index}
+                    display="flex"
+                    justifyContent="space-between"
+                    sx={{
+                      width: "400px",
+                      borderBottom: `1px solid ${COLORS.PRIMARY}`,
+                    }}
+                    mb={2}
+                  >
+                    <Typography sx={{ px: 1 }}>
+                      {guest.firstName} {guest.lastName}
+                    </Typography>
+                    <Box>
+                      <EditIcon sx={{ color: COLORS.PRIMARY, px: 1 }} />
+                      <DeleteIcon
+                        sx={{ color: COLORS.PRIMARY, px: 1 }}
+                        onClick={() => handleDelete(index)}
+                      />
+                    </Box>
                   </Box>
-                    )
-                })
-              ):(
-                <Typography>There are No Guests Available!</Typography>
-              )
-           }
-      
+                );
+              })
+            ) : (
+              <Typography>There are No Guests Available!</Typography>
+            )}
           </Box>
 
-          <Box display="flex" justifyContent="center" >
-          <Button  sx={{bgcolor:COLORS.PRIMARY,color:COLORS.WHITE,p:1,px:4}}  onClick={()=>dispatch(hideModal())}>
-            DONE
-          </Button>
+          <Box display="flex" justifyContent="center">
+            <Button
+              sx={{ bgcolor: COLORS.PRIMARY, color: COLORS.WHITE, p: 1, px: 4 }}
+              onClick={() => dispatch(hideModal())}
+            >
+              DONE
+            </Button>
           </Box>
-          
-          </Box>
-              ))
-           }
-
-     
+        </Box>
+      )}
     </Box>
   );
 };
-

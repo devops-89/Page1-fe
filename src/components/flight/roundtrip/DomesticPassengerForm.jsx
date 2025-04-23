@@ -88,7 +88,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
       childSeatsOutgoing.push(seat);
     });
 
- // -----------Transposing Return value----------------
+  // -----------Transposing Return value----------------
 
   const maxLengthReturn = Math.max(...finalSeatReturn.map((row) => row.length));
 
@@ -106,58 +106,21 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
       childSeatsReturn.push(seat);
     });
 
-
   // -------------Send data to custom to fix the format of meal & baggage-----------------
   const customMealAndBaggage =
     useRoundTripDomesticMealAndBaggage(flightDetails);
 
+  // console.log("selectedSeatsOutgoing------------------", selectedSeatsOutgoing)
+  //     console.log("selectedSeatsReturn------------------", selectedSeatsReturn)
+  //     console.log("transposedOutGoing------------------", transposedOutGoing)
+  //     console.log("transposedOutReturn----------------", transposedOutReturn)
+  //     console.log("adultSeatsOutgoing---------------", adultSeatsOutgoing)
+  //     console.log("childSeatsOutgoing---------------", childSeatsOutgoing)
+  //     console.log("adultSeatsReturn---------------", adultSeatsReturn)
+  //     console.log("childSeatsReturn---------------", childSeatsReturn)
 
-
-
-
-// console.log("selectedSeatsOutgoing------------------", selectedSeatsOutgoing)
-//     console.log("selectedSeatsReturn------------------", selectedSeatsReturn)
-//     console.log("transposedOutGoing------------------", transposedOutGoing)
-//     console.log("transposedOutReturn----------------", transposedOutReturn)
-//     console.log("adultSeatsOutgoing---------------", adultSeatsOutgoing)
-//     console.log("childSeatsOutgoing---------------", childSeatsOutgoing)
-//     console.log("adultSeatsReturn---------------", adultSeatsReturn)
-//     console.log("childSeatsReturn---------------", childSeatsReturn)
-
-
-  const {
-    Currency_ob,
-    BaseFare_ob,
-    Tax_ob,
-    YQTax_ob,
-    AdditionalTxnFeeOfrd_ob,
-    AdditionalTxnFeePub_ob,
-    OtherCharges_ob,
-    Discount_ob,
-    PublishedFare_ob,
-    OfferedFare_ob,
-    TdsOnCommission_ob,
-    TdsOnPLB_ob,
-    TdsOnIncentive_ob,
-    ServiceFee_ob,
-  } = flightDetails?.[0][0]?.Results?.Fare || {};
-
-  const {
-    Currency_ib,
-    BaseFare_ib,
-    Tax_ib,
-    YQTax_ib,
-    AdditionalTxnFeeOfrd_ib,
-    AdditionalTxnFeePub_ib,
-    OtherCharges_ib,
-    Discount_ib,
-    PublishedFare_ib,
-    OfferedFare_ib,
-    TdsOnCommission_ib,
-    TdsOnPLB_ib,
-    TdsOnIncentive_ib,
-    ServiceFee_ib,
-  } = flightDetails?.[1][0]?.Results?.Fare || {};
+  const OB_Fare = flightDetails?.[0]?.[0]?.Results?.Fare || {};
+  const IB_Fare = flightDetails?.[1]?.[0]?.Results?.Fare || {};
 
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
@@ -503,20 +466,20 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
         passenger_details: passengerDetails_OB,
         fare: [
           {
-            Currency: Currency_ob || "INR",
-            BaseFare: BaseFare_ob || 0,
-            Tax: Tax_ob || 0,
-            YQTax: YQTax_ob || 0,
-            AdditionalTxnFeeOfrd: AdditionalTxnFeeOfrd_ob || 0,
-            AdditionalTxnFeePub: AdditionalTxnFeePub_ob || 0,
-            OtherCharges: OtherCharges_ob || 0,
-            Discount: Discount_ob || 0,
-            PublishedFare: PublishedFare_ob || 0,
-            OfferedFare: OfferedFare_ob || 0,
-            TdsOnCommission: TdsOnCommission_ob || 0,
-            TdsOnPLB: TdsOnPLB_ob || 0,
-            TdsOnIncentive: TdsOnIncentive_ob || 0,
-            ServiceFee: ServiceFee_ob || 0,
+            Currency: OB_Fare.Currency || "INR",
+            BaseFare: OB_Fare.BaseFare || 0,
+            Tax: OB_Fare.Tax || 0,
+            YQTax: OB_Fare.YQTax || 0,
+            AdditionalTxnFeeOfrd: OB_Fare.AdditionalTxnFeeOfrd || 0,
+            AdditionalTxnFeePub: OB_Fare.AdditionalTxnFeePub || 0,
+            OtherCharges: OB_Fare.OtherCharges || 0,
+            Discount: OB_Fare.Discount || 0,
+            PublishedFare: OB_Fare.PublishedFare || 0,
+            OfferedFare: OB_Fare.OfferedFare || 0,
+            TdsOnCommission: OB_Fare.TdsOnCommission || 0,
+            TdsOnPLB: OB_Fare.TdsOnPLB || 0,
+            TdsOnIncentive: OB_Fare.TdsOnIncentive || 0,
+            ServiceFee: OB_Fare.ServiceFee || 0,
           },
         ],
         fareBreakdown:
@@ -555,20 +518,20 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
         passenger_details: passengerDetails_IB,
         fare: [
           {
-            Currency: Currency_ib || "INR",
-            BaseFare: BaseFare_ib || 0,
-            Tax: Tax_ib || 0,
-            YQTax: YQTax_ib || 0,
-            AdditionalTxnFeeOfrd: AdditionalTxnFeeOfrd_ib || 0,
-            AdditionalTxnFeePub: AdditionalTxnFeePub_ib || 0,
-            OtherCharges: OtherCharges_ib || 0,
-            Discount: Discount_ib || 0,
-            PublishedFare: PublishedFare_ib || 0,
-            OfferedFare: OfferedFare_ib || 0,
-            TdsOnCommission: TdsOnCommission_ib || 0,
-            TdsOnPLB: TdsOnPLB_ib || 0,
-            TdsOnIncentive: TdsOnIncentive_ib || 0,
-            ServiceFee: ServiceFee_ib || 0,
+            Currency: IB_Fare.Currency || "INR",
+            BaseFare: IB_Fare.BaseFare || 0,
+            Tax: IB_Fare.Tax || 0,
+            YQTax: IB_Fare.YQTax || 0,
+            AdditionalTxnFeeOfrd: IB_Fare.AdditionalTxnFeeOfrd || 0,
+            AdditionalTxnFeePub: IB_Fare.AdditionalTxnFeePub || 0,
+            OtherCharges: IB_Fare.OtherCharges || 0,
+            Discount: IB_Fare.Discount || 0,
+            PublishedFare: IB_Fare.PublishedFare || 0,
+            OfferedFare: IB_Fare.OfferedFare || 0,
+            TdsOnCommission: IB_Fare.TdsOnCommission || 0,
+            TdsOnPLB: IB_Fare.TdsOnPLB || 0,
+            TdsOnIncentive: IB_Fare.TdsOnIncentive || 0,
+            ServiceFee: IB_Fare.ServiceFee || 0,
           },
         ],
         fareBreakdown:
