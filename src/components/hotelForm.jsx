@@ -20,26 +20,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import useFetchIP  from "@/custom-hook/useFetchIp";
+import useFetchIP from "@/custom-hook/useFetchIp";
 import { useRouter } from "next/router";
 
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { useState, useMemo } from "react";
 import Loading from "react-loading";
+import moment from "moment";
 
 const HotelForm = () => {
-
-  const router=useRouter();
-  const dispatch=useDispatch();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [selectedCity, setSelectedCity] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [adultValue, setAdultValue] = useState(1);
   const [childValue, setChildValue] = useState(0);
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
-  const [userIp,setUserIp]=useState("");
-    const [buttonLoading, setButtonLoading] = useState(false);
+  const [userIp, setUserIp] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   useFetchIP(setUserIp);
 
@@ -48,8 +48,6 @@ const HotelForm = () => {
     setAnchorEl(e.currentTarget);
   };
 
-   
-  
   const initialState = {
     ip_address: "",
     preferred_time: "",
@@ -63,46 +61,54 @@ const HotelForm = () => {
   };
 
   const [state, setState] = useState(initialState);
-
   const [inputValue, setInputValue] = useState(null);
 
-  // const [options, setOptions] = useState(hotelslist.slice(0, 20)); // Show top 20 initially
-
-  // This memoized filter only runs when user types
+  // filter the hotel list
   const filteredOptions = useMemo(() => {
-    if (!inputValue) return hotelslist.slice(0, 20); // popular/trending
+    if (!inputValue) return hotelslist.slice(0, 20);
 
-    const lower = inputValue.toLowerCase();
+    // console.log("hotelslist--------------",hotelslist)
+
+    const cityQuery = inputValue.toLowerCase();
     return hotelslist
       .filter(
         (item) =>
-          item.city_name?.toLowerCase().includes(lower) ||
-          item.country_name?.toLowerCase().includes(lower) ||
-          item.country_code?.toLowerCase().includes(lower)
+          item.city_name?.toLowerCase().startsWith(cityQuery) ||
+          item.country_name?.toLowerCase().startsWith(cityQuery) ||
+          item.country_code?.toLowerCase().startsWith(cityQuery)
       )
-      .slice(0, 100); // limit results to avoid lag
+      .slice(0, 100);
   }, [inputValue]);
 
+  // -----------Handle Search---------------
   async function handleSearch() {
-    
     if (!checkIn || !checkOut || !selectedCity || !userIp) {
-      alert("Please fill all required fields.");
+      dispatch(
+        setToast({
+          open: true,
+          message: "Please fill all required fields.",
+          severity: TOAST_STATUS.ERROR,
+        })
+      );
       return;
     }
 
-    console.log(selectedCity.city_code);
-  
     const payload = {
       CheckIn: checkIn.format("YYYY-MM-DD"),
       CheckOut: checkOut.format("YYYY-MM-DD"),
-      CityCodes: selectedCity.city_code ,
+      CityCodes: selectedCity.city_code,
       GuestNationality: selectedCity.country_code,
       EndUserIp: userIp,
       PaxRooms: [
         {
           Adults: adultValue,
           Children: childValue,
-          ChildrenAges: childValue > 0 ? [/* fill ages */] : [],
+          ChildrenAges:
+            childValue > 0
+              ? [
+                  /* fill ages */
+                ]
+              : [],
         },
       ],
       ResponseTime: 23.0,
@@ -116,27 +122,28 @@ const HotelForm = () => {
         HotelName: null,
       },
     };
-  
+
     try {
       setButtonLoading(true);
       const response = await hotelController.searchHotel(payload);
-      console.log("Response from API: ", response.data.data.length);
-      if(response.data.data.length>0){
+      if (response.data.data.length > 0) {
         dispatch(setHotelList(response?.data?.data));
         router.push("/hotel-list");
-      }
-      else{
-
+      } else {
         throw new Error("No Hotels Available!");
       }
-      setButtonLoading(false)
+      setButtonLoading(false);
     } catch (error) {
-     dispatch(setToast({open:true,message:"No Hotels Found!",severity:TOAST_STATUS.ERROR}))
-      setButtonLoading(false)
+      dispatch(
+        setToast({
+          open: true,
+          message: "No Hotels Found!",
+          severity: TOAST_STATUS.ERROR,
+        })
+      );
+      setButtonLoading(false);
     }
-   
   }
-  
 
   function handleCheckin(newvalue) {
     setCheckIn(newvalue);
@@ -206,14 +213,25 @@ const HotelForm = () => {
                   justifyContent="space-between"
                   sx={{ width: "100%" }}
                 >
-                  {/* Left: icon and city details */}
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <ApartmentIcon sx={{ color: COLORS.PRIMARY }} />
                     <Box>
-                      <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: 800,
+                          fontFamily: nunito.style,
+                        }}
+                      >
                         {option.city_name}
                       </Typography>
-                      <Typography sx={{ fontSize: 12, color: COLORS.DARKGREY }}>
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          color: COLORS.DARKGREY,
+                          fontFamily: nunito.style,
+                        }}
+                      >
                         {option.country_name}
                       </Typography>
                     </Box>
@@ -225,6 +243,8 @@ const HotelForm = () => {
                       fontSize: 13,
                       fontWeight: 500,
                       color: COLORS.DARKGREY,
+                      fontFamily: nunito.style,
+                      fontWeight: 600,
                     }}
                   >
                     {option.country_code}
@@ -238,7 +258,6 @@ const HotelForm = () => {
           size={{ lg: 3, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
-
             position: "relative",
           }}
         >
@@ -263,6 +282,9 @@ const HotelForm = () => {
               disablePast
               value={checkIn}
               onChange={handleCheckin}
+              maxDate={moment().add(90, "days")}
+              minDate={moment()}
+              format="DD/MM/YYYY"
             />
           </LocalizationProvider>
         </Grid2>
@@ -292,9 +314,12 @@ const HotelForm = () => {
                   border: "none",
                 },
               }}
+              maxDate={moment().add(90, 'days')}
+              minDate={checkIn ? moment(checkIn).add(1, "day") : moment()}
               value={checkOut}
               onChange={handleCheckout}
               disablePast
+              format="DD/MM/YYYY"
             />
           </LocalizationProvider>
         </Grid2>
@@ -363,34 +388,34 @@ const HotelForm = () => {
           {/* popover end */}
         </Grid2>
         <Grid2 size={{ lg: 12, xs: 12, sm: 12 }} sx={{ textAlign: "center" }}>
-         <Button
-                     disabled={buttonLoading}
-                     sx={{
-                       backgroundColor: COLORS.SECONDARY,
-                       color: COLORS.WHITE,
-                       width: {lg:150 , md:150 , sm:120 ,xs:120},
-                      
-                       mt: { lg: 2, sm: 1, xs: 2 },
-                       cursor: buttonLoading ? "not-allowed" : "pointer",
-                       fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
-                       py: {lg:1.5 , md:1.5,sm:1 , xs:1},
-                     }}
-                     onClick={handleSearch}
-                   >
-                     {buttonLoading ? (
-                       <Loading
-                         type="bars"
-                         width={20}
-                         height={20}
-                         color={COLORS.WHITE}
-                       />
-                     ) : (
-                       "Search"
-                     )}
-                   </Button>
+          <Button
+            disabled={buttonLoading}
+            sx={{
+              backgroundColor: COLORS.SECONDARY,
+              color: COLORS.WHITE,
+              width: { lg: 150, md: 150, sm: 120, xs: 120 },
+
+              mt: { lg: 2, sm: 1, xs: 2 },
+              cursor: buttonLoading ? "not-allowed" : "pointer",
+              fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
+              py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
+            }}
+            onClick={handleSearch}
+          >
+            {buttonLoading ? (
+              <Loading
+                type="bars"
+                width={20}
+                height={20}
+                color={COLORS.WHITE}
+              />
+            ) : (
+              "Search"
+            )}
+          </Button>
         </Grid2>
       </Grid2>
-      <ToastBar/>
+      <ToastBar />
     </Box>
   );
 };
