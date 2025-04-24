@@ -61,9 +61,9 @@ const HotelForm = () => {
     return hotelslist
       .filter(
         (item) =>
-          item.city_name?.toLowerCase().startsWith(cityQuery) ||
-          item.country_name?.toLowerCase().startsWith(cityQuery) ||
-          item.country_code?.toLowerCase().startsWith(cityQuery)
+          item.city_name?.toLowerCase().includes(cityQuery) ||
+          item.country_name?.toLowerCase().includes(cityQuery) ||
+          item.country_code?.toLowerCase().includes(cityQuery)
       )
       .slice(0, 100);
   }, [inputValue]);
