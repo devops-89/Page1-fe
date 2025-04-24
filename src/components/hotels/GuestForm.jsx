@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 import {
   Box,
@@ -20,10 +20,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { COLORS } from "@/utils/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal, hideModal } from "@/redux/reducers/modal";
-import { addGuest, removeGuest } from "@/redux/reducers/hotel-reducers/GuestSlice";
+import { addGuest,removeGuest } from "@/redux/reducers/no-persist-reducers/GuestAdditionSlice";
+import { addPersistGuest,clearPersistGuests,addCommonFields,clearCommonFields,updatePersistGuest } from "@/redux/reducers/hotel-reducers/GuestSlice";
+
 
 const GuestForm = () => {
   const dispatch = useDispatch();
+
+  const persistedGuests=useSelector((state)=> state.HOTEL.GuestList.selectedGuests);
+  const persistedCommonFields=useSelector((state)=>state.HOTEL.GuestList.commonFields)
+
+  useEffect(()=>{
+     dispatch(clearPersistGuests());
+     dispatch(clearCommonFields());
+  },[]);
+
+
+
   // State for guest-specific fields
   const [guestFields, setGuestFields] = useState({
     title: "mr",
@@ -55,7 +68,13 @@ const GuestForm = () => {
       return;
     }
 
-    dispatch(addGuest(guestFields))
+    if(persistedGuests.length===0)
+    {
+      dispatch(addPersistGuest(guestFields));
+      dispatch(addCommonFields(commonFields));
+    }
+  
+
     dispatch(
       showModal(
         <GuestAdditionDialog
@@ -64,13 +83,11 @@ const GuestForm = () => {
     );
   };
 
-  console.log(
-    "Guest Fields: ",
-    guestFields.firstName,
-    guestFields.lastName,
-    guestFields.title
-  );
-  console.log("Common Fields: ", commonFields.email, commonFields.mobile);
+  
+
+  console.log("Persisted Guests: ",persistedGuests);
+  console.log("Persisted Common Fields: ",persistedCommonFields);
+  
 
   return (
     <Box>
@@ -213,9 +230,10 @@ export default GuestForm;
 const GuestAdditionDialog = () => {
   const dispatch = useDispatch();
 
-  const guestList = useSelector((state)=>state.HOTEL.GuestList);
+  const guestList = useSelector((state)=>state.NOPERSIST.GUESTADDITION.guestSelected);
+  const persistedGuests=useSelector((state)=> state.HOTEL.GuestList.selectedGuests);
 
-  console.log("guestList---------------", guestList.selectedGuests)
+  console.log("guestList---------------", guestList)
 
   const [guestData, setGuestData] = useState({
     title: "Mr",
@@ -225,7 +243,7 @@ const GuestAdditionDialog = () => {
     guardianPan: "",
   });
 
-  const [showList, setShowList] = useState(true);
+  const [showList, setShowList] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -445,8 +463,8 @@ const GuestAdditionDialog = () => {
           {/* showing the added guests list */}
           <Box sx={{ height: "200px", overflow: "auto", py: 2 }}>
             {/* mapping the selected guests list here */}
-            {guestList.selectedGuests.length > 0 ? (
-              guestList.selectedGuests.map((guest, index) => {
+            {guestList.length > 0 ? (
+              guestList.map((guest, index) => {
                 return (
                   <Box
                     key={index}
@@ -479,7 +497,11 @@ const GuestAdditionDialog = () => {
           <Box display="flex" justifyContent="center">
             <Button
               sx={{ bgcolor: COLORS.PRIMARY, color: COLORS.WHITE, p: 1, px: 4 }}
-              onClick={() => dispatch(hideModal())}
+              onClick={() =>{
+                dispatch(updatePersistGuest(guestList));
+                dispatch(hideModal());
+                console.log("Persisted Guests: ",persistedGuests);
+              } }
             >
               DONE
             </Button>

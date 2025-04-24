@@ -2,26 +2,48 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   selectedGuests: [],
+  commonFields:{
+    email: "",
+    mobile: "",
+  }
 };
 
 const guestSlice = createSlice({
   name: 'guestSlice',
   initialState,
   reducers: {
-    addGuest: (state, action) => {
-      state.selectedGuests.push(action.payload);  // Corrected here
+    addPersistGuest: (state, action) => {
+      state.selectedGuests.push(action.payload);  
     },
-    removeGuest: (state, action) => {
+    updatePersistGuest: (state, action)=>{
+        const firstGuest=state.selectedGuests.length>0?state.selectedGuests[0]:null;
+         state.selectedGuests=[firstGuest,...action.payload];
+    },
+    removePersistGuest: (state, action) => {
       state.selectedGuests = state.selectedGuests.filter((_, idx) => idx !== action.payload);
     },
-    setGuests: (state, action) => {
+    setPersistGuests: (state, action) => {
       state.selectedGuests = action.payload;
     },
-    clearGuests: (state) => {
+    clearPersistGuests: (state) => {
       state.selectedGuests = [];
+    },
+    addCommonFields:(state,action)=>{
+      let {email,mobile}=action.payload;
+      if(email!=="" && mobile!=="")
+      {
+        state.commonFields.email=email;
+        state.commonFields.mobile=mobile;
+      }
+    },
+    clearCommonFields:(state)=>{
+      state.commonFields={
+        email: "",
+        mobile: "",
+      }
     }
   },
 });
 
-export const { addGuest, removeGuest, setGuests, clearGuests } = guestSlice.actions;
+export const { addPersistGuest, removePersistGuest,updatePersistGuest, setPersistGuests, clearPersistGuests,addCommonFields,clearCommonFields } = guestSlice.actions;
 export default guestSlice.reducer;
