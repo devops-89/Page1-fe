@@ -3,7 +3,7 @@ import { nunito } from "@/utils/fonts";
 import {
   Box,
   Button,
-  Divider,
+  Divider, 
   FormControl,
   Grid2,
   MenuItem,
@@ -14,14 +14,16 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import TravellorCounter from "./travellerCounter";
-import useHotelTravellerValidation from "@/custom-hook/useHotelTravellerValidation";
+import TravellorCounter from "./travellerCounter"; 
+import useHotelTravellerValidation from "@/custom-hook/useHotelTravellerValidation"; 
 
-const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
+
+const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
   const validateTravelers = useHotelTravellerValidation();
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState({ errorStatus: false, errorMessage: "" });
 
+ 
   const [tempPaxRooms, setTempPaxRooms] = useState(paxRoom);
   const totalAdults = tempPaxRooms.reduce((sum, room) => sum + room.Adults, 0);
 
@@ -86,21 +88,22 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
     if (!error.errorStatus) {
       setPaxRoom(tempPaxRooms);
       setAnchorEl(null);
-      setValidationErrors(null);
+      setValidationErrors(null); 
     } else {
       setValidationErrors(error.errorMessage);
     }
   };
 
-  const handleCancel = () => {
-    // console.log("paxRoom----------", paxRoom);
-    setPaxRoom([{ Adults: 1, Children: 0, ChildrenAges: [] }]);
-    setError({ errorStatus: false, errorMessage: "" });
-    setValidationErrors(null);
 
-    setAnchorEl(null);
-  };
-
+    const handleCancel = () => {
+      // console.log("paxRoom----------",paxRoom)
+      setTempPaxRooms( { Adults: 1, Children: 0, ChildrenAges: [] });
+      setError({ errorStatus: false, errorMessage: "" });
+      setValidationErrors(null);
+  
+      setAnchorEl(null);
+    };
+  
   return (
     <div>
       <Typography
@@ -145,7 +148,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                 {roomIndex === 0 && (
                   <TravellorCounter
                     heading="Room"
-                    value={totalRooms}
+                    value={totalRooms} 
                     onIncrease={() =>
                       updateTravellerCount(roomIndex, "room", "increase")
                     }
@@ -159,7 +162,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
               <Grid2
                 size={{ xs: 9 }}
                 container
-                component={Paper}
+                component={Paper} 
                 spacing={1}
                 sx={{ p: 2 }}
               >
@@ -179,7 +182,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                 <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                   <TravellorCounter
                     heading="Adults"
-                    value={room.Adults}
+                    value={room.Adults} 
                     onIncrease={() =>
                       updateTravellerCount(roomIndex, "adult", "increase")
                     }
@@ -191,7 +194,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                 <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                   <TravellorCounter
                     heading="Children"
-                    value={room.Children}
+                    value={room.Children} 
                     onIncrease={() =>
                       updateTravellerCount(roomIndex, "child", "increase")
                     }
