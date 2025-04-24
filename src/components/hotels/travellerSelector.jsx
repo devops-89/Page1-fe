@@ -3,7 +3,7 @@ import { nunito } from "@/utils/fonts";
 import {
   Box,
   Button,
-  Divider, 
+  Divider,
   FormControl,
   Grid2,
   MenuItem,
@@ -14,19 +14,20 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import TravellorCounter from "./travellerCounter"; 
-import useHotelTravellerValidation from "@/custom-hook/useHotelTravellerValidation"; 
+import TravellorCounter from "./travellerCounter";
+import useHotelTravellerValidation from "@/custom-hook/useHotelTravellerValidation";
 
-
-const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
+const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
   const validateTravelers = useHotelTravellerValidation();
+  // validationErrors seems redundant if error state is used, keeping for now but could be simplified
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState({ errorStatus: false, errorMessage: "" });
 
- 
+  // Initialize tempPaxRooms with the initial paxRoom prop
   const [tempPaxRooms, setTempPaxRooms] = useState(paxRoom);
-  const totalAdults = tempPaxRooms.reduce((sum, room) => sum + room.Adults, 0);
 
+  // Recalculate total adults and rooms whenever tempPaxRooms changes
+  const totalAdults = tempPaxRooms.reduce((sum, room) => sum + room.Adults, 0);
   const totalRooms = tempPaxRooms.length;
 
   useEffect(() => {
@@ -35,10 +36,11 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
       tempPaxRooms
     );
     setError((prev) => ({ ...prev, errorStatus, errorMessage }));
-  }, [totalRooms, tempPaxRooms]);
+  }, [totalRooms, tempPaxRooms, validateTravelers]); // Added validateTravelers to dependency array
 
   // Handler for updating adult, child, or room counts
-  const updateTravellerCount = (roomIndex, type, action) => {
+  const updateTravellerCount = (type, action, roomIndex) => {
+    // Reordered parameters for clarity
     setTempPaxRooms((prevPaxRooms) => {
       const newPaxRooms = [...prevPaxRooms];
 
@@ -51,6 +53,9 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
           newPaxRooms.pop();
         }
       } else if (type === "adult") {
+        // Ensure roomIndex is provided for adult/child updates
+        if (roomIndex === undefined || roomIndex === null) return prevPaxRooms;
+
         const currentAdults = newPaxRooms[roomIndex].Adults;
         if (action === "increase") {
           newPaxRooms[roomIndex].Adults = currentAdults + 1;
@@ -59,6 +64,9 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
           newPaxRooms[roomIndex].Adults = currentAdults - 1;
         }
       } else if (type === "child") {
+        // Ensure roomIndex is provided for adult/child updates
+        if (roomIndex === undefined || roomIndex === null) return prevPaxRooms;
+
         const currentChildren = newPaxRooms[roomIndex].Children;
         if (action === "increase") {
           newPaxRooms[roomIndex].Children = currentChildren + 1;
@@ -79,7 +87,13 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
   const handleChildAgeChange = (roomIndex, childIndex, newAge) => {
     setTempPaxRooms((prevPaxRooms) => {
       const newPaxRooms = [...prevPaxRooms];
-      newPaxRooms[roomIndex].ChildrenAges[childIndex] = newAge;
+      // Ensure roomIndex and childIndex are valid
+      if (
+        newPaxRooms[roomIndex] &&
+        newPaxRooms[roomIndex].ChildrenAges[childIndex] !== undefined
+      ) {
+        newPaxRooms[roomIndex].ChildrenAges[childIndex] = newAge;
+      }
       return newPaxRooms;
     });
   };
@@ -88,22 +102,20 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
     if (!error.errorStatus) {
       setPaxRoom(tempPaxRooms);
       setAnchorEl(null);
-      setValidationErrors(null); 
+      setValidationErrors(null);
     } else {
       setValidationErrors(error.errorMessage);
     }
   };
 
+  const handleCancel = () => {
+    // Revert tempPaxRooms to the original paxRoom state
+    setTempPaxRooms(paxRoom);
+    setError({ errorStatus: false, errorMessage: "" });
+    setValidationErrors(null);
+    setAnchorEl(null);
+  };
 
-    const handleCancel = () => {
-      // console.log("paxRoom----------",paxRoom)
-      setTempPaxRooms( { Adults: 1, Children: 0, ChildrenAges: [] });
-      setError({ errorStatus: false, errorMessage: "" });
-      setValidationErrors(null);
-  
-      setAnchorEl(null);
-    };
-  
   return (
     <div>
       <Typography
@@ -116,9 +128,16 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
       >
         Select Travelers
       </Typography>
+      {/* Use the error state for displaying messages */}
       {error.errorMessage && (
         <Box sx={{ mt: 2, color: "red", textAlign: "center" }}>
           <Typography>{error.errorMessage}</Typography>
+        </Box>
+      )}
+      {/* Display validation errors if any after apply attempt */}
+      {validationErrors && (
+        <Box sx={{ mt: 2, color: "red", textAlign: "center" }}>
+          <Typography>{validationErrors}</Typography>
         </Box>
       )}
       <Box
@@ -129,6 +148,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
           m: 1,
           maxHeight: "250px",
           overflowY: "scroll",
+          position:"relative",
           "::-webkit-scrollbar": {
             width: 5,
             borderRadius: 4,
@@ -141,121 +161,121 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom}) => {
           },
         }}
       >
-        {tempPaxRooms.map((room, roomIndex) => (
-          <Box key={roomIndex} sx={{ mb: 2 }}>
-            <Grid2 container spacing={2}>
-              <Grid2 size={{ xs: 3 }} sx={{ borderRight: "1px solid #aaaaaa" }}>
-                {roomIndex === 0 && (
-                  <TravellorCounter
-                    heading="Room"
-                    value={totalRooms} 
-                    onIncrease={() =>
-                      updateTravellerCount(roomIndex, "room", "increase")
-                    }
-                    onDecrease={() =>
-                      updateTravellerCount(roomIndex, "room", "decrease")
-                    }
-                  />
-                )}
-              </Grid2>
-
-              <Grid2
-                size={{ xs: 9 }}
-                container
-                component={Paper} 
-                spacing={1}
-                sx={{ p: 2 }}
-              >
-                <Grid2 size={{ xs: 12 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 800,
-                      fontFamily: nunito.style,
-                      color: COLORS.PRIMARY,
-                      textAlign: "center",
-                    }}
-                  >
-                    Room {roomIndex + 1}
-                  </Typography>
-                </Grid2>
-                <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
-                  <TravellorCounter
-                    heading="Adults"
-                    value={room.Adults} 
-                    onIncrease={() =>
-                      updateTravellerCount(roomIndex, "adult", "increase")
-                    }
-                    onDecrease={() =>
-                      updateTravellerCount(roomIndex, "adult", "decrease")
-                    }
-                  />
-                </Grid2>
-                <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
-                  <TravellorCounter
-                    heading="Children"
-                    value={room.Children} 
-                    onIncrease={() =>
-                      updateTravellerCount(roomIndex, "child", "increase")
-                    }
-                    onDecrease={() =>
-                      updateTravellerCount(roomIndex, "child", "decrease")
-                    }
-                  />
-                </Grid2>
-                {room.Children > 0 && (
-                  <Grid2
-                    size={{ xs: 12 }}
-                    container
-                    spacing={2}
-                    sx={{ borderTop: "1px solid #aaaaaa", pt: "10px" }}
-                  >
-                    {/* Iterate through children's ages for THIS room */}
-                    {room.ChildrenAges.map((age, childIndex) => (
-                      <Grid2
-                        key={childIndex}
-                        size={{ lg: 4, md: 4, sm: 6, xs: 12 }}
-                      >
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontWeight: 700,
-                            fontFamily: nunito.style,
-                            mb: "10px",
-                          }}
-                        >
-                          Child {childIndex + 1} Age
-                        </Typography>
-                        <FormControl fullWidth>
-                          <Select
-                            value={age} // Show age for THIS child
-                            onChange={(event) =>
-                              handleChildAgeChange(
-                                roomIndex,
-                                childIndex,
-                                event.target.value
-                              )
-                            }
-                            size="small"
-                          >
-                            {/* Age options 1-12 */}
-                            {Array.from({ length: 12 }, (_, i) => (
-                              <MenuItem key={i + 1} value={i + 1}>
-                                {i + 1} Years
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Grid2>
-                    ))}
-                  </Grid2>
-                )}
-              </Grid2>
+        <Box sx={{ mb: 2 }}>
+          <Grid2 container spacing={2}>
+            {/* Room Counter Grid - spans 12 on xs, centers content */}
+            <Grid2 size={{ xs: 12, sm: 12, md: 3, lg: 3 }} sx={{ height:'100%',position:'sticky', top:0}}>
+              <TravellorCounter
+                heading="Room"
+                value={totalRooms}
+                onIncrease={() => updateTravellerCount("room", "increase")}
+                onDecrease={() => updateTravellerCount("room", "decrease")}
+              />
             </Grid2>
-            {roomIndex < tempPaxRooms.length - 1 && <Divider sx={{ my: 2 }} />}{" "}
-            {/* Add a divider between rooms */}
-          </Box>
-        ))}
+
+            <Grid2 size={{ xs: 9 }} container spacing={1}>
+              {tempPaxRooms.map((room, roomIndex) => (
+                <Grid2
+                  container
+                  component={Paper}
+                  key={roomIndex}
+                  size={{ xs: 12 }}
+                  sx={{ p: 2 }}
+                >
+                  <Grid2 size={{ xs: 12 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 800,
+                        fontFamily: nunito.style,
+                        color: COLORS.PRIMARY,
+                        textAlign: "center",
+                      }}
+                    >
+                      Room {roomIndex + 1}
+                    </Typography>
+                  </Grid2>
+                  <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+                    <TravellorCounter
+                      heading="Adults"
+                      value={room.Adults}
+                      onIncrease={
+                        () =>
+                          updateTravellerCount("adult", "increase", roomIndex) // Pass roomIndex
+                      }
+                      onDecrease={
+                        () =>
+                          updateTravellerCount("adult", "decrease", roomIndex) // Pass roomIndex
+                      }
+                    />
+                  </Grid2>
+                  <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+                    <TravellorCounter
+                      heading="Children"
+                      value={room.Children}
+                      onIncrease={() =>
+                        updateTravellerCount("child", "increase", roomIndex)
+                      }
+                      onDecrease={() =>
+                        updateTravellerCount("child", "decrease", roomIndex)
+                      }
+                    />
+                  </Grid2>
+                  {room.Children > 0 && (
+                    <Grid2
+                      size={{ xs: 12 }}
+                      container
+                      spacing={2}
+                      sx={{
+                        borderTop: "1px solid #aaaaaa",
+                        pt: "10px",
+                        mt: "10px",
+                      }}
+                    >
+                      {room.ChildrenAges.map((age, childIndex) => (
+                        <Grid2
+                          key={childIndex}
+                          size={{ lg: 4, md: 4, sm: 6, xs: 12 }}
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontWeight: 700,
+                              fontFamily: nunito.style,
+                              mb: "10px",
+                            }}
+                          >
+                            Child {childIndex + 1} Age
+                          </Typography>
+                          <FormControl fullWidth>
+                            <Select
+                              value={age}
+                              onChange={(event) =>
+                                handleChildAgeChange(
+                                  roomIndex,
+                                  childIndex,
+                                  event.target.value
+                                )
+                              }
+                              size="small"
+                            >
+                              {/* Age options 1-12 */}
+                              {Array.from({ length: 12 }, (_, i) => (
+                                <MenuItem key={i + 1} value={i + 1}>
+                                  {i + 1} Years
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid2>
+                      ))}
+                    </Grid2>
+                  )}
+                </Grid2>
+              ))}
+            </Grid2>
+          </Grid2>
+        </Box>
       </Box>
 
       <Stack
