@@ -2,13 +2,13 @@ import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
 import TravellerSelector from "./hotels/travellerSelector";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import { hotelController } from "@/api/hotelController";
-import { hotelslist } from "@/utils/hotelcitycodes";
-import { useDispatch } from "react-redux";
-import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList";
-import ToastBar from "./toastBar";
-import { TOAST_STATUS } from "@/utils/enum";
-import { setToast } from "@/redux/reducers/toast";
+import { hotelController } from "@/api/hotelController"; 
+import { hotelslist } from "@/utils/hotelcitycodes"; 
+import { useDispatch } from "react-redux"; 
+import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList"; 
+import ToastBar from "./toastBar"; 
+import { TOAST_STATUS } from "@/utils/enum"; 
+import { setToast } from "@/redux/reducers/toast"; 
 import {
   Autocomplete,
   Box,
@@ -20,22 +20,25 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import useFetchIP from "@/custom-hook/useFetchIp";
-import { useRouter } from "next/router";
+import useFetchIP from "@/custom-hook/useFetchIp"; 
+import { useRouter } from "next/router"; 
 
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"; 
 import { useState, useMemo } from "react";
-import Loading from "react-loading";
-import moment from "moment";
+import Loading from "react-loading"; 
+import moment from "moment"; 
 
 const HotelForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [selectedCity, setSelectedCity] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [adultValue, setAdultValue] = useState(1);
-  const [childValue, setChildValue] = useState(0);
+
+  const [paxRoom, setPaxRoom] = useState([
+    { Adults: 1, Children: 0, ChildrenAges: [] },
+  ]);
+
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [userIp, setUserIp] = useState("");
@@ -48,26 +51,11 @@ const HotelForm = () => {
     setAnchorEl(e.currentTarget);
   };
 
-  const initialState = {
-    ip_address: "",
-    preferred_time: "",
-    origin: "",
-    destination: "",
-    departure_date: "",
-    cabin_class: "1",
-    adult: 1,
-    child: 0,
-    infant: 0,
-  };
-
-  const [state, setState] = useState(initialState);
   const [inputValue, setInputValue] = useState(null);
 
   // filter the hotel list
   const filteredOptions = useMemo(() => {
     if (!inputValue) return hotelslist.slice(0, 20);
-
-    // console.log("hotelslist--------------",hotelslist)
 
     const cityQuery = inputValue.toLowerCase();
     return hotelslist
@@ -80,6 +68,13 @@ const HotelForm = () => {
       .slice(0, 100);
   }, [inputValue]);
 
+
+  // console.log("paxRoom------------ home",paxRoom)
+  const totalAdults = paxRoom.reduce((sum, room) => sum + room.Adults, 0);
+  const totalChildren = paxRoom.reduce((sum, room) => sum + room.Children, 0);
+  const totalRooms = paxRoom.length;
+
+ 
   // -----------Handle Search---------------
   async function handleSearch() {
     if (!checkIn || !checkOut || !selectedCity || !userIp) {
@@ -99,23 +94,12 @@ const HotelForm = () => {
       CityCodes: selectedCity.city_code,
       GuestNationality: selectedCity.country_code,
       EndUserIp: userIp,
-      PaxRooms: [
-        {
-          Adults: adultValue,
-          Children: childValue,
-          ChildrenAges:
-            childValue > 0
-              ? [
-                  /* fill ages */
-                ]
-              : [],
-        },
-      ],
+      PaxRooms: paxRoom,
       ResponseTime: 23.0,
       IsDetailedResponse: true,
       Filters: {
         Refundable: false,
-        NoOfRooms: 1,
+        NoOfRooms: paxRoom.length, 
         MealType: 0,
         OrderBy: 0,
         StarRating: 0,
@@ -125,19 +109,25 @@ const HotelForm = () => {
 
     try {
       setButtonLoading(true);
-      const response = await hotelController.searchHotel(payload);
-      if (response.data.data.length > 0) {
+      const response = await hotelController.searchHotel(payload); 
+      if (response.data?.data?.length > 0) { 
         dispatch(setHotelList(response?.data?.data));
         router.push("/hotel-list");
       } else {
-        throw new Error("No Hotels Available!");
+        dispatch(
+          setToast({
+            open: true,
+            message: "No Hotel Available",
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
       }
       setButtonLoading(false);
     } catch (error) {
       dispatch(
         setToast({
           open: true,
-          message: "No Hotels Found!",
+          message: error.message || "An error occurred during the search.",
           severity: TOAST_STATUS.ERROR,
         })
       );
@@ -152,6 +142,9 @@ const HotelForm = () => {
   function handleCheckout(newvalue) {
     setCheckOut(newvalue);
   }
+
+  // console.log("paxRoom----------------",paxRoom)
+
 
   return (
     <Box sx={{ p: 2 }}>
@@ -169,6 +162,8 @@ const HotelForm = () => {
             border: "1px solid #808080",
             borderTopLeftRadius: 4,
             borderBottomLeftRadius: 4,
+            flexGrow: { xs: 1, sm: 0, lg: 0 },
+            mb: { xs: 1, sm: 0 }, 
           }}
         >
           <Typography
@@ -185,7 +180,6 @@ const HotelForm = () => {
 
           <Autocomplete
             options={filteredOptions}
-            onchan
             inputValue={inputValue}
             onChange={(event, value) => setSelectedCity(value)}
             onInputChange={(_, value) => setInputValue(value)}
@@ -259,6 +253,13 @@ const HotelForm = () => {
           sx={{
             border: "1px solid #808080",
             position: "relative",
+            flexGrow: { xs: 1, sm: 0, lg: 0 },
+             mb: { xs: 1, sm: 0 },
+            borderTopLeftRadius: { sm: 0, xs: 4 },
+            borderBottomLeftRadius: { sm: 0, xs: 4 },
+             borderTopRightRadius: { sm: 0, xs: 4 },
+            borderBottomRightRadius: { sm: 0, xs: 4 },
+
           }}
         >
           <Typography
@@ -292,8 +293,13 @@ const HotelForm = () => {
           size={{ lg: 3, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
-
             position: "relative",
+            flexGrow: { xs: 1, sm: 0, lg: 0 },
+             mb: { xs: 1, sm: 0 },
+            borderTopLeftRadius: { sm: 0, xs: 4 },
+            borderBottomLeftRadius: { sm: 0, xs: 4 },
+             borderTopRightRadius: { sm: 0, xs: 4 },
+            borderBottomRightRadius: { sm: 0, xs: 4 },
           }}
         >
           <Typography
@@ -314,7 +320,8 @@ const HotelForm = () => {
                   border: "none",
                 },
               }}
-              maxDate={moment().add(90, 'days')}
+              maxDate={moment().add(90, "days")}
+              // Ensure check-out is after check-in
               minDate={checkIn ? moment(checkIn).add(1, "day") : moment()}
               value={checkOut}
               onChange={handleCheckout}
@@ -327,11 +334,13 @@ const HotelForm = () => {
           size={{ lg: 3, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
-
             position: "relative",
             height: 90,
-            borderTopRightRadius: 4,
-            borderBottomRightRadius: 4,
+            borderTopLeftRadius: { sm: 0, xs: 4 },
+            borderBottomLeftRadius: { sm: 0, xs: 4 },
+            borderTopRightRadius: { lg: 4, sm: 4, xs: 4 },
+            borderBottomRightRadius: { lg: 4, sm: 4, xs: 4 },
+            flexGrow: { xs: 1, sm: 0, lg: 0 },
           }}
         >
           <Typography
@@ -347,10 +356,11 @@ const HotelForm = () => {
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
             <Typography sx={{ fontSize: 17, fontFamily: nunito.style }}>
-              {adultValue + childValue} Person
+              {totalAdults + totalChildren} Person, {totalRooms} Rooms
             </Typography>
             <Typography fontSize={13} fontFamily={nunito.style}>
-              {adultValue} Adult, {childValue} children
+              {totalAdults} Adult{totalAdults !== 1 ? "s" : ""},{" "}
+              {totalChildren} Child{totalChildren !== 1 ? "ren" : ""}
             </Typography>
           </CardActionArea>
 
@@ -362,26 +372,24 @@ const HotelForm = () => {
               vertical: "bottom",
               horizontal: "center",
             }}
+             transformOrigin={{
+               vertical: "top",
+               horizontal: "center",
+             }}
             onClose={() => setAnchorEl(null)}
             sx={{
               "& .MuiPopover-paper": {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                 p: 2,
-                width: "25%",
+                width: { lg: "38%", md: "60%", sm: "80%", xs: "95%" },
               },
             }}
           >
-            {/* <TravellerSelector anchorEl={anchorEl} setAnchorEl={setAnchorEl} /> */}
-            {/* Traveller selection form start */}
             <TravellerSelector
+              setPaxRoom={setPaxRoom}
               setAnchorEl={setAnchorEl}
-              state={state}
-              setState={setState}
-              adultValue={adultValue}
-              setAdultValue={setAdultValue}
-              childValue={childValue}
-              setChildValue={setChildValue}
+              paxRoom={paxRoom}              
             />
             {/* Traveller selection form end */}
           </Popover>
@@ -394,11 +402,11 @@ const HotelForm = () => {
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
               width: { lg: 150, md: 150, sm: 120, xs: 120 },
-
               mt: { lg: 2, sm: 1, xs: 2 },
               cursor: buttonLoading ? "not-allowed" : "pointer",
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
+               opacity: buttonLoading ? 0.7 : 1, // Add visual disabled state
             }}
             onClick={handleSearch}
           >

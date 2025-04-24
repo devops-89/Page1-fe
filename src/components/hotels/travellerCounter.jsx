@@ -14,9 +14,10 @@ const TravellorCounter = ({
     <Stack  direction={"column"} alignItems={"center"} justifyContent={"center"}>
       <Typography
         sx={{
-          fontSize: { lg: 13, xs: 12 },
+          fontSize: { lg: 14, xs: 12 },
           color: COLORS.BLACK,
           fontFamily: nunito.style,
+          fontWeight:600
         }}
         mt={2}
       >
