@@ -1,90 +1,104 @@
-import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import {
   Box,
   Button,
-  FormControlLabel,
+  Divider,
+  FormControl,
   Grid2,
-  Radio,
-  RadioGroup,
+  MenuItem,
+  Paper,
+  Select,
   Stack,
   Typography,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
 import TravellorCounter from "./travellerCounter";
-import useTravellerValidation from "@/custom-hook/useTravellerValidation";
+import useHotelTravellerValidation from "@/custom-hook/useHotelTravellerValidation";
 
-const TravellerSelector = ({
-  setAnchorEl,
-  setState,
-  state,
-  adultValue,
-  setAdultValue,
-  childValue,
-  setChildValue,
-}) => {
-  const validateTravelers = useTravellerValidation();
+const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
+  const validateTravelers = useHotelTravellerValidation();
   const [validationErrors, setValidationErrors] = useState(null);
   const [error, setError] = useState({ errorStatus: false, errorMessage: "" });
 
- 
+  const [tempPaxRooms, setTempPaxRooms] = useState(paxRoom);
+  const totalAdults = tempPaxRooms.reduce((sum, room) => sum + room.Adults, 0);
 
-  // Temporary state for traveler counts
-  const [tempAdult, setTempAdult] = useState(adultValue);
-  const [tempChild, setTempChild] = useState(childValue);
-  
+  const totalRooms = tempPaxRooms.length;
 
   useEffect(() => {
     let { errorMessage, errorStatus } = validateTravelers(
-      tempAdult,
-      tempChild,
- 
+      totalRooms,
+      tempPaxRooms
     );
     setError((prev) => ({ ...prev, errorStatus, errorMessage }));
-  }, [tempAdult, tempChild]);
+  }, [totalRooms, tempPaxRooms]);
 
-  const flightClassHandler = (e) => {
-    setState((prevState) => ({
-      ...prevState,
-      cabin_class: e.target.value,
-    }));
+  // Handler for updating adult, child, or room counts
+  const updateTravellerCount = (roomIndex, type, action) => {
+    setTempPaxRooms((prevPaxRooms) => {
+      const newPaxRooms = [...prevPaxRooms];
+
+      if (type === "room") {
+        if (action === "increase") {
+          // Add a new room with default values (1 adult, 0 children)
+          newPaxRooms.push({ Adults: 1, Children: 0, ChildrenAges: [] });
+        } else if (action === "decrease" && newPaxRooms.length > 1) {
+          // Remove the last room
+          newPaxRooms.pop();
+        }
+      } else if (type === "adult") {
+        const currentAdults = newPaxRooms[roomIndex].Adults;
+        if (action === "increase") {
+          newPaxRooms[roomIndex].Adults = currentAdults + 1;
+        } else if (action === "decrease" && currentAdults > 1) {
+          // Minimum 1 adult per room
+          newPaxRooms[roomIndex].Adults = currentAdults - 1;
+        }
+      } else if (type === "child") {
+        const currentChildren = newPaxRooms[roomIndex].Children;
+        if (action === "increase") {
+          newPaxRooms[roomIndex].Children = currentChildren + 1;
+          // Add a default age (e.g., 1 year) for the new child
+          newPaxRooms[roomIndex].ChildrenAges.push(1);
+        } else if (action === "decrease" && currentChildren > 0) {
+          newPaxRooms[roomIndex].Children = currentChildren - 1;
+          // Remove the last child's age
+          newPaxRooms[roomIndex].ChildrenAges.pop();
+        }
+      }
+
+      return newPaxRooms;
+    });
   };
 
-  console.log(tempAdult,tempChild);
-
-  const updateTravellerCount = (type, action) => {
-    let updatedValue = 0;
-
-    if (type === "adult") {
-      updatedValue = action === "increase" ? tempAdult + 1 : tempAdult - 1;
-      if (updatedValue >= 1) setTempAdult(updatedValue);
-    } else if (type === "child") {
-      updatedValue = action === "increase" ? tempChild + 1 : tempChild - 1;
-      if (updatedValue >= 0) setTempChild(updatedValue);
-    } 
+  // Handler for updating a specific child's age in a specific room
+  const handleChildAgeChange = (roomIndex, childIndex, newAge) => {
+    setTempPaxRooms((prevPaxRooms) => {
+      const newPaxRooms = [...prevPaxRooms];
+      newPaxRooms[roomIndex].ChildrenAges[childIndex] = newAge;
+      return newPaxRooms;
+    });
   };
 
   const handleApply = () => {
     if (!error.errorStatus) {
-      setAdultValue(tempAdult);
-      setChildValue(tempChild);
-    
-
-      setState((prev) => ({
-        ...prev,
-        adult: tempAdult,
-        child: tempChild,
-     
-      }));
-
+      setPaxRoom(tempPaxRooms);
       setAnchorEl(null);
       setValidationErrors(null);
     } else {
       setValidationErrors(error.errorMessage);
-      console.log("Validation errors:", error.errorMessage);
     }
+  };
+
+  const handleCancel = () => {
+    // console.log("paxRoom----------", paxRoom);
+    setPaxRoom([{ Adults: 1, Children: 0, ChildrenAges: [] }]);
+    setError({ errorStatus: false, errorMessage: "" });
+    setValidationErrors(null);
+
+    setAnchorEl(null);
   };
 
   return (
@@ -99,37 +113,147 @@ const TravellerSelector = ({
       >
         Select Travelers
       </Typography>
+      {error.errorMessage && (
+        <Box sx={{ mt: 2, color: "red", textAlign: "center" }}>
+          <Typography>{error.errorMessage}</Typography>
+        </Box>
+      )}
+      <Box
+        sx={{
+          border: "1px solid #808080",
+          borderRadius: 2,
+          p: 1,
+          m: 1,
+          maxHeight: "250px",
+          overflowY: "scroll",
+          "::-webkit-scrollbar": {
+            width: 5,
+            borderRadius: 4,
+          },
+          "::-webkit-scrollbar-thumb": {
+            backgroundColor: "#A8A8A8",
+            borderRadius: 4,
+            height: 20,
+            width: 20,
+          },
+        }}
+      >
+        {tempPaxRooms.map((room, roomIndex) => (
+          <Box key={roomIndex} sx={{ mb: 2 }}>
+            <Grid2 container spacing={2}>
+              <Grid2 size={{ xs: 3 }} sx={{ borderRight: "1px solid #aaaaaa" }}>
+                {roomIndex === 0 && (
+                  <TravellorCounter
+                    heading="Room"
+                    value={totalRooms}
+                    onIncrease={() =>
+                      updateTravellerCount(roomIndex, "room", "increase")
+                    }
+                    onDecrease={() =>
+                      updateTravellerCount(roomIndex, "room", "decrease")
+                    }
+                  />
+                )}
+              </Grid2>
 
-      <Box sx={{ border: "1px solid #808080", borderRadius: 2, p: 1, m: 1 }}>
-        <Typography sx={{ fontFamily: nunito.style, fontSize: 17, fontWeight: 600 }}>Travellers</Typography>
-        <Grid2 container spacing={2}>
-          <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 6,margin:"auto"}} >
-            <TravellorCounter
-              heading="Adults (12+ Yrs)"
-              value={tempAdult}
-              onIncrease={() => updateTravellerCount("adult", "increase")}
-              onDecrease={() => updateTravellerCount("adult", "decrease")}
-            />
-          </Grid2>
-          <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 6 }} >
-            <TravellorCounter
-              heading="Children (2-12 Yrs)"
-              value={tempChild}
-              onIncrease={() => updateTravellerCount("child", "increase")}
-              onDecrease={() => updateTravellerCount("child", "decrease")}
-            />
-          </Grid2>
-        
-        </Grid2>
-
-        {error.errorMessage && (
-          <Box sx={{ mt: 2, color: "red" }}>
-            <Typography>{error.errorMessage}</Typography>
+              <Grid2
+                size={{ xs: 9 }}
+                container
+                component={Paper}
+                spacing={1}
+                sx={{ p: 2 }}
+              >
+                <Grid2 size={{ xs: 12 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: nunito.style,
+                      color: COLORS.PRIMARY,
+                      textAlign: "center",
+                    }}
+                  >
+                    Room {roomIndex + 1}
+                  </Typography>
+                </Grid2>
+                <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+                  <TravellorCounter
+                    heading="Adults"
+                    value={room.Adults}
+                    onIncrease={() =>
+                      updateTravellerCount(roomIndex, "adult", "increase")
+                    }
+                    onDecrease={() =>
+                      updateTravellerCount(roomIndex, "adult", "decrease")
+                    }
+                  />
+                </Grid2>
+                <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
+                  <TravellorCounter
+                    heading="Children"
+                    value={room.Children}
+                    onIncrease={() =>
+                      updateTravellerCount(roomIndex, "child", "increase")
+                    }
+                    onDecrease={() =>
+                      updateTravellerCount(roomIndex, "child", "decrease")
+                    }
+                  />
+                </Grid2>
+                {room.Children > 0 && (
+                  <Grid2
+                    size={{ xs: 12 }}
+                    container
+                    spacing={2}
+                    sx={{ borderTop: "1px solid #aaaaaa", pt: "10px" }}
+                  >
+                    {/* Iterate through children's ages for THIS room */}
+                    {room.ChildrenAges.map((age, childIndex) => (
+                      <Grid2
+                        key={childIndex}
+                        size={{ lg: 4, md: 4, sm: 6, xs: 12 }}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontWeight: 700,
+                            fontFamily: nunito.style,
+                            mb: "10px",
+                          }}
+                        >
+                          Child {childIndex + 1} Age
+                        </Typography>
+                        <FormControl fullWidth>
+                          <Select
+                            value={age} // Show age for THIS child
+                            onChange={(event) =>
+                              handleChildAgeChange(
+                                roomIndex,
+                                childIndex,
+                                event.target.value
+                              )
+                            }
+                            size="small"
+                          >
+                            {/* Age options 1-12 */}
+                            {Array.from({ length: 12 }, (_, i) => (
+                              <MenuItem key={i + 1} value={i + 1}>
+                                {i + 1} Years
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid2>
+                    ))}
+                  </Grid2>
+                )}
+              </Grid2>
+            </Grid2>
+            {roomIndex < tempPaxRooms.length - 1 && <Divider sx={{ my: 2 }} />}{" "}
+            {/* Add a divider between rooms */}
           </Box>
-        )}
+        ))}
       </Box>
-
-     
 
       <Stack
         direction="row"
@@ -148,7 +272,7 @@ const TravellerSelector = ({
             borderRadius: 6,
             width: 80,
           }}
-          onClick={() => setAnchorEl(null)}
+          onClick={handleCancel}
         >
           Cancel
         </Button>
