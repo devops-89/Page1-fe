@@ -1,3 +1,4 @@
+import { DestinationWedding, setDestinationFormDetails } from "@/redux/reducers/destinationWedding";
 import { COLORS } from "@/utils/colors";
 import { roboto } from "@/utils/fonts";
 import { loginTextField } from "@/utils/styles";
@@ -9,8 +10,11 @@ import { useFormik } from "formik";
 import moment from "moment";
 import { matchIsValidTel, MuiTelInput } from "mui-tel-input";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
-const DestinationWeddingStep1Form = () => {
+const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -20,9 +24,14 @@ const DestinationWeddingStep1Form = () => {
     },
     validationSchema: destinationWeddingFirstStep,
     onSubmit: (values) => {
-      console.log("values", values);
+      dispatch(setDestinationFormDetails({ ...values }));
+
+      // console.log("values", values);
+      setActiveStep(activeStep + 1);
     },
   });
+
+  // console.log("active", activeStep);
   const [phone, setPhone] = useState(null);
   const handlePhoneNumber = (newPhone, countryData) => {
     setPhone(newPhone);

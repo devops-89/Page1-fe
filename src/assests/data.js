@@ -64,7 +64,14 @@ import tour5 from "@/tours/Losangeles.jpg";
 import tour6 from "@/tours/nevada.jpg";
 import tour7 from "@/tours/virginia.jpg";
 import tour8 from "@/tours/wilmington.jpg";
-import { FLIGHT_CLASS, FLIGHT_DETAILS } from "@/utils/enum";
+import {
+  Destination_Type,
+  DESTINATION_WEDDING_BUDGET,
+  FLIGHT_CLASS,
+  FLIGHT_DETAILS,
+  NUMBER_OF_GUESTS,
+  WEDDING_SIDE,
+} from "@/utils/enum";
 import { RiInformation2Line } from "react-icons/ri";
 export const data = {
   headerLinks: [
@@ -148,7 +155,7 @@ export const data = {
     {
       img: selfDrive,
       title: "Self Drive",
-      ur: "/self-drive",
+      url: "/self-drive",
     },
     {
       img: outStationCabs,
@@ -1609,6 +1616,220 @@ export const data = {
     {
       label: "Additional Information",
       icon: <RiInformation2Line />,
+    },
+  ],
+  WeddingSide: [
+    {
+      label: WEDDING_SIDE.BRIDE,
+    },
+    {
+      label: WEDDING_SIDE.GROOM,
+    },
+    {
+      label: WEDDING_SIDE.BOTH,
+    },
+  ],
+  WEDDING_DESTINATION: [
+    {
+      label: Destination_Type.DOMESTIC,
+    },
+    {
+      label: Destination_Type.INTERNATIONAL,
+    },
+  ],
+
+  WEDDING_GUESTS: [
+    {
+      label: NUMBER_OF_GUESTS["0-100"],
+    },
+    {
+      label: NUMBER_OF_GUESTS["100-200"],
+    },
+    {
+      label: NUMBER_OF_GUESTS["200-300"],
+    },
+    {
+      label: NUMBER_OF_GUESTS["300-400"],
+    },
+    {
+      label: NUMBER_OF_GUESTS["400-500"],
+    },
+    {
+      label: NUMBER_OF_GUESTS["500+"],
+    },
+  ],
+  WEDDING_BUDGET: [
+    {
+      label: DESTINATION_WEDDING_BUDGET.LOW,
+    },
+    {
+      label: DESTINATION_WEDDING_BUDGET.MEDIUM,
+    },
+    {
+      label: DESTINATION_WEDDING_BUDGET.HIGH,
+    },
+  ],
+  weddingTheme: [
+    {
+      label: "Classic Traditional / Ethnic",
+    },
+    {
+      label: "Rock n Roll",
+    },
+    {
+      label: "Vintage",
+    },
+    {
+      label: "Royal ",
+    },
+    {
+      label: "Rustic",
+    },
+  ],
+  propertyType: [
+    {
+      label: "Resort",
+    },
+    {
+      label: "Beachfront",
+    },
+    {
+      label: "Desert Dunes",
+    },
+    {
+      label: "Heritage Palaces",
+    },
+    {
+      label: "Private Yachts",
+    },
+    {
+      label: "Villa",
+    },
+    {
+      label: "Cruise",
+    },
+    {
+      label: "Banquet Hall",
+    },
+    {
+      label: "Island",
+    },
+  ],
+  foodType: [
+    {
+      label: "Vegetarian",
+    },
+    {
+      label: "Non-vegetarian",
+    },
+    {
+      label: "Vegan",
+    },
+  ],
+  entryVehicle: [
+    {
+      label: "Car",
+    },
+    {
+      label: "Chopper",
+    },
+    {
+      label: "Horse",
+    },
+    {
+      label: "Horse Carriage",
+    },
+  ],
+  musicTheme: [
+    {
+      label: "Classic Bollywood",
+    },
+    {
+      label: "Classic Hollywood",
+    },
+    {
+      label: "Folk Music",
+    },
+    {
+      label: "Retro Music",
+    },
+    {
+      label: "Ballroom Music",
+    },
+    {
+      label: "Band Music",
+    },
+  ],
+  eventType: [
+    {
+      label: "Bachelor/Bachelorette Party",
+    },
+    {
+      label: "Engagement Ceremony",
+    },
+    {
+      label: "Haldi Ceremony",
+    },
+    {
+      label: "Sangeet Event",
+    },
+    {
+      label: "Mehandi Ceremony",
+    },
+    {
+      label: "Rehearsal Dinner",
+    },
+    {
+      label: "Wedding Ceremony",
+    },
+    {
+      label: "Wedding After Party",
+    },
+    {
+      label: "Reception Ceremony",
+    },
+  ],
+  clothing: [
+    {
+      label: "Bride (for all ceremonies)",
+    },
+    {
+      label: "Groom (for all ceremonies)",
+    },
+    {
+      label: "Bride (for certain ceremonies)",
+    },
+    {
+      label: "Groom (for certain ceremonies)",
+    },
+  ],
+  additionalServices: [
+    {
+      label: "Photography & Videography",
+    },
+    {
+      label: "Decoration",
+    },
+    {
+      label: "Transportation",
+    },
+    {
+      label: "Choreographers",
+    },
+    {
+      label: "Make-up artists",
+    },
+    {
+      label: "Mehandi artists",
+    },
+    {
+      label: "Caterers",
+    },
+    {
+      label: "Entertainers",
+    },
+    {
+      label: "Priest/Pandit",
     },
   ],
 

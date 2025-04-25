@@ -206,6 +206,38 @@ export const taxiFormValidationSchema = Yup.object({
     .required("Please Enter Email"),
   phoneNumber: Yup.string().required("Please Enter Phone Number"),
   taxiType: Yup.string().required("Please Select Taxi Type"),
+  pickup: Yup.string().required("Please Enter Pickup Location"),
+  drop: Yup.string().required("Please Enter Drop Location"),
+  date: Yup.string().required("Please Enter Date and time "),
+  capacity: Yup.string().required("Please Enter Capacity"),
+});
+
+export const basicInformationValidationSchema = Yup.object({
+  weddingSide: Yup.string().required("Please Select Wedding Side"),
+  destination: Yup.string().required("Please Select Wedding Destination"),
+  numberOfGuests: Yup.string().required("Please Select Number Of Guests"),
+  budget: Yup.string().required("Please Select Wedding Budget"),
+});
+
+export const additionalInformationValidationSchema = Yup.object({
+  weddingTheme: Yup.string().required("Please Select Wedding Theme"),
+  propertyType: Yup.string().required("Please Select Property Type"),
+  foodType: Yup.array().required("Please Select at least one Food"),
+  entryVehicle: Yup.string().required("Please Select Entry Vehicle"),
+  musicTheme: Yup.string().required("Please Select Music Theme"),
+  eventType: Yup.array().required("Please select at least one Event Type"),
+  clothing: Yup.array().required("Please Select at least one Clothing Type"),
+  additionalServices: Yup.array().optional().notRequired(),
+});
+
+export const selfDriveValidationSchema = Yup.object({
+  fullName: Yup.string().required("Please Enter Full Name"),
+  email: Yup.string()
+    .email("Please Enter Valid Email")
+    .required("Please Enter Email"),
+  phoneNumber: Yup.string().required("Please Enter Phone Number"),
+  fromDate: Yup.string().required("Please Select From Date"),
+  toDate: Yup.string().required("Please Select To Date"),
 });
 
 export { passengerSchema, gstFormSchema, addFormSchema };
