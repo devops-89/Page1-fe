@@ -110,8 +110,9 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
 
   const handleCancel = () => {
     // Revert tempPaxRooms to the original paxRoom state
-    // console.log(paxRoom)
-    setTempPaxRooms(paxRoom);
+    setPaxRoom([
+      { Adults: 1, Children: 0, ChildrenAges: [] },
+    ]);
     setError({ errorStatus: false, errorMessage: "" });
     setValidationErrors(null);
     setAnchorEl(null);
