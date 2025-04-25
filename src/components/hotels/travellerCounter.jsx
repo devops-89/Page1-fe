@@ -9,8 +9,11 @@ const TravellorCounter = ({
   onIncrease,
   onDecrease,
   initialValue,
+  disableButton
 }) => {
   return (
+    <>
+    {/* {console.log("disableButton------------",disableButton)} */}
     <Stack  direction={"column"} alignItems={"center"} justifyContent={"center"}>
       <Typography
         sx={{
@@ -62,6 +65,7 @@ const TravellorCounter = ({
           slotProps={{}}
         />
         <IconButton
+          disabled={disableButton}
           sx={{
             backgroundColor: COLORS.GREY,
             ":hover": {
@@ -74,6 +78,7 @@ const TravellorCounter = ({
         </IconButton>
       </Stack>
     </Stack>
+    </>
   );
 };
 

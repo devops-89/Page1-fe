@@ -74,7 +74,8 @@ const HotelForm = () => {
   const totalChildren = paxRoom.reduce((sum, room) => sum + room.Children, 0);
   const totalRooms = paxRoom.length;
 
- 
+  
+
   // -----------Handle Search---------------
   async function handleSearch() {
     if (!checkIn || !checkOut || !selectedCity || !userIp) {
@@ -382,7 +383,7 @@ const HotelForm = () => {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                 p: 2,
-                width: { lg: "38%", md: "60%", sm: "80%", xs: "95%" },
+                width: { lg: "40%", md: "60%", sm: "80%", xs: "95%" },
               },
             }}
           >

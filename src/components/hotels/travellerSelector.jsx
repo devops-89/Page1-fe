@@ -110,6 +110,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
 
   const handleCancel = () => {
     // Revert tempPaxRooms to the original paxRoom state
+    // console.log(paxRoom)
     setTempPaxRooms(paxRoom);
     setError({ errorStatus: false, errorMessage: "" });
     setValidationErrors(null);
@@ -166,6 +167,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
             {/* Room Counter Grid - spans 12 on xs, centers content */}
             <Grid2 size={{ xs: 12, sm: 12, md: 3, lg: 3 }} sx={{ height:'100%',position:'sticky', top:0}}>
               <TravellorCounter
+                disableButton={totalRooms>=6}
                 heading="Room"
                 value={totalRooms}
                 onIncrease={() => updateTravellerCount("room", "increase")}
@@ -180,7 +182,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                   component={Paper}
                   key={roomIndex}
                   size={{ xs: 12 }}
-                  sx={{ p: 2 }}
+                  sx={{ p: 2, backgroundColor:COLORS.WHITE }}
                 >
                   <Grid2 size={{ xs: 12 }}>
                     <Typography
@@ -197,6 +199,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                   </Grid2>
                   <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                     <TravellorCounter
+                      disableButton={room.Adults>=8}
                       heading="Adults"
                       value={room.Adults}
                       onIncrease={
@@ -211,6 +214,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                   </Grid2>
                   <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                     <TravellorCounter
+                     disableButton={room.Children>=4}
                       heading="Children"
                       value={room.Children}
                       onIncrease={() =>
@@ -235,7 +239,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                       {room.ChildrenAges.map((age, childIndex) => (
                         <Grid2
                           key={childIndex}
-                          size={{ lg: 4, md: 4, sm: 6, xs: 12 }}
+                          size={{ lg: 3, md: 3, sm: 6, xs: 12 }}
                         >
                           <Typography
                             variant="body2"
