@@ -19,6 +19,8 @@ import {
   CardActionArea,
   Grid2,
   Popover,
+  Popper,
+  styled,
   TextField,
   Typography,
 } from "@mui/material";
@@ -32,6 +34,14 @@ import TravellerSelector from "./travellerSelector";
 const Multiway = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+
+  const CustomPopper = styled(Popper)(({ theme }) => ({
+      width: '310px !important',
+      zIndex: 1300,
+    }));
+  
+  
 
   const initialState = {
     ip_address: "",
@@ -363,6 +373,7 @@ const Multiway = () => {
                 }
                 ListboxComponent={VirtualList}
                 loading={loading}
+                PopperComponent={CustomPopper}
                 filterOptions={customFilter}
                 options={airportList}
                 getOptionLabel={(option) =>
@@ -484,6 +495,7 @@ const Multiway = () => {
                 }
                 ListboxComponent={VirtualList}
                 filterOptions={customFilter}
+                PopperComponent={CustomPopper}
                 loading={loading}
                 options={airportList}
                 getOptionLabel={(option) =>
