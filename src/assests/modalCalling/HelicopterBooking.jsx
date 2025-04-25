@@ -49,7 +49,6 @@ const HelicopterBooking = () => {
       adults: "",
       children: "",
       message: "",
-      permission: false,
     },
     validationSchema: helicopterBookingValidationSchema,
     onSubmit: (values) => {

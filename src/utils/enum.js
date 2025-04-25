@@ -55,3 +55,29 @@ export const BOOKING_ENQUIRY = {
   OUTSTATION_CABS: "Outstation Cabs",
   ACTIVITIES: "Activities",
 };
+
+export const WEDDING_SIDE = {
+  BRIDE: "Bride",
+  GROOM: "Groom",
+  BOTH: "Both",
+};
+
+export const Destination_Type = {
+  DOMESTIC: "Domestic",
+  INTERNATIONAL: "International",
+};
+
+export const NUMBER_OF_GUESTS = {
+  "0-100": "0-100",
+  "100-200": "100-200",
+  "200-300": "200-300",
+  "300-400": "300-400",
+  "400-500": "400-500",
+  "500+": "500+",
+};
+
+export const DESTINATION_WEDDING_BUDGET = {
+  LOW: "Low",
+  MEDIUM: "Medium",
+  HIGH: "High",
+};
