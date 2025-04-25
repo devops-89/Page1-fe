@@ -30,7 +30,7 @@ import HotelCard from "@/components/hotels/hotelCard";
 import Link from "next/link";
 import { COLORS } from "@/utils/colors";
 import Loading from "react-loading";
-
+import { nunito } from "@/utils/fonts";
 
 const HotelList = () => {
   const [priceRange, setPriceRange] = useState([500, 2000]);
@@ -43,7 +43,7 @@ const HotelList = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const hotellist = useSelector((state) => state.HOTEL.HotelList.hotelList);
-  //  console.log("hotel-list:",hotellist)
+  console.log("hotel-list----------------------", hotellist);
   useEffect(() => {
     if (Array.isArray(hotellist)) {
       setLoading(false);
@@ -104,31 +104,58 @@ const HotelList = () => {
           <Grid2 container spacing={3}>
             {/* Filters Section */}
             {phone ? (
-              <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%",
+                }}
+              >
                 <Button onClick={toggleDrawer(true)}>
                   <FilterAltIcon sx={{ fontSize: 30, color: COLORS.PRIMARY }} />
                 </Button>
 
                 <Drawer open={open} onClose={toggleDrawer(false)}>
                   <Box sx={{ width: 300, p: 2 }}>
-                    <Card>
+                    <Card
+                      sx={{
+                        position: "sticky",
+                        top: "75px",
+                        overflowY: "scroll",
+                        boxShadow: "0px 0px 3px 3px rgba(0,0,0,0.1)",
+                        "::-webkit-scrollbar": { width: 5 },
+                        "::-webkit-scrollbar-thumb": {
+                          backgroundColor: "#A8A8A8",
+                          borderRadius: 4,
+                        },
+                      }}
+                    >
                       <CardHeader
-                        action={
-                          <Button onClick={toggleDrawer(false)}>
-                            <CloseIcon sx={{ fontSize: 30 }} />
-                          </Button>
+                        title={
+                          <Typography
+                            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+                            variant="h5"
+                          >
+                            Filters
+                          </Typography>
                         }
-                      />
-                      <CardHeader
-                        title="Filters"
                         action={
-                          <Button variant="text" color="primary" size="small">
+                          <Button
+                            variant="text"
+                            color="primary"
+                            size="small"
+                            sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+                          >
                             Reset
                           </Button>
                         }
                       />
                       <CardContent>
-                        <Typography variant="subtitle1" gutterBottom>
+                        <Typography
+                          variant="h6"
+                          gutterBottom
+                          sx={{ fontWeight: 600, fontFamily: nunito.style }}
+                        >
                           Search by Hotel Names
                         </Typography>
                         <TextField
@@ -142,30 +169,41 @@ const HotelList = () => {
                             ),
                           }}
                         />
-                        <Box mt={2}>
-                          <Typography variant="subtitle1">Popular</Typography>
-                          {["Breakfast Included", "Budget", "4 Star Hotels", "5 Star Hotels"].map(
-                            (label) => (
-                              <FormControlLabel
-                                key={label}
-                                control={<Checkbox defaultChecked={label === "Breakfast Included"} />}
-                                label={label}
-                              />
-                            )
-                          )}
-                        </Box>
-                        <Box mt={2}>
-                          <Typography variant="subtitle1">Price Per Night</Typography>
-                          <Slider
-                            value={priceRange}
-                            onChange={handleRangeChange}
-                            valueLabelDisplay="auto"
-                            min={200}
-                            max={5695}
-                          />
-                          <Typography>
-                            Range: ${priceRange[0]} - ${priceRange[1]}
+                        <Box mt={3}>
+                          <Typography
+                            variant="h6"
+                            sx={{ fontWeight: 600, fontFamily: nunito.style }}
+                          >
+                            Popular
                           </Typography>
+                          {[
+                            "Breakfast Included",
+                            "Budget",
+                            "4 Star Hotels",
+                            "5 Star Hotels",
+                          ].map((label) => (
+                            <FormControlLabel
+                              key={label}
+                              control={
+                                <Checkbox
+                                  defaultChecked={
+                                    label === "Breakfast Included"
+                                  }
+                                />
+                              }
+                              label={
+                                <Typography
+                                  variant="body1"
+                                  sx={{
+                                    fontWeight: 600,
+                                    fontFamily: nunito.style,
+                                  }}
+                                >
+                                  {label}
+                                </Typography>
+                              }
+                            />
+                          ))}
                         </Box>
                       </CardContent>
                     </Card>
@@ -173,14 +211,13 @@ const HotelList = () => {
                 </Drawer>
               </Box>
             ) : (
-              <Grid2 size={{xs:12, md:3}}>
+              <Grid2 size={{ xs: 12, md: 3 }}>
                 <Card
                   sx={{
                     position: "sticky",
                     top: "75px",
                     overflowY: "scroll",
                     boxShadow: "0px 0px 3px 3px rgba(0,0,0,0.1)",
-                    p: 2,
                     "::-webkit-scrollbar": { width: 5 },
                     "::-webkit-scrollbar-thumb": {
                       backgroundColor: "#A8A8A8",
@@ -189,15 +226,31 @@ const HotelList = () => {
                   }}
                 >
                   <CardHeader
-                    title="Filters"
+                    title={
+                      <Typography
+                        sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+                        variant="h5"
+                      >
+                        Filters
+                      </Typography>
+                    }
                     action={
-                      <Button variant="text" color="primary" size="small">
+                      <Button
+                        variant="text"
+                        color="primary"
+                        size="small"
+                        sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+                      >
                         Reset
                       </Button>
                     }
                   />
                   <CardContent>
-                    <Typography variant="subtitle1" gutterBottom>
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{ fontWeight: 600, fontFamily: nunito.style }}
+                    >
                       Search by Hotel Names
                     </Typography>
                     <TextField
@@ -211,17 +264,36 @@ const HotelList = () => {
                         ),
                       }}
                     />
-                    <Box mt={2}>
-                      <Typography variant="subtitle1">Popular</Typography>
-                      {["Breakfast Included", "Budget", "4 Star Hotels", "5 Star Hotels"].map(
-                        (label) => (
-                          <FormControlLabel
-                            key={label}
-                            control={<Checkbox defaultChecked={label === "Breakfast Included"} />}
-                            label={label}
-                          />
-                        )
-                      )}
+                    <Box mt={3}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, fontFamily: nunito.style }}
+                      >
+                        Popular
+                      </Typography>
+                      {[
+                        "Breakfast Included",
+                        "Budget",
+                        "4 Star Hotels",
+                        "5 Star Hotels",
+                      ].map((label) => (
+                        <FormControlLabel
+                          key={label}
+                          control={
+                            <Checkbox
+                              defaultChecked={label === "Breakfast Included"}
+                            />
+                          }
+                          label={
+                            <Typography
+                              variant="body1"
+                              sx={{ fontWeight: 600, fontFamily: nunito.style }}
+                            >
+                              {label}
+                            </Typography>
+                          }
+                        />
+                      ))}
                     </Box>
                   </CardContent>
                 </Card>
@@ -229,13 +301,16 @@ const HotelList = () => {
             )}
 
             {/* Hotel List Section */}
-            <Grid2 size={{xs:12, md:9}} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Grid2
+              size={{ xs: 12, md: 9 }}
+              sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            >
               {loading ? (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
                   <CircularProgress />
                 </Box>
               ) : hotels.length === 0 ? (
-                <Typography variant="h6" sx={{ textAlign: "center", mt: 5 }}>
+                <Typography variant="h6" sx={{ textAlign: "center", mt: 5, fontFamily:nunito.style }}>
                   No hotels available.
                 </Typography>
               ) : (
@@ -247,20 +322,21 @@ const HotelList = () => {
                       key={i}
                       ref={isLast ? lastBookElementRef : null}
                     >
-                      
-                        <HotelCard hotel={val} />
+                      <HotelCard hotel={val} />
                     </Grid2>
                   );
                 })
               )}
               {hasMore && (
-                <Box sx={{ textAlign: "center", mt: 2, mx:'auto' }}>
-                  {loadingMore && <Loading
-                                  type="bars"
-                                  width={50}
-                                  height={50}
-                                  color={COLORS.PRIMARY}
-                                />}
+                <Box sx={{ textAlign: "center", mt: 2, mx: "auto" }}>
+                  {loadingMore && (
+                    <Loading
+                      type="bars"
+                      width={50}
+                      height={50}
+                      color={COLORS.PRIMARY}
+                    />
+                  )}
                 </Box>
               )}
             </Grid2>
