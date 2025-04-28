@@ -70,7 +70,7 @@ const DestinationWeddingSecondForm = ({ activeStep, setActiveStep }) => {
         </Typography>
         <form onSubmit={formik.handleSubmit}>
           <Grid2 container spacing={3}>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -101,7 +101,7 @@ const DestinationWeddingSecondForm = ({ activeStep, setActiveStep }) => {
                 value={weddingSide}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -132,7 +132,7 @@ const DestinationWeddingSecondForm = ({ activeStep, setActiveStep }) => {
                 value={destination}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -164,7 +164,7 @@ const DestinationWeddingSecondForm = ({ activeStep, setActiveStep }) => {
                 value={numberOfGuests}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField

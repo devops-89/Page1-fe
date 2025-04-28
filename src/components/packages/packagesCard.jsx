@@ -116,15 +116,6 @@ const Packagescard = ({ img, location, rating, title, price, duration }) => {
               p={1}
             >
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                {/* <Typography
-                  sx={{
-                    fontSize: 12,
-                    color: COLORS.DARKGREY,
-                    fontFamily: nunito.style,
-                  }}
-                >
-                  From
-                </Typography> */}
                 <Typography
                   sx={{
                     fontSize: 20,
@@ -133,7 +124,7 @@ const Packagescard = ({ img, location, rating, title, price, duration }) => {
                     fontWeight: 800,
                   }}
                 >
-                  € {price}
+                  ₹ {price}
                 </Typography>
               </Stack>
               <Stack direction={"row"} alignItems={"center"} spacing={1}>

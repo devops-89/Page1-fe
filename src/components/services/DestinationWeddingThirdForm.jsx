@@ -109,7 +109,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
         </Typography>
         <form onSubmit={formik.handleSubmit}>
           <Grid2 container spacing={2}>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -133,7 +133,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
                 value={weddingTheme}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -157,7 +157,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
                 value={propertyType}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -183,7 +183,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
                 limitTags={1}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -207,7 +207,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
                 value={entryVehicle}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -231,7 +231,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
                 value={musicTheme}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField
@@ -258,7 +258,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
                 limitTags={1}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Autocomplete
                 renderInput={(params) => (
                   <TextField

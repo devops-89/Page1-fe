@@ -13,7 +13,7 @@ const DestinationWedding = () => {
       <Box sx={{ mt: 3 }}>
         <Container>
           <Grid2 container spacing={5} alignItems={"center"}>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:6}} sx={{textAlign:{xs:'center', sm:'start'}}}>
               <Typography
                 sx={{ fontSize: 30, fontWeight: 550, fontFamily: roboto.style }}
               >
@@ -36,8 +36,8 @@ const DestinationWedding = () => {
                 ipsum quia dolor sit amet consectetur.
               </Typography>
             </Grid2>
-            <Grid2 size={6} textAlign={"center"}>
-              <Image src={wedding} width={450} style={{ borderRadius: 4 }} />
+            <Grid2 size={{xs:12, sm:6}} textAlign={"center"}>
+              <Image src={wedding} style={{ borderRadius: 4, maxWidth:'450px', height:'100%', width:"100%" }}/>
             </Grid2>
           </Grid2>
         </Container>

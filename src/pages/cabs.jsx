@@ -13,8 +13,7 @@ import {
 } from "@mui/material";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
-import Link from "next/link";
-import { Done, Home } from "@mui/icons-material";
+import { Done } from "@mui/icons-material";
 import Image from "next/image";
 import cabs1 from "@/cabs/cabs1.jpg";
 import cab2 from "@/cabs/cabs2.jpg";
@@ -46,7 +45,7 @@ const Cabs = () => {
               <Grid2 container spacing={{ lg: 3, xs: 1 }}>
                 {/* First Image */}
                 <Grid2
-                  size={6}
+                  size={{xs:12, sm:6}}
                   sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -56,7 +55,7 @@ const Cabs = () => {
                   <Box
                     sx={{
                       width: "100%",
-                      height: { lg: 600, xs: 600 },
+                      height: { lg: 600, xs: 280, sm:600 },
                       display: "flex",
                     }}
                   >
@@ -73,7 +72,7 @@ const Cabs = () => {
                 </Grid2>
 
                 <Grid2
-                  size={6}
+                 size={{xs:12, sm:6}}
                   sx={{
                     display: "flex",
                     flexDirection: "column",

@@ -55,7 +55,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
     }
   };
   return (
-    <div>
+    <>
       <Card
         sx={{
           boxShadow: "0px 0px 2px 2px #00000010",
@@ -77,7 +77,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
         </Typography>
         <form onSubmit={formik.handleSubmit}>
           <Grid2 container mt={2} spacing={4}>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <TextField
                 sx={{ ...loginTextField }}
                 label="Full Name"
@@ -90,7 +90,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
                 helperText={formik.touched.fullName && formik.errors.fullName}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <TextField
                 sx={{ ...loginTextField }}
                 label="Email"
@@ -101,7 +101,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
                 helperText={formik.touched.email && formik.errors.email}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <MuiTelInput
                 sx={{ ...loginTextField }}
                 label="Phone Number"
@@ -118,7 +118,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
                 }
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <DatePicker
                   sx={{ ...loginTextField, width: "100%" }}
@@ -134,7 +134,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
                 />
               </LocalizationProvider>
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:12, md:6}}>
               <Button
                 sx={{
                   width: 150,
@@ -150,7 +150,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
           </Grid2>
         </form>
       </Card>
-    </div>
+    </>
   );
 };
 

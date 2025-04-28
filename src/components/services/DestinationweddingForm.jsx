@@ -10,9 +10,9 @@ const DestinationweddingForm = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <div>
+    <>
       <Grid2 container alignItems={"center"}>
-        <Grid2 size={3}>
+        <Grid2 size={{xs:12, sm:6, md:3}}>
           <Stepper activeStep={activeStep} orientation="vertical">
             {data.destinationWeddingSteps.map((val, i) => (
               <Step>
@@ -25,7 +25,7 @@ const DestinationweddingForm = () => {
             ))}
           </Stepper>
         </Grid2>
-        <Grid2 size={9}>
+        <Grid2 size={{xs:12, sm:6, md:9}} container>
           {activeStep === 0 && (
             <DestinationWeddingStep1Form
               activeStep={activeStep}
@@ -46,7 +46,7 @@ const DestinationweddingForm = () => {
           )}
         </Grid2>
       </Grid2>
-    </div>
+    </>
   );
 };
 
