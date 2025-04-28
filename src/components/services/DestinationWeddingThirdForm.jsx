@@ -19,7 +19,7 @@ import React, { useState } from "react";
 import Loading from "react-loading";
 import { useDispatch, useSelector } from "react-redux";
 
-const DestinationWeddingThirdForm = ({ active, setActive }) => {
+const DestinationWeddingThirdForm = ({ activeStep, setActiveStep }) => {
   const selector = useSelector((state) => state.destinationWedding);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
       additionalServices: [],
     },
     validationSchema: additionalInformationValidationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values,{resetForm}) => {
       setLoading(true);
       const body = {
         enquiry_type: BOOKING_ENQUIRY.DESTINATION_WEDDING,
@@ -46,9 +46,28 @@ const DestinationWeddingThirdForm = ({ active, setActive }) => {
         data: body,
         setLoading: setLoading,
         dispatch: dispatch,
+        setActiveStep:setActiveStep
       });
+
+    // Reset Formik and local states after submission
+  resetForm();
+  setWeddingTheme(null);
+  setPropertyType(null);
+  setFoodType([]);
+  setEntryVehicle(null);
+  setMusicTheme(null);
+  setEventType([]);
+  setClothing([]);
+  setAdditionalServices([]);
+
+  
     },
   });
+
+
+  
+
+
   const [weddingTheme, setWeddingTheme] = useState(null);
   const [propertyType, setPropertyType] = useState(null);
   const [entryVehicle, setEntryVehicle] = useState(null);

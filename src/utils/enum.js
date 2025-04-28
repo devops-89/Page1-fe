@@ -67,6 +67,8 @@ export const Destination_Type = {
   INTERNATIONAL: "International",
 };
 
+
+
 export const NUMBER_OF_GUESTS = {
   "0-100": "0-100",
   "100-200": "100-200",

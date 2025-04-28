@@ -29,9 +29,19 @@ const DestinationWeddingSecondForm = ({ activeStep, setActiveStep }) => {
       budget: "",
     },
     validationSchema: basicInformationValidationSchema,
-    onSubmit: (values) => {
+    onSubmit: (values,{resetForm}) => {
     //   console.log("test", values);
       dispatch(setDestinationFormDetails({ ...selector, ...values }));
+
+      // Reset formik values
+      resetForm();
+
+      // Reseting the state values
+      setWeddingSide(null);
+      setDestination(null);
+      setNumberOfGuests(null);
+      setBudget(null);
+
       setActiveStep(activeStep + 1);
     },
   });

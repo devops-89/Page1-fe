@@ -30,6 +30,12 @@ import card3 from "@/discover.svg";
 import card4 from "@/master.svg";
 import card5 from "@/stripe.svg";
 import card6 from "@/paypal.svg";
+import adventure from "@/services/activities/adventure.jpg";
+import offroadingactivity from "@/services/activities/offroadingactivity.jpg";
+import campfireactivity from "@/services/activities/campfireactivity.jpg";
+import campingactivity from "@/services/activities/campingactivity.jpg";
+import heliskiingactivity from "@/services/activities/heliskiingactivity.jpg";
+import trekkingactivity from "@/services/activities/trekkingactivity.jpg";
 import {
   AttachMoney,
   BarChartOutlined,
@@ -1548,46 +1554,38 @@ export const data = {
     { code: "ZM", label: "Zambia", phone: "260" },
     { code: "ZW", label: "Zimbabwe", phone: "263" },
   ],
-  payment:{
-
-    
-      id: "pay_QAdPuYorh3U9cw",
-      entity: "payment",
-      amount: 1277455,
-      currency: "INR",
-      status: "captured",
-      order_id: "order_QAdPntmMXFnpXu",
-      invoice_id: null,
-      international: false,
-      method: "netbanking",
-      amount_refunded: 0,
-      refund_status: null,
-      captured: true,
-      description: "#QAdPSEQcP5moug",
-      card_id: null,
-      bank: "CNRB",
-      wallet: null,
-      vpa: null,
-      email: "void@razorpay.com",
-      contact: "+918081137994",
-      notes: [],
-      fee: 30150,
-      tax: 4600,
-      error_code: null,
-      error_description: null,
-      error_source: null,
-      error_step: null,
-      error_reason: null,
-      acquirer_data: {
-          bank_transaction_id: "1028635"
-      },
-      created_at: 1742820866
-  
-  
-
-
-
-    
+  payment: {
+    id: "pay_QAdPuYorh3U9cw",
+    entity: "payment",
+    amount: 1277455,
+    currency: "INR",
+    status: "captured",
+    order_id: "order_QAdPntmMXFnpXu",
+    invoice_id: null,
+    international: false,
+    method: "netbanking",
+    amount_refunded: 0,
+    refund_status: null,
+    captured: true,
+    description: "#QAdPSEQcP5moug",
+    card_id: null,
+    bank: "CNRB",
+    wallet: null,
+    vpa: null,
+    email: "void@razorpay.com",
+    contact: "+918081137994",
+    notes: [],
+    fee: 30150,
+    tax: 4600,
+    error_code: null,
+    error_description: null,
+    error_source: null,
+    error_step: null,
+    error_reason: null,
+    acquirer_data: {
+      bank_transaction_id: "1028635",
+    },
+    created_at: 1742820866,
   },
 
   heliBenefits: [
@@ -1832,11 +1830,118 @@ export const data = {
       label: "Priest/Pandit",
     },
   ],
+  activitiesPage: {
+    activities: {
+      heading: "ACTIVITIES",
+      desc: "Page1 Travels offers a wide range of activities suitable for every aged person. Serving across different cities in India and the world. Offers ease of booking, stylish prices, last nanosecond vacuity, and other instigative benefits like ‘skip the line at monuments’ along with vacuity of conditioning that guests can choose from! With a unique mix of thrilling and audacious conditioning, has a lot to offer, be it in the form of Weekend lams, Day jaunts at recreation and Theme premises, tenures and sightseeing of popular lodestones and Monuments, etc. With knitter-made gests within top destinations of India like Delhi, Mumbai, and Pune or International destinations like Singapore, Europe, Bali, Thailand, or Dubai, you name it and Page1 Travels have it. You can also get entry tickets to Qutub Minar, Louvre Museum, Burj Khalifa, the Taj Mahal, Ferrari World, and numerous other places. With a stoner-friendly interface and stylish prices available on top conditioning, you can bespeak from either the Page1 Travels App or website. Click on the icon and select a megacity as per your preference, post which you will be suitable to see a wide array of conditioning and gests that you can choose from. Choose from different sections, be it ‘Tour and Sightseeing,’ ‘Day Outings,’ ‘Weekend Getaways,’ ‘Live guests,’ and much more!",
+    },
+    allactivities: [
+      {
+        heading: "ADVENTURE",
+        img: adventure.src,
+        desc: {
+          para: "Wildlife sanctuaries in India beautifully save and portray the nation’s rich biodiversity. It is surely one of the stylish adventure conditionings to be cherished with musketeers and family. Get near foliage and fauna at the popular public premises in India. Every beast nut can spot his favorite critter while wandering in the thick timber. From one-horned rhinos, the Great Indian Bustards, to the Royal Bengal Tiger, the woods of the country are the home to all.",
+          list: [
+            "Go Bungee Jumping from the top of mountains",
+            "Horse Riding in the mountains will be the best option for adventure-loving people.",
+            " Another option can be Mountain biking for young people.",
+          ],
+        },
+      },
+      {
+        heading: "TREKKING",
+        img: trekkingactivity.src,
+        desc: {
+          para: "Trekking suckers are sure to find immense pleasure while planning to journey in India and World. Wonderful hill areas of the west and beautiful elevation in the East are worth seeing. Touring trails varying from 2000 to 20000 bases are full of twists and surprises. Every curious mountaineer is bestowed with amazing audacious moments.",
+          list: [
+            "Trekking requires a lot of physical effort so be prepared for it.",
+            "You will also encounter breathtaking campsites.",
+            "It will be a mesmerizing trip that you will remember forever.",
+          ],
+        },
+      },
+      {
+        heading: "CAMP-FIRE",
+        img: campfireactivity.src,
+        desc: {
+          para: "A campfire or bonfire is a hutment fire that provides light, warmth, and heat for cuisine. It can also serve as a lamp and a nonentity and bloodsucker interference. Established campsites constantly give a monument or brand fire ring for safety. Conflagrations are a popular point of camping. Some camps relate to the fire itself as a bonfire. Some safety measures to take during camp-fire can be:",
+          list: [
+            "Having enough water hard and a shovel to smother an out-of-control fire with dirt.",
+            "Minimizing the size of the fire to help problems from being.",
+            "Noway leaving a bonfire unattended.",
+          ],
+        },
+      },
+      {
+        heading: "OFF ROAD",
+        img: offroadingactivity.src,
+        desc: {
+          para: "A Off-roading is a rugged, in- outdoor exertion that involves navigating vehicles on dirt tracks, mountain paths, or desert trails. It is pursued on terrains like the beach, clay, snow, slush, gemstone, champaign, surfaces (dry or with shallow water), and another natural terrain – down from unpaved shells. Variants of out-roading include drift-bashing (or ‘wadi’ bashing, as it is called in the countries of the Gulf), cross country, rally raids, green laning, mudding, gemstone racing, and comptitive trials. There are also winch events, which bear the use of a winch (at the reverse and the front of the vehicle) to pierce hard-to-reach places like defiles and precipitous inclines. Off-roading is done in all-terrain vehicles (ATVs), both four- and two-wheel, like 4x4s, jeeps, snowmobiles, dirt bikes, quadrangle bikes, gemstone dawdlers, and beach rails.",
+          list: [
+            "Though out-roading is enough much a niche adventure sport amongst Indians",
+            " Corridor of the Himalayas points to perfect and frequently spectacular off-roading terrain, while Ladakh’s high-altitude desert offers inversely favorable conditions for the exertion.",
+            "Enjoy the Off-road ride, but don’t forget to take the necessary precautions.",
+          ],
+        },
+      },
+      {
+        heading: "CAMPING",
+        img: campingactivity.src,
+        desc: {
+          para: "Camping is a form of out-of-door recreation involving overnight stays with an introductory temporary sanctum like a roof. Camping can also include a recreational vehicle, an endless roof, a sanctum like a bevy or a tarp, or no sanctum. generally, actors leave developed areas to spend time outside, in pursuit of conditioning and furnishing them enjoyment or an educational experience. Spending the night down from home distinguishes boarding from day-tripping, picnicking, and other out-of-door conditioning. Camping as a recreational exertion came popular among elites in the early 20th century. With time, it grew in fissionability among other socioeconomic classes. ultramodern RVs frequently intimately possessed natural coffers like public and state premises, nature areas, and marketable campsites. In many countries, like Sweden and Scotland, public camping is also legal on intimately held land.",
+          list: [
+            "Camping works as a stress buster for you, so if you feel a little bit stressed go camping.",
+            "If you are nature-loving then camping is a must-try activity for you.",
+            "Camping involves a sense of fresh vibes in the middle of the mountains.",
+          ],
+        },
+      },
+      {
+        heading: "EXPLORING",
+        img: campingactivity.src,
+        desc: {
+          para: "Explore different places with us. Some of our favorite exertion analogous as walking, hiking, and biking are done outdoors and it is a great space for unstructured creative play. Make the outside into your trip – whether concluding to play outside or bringing nature to you with trades and crafts. progressed youths and youthful youths can work together or can explore further independently or using age-applicable exertion. Explore activities apart from mentioned like:",
+          list: [
+            " Set up a treasure hunt.",
+            "Go for fruits and vegetable picking.",
+            "Explore through a nature walk.",
+          ],
+        },
+      },
+      {
+        heading: "HELI SKIING",
+        img: heliskiingactivity.src,
+        desc: {
+          para: "Heli-skiing is a kind of skiing that involves a copter to visit remote areas. Winter suckers are constantly encouraged to push further their skiing/ snowboarding adventure; accessible structures at ski resorts giving access to out-piste skiing areas constant disquisition of new pitches revealing seductive descents, vacuity of high-tech safety gear for skiing in the bush, adding several trip agents specializing in audacious leaves are among the major factors. Heliskiing stands out because of the inconceivable freedom and convenience it gives – in remote areas for moving from one peak to the coming, and for furnishing a large choice of pristine pitches and greasepaint runs. likewise, heli-skiing is rehearsed in named places, precisely chosen by professional and largely professed attendants leading the groups and seeking to minimize the pitfalls associated with this exertion. This allows skiers and snowboarders to enjoy the natural terrain- and the horizonless joy of heli-skiing- with a feeling of safety, anyhow of the degree of mountain experience and snowpack knowledge they may have.",
+          list: [
+            "You will feel out of the world experience once you get indulges there is no going back.",
+            "We exercise what we sermonize and ski all over the world to find unmarked bush hooches hot springs, and larger-than-life ski attendants.",
+            "Hei-Ski creates extraordinary Ski adventures across the world.",
+          ],
+        },
+      },
+    ],
+    activityCategories: [
+      "ADVENTURE",
+      "TREKKING",
+      "CAMP FIRE",
+      "OFF ROADING",
+      "CAMPING",
+      "EXPLORING",
+      "HELISKIING",
+    ],
+  },
 
- hotelPreBook : {
+  forexPage:{
+    heading:"Why Page1 Travels for Currency Conversion?",
+    desc:"You need foreign currency while you're traveling or doing business abroad and calculating currency conversion can pose a challenge for many individuals, especially those who are not familiar with exchange rates. Does that sound like a lot of complex calculation. Well, Page1 Travels makes is very convenient for you to calculate your currency conversion and ensure to address all your queries and doubts regarding the same by just a few clicks."
+
+  },
+
+  hotelPreBook: {
     Status: {
       Code: 200,
-      Description: "Successful"
+      Description: "Successful",
     },
     HotelResult: [
       {
@@ -1844,20 +1949,19 @@ export const data = {
         Currency: "INR",
         Rooms: [
           {
-            Name: [
-              "Deluxe Double Room,1 Double Bed,NonSmoking"
-            ],
-            BookingCode: "1144184!TB!4!TB!469e3e2a-1e9b-11f0-88c1-3ad144d360dd!TB!N!TB!AFF!",
+            Name: ["Deluxe Double Room,1 Double Bed,NonSmoking"],
+            BookingCode:
+              "1144184!TB!4!TB!469e3e2a-1e9b-11f0-88c1-3ad144d360dd!TB!N!TB!AFF!",
             Inclusion: "Free self parking",
             DayRates: [
               [
                 {
-                  BasePrice: 2867.66
+                  BasePrice: 2867.66,
                 },
                 {
-                  BasePrice: 2867.66
-                }
-              ]
+                  BasePrice: 2867.66,
+                },
+              ],
             ],
             TotalFare: 6450.64,
             TotalTax: 715.33,
@@ -1867,8 +1971,8 @@ export const data = {
               {
                 FromDate: "20-04-2025 00:00:00",
                 ChargeType: "Percentage",
-                CancellationCharge: 100
-              }
+                CancellationCharge: 100,
+              },
             ],
             MealType: "Room_Only",
             IsRefundable: false,
@@ -1888,7 +1992,7 @@ export const data = {
               "Rollaway/extra beds (surcharge)",
               "Desk",
               "Room service (24 hours)",
-              "Cable TV service"
+              "Cable TV service",
             ],
             LastCancellationDeadline: "19-04-2025 23:59:59",
             PriceBreakUp: [
@@ -1901,12 +2005,12 @@ export const data = {
                     TaxType: "Tax_TDS",
                     TaxableAmount: 41.572180350000004,
                     TaxPercentage: 2,
-                    TaxAmount: 0.8314436070000001
-                  }
-                ]
-              }
-            ]
-          }
+                    TaxAmount: 0.8314436070000001,
+                  },
+                ],
+              },
+            ],
+          },
         ],
         RateConditions: [
           "Early check out will attract full cancellation charge unless otherwise specified",
@@ -1917,9 +2021,9 @@ export const data = {
           "Minimum CheckIn Age : 18",
           "Optional Fees: <ul> <li>Airport shuttle fee: INR 2000 per vehicle (roundtrip)</li><li>Rollaway bed fee: INR 500 per night</li></ul> <p>The above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. </p>",
           "Cards Accepted: Visa,Mastercard",
-          "Pets not allowed,Professional property host/manager,No cribs (infant beds) available"
-        ]
-      }
+          "Pets not allowed,Professional property host/manager,No cribs (infant beds) available",
+        ],
+      },
     ],
     ValidationInfo: {
       PanMandatory: false,
@@ -1935,10 +2039,7 @@ export const data = {
       PackageFare: false,
       PackageDetailsMandatory: false,
       DepartureDetailsMandatory: false,
-      GSTAllowed: false
-    }
-  }
-  
+      GSTAllowed: false,
+    },
+  },
 };
-
-
