@@ -2,7 +2,7 @@ import { authenticationController } from "@/api/auth";
 import { setToast } from "@/redux/reducers/toast";
 import { TOAST_STATUS } from "@/utils/enum";
 
-export const userSendEnquiry = ({ setLoading, data, dispatch }) => {
+export const userSendEnquiry = ({ setLoading, data, dispatch,setActiveStep }) => {
   authenticationController
     .sendEnquiry(data)
     .then((res) => {
@@ -18,5 +18,8 @@ export const userSendEnquiry = ({ setLoading, data, dispatch }) => {
     })
     .catch((err) => {
       console.log("err", err);
-    });
+    })
+    .finally(()=>{
+      setActiveStep(0);
+    })
 };

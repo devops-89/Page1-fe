@@ -23,8 +23,14 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
       date: "",
     },
     validationSchema: destinationWeddingFirstStep,
-    onSubmit: (values) => {
+    onSubmit: (values,{resetForm}) => {
       dispatch(setDestinationFormDetails({ ...values }));
+      // reset Formik Values
+      resetForm();
+
+      // Reset Local States
+      setPhone(null);
+      setDate(null);
 
       // console.log("values", values);
       setActiveStep(activeStep + 1);
@@ -123,6 +129,7 @@ const DestinationWeddingStep1Form = ({ activeStep, setActiveStep }) => {
                 <DatePicker
                   sx={{ ...loginTextField, width: "100%" }}
                   label="Date"
+                  disablePast
                   onChange={handleChangeDate}
                   value={date}
                   slotProps={{
