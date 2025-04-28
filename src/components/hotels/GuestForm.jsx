@@ -10,7 +10,6 @@ import {
   TextField,
   Button,
   Grid2,
-  InputLabel,
   FormControlLabel,
   Checkbox,
 } from "@mui/material";

@@ -6,16 +6,19 @@ import React from "react";
 
 const Benefits = () => {
   return (
-    <Box sx={{ backgroundColor: COLORS.PRIMARY, p: 4 }}>
+    <Box sx={{ backgroundColor: COLORS.PRIMARY, py:3 }}>
       <Container>
-        <Grid2 container>
+        <Grid2 container spacing={2}>
           {data?.heliBenefits.map((val, i) => (
             <Grid2
-              size={4}
+              size={{xs:12, sm:4}}
               sx={{
-                borderRight:
-                  i !== data.heliBenefits.length - 1 && "1px solid #00000040",
+                borderRight: {
+                  xs: 'none',
+                  sm: i !== data.heliBenefits.length - 1 ? "1px solid #00000040" : "none",
+                },
                 px: 2,
+                textAlign:{xs:'center', sm:'start'}
               }}
             >
               <Typography sx={{ fontSize: 20, fontFamily: roboto.style }}>

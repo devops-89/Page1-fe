@@ -17,21 +17,21 @@ const Helicopter = () => {
   return (
     <>
       <InnerBanner img={banner.src} heading={"Helicopter"} />
-      <Container sx={{ mt: 7 }}>
+      <Container sx={{ my: 7 }}>
         <Box
           sx={{
             backgroundImage: `url(${bgImage.src})`,
             width: "100%",
-            backgroundPosition: "center right",
+            backgroundPosition: {xs:'bottom center', sm:'center right'},
             backgroundRepeat: "no-repeat",
             backgroundSize: "70%",
-            height: "70vh",
             display: "flex",
+            height:'450px'
           }}
         >
-          <Grid2 container alignItems={"center"}>
-            <Grid2 size={5}>
-              <Typography sx={{ fontSize: 55, fontFamily: roboto.style }}>
+          <Grid2 container sx={{alignItems:{xs:'flex-start', sm:'center'}}}>
+            <Grid2 size={{xs:12}} sx={{textAlign:{xs:'center', sm:'start'}}}>
+              <Typography sx={{ fontSize: {xs:24, sm:30, md:55}, fontFamily: roboto.style }}>
                 Create Memories for a lifetime
               </Typography>
               <Typography

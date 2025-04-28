@@ -114,7 +114,7 @@ const HelicopterBooking = () => {
       });
   };
   return (
-    <Box sx={{ width: 800 }}>
+    <Box>
       <Stack
         direction={"row"}
         alignItems={"center"}
@@ -132,7 +132,7 @@ const HelicopterBooking = () => {
       <form onSubmit={formik.handleSubmit}>
         <Box sx={{ mt: 2 }}>
           <Grid2 container spacing={3}>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
@@ -145,7 +145,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.fullName && formik.errors.fullName}
               />
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <MuiTelInput
                 sx={{ ...loginTextField }}
                 fullWidth
@@ -162,7 +162,7 @@ const HelicopterBooking = () => {
                 }
               />
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
@@ -173,7 +173,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.email && formik.errors.email}
               />
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
@@ -184,7 +184,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.from && formik.errors.from}
               />
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
@@ -195,7 +195,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.to && formik.errors.to}
               />
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <DatePicker
                   label="Date"
@@ -212,7 +212,7 @@ const HelicopterBooking = () => {
                 />
               </LocalizationProvider>
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <TimePicker
                   label="Time"
@@ -228,7 +228,7 @@ const HelicopterBooking = () => {
                 />
               </LocalizationProvider>
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <TextField
                 label="Adults(in Numbers)"
                 sx={{ ...loginTextField }}
@@ -240,7 +240,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.adults && formik.errors.adults}
               />
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={{xs:12, sm:6, md:4}}>
               <TextField
                 label="Children(in Numbers)"
                 sx={{ ...loginTextField }}
@@ -254,7 +254,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.children && formik.errors.children}
               />
             </Grid2>
-            <Grid2 size={12}>
+            <Grid2 size={{xs:12}}>
               <TextField
                 sx={{
                   ...loginTextField,
@@ -272,7 +272,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.message && formik.errors.message}
               />
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:6}}>
               <Button
                 sx={{
                   backgroundColor: COLORS.PRIMARY,
@@ -294,7 +294,7 @@ const HelicopterBooking = () => {
                 )}
               </Button>
             </Grid2>
-            <Grid2 size={6}>
+            <Grid2 size={{xs:12, sm:6}}>
               <Button
                 sx={{
                   border: `1px solid ${COLORS.PRIMARY}`,

@@ -433,7 +433,7 @@ const hotelSummary = () => {
                                     />
                                 </Grid2>
 
-                                <Grid2 size={{xs:12}}>
+                                <Grid2 size={{xs:12, sm:6}}>
                                     <TextField
                                         fullWidth
                                         label="Email ID"
@@ -445,7 +445,7 @@ const hotelSummary = () => {
                                     />
                                 </Grid2>
 
-                                <Grid2 size={{xs:12}}>
+                                <Grid2 size={{xs:12, sm:6}}>
                                     <TextField
                                         fullWidth
                                         label="Mobile Number"
