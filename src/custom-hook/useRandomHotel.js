@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 export default function useRandomHotel() {
     const hotel = [
      "https://img.freepik.com/free-photo/colonial-style-house-night-scene_1150-17925.jpg?t=st=1745585067~exp=1745588667~hmac=e9aa2dfb75ba0dfd609250aa57e3370f21bb31965158f77a1e230660ed39e84e&w=1380",
@@ -7,5 +9,10 @@ export default function useRandomHotel() {
      "https://img.freepik.com/free-photo/restaurant-hall-with-leather-armchairs-french-windows_140725-8445.jpg?t=st=1745585382~exp=1745588982~hmac=6b64db52d296305897a4b0d3ad7501a79da3b531b30592359ad17080be0091da&w=1380",
      "https://s3.eu-west-2.amazonaws.com/staticgh.gentinghotel.co.uk/uploads/hero/SuiteNov2022_0008_1920.jpg"
     ];
-    return hotel[Math.floor(Math.random() * hotel.length)];
+
+    const randomImage = useMemo(()=>{
+      return hotel[Math.floor(Math.random() * hotel.length)];
+    },[])
+
+   return randomImage
   }

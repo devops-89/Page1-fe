@@ -18,6 +18,30 @@ import useRandomHotel from "@/custom-hook/useRandomHotel";
 import { HOTEL_RATING, HOTEL_RATING_IN_WORDS } from "@/utils/enum";
 
 const HotelCard = ({ hotel }) => {
+
+
+  const hotelImage = useRandomHotel()
+
+
+  const attractionsHTML = hotel?.Attractions[0] || "";
+
+// Extract only the first two entries
+const getFirstTwoAttractions = (html) => {
+  // Remove the "Distances are displayed..." sentence
+  const splitByPTag = html.split('<p>')[1] || "";
+  const listItems = splitByPTag.split('<br />').filter(item => item.trim() !== "");
+
+  // Get the first two attractions
+  const firstTwo = listItems.slice(0, 2);
+
+  // Join them back with <br />
+  return firstTwo.join('<br />');
+};
+
+const twoAttractionsHTML = getFirstTwoAttractions(attractionsHTML);
+
+
+
   return (
     <Card
       sx={{
@@ -40,7 +64,7 @@ const HotelCard = ({ hotel }) => {
           >
             <CardMedia
               component="img"
-              image={useRandomHotel()}
+              image={hotelImage}
               alt={hotel?.HotelName}
               sx={{
                 width: "100%",
@@ -62,7 +86,7 @@ const HotelCard = ({ hotel }) => {
           md={6}
           sx={{ borderRight: { md: "1px solid gray" } }}
         >
-          <CardContent>
+          <CardContent sx={{pb:0}}>
             <Stack
               direction="row"
               justifyContent="space-between"
@@ -111,31 +135,10 @@ const HotelCard = ({ hotel }) => {
             {/* Attractions with clipping */}
             {hotel?.Attractions && hotel.Attractions.length > 0 && (
               <Box mt={2}>
-                {/* <Typography
-                  sx={{
-                    fontSize: '0.875rem',
-                    color: 'text.secondary',
-                    maxHeight: '60px',
-                    overflow: 'hidden',
-                    position: 'relative',
-                    lineHeight: '1.4',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '1.2em',
-                      background: 'linear-gradient(to bottom, transparent, #fff)',
-                    },
-                  }}
-                  dangerouslySetInnerHTML={{ __html: hotel?.Attractions[0] }}
-                /> */}
-
                 <Typography
                   variant="body2"
                   sx={{ fontFamily: nunito.style }}
-                  dangerouslySetInnerHTML={{ __html: hotel?.Attractions[0] }}
+                  dangerouslySetInnerHTML={{ __html: twoAttractionsHTML }}
                 />
               </Box>
             )}
