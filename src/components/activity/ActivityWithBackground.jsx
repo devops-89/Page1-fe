@@ -9,8 +9,7 @@ const ActivityWithBackground = ({ activity,handleOpenForm }) => {
     <Box 
       sx={{ 
         position: 'relative', 
-        backgroundImage: `url(${activity.img})`, 
-        marginTop: "90px", 
+        backgroundImage: `url(${activity.img})`,  
         backgroundRepeat: "no-repeat", 
         backgroundSize: "cover", 
         backgroundPosition: "center",
@@ -32,7 +31,7 @@ const ActivityWithBackground = ({ activity,handleOpenForm }) => {
 
       {/* Content */}
       <Container sx={{ py: 10, position: 'relative', zIndex: 2 }}>
-        <Box sx={{ width: "500px" }}>
+        <Box sx={{ maxWidth: "500px", textAlign:{xs:'center', sm:'start'} }}>
           <Typography 
             variant='h4' 
             sx={{ color: COLORS.PRIMARY, fontWeight: "bold", fontFamily: roboto.style }}
