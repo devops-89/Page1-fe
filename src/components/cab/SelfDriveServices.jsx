@@ -27,7 +27,7 @@ const SelfDriveServices = () => {
   return (
     <Container sx={{ mt: 5 }}>
       <Grid2 container>
-        <Grid2 size={6} margin="auto">
+        <Grid2 size={{xs:12, sm:6}} margin="auto">
           <Typography
             sx={{
               fontSize: 16,
@@ -40,7 +40,7 @@ const SelfDriveServices = () => {
           </Typography>
           <Typography
             sx={{
-              fontSize: 30,
+              fontSize: {xs:20, sm:30},
               fontFamily: roboto.style,
               color: COLORS.BLACK,
               fontWeight: 550,
@@ -53,9 +53,10 @@ const SelfDriveServices = () => {
       </Grid2>
       <Grid2 container spacing={5} sx={{ mt: 5, mb: 5 }}>
         {data.map((item, index) => (
-          <Grid2 size={4} key={index}>
+          <Grid2 size={{xs:12, sm:4}} key={index}>
             <Card
               sx={{
+                textAlign:{xs:'center', sm:'start'},
                 p: 2,
                 ":hover": {
                   backgroundColor: COLORS.PRIMARY,
