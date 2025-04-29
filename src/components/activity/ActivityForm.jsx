@@ -1,6 +1,5 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import {data} from "@/assests/data";
 import { activityFormSchema } from "@/utils/validationSchema";
 import {
@@ -9,6 +8,7 @@ import {
   TextField,
   MenuItem,
   Typography,
+  Stack,
 } from "@mui/material";
 import { COLORS } from "@/utils/colors";
 
@@ -34,7 +34,6 @@ const ActivityForm = () => {
   });
 
   return (
-    <div style={{width:"300px"}}>
     <Box
       component="form"
       onSubmit={formik.handleSubmit}
@@ -195,7 +194,6 @@ const ActivityForm = () => {
         Submit
       </Button>
     </Box>
-    </div>
   );
 };
 

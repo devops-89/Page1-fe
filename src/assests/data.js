@@ -149,11 +149,6 @@ export const data = {
       url: "/destination-wedding",
     },
     {
-      img: gift,
-      title: "Gift Cards",
-      ur: "/gift-cards",
-    },
-    {
       img: forex,
       title: "Forex",
       url: "/forex",

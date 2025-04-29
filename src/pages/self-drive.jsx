@@ -12,10 +12,10 @@ const SelfDrive = () => {
       <InnerBanner img={bannerImage.src} heading={"Self Drive"} />
       <Container sx={{ mt: 5 }}>
         <Grid2 container alignItems={"center"} spacing={5}>
-          <Grid2 size={6}>
+          <Grid2 size={{xs:12, sm:6}} sx={{textAlign:{xs:'center', sm:'start'}}}>
             <Typography
               sx={{
-                fontSize: 40,
+                fontSize: {xs:24, sm:40},
                 fontFamily: roboto.style,
                 color: COLORS.PRIMARY,
                 fontWeight: 550,
@@ -25,7 +25,7 @@ const SelfDrive = () => {
             </Typography>
             <Typography
               sx={{
-                fontSize: 30,
+                fontSize: {xs:20, sm:30},
                 fontFamily: roboto.style,
                 color: COLORS.BLACK,
                 fontWeight: 550,
@@ -47,7 +47,7 @@ const SelfDrive = () => {
               and secure while cruising down open roads.
             </Typography>
           </Grid2>
-          <Grid2 size={6}>
+          <Grid2 size={{xs:12, sm:6}}>
             <SelfDriveForm />
           </Grid2>
         </Grid2>
