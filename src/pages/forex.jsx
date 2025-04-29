@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import InnerBanner from "@/components/innerBanner";
 import forexbg from "@/services/forex/forexbg.jpg";
-import { Container, Typography, Box, Grid2, TextField, Button } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Grid2,
+  TextField,
+  Button,
+} from "@mui/material";
 import { data } from "@/assests/data";
 import { roboto } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
@@ -27,7 +34,7 @@ const Forex = () => {
     try {
       const response = await axios.get(url, {
         headers: {
-          "apikey": apiKey,
+          apikey: apiKey,
         },
       });
       setConvertedAmount(response.data.result); // Set the converted amount
@@ -37,55 +44,101 @@ const Forex = () => {
   };
 
   return (
-    <div>
+    <>
       <InnerBanner img={forexbg.src} heading={"FOREX"} />
-      <Container>
-        <Typography variant="h4" sx={{ textAlign: "center", mt: 10, fontFamily: roboto.style }}>
+      <Container sx={{ my: 7 }}>
+        <Typography
+          variant="h4"
+          sx={{
+            textAlign: "center",
+            mb: 3,
+            fontFamily: roboto.style,
+            fontSize: { xs: 28, sm: 40 },
+          }}
+        >
           {data.forexPage.heading}
         </Typography>
-        <Typography variant="body1" sx={{ textAlign: "center", fontFamily: roboto.style }}>
+        <Typography
+          variant="body1"
+          sx={{ textAlign: "center", fontFamily: roboto.style, mb: 3 }}
+        >
           {data.forexPage.desc}
         </Typography>
 
-        <Box sx={{ bgcolor: COLORS.BLUEOVERLAY, py: 10, my: 2, px: 20 }}>
-          <Typography variant="h4" sx={{ textAlign: "center", fontFamily: roboto.style }}>
-            Get Started
-          </Typography>
-          <Typography variant="body1" sx={{ textAlign: "center", fontFamily: roboto.style }}>
-            With Page1 Travels, start your currency conversion in just a few steps:
-          </Typography>
-
-          <Grid2 container spacing={2} sx={{ mt: 2 }}>
-            <Grid2 item size={{ lg: 6 }}>
-              <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
-                <PaidIcon sx={{ color: COLORS.PRIMARY, fontSize: 40 }} />
-              </Typography>
-              <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
-                Start your currency conversion by selecting currency and entering amount.
-              </Typography>
-            </Grid2>
-            <Grid2 item size={{ lg: 6 }}>
-              <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
-                <CurrencyBitcoinIcon sx={{ color: COLORS.PRIMARY, fontSize: 40 }} />
-              </Typography>
-              <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
-                Raise the query or dilemma that you are facing.
-              </Typography>
-            </Grid2>
+        <Grid2
+          container
+          spacing={3}
+          sx={{ bgcolor: COLORS.BLUEOVERLAY, p: { xs: 4, sm: 6 } }}
+        >
+          <Grid2 size={{ xs: 12 }}>
+            <Typography
+              variant="h4"
+              sx={{ textAlign: "center", fontFamily: roboto.style, mb: 3 }}
+            >
+              Get Started
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ textAlign: "center", fontFamily: roboto.style }}
+            >
+              With Page1 Travels, start your currency conversion in just a few
+              steps:
+            </Typography>
           </Grid2>
-        </Box>
+          <Grid2 size={{ xs: 12, sm: 6 }}>
+            <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
+              <PaidIcon sx={{ color: COLORS.PRIMARY, fontSize: 40 }} />
+            </Typography>
+            <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
+              Start your currency conversion by selecting currency and entering
+              amount.
+            </Typography>
+          </Grid2>
+          <Grid2 size={{ xs: 12, sm: 6 }}>
+            <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
+              <CurrencyBitcoinIcon
+                sx={{ color: COLORS.PRIMARY, fontSize: 40 }}
+              />
+            </Typography>
+            <Typography sx={{ textAlign: "center", fontFamily: roboto.style }}>
+              Raise the query or dilemma that you are facing.
+            </Typography>
+          </Grid2>
+        </Grid2>
 
-        <Box sx={{bgcolor:COLORS.PRIMARY,my: 10,px:1}}>
-        <Box sx={{ px: 10, py:10,bgcolor:COLORS.BLUEOVERLAY }}>
-          <Box sx={{ bgcolor: COLORS.PRIMARY, py: 2 }}>
-            <Typography variant="h4" sx={{ color: COLORS.WHITE, textAlign: "center", fontFamily: roboto.style }}>
+        <Grid2
+          container
+          spacing={3}
+          sx={{
+            py: { xs: 4, sm: 8 },
+            px: { xs: 1 },
+            bgcolor: COLORS.BLUEOVERLAY,
+            my: 10,
+            borderLeft: `6px solid ${COLORS.PRIMARY}`,
+            borderRight: `6px solid ${COLORS.PRIMARY}`,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Grid2
+            size={{ xs: 12, sm: 9 }}
+            sx={{ bgcolor: COLORS.PRIMARY, py: 2 }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                color: COLORS.WHITE,
+                textAlign: "center",
+                fontFamily: roboto.style,
+              }}
+            >
               Currency Conversion
             </Typography>
-          </Box>
-          <Grid2 container spacing={2} sx={{ my: 2 }}>
-            <Grid2 item size={{ lg: 3 }}>
+          </Grid2>
+          <Grid2 container spacing={2}>
+            <Grid2 size={{ xs: 12, sm: 12, md: 3 }}>
               <Autocomplete
-                size="small"
+                size="medium"
                 id="from-currency"
                 options={countries}
                 autoHighlight
@@ -94,27 +147,39 @@ const Forex = () => {
                 renderOption={(props, option) => {
                   const { key, ...optionProps } = props;
                   return (
-                    <Box key={key} component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...optionProps}>
-                      <img loading="lazy" width="20" src={option.image} alt="" />
+                    <Box
+                      key={key}
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...optionProps}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        src={option.image}
+                        alt=""
+                      />
                       {option.label} ({option.code})
                     </Box>
                   );
                 }}
-                renderInput={(params) => <TextField {...params} label="From Currency" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="From Currency" />
+                )}
               />
             </Grid2>
-            <Grid2 item size={{ lg: 3 }}>
+            <Grid2 size={{ xs: 12, sm: 12, md: 3 }}>
               <TextField
-                size="small"
+                size="medium"
                 fullWidth
                 label="Enter Amount"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
             </Grid2>
-            <Grid2 item size={{ lg: 3 }}>
+            <Grid2 size={{ xs: 12, sm: 12, md: 3 }}>
               <Autocomplete
-                size="small"
+                size="medium"
                 id="to-currency"
                 options={countries}
                 autoHighlight
@@ -123,45 +188,58 @@ const Forex = () => {
                 renderOption={(props, option) => {
                   const { key, ...optionProps } = props;
                   return (
-                    <Box key={key} component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...optionProps}>
-                      <img loading="lazy" width="20" src={option.image} alt="" />
+                    <Box
+                      key={key}
+                      component="li"
+                      sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                      {...optionProps}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        src={option.image}
+                        alt=""
+                      />
                       {option.label} ({option.code})
                     </Box>
                   );
                 }}
-                renderInput={(params) => <TextField {...params} label="To Currency" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="To Currency" />
+                )}
               />
             </Grid2>
-            <Grid2 item size={{ lg: 3 }}>
+            <Grid2 size={{ xs: 12, sm: 12, md: 3 }}>
               <TextField
                 disabled
-                size="small"
+                size="medium"
                 fullWidth
                 label="Converted Amount"
                 value={convertedAmount || ""}
               />
             </Grid2>
-          </Grid2>
-
-          <Box display={"flex"} justifyContent={"center"}>
-            <Button
-              size="small"
-              variant="contained"
-              onClick={fetchConversionRate}
-              sx={{
-                bgcolor: COLORS.PRIMARY,
-                color: COLORS.WHITE,
-                borderRadius: 0,
-                fontFamily: roboto.style,
-              }}
+            <Grid2
+              size={{ xs: 12, sm: 12, md: 12 }}
+              sx={{ textAlign: "center" }}
             >
-              Convert
-            </Button>
-          </Box>
-        </Box>
-        </Box>
+              <Button
+                size="large"
+                variant="contained"
+                onClick={fetchConversionRate}
+                sx={{
+                  bgcolor: COLORS.PRIMARY,
+                  color: COLORS.WHITE,
+                  borderRadius: 0,
+                  fontFamily: roboto.style,
+                }}
+              >
+                Convert
+              </Button>
+            </Grid2>
+          </Grid2>
+        </Grid2>
       </Container>
-    </div>
+    </>
   );
 };
 
