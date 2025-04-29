@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 
 import OneWayOutstation from './OneWayOutstation';
 import { roboto } from '@/utils/fonts';
+import RoundTripOutstation from './RoundTripOutstation';
+import { COLORS } from '@/utils/colors';
 
 export default function CenteredTabs() {
   const [value, setValue] = React.useState(0);
@@ -15,10 +17,16 @@ export default function CenteredTabs() {
   };
 
   return (
-    <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      <Tabs value={value} onChange={handleChange} centered>
-        <Tab label="ONE-WAY" sx={{fontFamily:roboto.style,fontWeight:"bold"}} />
-        <Tab label="ROUND-TRIP" sx={{fontFamily:roboto.style,fontWeight:"bold"}} />
+    <Box sx={{ width: '100%', bgcolor: 'background.paper'}}>
+      <Tabs value={value} onChange={handleChange} TabIndicatorProps={{sx:{
+        backgroundColor:COLORS.PRIMARY
+      }}} centered>
+        <Tab label="ONE-WAY" sx={{fontFamily:roboto.style,fontWeight:"bold", '&.Mui-selected': {
+        color: COLORS.PRIMARY,
+      }}} />
+        <Tab label="ROUND-TRIP" sx={{fontFamily:roboto.style,fontWeight:"bold",'&.Mui-selected': {
+        color: COLORS.PRIMARY,
+      }}} />
       
       </Tabs>
 
@@ -30,7 +38,7 @@ export default function CenteredTabs() {
       )}
       {value === 1 && (
         <Box sx={{ p: 3 }}>
-          <Typography>Content of Item Two</Typography>
+          <RoundTripOutstation />
         </Box>
       )}
      

@@ -4,10 +4,10 @@ import { COLORS } from "@/utils/colors";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { roboto } from "@/utils/fonts";
-const OneWayOutstation = () => {
- 
+const RoundTripOutstation = () => {
+  const [time, setTime] = useState();
 
   return (
     <Box>
@@ -71,7 +71,19 @@ const OneWayOutstation = () => {
         />
       </LocalizationProvider>
     
-    
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TimePicker
+          label="Select Time"
+          value={time}
+          onChange={(newTime) => setTime(newTime)}
+          slotProps={{
+            textField:{
+              size:"small"
+            }
+          }}
+          sx={{width:"100%",my:1}}
+        />
+      </LocalizationProvider>
       <Button
         sx={{
           bgcolor: COLORS.PRIMARY,
@@ -89,4 +101,4 @@ const OneWayOutstation = () => {
   );
 };
 
-export default OneWayOutstation;
+export default RoundTripOutstation;

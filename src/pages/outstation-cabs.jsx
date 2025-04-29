@@ -14,7 +14,7 @@ const OutstationCabs = () => {
       <InnerBanner img={innerImage.src} heading={"Outstation Cabs"} />
       <Container>
       {/* Main Section */}
-      <Grid2 container spacing={4} sx={{mt:10}}>
+      <Grid2 container spacing={4} sx={{mt:10,height:"600px" }}>
         <Grid2 item size={{lg:6}}>
             <Typography variant="h4" sx={{fontFamily:roboto.style,color:COLORS.PRIMARY,textAlign:"justify"}}>OUTSTATION CAB PAGE</Typography>
             <Typography variant="body1" sx={{fontFamily:roboto.style,textAlign:"justify"}}>
