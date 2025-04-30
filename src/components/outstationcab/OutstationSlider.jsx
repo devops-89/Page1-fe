@@ -19,7 +19,7 @@ const OutstationSlider = () => {
       loop={true}
       slidesPerView={3}
       onSwiper={(swipe) => console.log(swipe)}
-      onSlideChange={() => console.log("slide change")}
+    
       style={{marginBlock:"30px"}}
     >
       <SwiperSlide>
