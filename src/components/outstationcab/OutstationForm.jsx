@@ -32,12 +32,12 @@ export default function CenteredTabs() {
 
       {/* Render content based on selected tab */}
       {value === 0 && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: {xs:0.5, sm:3} }}>
          <OneWayOutstation/>
         </Box>
       )}
       {value === 1 && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: {xs:0.5, sm:3} }}>
           <RoundTripOutstation />
         </Box>
       )}

@@ -1,11 +1,9 @@
 import * as React from 'react';
 import Accordion from '@mui/material/Accordion';
-import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Button from '@mui/material/Button';
 
 import { Box } from '@mui/material';
 import { COLORS } from '@/utils/colors';
@@ -13,8 +11,8 @@ import { roboto } from '@/utils/fonts';
 
 export default function OutstationFaq() {
   return (
-    <Box sx={{my:10}}>
-        <Typography variant='h4' sx={{color:COLORS.PRIMARY,fontFamily:roboto.style,fontWeight:"bold",textAlign:"center",mb:2}}>Frequently Asked Questions?</Typography>
+    <Box sx={{my:{xs:6, sm:10}}}>
+        <Typography variant='h4' sx={{color:COLORS.PRIMARY,fontFamily:roboto.style,fontWeight:"bold",textAlign:"center",mb:3, fontSize:{xs:24, sm:30}}}>Frequently Asked Questions?</Typography>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
