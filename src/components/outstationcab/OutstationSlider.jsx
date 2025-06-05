@@ -32,7 +32,7 @@ const OutstationSlider = () => {
       }}
       
       onSwiper={(swipe) => console.log(swipe)}
-      onSlideChange={() => console.log("slide change")}
+    
       style={{marginBlock:"30px"}}
     >
       <SwiperSlide>

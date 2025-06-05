@@ -74,7 +74,8 @@ export const authenticationController = {
 
   sendEnquiry: async (data) => {
     try {
-      let result = await basicPublicApi.post("/page-one-travels", data);
+      let result = await basicPublicApi.post("/page-one-travels", 
+        data);
       return result;
     } catch (error) {
       throw error;
