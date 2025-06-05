@@ -22,7 +22,7 @@ const seatsInformation = createSlice({
 
         const seatExists = airplane.selectedSeats.some(
           (s) => s.Code === selected.Code
-        );0
+        );
 
         if (seatExists) {
           // Remove the seat if it exists
