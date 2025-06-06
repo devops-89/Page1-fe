@@ -89,7 +89,7 @@ const Header = () => {
 
   const user = useSelector((state) => state.USER.UserData);
 
-  console.log("user---------------", user)
+  // console.log("user---------------", user)
 
   const name = user?.email ? user.email.slice(0, 1) : "";
   
