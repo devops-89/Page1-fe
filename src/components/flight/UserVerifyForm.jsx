@@ -5,7 +5,7 @@ import { COLORS } from "@/utils/colors";
 import { loginTextField } from "@/utils/styles";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { useDispatch } from "react-redux";
-import { setAuthenticated } from "@/redux/reducers/user.js";
+import { setAuthenticated, setOtpEmailAuthenticated } from "@/redux/reducers/user.js";
 import { nunito } from "@/utils/fonts";
 import Loading from "react-loading";
 import { setToast } from "@/redux/reducers/toast";
@@ -70,6 +70,8 @@ const UserVerifyForm = () => {
     authenticationController
       .signUpLoginViaEmail(payload)
       .then((response) => {
+        // console.log("response------------",response)
+
         setOtpSent(response.data);
         setLoadingResend(false);
         setEnableOtpButton(false);
@@ -97,6 +99,7 @@ const UserVerifyForm = () => {
 
     authenticationController.verifyEmailOtp(payload).then((response) => {
       if (response.statusText === "OK") {
+        dispatch(setOtpEmailAuthenticated(email,response?.data?.data?.email));
         dispatch(setAuthenticated(true));
         localStorage.setItem("accesstoken", response?.data?.data?.access_token);
         setLoadingVerify(false);

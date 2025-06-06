@@ -23,9 +23,12 @@ export const USER = createSlice({
     },
     setAuthenticated : (state, actions)=>{
       return (state ={...state, isAuthenticated:actions.payload})
+    },
+    setOtpEmailAuthenticated : (state, actions)=>{
+      return (state ={...state, email:actions.payload})
     }
   },
 });
 
-export const { setUserDetails, removeUserDetails, setAuthenticated } = USER.actions;
+export const { setUserDetails, removeUserDetails, setAuthenticated, setOtpEmailAuthenticated } = USER.actions;
 export default USER.reducer;

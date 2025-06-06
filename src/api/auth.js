@@ -60,7 +60,7 @@ export const authenticationController = {
       let result = await securedApi.post("/signup_login_via_email", data);
       return result;
     } catch (error) {
-      // console.log("error----",error)
+      console.log("error----",error)
       throw error;
     }
   },
