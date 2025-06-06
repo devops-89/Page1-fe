@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Typography,
-  Box,
   Tabs,
   Tab,
-  Paper,
   useMediaQuery,
   useTheme,
   Grid2,
@@ -31,6 +29,8 @@ import Activities from "@/components/dashboard/Activities";
 import DestinationWedding from "@/components/dashboard/DestinationWedding";
 import OutstationCab from "@/components/dashboard/OutstationCab";
 import BookingGrid from "@/components/dashboard/DashboardSection";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,6 +60,8 @@ function a11yProps(index) {
 }
 
 const Dashboard = () => {
+  const isAuthenticated = useSelector((state)=>state.USER?.UserData?.isAuthenticated);
+  const router = useRouter();
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -67,6 +69,16 @@ const Dashboard = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+   useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace("/login");
+    }
+  }, [isAuthenticated, router]);
+
+  if (!isAuthenticated) {
+    return null; 
+  }
 
   return (
     <>
@@ -101,7 +113,7 @@ const Dashboard = () => {
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Grid2 container spacing={2}>
           {/* Sidebar Tabs */}
-          <Grid2 size={{ xs: 12, sm: 3, md: 2 }}>
+          <Grid2 size={{ xs: 12, sm: 3, md: 2 }} sx={{boxShadow:`1px 0px 2px ${COLORS.GREY}`}}>
             <Tabs
               orientation={isSmallScreen ? "horizontal" : "vertical"}
               variant="scrollable"
@@ -122,7 +134,7 @@ const Dashboard = () => {
                 },
                 "& .Mui-selected": {
                   backgroundColor: COLORS.PRIMARY,
-                  color:'#fff',
+                  color:'#fff!important',
                 },
                 "& .MuiTabs-indicator":{
                   display:'none'

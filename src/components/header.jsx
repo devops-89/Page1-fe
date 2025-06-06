@@ -3,7 +3,7 @@ import logo from "@/logo/logo.png";
 import { removeUserDetails } from "@/redux/reducers/user";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
-import { ShoppingBag } from "@mui/icons-material";
+// import { ShoppingBag } from "@mui/icons-material";
 import PersonIcon from '@mui/icons-material/Person';
 import {
   Avatar,
@@ -15,7 +15,6 @@ import {
   ListItemText,
   Popover,
   Stack,
-  Table,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -90,7 +89,7 @@ const Header = () => {
 
   const user = useSelector((state) => state.USER.UserData);
 
-  // console.log("user", user)
+  console.log("user---------------", user)
 
   const name = user?.email ? user.email.slice(0, 1) : "";
   
@@ -214,7 +213,7 @@ const Header = () => {
                   backgroundColor: COLORS.WHITE,
                   border: `1px solid ${COLORS.WHITE}`,
                 }}
-                onClick={() => router.push("/login")}
+                onClick={() => router.replace("/login")}
               >
                 <PersonIcon sx={{color: COLORS.PRIMARY, fontSize: {lg:14 ,sm:12 ,xs:10}, zIndex:999 }} />
               </IconButton>

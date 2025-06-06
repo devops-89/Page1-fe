@@ -21,6 +21,7 @@ const UserVerifyForm = () => {
   const [loadingVerify, setLoadingVerify] = useState(false);
   const [loadingResend, setLoadingResend] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [showOtpMessage, setShowOtpMessage] = useState(true); 
 
   useEffect(() => {
     let interval;
@@ -29,8 +30,13 @@ const UserVerifyForm = () => {
         setTimer((prev) => prev - 1);
       }, 1000);
     }
+
+    if (timer === 0 && otpSent) {
+      setShowOtpMessage(false); 
+    }
+
     return () => clearInterval(interval);
-  }, [timer]);
+  }, [timer, otpSent]);
 
   const matchIsNumeric = (text) => {
     const isNumber = typeof text === "number";
@@ -39,12 +45,10 @@ const UserVerifyForm = () => {
   };
 
   const validateChar = (value) => matchIsNumeric(value);
-
   const handleChange = (newValue) => setOtp(newValue);
 
   const validateEmail = (email) => {
-    const emailPattern =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
   };
 
@@ -61,7 +65,7 @@ const UserVerifyForm = () => {
     }
 
     setLoadingResend(true);
-    let payload = { email: email, user_type: "USER" };
+    const payload = { email: email, user_type: "USER" };
 
     authenticationController
       .signUpLoginViaEmail(payload)
@@ -69,6 +73,7 @@ const UserVerifyForm = () => {
         setOtpSent(response.data);
         setLoadingResend(false);
         setEnableOtpButton(false);
+        setShowOtpMessage(true); 
         setTimer(90);
       })
       .catch((error) => {
@@ -85,7 +90,7 @@ const UserVerifyForm = () => {
 
   const handleVerifyOtp = () => {
     setLoadingVerify(true);
-    let payload = {
+    const payload = {
       reference_id: otpSent?.data?.reference_id,
       otp: otp,
     };
@@ -150,91 +155,101 @@ const UserVerifyForm = () => {
 
       {otpSent ? (
         <>
-          <Typography sx={{ color: COLORS.GREEN }}>
-            {otpSent?.message}
-          </Typography>
+          {showOtpMessage && (
+            <Typography sx={{ color: COLORS.GREEN }}>
+              {otpSent?.message}
+            </Typography>
+          )}
+
           {timer > 0 && (
             <Typography sx={{ mt: 1 }}>
               Time remaining: {formatTime(timer)}
             </Typography>
           )}
-          <MuiOtpInput
-            className="custom-otp-input"
-            value={otp}
-            autoFocus
-            sx={{
-              ...loginTextField,
-              "& fieldset": { borderWidth: "2px!important" },
-              mb: 2,
-              mt: 2,
-              "& .MuiOtpInput-TextField": {
-                width: "40px",
-                height: "40px",
-              },
-              "& .MuiOtpInput-TextField .MuiOutlinedInput-root": {
-                fontSize: "14px",
-                padding: "5px",
-              },
-              "& .MuiOtpInput-TextField input": {
-                textAlign: "center",
-                padding: "5px",
-              },
-            }}
-            onChange={handleChange}
-            onComplete={() => setEnableOtpButton(true)}
-            length={6}
-            validateChar={validateChar}
-            disabled={!otpSent}
-          />
+
+          {timer > 0 && (
+            <MuiOtpInput
+              className="custom-otp-input"
+              value={otp}
+              autoFocus
+              sx={{
+                ...loginTextField,
+                "& fieldset": { borderWidth: "2px!important" },
+                mb: 2,
+                mt: 2,
+                "& .MuiOtpInput-TextField": {
+                  width: "40px",
+                  height: "40px",
+                },
+                "& .MuiOtpInput-TextField .MuiOutlinedInput-root": {
+                  fontSize: "14px",
+                  padding: "5px",
+                },
+                "& .MuiOtpInput-TextField input": {
+                  textAlign: "center",
+                  padding: "5px",
+                },
+              }}
+              onChange={handleChange}
+              onComplete={() => setEnableOtpButton(true)}
+              length={6}
+              validateChar={validateChar}
+              disabled={!otpSent}
+            />
+          )}
 
           <Box sx={{ display: "flex", gap: "10px" }}>
-            <Button
-              variant="contained"
-              type="button"
-              size="small"
-              onClick={handleVerifyOtp}
-              disabled={!enableOtpButton || loadingVerify}
-              sx={{
-                width: "150px",
-                backgroundColor:COLORS.PRIMARY,
-                cursor: loadingVerify ? "not-allowed" : "pointer",
-              }}
-            >
-              {loadingVerify ? (
-                <Loading
-                  type="spin"
-                  width={25}
-                  height={25}
-                  color={COLORS.WHITE}
-                />
-              ) : (
-                "Verify OTP"
-              )}
-            </Button>
+            {timer > 0 && (
+              <Button
+                variant="contained"
+                type="button"
+                size="small"
+                onClick={handleVerifyOtp}
+                disabled={!enableOtpButton || loadingVerify}
+                sx={{
+                  width: "150px",
+                  backgroundColor: COLORS.PRIMARY,
+                  cursor: loadingVerify ? "not-allowed" : "pointer",
+                }}
+              >
+                {loadingVerify ? (
+                  <Loading
+                    type="spin"
+                    width={25}
+                    height={25}
+                    color={COLORS.WHITE}
+                  />
+                ) : (
+                  "Verify OTP"
+                )}
+              </Button>
+            )}
 
-            <Button
-              variant="contained"
-              type="button"
-              size="small"
-              onClick={handleSendOtp}
-              disabled={timer > 0 || loadingResend}
-              sx={{
-                width: "150px",
-                backgroundColor: COLORS.SECONDARY,
-                cursor: loadingResend ? "not-allowed" : "pointer",
-              }}
-            >
-              {loadingResend ? (
-                <Loading
-                  type="spin"
-                  width={25}
-                  height={25}
-                  color={COLORS.WHITE}
-                />
-              ) : (
-                "Resend Code"
-              )}
-            </Button>
+            {timer === 0 && (
+              <Button
+                variant="contained"
+                type="button"
+                size="small"
+                onClick={handleSendOtp}
+                disabled={loadingResend}
+                sx={{
+                  width: "150px",
+                  backgroundColor: COLORS.SECONDARY,
+                  cursor: loadingResend ? "not-allowed" : "pointer",
+                }}
+              >
+                {loadingResend ? (
+                  <Loading
+                    type="spin"
+                    width={25}
+                    height={25}
+                    color={COLORS.WHITE}
+                  />
+                ) : (
+                  "Resend Code"
+                )}
+              </Button>
+            )}
           </Box>
         </>
       ) : (

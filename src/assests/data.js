@@ -610,20 +610,20 @@ export const data = {
   popoverData: [
     {
       label: "Dashboard",
-      url: "/profile/dashboard",
+      url: "/dashboard",
     },
-    {
-      label: "My Booking",
-      url: "/profile/my-booking",
-    },
-    {
-      label: "My Profile",
-      url: "/profile/my-profile",
-    },
-    {
-      label: "Settings",
-      url: "/profile/settings",
-    },
+    // {
+    //   label: "My Booking",
+    //   url: "/profile/my-booking",
+    // },
+    // {
+    //   label: "My Profile",
+    //   url: "/profile/my-profile",
+    // },
+    // {
+    //   label: "Settings",
+    //   url: "/profile/settings",
+    // },
     {
       label: "Logout",
       url: "/login",
