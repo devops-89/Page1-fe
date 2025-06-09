@@ -8,11 +8,11 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { roboto } from "@/utils/fonts";
-import dayjs from "dayjs";
 import { BOOKING_ENQUIRY, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch } from "react-redux";
 import { authenticationController } from "@/api/auth";
 import { setToast } from "@/redux/reducers/toast";
+import moment from "moment";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -30,7 +30,7 @@ const validationSchema = Yup.object({
   returnDate: Yup.date()
     .nullable()
     .min(Yup.ref("pickupDate"), "Return Date must be after Pickup Date"),
-  time: Yup.date().required("Time is required"),
+  pickupTime: Yup.date().required("Pickup Time is required"),
 });
 
 const RoundTripOutstation = () => {
@@ -45,19 +45,27 @@ const RoundTripOutstation = () => {
       numberOfPerson: "",
       pickupDate: null,
       returnDate: null,
-      time: null,
+      pickupTime: null,
     },
     validationSchema,
     onSubmit: (values, {resetForm}) => {
-         // console.log("Form values", values);
-          const body = {
-                 enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
-                 enquiry_description: values,
-               };
-               // console.log("body: ",body);
-               sendEnquiry(body);
-               resetForm();
+          const formattedDate = moment(values.pickupDate).format("DD-MM-YYYY");
+          const formattedReturnDate = moment(values.returnDate).format("DD-MM-YYYY");
+             const formattedTime = moment(values.pickupTime).format("HH:mm");
+         
+             const body = {
+               enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
+               enquiry_description: {
+                 ...values,
+                 returnDate:formattedReturnDate,
+                 pickupDate: formattedDate,
+                 pickupTime: formattedTime,
+               },
+             };
+              sendEnquiry(body);
+    resetForm();
        },
+        
   });
 
    const sendEnquiry = (body) => {
@@ -92,6 +100,7 @@ const RoundTripOutstation = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
+      {console.log("errors", formik)}
       <Box>
         <TextField
           name="email"
@@ -186,14 +195,14 @@ const RoundTripOutstation = () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimePicker
             label="Select Time"
-            value={formik.values.time}
-            onChange={(value) => formik.setFieldValue("time", value)}
+            value={formik.values.pickupTime}
+            onChange={(value) => formik.setFieldValue("pickupTime", value)}
             slotProps={{
               textField: {
                 size: "small",
                 fullWidth: true,
-                error: formik.touched.time && Boolean(formik.errors.time),
-                helperText: formik.touched.time && formik.errors.time,
+                error: formik.touched.pickupTime && Boolean(formik.errors.pickupTime),
+                helperText: formik.touched.pickupTime && formik.errors.pickupTime,
               },
             }}
             sx={{ my: 1 }}

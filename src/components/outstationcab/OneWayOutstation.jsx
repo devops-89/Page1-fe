@@ -14,6 +14,7 @@ import { BOOKING_ENQUIRY, TOAST_STATUS } from "@/utils/enum";
 import Loading from "react-loading";
 import { authenticationController } from "@/api/auth";
 import { useDispatch } from "react-redux";
+import moment from "moment";
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
   pickupLocation: Yup.string().required("Pickup Location is required"),
@@ -34,29 +35,34 @@ const OneWayOutstation = () => {
   const dispatch=useDispatch();
   const [loading,setLoading]=useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      pickupLocation: "",
-      dropLocation: "",
-      mobileNumber: "",
-      numberOfPerson: "",
-      pickupDate: null,
-      pickupTime: null,
-    },
-    validationSchema,
-    onSubmit: (values, {resetForm}) => {
-      // console.log("Form values", values);
-       const body = {
-              enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
-              enquiry_description: values,
-            };
-            // console.log("body: ",body);
-            sendEnquiry(body);
-            resetForm();
-    },
-  });
+ const formik = useFormik({
+  initialValues: {
+    email: "",
+    pickupLocation: "",
+    dropLocation: "",
+    mobileNumber: "",
+    numberOfPerson: "",
+    pickupDate: null,
+    pickupTime: null,
+  },
+  validationSchema,
+  onSubmit: (values, { resetForm }) => {
+    const formattedDate = moment(values.pickupDate).format("DD-MM-YYYY");
+    const formattedTime = moment(values.pickupTime).format("HH:mm");
 
+    const body = {
+      enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
+      enquiry_description: {
+        ...values,
+        pickupDate: formattedDate,
+        pickupTime: formattedTime,
+      },
+    };
+
+    sendEnquiry(body);
+    resetForm();
+  },
+});
   const sendEnquiry = (body) => {
       setLoading(true);
       authenticationController
