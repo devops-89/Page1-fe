@@ -45,14 +45,15 @@ const OneWayOutstation = () => {
       pickupTime: null,
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Form values", values);
+    onSubmit: (values, {resetForm}) => {
+      // console.log("Form values", values);
        const body = {
               enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
               enquiry_description: values,
             };
-            console.log("body: ",body);
+            // console.log("body: ",body);
             sendEnquiry(body);
+            resetForm();
     },
   });
 
@@ -61,7 +62,7 @@ const OneWayOutstation = () => {
       authenticationController
         .sendEnquiry(body)
         .then((res) => {
-          console.log("res", res);
+          // console.log("res", res);
           dispatch(
             setToast({
               open: true,
@@ -69,11 +70,10 @@ const OneWayOutstation = () => {
               severity: TOAST_STATUS.SUCCESS,
             })
           );
-          closeModal();
           setLoading(false);
         })
         .catch((err) => {
-          console.log("err", err);
+          // console.log("err", err);
           dispatch(
             setToast({
               open: true,

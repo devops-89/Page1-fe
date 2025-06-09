@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import { COLORS } from "@/utils/colors";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -9,6 +9,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { roboto } from "@/utils/fonts";
 import dayjs from "dayjs";
+import { BOOKING_ENQUIRY, TOAST_STATUS } from "@/utils/enum";
+import { useDispatch } from "react-redux";
+import { authenticationController } from "@/api/auth";
+import { setToast } from "@/redux/reducers/toast";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -30,6 +34,8 @@ const validationSchema = Yup.object({
 });
 
 const RoundTripOutstation = () => {
+  const dispatch=useDispatch();
+  const [loading,setLoading]=useState(false);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -42,11 +48,47 @@ const RoundTripOutstation = () => {
       time: null,
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Submitted values:", values);
-      // API call or booking logic here
-    },
+    onSubmit: (values, {resetForm}) => {
+         // console.log("Form values", values);
+          const body = {
+                 enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
+                 enquiry_description: values,
+               };
+               // console.log("body: ",body);
+               sendEnquiry(body);
+               resetForm();
+       },
   });
+
+   const sendEnquiry = (body) => {
+        setLoading(true);
+        authenticationController
+          .sendEnquiry(body)
+          .then((res) => {
+            // console.log("res", res);
+            dispatch(
+              setToast({
+                open: true,
+                message: "Enquiry Submitted Successfully",
+                severity: TOAST_STATUS.SUCCESS,
+              })
+            );
+            setLoading(false);
+          })
+          .catch((err) => {
+            // console.log("err", err);
+            dispatch(
+              setToast({
+                open: true,
+                message: err.message,
+                severity: TOAST_STATUS.ERROR,
+              })
+            );
+            setLoading(false);
+          });
+      };
+
+
 
   return (
     <form onSubmit={formik.handleSubmit}>

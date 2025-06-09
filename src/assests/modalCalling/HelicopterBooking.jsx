@@ -33,6 +33,7 @@ import { Grid } from "swiper/modules";
 
 const HelicopterBooking = () => {
   const dispatch = useDispatch();
+  const [activeStep, setActiveStep] = useState(0);
 
   const closeModal = () => {
     dispatch(hideModal());

@@ -1,22 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import {data} from "@/assests/data";
+import { data } from "@/assests/data";
 import { activityFormSchema } from "@/utils/validationSchema";
-import {
-  Box,
-  Button,
-  TextField,
-  MenuItem,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { Box, Button, TextField, MenuItem, Typography } from "@mui/material";
 import { COLORS } from "@/utils/colors";
+import { BOOKING_ENQUIRY } from "@/utils/enum";
+import { userSendEnquiry } from "@/assests/apicalling/enquiry";
 
-
-
-
+import Loading from "react-loading";
+import { useDispatch } from "react-redux";
+import { hideModal } from "@/redux/reducers/modal";
 
 const ActivityForm = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -26,10 +25,18 @@ const ActivityForm = () => {
       message: "",
     },
     validationSchema: activityFormSchema,
-    onSubmit: (values,{resetForm}) => {
-      console.log("Form data", values);
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
+      const body = {
+        enquiry_type: BOOKING_ENQUIRY.ACTIVITIES,
+        enquiry_description: values,
+      };
+      await userSendEnquiry({ data: body, setLoading, dispatch, setActiveStep:setActiveStep });
       resetForm();
-    
+      setTimeout(()=>{
+ dispatch(hideModal());
+      },1500)
+     
     },
   });
 
@@ -41,7 +48,6 @@ const ActivityForm = () => {
         display: "flex",
         flexDirection: "column",
         gap: 2,
-        p: 2,
       }}
     >
       <Typography variant="h5" sx={{ mb: 2 }}>
@@ -49,7 +55,7 @@ const ActivityForm = () => {
       </Typography>
 
       <TextField
-      size="small"
+        size="small"
         fullWidth
         id="name"
         name="name"
@@ -58,23 +64,23 @@ const ActivityForm = () => {
         onChange={formik.handleChange}
         error={formik.touched.name && Boolean(formik.errors.name)}
         helperText={formik.touched.name && formik.errors.name}
-      sx={{
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: COLORS.PRIMARY, 
-      },
-    },
-    '& .MuiInputLabel-root': {
-      color: 'gray', 
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: COLORS.PRIMARY,
-    },
-  }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: COLORS.PRIMARY,
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: "gray",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: COLORS.PRIMARY,
+          },
+        }}
       />
 
       <TextField
-      size="small"
+        size="small"
         fullWidth
         id="email"
         name="email"
@@ -84,23 +90,23 @@ const ActivityForm = () => {
         onChange={formik.handleChange}
         error={formik.touched.email && Boolean(formik.errors.email)}
         helperText={formik.touched.email && formik.errors.email}
-          sx={{
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: COLORS.PRIMARY, 
-      },
-    },
-    '& .MuiInputLabel-root': {
-      color: 'gray', 
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: COLORS.PRIMARY,
-    },
-  }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: COLORS.PRIMARY,
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: "gray",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: COLORS.PRIMARY,
+          },
+        }}
       />
 
       <TextField
-      size="small"
+        size="small"
         fullWidth
         id="mobile"
         name="mobile"
@@ -110,19 +116,19 @@ const ActivityForm = () => {
         onChange={formik.handleChange}
         error={formik.touched.mobile && Boolean(formik.errors.mobile)}
         helperText={formik.touched.mobile && formik.errors.mobile}
-          sx={{
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: COLORS.PRIMARY, 
-      },
-    },
-    '& .MuiInputLabel-root': {
-      color: 'gray', 
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: COLORS.PRIMARY,
-    },
-  }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: COLORS.PRIMARY,
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: "gray",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: COLORS.PRIMARY,
+          },
+        }}
       />
 
       <TextField
@@ -136,19 +142,19 @@ const ActivityForm = () => {
         onChange={formik.handleChange}
         error={formik.touched.activity && Boolean(formik.errors.activity)}
         helperText={formik.touched.activity && formik.errors.activity}
-          sx={{
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: COLORS.PRIMARY, 
-      },
-    },
-    '& .MuiInputLabel-root': {
-      color: 'gray', 
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: COLORS.PRIMARY,
-    },
-  }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: COLORS.PRIMARY,
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: "gray",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: COLORS.PRIMARY,
+          },
+        }}
       >
         {data.activitiesPage.activityCategories.map((option, index) => (
           <MenuItem key={index} value={option}>
@@ -158,7 +164,7 @@ const ActivityForm = () => {
       </TextField>
 
       <TextField
-      size="small"
+        size="small"
         fullWidth
         id="message"
         name="message"
@@ -169,29 +175,32 @@ const ActivityForm = () => {
         onChange={formik.handleChange}
         error={formik.touched.message && Boolean(formik.errors.message)}
         helperText={formik.touched.message && formik.errors.message}
-          sx={{
-    '& .MuiOutlinedInput-root': {
-      '&.Mui-focused fieldset': {
-        borderColor: COLORS.PRIMARY, 
-      },
-    },
-    '& .MuiInputLabel-root': {
-      color: 'gray', 
-    },
-    '& .MuiInputLabel-root.Mui-focused': {
-      color: COLORS.PRIMARY,
-    },
-  }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: COLORS.PRIMARY,
+            },
+          },
+          "& .MuiInputLabel-root": {
+            color: "gray",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: COLORS.PRIMARY,
+          },
+        }}
       />
 
-      <Button 
-      size="small"
-       
-        variant="contained" 
+      <Button
+        size="small"
+        variant="contained"
         type="submit"
-        sx={{ mt: 2,bgcolor:COLORS.PRIMARY,color:COLORS.WHITE }}
+        sx={{ mt: 2, bgcolor: COLORS.PRIMARY, color: COLORS.WHITE }}
       >
-        Submit
+        {loading ? (
+          <Loading type="bars" color={COLORS.BLACK} width={20} height={20} />
+        ) : (
+          "Submit"
+        )}
       </Button>
     </Box>
   );

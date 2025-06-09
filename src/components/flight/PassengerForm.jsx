@@ -19,6 +19,7 @@ import { JOURNEY_TYPE } from "@/utils/enum";
 import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
 
 const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
+
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
