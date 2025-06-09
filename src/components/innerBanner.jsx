@@ -9,7 +9,7 @@ const InnerBanner = ({ img, heading }) => {
       <Box
         sx={{
           backgroundImage: `url(${img})`,
-          height: 200,
+          height: 250,
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
