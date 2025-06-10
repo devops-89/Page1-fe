@@ -50,6 +50,7 @@ const OneWayOutstation = () => {
     const formattedDate = moment(values.pickupDate).format("DD-MM-YYYY");
     const formattedTime = moment(values.pickupTime).format("HH:mm");
 
+
     const body = {
       enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
       enquiry_description: {
