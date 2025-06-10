@@ -23,7 +23,7 @@ const VerifyOtp = () => {
     authenticationController
       .verifyOtp(body)
       .then((res) => {
-        localStorage.setItem("accessToken", res.data.data.accessToken);
+        localStorage.setItem("access_token", res.data.data.accessToken);
         setLoading(false);
         dispatch(
           setToast({

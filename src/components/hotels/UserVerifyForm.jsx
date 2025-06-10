@@ -93,7 +93,7 @@ const UserVerifyForm = () => {
     authenticationController.verifyEmailOtp(payload).then((response) => {
       if (response.statusText === "OK") {
         dispatch(setAuthenticated(true));
-        localStorage.setItem("accesstoken", response?.data?.data?.access_token);
+        localStorage.setItem("access_token", response?.data?.data?.access_token);
         setLoadingVerify(false);
         dispatch(
           setToast({

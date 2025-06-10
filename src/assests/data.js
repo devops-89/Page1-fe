@@ -702,17 +702,17 @@ export const data = {
     {
       icon: <Email />,
       contactType: "Email Address",
-      contactInfo: "dreamtourinfo@example.com",
+      contactInfo: "info@page1travels.com",
     },
     {
       icon: <Phone />,
       contactType: "Phone Number",
-      contactInfo: "+1 81649 48103",
+      contactInfo: "+91 7977512494",
     },
     {
       icon: <LocationOn />,
       contactType: "Our Location",
-      contactInfo: "2077 Chicago Avenue Orosi, CA 93647",
+      contactInfo: "Ghaziabad, UP, 201002",
     },
   ],
 
