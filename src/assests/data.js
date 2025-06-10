@@ -415,22 +415,24 @@ export const data = {
   ],
   destinations: [
     {
-      label: "United States",
+      label: "Our Hotels",
+      url: "/our-hotels",
     },
     {
-      label: "United Kingdom",
+      label: "Destination Wedding",
+      url: "/destination-wedding",
     },
     {
-      label: "Australia",
+      label: "Self Drive",
+      url: "/self-drive",
     },
     {
-      label: "india",
+      label: "Outstation Cabs",
+      url: "/outstation-cabs",
     },
     {
-      label: "South Africa",
-    },
-    {
-      label: "Indonesia",
+      label: "Activities",
+      url: "/activities",
     },
   ],
   cards: [
