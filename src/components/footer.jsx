@@ -151,6 +151,7 @@ const Footer = () => {
                 <ListItemButton key={i} sx={{ padding: 0, mb: 1 }}>
                   <ListItemText
                     primary={
+                     <Link href={val.url} style={{textDecoration:"none",color:"black"}}>
                       <Typography
                         sx={{
                           fontSize: {lg:15 ,sm:15, xs:13},
@@ -162,6 +163,7 @@ const Footer = () => {
                       >
                         {val.label}
                       </Typography>
+                      </Link>
                     }
                   />
                 </ListItemButton>

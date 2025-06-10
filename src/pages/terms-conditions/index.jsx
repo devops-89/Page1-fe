@@ -1,54 +1,58 @@
-import InnerBanner from '@/components/innerBanner'
+import InnerBanner from "@/components/innerBanner";
 import backgroundImage from "@/banner/privacy-policy.jpg";
-import { Container, Typography } from '@mui/material'
-import React from 'react'
-import { nunito } from '@/utils/fonts';
+import { Container, Typography } from "@mui/material";
+import React from "react";
+import { roboto } from "@/utils/fonts";
 
-const PrivacyPolicy = () => {
+const TermsAndConditions = () => {
   return (
     <>
-    <InnerBanner img={backgroundImage.src} heading={"Our Terms & Conditions"} />
-    <Container sx={{py:{xs:4, sm:6, md:8}}}>
-        <Typography variant='body1' sx={{fontFamily:nunito.style}}>
-            We care about data privacy and security. By using the Site, you agree to be bound by our Privacy Policy, which is incorporated into these Terms of Use. Please be advised the Site is hosted in India.
-            <br/> <br/>
-If you access the Site from the European Union, Asia, or any other region of the world with laws or other requirements governing personal data collection, use, or disclosure that differ from applicable laws in India, then through your continued use of the Site, you are transferring your data to India, and you expressly consent to have your data transferred to and processed in India.
- <br/> <br/>
-We respect the intellectual property rights of others. If you believe that any material available on or through the Site infringes upon any copyright you own or control, please immediately notify our Designated Copyright Agent using the contact information provided below (a “Notification”).
- <br/> <br/>
-A copy of your Notification will be sent to the person who posted or stored the material addressed in the Notification. Please be advised that pursuant to federal law you may be held liable for damages if you make material misrepresentations in a Notification. Thus, if you are not sure that material located on or linked to by the Site infringes your copyright, you should consider first contacting an attorney.
- <br/> <br/>
-(1) A physical or electronic signature of a person authorized to act on behalf of the owner of an exclusive right that is allegedly infringed.
- <br/> <br/>
-(2) Identification of the copyrighted work claimed to have been (2) Identification of the copyrighted work claimed to have been infringed, or, if multiple copyrighted works on the Site are covered by the Notification, a representative list of such works on the Site.
- <br/> <br/>
-(3) Identification of the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit us to locate the material.
- <br/> <br/>
-(4) Information reasonably sufficient to permit us to contact the complaining party, such as an address, telephone number, and, if available, an email address at which the complaining party may be contacted.
- <br/> <br/>
-(5) A statement that the complaining party has a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law.
- <br/> <br/>
-(6) A statement that the information in the notification is accurate, and under penalty of perjury, that the complaining party is authorized to act on behalf of the owner of an exclusive right that is allegedly infringed upon.
- <br/> <br/>
-(7) Identification of the material that has been removed or disabled and the location at which the material appeared before it was removed or disabled.
- <br/> <br/>
-(8) A statement that you consent to the jurisdiction of the court in which your address is located, or if your address is outside India, for any judicial district in which we are located.
- <br/> <br/>
-(9) A statement that you will accept service of process from the party that filed the Notification or the party’s agent.
- <br/> <br/>
-(10) your name, address, and telephone number.
- <br/> <br/>
-(11) A statement under penalty of perjury that you have a good faith belief that the material in question was removed or disabled as a result of a mistake or misidentification of the material to be removed or disabled.
- <br/> <br/>
-(12) Your physical or electronic signature.
- <br/> <br/>
-If you send us a valid, written Counter Notification meeting the requirements described above, we will restore your removed or disabled material, unless we first receive notice from the party filing the Notification informing us that such party has filed a court action to restrain you from engaging in infringing activity related to the material in question.
- <br/> <br/>
-Please note that if you materially misrepresent that the disabled or removed content was removed by mistake or misidentification, you may be liable for damages, including costs and attorney’s fees. Filing a false Counter Notification constitutes perjury.
+      <InnerBanner
+        img={backgroundImage.src}
+        heading={"Terms & Conditions"}
+      />
+      <Container sx={{ py: { xs: 4, sm: 6, md: 8 } }}>
+        <Typography variant="body1" sx={{ fontFamily: roboto.style }}>
+          Welcome to our website. These Terms and Conditions ("Terms") govern your access to and use of our website and services. By accessing or using the site, you agree to be bound by these Terms in full. If you do not agree with any part of these Terms, please do not use our services.
+          <br /> <br />
+          <strong>1. Eligibility and Account Responsibility</strong><br />
+          You must be at least 18 years of age or the legal age of majority in your jurisdiction to use our website. You agree to provide accurate and complete registration information and to update your information as necessary. You are solely responsible for maintaining the confidentiality of your account and password.
+          <br /> <br />
+          <strong>2. Use of the Site</strong><br />
+          You agree not to use the website for any purpose that is unlawful, harmful, or prohibited by these Terms. You may not use the site in any manner that could damage, disable, overburden, or impair our servers or interfere with any other party's use of the site.
+          <br /> <br />
+          <strong>3. Intellectual Property</strong><br />
+          All content, trademarks, logos, service marks, and data on this website—including text, graphics, software, images, and layout—are the property of or licensed to us and are protected by applicable intellectual property laws. You may not reproduce, distribute, modify, or use any content without prior written consent.
+          <br /> <br />
+          <strong>4. User-Generated Content</strong><br />
+          If you post or submit any content to our website, including reviews, comments, or messages, you grant us a worldwide, royalty-free, perpetual license to use, reproduce, modify, publish, and display such content in connection with our services. You represent that you own or have rights to submit such content and that it does not infringe on any third-party rights.
+          <br /> <br />
+          <strong>5. Third-Party Links</strong><br />
+          Our site may contain links to third-party websites. These links are provided solely for your convenience. We do not endorse or assume responsibility for any third-party site, including their content, policies, or practices. Your use of any third-party site is at your own risk.
+          <br /> <br />
+          <strong>6. Disclaimer of Warranties</strong><br />
+          The website and services are provided "as is" and "as available" without any warranties, express or implied. We do not warrant that the services will be uninterrupted, error-free, or secure, or that defects will be corrected.
+          <br /> <br />
+          <strong>7. Limitation of Liability</strong><br />
+          In no event shall we, our affiliates, directors, or employees be liable for any indirect, incidental, special, or consequential damages arising from or related to your use of or inability to use the website, even if we have been advised of the possibility of such damages.
+          <br /> <br />
+          <strong>8. Indemnification</strong><br />
+          You agree to indemnify and hold harmless our company, its affiliates, officers, agents, and employees from any claim or demand made by any third party due to or arising out of your use of the site, your violation of these Terms, or your violation of any rights of another.
+          <br /> <br />
+          <strong>9. Termination</strong><br />
+          We reserve the right to suspend or terminate your access to the website at any time, without notice, for conduct that we believe violates these Terms or is harmful to other users or our operations.
+          <br /> <br />
+          <strong>10. Changes to Terms</strong><br />
+          We may revise these Terms at any time without prior notice. By continuing to use the website after changes are made, you agree to be bound by the updated Terms. It is your responsibility to check this page regularly.
+          <br /> <br />
+          <strong>11. Governing Law & Dispute Resolution</strong><br />
+          These Terms are governed by and construed in accordance with the laws of India. Any disputes arising from these Terms shall be subject to the exclusive jurisdiction of the courts of [Your City], India.
+          <br /> <br />
+         
         </Typography>
-    </Container>
+      </Container>
     </>
-  )
-}
+  );
+};
 
-export default PrivacyPolicy
+export default TermsAndConditions;

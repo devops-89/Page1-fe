@@ -410,7 +410,7 @@ export const data = {
     },
     {
       label: "Terms & Conditions",
-      url: "/terms-&-conditions",
+      url: "/terms-conditions",
     },
   ],
   destinations: [
