@@ -47,23 +47,24 @@ const OneWayOutstation = () => {
   },
   validationSchema,
   onSubmit: (values, { resetForm }) => {
-    const formattedDate = moment(values.pickupDate).format("DD-MM-YYYY");
-    const formattedTime = moment(values.pickupTime).format("HH:mm");
+  const formattedDate = moment(values.pickupDate?.toDate()).format("DD-MM-YYYY");
+  const formattedTime = moment(values.pickupTime?.toDate()).format("HH:mm");
 
-    const body = {
-      enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
-      enquiry_description: {
-        ...values,
-        pickupDate: formattedDate,
-        pickupTime: formattedTime,
-      },
-    };
+  const body = {
+    enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
+    enquiry_description: {
+      ...values,
+      pickupDate: formattedDate,
+      pickupTime: formattedTime,
+    },
+  };
 
-    sendEnquiry(body);
-    resetForm();
-  },
+  sendEnquiry(body);
+  resetForm();
+},
 });
   const sendEnquiry = (body) => {
+    console.log("body:",body)
       setLoading(true);
       authenticationController
         .sendEnquiry(body)
