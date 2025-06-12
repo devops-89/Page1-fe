@@ -46,7 +46,7 @@ const OneWayOutstation = () => {
     pickupTime: null,
   },
   validationSchema,
-  onSubmit: (values, { resetForm }) => {
+ onSubmit: (values, { resetForm }) => {
   const formattedDate = moment(values.pickupDate?.toDate()).format("DD-MM-YYYY");
   const formattedTime = moment(values.pickupTime?.toDate()).format("HH:mm");
 
@@ -58,7 +58,7 @@ const OneWayOutstation = () => {
       pickupTime: formattedTime,
     },
   };
-
+ 
   sendEnquiry(body);
   resetForm();
 },

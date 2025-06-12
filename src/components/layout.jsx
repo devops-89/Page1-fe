@@ -27,7 +27,7 @@ const Layout = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
 
   const getDetails = () => {
-    if (isAuthenticated || localStorage.getItem("accesstoken")) {
+    if (isAuthenticated || localStorage.getItem("access_token")) {
       authenticationController
         .getUserDetails()
         .then((res) => {
@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("accesstoken")) {
+    if (localStorage.getItem("access_token")) {
       getDetails();
     }
   });

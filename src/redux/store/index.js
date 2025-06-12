@@ -24,7 +24,7 @@ const storage = createIndexedDBStorage("TRDB");
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["HOTEL"],
+  whitelist: ["HOTEL", "USER"],
 };
 
 const rootReducer = combineReducers({

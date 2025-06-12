@@ -34,25 +34,25 @@ const hotelPublicApi = axios.create({
 });
 
 userSecuredApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accesstoken");
+  const token = localStorage.getItem("access_token");
   config.headers.accesstoken = token;
   return config;
 });
 
 securedApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accesstoken");
+  const token = localStorage.getItem("access_token");
   config.headers.accesstoken = token;
   return config;
 });
 
 securedFlightApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accesstoken");
+  const token = localStorage.getItem("access_token");
   config.headers.accesstoken = token;
   return config;
 });
 
 securedPaymentUrl.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accesstoken");
+  const token = localStorage.getItem("access_token");
   config.headers.accesstoken = token;
   return config;
 });
