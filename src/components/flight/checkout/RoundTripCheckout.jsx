@@ -1,33 +1,30 @@
+import { paymentController } from "@/api/paymentController";
+import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
+import { COLORS } from "@/utils/colors";
+import { JOURNEY } from "@/utils/enum";
+import { nunito } from "@/utils/fonts";
+import Loader from "@/utils/Loader";
+import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import {
-  Container,
-  Divider,
-  Stack,
   Box,
-  Typography,
-  FormControlLabel,
   Button,
   Checkbox,
+  Container,
+  FormControlLabel,
   Grid2,
- 
+  Stack,
+  Typography,
   useMediaQuery
 } from "@mui/material";
-import { COLORS } from "@/utils/colors";
-import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
-import { nunito } from "@/utils/fonts";
+import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import FareSummary from "../FareSummary";
-import InternationalDetail from "../internationalDetail";
-import DomesticDetail from "../domesticDetail";
-import { JOURNEY } from "@/utils/enum";
-import RoundFareSummary from "../RoundFareSummary";
-import moment from "moment";
-import { paymentController } from "@/api/paymentController";
 import Loading from "react-loading";
-import Loader from "@/utils/Loader";
-import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
+import { useSelector } from "react-redux";
+import DomesticDetail from "../domesticDetail";
+import InternationalDetail from "../internationalDetail";
 import InternationalFareSummary from "../InternationalFareSummary";
+import RoundFareSummary from "../RoundFareSummary";
 
 export default function RoundTripCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
