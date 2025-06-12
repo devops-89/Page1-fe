@@ -57,7 +57,7 @@ const HotelDetails = () => {
   // extracting data from redux of hotel details
   const hotels = useSelector((state) => state.HOTEL.HotelList.hotelList || []);
 
-  console.log("Total Hotels: ", hotels);
+  // console.log("Total Hotels: ", hotels);
 
   const [open, setOpen] = React.useState(false);
   const [roomType, setRoomType] = React.useState("");
@@ -69,7 +69,7 @@ const HotelDetails = () => {
     );
   }, [query.slug]);
 
-  console.log("selected Hotel Data:", selectedHotel);
+  // console.log("selected Hotel Data:", selectedHotel);
 
   const handleChange = (event) => {
     setRoomType(event.target.value);
@@ -548,7 +548,7 @@ const HotelDetails = () => {
             py: "30px",
           }}
         >
-          <Box>
+          {/* <Box>
             <FormControl sx={{ width: 180 }}>
               <InputLabel
                 id="demo-simple-select-label"
@@ -579,7 +579,7 @@ const HotelDetails = () => {
                 </MenuItem>
               </Select>
             </FormControl>
-          </Box>
+          </Box> */}
 
           {selectedHotel?.Rooms?.map((room, index) => {
             return (
@@ -834,7 +834,9 @@ const HotelDetails = () => {
                           >
                             Day-wise Base Prices:
                           </Typography>
-                          <List sx={{ listStyleType: "disc", ml: 3 }}>
+                          {/* {console.log("room---------", room?.DayRates[0])} */}
+                          <Typography sx={{fontFamily: nunito.style, fontWeight:600}}>₹ {room?.DayRates[0][0]?.BasePrice}</Typography>
+                          {/* <List sx={{ listStyleType: "disc", ml: 3 }}>
                             {room.DayRates[0].map((rate, i) => (
                               <ListItem
                                 key={i}
@@ -844,10 +846,10 @@ const HotelDetails = () => {
                                   fontFamily: nunito.style,
                                 }}
                               >
-                                ₹ {rate.BasePrice}
+                                
                               </ListItem>
                             ))}
-                          </List>
+                          </List> */}
                         </Box>
                       )}
                     </Grid2>
