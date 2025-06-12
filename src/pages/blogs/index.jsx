@@ -38,7 +38,7 @@ export default function Blogs() {
           </Typography>
         </Box>
       </Box>
-      <Container>
+      <Container sx={{ mb: 2 }}>
         <Box sx={{ mt: 2 }}>
           <Grid2 container spacing={4}>
             {BLOG_DATA.map((val, i) => (
@@ -47,6 +47,7 @@ export default function Blogs() {
                   img={val.image}
                   title={val.title}
                   description={val.shortDescription}
+                  id={val.id}
                 />
               </Grid2>
             ))}
