@@ -47,8 +47,8 @@ const OneWayOutstation = () => {
   },
   validationSchema,
  onSubmit: (values, { resetForm }) => {
-  const formattedDate = moment(values.pickupDate?.toDate()).format("DD-MM-YYYY");
-  const formattedTime = moment(values.pickupTime?.toDate()).format("HH:mm");
+  const formattedDate = dayjs(values.pickupDate).format("DD-MM-YYYY");
+  const formattedTime = dayjs(values.pickupTime).format("HH:mm");
 
   const body = {
     enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
@@ -58,7 +58,7 @@ const OneWayOutstation = () => {
       pickupTime: formattedTime,
     },
   };
- 
+  
   sendEnquiry(body);
   resetForm();
 },

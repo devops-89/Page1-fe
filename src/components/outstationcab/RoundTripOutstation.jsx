@@ -12,7 +12,7 @@ import { BOOKING_ENQUIRY, TOAST_STATUS } from "@/utils/enum";
 import { useDispatch } from "react-redux";
 import { authenticationController } from "@/api/auth";
 import { setToast } from "@/redux/reducers/toast";
-import moment from "moment";
+import dayjs from "dayjs"
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -48,23 +48,28 @@ const RoundTripOutstation = () => {
       pickupTime: null,
     },
     validationSchema,
-    onSubmit: (values, {resetForm}) => {
-          const formattedDate = moment(values.pickupDate).format("DD-MM-YYYY");
-          const formattedReturnDate = moment(values.returnDate).format("DD-MM-YYYY");
-             const formattedTime = moment(values.pickupTime).format("HH:mm");
-         
-             const body = {
-               enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
-               enquiry_description: {
-                 ...values,
-                 returnDate:formattedReturnDate,
-                 pickupDate: formattedDate,
-                 pickupTime: formattedTime,
-               },
-             };
-              sendEnquiry(body);
-    resetForm();
-       },
+   onSubmit: (values, { resetForm }) => {
+  const formattedDate = dayjs(values.pickupDate).format("DD-MM-YYYY");
+  const formattedReturnDate = values.returnDate
+    ? dayjs(values.returnDate).format("DD-MM-YYYY")
+    : null;
+  const formattedTime = dayjs(values.pickupTime).format("HH:mm");
+
+  const body = {
+    enquiry_type: BOOKING_ENQUIRY.OUTSTATION_CABS,
+    enquiry_description: {
+      ...values,
+      pickupDate: formattedDate,
+      returnDate: formattedReturnDate,
+      pickupTime: formattedTime,
+    },
+  };
+
+ 
+
+  sendEnquiry(body);
+  resetForm();
+}
         
   });
 

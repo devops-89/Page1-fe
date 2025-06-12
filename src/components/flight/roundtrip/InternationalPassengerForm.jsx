@@ -145,6 +145,8 @@ const InternationalPassengerForm = ({
     ServiceFee,
   } = flightDetails?.[0]?.Results?.Fare || {};
 
+   console.log("final Payload:",payload);
+
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
     if (storedState) {
@@ -277,6 +279,10 @@ const InternationalPassengerForm = ({
           AdditionalTxnFeePub: fare.AdditionalTxnFeePub || 0,
         })) || [],
     };
+console.log("common payload: ",commonPayload);
+   
+
+   
 
     const passengerDetails = {
       adult:
@@ -398,10 +404,16 @@ const InternationalPassengerForm = ({
         }) || [],
     };
 
+     
+     console.log("passengerDeatil:",passengerDetails)
+
     const finalPayload = {
       ...commonPayload,
       passenger_details: passengerDetails,
     };
+
+    
+    
 
     setPayload(finalPayload);
     console.log("finalpayload", finalPayload);
@@ -410,6 +422,7 @@ const InternationalPassengerForm = ({
   const currentValidationSchema = validationSchema(isGSTMandatory);
 
   useEffect(() => {
+    
     if (payload.trace_id) {
       const bookingPromise = flightDetails?.[0]?.Results?.IsLCC
         ? flightController.oneWayBookingLLC(payload)
