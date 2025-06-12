@@ -279,17 +279,15 @@ const InternationalPassengerForm = ({
           AdditionalTxnFeePub: fare.AdditionalTxnFeePub || 0,
         })) || [],
     };
-console.log("common payload: ",commonPayload);
-   
 
-   
 
+    console.log("value--------------", values)
     const passengerDetails = {
       adult:
         values?.adult?.map((passenger, index) => {
           let gender = "Other";
 
-          switch (passenger.title) {
+          switch (passenger?.title) {
             case "Mr":
               gender = "Male";
               break;
@@ -308,30 +306,30 @@ console.log("common payload: ",commonPayload);
             contact_no: phoneNumber,
 
             date_of_birth: isBirthdayRequired
-              ? passenger.date_of_birth
-              : passenger.date_of_birth || null,
+              ? passenger?.date_of_birth
+              : passenger?.date_of_birth || null,
 
             gender: gender,
             pax_type: 1,
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic:
+            MealDynamic: selectedMeals &&
               selectedMeals[`adult-${index}`]?.meals?.map(
                 (single) => single?.meal
               ) || null,
-            Baggage:
+            Baggage: selectedBaggages &&
               selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(
                 (single) => single?.selectedBaggage
               ) || null,
-            SeatDynamic: [...adultSeatsOutgoing[index], ...adultSeatsReturn[index]] || null,
+            SeatDynamic: (adultSeatsOutgoing?.[index] || adultSeatsReturn?.[index]) ? [...adultSeatsOutgoing[index], ...adultSeatsReturn[index]] : null,
           };
         }) || [],
       child:
         values?.child?.map((passenger, index) => {
           let gender = "Other";
 
-          switch (passenger.title) {
+          switch (passenger?.title) {
             case "Mr":
               gender = "Male";
               break;
@@ -350,30 +348,30 @@ console.log("common payload: ",commonPayload);
             contact_no: phoneNumber,
 
             date_of_birth: isBirthdayRequired
-              ? passenger.date_of_birth
-              : passenger.date_of_birth || null,
+              ? passenger?.date_of_birth
+              : passenger?.date_of_birth || null,
 
             gender: gender,
             pax_type: 2,
             is_lead_pax: false,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic:
+            MealDynamic: selectedMeals &&
               selectedMeals[`child-${index}`]?.meals?.map(
                 (single) => single?.meal
               ) || null,
-            Baggage:
+            Baggage: selectedBaggages &&
               selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
                 (single) => single?.selectedBaggage
               ) || null,
-            SeatDynamic: [...childSeatsOutgoing[index], ...childSeatsReturn[index]] || null,
+            SeatDynamic: (childSeatsOutgoing || childSeatsReturn) ? [...childSeatsOutgoing[index], ...childSeatsReturn[index]] : null,
           };
         }) || [],
       infant:
         values?.infant?.map((passenger, index) => {
           let gender = "Other";
 
-          switch (passenger.title) {
+          switch (passenger?.title) {
             case "Mr":
               gender = "Male";
               break;
@@ -392,8 +390,8 @@ console.log("common payload: ",commonPayload);
             contact_no: phoneNumber,
 
             date_of_birth: isBirthdayRequired
-              ? passenger.date_of_birth
-              : passenger.date_of_birth || null,
+              ? passenger?.date_of_birth
+              : passenger?.date_of_birth || null,
 
             gender: gender,
             pax_type: 3,
@@ -404,8 +402,7 @@ console.log("common payload: ",commonPayload);
         }) || [],
     };
 
-     
-     console.log("passengerDeatil:",passengerDetails)
+    console.log("passengerDetails----------", passengerDetails)
 
     const finalPayload = {
       ...commonPayload,
