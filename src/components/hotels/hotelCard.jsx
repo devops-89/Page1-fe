@@ -182,13 +182,13 @@ const twoAttractionsHTML = getFirstTwoAttractions(attractionsHTML);
                   variant="h5"
                   sx={{ fontFamily: nunito.style, fontWeight: 700, pt:3 }}
                 >
-                  ₹ {hotel?.Rooms[0]?.TotalFare}
+                  ₹ {hotel?.Rooms[0]?.TotalFare.toFixed(2)}
                 </Typography>
                 <Typography
                   variant="body1"
                   sx={{ fontFamily: nunito.style, fontWeight: 500, color:COLORS.DARKGREY }}
                 >
-                 Tax - ₹ {hotel?.Rooms[0]?.TotalTax}
+                 Tax - ₹ {hotel?.Rooms[0]?.TotalTax.toFixed(2)}
                 </Typography>
                 <Link
                   href={`/hotel-list/${hotel?.HotelCode}/hotel-details`}

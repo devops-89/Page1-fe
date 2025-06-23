@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import {
   Box,
   Card,
@@ -12,24 +12,108 @@ import {
   Grid2,
   Button,
 } from "@mui/material";
+
 import { useSelector } from "react-redux";
 import StarIcon from "@mui/icons-material/Star";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
+import { hotelController } from "@/api/hotelController";
+import ReactLoading from 'react-loading';
 import { data } from "@/assests/data";
 import UserVerifyForm from "@/components/hotels/UserVerifyForm";
 import GuestForm from "@/components/hotels/GuestForm";
 import moment from "moment";
+import { useRouter } from "next/router";
 
 const HotelPreBookPage = () => {
+
+  // make router instance for extracting instance
+   const router=useRouter();
+
+  // making state variables for preBook Api Call
+  const [preBookResponse,setPreBookResponse]=useState(null);
+  const [loading,setLoading]=useState(true);
+  const [error,setError]=useState(null);
+
+
   // extracting the logic status to login and giving access
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
   );
 
+ 
+
+  console.log("router Value:", router.query.slug);
+  console.log("router is ready or not!:",router.isReady);
+
   // extractimg the hotel data to render
   const hotel = data?.hotelPreBook?.HotelResult?.[0];
   const room = hotel?.Rooms?.[0];
+
+  // preBook API Calling Here
+  useEffect(()=>{
+
+    if(!router.isReady) return; 
+
+    const fetchPreBook=async ()=>{
+      const bookingCode=router?.query?.slug;
+
+      try{
+           
+       const response=await hotelController.preBook({BookingCode:bookingCode});
+       setPreBookResponse(response?.data?.data);
+       console.log("PreBook Response:",response);
+      }
+      catch(error){
+        console.error("PreBook Error:", error.message);
+        setError(error);
+         
+      }
+      finally{
+        setLoading(false);
+      }
+
+    }
+
+    fetchPreBook();
+
+  },[router.isReady,router.query.slug]);
+
+
+  if(loading){
+    return (
+        <Grid2 container>
+      <Grid2
+        size={{ xs: "12" }}
+        sx={{
+          height: "230px",
+          background: "rgba(8,8,79,1)",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: "10px",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            color: COLORS.WHITE,
+            fontFamily: nunito.style,
+            fontWeight: 700,
+          }}
+        >
+          Complete Your Booking
+        </Typography>
+      </Grid2>
+      <Container >
+      <Box sx={{display:"flex",justifyContent:"center",alignItems:"center",height:"300px"}}>
+          <ReactLoading type={"bars"} color={COLORS.PRIMARY} height={60} width={60} />
+      </Box>
+      </Container>
+       </Grid2>
+    )
+  }
 
   return (
     <Grid2 container>
@@ -73,7 +157,7 @@ const HotelPreBookPage = () => {
                         sx={{ fontWeight: "bold", fontFamily:nunito.style }}
                         gutterBottom
                       >
-                        Radisson Blu Hotel New Delhi Dwarka
+                       {preBookResponse.HotelResult[0].HotelName}
                       </Typography>
                       <Typography
                         variant="subtitle2"

@@ -10,5 +10,16 @@ export const hotelController={
         throw error;
      }
 
+    },
+    preBook:async (data)=>{
+      try{
+        let result=hotelPublicApi.post("/hotel/prebook",data);
+        return result;
+      }
+      catch(error){
+         throw error;
+      }
+
     }
+
 }

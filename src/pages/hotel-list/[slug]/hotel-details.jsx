@@ -69,7 +69,7 @@ const HotelDetails = () => {
     );
   }, [query.slug]);
 
-  // console.log("selected Hotel Data:", selectedHotel);
+  console.log("selected Hotel Data:", selectedHotel);
 
   const handleChange = (event) => {
     setRoomType(event.target.value);
@@ -519,16 +519,16 @@ const HotelDetails = () => {
                   variant="h4"
                   sx={{ fontWeight: 700, fontFamily: nunito.style, mb: "15px" }}
                 >
-                  ₹ {selectedHotel?.Rooms?.[0]?.TotalFare}+{" "}
+                  ₹ {selectedHotel?.Rooms?.[0]?.TotalFare.toFixed(2)}+{" "}
                   <Typography component={"div"} sx={{ color: COLORS.DARKGREY }}>
-                    ₹ {selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
+                    ₹ {selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)} taxes & fees
                   </Typography>
                 </Typography>
 
                 <Button
                   onClick={() =>
                     router.push(
-                      `/hotel-list/${selectedHotel.HotelCode}/hotel-prebook`
+                      `/hotel-list/${selectedHotel?.Rooms?.[0]?.BookingCode}/hotel-prebook`
                     )
                   }
                   variant="contained"
@@ -813,7 +813,7 @@ const HotelDetails = () => {
                           mb: "5px",
                         }}
                       >
-                        ₹ {selectedHotel?.Rooms?.[index]?.TotalFare}
+                        ₹ {selectedHotel?.Rooms?.[index]?.TotalFare.toFixed(2)}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -822,7 +822,7 @@ const HotelDetails = () => {
                           fontFamily: nunito.style,
                         }}
                       >
-                        + ₹{selectedHotel?.Rooms?.[0]?.TotalTax} taxes & fees
+                        + ₹{selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)} taxes & fees
                       </Typography>
 
                       {/* Day Rates */}
@@ -835,7 +835,7 @@ const HotelDetails = () => {
                             Day-wise Base Prices:
                           </Typography>
                           {/* {console.log("room---------", room?.DayRates[0])} */}
-                          <Typography sx={{fontFamily: nunito.style, fontWeight:600}}>₹ {room?.DayRates[0][0]?.BasePrice}</Typography>
+                          <Typography sx={{fontFamily: nunito.style, fontWeight:600}}>₹ {room?.DayRates[0][0]?.BasePrice.toFixed(2)}</Typography>
                           {/* <List sx={{ listStyleType: "disc", ml: 3 }}>
                             {room.DayRates[0].map((rate, i) => (
                               <ListItem
@@ -850,6 +850,17 @@ const HotelDetails = () => {
                               </ListItem>
                             ))}
                           </List> */}
+                           <Button
+                  onClick={() =>
+                    router.push(
+                      `/hotel-list/${selectedHotel?.Rooms?.[index]?.BookingCode}/hotel-prebook`
+                    )
+                  }
+                  variant="contained"
+                  sx={{ backgroundColor: COLORS.PRIMARY,mt:2 }}
+                >
+                 SELECT ROOM
+                </Button>
                         </Box>
                       )}
                     </Grid2>
