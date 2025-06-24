@@ -502,6 +502,8 @@ const MultiCityPassengerForm = ({
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -522,6 +524,8 @@ const MultiCityPassengerForm = ({
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -537,6 +541,8 @@ const MultiCityPassengerForm = ({
                       formType="infant"
                       isPassportRequired={isPassportRequired}
                       values={values}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -552,14 +558,7 @@ const MultiCityPassengerForm = ({
                   />
                 )}
 
-                <AddForm
-                  values={values}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  errors={errors}
-                  touched={touched}
-                  setFieldValue={setFieldValue}
-                />
+              
 
                 {flightDetails[1]?.Response?.SeatDynamic && (
                   <Box

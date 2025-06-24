@@ -16,8 +16,11 @@ import MealSelection from "./ssr/oneway/MealSelection";
 import BaggageSelection from "./ssr/oneway/BaggageSelection";
 import DomesticMealSelection from "./ssr/roundtrip/domestic/DomesticMealSelection";
 import DomesticBaggageSelection from "./ssr/roundtrip/domestic/DomesticBaggageSelection";
+import AddForm from "./AddForm";
 
 const PassengerFields = ({
+  touched,
+  setFieldValue,
   data,
   index,
   handleChange,
@@ -277,6 +280,18 @@ const PassengerFields = ({
                 }}
               </Field>
             </LocalizationProvider>
+          </Grid2>
+          <Grid2 size={12}>
+            {index == 0 && formType=="adult" ? (
+              <AddForm
+                values={values}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors}
+                touched={touched}
+                setFieldValue={setFieldValue}
+              />
+            ) : null}
           </Grid2>
 
           {journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP &&

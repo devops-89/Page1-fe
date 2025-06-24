@@ -705,6 +705,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -722,6 +724,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -738,6 +742,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -753,14 +759,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                   />
                 )}
 
-                <AddForm
-                  values={values}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  errors={errors}
-                  touched={touched}
-                  setFieldValue={setFieldValue}
-                />
+                
 
                 <Box
                   sx={{

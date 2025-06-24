@@ -164,16 +164,16 @@ const HotelPreBookPage = () => {
                         sx={{ fontWeight: "bold" }}
                         gutterBottom
                       >
-                        {Array.from([0, 1, 2, 3, 4]).map((_, index) => (
+                        {Array.from({length:5}).map((_, index) => (
                           <StarIcon
                             key={index}
-                            sx={{ color: COLORS.PRIMARY }}
+                            sx={{ color: index<preBookResponse.HotelResult[0].HotelHotelRating? COLORS.PRIMARY : "#ccc"
+ }}
                           />
                         ))}
                       </Typography>
                       <Typography variant="subtitle2" gutterBottom sx={{fontFamily:nunito.style}}>
-                        Plot No 4, Sector 13, Next To Metro Station, Dwarka City
-                        Centre, Near Airport, Delhi, India
+                       {preBookResponse.HotelResult[0].HotelAddress}
                       </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 12, lg: 3 }}>

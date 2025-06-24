@@ -99,3 +99,5 @@ export const HOTEL_RATING_IN_WORDS = {
   FourStar:'Very Good',
   FiveStar:'Excellent'
 }
+
+

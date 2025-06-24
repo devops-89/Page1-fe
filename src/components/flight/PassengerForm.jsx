@@ -516,6 +516,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                     }}
                   >
                     <PassengerFields
+                      
                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
@@ -525,8 +526,11 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       formType="adult"
                       isPassportRequired={isPassportRequired}
                       values={values}
+                      touched={touched}
                       journey={journey}
+                      setFieldValue={setFieldValue}
                     />
+                 
                   </Box>
                 ))}
 
@@ -543,6 +547,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -559,6 +565,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
                     />
                   </Box>
                 ))}
@@ -574,14 +582,14 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                   />
                 )}
 
-                <AddForm
+                {/* <AddForm
                   values={values}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
                   errors={errors}
                   touched={touched}
                   setFieldValue={setFieldValue}
-                />
+                /> */}
 
                 {flightDetails[1]?.SeatDynamic && (
                   <Box

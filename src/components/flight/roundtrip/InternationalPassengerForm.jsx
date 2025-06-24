@@ -566,6 +566,9 @@ const InternationalPassengerForm = ({
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
+                    
                     />
                   </Box>
                 ))}
@@ -583,6 +586,9 @@ const InternationalPassengerForm = ({
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
+                    
                     />
                   </Box>
                 ))}
@@ -599,6 +605,9 @@ const InternationalPassengerForm = ({
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
+                       touched={touched}
+                      setFieldValue={setFieldValue}
+
                     />
                   </Box>
                 ))}
@@ -614,14 +623,7 @@ const InternationalPassengerForm = ({
                   />
                 )}
 
-                <AddForm
-                  values={values}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  errors={errors}
-                  touched={touched}
-                  setFieldValue={setFieldValue}
-                />
+              
 
                 <Box
                   sx={{

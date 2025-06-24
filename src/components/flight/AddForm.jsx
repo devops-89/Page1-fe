@@ -12,9 +12,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
     <>
       <Box
         sx={{
-          boxShadow: "0px 2px 6px rgba(128, 128, 128, 0.2)",
-          borderRadius: "4px",
-          padding: "20px",
+          paddingBlock: "20px",
           mb: "20px",
         }}
       >
@@ -23,11 +21,11 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
           sx={{
             fontFamily: nunito.style,
             fontWeight: 700,
-            mb: "20px",
+            mb: "5px",
             color: COLORS.PRIMARY,
           }}
         >
-          Booking Detail will be sent on
+          Booking Detail will be sent on:
         </Typography>
         <Grid2 container spacing={1}>
           {/* Cell Country Code */}
