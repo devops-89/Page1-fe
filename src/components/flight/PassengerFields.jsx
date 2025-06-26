@@ -365,7 +365,8 @@ const PassengerFields = ({
           )}
 
           {/* Passport Number */}
-          {isPassportRequired && (
+          {/* Passport Number compulsary show in international flights */}
+          {( journey?.journey === JOURNEY.INTERNATIONAL || journey?.journey === JOURNEY.FLIGHT_ONEWAY_INTERNATIONAL || journey?.journey === FLIGHT_MULTICITY_INTERNATIONAL) && (
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <Typography
                 variant="body1"
@@ -400,7 +401,8 @@ const PassengerFields = ({
           )}
 
           {/* Passport Expiry Date */}
-          {isPassportRequired && (
+             {/* Passport Number compulsary show in international flights */}
+          {(journey?.journey === JOURNEY.INTERNATIONAL || journey?.journey === JOURNEY.FLIGHT_ONEWAY_INTERNATIONAL || journey?.journey === FLIGHT_MULTICITY_INTERNATIONAL )&& (
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <Typography
                 variant="body1"

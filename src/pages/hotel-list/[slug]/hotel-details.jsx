@@ -525,17 +525,7 @@ const HotelDetails = () => {
                   </Typography>
                 </Typography>
 
-                <Button
-                  onClick={() =>
-                    router.push(
-                      `/hotel-list/${selectedHotel?.Rooms?.[0]?.BookingCode}/hotel-prebook`
-                    )
-                  }
-                  variant="contained"
-                  sx={{ backgroundColor: COLORS.PRIMARY }}
-                >
-                  Book Now
-                </Button>
+             
               </Box>
             </Grid2>
           </Grid2>

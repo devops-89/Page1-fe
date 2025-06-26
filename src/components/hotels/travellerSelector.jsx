@@ -119,7 +119,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
   };
 
   return (
-    <div>
+    <Box>
       <Typography
         sx={{
           fontFamily: nunito.style,
@@ -148,7 +148,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
           borderRadius: 2,
           p: 1,
           m: 1,
-          maxHeight: "250px",
+          maxHeight: "160px",
           overflowY: "scroll",
           position:"relative",
           "::-webkit-scrollbar": {
@@ -320,7 +320,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
           Apply
         </Button>
       </Stack>
-    </div>
+    </Box>
   );
 };
 

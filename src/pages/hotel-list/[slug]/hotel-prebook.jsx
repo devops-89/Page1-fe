@@ -115,6 +115,50 @@ const HotelPreBookPage = () => {
     )
   }
 
+  if(loading){
+    return (
+        <Grid2 container>
+      <Grid2
+        size={{ xs: "12" }}
+        sx={{
+          height: "230px",
+          background: "rgba(8,8,79,1)",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          py: "10px",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            color: COLORS.WHITE,
+            fontFamily: nunito.style,
+            fontWeight: 700,
+          }}
+        >
+          Complete Your Booking
+        </Typography>
+      </Grid2>
+      <Container >
+      <Box sx={{display:"flex",justifyContent:"center",alignItems:"center",height:"300px"}}>
+       <Typography
+          variant="h5"
+          sx={{
+            color: COLORS.WHITE,
+            fontFamily: nunito.style,
+            fontWeight: 700,
+          }}
+        >
+          Error in API
+        </Typography>
+      </Box>
+      </Container>
+       </Grid2>
+    )
+  }
+
   return (
     <Grid2 container>
       <Grid2

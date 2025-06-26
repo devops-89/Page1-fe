@@ -13,7 +13,6 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
       <Box
         sx={{
           paddingBlock: "20px",
-          mb: "20px",
         }}
       >
         <Typography
