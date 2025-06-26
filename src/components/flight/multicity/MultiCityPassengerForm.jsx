@@ -40,6 +40,8 @@ const MultiCityPassengerForm = ({
 
   // console.log("flightDetails ----", flightDetails[1]?.SeatDynamic)
 
+ 
+
   const selectedSeats = useSelector(
     (state) => state.Flight?.SeatsInformation?.seats || []
   );
@@ -504,6 +506,7 @@ const MultiCityPassengerForm = ({
                       values={values}
                       touched={touched}
                       setFieldValue={setFieldValue}
+                      journey={journey}
                     />
                   </Box>
                 ))}

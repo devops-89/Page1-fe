@@ -73,7 +73,7 @@ const FlightDetails = () => {
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // console.log("router", router.query)
+  // console.log("router journey:", router.query.journey);
 
   useEffect(() => {
     if (
