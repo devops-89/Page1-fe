@@ -9,7 +9,7 @@ import Seat from "./Seat";
 import flightFront from "@/assests/flight_image/flight_front.png";
 import flightBack from "@/assests/flight_image/flight_back.png";
 import { COLORS } from "@/utils/colors.js";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { JOURNEY_TYPE } from "@/utils/enum";
 
 const SeatMap = ({ flightDetailType }) => {
@@ -72,7 +72,7 @@ const SeatMap = ({ flightDetailType }) => {
                     />
                     <Typography
                       variant="body1"
-                      sx={{ p: 1, fontFamily: nunito.style }}
+                      sx={{ p: 1, fontFamily:roboto.style }}
                     >
                       Conveniently select your seats now for Free.
                     </Typography>

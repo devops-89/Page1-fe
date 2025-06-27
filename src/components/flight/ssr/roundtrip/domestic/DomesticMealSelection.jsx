@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid2, Tab, Tabs, Typography } from "@mui/material";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -119,7 +119,7 @@ export default function DomesticMealSelection({
         <Typography
           variant="body1"
           sx={{
-            fontFamily: nunito.style,
+           fontFamily:roboto.style,
             fontWeight: 700,
             display: "flex",
             alignItems: "center",
@@ -148,6 +148,7 @@ export default function DomesticMealSelection({
             "& .Mui-selected": {
               color: COLORS.PRIMARY,
             },
+            fontFamily:roboto.style
           }}
         >
           <Tab label="Outgoing" />
@@ -173,7 +174,7 @@ export default function DomesticMealSelection({
                   <Typography
                     variant="body1"
                     sx={{
-                      fontFamily: nunito.style,
+                    fontFamily:roboto.style,
                       fontWeight: 800,
                       mb: "20px",
                       p: "10px",
@@ -212,7 +213,7 @@ export default function DomesticMealSelection({
                     <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
                       <Typography
                         variant="body1"
-                        sx={{ textAlign: "center", fontFamily: nunito.style }}
+                        sx={{ textAlign: "center", fontFamily:roboto.style }}
                       >
                         No Meal Available
                       </Typography>
@@ -242,7 +243,7 @@ export default function DomesticMealSelection({
                   <Typography
                     variant="body1"
                     sx={{
-                      fontFamily: nunito.style,
+                     fontFamily:roboto.style,
                       fontWeight: 800,
                       mb: "20px",
                       p: "10px",
@@ -278,7 +279,7 @@ export default function DomesticMealSelection({
                     <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
                       <Typography
                         variant="body1"
-                        sx={{ textAlign: "center", fontFamily: nunito.style }}
+                        sx={{ textAlign: "center", fontFamily:roboto.style }}
                       >
                         No Meal Available
                       </Typography>

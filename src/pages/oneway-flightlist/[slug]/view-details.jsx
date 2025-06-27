@@ -147,14 +147,14 @@ const FlightDetails = () => {
             alignItems: "center",
             justifyContent: "center",
             py: "100px",
-            fontFamily:roboto.style
+            
           }}
         >
           <Typography
             variant="h5"
             sx={{
               color: COLORS.WHITE,
-              fontFamily: nunito.style,
+             fontFamily:roboto.style,
               fontWeight: 700,
             }}
           >
@@ -177,7 +177,7 @@ const FlightDetails = () => {
               variant="h6"
               sx={{
                 fontWeight: 600,
-                fontFamily: nunito.style,
+               fontFamily:roboto.style,
                 fontSize: "24px",
                 mb: "10px",
               }}
@@ -190,7 +190,8 @@ const FlightDetails = () => {
             <Link href="/">
               <Button
                 variant="contained"
-                sx={{ backgroundColor: COLORS.PRIMARY }}
+                
+                sx={{ backgroundColor: COLORS.PRIMARY,fontFamily:roboto.style }}
               >
                 Back to Homepage
               </Button>
@@ -221,7 +222,7 @@ const FlightDetails = () => {
                             variant="h6"
                             gutterBottom
                             sx={{
-                              fontFamily: nunito.style,
+                             fontFamily:roboto.style,
                               fontSize: "20px",
                               fontWeight: 700,
                             }}
@@ -238,14 +239,14 @@ const FlightDetails = () => {
                           <Typography
                             variant="subtitle1"
                             gutterBottomx
-                            sx={{ marginBottom: "10px" }}
+                            sx={{ marginBottom: "10px",fontFamily:roboto.style }}
                           >
                             <span
                               style={{
                                 backgroundColor: "#FFEDD1",
                                 padding: "5px",
                                 borderRadius: "4px",
-                                fontFamily: nunito.style,
+                              
                               }}
                             >
                               {moment(
@@ -295,7 +296,7 @@ const FlightDetails = () => {
                           <Button
                             size="small"
                             sx={{
-                              fontFamily: nunito.style,
+                             fontFamily:roboto.style,
                               fontWeight: 800,
                               fontSize: { lg: 15, md: 15, xs: 12 },
                             }}
@@ -340,6 +341,7 @@ const FlightDetails = () => {
                                       sx={{
                                         fontFamily: nunito.style,
                                         fontWeight: 600,
+                                        fontFamily:roboto.style
                                       }}
                                     >
                                       {segment?.Airline?.AirlineName}{" "}
@@ -359,7 +361,7 @@ const FlightDetails = () => {
                                       variant="body1"
                                       sx={{
                                         fontWeight: 700,
-                                        fontFamily: nunito.style,
+                                      fontFamily:roboto.style
                                       }}
                                     >
                                       {moment(segment?.Origin?.DepTime).format(
@@ -375,6 +377,7 @@ const FlightDetails = () => {
                                         alignItems: "center",
                                         gap: "10px",
                                         marginLeft: "65px",
+                                        fontFamily:roboto.style
                                       }}
                                     >
                                       <img
@@ -393,7 +396,7 @@ const FlightDetails = () => {
                                       variant="body1"
                                       sx={{
                                         fontWeight: 700,
-                                        fontFamily: nunito.style,
+                                       fontFamily:roboto.style
                                       }}
                                     >
                                       {moment(
@@ -418,7 +421,7 @@ const FlightDetails = () => {
                                     <Typography
                                       variant="body2"
                                       sx={{
-                                        fontFamily: nunito.style,
+                                       fontFamily:roboto.style,
                                         fontWeight: 500,
                                       }}
                                     >
@@ -428,7 +431,7 @@ const FlightDetails = () => {
                                     <Typography
                                       variant="body2"
                                       sx={{
-                                        fontFamily: nunito.style,
+                                      fontFamily:roboto.style,
                                         fontWeight: 500,
                                       }}
                                     >
@@ -455,7 +458,7 @@ const FlightDetails = () => {
                                           marginTop: "10px",
                                           color: "orange",
                                           fontWeight: 600,
-                                          fontFamily: nunito.style,
+                                         fontFamily:roboto.style
                                         }}
                                       >
                                         Change of Planes
@@ -465,7 +468,7 @@ const FlightDetails = () => {
                                         sx={{
                                           marginTop: "10px",
                                           fontWeight: 700,
-                                          fontFamily: nunito.style,
+                                        fontFamily:roboto.style
                                         }}
                                       >
                                         {`${moment
@@ -526,6 +529,7 @@ const FlightDetails = () => {
                   size={{ lg: 4, xs: 12 }}
                   sx={{
                     position: "sticky",
+                    fontFamily:roboto.style,
                     top: "75px",
                     alignSelf: "start",
                     overflow: "visible",
@@ -580,7 +584,7 @@ const FlightDetails = () => {
       >
         <Stack justifyContent={"space-between"} alignItems={"center"}>
           <DialogTitle
-            sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
+            sx={{ m: 0, p: 2,fontFamily:roboto.style, fontWeight: 700 }}
             id="customized-dialog-title"
           >
             Fare Rules
@@ -609,7 +613,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily: nunito.style,
+                      fontFamily:roboto.style
                     }}
                   >
                     Origin
@@ -619,7 +623,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily: nunito.style,
+                     fontFamily:roboto.style
                     }}
                   >
                     Destination
@@ -629,7 +633,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily: nunito.style,
+                      fontFamily:roboto.style,
                     }}
                   >
                     Airline
@@ -647,7 +651,7 @@ const FlightDetails = () => {
                               fontSize: "15px",
                               textAlign: "center",
                               fontWeight: 600,
-                              fontFamily: nunito.style,
+                            fontFamily:roboto.style
                             }}
                           >
                             {fareRule.Origin}
@@ -657,7 +661,7 @@ const FlightDetails = () => {
                               fontSize: "15px",
                               textAlign: "center",
                               fontWeight: 600,
-                              fontFamily: nunito.style,
+                             fontFamily:roboto.style
                             }}
                           >
                             {fareRule.Destination}
@@ -667,7 +671,7 @@ const FlightDetails = () => {
                               fontSize: "15px",
                               textAlign: "center",
                               fontWeight: 600,
-                              fontFamily: nunito.style,
+                            fontFamily:roboto.style
                             }}
                           >
                             {fareRule.Airline}

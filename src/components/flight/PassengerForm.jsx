@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
 import GstForm from "./GstForm";
-import { nunito } from "@/utils/fonts";
+import { nunito,roboto } from "@/utils/fonts";
 import AddForm from "./AddForm";
 import { flightController } from "@/api/flightController";
 import { JOURNEY, TOAST_STATUS } from "@/utils/enum";
@@ -434,6 +434,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               sx={{
                 color: COLORS.GREEN,
                 fontWeight: 500,
+                fontFamily:roboto.style,
                 fontSize: { lg: 16, xs: 12 },
               }}
             >
@@ -445,6 +446,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               sx={{
                 color: COLORS.RED,
                 fontWeight: 500,
+                fontFamily:roboto.style,
                 fontSize: { lg: 16, xs: 12 },
               }}
             >
@@ -463,7 +465,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             variant="h5"
             sx={{
               fontSize: { lg: 18, xs: 14 },
-              fontFamily: nunito.style,
+             fontFamily:roboto.style,
               fontWeight: 700,
               mb: "10px",
             }}
@@ -474,7 +476,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             variant="body1"
             sx={{
               fontSize: { lg: 18, xs: 14 },
-              fontFamily: nunito.style,
+            fontFamily:roboto.style,
               fontWeight: 600,
               mb: "10px",
             }}
@@ -614,7 +616,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                   <Button
                     type="submit"
                     variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
+                    sx={{ backgroundColor: COLORS.PRIMARY,fontFamily:roboto.style }}
                   >
                     Continue
                   </Button>

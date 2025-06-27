@@ -1,5 +1,6 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
+import {roboto} from "@/utils/fonts.js";
 import Typography from "@mui/material/Typography";
 import { Button, Grid2, Stack } from "@mui/material";
 import { nunito } from "@/utils/fonts";
@@ -23,7 +24,7 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
         <Typography
           variant="body1"
           sx={{
-            fontFamily: nunito.style,
+           fontFamily:roboto.style,
             fontWeight: 600,
             color: COLORS.PRIMARY,
             mb: "10px",
@@ -35,7 +36,7 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
         </Typography>
         <Typography
           variant="body2"
-          sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 600 }}
         >
           {meal?.Code || "--"}
         </Typography>
@@ -49,7 +50,7 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
         >
           <Typography
             variant="body1"
-            sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+            sx={{ fontFamily:roboto.style, fontWeight: 600 }}
           >
             {meal?.Price} {meal?.Currency}
           </Typography>
@@ -58,6 +59,7 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
             size="small"
             sx={{
               backgroundColor: isSelected ? COLORS.SECONDARY : COLORS.GRAY,
+              fontFamily:roboto.style
             }}
             onClick={() => handleMealValue(meal)}
           >

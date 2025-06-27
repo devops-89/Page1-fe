@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField, Typography, Box, Grid2 } from "@mui/material";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { Field } from "formik";
 
@@ -14,13 +14,13 @@ const GstForm = ({ errors, touched, isGSTMandatory, values, handleChange, handle
   return (
     <>
       <Box sx={{ boxShadow: "0px 2px 6px rgba(128, 128, 128, 0.2)", borderRadius: "4px", padding: "20px", mb: '20px' }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, fontFamily: nunito.style, mb: '20px', color: COLORS.PRIMARY }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, fontFamily:roboto.style, mb: '20px', color: COLORS.PRIMARY }}>
           GST Details
         </Typography>
         <Grid2 container spacing={1}>
           {/* GST Company Name */}
           <Grid2 size={{ xs: 12, sm: 6 }}>
-            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: nunito.style, mb: '5px' }}>Company Name</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily:roboto.style, mb: '5px' }}>Company Name</Typography>
             <Field
               as={TextField}
               fullWidth
@@ -38,7 +38,7 @@ const GstForm = ({ errors, touched, isGSTMandatory, values, handleChange, handle
 
           {/* GST Number */}
           <Grid2 size={{ xs: 12, sm: 6 }}>
-            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: nunito.style, mb: '5px' }}>GST Number</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily:roboto.style, mb: '5px' }}>GST Number</Typography>
             <Field
               as={TextField}
               fullWidth
@@ -56,7 +56,7 @@ const GstForm = ({ errors, touched, isGSTMandatory, values, handleChange, handle
 
           {/* GST Company Address */}
           <Grid2 size={{ xs: 12, sm: 6 }}>
-            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: nunito.style, mb: '5px' }}>Company Address</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily:roboto.style, mb: '5px' }}>Company Address</Typography>
             <Field
               as={TextField}
               fullWidth
@@ -74,7 +74,7 @@ const GstForm = ({ errors, touched, isGSTMandatory, values, handleChange, handle
 
           {/* GST Company Contact Number */}
           <Grid2 size={{ xs: 12, sm: 6 }}>
-            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: nunito.style, mb: '5px' }}>Contact Number</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily:roboto.style, mb: '5px' }}>Contact Number</Typography>
             <Field
               as={TextField}
               fullWidth
@@ -92,7 +92,7 @@ const GstForm = ({ errors, touched, isGSTMandatory, values, handleChange, handle
 
           {/* GST Company Email */}
           <Grid2 size={{ xs: 12 }}>
-            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: nunito.style, mb: '5px' }}>Company Email</Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600, fontFamily:roboto.style, mb: '5px' }}>Company Email</Typography>
             <Field
               as={TextField}
               fullWidth

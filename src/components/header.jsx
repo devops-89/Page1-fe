@@ -2,7 +2,7 @@ import { data } from "@/assests/data";
 import logo from "@/logo/logo.png";
 import { removeUserDetails } from "@/redux/reducers/user";
 import { COLORS } from "@/utils/colors";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 // import { ShoppingBag } from "@mui/icons-material";
 import PersonIcon from '@mui/icons-material/Person';
 import {
@@ -113,6 +113,7 @@ const Header = () => {
       }}
 
     >
+    
       <Container maxWidth='lg'>
         < Stack
           direction={"row"}
@@ -129,7 +130,7 @@ const Header = () => {
               <Typography
                 sx={{
                   fontSize: 16,
-                  fontFamily: nunito.style,
+                 fontFamily:roboto.style,
                   textTransform: "capitalize",
                   fontWeight: 600,
                   color:
@@ -198,7 +199,7 @@ const Header = () => {
                   <Typography
                     sx={{
                       fontSize: 14,
-                      fontFamily: nunito.style,
+                      fontFamily:roboto.style,
                       fontWeight: 800,
                       color: COLORS.PRIMARY,
                     }}
@@ -267,7 +268,7 @@ const Header = () => {
             >
               <ListItemText
                 primary={
-                  <Typography sx={{ fontSize: 14, fontFamily: nunito.style }}>
+                  <Typography sx={{ fontSize: 14, fontFamily:roboto.style }}>
                     {val.label}
                   </Typography>
                 }

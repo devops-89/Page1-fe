@@ -8,7 +8,7 @@ import moment from "moment";
 import { FlightTakeoff } from "@mui/icons-material";
 import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
 
-import { nunito } from "@/utils/fonts";
+import {roboto} from "@/utils/fonts";
 const SeatDetail = ({extraDetails,planeIndex}) => {
 
   //  console.log(chalk.green("Seat Details"),extraDetails.Results.Segments[0]);
@@ -34,20 +34,20 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
     <Grid2 container sx={{p:1}} spacing={6} alignItems={"flex-start"}>
           <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
-              sx={{ fontSize:{lg:22 , xs:15}, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize:{lg:22 , xs:15}, fontWeight: 700, fontFamily:roboto.style }}
             >
               {moment(extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.DepTime).format(
                 "HH:mm"
               )}
             </Typography>
             <Typography
-              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{ fontSize: 14, fontWeight: 600,fontFamily:roboto.style }}
             >
               {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport.AirportCode} -{" "}
               {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport.Terminal} Terminal
             </Typography>
             <Typography
-              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{ fontSize: 14, fontWeight: 600, fontFamily:roboto.style }}
             >
               {extraDetails?.Results?.Segments[0][planeIndex]?.Origin?.Airport?.CityName}
             </Typography>
@@ -57,7 +57,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
               sx={{
                 fontSize: {lg:18 , xs:14},
                 fontWeight: 700,
-                fontFamily: nunito.style,
+                fontFamily:roboto.style,
                 textAlign: "center",
               }}
             >
@@ -83,14 +83,14 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
           </Grid2>
           <Grid2 size={4} sx={{textAlign:'center'}}>
             <Typography
-              sx={{ fontSize: {lg:22 , xs:14}, fontWeight: 700, fontFamily: nunito.style }}
+              sx={{ fontSize: {lg:22 , xs:14}, fontWeight: 700, fontFamily:roboto.style}}
             >
               {moment(
                 extraDetails?.Results?.Segments[0][planeIndex]?.Destination.ArrTime
               ).format("HH:mm")}
             </Typography>
             <Typography
-              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{ fontSize: 14, fontWeight: 600, fontFamily:roboto.style}}
             >
               {
                 extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.AirportCode
@@ -102,7 +102,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
               Terminal
             </Typography>
             <Typography
-              sx={{ fontSize: 14, fontWeight: 600, fontFamily: nunito.style }}
+              sx={{ fontSize: 14, fontWeight: 600,fontFamily:roboto.style }}
             >
               {
                 extraDetails?.Results?.Segments[0][planeIndex]?.Destination.Airport.CityName
@@ -143,9 +143,9 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
           >
             <AirlineSeatReclineExtraIcon sx={{color:COLORS.PRIMARY}}/>
           </Box>
-          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style ,fontSize:{lg:16 , xs:13}}}>Reserved</Typography>
+          <Typography variant="body1" sx={{textAlign:"center", ffontFamily:roboto.style,fontSize:{lg:16 , xs:13}}}>Reserved</Typography>
         </Box>
-        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",  fontFamily:nunito.style}}>
+        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",  fontFamily:roboto.style}}>
           <Box
             sx={{
               width: "20px",
@@ -162,7 +162,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
           >
              <AirlineSeatReclineExtraIcon sx={{color:COLORS.GREEN,}}/>
           </Box>
-          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style ,fontSize:{lg:16 , xs:13}}}>Selected</Typography>
+          <Typography variant="body1" sx={{textAlign:"center", fontFamily:roboto.style,fontSize:{lg:16 , xs:13}}}>Selected</Typography>
         </Box>
         <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
@@ -182,7 +182,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
           >
             <AirlineSeatReclineExtraIcon sx={{color:COLORS.SECONDARY}}/>
           </Box>
-          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style ,fontSize:{lg:16 , xs:13}}}>Available</Typography>
+          <Typography variant="body1" sx={{textAlign:"center", fontFamily:roboto.style,fontSize:{lg:16 , xs:13}}}>Available</Typography>
         </Box>
         <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
@@ -201,7 +201,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
           >
              <AirlineSeatReclineExtraIcon sx={{color:COLORS.RED}}/>
           </Box>
-          <Typography variant="body1" sx={{textAlign:"center", fontFamily:nunito.style ,fontSize:{lg:16 , xs:13}}}>Blocked</Typography>
+          <Typography variant="body1" sx={{textAlign:"center", fontFamily:roboto.style ,fontSize:{lg:16 , xs:13}}}>Blocked</Typography>
         </Box>
       </Stack>
     </Box>

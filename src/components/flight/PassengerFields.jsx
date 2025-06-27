@@ -1,7 +1,7 @@
 import React from "react";
 import { Field } from "formik";
 import { Grid2, TextField, Typography, MenuItem, Box } from "@mui/material";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -44,7 +44,7 @@ const PassengerFields = ({
           variant="h6"
           sx={{
             fontWeight: 700,
-            fontFamily: nunito.style,
+           fontFamily:roboto.style,
             textTransform: "capitalize",
           }}
         >
@@ -57,12 +57,12 @@ const PassengerFields = ({
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px"}}
             >
               First Name
             </Typography>
 
-            <Box sx={{ display: "grid", gridTemplateColumns: "30% 70%" }}>
+            <Box sx={{ display: "grid", gridTemplateColumns: "30% 70%",fontFamily:roboto.style }}>
               <Field
                 as={TextField}
                 size="small"
@@ -92,6 +92,7 @@ const PassengerFields = ({
                       borderTopRightRadius: 0,
                       borderBottomRightRadius: 0,
                     },
+                   
                   },
                 }}
               >
@@ -127,6 +128,7 @@ const PassengerFields = ({
                       borderTopLeftRadius: 0,
                       borderBottomLeftRadius: 0,
                     },
+                   
                   },
                 }}
               />
@@ -136,7 +138,7 @@ const PassengerFields = ({
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
               Middle Name
             </Typography>
@@ -163,13 +165,15 @@ const PassengerFields = ({
                 errors[formType][index] &&
                 errors[formType][index].middle_name
               }
+              
+              
             />
           </Grid2>
 
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
               Last Name
             </Typography>
@@ -196,13 +200,15 @@ const PassengerFields = ({
                 errors[formType][index] &&
                 errors[formType][index].last_name
               }
+             
+             
             />
           </Grid2>
 
-          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+   <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, mb: "5px", fontFamily: nunito.style }}
+              sx={{ fontWeight: 600, mb: "5px", fontFamily: roboto.style }}
             >
               Date of Birth
             </Typography>
@@ -245,14 +251,14 @@ const PassengerFields = ({
                               severity: TOAST_STATUS.ERROR,
                             })
                           );
-
                           return;
                         }
 
-                        // Set valid date value
                         form.setFieldValue(
                           `${formType}[${index}].date_of_birth`,
-                          date ? date.toISOString() : ""
+                          date
+                            ? date.startOf("day").format("YYYY-MM-DD")
+                            : ""
                         );
                       }}
                       minDate={minDate}
@@ -370,7 +376,7 @@ const PassengerFields = ({
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <Typography
                 variant="body1"
-                sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+                sx={{ fontWeight: 600,fontFamily:roboto.style, mb: "5px" }}
               >
                 Passport Number
               </Typography>
@@ -396,6 +402,7 @@ const PassengerFields = ({
                   errors[formType][index] &&
                   errors[formType][index].passport_no
                 }
+              
               />
             </Grid2>
           )}
@@ -406,12 +413,12 @@ const PassengerFields = ({
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <Typography
                 variant="body1"
-                sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+                sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
               >
                 Passport Expiry Date
               </Typography>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Field name={`${formType}[${index}].passport_expiry`}>
+                <Field name={`${formType}[${index}].passport_expiry`} >
                   {({ field, form }) => (
                     <DatePicker
                       format="DD/MM/YYYY"
@@ -455,6 +462,7 @@ const PassengerFields = ({
                       sx={{
                         "& .MuiInputBase-input": { padding: "8.5px 14px" },
                         "& .MuiFormLabel-root": { top: "-7px" },
+                        
                       }}
                       onBlur={field.onBlur}
                       renderInput={(params) => (

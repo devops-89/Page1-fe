@@ -2,7 +2,7 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import { Button, Grid2, Stack } from "@mui/material";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import Image from "next/image";
 import baggageImage from "@/../public/images/baggage.png";
@@ -21,7 +21,7 @@ export default function BaggageCard({ baggage, handleBaggageValue, isSelected })
         <Typography
           variant="body1"
           sx={{
-            fontFamily: nunito.style,
+            fontFamily:roboto.style,
             fontWeight: 600,
             color: COLORS.PRIMARY,
             mb: "10px",
@@ -32,7 +32,7 @@ export default function BaggageCard({ baggage, handleBaggageValue, isSelected })
         </Typography>
         <Typography
           variant="body2"
-          sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 600 }}
         >
           {baggage?.Code || "--"}
         </Typography>
@@ -46,7 +46,7 @@ export default function BaggageCard({ baggage, handleBaggageValue, isSelected })
         >
           <Typography
             variant="body1"
-            sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+            sx={{ fontFamily:roboto.style, fontWeight: 600 }}
           >
             {baggage?.Price} {baggage?.Currency}
           </Typography>
@@ -54,7 +54,7 @@ export default function BaggageCard({ baggage, handleBaggageValue, isSelected })
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: isSelected ? COLORS.SECONDARY : COLORS.GRAY,
+              backgroundColor: isSelected ? COLORS.SECONDARY : COLORS.GRAY,fontFamily:roboto.style
             }}
             onClick={() => handleBaggageValue(baggage)}
           >

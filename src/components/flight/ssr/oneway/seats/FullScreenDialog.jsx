@@ -14,7 +14,7 @@ import SeatMap from "./SeatMap";
 import { COLORS } from "@/utils/colors.js";
 import { useDispatch } from "react-redux";
 import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
-
+import {roboto} from "@/utils/fonts.js";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -45,7 +45,7 @@ export default function FullScreenDialog({flightDetailType}) {
     <>
       <Button
         variant="text"
-        sx={{color:"darkgreen" , fontWeight:600,fontSize:"15px",borderBottom:"2px solid darkgreen",p:"0px",borderRadius:0}}
+        sx={{color:"darkgreen" ,fontFamily:roboto.style, fontWeight:600,fontSize:"15px",borderBottom:"2px solid darkgreen",p:"0px",borderRadius:0}}
         onClick={handleClickOpen}
       >
         Select Seat
@@ -67,10 +67,10 @@ export default function FullScreenDialog({flightDetailType}) {
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 ,fontSize:{lg:20 , xs:15} }} variant="h6" component="div">
+            <Typography sx={{ ml: 2, flex: 1 ,fontFamily:roboto.style,fontSize:{lg:20 , xs:15} }} variant="h6" component="div">
               Seats Selection
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleSave}>
+            <Button autoFocus color="inherit" sx={{fontFamily:roboto.style}} onClick={handleSave}>
               save
             </Button>
           </Toolbar>

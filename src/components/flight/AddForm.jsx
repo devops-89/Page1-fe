@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField, Typography, Grid2, Box, Autocomplete } from "@mui/material";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { data } from "@/assests/data";
 import { MuiTelInput } from "mui-tel-input";
@@ -18,7 +18,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
         <Typography
           variant="h6"
           sx={{
-            fontFamily: nunito.style,
+           fontFamily:roboto.style,
             fontWeight: 700,
             mb: "5px",
             color: COLORS.PRIMARY,
@@ -31,7 +31,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
           <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
               Phone No
             </Typography>
@@ -42,7 +42,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               disablePortal
               options={data.countries || []}
               getOptionLabel={(option) => `${option.phone}`}
-              sx={{ width: "100%" ,fontSize:"16px" }}
+              sx={{ width: "100%" ,fontSize:"16px",fontFamily:roboto.style }}
               value={
                 data.countries.find(
                   (country) => country.phone === values?.cell_country_code
@@ -123,6 +123,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
                     borderBottomLeftRadius:0
                      // remove left border
                   },
+                  fontFamily:roboto.style
                 },
               }}
             />
@@ -135,7 +136,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
               City
             </Typography>
@@ -151,6 +152,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               error={touched?.city && !!errors?.city}
               helperText={touched?.city && errors?.city}
               variant="outlined"
+              sx={{fontFamily:roboto.style}}
             />
           </Grid2>
 
@@ -160,7 +162,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
               Address
             </Typography>
@@ -176,6 +178,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               error={touched?.address && !!errors?.address}
               helperText={touched?.address && errors?.address}
               variant="outlined"
+              sx={{fontFamily:roboto.style}}
             />
           </Grid2>
 
@@ -184,7 +187,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily: nunito.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
               Email
             </Typography>
@@ -201,6 +204,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               error={touched?.email && !!errors?.email}
               helperText={touched?.email && errors?.email}
               variant="outlined"
+              sx={{fontFamily:roboto.style}}
             />
           </Grid2>
         </Grid2>

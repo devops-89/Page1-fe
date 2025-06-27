@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import KeyboardDoubleArrowUpOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowUpOutlined";
 import KeyboardDoubleArrowDownOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { COMMISSION_TYPE } from "@/utils/enum";
 
 const FareSummary = ({ fareData, commission, toggleDrawer }) => {
@@ -110,7 +110,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
             fontSize: 18,
             fontWeight: 800,
             color: "#000",
-            fontFamily: nunito.style,
+          fontFamily:roboto.style,
           }}
         >
           Fare Summary
@@ -140,7 +140,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
             <AddCircleIcon />
           </ListItemIcon>
           <ListItemText>
-            <Typography sx={{ fontFamily: nunito.style, fontWeight: 700 }}>
+            <Typography sx={{ fontFamily:roboto.style, fontWeight: 700 }}>
               Base Amount
             </Typography>
           </ListItemText>
@@ -153,7 +153,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
           >
             <Typography
               variant="body1"
-              sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+              sx={{ fontFamily:roboto.style, fontWeight: 700 }}
             >
               ₹ {fareData?.Fare?.BaseFare}
             </Typography>
@@ -173,7 +173,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
             {open ? <RemoveCircleIcon /> : <AddCircleIcon />}
           </ListItemIcon>
           <ListItemText>
-            <Typography sx={{ fontFamily: nunito.style, fontWeight: 700 }}>
+            <Typography sx={{ fontFamily:roboto.style, fontWeight: 700 }}>
               Taxes and Surcharges
             </Typography>
           </ListItemText>
@@ -186,7 +186,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
           >
             <Typography
               variant="body1"
-              sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+              sx={{ fontFamily:roboto.style, fontWeight: 700 }}
             >
               ₹ {fareData?.Fare?.Tax}
             </Typography>
@@ -201,13 +201,13 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
                   display: "flex",
                   justifyContent: "space-between",
                   paddingLeft: 4,
-                  fontFamily: nunito.style,
+                  fontFamily:roboto.style,
                 }}
               >
-                <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
+                <Typography variant="body2" sx={{ fontFamily:roboto.style}}>
                   {tax.key}
                 </Typography>
-                <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
+                <Typography variant="body2" sx={{fontFamily:roboto.style }}>
                   ₹ {tax.value}
                 </Typography>
               </ListItem>
@@ -226,7 +226,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
             <AddCircleIcon />
           </ListItemIcon>
           <ListItemText>
-            <Typography sx={{ fontFamily: nunito.style, fontWeight: 700 }}>
+            <Typography sx={{ fontFamily:roboto.style, fontWeight: 700 }}>
               Discount
             </Typography>
           </ListItemText>
@@ -239,7 +239,7 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
           >
             <Typography
               variant="body1"
-              sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+              sx={{ fontFamily:roboto.style, fontWeight: 700 }}
             >
               ₹ {fareData?.Fare?.Discount}
             </Typography>
@@ -257,13 +257,13 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
       >
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           Amount
         </Typography>
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           ₹ {fareData?.Fare?.PublishedFare}
         </Typography>
@@ -279,13 +279,13 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
       >
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           Extra<span style={{fontSize:"15px" ,fontWeight:600}}>(meal ,seat,baggage)  </span>
         </Typography>
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           ₹ {extraTotal}
         </Typography>
@@ -299,13 +299,13 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
       >
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           Service Fee
         </Typography>
         <Typography
           variant="body1"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           ₹{" "}
           {commission?.commission_type === COMMISSION_TYPE.FIXED
@@ -323,13 +323,13 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
       >
         <Typography
           variant="h6"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           Grand Total
         </Typography>
         <Typography
           variant="h6"
-          sx={{ fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ fontFamily:roboto.style, fontWeight: 700 }}
         >
           ₹{" "}
           {/* {commission?.commission_type === COMMISSION_TYPE.FIXED
