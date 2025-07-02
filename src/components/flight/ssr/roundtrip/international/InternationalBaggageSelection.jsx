@@ -147,7 +147,8 @@ export default function InternationalBaggageSelection({
               {baggageData?.[0][0]?.FlightNumber ? (
                 baggageData?.[0]?.map((baggage, baggageIndex) => {
                   return (
-                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                    (baggage?.Price!=0)?(
+                         <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
                         handleBaggageValue={() =>
@@ -161,6 +162,8 @@ export default function InternationalBaggageSelection({
                         )}
                       />
                     </Grid2>
+                    ):(null)
+                  
                   );
                 })
               ) : (
@@ -198,7 +201,8 @@ export default function InternationalBaggageSelection({
                   sx={{ flexWrap: "wrap", mb: "10px" }}
                 >
                   {baggageData?.[1]?.map((baggage, baggageIndex) => (
-                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                    (baggage?.Price!=0)?(
+                         <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
                         handleBaggageValue={() =>
@@ -212,6 +216,8 @@ export default function InternationalBaggageSelection({
                         )}
                       />
                     </Grid2>
+                    ):(null)
+                  
                   ))}
                 </Grid2>
               </>

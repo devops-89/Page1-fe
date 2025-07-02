@@ -188,7 +188,7 @@ export default function DomesticMealSelection({
                   {filteredDataOutgoing[flightNumber][0]?.FlightNumber ? (
                     filteredDataOutgoing[flightNumber]?.map(
                       (meal, mealIndex) => (
-                        <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                        (meal?.Price!=0)?(  <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                           <MealCard
                             meal={meal}
                             handleMealValue={(meal) => {
@@ -206,7 +206,8 @@ export default function DomesticMealSelection({
                               }) || false
                             }
                           />
-                        </Grid2>
+                        </Grid2>):null
+                      
                       )
                     )
                   ) : (
@@ -256,7 +257,7 @@ export default function DomesticMealSelection({
                 <Grid2 container spacing={2}>
                   {filteredDataReturn[flightNumber][0]?.FlightNumber ? (
                     filteredDataReturn[flightNumber]?.map((meal, mealIndex) => (
-                      <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                      (meal?.Price!=0)?(  <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                         <MealCard
                           meal={meal}
                           handleMealValue={(meal) => {
@@ -273,7 +274,8 @@ export default function DomesticMealSelection({
                             ) || false
                           }
                         />
-                      </Grid2>
+                      </Grid2>):(null)
+                    
                     ))
                   ) : (
                     <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>

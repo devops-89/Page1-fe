@@ -139,7 +139,8 @@ export default function MealSelection({
                 </Typography>
                 <Grid2 container spacing={2}>
                   {filteredData[flightNumber]?.[0].FlightNumber ? filteredData[flightNumber]?.map((meal, mealIndex) => (
-                    <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                    (meal?.Price!=0)?(
+                         <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                       <MealCard
                         meal={meal}
                         handleMealValue={() =>
@@ -154,6 +155,8 @@ export default function MealSelection({
                         }
                       />
                     </Grid2>
+                    ):(null)
+                  
                   )):
                   
                   <Grid2 size={{ xs: 12 }} sx={{py:'20px'}}>
@@ -168,7 +171,8 @@ export default function MealSelection({
         ) : (
           <Grid2 container spacing={2}>
             {mealData?.[0]?.FlightNumber ? mealData?.map((meal, mealIndex) => (
-              <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+              (meal?.Price!=0)?(
+                  <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                 <MealCard
                   meal={meal}
                   handleMealValue={() =>
@@ -183,6 +187,8 @@ export default function MealSelection({
                   }
                 />
               </Grid2>
+              ):(null)
+             
             )) :
             <Grid2 size={{ xs: 12 }} sx={{py:'20px'}}>
             <Typography variant="body1" sx={{textAlign:'center', fontFamily:nunito.style}}>No Meal Available</Typography>

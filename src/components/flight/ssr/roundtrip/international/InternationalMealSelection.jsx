@@ -183,7 +183,8 @@ export default function InternationalMealSelection({
                       {filteredDataOutgoing[flightNumber][0].FlightNumber ? (
                         filteredDataOutgoing[flightNumber]?.map(
                           (meal, mealIndex) => (
-                            <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                            (meal?.Price!=0)?(
+                                <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                               <MealCard
                                 meal={meal}
                                 handleMealValue={() =>
@@ -200,6 +201,8 @@ export default function InternationalMealSelection({
                                 }
                               />
                             </Grid2>
+                            ):(null)
+                            
                           )
                         )
                       ) : (
@@ -223,7 +226,8 @@ export default function InternationalMealSelection({
               <Grid2 container spacing={2}>
                 {mealData?.[0]?.FlightNumber ? (
                   mealData?.map((meal, mealIndex) => (
-                    <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                    (meal?.Price!=0)?(
+ <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                       <MealCard
                         meal={meal}
                         handleMealValue={() =>
@@ -238,6 +242,8 @@ export default function InternationalMealSelection({
                         }
                       />
                     </Grid2>
+                    ):(null)
+                   
                   ))
                 ) : (
                   <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
@@ -288,7 +294,8 @@ export default function InternationalMealSelection({
                         {filteredDataReturn[flightNumber]?.length > 0 ? (
                           filteredDataReturn[flightNumber].map(
                             (meal, mealIndex) => (
-                              <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                              (meal?.Price!=0)?(
+                               <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                                 <MealCard
                                   meal={meal}
                                   handleMealValue={() =>
@@ -305,6 +312,8 @@ export default function InternationalMealSelection({
                                   }
                                 />
                               </Grid2>
+                              ):(null)
+                            
                             )
                           )
                         ) : (
@@ -341,7 +350,8 @@ export default function InternationalMealSelection({
               <Grid2 container spacing={2}>
                 {mealData?.[0]?.FlightNumber ? (
                   mealData.map((meal, mealIndex) => (
-                    <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                    (meal?.Price!=0)?(
+                        <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                       <MealCard
                         meal={meal}
                         handleMealValue={() =>
@@ -356,6 +366,8 @@ export default function InternationalMealSelection({
                         }
                       />
                     </Grid2>
+                    ):(null)
+                   
                   ))
                 ) : (
                   <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>

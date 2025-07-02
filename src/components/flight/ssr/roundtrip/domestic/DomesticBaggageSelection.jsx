@@ -154,7 +154,7 @@ export default function DomesticBaggageSelection({
               {baggageData?.[0][0]?.FlightNumber ? (
                 baggageData?.[0]?.map((baggage, baggageIndex) => {
                   return (
-                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                    (baggage?.Price!=0)?(  <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
                         handleBaggageValue={(baggage) => {
@@ -173,7 +173,8 @@ export default function DomesticBaggageSelection({
                             b.baggage.Code === baggage?.Code
                         )}
                       />
-                    </Grid2>
+                    </Grid2>):(null)
+                  
                   );
                 })
               ) : (
@@ -209,7 +210,8 @@ export default function DomesticBaggageSelection({
               {baggageData?.[1][0]?.FlightNumber ? (
                 baggageData?.[1]?.map((baggage, baggageIndex) => {
                   return (
-                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                    (baggage?.Price!=0)?(
+                       <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
                         handleBaggageValue={(baggage) => {
@@ -229,6 +231,8 @@ export default function DomesticBaggageSelection({
                         )}
                       />
                     </Grid2>
+                    ):(null)
+                   
                   );
                 })
               ) : (
