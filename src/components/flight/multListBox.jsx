@@ -1,6 +1,6 @@
 import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import moment from "moment";
 import { FlightTakeoff } from "@mui/icons-material";
 import {
@@ -74,15 +74,15 @@ const MultiListBox = ({ details, traceId, journey }) => {
                     <Typography
                       sx={{
                         fontSize: 15,
-                        fontWeight: 600,
-                        fontFamily: nunito.style,
+                        fontWeight: "bold",
+                        fontFamily: roboto.style,
                       }}
                     >
                       {flight[0]?.Origin?.Airport?.CityName} -{" "}
                       {
                         flight[flight?.length - 1]?.Destination?.Airport
                           ?.CityName
-                      }
+                      }, {moment(flight[0]?.Origin?.DepTime).format("DD MMM")}
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
@@ -107,7 +107,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                             <Typography
                               sx={{
                                 fontSize: 15,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                                 fontWeight: 550,
                               }}
                             >
@@ -123,7 +123,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           sx={{
                             fontSize: { lg: 22, md: 22, sm: 20, xs: 18 },
                             fontWeight: 700,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {moment(flight[0]?.Origin?.DepTime).format("HH:mm")}
@@ -132,7 +132,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           sx={{
                             fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
                             fontWeight: 600,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {flight[0]?.Origin?.Airport?.AirportCode} -{" "}
@@ -142,7 +142,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           sx={{
                             fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
                             fontWeight: 600,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {flight[0]?.Origin?.Airport?.CityName}
@@ -156,7 +156,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                             sx={{
                               fontSize: { lg: 16, md: 16, sm: 14, xs: 14 },
                               fontWeight: 700,
-                              fontFamily: nunito.style,
+                              fontFamily: roboto.style,
                               textAlign: "center",
                             }}
                           >
@@ -208,7 +208,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           sx={{
                             fontSize: { lg: 22, md: 22, sm: 20, xs: 18 },
                             fontWeight: 700,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                             textAlign: "end",
                           }}
                         >
@@ -220,7 +220,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           sx={{
                             fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
                             fontWeight: 600,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                             textAlign: "end",
                           }}
                         >
@@ -239,7 +239,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           sx={{
                             fontSize: { lg: 14, md: 14, sm: 13, xs: 12 },
                             fontWeight: 600,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                             textAlign: "end",
                           }}
                         >
@@ -263,7 +263,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                             sx={{
                               fontSize: { lg: 15, md: 14, sm: 13, xs: 13 },
                               color: COLORS.DANGER,
-                              fontFamiy: nunito.style,
+                              fontFamiy: roboto.style,
                               fontWeight: 500,
                             }}
                           >
@@ -284,7 +284,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                           <Typography
                             sx={{
                               fontSize: { lg: 15, md: 14, sm: 13, xs: 13 },
-                              fontFamiy: nunito.style,
+                              fontFamiy: roboto.style,
                               fontWeight: 500,
                             }}
                           >
@@ -309,7 +309,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
               <Typography
                 sx={{
                   fontSize: 15,
-                  fontFamily: nunito.style,
+                  fontFamily: roboto.style,
                   fontWeight: 550,
                 }}
               >
@@ -333,7 +333,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                 sx={{
                   fontSize: { lg: 28, md: 28, sm: 22, xs: 20 },
                   fontWeight: 900,
-                  fontFamily: nunito.style,
+                  fontFamily: roboto.style,
                   marginRight: "10px",
                 }}
               >
@@ -345,7 +345,7 @@ const MultiListBox = ({ details, traceId, journey }) => {
                   color: COLORS.BLACK,
                   fontWeight: 550,
                   fontSize: 16,
-                  fontFamily: nunito.style,
+                  fontFamily: roboto.style,
                 }}
                 onClick={routetoAnotherPage}
               >

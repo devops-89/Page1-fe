@@ -553,7 +553,7 @@ const FlightList = () => {
           </Grid2>
         </Container>
       </Box>
-      {loading && !flightList?.segments?.flightData && (
+      {/* {loading && !flightList?.segments?.flightData && (
         <Box
           sx={{
             width: "100%",
@@ -565,7 +565,7 @@ const FlightList = () => {
         >
           <Loader open={true} />
         </Box>
-      )}
+      )} */}
     </>
   );
 };

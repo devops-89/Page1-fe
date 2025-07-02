@@ -3,7 +3,7 @@ import moment from "moment";
 import Image from "next/image";
 import React from "react";
 import pointerImage from "@/../public/images/pointer.png";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { useRouter } from "next/router";
 import { Grid } from "swiper/modules";
 
@@ -28,7 +28,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                   variant="h6"
                   gutterBottom
                   sx={{
-                    fontFamily: nunito.style,
+                    fontFamily: roboto.style,
                     fontSize: "20px",
                     fontWeight: 700,
                   }}
@@ -49,7 +49,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                       backgroundColor: "#FFEDD1",
                       padding: "5px",
                       borderRadius: "4px",
-                      fontFamily: nunito.style,
+                      fontFamily: roboto.style,
                     }}
                   >
                     {moment(segmentGroup[0]?.Origin?.DepTime).format(
@@ -84,7 +84,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
              <Button
         size="small"
         sx={{
-          fontFamily: nunito.style,
+          fontFamily: roboto.style,
           fontWeight: 800,
          
           display: {
@@ -119,7 +119,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                       />
                       <Typography
                         variant="subtitle1"
-                        sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+                        sx={{ fontFamily: roboto.style, fontWeight: 600 }}
                       >
                         {segment?.Airline?.AirlineName}{" "}
                         {segment?.Airline?.AirlineCode}{" "}
@@ -136,7 +136,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                     >
                       <Typography
                         variant="body1"
-                        sx={{ fontWeight: 700, fontFamily: nunito.style }}
+                        sx={{ fontWeight: 700, fontFamily: roboto.style }}
                       >
                         {moment(segment?.Origin?.DepTime).format("HH:mm")} -{" "}
                         {segment?.Origin?.Airport?.CityName} (
@@ -164,7 +164,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                       </Typography>
                       <Typography
                         variant="body1"
-                        sx={{ fontWeight: 700, fontFamily: nunito.style }}
+                        sx={{ fontWeight: 700, fontFamily: roboto.style }}
                       >
                         {moment(segment?.Destination?.ArrTime).format("HH:mm")}{" "}
                         - {segment?.Destination?.Airport?.CityName} (
@@ -185,13 +185,13 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                     >
                       <Typography
                         variant="body2"
-                        sx={{ fontFamily: nunito.style, fontWeight: 500 }}
+                        sx={{ fontFamily: roboto.style, fontWeight: 500 }}
                       >
                         <strong>Baggage:</strong> {segment?.Baggage}
                       </Typography>
                       <Typography
                         variant="body2"
-                        sx={{ fontFamily: nunito.style, fontWeight: 500 }}
+                        sx={{ fontFamily: roboto.style, fontWeight: 500 }}
                       >
                         <strong>Cabin Baggage:</strong> {segment?.CabinBaggage}
                       </Typography>
@@ -215,7 +215,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                             marginTop: "10px",
                             color: "orange",
                             fontWeight: 600,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           Change of Planes
@@ -225,7 +225,7 @@ const InternationalDetail = ({ flightDetails, setOpen }) => {
                           sx={{
                             marginTop: "10px",
                             fontWeight: 700,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {`${moment

@@ -3,7 +3,7 @@ import moment from "moment";
 import Image from "next/image";
 import React from "react";
 import pointerImage from "@/../public/images/pointer.png";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { useRouter } from "next/router";
 
 const DomesticDetail = ({ flightDetails, setOpen }) => {
@@ -32,7 +32,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                         variant="h6"
                         gutterBottom
                         sx={{
-                          fontFamily: nunito.style,
+                          fontFamily: roboto.style,
                           fontSize: "20px",
                           fontWeight: 700,
                         }}
@@ -54,7 +54,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                             backgroundColor: "#FFEDD1",
                             padding: "5px",
                             borderRadius: "4px",
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {moment(segmentGroup[0]?.Origin?.DepTime).format(
@@ -90,7 +90,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                       <Button
                         size="small"
                         sx={{
-                          fontFamily: nunito.style,
+                          fontFamily: roboto.style,
                           fontWeight: 800,
                           textAlign: "end",
 
@@ -132,7 +132,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                             />
                             <Typography
                               variant="subtitle1"
-                              sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+                              sx={{ fontFamily: roboto.style, fontWeight: 600 }}
                             >
                               {segment?.Airline?.AirlineName}{" "}
                               {segment?.Airline?.AirlineCode}{" "}
@@ -149,7 +149,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                           >
                             <Typography
                               variant="body1"
-                              sx={{ fontWeight: 700, fontFamily: nunito.style }}
+                              sx={{ fontWeight: 700, fontFamily: roboto.style }}
                             >
                               {moment(segment?.Origin?.DepTime).format("HH:mm")}{" "}
                               - {segment?.Origin?.Airport?.CityName} (
@@ -179,7 +179,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                             </Typography>
                             <Typography
                               variant="body1"
-                              sx={{ fontWeight: 700, fontFamily: nunito.style }}
+                              sx={{ fontWeight: 700, fontFamily: roboto.style }}
                             >
                               {moment(segment?.Destination?.ArrTime).format(
                                 "HH:mm"
@@ -202,13 +202,13 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                           >
                             <Typography
                               variant="body2"
-                              sx={{ fontFamily: nunito.style, fontWeight: 500 }}
+                              sx={{ fontFamily: roboto.style, fontWeight: 500 }}
                             >
                               <strong>Baggage:</strong> {segment?.Baggage}
                             </Typography>
                             <Typography
                               variant="body2"
-                              sx={{ fontFamily: nunito.style, fontWeight: 500 }}
+                              sx={{ fontFamily: roboto.style, fontWeight: 500 }}
                             >
                               <strong>Cabin Baggage:</strong>{" "}
                               {segment?.CabinBaggage}
@@ -233,7 +233,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                                   marginTop: "10px",
                                   color: "orange",
                                   fontWeight: 600,
-                                  fontFamily: nunito.style,
+                                  fontFamily: roboto.style,
                                 }}
                               >
                                 Change of Planes
@@ -243,7 +243,7 @@ const DomesticDetail = ({ flightDetails, setOpen }) => {
                                 sx={{
                                   marginTop: "10px",
                                   fontWeight: 700,
-                                  fontFamily: nunito.style,
+                                  fontFamily: roboto.style,
                                 }}
                               >
                                 {`${moment

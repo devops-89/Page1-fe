@@ -25,7 +25,7 @@ import {
 import { flightController } from "@/api/flightController";
 import { useRouter } from "next/router";
 import RoundFareSummary from "@/components/flight/RoundFareSummary";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import DomesticDetail from "@/components/flight/domesticDetail";
@@ -165,7 +165,7 @@ const FlightDetails = () => {
             variant="h5"
             sx={{
               color: COLORS.WHITE,
-              fontFamily: nunito.style,
+              fontFamily: roboto.style,
               fontWeight: 700,
             }}
           >
@@ -188,7 +188,7 @@ const FlightDetails = () => {
               variant="h6"
               sx={{
                 fontWeight: 600,
-                fontFamily: nunito.style,
+                fontFamily: roboto.style,
                 fontSize: "24px",
                 mb: "10px",
               }}
@@ -336,7 +336,7 @@ const FlightDetails = () => {
         open={open}
       >
         <DialogTitle
-          sx={{ m: 0, p: 2, fontFamily: nunito.style, fontWeight: 700 }}
+          sx={{ m: 0, p: 2, fontFamily: roboto.style, fontWeight: 700 }}
           id="customized-dialog-title"
         >
           Fare Rules
@@ -363,7 +363,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily: nunito.style,
+                      fontFamily: roboto.style,
                     }}
                   >
                     Origin
@@ -373,7 +373,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily: nunito.style,
+                      fontFamily: roboto.style,
                     }}
                   >
                     Destination
@@ -383,7 +383,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily: nunito.style,
+                      fontFamily: roboto.style,
                     }}
                   >
                     Airline
@@ -403,7 +403,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Origin}
@@ -413,7 +413,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Destination}
@@ -423,7 +423,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Airline}
@@ -445,7 +445,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Origin}
@@ -455,7 +455,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Destination}
@@ -465,7 +465,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Airline}
@@ -485,7 +485,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Origin}
@@ -495,7 +495,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Destination}
@@ -505,7 +505,7 @@ const FlightDetails = () => {
                                 fontSize: "15px",
                                 textAlign: "center",
                                 fontWeight: 600,
-                                fontFamily: nunito.style,
+                                fontFamily: roboto.style,
                               }}
                             >
                               {fareRule.Airline}

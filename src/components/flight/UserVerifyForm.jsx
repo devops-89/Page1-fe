@@ -6,7 +6,7 @@ import { loginTextField } from "@/utils/styles";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { useDispatch } from "react-redux";
 import { setAuthenticated, setOtpEmailAuthenticated } from "@/redux/reducers/user.js";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import Loading from "react-loading";
 import { setToast } from "@/redux/reducers/toast";
 import { TOAST_STATUS } from "@/utils/enum";
@@ -134,7 +134,7 @@ const UserVerifyForm = () => {
     <>
       <Typography
         variant="h6"
-        sx={{ mb: "12px", fontWeight: 700, fontFamily: nunito.style }}
+        sx={{ mb: "12px", fontWeight: 700, fontFamily: roboto.style }}
       >
         Enter Your Email to Continue Booking
       </Typography>

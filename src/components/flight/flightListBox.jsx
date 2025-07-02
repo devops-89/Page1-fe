@@ -302,6 +302,7 @@ const FlightListBox = ({ details, traceId, journey }) => {
           </Stack>
         </Card>
         <Collapse in={open} sx={{ mt: 2 }}>
+       
           <Tabs
             value={value}
             onChange={tabChangeHandler}
@@ -337,6 +338,8 @@ const FlightListBox = ({ details, traceId, journey }) => {
               />
             ))}
           </Tabs>
+         
+          
           <TabPanel index={0} value={value}>
             <FlightBox tableData={flightDetails?.departure} />
           </TabPanel>

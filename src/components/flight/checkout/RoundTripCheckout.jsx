@@ -2,7 +2,7 @@ import { paymentController } from "@/api/paymentController";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import { COLORS } from "@/utils/colors";
 import { JOURNEY } from "@/utils/enum";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import Loader from "@/utils/Loader";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import {
@@ -112,7 +112,7 @@ export default function RoundTripCheckout() {
               variant="h5"
               sx={{
                 color: COLORS.WHITE,
-                fontFamily: nunito.style,
+                fontFamily: roboto.style,
                 fontWeight: 700,
               }}
             >
@@ -127,7 +127,7 @@ export default function RoundTripCheckout() {
                 variant="h5"
                 sx={{
                   fontWeight: "bold",
-                  fontFamily: nunito.style,
+                  fontFamily: roboto.style,
                   mb: 4,
                 }}
               >
@@ -182,7 +182,7 @@ export default function RoundTripCheckout() {
                       <Typography
                         variant="h6"
                         sx={{
-                          fontFamily: nunito.style,
+                          fontFamily: roboto.style,
                           fontWeight: 600,
                           mb: 1,
                           color: COLORS.PRIMARY,
@@ -200,7 +200,7 @@ export default function RoundTripCheckout() {
                         <Typography
                           sx={{
                             fontWeight: 500,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           Adult
@@ -209,7 +209,7 @@ export default function RoundTripCheckout() {
                         <Typography
                           sx={{
                             fontWeight: 500,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {passengerCount?.adult}
@@ -224,7 +224,7 @@ export default function RoundTripCheckout() {
                         <Typography
                           sx={{
                             fontWeight: 500,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           Child
@@ -233,7 +233,7 @@ export default function RoundTripCheckout() {
                         <Typography
                           sx={{
                             fontWeight: 500,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {passengerCount?.child}
@@ -248,7 +248,7 @@ export default function RoundTripCheckout() {
                         <Typography
                           sx={{
                             fontWeight: 500,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           Infant
@@ -257,7 +257,7 @@ export default function RoundTripCheckout() {
                         <Typography
                           sx={{
                             fontWeight: 500,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                           }}
                         >
                           {passengerCount?.infant}
@@ -283,7 +283,7 @@ export default function RoundTripCheckout() {
                               <Typography
                                 variant="h6"
                                 sx={{
-                                  fontFamily: nunito.style,
+                                  fontFamily: roboto.style,
                                   fontWeight: 600,
                                   mb: 1,
                                   color: COLORS.PRIMARY,
@@ -306,7 +306,7 @@ export default function RoundTripCheckout() {
                                 <Typography
                                   sx={{
                                     fontWeight: 500,
-                                    fontFamily: nunito.style,
+                                    fontFamily: roboto.style,
                                   }}
                                 >
                                   Departure Date
@@ -314,7 +314,7 @@ export default function RoundTripCheckout() {
                                 <Typography
                                   sx={{
                                     fontWeight: 500,
-                                    fontFamily: nunito.style,
+                                    fontFamily: roboto.style,
                                   }}
                                 >
                                   {moment(segment[0]?.Origin?.DepTime).format(
@@ -331,7 +331,7 @@ export default function RoundTripCheckout() {
                                 <Typography
                                   sx={{
                                     fontWeight: 500,
-                                    fontFamily: nunito.style,
+                                    fontFamily: roboto.style,
                                   }}
                                 >
                                   Departure Time
@@ -339,7 +339,7 @@ export default function RoundTripCheckout() {
                                 <Typography
                                   sx={{
                                     fontWeight: 500,
-                                    fontFamily: nunito.style,
+                                    fontFamily: roboto.style,
                                   }}
                                 >
                                   {moment(segment[0]?.Origin?.DepTime).format(
@@ -368,7 +368,7 @@ export default function RoundTripCheckout() {
                                 <Typography
                                   variant="h6"
                                   sx={{
-                                    fontFamily: nunito.style,
+                                    fontFamily: roboto.style,
                                     fontWeight: 600,
                                     mb: 1,
                                     color: COLORS.PRIMARY,
@@ -387,7 +387,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     Departure Date
@@ -395,7 +395,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     {moment(segment?.Origin?.DepTime).format(
@@ -412,7 +412,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     Departure Time
@@ -420,7 +420,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     {moment(segment?.Origin?.DepTime).format(
@@ -448,7 +448,7 @@ export default function RoundTripCheckout() {
                                 <Typography
                                   variant="h6"
                                   sx={{
-                                    fontFamily: nunito.style,
+                                    fontFamily: roboto.style,
                                     fontWeight: 600,
                                     mb: 1,
                                     color: COLORS.PRIMARY,
@@ -467,7 +467,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     Departure Date
@@ -475,7 +475,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     {moment(segment?.Origin?.DepTime).format(
@@ -492,7 +492,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     Departure Time
@@ -500,7 +500,7 @@ export default function RoundTripCheckout() {
                                   <Typography
                                     sx={{
                                       fontWeight: 500,
-                                      fontFamily: nunito.style,
+                                      fontFamily: roboto.style,
                                     }}
                                   >
                                     {moment(segment?.Origin?.DepTime).format(
@@ -522,7 +522,7 @@ export default function RoundTripCheckout() {
                         <Typography
                           sx={{
                             fontSize: 14,
-                            fontFamily: nunito.style,
+                            fontFamily: roboto.style,
                             textAlign: "left",
                           }}
                         >
@@ -543,7 +543,7 @@ export default function RoundTripCheckout() {
                       <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Stack direction="row" alignItems={"center"}>
                           <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                          <Typography sx={{ fontFamily: nunito.style }}>
+                          <Typography sx={{ fontFamily: roboto.style }}>
                             100% secure booking
                           </Typography>
                         </Stack>
@@ -552,7 +552,7 @@ export default function RoundTripCheckout() {
                       <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Stack direction="row" alignItems={"center"}>
                           <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                          <Typography sx={{ fontFamily: nunito.style }}>
+                          <Typography sx={{ fontFamily: roboto.style }}>
                             100% secure booking
                           </Typography>
                         </Stack>
@@ -561,7 +561,7 @@ export default function RoundTripCheckout() {
                       <Grid2 size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
                         <Stack direction="row" alignItems={"center"}>
                           <ShieldRoundedIcon sx={{ color: COLORS.GREEN }} />
-                          <Typography sx={{ fontFamily: nunito.style }}>
+                          <Typography sx={{ fontFamily: roboto.style }}>
                             100% secure booking
                           </Typography>
                         </Stack>

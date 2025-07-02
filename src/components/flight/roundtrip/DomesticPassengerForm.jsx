@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Typography, Box } from "@mui/material";
 import { Formik, Form } from "formik";
-import { nunito } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
 import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import Loader from "@/utils/Loader";
@@ -647,7 +647,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             variant="h5"
             sx={{
               fontSize: { lg: 18, xs: 14 },
-              fontFamily: nunito.style,
+              fontFamily: roboto.style,
               fontWeight: 700,
               mb: "10px",
             }}
@@ -658,7 +658,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
             variant="body1"
             sx={{
               fontSize: { lg: 18, xs: 14 },
-              fontFamily: nunito.style,
+              fontFamily: roboto.style,
               fontWeight: 600,
               mb: "10px",
             }}

@@ -34,7 +34,15 @@ const FlightBox = ({ tableData }) => {
             <Card sx={{ p: 1, mt: 2 ,}}>
                 <TableContainer>
                     <Table>
-
+                         <TableRow>
+                            <TableCell sx={{ padding: "8px" }}>
+                                <Typography sx={{fontWeight:"bold"}}>
+                                   {tableData[0]?.Origin?.Airport?.CityName} to {tableData[tableData.length-1]?.Destination?.Airport?.CityName}, {moment(tableData[0]?.Origin?.DepTime).format('DD MMM')}
+                                </Typography>
+                            </TableCell>
+                            <TableCell sx={{ padding: "8px" }}></TableCell>
+                            <TableCell sx={{ padding: "8px" }}></TableCell>
+                         </TableRow>
                         {tableData?.map((intermediate, index) => (
                             <TableRow
                                 key={index}
