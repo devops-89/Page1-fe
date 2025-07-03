@@ -42,7 +42,13 @@ const FlightList = () => {
   const [priceRange, setPriceRange] = useState([0, 500000]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [selectedTime, setSelectedTime] = useState("Anytime");
+ 
   const [loading, setLoading] = useState(true);
+
+
+
+   
+ 
 
   useEffect(() => {
     const fetchInitialData = () => {
@@ -68,6 +74,9 @@ const FlightList = () => {
 
     fetchInitialData();
   }, []);
+
+
+
 
   const handleRangeChange = (event, newValue) => {
     setPriceRange(newValue);
@@ -161,6 +170,9 @@ const FlightList = () => {
       ))}
     </>
   );
+
+ 
+ 
 
   return (
     <>

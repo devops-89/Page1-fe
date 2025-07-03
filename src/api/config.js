@@ -25,6 +25,10 @@ const flightPublicApi = axios.create({
   baseURL: APIURL.flightUrl,
 });
 
+const dashboardPublicApi=axios.create({
+  baseURL: APIURL.dashboardUrl,
+})
+
 const publicApi = axios.create({
   baseURL: APIURL.authenticationUrl,
 });
@@ -77,4 +81,5 @@ module.exports = {
   securedPaymentUrl,
   hotelPublicApi,
   basicPublicApi,
+  dashboardPublicApi
 };

@@ -8,6 +8,7 @@ export const APIURL = {
   authPaymentUrl: `${baseUrl}/payment/api/`,
   hotelUrl: `${baseUrl}/hotel/api/`,
   basicUrl: `${baseUrl}/utility-services/api/`,
+  dashboardUrl:`${baseUrl}/user/api/stats`
 };
 
 // export const baseUrl = "http://192.168.31.233";

@@ -18,13 +18,14 @@ import {
 } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
+import { dashboardController } from "@/api/dashboardController";
 
 const columns = [
-  { key: "sl", label: "SL" },
-  { key: "bookingRef", label: "Booking Ref" },
-  { key: "passengerName", label: "Passenger Name" },
-  { key: "email", label: "Email" },
-  { key: "phone", label: "Phone" },
+  { key: "custom_order_id", label: "Order Id" },
+  { key: "journey", label: "Journey Scope" },
+  { key: "journey_type", label: "Trip Type" },
+  { key: "amount", label: "Price" },
+  { key: "updated_at", label: "Order Time" },
   { key: "departure", label: "Departure" },
   { key: "arrival", label: "Arrival" },
   { key: "flightDate", label: "Flight Date" },
@@ -32,134 +33,15 @@ const columns = [
   { key: "ticket", label: "Ticket" },
 ];
 
-const dummyData = [
-  {
-    sl: 1,
-    bookingRef: "FBK001",
-    passengerName: "John Doe",
-    email: "john@example.com",
-    phone: "+91 9876543210",
-    departure: "Delhi (DEL)",
-    arrival: "Mumbai (BOM)",
-    flightDate: "2025-06-10",
-    status: "Confirmed",
-    ticket: "FBK001.pdf",
-  },
-  {
-    sl: 2,
-    bookingRef: "FBK002",
-    passengerName: "Jane Smith",
-    email: "jane@example.com",
-    phone: "+91 9123456780",
-    departure: "Bangalore (BLR)",
-    arrival: "Chennai (MAA)",
-    flightDate: "2025-06-12",
-    status: "Pending",
-    ticket: "FBK002.pdf",
-  },
-  {
-    sl: 3,
-    bookingRef: "FBK003",
-    passengerName: "Alex Johnson",
-    email: "alex@example.com",
-    phone: "+91 9988776655",
-    departure: "Kolkata (CCU)",
-    arrival: "Hyderabad (HYD)",
-    flightDate: "2025-06-15",
-    status: "Cancelled",
-    ticket: "FBK003.pdf",
-  },
-  {
-    sl: 4,
-    bookingRef: "FBK004",
-    passengerName: "Emily Brown",
-    email: "emily@example.com",
-    phone: "+91 8877665544",
-    departure: "Mumbai (BOM)",
-    arrival: "Delhi (DEL)",
-    flightDate: "2025-06-18",
-    status: "Confirmed",
-    ticket: "FBK004.pdf",
-  },
-  {
-    sl: 5,
-    bookingRef: "FBK005",
-    passengerName: "Michael Green",
-    email: "michael@example.com",
-    phone: "+91 7766554433",
-    departure: "Chennai (MAA)",
-    arrival: "Bangalore (BLR)",
-    flightDate: "2025-06-20",
-    status: "Pending",
-    ticket: "FBK005.pdf",
-  },
-  {
-    sl: 6,
-    bookingRef: "FBK006",
-    passengerName: "Sophia Blue",
-    email: "sophia@example.com",
-    phone: "+91 6655443322",
-    departure: "Hyderabad (HYD)",
-    arrival: "Kolkata (CCU)",
-    flightDate: "2025-06-22",
-    status: "Confirmed",
-    ticket: "FBK006.pdf",
-  },
-  {
-    sl: 7,
-    bookingRef: "FBK007",
-    passengerName: "Daniel Black",
-    email: "daniel@example.com",
-    phone: "+91 5544332211",
-    departure: "Delhi (DEL)",
-    arrival: "Chennai (MAA)",
-    flightDate: "2025-06-25",
-    status: "Cancelled",
-    ticket: "FBK007.pdf",
-  },
-  {
-    sl: 8,
-    bookingRef: "FBK008",
-    passengerName: "Olivia White",
-    email: "olivia@example.com",
-    phone: "+91 4433221100",
-    departure: "Mumbai (BOM)",
-    arrival: "Bangalore (BLR)",
-    flightDate: "2025-06-27",
-    status: "Confirmed",
-    ticket: "FBK008.pdf",
-  },
-  {
-    sl: 9,
-    bookingRef: "FBK009",
-    passengerName: "Liam Brown",
-    email: "liam@example.com",
-    phone: "+91 3322110099",
-    departure: "Kolkata (CCU)",
-    arrival: "Delhi (DEL)",
-    flightDate: "2025-06-30",
-    status: "Pending",
-    ticket: "FBK009.pdf",
-  },
-  {
-    sl: 10,
-    bookingRef: "FBK010",
-    passengerName: "Ava Wilson",
-    email: "ava@example.com",
-    phone: "+91 2211009988",
-    departure: "Chennai (MAA)",
-    arrival: "Mumbai (BOM)",
-    flightDate: "2025-07-02",
-    status: "Confirmed",
-    ticket: "FBK010.pdf",
-  },
-];
 
 const Flight = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [fetchedData,setFetchedData]=useState([]);
+  const [totalItems,setTotalItems]=useState(0);
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -172,19 +54,33 @@ const Flight = () => {
     setCurrentPage(1);
   }, [debouncedSearch, pageSize]);
 
-  const filteredData = dummyData.filter((item) =>
-    columns.some((col) =>
-      String(item[col.key] || "")
-        .toLowerCase()
-        .includes(debouncedSearch.toLowerCase())
-    )
-  );
+  
+  
 
-  const pageCount = Math.ceil(filteredData.length / pageSize);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  // API Calling for the flight bookings
+  useEffect( ()=>{
+
+   const fetchBookings= async()=>{
+    try{
+        let response=await dashboardController.getBookingByUserId("177b0159-8440-4b1f-b4b2-cedbd02e1ed9",currentPage,pageSize,debouncedSearch?.trim() || "");
+     
+        setFetchedData(response.data.data.docs);
+       setTotalItems(response.data.data.totalDocs);
+     }
+     catch(error){
+      console.error("API Error: ",error);
+     }
+    }
+
+    fetchBookings();
+    
+  },[currentPage,pageSize,debouncedSearch]);
+
+
+  // required Data
+  const paginatedData = fetchedData;
+ const pageCount = Math.ceil(totalItems / pageSize);
+ console.log("PaginatedData: ",fetchedData)
 
   return (
     <Box
@@ -288,7 +184,7 @@ const Flight = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedData.length === 0 ? (
+            {paginatedData?.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
@@ -299,7 +195,7 @@ const Flight = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedData.map((row, i) => (
+              paginatedData?.map((row, i) => (
                 <TableRow key={i}>
                   {columns.map((col) => (
                     <TableCell
@@ -334,7 +230,7 @@ const Flight = () => {
       >
         <Typography sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
           Showing {(currentPage - 1) * pageSize + 1} to{" "}
-          {Math.min(currentPage * pageSize, filteredData.length)} of {filteredData.length} entries
+          {Math.min(currentPage * pageSize, paginatedData?.length)} of {paginatedData?.length} entries
         </Typography>
 
         <Stack spacing={2} direction="row">
