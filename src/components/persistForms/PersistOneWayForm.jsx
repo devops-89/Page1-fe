@@ -22,8 +22,8 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import VirtualList from "./fixedSizeList";
-import TravellerSelector from "./travellerSelector";
+import VirtualList from "../flight/fixedSizeList";
+import TravellerSelector from "../flight/travellerSelector";
 import { setToast } from "@/redux/reducers/toast";
 import { data } from "@/assests/data";
 import Loading from "react-loading";
@@ -35,7 +35,7 @@ import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
 import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
 
-const OnewayForm = () =>  {
+const PersistOneWayForm = () =>  {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [adultValue, setAdultValue] = useState(1);
@@ -88,7 +88,6 @@ const OnewayForm = () =>  {
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
     if (newValue) {
-       console.log(newValue.iata_code);
       setState({
         ...state,
         origin: newValue.iata_code,
@@ -98,7 +97,6 @@ const OnewayForm = () =>  {
   const destinationHandler = (e, newValue) => {
     setDestination(newValue);
     if (newValue) {
-      console.log(newValue.iata_code);
       setState({
         ...state,
         destination: newValue.iata_code,
@@ -212,6 +210,47 @@ const OnewayForm = () =>  {
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
 
+//   setting the input filelds of the form with previous search
+useEffect(() => {
+  if (!loading && airportList.length) {
+    const savedState = JSON.parse(localStorage.getItem("state") || "{}");
+
+    if (savedState.origin) {
+      const originAirport = airportList.find(
+        (a) => a.iata_code === savedState.origin
+      );
+      if (originAirport) {
+        setOrigin(originAirport);
+        setState((prev) => ({ ...prev, origin: originAirport.iata_code }));
+      }
+    }
+
+    if (savedState.destination) {
+      const destinationAirport = airportList.find(
+        (a) => a.iata_code === savedState.destination
+      );
+      if (destinationAirport) {
+        setDestination(destinationAirport);
+        setState((prev) => ({
+          ...prev,
+          destination: destinationAirport.iata_code,
+        }));
+      }
+    }
+
+    if (savedState.departure_date) {
+      setDepartureDate(moment(savedState.departure_date));
+      setState((prev) => ({
+        ...prev,
+        departure_date: savedState.departure_date,
+      }));
+    }
+
+    // Optional: Load adults/children/infants/cabin_class if needed
+  }
+}, [loading, airportList]);
+
+
   return (
     <>
       <Grid2 container alignItems={"center"} justifyContent={"center"} sx={{ display:"flex" , alignItems:"stretch"}}>
@@ -232,14 +271,14 @@ const OnewayForm = () =>  {
               pt: 1,
             }}
           >
-            From 
+            From mm
           </Typography>
 
           <Autocomplete
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Search.."
+                placeholder="Search..."
                 sx={{
                   fieldset: { border: "none" },
                   input: { textAlign: "start" },
@@ -333,7 +372,7 @@ const OnewayForm = () =>  {
               pt: 1,
             }}
           >
-            To
+            To mm
           </Typography>
 
           <Autocomplete
@@ -577,4 +616,4 @@ const OnewayForm = () =>  {
   );
 };
 
-export default OnewayForm;
+export default PersistOneWayForm;

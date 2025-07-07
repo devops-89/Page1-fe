@@ -1,22 +1,16 @@
 import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
-import {
-  Box,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Stack, Tab, Tabs, Typography ,useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TabPanel from "../tabPanel";
-import OnewayForm from "./oneWayForm";
-import RoundTrip from "./roundTripForm";
-import Multiway from "./multiForm";
+
+import RoundTrip from "../flight/roundTripForm";
+import Multiway from "../flight/multiForm";
 import { useRouter } from "next/router";
 import PersistOneWayForm from "../persistForms/PersistOneWayForm";
+import PersistRoundTripForm from "./PersistRoundTripForm";
 
-const FlightForm = () => {
+const PersistFlightForm = () => {
   const tab = [
     {
       label: "Oneway",
@@ -33,6 +27,7 @@ const FlightForm = () => {
   const tablet = useMediaQuery("(max-width:900px)");
 
   const router = useRouter();
+
 
   const [flightValue, setFlightValue] = useState(0);
 
@@ -51,17 +46,20 @@ const FlightForm = () => {
   };
 
   return (
-    <Box sx={{ p: 1 }}>
+    <Box sx={{ p: 1   }}>
+   
       <Stack
-        direction={{ lg: "row", md: "row", xs: "column" }}
+        direction={{lg:"row" ,md:"row",xs:"column"}}
         alignItems={"center"}
         justifyContent={"space-between"}
+       
       >
         <Tabs
           value={flightValue}
           sx={{
+            
             "& .MuiTab-root": {
-              width: { lg: 115, xs: 100 },
+              width: {lg:115 , xs:100},
               minHeight: 40,
               top: 5,
               borderRadius: 8,
@@ -82,24 +80,27 @@ const FlightForm = () => {
               icon={
                 <Box
                   sx={{
+                  
                     backgroundColor:
-                      i === flightValue ? `${COLORS.SECONDARY}` : "#d7d7d7",
+                      i === flightValue
+                        ? `${COLORS.SECONDARY}`
+                        : "#d7d7d7",
                     borderRadius: "50%",
-                    width: { lg: 15, xs: 10 },
-                    height: { lg: 15, xs: 10 },
-                    border: `4px solid ${COLORS.SEMIGREY}`,
+                    width: {lg:15 , xs:10},
+                    height: {lg:15 , xs:10},
+                    border:`4px solid ${COLORS.SEMIGREY}`,
                   }}
                 ></Box>
               }
               label={
                 <Typography
                   sx={{
-                    fontSize: { lg: 12, xs: 10 },
+                    fontSize: {lg:12 , xs:10},
                     fontWeight: 500,
                     fontFamily: nunito.style,
                   }}
                 >
-                  {val.label}
+                  {val.label} 
                 </Typography>
               }
               iconPosition="start"
@@ -107,25 +108,19 @@ const FlightForm = () => {
             />
           ))}
         </Tabs>
-        <Typography
-          sx={{
-            fontSize: { lg: 15, md: 15, sm: 15, xs: 14 },
-            fontFamily: raleway.style,
-            mr: 2,
-            mb: { xs: 1 },
-            textAlign: "center",
-          }}
-        >
+        <Typography sx={{ fontSize: {lg:15 , md:15 , sm:15 ,xs:14}, fontFamily: raleway.style, mr: 2 ,mb:{xs:1} ,textAlign:"center" }}>
           Millions of cheap flights. One simple search
         </Typography>
       </Stack>
+     
 
-      <TabPanel value={flightValue} index={0}>
+      <TabPanel value={flightValue} index={0} >
         {/* one way done */}
-        <OnewayForm />
+        <PersistOneWayForm/>
+       
       </TabPanel>
       <TabPanel value={flightValue} index={1}>
-        <RoundTrip />
+       <PersistRoundTripForm />
       </TabPanel>
       <TabPanel value={flightValue} index={2}>
         <Multiway />
@@ -134,4 +129,4 @@ const FlightForm = () => {
   );
 };
 
-export default FlightForm;
+export default PersistFlightForm;

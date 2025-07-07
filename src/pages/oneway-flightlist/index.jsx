@@ -24,7 +24,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CloseIcon from "@mui/icons-material/Close";
-import FlightForm from "@/components/flight/flightForm";
+
 import FlightListBox from "@/components/flight/flightListBox";
 import Loader from "@/utils/Loader";
 import { COLORS } from "@/utils/colors";
@@ -32,6 +32,7 @@ import { nunito } from "@/utils/fonts";
 import Loading from "react-loading";
 import filterImage from "@/assests/flight_image/filter.svg";
 import Image from "next/image";
+import PersistFlightForm from "@/components/persistForms/PersistFlightForm";
 
 const FlightList = () => {
   const [flightList, setFlightList] = useState(null);
@@ -178,15 +179,20 @@ const FlightList = () => {
     <>
       <InnerBanner img={banner.src} heading={"OnewayFlight"} />
 
-      <Box sx={{ pt: 10 }}>
-        <Container>
-          <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
-            <Typography sx={{ fontSize: 18, fontFamily: nunito.style }}>
-              {" "}
-              Search Flight
-            </Typography>
-            <FlightForm />
-          </Card>
+      <Box sx={{ pt: 10, }}>
+        <Container  >
+         <Card
+      sx={{
+        boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)",
+        p: 2,
+        backgroundColor: "#fff", // Important for overlaying content below
+      }}
+    >
+      <Typography sx={{ fontSize: 18, fontFamily: nunito.style }}>
+        Search Flight
+      </Typography>
+      <PersistFlightForm />
+    </Card>
         </Container>
       </Box>
 
@@ -229,6 +235,7 @@ const FlightList = () => {
                         boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
                       }}
                     >
+                    
                       <CardHeader
                         action={
                           <Button onClick={toggleDrawer(false)}>
@@ -240,8 +247,10 @@ const FlightList = () => {
                                 fontSize: 30,
                                 fontWeight: "bold",
                               }}
+                            
                             />
                           </Button>
+                         
                         }
                       />
                       <CardHeader

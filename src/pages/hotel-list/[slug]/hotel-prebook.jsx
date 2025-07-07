@@ -1,4 +1,5 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {
   Box,
   Card,
@@ -11,152 +12,176 @@ import {
   Paper,
   Grid2,
   Button,
+  ListItemIcon,
 } from "@mui/material";
 
 import { useSelector } from "react-redux";
 import StarIcon from "@mui/icons-material/Star";
 import { COLORS } from "@/utils/colors";
-import { nunito } from "@/utils/fonts";
+import { nunito, roboto } from "@/utils/fonts";
 import { hotelController } from "@/api/hotelController";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 import { data } from "@/assests/data";
 import UserVerifyForm from "@/components/hotels/UserVerifyForm";
 import GuestForm from "@/components/hotels/GuestForm";
 import moment from "moment";
 import { useRouter } from "next/router";
+import { useFormatCancellationPolicy } from "@/custom-hook/useFormatHotelCancellationPolicy";
 
 const HotelPreBookPage = () => {
-
   // make router instance for extracting instance
-   const router=useRouter();
+  const router = useRouter();
+
+  // parsing html from the api response
+  function decodeHTMLEntities(text) {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = text;
+    return textarea.value;
+  }
 
   // making state variables for preBook Api Call
-  const [preBookResponse,setPreBookResponse]=useState(null);
-  const [loading,setLoading]=useState(true);
-  const [error,setError]=useState(null);
-
+  const [preBookResponse, setPreBookResponse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // extracting the logic status to login and giving access
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
   );
 
- 
-
   console.log("router Value:", router.query.slug);
-  console.log("router is ready or not!:",router.isReady);
+  console.log("router is ready or not!:", router.isReady);
 
   // extractimg the hotel data to render
   const hotel = data?.hotelPreBook?.HotelResult?.[0];
   const room = hotel?.Rooms?.[0];
 
   // preBook API Calling Here
-  useEffect(()=>{
+  useEffect(() => {
+    if (!router.isReady) return;
 
-    if(!router.isReady) return; 
+    const fetchPreBook = async () => {
+      const bookingCode = router?.query?.slug;
 
-    const fetchPreBook=async ()=>{
-      const bookingCode=router?.query?.slug;
-
-      try{
-           
-       const response=await hotelController.preBook({BookingCode:bookingCode});
-       setPreBookResponse(response?.data?.data);
-       console.log("PreBook Response:",response);
-      }
-      catch(error){
+      try {
+        const response = await hotelController.preBook({
+          BookingCode: bookingCode,
+        });
+        setPreBookResponse(response?.data?.data);
+        console.log("PreBook Response:", response);
+      } catch (error) {
         console.error("PreBook Error:", error.message);
         setError(error);
-         
-      }
-      finally{
+      } finally {
         setLoading(false);
       }
-
-    }
+    };
 
     fetchPreBook();
+  }, [router.isReady, router.query.slug]);
 
-  },[router.isReady,router.query.slug]);
+  // extracting the cancellation policy for formating it
+  const cancellationPolicies =
+    preBookResponse?.HotelResult[0]?.Rooms[0]?.CancelPolicies;
+  const cancellationMessages =
+    useFormatCancellationPolicy(cancellationPolicies);
 
-
-  if(loading){
+  if (loading) {
     return (
-        <Grid2 container>
-      <Grid2
-        size={{ xs: "12" }}
-        sx={{
-          height: "230px",
-          background: "rgba(8,8,79,1)",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          py: "10px",
-        }}
-      >
-        <Typography
-          variant="h5"
+      <Grid2 container>
+        <Grid2
+          size={{ xs: "12" }}
           sx={{
-            color: COLORS.WHITE,
-            fontFamily: nunito.style,
-            fontWeight: 700,
+            height: "230px",
+            background: "rgba(8,8,79,1)",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            py: "10px",
           }}
         >
-          Complete Your Booking
-        </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              color: COLORS.WHITE,
+              fontFamily: nunito.style,
+              fontWeight: 700,
+            }}
+          >
+            Complete Your Booking
+          </Typography>
+        </Grid2>
+        <Container>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "300px",
+            }}
+          >
+            <ReactLoading
+              type={"bars"}
+              color={COLORS.PRIMARY}
+              height={60}
+              width={60}
+            />
+          </Box>
+        </Container>
       </Grid2>
-      <Container >
-      <Box sx={{display:"flex",justifyContent:"center",alignItems:"center",height:"300px"}}>
-          <ReactLoading type={"bars"} color={COLORS.PRIMARY} height={60} width={60} />
-      </Box>
-      </Container>
-       </Grid2>
-    )
+    );
   }
 
-  if(loading){
+  if (loading) {
     return (
-        <Grid2 container>
-      <Grid2
-        size={{ xs: "12" }}
-        sx={{
-          height: "230px",
-          background: "rgba(8,8,79,1)",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          py: "10px",
-        }}
-      >
-        <Typography
-          variant="h5"
+      <Grid2 container>
+        <Grid2
+          size={{ xs: "12" }}
           sx={{
-            color: COLORS.WHITE,
-            fontFamily: nunito.style,
-            fontWeight: 700,
+            height: "230px",
+            background: "rgba(8,8,79,1)",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            py: "10px",
           }}
         >
-          Complete Your Booking
-        </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              color: COLORS.WHITE,
+              fontFamily: roboto.style,
+              fontWeight: 700,
+            }}
+          >
+            Complete Your Booking
+          </Typography>
+        </Grid2>
+        <Container>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "300px",
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                color: COLORS.WHITE,
+                fontFamily: roboto.style,
+                fontWeight: 700,
+              }}
+            >
+              Error in API
+            </Typography>
+          </Box>
+        </Container>
       </Grid2>
-      <Container >
-      <Box sx={{display:"flex",justifyContent:"center",alignItems:"center",height:"300px"}}>
-       <Typography
-          variant="h5"
-          sx={{
-            color: COLORS.WHITE,
-            fontFamily: nunito.style,
-            fontWeight: 700,
-          }}
-        >
-          Error in API
-        </Typography>
-      </Box>
-      </Container>
-       </Grid2>
-    )
+    );
   }
 
   return (
@@ -177,7 +202,7 @@ const HotelPreBookPage = () => {
           variant="h5"
           sx={{
             color: COLORS.WHITE,
-            fontFamily: nunito.style,
+            fontFamily: roboto.style,
             fontWeight: 700,
           }}
         >
@@ -198,26 +223,40 @@ const HotelPreBookPage = () => {
                     <Grid2 size={{ xs: 12, md: 12, lg: 9 }}>
                       <Typography
                         variant="h5"
-                        sx={{ fontWeight: "bold", fontFamily:nunito.style }}
+                        sx={{ fontWeight: "bold", fontFamily: roboto.style }}
                         gutterBottom
                       >
-                       {preBookResponse.HotelResult[0].HotelName}
+                        {preBookResponse.HotelResult[0].HotelName}
                       </Typography>
                       <Typography
                         variant="subtitle2"
                         sx={{ fontWeight: "bold" }}
                         gutterBottom
                       >
-                        {Array.from({length:5}).map((_, index) => (
+                        {Array.from({ length: 5 }).map((_, index) => (
                           <StarIcon
                             key={index}
-                            sx={{ color: index<preBookResponse.HotelResult[0].HotelHotelRating? COLORS.PRIMARY : "#ccc"
- }}
+                            sx={{
+                              color:
+                                index <
+                                preBookResponse.HotelResult[0].HotelHotelRating
+                                  ? COLORS.PRIMARY
+                                  : "#ccc",
+                            }}
                           />
                         ))}
                       </Typography>
-                      <Typography variant="subtitle2" gutterBottom sx={{fontFamily:nunito.style}}>
-                       {preBookResponse.HotelResult[0].HotelAddress}
+                      <Typography
+                        variant="subtitle2"
+                        color="text.primary"
+                        gutterBottom
+                        sx={{
+                          fontFamily: roboto.style,
+                          fontWeight: 600,
+                          fontSize: "16px",
+                        }}
+                      >
+                        {preBookResponse.HotelResult[0].HotelAddress}
                       </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 12, lg: 3 }}>
@@ -226,7 +265,7 @@ const HotelPreBookPage = () => {
                         alt="hotel_image"
                         width={150}
                         height={130}
-                        style={{borderRadius:"8px"}}
+                        style={{ borderRadius: "8px" }}
                       />
                     </Grid2>
                   </Grid2>
@@ -242,9 +281,21 @@ const HotelPreBookPage = () => {
                       size={{ xs: 12, md: 12, lg: 3 }}
                       sx={{ textAlign: "center" }}
                     >
-                      <Typography sx={{fontWeight:800, fontFamily:nunito.style}}>CHECK IN</Typography>
-                      <Typography sx={{fontWeight:600, fontFamily:nunito.style}}>23 Apr 2025</Typography>
-                      <Typography sx={{fontWeight:600, fontFamily:nunito.style}}>11 AM</Typography>
+                      <Typography
+                        sx={{ fontWeight: 800, fontFamily: roboto.style }}
+                      >
+                        CHECK IN
+                      </Typography>
+                      <Typography
+                        sx={{ fontWeight: 600, fontFamily: roboto.style }}
+                      >
+                        23 Apr 2025
+                      </Typography>
+                      <Typography
+                        sx={{ fontWeight: 600, fontFamily: roboto.style }}
+                      >
+                        11 AM
+                      </Typography>
                     </Grid2>
                     <Grid2
                       item
@@ -256,9 +307,9 @@ const HotelPreBookPage = () => {
                           border: `2px solid ${COLORS.PRIMARY}`,
                           textAlign: "center",
                           borderRadius: 5,
-                          backgroundColor:COLORS.PRIMARY,
-                          fontWeight:600,
-                          fontFamily:nunito.style
+                          backgroundColor: COLORS.PRIMARY,
+                          fontWeight: 600,
+                          fontFamily: roboto.style,
                         }}
                       >
                         DAY USE
@@ -269,16 +320,32 @@ const HotelPreBookPage = () => {
                       size={{ xs: 12, md: 12, lg: 3 }}
                       sx={{ textAlign: "center" }}
                     >
-                      <Typography sx={{fontWeight:800, fontFamily:nunito.style}}>CHECK OUT</Typography>
-                      <Typography sx={{fontWeight:600, fontFamily:nunito.style}}>23 Apr 2025</Typography>
-                      <Typography sx={{fontWeight:600, fontFamily:nunito.style}}>5 PM</Typography>
+                      <Typography
+                        sx={{ fontWeight: 800, fontFamily: roboto.style }}
+                      >
+                        CHECK OUT
+                      </Typography>
+                      <Typography
+                        sx={{ fontWeight: 600, fontFamily: roboto.style }}
+                      >
+                        23 Apr 2025
+                      </Typography>
+                      <Typography
+                        sx={{ fontWeight: 600, fontFamily: roboto.style }}
+                      >
+                        5 PM
+                      </Typography>
                     </Grid2>
                     <Grid2
                       item
                       size={{ xs: 12, md: 12, lg: 4 }}
                       sx={{ textAlign: "center" }}
                     >
-                      <Typography sx={{fontWeight:700, fontFamily:nunito.style}}>1 Night | 2 Adults | 1 Room</Typography>
+                      <Typography
+                        sx={{ fontWeight: 700, fontFamily: roboto.style }}
+                      >
+                        1 Night | 2 Adults | 1 Room
+                      </Typography>
                     </Grid2>
                   </Grid2>
                 </CardContent>
@@ -302,38 +369,85 @@ const HotelPreBookPage = () => {
               {/* this section is used to show the additional information to be shown for the hotels */}
               <Card variant="outlined" sx={{ boxShadow: 1, mb: 3 }}>
                 <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: "700", fontFamily:nunito.style }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "700", fontFamily: roboto.style }}
+                  >
                     Cancellation Policy
                   </Typography>
-                  {room?.CancelPolicies.map((policy, idx) => (
+                  {/* {room?.CancelPolicies.map((policy, idx) => (
                     <Box key={idx} mt={1}>
-                      <Typography sx={{fontFamily:nunito.style, fontWeight:500}}>
-                        From: <strong>{moment(policy.FromDate, 'DD-MM-YYYY HH:mm:ss').format('DD-MMM-YYYY')}</strong> -{" "}
-                        <strong>{policy.CancellationCharge}%</strong> charge (
+                      <Typography
+                       color="text.primary"
+                        sx={{ fontFamily: roboto.style, fontWeight: 600 }}
+                      >
+                        From:{" "}
+                        <strong>
+                          {moment(
+                            policy.FromDate,
+                            "DD-MM-YYYY HH:mm:ss"
+                          ).format("DD-MMM-YYYY")}
+                        </strong>{" "}
+                        - <strong>{policy.CancellationCharge}%</strong> charge (
                         {policy.ChargeType})
                       </Typography>
                     </Box>
-                  ))}
-                  <Typography mt={2} sx={{fontFamily:nunito.style, fontWeight:500}}>
+                  ))} */}
+                  
+                  <List>
+                    {cancellationMessages.map((msg, idx) => (
+                      <ListItem
+                        key={idx}
+                        sx={{ alignItems: "flex-start", pl: 2 }}
+                      >
+                        <Typography
+                          sx={{ fontFamily: roboto.style, fontWeight: 600 }}
+                        >
+                          {msg}
+                        </Typography>
+                      </ListItem>
+                    ))}
+                  </List>
+                       <Divider sx={{ my: 2 }} />
+                  {/* Last Cancellation Deadline */}
+                  <Typography
+                    mt={2}
+                     color="text.primary"
+                    sx={{ fontFamily: roboto.style, fontWeight: 600 ,pl: 2 }}
+                  >
                     Last Cancellation Deadline:{" "}
-                    <strong>{moment(room?.LastCancellationDeadline, 'DD-MM-YYYY HH:mm:ss').format('DD-MMM-YYYY')}</strong>
+                    <strong>
+                      {moment(
+                        room?.LastCancellationDeadline,
+                        "DD-MM-YYYY HH:mm:ss"
+                      ).format("DD-MMM-YYYY, HH:mm")}
+                    </strong>
                   </Typography>
                 </CardContent>
               </Card>
-              
+
               <Card variant="outlined" sx={{ boxShadow: 1 }}>
                 <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", fontFamily:nunito.style }}>
-                    Rate Conditions
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", fontFamily: roboto.style }}
+                  >
+                    Rate Condition
                   </Typography>
                   <List>
-                    {hotel?.RateConditions.map((cond, idx) => (
-                      <ListItem key={idx}>
-                        <Typography sx={{fontFamily:nunito.style, fontWeight:600}}
-                          dangerouslySetInnerHTML={{ __html: cond }}
-                        />
-                      </ListItem>
-                    ))}
+                    {preBookResponse?.HotelResult?.[0]?.RateConditions.map(
+                      (cond, idx) => (
+                        <ListItem key={idx} alignItems="flex-start">
+                          <Typography
+                            color="text.primary"
+                            sx={{ fontFamily: roboto.style, fontWeight: 600 }}
+                            dangerouslySetInnerHTML={{
+                              __html: decodeHTMLEntities(cond),
+                            }}
+                          />
+                        </ListItem>
+                      )
+                    )}
                   </List>
                 </CardContent>
               </Card>
@@ -347,7 +461,11 @@ const HotelPreBookPage = () => {
               sx={{ boxShadow: 1, p: 1, borderRadius: 0 }}
             >
               <CardContent>
-                <Typography variant="h6" gutterBottom sx={{fontFamily:nunito.style, fontWeight:800}}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ fontFamily: roboto.style, fontWeight: 800 }}
+                >
                   Price Breakup
                 </Typography>
 
@@ -358,15 +476,25 @@ const HotelPreBookPage = () => {
                     alignItems="center"
                   >
                     <Grid2 item>
-                      <Typography sx={{fontFamily:nunito.style, fontWeight:700}}>
+                      <Typography
+                        sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+                      >
                         <span>1 Room</span>
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{fontFamily:nunito.style, fontWeight:700}}>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+                      >
                         Base Price
                       </Typography>
                     </Grid2>
                     <Grid2 item>
-                      <Typography sx={{fontFamily:nunito.style, fontWeight:700}}>₹ 5,644</Typography>
+                      <Typography
+                        sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+                      >
+                        ₹ 5,644
+                      </Typography>
                     </Grid2>
                   </Grid2>
                 </Box>
@@ -379,13 +507,20 @@ const HotelPreBookPage = () => {
                   >
                     <Grid2 item>
                       <Box display="flex" alignItems="center">
-                        <Typography sx={{fontFamily:nunito.style, fontWeight:700}}  mr={1}>
+                        <Typography
+                          sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+                          mr={1}
+                        >
                           Hotel Taxes
                         </Typography>
                       </Box>
                     </Grid2>
                     <Grid2 item>
-                      <Typography sx={{fontFamily:nunito.style, fontWeight:700}}>₹ 677</Typography>
+                      <Typography
+                        sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+                      >
+                        ₹ 677
+                      </Typography>
                     </Grid2>
                   </Grid2>
                 </Box>
@@ -399,12 +534,18 @@ const HotelPreBookPage = () => {
                     alignItems="center"
                   >
                     <Grid2 item>
-                      <Typography variant="subtitle1" sx={{fontFamily:nunito.style, fontWeight:800}}>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontFamily: roboto.style, fontWeight: 800 }}
+                      >
                         Total Amount to be paid
                       </Typography>
                     </Grid2>
                     <Grid2 item>
-                      <Typography variant="h6" sx={{fontFamily:nunito.style, fontWeight:800}}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontFamily: roboto.style, fontWeight: 800 }}
+                      >
                         ₹ 6,321
                       </Typography>
                     </Grid2>
@@ -419,8 +560,8 @@ const HotelPreBookPage = () => {
                       my: 2,
                       py: 2,
                       bgcolor: COLORS.PRIMARY,
-                      fontFamily:nunito.style,
-                      fontWeight:800
+                      fontFamily: roboto.style,
+                      fontWeight: 800,
                     }}
                   >
                     Pay Now

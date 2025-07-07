@@ -38,6 +38,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Loading from "react-loading";
 import filterImage from "@/assests/flight_image/filter.svg";
 import { JOURNEY } from "@/utils/enum";
+import PersistFlightForm from "@/components/persistForms/PersistFlightForm";
 
 const FlightList = () => {
   const router = useRouter();
@@ -471,7 +472,7 @@ const FlightList = () => {
       <Box sx={{ pt: { lg: 10, xs: 5 }, px: 4 }}>
         <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
           <Typography sx={{ fontSize: 18 }}> Search Flight</Typography>
-          <FlightForm />
+          <PersistFlightForm />
         </Card>
       </Box>
 
