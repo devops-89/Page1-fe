@@ -60,7 +60,10 @@ function a11yProps(index) {
 }
 
 const Dashboard = () => {
-  const isAuthenticated = useSelector((state)=>state.USER?.UserData?.isAuthenticated);
+
+  const userData=useSelector((state)=>state?.USER?.UserData);
+  const isAuthenticated=userData?.isAuthenticated;
+
   const router = useRouter();
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
@@ -79,6 +82,8 @@ const Dashboard = () => {
   if (!isAuthenticated) {
     return null; 
   }
+
+  console.log("User Data using Selector:", userData);
 
   return (
     <>
@@ -215,7 +220,7 @@ const Dashboard = () => {
              <Package/>
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <Flight/>
+              <Flight userId={userData?.id}/>
             </TabPanel>
             <TabPanel value={value} index={3}>
              <Hotel/>

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,current } from "@reduxjs/toolkit";
 
 let initialState = {
   email: "",
@@ -16,13 +16,17 @@ export const USER = createSlice({
   initialState: initialState,
   reducers: {
     setUserDetails: (state, actions) => {
-      return (state = actions.payload);
+      Object.assign(state,actions.payload)
+      console.log("current user Object:",current(state));
+      return state;
     },
     removeUserDetails: (state) => {
       return (state = initialState);
     },
     setAuthenticated : (state, actions)=>{
-      return (state ={...state, isAuthenticated:actions.payload})
+       state.isAuthenticated = action.payload;
+      console.log("current user Object authenticated:",current(state));
+      return state;
     },
     setOtpEmailAuthenticated : (state, actions)=>{
       return (state ={...state, email:actions.payload})
