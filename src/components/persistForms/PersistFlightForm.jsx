@@ -9,6 +9,7 @@ import Multiway from "../flight/multiForm";
 import { useRouter } from "next/router";
 import PersistOneWayForm from "../persistForms/PersistOneWayForm";
 import PersistRoundTripForm from "./PersistRoundTripForm";
+import PersistMultiForm from "./PersistMultiForm";
 
 const PersistFlightForm = () => {
   const tab = [
@@ -123,7 +124,7 @@ const PersistFlightForm = () => {
        <PersistRoundTripForm />
       </TabPanel>
       <TabPanel value={flightValue} index={2}>
-        <Multiway />
+       <PersistMultiForm  />
       </TabPanel>
     </Box>
   );

@@ -29,6 +29,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Loading from "react-loading";
 import Image from "next/image";
 import filterImage from '@/assests/flight_image/filter.svg'
+import PersistFlightForm from "@/components/persistForms/PersistFlightForm";
 
 const MultiList = () => {
   const [flightList, setFlightList] = useState(null);
@@ -173,7 +174,7 @@ const MultiList = () => {
       <Box sx={{ pt: 10, px: 0 }}>
         <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
           <Typography sx={{ fontSize: 18 }}> Search Flight</Typography>
-          <FlightForm />
+          <PersistFlightForm />
         </Card>
       </Box>
 
