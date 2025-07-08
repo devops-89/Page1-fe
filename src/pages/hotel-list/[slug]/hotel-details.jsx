@@ -933,7 +933,17 @@ function CustomDialog({ data, open, handleClose }) {
 
 function CustomDialogFacilities({ data, open, handleClose }) {
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} BackdropProps={{ sx: {
+      backgroundColor: "rgba(0, 0, 0, 0.07)",
+      
+    },}}  
+    PaperProps={{
+        sx: {
+          backgroundColor: "#fff",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.07)",
+          borderRadius: 2,
+        },
+      }}>
       <DialogTitle
         sx={{
           display: "flex",

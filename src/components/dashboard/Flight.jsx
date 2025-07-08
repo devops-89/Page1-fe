@@ -57,6 +57,7 @@ const Flight = ({ userId }) => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
+        setLoading(true);
         let response = await dashboardController.getBookingByUserId(
           userId,
           currentPage,
@@ -173,6 +174,7 @@ const Flight = ({ userId }) => {
         component={Paper}
         sx={{
           overflowX: "auto",
+          minHeight:"200px"
         }}
       >
         <Table sx={{ minWidth: 650 }}>
