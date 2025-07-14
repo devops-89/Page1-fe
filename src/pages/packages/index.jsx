@@ -18,9 +18,10 @@ import Packagescard from "@/components/packages/packagesCard";
 import Head from "next/head";
 import { data } from "@/assests/data";
 import InnerBanner from "@/components/innerBanner";
-import { holidayPackageSchema } from "../utils/validationSchema.js";
+import { holidayPackageSchema } from "@/utils/validationSchema.js";
 import { useFormik } from "formik";
 import { packageController } from "@/api/packageController.js";
+import Link from "next/link";
 
 const destinations = ["Paris", "New York", "Tokyo"];
 const durations = ["3 Days", "7 Days", "14 Days"];
@@ -329,7 +330,9 @@ const Packages = () => {
 
           <Grid2 container mt={4} spacing={3}>
             {packageList?.map((val, i) => (
-              <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
+            
+             <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i} >
+                <Link  href={`/packages/${i}/package-details`} passHref>
                 <Packagescard
                   title={val.package_name}
                   img={data?.toursData?.[i]?.img}
@@ -337,8 +340,10 @@ const Packages = () => {
                   // rating={val.rating}
                   price={val.package_price}
                   duration={val.package_day}
-                />
+                /> 
+                </Link>
               </Grid2>
+             
             ))}
           </Grid2>
           </Container>
