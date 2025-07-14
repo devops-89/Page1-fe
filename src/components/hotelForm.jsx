@@ -9,6 +9,7 @@ import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList";
 import ToastBar from "./toastBar"; 
 import { TOAST_STATUS } from "@/utils/enum"; 
 import { setToast } from "@/redux/reducers/toast"; 
+import { setHotelFormData } from "@/redux/reducers/hotel-reducers/HotelSearchData";
 import {
   Autocomplete,
   Box,
@@ -107,6 +108,18 @@ const HotelForm = () => {
         HotelName: null,
       },
     };
+
+    console.log("paload printing:",payload);
+
+    dispatch(setHotelFormData({
+      selectedCity,
+      paxRoom,
+      checkIn:checkIn.format("DD-MM-YYYY"),
+      checkOut:checkOut.format("DD-MM-YYYY"),
+      userIp
+    }));
+
+
 
     try {
       setButtonLoading(true);

@@ -79,9 +79,6 @@ const HotelDetails = () => {
     setOpen(false);
   };
 
-
-
-
   // =============================== address truncation logic start===============================
   const [openAddress, setOpenAddress] = useState(false);
 
@@ -169,23 +166,25 @@ const HotelDetails = () => {
                   }}
                 >
                   {selectedHotel?.HotelName}
-                  <Box sx={{display:'flex', alignItems:'center', gap:"10px"}}>
-                  <Rating
-                    name="read-only"
-                    value={HOTEL_RATING[selectedHotel?.HotelRating] || 5}
-                    readOnly
-                    fontSize={{ lg: "30px", md: "24px", xs: "10px" }}
-                  />
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontFamily: nunito.style,
-                      fontWeight: 700,
-                      color: COLORS.BLACK,
-                    }}
+                  <Box
+                    sx={{ display: "flex", alignItems: "center", gap: "10px" }}
                   >
-                    {HOTEL_RATING_IN_WORDS[selectedHotel?.HotelRating]}
-                  </Typography>
+                    <Rating
+                      name="read-only"
+                      value={HOTEL_RATING[selectedHotel?.HotelRating] || 5}
+                      readOnly
+                      fontSize={{ lg: "30px", md: "24px", xs: "10px" }}
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontFamily: nunito.style,
+                        fontWeight: 700,
+                        color: COLORS.BLACK,
+                      }}
+                    >
+                      {HOTEL_RATING_IN_WORDS[selectedHotel?.HotelRating]}
+                    </Typography>
                   </Box>
                 </Typography>
                 <img
@@ -304,14 +303,14 @@ const HotelDetails = () => {
                       variant="body1"
                       sx={{
                         fontFamily: nunito.style,
-                        padding:'6px 16px',
-                        backgroundColor:useRandomColor(),
+                        padding: "6px 16px",
+                        backgroundColor: useRandomColor(),
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
-                        borderRadius:'23px',
-                        fontWeight:600,
-                         textTransform:'capitalize'
+                        borderRadius: "23px",
+                        fontWeight: 600,
+                        textTransform: "capitalize",
                       }}
                     >
                       {facilities[0]}
@@ -322,14 +321,14 @@ const HotelDetails = () => {
                       variant="body1"
                       sx={{
                         fontFamily: nunito.style,
-                        padding:'6px 16px',
-                        backgroundColor:useRandomColor(),
+                        padding: "6px 16px",
+                        backgroundColor: useRandomColor(),
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
-                        borderRadius:'23px',
-                        fontWeight:600,
-                         textTransform:'capitalize'
+                        borderRadius: "23px",
+                        fontWeight: 600,
+                        textTransform: "capitalize",
                       }}
                     >
                       {facilities[1]}
@@ -340,39 +339,40 @@ const HotelDetails = () => {
                       variant="body1"
                       sx={{
                         fontFamily: nunito.style,
-                        padding:'6px 16px',
-                        backgroundColor:useRandomColor(),
+                        padding: "6px 16px",
+                        backgroundColor: useRandomColor(),
                         display: "flex",
                         alignItems: "center",
                         gap: "5px",
-                        borderRadius:'23px',
-                        fontWeight:600,
-                         textTransform:'capitalize'
+                        borderRadius: "23px",
+                        fontWeight: 600,
+                        textTransform: "capitalize",
                       }}
                     >
                       {facilities[2]}
                     </Typography>
                   </Box>
                   <Box>
-                    {shouldTruncateFacilities && <Typography
-                      variant="subtitle1"
-                      sx={{
-                        fontFamily: nunito.style,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        cursor: "pointer",
-                        fontWeight:'bold',
-                        color:COLORS.GREEN,
-                        '&:hover' :{
-                          color:COLORS.PRIMARY
-                        }
-                      }}
-                      onClick={handleOpenFacilities}
-                    >
-                      {facilities.length-3}+ amenities
-                    </Typography>}
-
+                    {shouldTruncateFacilities && (
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          fontFamily: nunito.style,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          color: COLORS.GREEN,
+                          "&:hover": {
+                            color: COLORS.PRIMARY,
+                          },
+                        }}
+                        onClick={handleOpenFacilities}
+                      >
+                        {facilities.length - 3}+ amenities
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
               </Container>
@@ -521,11 +521,10 @@ const HotelDetails = () => {
                 >
                   ₹ {selectedHotel?.Rooms?.[0]?.TotalFare.toFixed(2)}+{" "}
                   <Typography component={"div"} sx={{ color: COLORS.DARKGREY }}>
-                    ₹ {selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)} taxes & fees
+                    ₹ {selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)} taxes &
+                    fees
                   </Typography>
                 </Typography>
-
-             
               </Box>
             </Grid2>
           </Grid2>
@@ -812,7 +811,8 @@ const HotelDetails = () => {
                           fontFamily: nunito.style,
                         }}
                       >
-                        + ₹{selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)} taxes & fees
+                        + ₹{selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)}{" "}
+                        taxes & fees
                       </Typography>
 
                       {/* Day Rates */}
@@ -825,7 +825,11 @@ const HotelDetails = () => {
                             Day-wise Base Prices:
                           </Typography>
                           {/* {console.log("room---------", room?.DayRates[0])} */}
-                          <Typography sx={{fontFamily: nunito.style, fontWeight:600}}>₹ {room?.DayRates[0][0]?.BasePrice.toFixed(2)}</Typography>
+                          <Typography
+                            sx={{ fontFamily: nunito.style, fontWeight: 600 }}
+                          >
+                            ₹ {room?.DayRates[0][0]?.BasePrice.toFixed(2)}
+                          </Typography>
                           {/* <List sx={{ listStyleType: "disc", ml: 3 }}>
                             {room.DayRates[0].map((rate, i) => (
                               <ListItem
@@ -840,17 +844,17 @@ const HotelDetails = () => {
                               </ListItem>
                             ))}
                           </List> */}
-                           <Button
-                  onClick={() =>
-                    router.push(
-                      `/hotel-list/${selectedHotel?.Rooms?.[index]?.BookingCode}/hotel-prebook`
-                    )
-                  }
-                  variant="contained"
-                  sx={{ backgroundColor: COLORS.PRIMARY,mt:2 }}
-                >
-                 SELECT ROOM
-                </Button>
+                          <Button
+                            onClick={() =>
+                              router.push(
+                                `/hotel-list/${selectedHotel?.Rooms?.[index]?.BookingCode}/hotel-prebook`
+                              )
+                            }
+                            variant="contained"
+                            sx={{ backgroundColor: COLORS.PRIMARY, mt: 2 }}
+                          >
+                            SELECT ROOM
+                          </Button>
                         </Box>
                       )}
                     </Grid2>
@@ -933,17 +937,22 @@ function CustomDialog({ data, open, handleClose }) {
 
 function CustomDialogFacilities({ data, open, handleClose }) {
   return (
-    <Dialog open={open} onClose={handleClose} BackdropProps={{ sx: {
-      backgroundColor: "rgba(0, 0, 0, 0.07)",
-      
-    },}}  
-    PaperProps={{
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      BackdropProps={{
+        sx: {
+          backgroundColor: "rgba(0, 0, 0, 0.07)",
+        },
+      }}
+      PaperProps={{
         sx: {
           backgroundColor: "#fff",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.07)",
           borderRadius: 2,
         },
-      }}>
+      }}
+    >
       <DialogTitle
         sx={{
           display: "flex",

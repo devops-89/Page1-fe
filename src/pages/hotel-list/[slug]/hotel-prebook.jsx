@@ -39,6 +39,12 @@ const HotelPreBookPage = () => {
     return textarea.value;
   }
 
+  // extracting the search info from redux
+  const hotelSearchData=useSelector((state)=>state?.HOTEL?.HotelSearchData);
+
+  // passengers info
+  const [passengers,setPassengers]=useState({adult:0,child:0});
+
   // making state variables for preBook Api Call
   const [preBookResponse, setPreBookResponse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -85,6 +91,21 @@ const HotelPreBookPage = () => {
     preBookResponse?.HotelResult[0]?.Rooms[0]?.CancelPolicies;
   const cancellationMessages =
     useFormatCancellationPolicy(cancellationPolicies);
+
+
+    // calculating the number of adults and child
+     useEffect(()=>{
+    let adult=0;
+    let child=0;
+    
+    hotelSearchData?.paxRoom?.map((room)=>{
+        adult=adult+room.Adults;
+        child=child+room.Children;
+    });
+
+    setPassengers({adult,child});
+    
+  },[hotelSearchData]);
 
   if (loading) {
     return (
@@ -133,56 +154,9 @@ const HotelPreBookPage = () => {
     );
   }
 
-  if (loading) {
-    return (
-      <Grid2 container>
-        <Grid2
-          size={{ xs: "12" }}
-          sx={{
-            height: "230px",
-            background: "rgba(8,8,79,1)",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            py: "10px",
-          }}
-        >
-          <Typography
-            variant="h5"
-            sx={{
-              color: COLORS.WHITE,
-              fontFamily: roboto.style,
-              fontWeight: 700,
-            }}
-          >
-            Complete Your Booking
-          </Typography>
-        </Grid2>
-        <Container>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "300px",
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                color: COLORS.WHITE,
-                fontFamily: roboto.style,
-                fontWeight: 700,
-              }}
-            >
-              Error in API
-            </Typography>
-          </Box>
-        </Container>
-      </Grid2>
-    );
-  }
+  
+
+ 
 
   return (
     <Grid2 container>
@@ -289,13 +263,9 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontWeight: 600, fontFamily: roboto.style }}
                       >
-                        23 Apr 2025
+                       {hotelSearchData?.checkIn}
                       </Typography>
-                      <Typography
-                        sx={{ fontWeight: 600, fontFamily: roboto.style }}
-                      >
-                        11 AM
-                      </Typography>
+                    
                     </Grid2>
                     <Grid2
                       item
@@ -328,13 +298,9 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontWeight: 600, fontFamily: roboto.style }}
                       >
-                        23 Apr 2025
+                        {hotelSearchData?.checkOut}
                       </Typography>
-                      <Typography
-                        sx={{ fontWeight: 600, fontFamily: roboto.style }}
-                      >
-                        5 PM
-                      </Typography>
+                     
                     </Grid2>
                     <Grid2
                       item
@@ -344,7 +310,7 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontWeight: 700, fontFamily: roboto.style }}
                       >
-                        1 Night | 2 Adults | 1 Room
+                        {passengers?.adult} Adults | {passengers?.child} Children | {hotelSearchData?.paxRoom?.length} Room
                       </Typography>
                     </Grid2>
                   </Grid2>

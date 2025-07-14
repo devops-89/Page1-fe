@@ -20,12 +20,15 @@ import { data } from "@/assests/data";
 import InnerBanner from "@/components/innerBanner";
 import { holidayPackageSchema } from "../utils/validationSchema.js";
 import { useFormik } from "formik";
+import { packageController } from "@/api/packageController.js";
 
 const destinations = ["Paris", "New York", "Tokyo"];
 const durations = ["3 Days", "7 Days", "14 Days"];
 const months = ["January", "June", "December"];
 const packagetypes = ["Domestic", "International"];
 const packagecategorys = ["Solo", "Couple", "Friends", "Family"];
+
+
 
 const Packages = () => {
   const [destination, setDestination] = useState(null);
@@ -34,6 +37,9 @@ const Packages = () => {
   const [packageType, setPackageType] = useState(null);
   const [packageCategory, setPackageCategory] = useState(null);
   const [submitBtnDisable, setSubmitBtnDisable] = useState(true);
+  
+  // state for storing fetched package list
+  const [packageList,setPackageList]=useState([]);
 
   useEffect(() => {
     if (destination && duration && month && packageType && packageCategory) {
@@ -69,6 +75,21 @@ const Packages = () => {
       });
     },
   });
+
+  // fetching all the packages
+  useEffect(() => {
+  const fetchPackages = async () => {
+    try {
+      let response = await packageController.getPackageList(5, 1);
+      setPackageList(response.data.data.items);
+      console.log("Response from fetching all the packages:", response.data.data);
+    } catch (error) {
+      console.error("There is an error in fetching the package api list: ", error);
+    }
+  };
+
+  fetchPackages();
+}, []);
 
   return (
     <div>
@@ -297,7 +318,7 @@ const Packages = () => {
                 fontFamily: nunito.style,
               }}
             >
-              24 tours found
+              {packageList?.length} tours found
             </Typography>
           </Stack>
           </Container>
@@ -307,15 +328,15 @@ const Packages = () => {
      
 
           <Grid2 container mt={4} spacing={3}>
-            {data.toursData.map((val, i) => (
+            {packageList?.map((val, i) => (
               <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
                 <Packagescard
-                  title={val.title}
-                  img={val.img}
-                  location={val.location}
-                  rating={val.rating}
-                  price={val.price}
-                  duration={val.duration}
+                  title={val.package_name}
+                  img={data?.toursData?.[i]?.img}
+                  location={val.package_destination}
+                  // rating={val.rating}
+                  price={val.package_price}
+                  duration={val.package_day}
                 />
               </Grid2>
             ))}

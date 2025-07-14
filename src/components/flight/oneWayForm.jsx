@@ -174,6 +174,7 @@ const OnewayForm = () =>  {
       dispatch(resetSeatDetails());
       dispatch(resetMealDetails());
       dispatch(resetBaggageDetails());
+      console.log("State variable Value:",state)
        const emptyFields = Object.keys(state).filter(
         (key) =>
           state[key] === "" || state[key] === null || state[key] === undefined

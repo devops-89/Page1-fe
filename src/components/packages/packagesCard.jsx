@@ -1,4 +1,5 @@
 import { COLORS } from "@/utils/colors";
+import moment from "moment";
 import { nunito } from "@/utils/fonts";
 import {
   AddShoppingCartOutlined,
@@ -12,12 +13,12 @@ import {
   CardContent,
   Divider,
   IconButton,
-  Rating,
+  // Rating,
   Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
-const Packagescard = ({ img, location, rating, title, price, duration }) => {
+const Packagescard = ({ img, location, title, price, duration }) => {
   return (
     <div>
       <Card
@@ -100,12 +101,12 @@ const Packagescard = ({ img, location, rating, title, price, duration }) => {
           >
             {title}
           </Typography>
-          <Rating
+          {/* <Rating
             value={rating}
             precision={0.5}
             sx={{ fontSize: 20, mt: 1 }}
             readOnly
-          />
+          /> */}
           {/* <Stack></Stack> */}
           <Box sx={{ position: "absolute", bottom: 0, width: "85%" }}>
             <Divider />
