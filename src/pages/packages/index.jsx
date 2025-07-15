@@ -332,7 +332,7 @@ const Packages = () => {
             {packageList?.map((val, i) => (
             
              <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i} >
-                <Link  href={`/packages/${i}/package-details`} passHref>
+                <Link  href={`/packages/${val?.id}/package-details`} passHref>
                 <Packagescard
                   title={val.package_name}
                   img={data?.toursData?.[i]?.img}

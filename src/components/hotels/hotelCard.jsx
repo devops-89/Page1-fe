@@ -177,19 +177,22 @@ const twoAttractionsHTML = getFirstTwoAttractions(attractionsHTML);
                   readOnly
                   fontSize={{ lg: "30px", md: "24px", xs: "10px" }}
                 />
+               <Typography variant="body1" sx={{pt:3}}>
+                Starting From
 
+               </Typography>
                 <Typography
                   variant="h5"
-                  sx={{ fontFamily: nunito.style, fontWeight: 700, pt:3 }}
+                  sx={{ fontFamily: nunito.style, fontWeight: 700,  textAlign:"right" }}
                 >
                   ₹ {hotel?.Rooms[0]?.TotalFare.toFixed(2)}
                 </Typography>
-                <Typography
+                {/* <Typography
                   variant="body1"
                   sx={{ fontFamily: nunito.style, fontWeight: 500, color:COLORS.DARKGREY }}
                 >
                  Tax - ₹ {hotel?.Rooms[0]?.TotalTax.toFixed(2)}
-                </Typography>
+                </Typography> */}
                 <Link
                   href={`/hotel-list/${hotel?.HotelCode}/hotel-details`}
                   style={{ textDecoration: "none" }}

@@ -78,6 +78,8 @@ const Packagescard = ({ img, location, title, price, duration }) => {
                 sx={{
                   fontSize: 14,
                   fontFamily: nunito.style,
+                  textDecoration:"none",
+        
                   color: COLORS.DARKGREY,
                   fontWeight: 600,
                 }}
@@ -96,6 +98,7 @@ const Packagescard = ({ img, location, title, price, duration }) => {
               fontSize: {lg:18},
               fontWeight: 700,
               mt: 1,
+               textDecoration:"none",
               fontFamily: nunito.style,
             }}
           >
@@ -121,6 +124,7 @@ const Packagescard = ({ img, location, title, price, duration }) => {
                   sx={{
                     fontSize: 20,
                     color: COLORS.BLACK,
+                     textDecoration:"none",
                     fontFamily: nunito.style,
                     fontWeight: 800,
                   }}
@@ -136,6 +140,7 @@ const Packagescard = ({ img, location, title, price, duration }) => {
                 <Typography
                   sx={{
                     fontSize: 13,
+                     textDecoration:"none",
                     color: COLORS.DARKGREY,
                     fontFamily: nunito.style,
                   }}

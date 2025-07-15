@@ -3,7 +3,7 @@ import {
   Box, Typography, Breadcrumbs, Link, Button, Grid, Card, CardMedia, CardContent, Divider
 } from '@mui/material';
 
-const PackageDetail = () => {
+const PackageDetail = ({data}) => {
   return (
     <Box sx={{ padding: 3 }}>
       {/* Breadcrumb */}
@@ -14,15 +14,15 @@ const PackageDetail = () => {
         <Link underline="hover" color="inherit" href="/packages">
           Packages
         </Link>
-        <Typography color="text.primary">Bali Bliss</Typography>
+        <Typography color="text.primary">{data?.package_name}</Typography>
       </Breadcrumbs>
 
       {/* Package Heading */}
       <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Typography variant="h4" fontWeight={600}>Bali Bliss</Typography>
+        <Typography variant="h4" fontWeight={600}>{data?.package_name}</Typography>
         <Box>
-          <Typography variant="subtitle1">4 Nights / 5 Days</Typography>
-          <Typography variant="caption" color="text.secondary">Land Only</Typography>
+          <Typography variant="subtitle1">{data?.package_day}</Typography>
+          <Typography variant="caption" color="text.secondary">{data?.package_no_of_person} person</Typography>
         </Box>
       </Box>
 
@@ -52,7 +52,7 @@ const PackageDetail = () => {
         Package Overview
       </Typography>
       <Typography variant="body1">
-        Discover the beauty and adventure of Bali with a scenic visit to Mount Batur and the cultural charm of Ubud on a full-day private tour...
+       {data?.description}
       </Typography>
 
       {/* Hotel Info */}

@@ -17,6 +17,18 @@ export const packageController={
             throw error;
         }
 
+    },
+    getPackageDetails:async (id)=>{
+        try{
+            const result=await packagePublicApi.get(`/details/${id}`);
+            return result;
+        }
+        catch(error){
+            console.error("Error in fetching the package details api: ",error);
+            throw error;
+        }
+
     }
+
     
 }
