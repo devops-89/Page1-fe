@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { addMonths } from 'date-fns';
+import Link from 'next/link';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -52,7 +53,7 @@ export default function PackageDialog({ data }) {
 
     return (
         <>
-            <Button
+           <Button
                 variant="contained"
                 fullWidth
                 onClick={handleClickOpen}
@@ -60,6 +61,7 @@ export default function PackageDialog({ data }) {
             >
                 BOOK NOW
             </Button>
+          
 
             <Dialog
                 open={open}
@@ -195,6 +197,8 @@ export default function PackageDialog({ data }) {
                     <Button onClick={handleClose} sx={{ fontFamily: roboto.style }}>
                         Cancel
                     </Button>
+                    <Link href={`/packages/${data?.id}/package-prebook`}>
+            
                     <Button
                         variant="contained"
                         sx={{ bgcolor: COLORS.PRIMARY, fontFamily: roboto.style }}
@@ -202,6 +206,7 @@ export default function PackageDialog({ data }) {
                     >
                         Continue Booking
                     </Button>
+                    </Link>
                 </DialogActions>
             </Dialog>
         </>
