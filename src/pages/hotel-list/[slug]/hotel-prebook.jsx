@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import {
   Box,
@@ -13,7 +13,12 @@ import {
   Grid2,
   Button,
   ListItemIcon,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
+import CommonFieldsForm from "@/components/hotels/CommonFieldsForm";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { useSelector } from "react-redux";
 import StarIcon from "@mui/icons-material/Star";
@@ -32,6 +37,33 @@ const HotelPreBookPage = () => {
   // make router instance for extracting instance
   const router = useRouter();
 
+    // extracting the search info from redux
+  const hotelSearchData = useSelector((state) => state?.HOTEL?.HotelSearchData);
+
+  // states for expanding the guest form
+  const [expanded, setExpanded] = useState("room-0");
+
+  //   refs for attaching to the child formik forms
+     const commonFormRef=useRef();
+     const passengerFormRef=useRef([]);
+
+
+   useEffect(() => {
+  if (
+    hotelSearchData?.paxRoom?.length &&
+    passengerFormRef.current.length !== hotelSearchData?.paxRoom?.length
+  ) {
+    passengerFormRef.current = Array(hotelSearchData.paxRoom.length)
+      .fill()
+      .map((_, i) => passengerFormRef.current[i] || React.createRef());
+  }
+}, [hotelSearchData?.paxRoom?.length]);
+
+  // function for handling the form expansion change
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   // parsing html from the api response
   function decodeHTMLEntities(text) {
     const textarea = document.createElement("textarea");
@@ -39,11 +71,10 @@ const HotelPreBookPage = () => {
     return textarea.value;
   }
 
-  // extracting the search info from redux
-  const hotelSearchData=useSelector((state)=>state?.HOTEL?.HotelSearchData);
+
 
   // passengers info
-  const [passengers,setPassengers]=useState({adult:0,child:0});
+  const [passengers, setPassengers] = useState({ adult: 0, child: 0 });
 
   // making state variables for preBook Api Call
   const [preBookResponse, setPreBookResponse] = useState(null);
@@ -72,9 +103,10 @@ const HotelPreBookPage = () => {
       try {
         const response = await hotelController.preBook({
           BookingCode: bookingCode,
+          PaymentMode: "Limit",
         });
         setPreBookResponse(response?.data?.data);
-        console.log("PreBook Response:", response);
+        console.log("PreBook Response:", response?.data?.data);
       } catch (error) {
         console.error("PreBook Error:", error.message);
         setError(error);
@@ -92,20 +124,18 @@ const HotelPreBookPage = () => {
   const cancellationMessages =
     useFormatCancellationPolicy(cancellationPolicies);
 
+  // calculating the number of adults and child
+  useEffect(() => {
+    let adult = 0;
+    let child = 0;
 
-    // calculating the number of adults and child
-     useEffect(()=>{
-    let adult=0;
-    let child=0;
-    
-    hotelSearchData?.paxRoom?.map((room)=>{
-        adult=adult+room.Adults;
-        child=child+room.Children;
+    hotelSearchData?.paxRoom?.map((room) => {
+      adult = adult + room.Adults;
+      child = child + room.Children;
     });
 
-    setPassengers({adult,child});
-    
-  },[hotelSearchData]);
+    setPassengers({ adult, child });
+  }, [hotelSearchData]);
 
   if (loading) {
     return (
@@ -153,10 +183,6 @@ const HotelPreBookPage = () => {
       </Grid2>
     );
   }
-
-  
-
- 
 
   return (
     <Grid2 container>
@@ -263,9 +289,8 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontWeight: 600, fontFamily: roboto.style }}
                       >
-                       {hotelSearchData?.checkIn}
+                        {hotelSearchData?.checkIn}
                       </Typography>
-                    
                     </Grid2>
                     <Grid2
                       item
@@ -300,7 +325,6 @@ const HotelPreBookPage = () => {
                       >
                         {hotelSearchData?.checkOut}
                       </Typography>
-                     
                     </Grid2>
                     <Grid2
                       item
@@ -310,7 +334,8 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontWeight: 700, fontFamily: roboto.style }}
                       >
-                        {passengers?.adult} Adults | {passengers?.child} Children | {hotelSearchData?.paxRoom?.length} Room
+                        {passengers?.adult} Adults | {passengers?.child}{" "}
+                        Children | {hotelSearchData?.paxRoom?.length} Room
                       </Typography>
                     </Grid2>
                   </Grid2>
@@ -326,7 +351,38 @@ const HotelPreBookPage = () => {
                 ) : (
                   <Card>
                     <CardContent>
-                      <GuestForm />
+                      {hotelSearchData?.paxRoom?.map((room, index) => (
+                        <Accordion
+                          key={index}
+                          expanded={expanded === `room-${index}`}
+                          onChange={handleChange(`room-${index}`)}
+                        >
+                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography
+                              variant="subtitle1"
+                              sx={{
+                                fontWeight: 700,
+                                fontFamily: roboto.style,
+                              }}
+                            >
+                              Guest Details for Room {index + 1}
+                            </Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <Box sx={{ mb: 2 }}>
+                              <GuestForm
+                                roomIndex={index}
+                                validationInfo={preBookResponse?.ValidationInfo}
+                              />
+                            </Box>
+                          </AccordionDetails>
+                        </Accordion>
+                      ))}
+                    </CardContent>
+
+                    {/* Common Fields Section  */}
+                    <CardContent>
+                      <CommonFieldsForm formikRef={commonFormRef} />
                     </CardContent>
                   </Card>
                 )}
@@ -359,7 +415,7 @@ const HotelPreBookPage = () => {
                       </Typography>
                     </Box>
                   ))} */}
-                  
+
                   <List>
                     {cancellationMessages.map((msg, idx) => (
                       <ListItem
@@ -374,12 +430,12 @@ const HotelPreBookPage = () => {
                       </ListItem>
                     ))}
                   </List>
-                       <Divider sx={{ my: 2 }} />
+                  <Divider sx={{ my: 2 }} />
                   {/* Last Cancellation Deadline */}
                   <Typography
                     mt={2}
-                     color="text.primary"
-                    sx={{ fontFamily: roboto.style, fontWeight: 600 ,pl: 2 }}
+                    color="text.primary"
+                    sx={{ fontFamily: roboto.style, fontWeight: 600, pl: 2 }}
                   >
                     Last Cancellation Deadline:{" "}
                     <strong>
@@ -528,6 +584,12 @@ const HotelPreBookPage = () => {
                       bgcolor: COLORS.PRIMARY,
                       fontFamily: roboto.style,
                       fontWeight: 800,
+                    }}
+
+                    onClick={async()=>{
+                     await commonFormRef.current.submitForm();
+
+                    
                     }}
                   >
                     Pay Now

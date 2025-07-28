@@ -7,7 +7,11 @@ export const registrationSchema = Yup.object({
     .max(50, "Full Name is too long!")
     .required("Please Enter Full Name")
     .trim()
-    .test('no-spaces', 'Name cannot be just spaces', (value) => value.trim() !== ''),
+    .test(
+      "no-spaces",
+      "Name cannot be just spaces",
+      (value) => value.trim() !== ""
+    ),
   email: Yup.string()
     .email("Please Enter Valid Email")
     .required("Please Enter Valid Email"),
@@ -17,7 +21,11 @@ export const registrationSchema = Yup.object({
     .max(20, "Password is Too Long!")
     .required("Please Enter Password")
     .trim()
-    .test('no-spaces', 'Password cannot be just spaces', (value) => value.trim() !== ''),
+    .test(
+      "no-spaces",
+      "Password cannot be just spaces",
+      (value) => value.trim() !== ""
+    ),
 });
 
 export const loginSchema = Yup.object({
@@ -75,7 +83,7 @@ export const holidayPackageSchema = Yup.object({
   packagecategory: Yup.string().required("Package Category is required"),
 });
 
-export const activityFormSchema=Yup.object({
+export const activityFormSchema = Yup.object({
   name: Yup.string()
     .min(2, "Name must be at least 2 characters")
     .required("Name is required"),
@@ -85,8 +93,7 @@ export const activityFormSchema=Yup.object({
   mobile: Yup.string()
     .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
     .required("Mobile number is required"),
-  activity: Yup.string()
-    .required("Please select an activity"),
+  activity: Yup.string().required("Please select an activity"),
   message: Yup.string()
     .min(10, "Message must be at least 10 characters")
     .required("Message is required"),
@@ -113,37 +120,35 @@ const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
       : Yup.date().notRequired(),
   });
 
+const baseGstSchema = {
+  gst_company_email: Yup.string()
+    .trim()
+    .email("Invalid email format")
+    .required("Company Email is required"),
 
-  const baseGstSchema = {
-    gst_company_email: Yup.string()
-      .trim()
-      .email("Invalid email format")
-      .required("Company Email is required"),
-  
-    gst_company_contact_number: Yup.string()
-      .trim()
-      .matches(/^[0-9]{10}$/, "Contact number must be exactly 10 digits")
-      .required("Company Contact Number is required"),
-  
-    gst_company_address: Yup.string()
-      .trim()
-      .min(5, "Address must be at least 5 characters long")
-      .required("Company Address is required"),
-  
-    gst_number: Yup.string()
-      .trim()
-      .matches(
-        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/,
-        "Invalid GST Number format"
-      )
-      .required("GST Number is required"),
-  
-    gst_company_name: Yup.string()
-      .trim()
-      .min(3, "Company Name must be at least 3 characters long")
-      .required("Company Name is required"),
-  };
-  
+  gst_company_contact_number: Yup.string()
+    .trim()
+    .matches(/^[0-9]{10}$/, "Contact number must be exactly 10 digits")
+    .required("Company Contact Number is required"),
+
+  gst_company_address: Yup.string()
+    .trim()
+    .min(5, "Address must be at least 5 characters long")
+    .required("Company Address is required"),
+
+  gst_number: Yup.string()
+    .trim()
+    .matches(
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/,
+      "Invalid GST Number format"
+    )
+    .required("GST Number is required"),
+
+  gst_company_name: Yup.string()
+    .trim()
+    .min(3, "Company Name must be at least 3 characters long")
+    .required("Company Name is required"),
+};
 
 const gstFormSchema = (isGSTMandatory) => {
   return Yup.object().shape(
@@ -167,14 +172,14 @@ const addFormSchema = Yup.object({
     .required("Phone No. is required"),
   country: Yup.string().trim(),
   address: Yup.string().trim().required("Address is required"),
-  email: Yup.string()
-    .trim()
-    .email("Invalid email")
-    .required("Email required"),
+  email: Yup.string().trim().email("Invalid email").required("Email required"),
 });
 
-
-export const validationSchema = (isGSTMandatory, isPassportRequired ,isBirthdayRequired) => {
+export const validationSchema = (
+  isGSTMandatory,
+  isPassportRequired,
+  isBirthdayRequired
+) => {
   return Yup.object().shape({
     adult: Yup.array().of(
       passengerSchema(isPassportRequired, isBirthdayRequired)
@@ -253,6 +258,91 @@ export const selfDriveValidationSchema = Yup.object({
   phoneNumber: Yup.string().required("Please Enter Phone Number"),
   fromDate: Yup.string().required("Please Select From Date"),
   toDate: Yup.string().required("Please Select To Date"),
+});
+
+export const LeadPassengerValidation = (validationInfo) => {
+  return Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+
+    firstName: Yup.string().required("First name is required"),
+    lastName: Yup.string().required("Last name is required"),
+
+    Age: Yup.number()
+      .required("Age is required")
+      .min(0, "Age cannot be negative"),
+
+    isBelow12: Yup.boolean(),
+
+    PAN: Yup.string().when(["Age"], {
+      is: (age) =>
+        age >= 12 && validationInfo?.PanMandatory && !validationInfo?.Corporate,
+      then: (schema) => schema.required("PAN is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+    guardianPan: Yup.string().when("Age", {
+      is: (age) => age < 12,
+      then: (schema) => schema.required("Guardian PAN is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+    GuardianDetail: Yup.object().when("Age", {
+      is: (age) => age < 12,
+      then: () =>
+        Yup.object().shape({
+          Title: Yup.string().required("Guardian title is required"),
+          FirstName: Yup.string().required("Guardian first name is required"),
+          LastName: Yup.string().required("Guardian last name is required"),
+          PAN: Yup.string().required("Guardian PAN is required"),
+        }),
+      otherwise: () =>
+        Yup.object().shape({
+          Title: Yup.string().notRequired(),
+          FirstName: Yup.string().notRequired(),
+          LastName: Yup.string().notRequired(),
+          PAN: Yup.string().notRequired(),
+        }),
+    }),
+
+    // GST fields (conditionally optional – you can modify this logic based on your requirement)
+    GSTCompanyName: Yup.string().notRequired(),
+    GSTCompanyAddress: Yup.string().notRequired(),
+    GSTCompanyContactNumber: Yup.string()
+      .matches(/^[0-9]{10}$/, "Enter valid 10-digit contact number")
+      .notRequired(),
+    GSTCompanyEmail: Yup.string().email("Invalid email").notRequired(),
+    GSTNumber: Yup.string().notRequired(),
+
+    PassportNo: Yup.string().when([], {
+      is: () => validationInfo?.PassportMandatory,
+      then: (schema) => schema.required("Passport number is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+    PassportIssueDate: Yup.date()
+      .nullable()
+      .when([], {
+        is: () => validationInfo?.PassportMandatory,
+        then: (schema) => schema.required("Passport issue date is required"),
+        otherwise: (schema) => schema.nullable(),
+      }),
+
+    PassportExpDate: Yup.date()
+      .nullable()
+      .when([], {
+        is: () => validationInfo?.PassportMandatory,
+        then: (schema) => schema.required("Passport expiry date is required"),
+        otherwise: (schema) => schema.nullable(),
+      }),
+  });
+};
+
+export const CommonFieldValidation = Yup.object({
+  Email: Yup.string().trim().email("Invalid email").required("Email required"),
+  Phoneno: Yup.string()
+    .trim()
+    .matches(/^[0-9]{10}$/, "10 digits required")
+    .required("Phone No. is required"),
 });
 
 export { passengerSchema, gstFormSchema, addFormSchema };

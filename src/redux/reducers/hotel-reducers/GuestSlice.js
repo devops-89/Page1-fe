@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   selectedGuests: [],
   commonFields:{
-    email: "",
-    mobile: "",
+    Email: "",
+    Phoneno: "",
   }
 };
 
@@ -29,17 +29,17 @@ const guestSlice = createSlice({
       state.selectedGuests = [];
     },
     addCommonFields:(state,action)=>{
-      let {email,mobile}=action.payload;
-      if(email!=="" && mobile!=="")
+      let {Email,Phoneno}=action.payload;
+      if(Email!=="" && Phoneno!=="")
       {
-        state.commonFields.email=email;
-        state.commonFields.mobile=mobile;
+        state.commonFields.Email=Email;
+        state.commonFields.Phoneno=Phoneno;
       }
     },
     clearCommonFields:(state)=>{
       state.commonFields={
-        email: "",
-        mobile: "",
+        Email: "",
+        Phoneno: "",
       }
     }
   },
