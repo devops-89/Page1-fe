@@ -1,9 +1,9 @@
-import { hotelPublicApi } from "./config";
+import { hotelPublicApi,securedHotelApi } from "./config";
 
 export const hotelController={
     searchHotel:async (data)=>{
      try{
-        let result=hotelPublicApi.post("/hotel/search",data);
+        let result=await hotelPublicApi.post("/hotel/search",data);
         return result;
      }
      catch(error){
@@ -13,13 +13,22 @@ export const hotelController={
     },
     preBook:async (data)=>{
       try{
-        let result=hotelPublicApi.post("/hotel/prebook",data);
+        let result=await hotelPublicApi.post("/hotel/prebook",data);
         return result;
       }
       catch(error){
          throw error;
       }
 
+    },
+    hotelBook:async (data)=>{
+      try{
+        let result=await securedHotelApi.post("hotel/hotelBooking",data);
+        return result;
+      }
+      catch(error){
+         throw error;
+      }
     }
 
 }

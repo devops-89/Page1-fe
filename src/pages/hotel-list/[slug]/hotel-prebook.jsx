@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+
 import {
   Box,
   Card,
@@ -32,33 +32,126 @@ import GuestForm from "@/components/hotels/GuestForm";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useFormatCancellationPolicy } from "@/custom-hook/useFormatHotelCancellationPolicy";
+import { paymentController } from "@/api/paymentController";
 
 const HotelPreBookPage = () => {
   // make router instance for extracting instance
   const router = useRouter();
 
-    // extracting the search info from redux
-  const hotelSearchData = useSelector((state) => state?.HOTEL?.HotelSearchData);
+  // extracting the search info from redux
+  const { paxRoom, checkIn, checkOut, userIp } = useSelector(
+    (state) => state?.HOTEL?.HotelSearchData
+  );
+
+  // making state variables for preBook Api Call
+  const [preBookResponse, setPreBookResponse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [apiLoading, setApiLoading] = useState(false);
+
+  // make the payload according to the booking api expectation
+  function transformToBookingPayload(allValues, meta = {}) {
+    return {
+      BookingCode: meta.BookingCode,
+      IsVoucherBooking: true,
+      GuestNationality: meta.GuestNationality || "IN",
+      EndUserIp: meta.EndUserIp || "192.168.1.1",
+      RequestedBookingMode: 5,
+      NetAmount: meta.NetAmount, // Must match PreBook response
+      HotelRoomsDetails: allValues.map((room) => ({
+        HotelPassenger: room.guests.map((pax, idx) => {
+          const isAdult = pax.type === "adult";
+          const isLead = idx === 0;
+
+          const passenger = {
+            Title: pax.Title || "",
+            FirstName: pax.firstName || "",
+            MiddleName: pax.middleName || "",
+            LastName: pax.lastName || "",
+            Email: pax.Email || null,
+            Phoneno: pax.Phoneno || null,
+            PaxType: isAdult ? 1 : 2,
+            LeadPassenger: isLead,
+            Age: pax.Age || null,
+            PassportNo: pax.PassportNo || null,
+            PassportIssueDate: pax.PassportIssueDate || null,
+            PassportExpDate: pax.PassportExpDate || null,
+            PaxId: 0,
+
+            GSTCompanyAddress: pax.GSTCompanyAddress || null,
+            GSTCompanyContactNumber: pax.GSTCompanyContactNumber || null,
+            GSTCompanyName: pax.GSTCompanyName || null,
+            GSTNumber: pax.GSTNumber || null,
+            GSTCompanyEmail: pax.GSTCompanyEmail || null,
+          };
+
+          // ✅ Only add PAN if the passenger is an adult
+          if (isAdult && pax.PAN) {
+            passenger.PAN = pax.PAN;
+          }
+
+          if (!isAdult && pax.GuardianDetail) {
+            passenger.GuardianDetail = {
+              Title: pax.GuardianDetail.Title || null,
+              FirstName: pax.GuardianDetail.FirstName || null,
+              LastName: pax.GuardianDetail.LastName || null,
+              PAN: pax.GuardianDetail.PAN || null,
+            };
+          }
+
+          return passenger;
+        }),
+      })),
+    };
+  }
 
   // states for expanding the guest form
   const [expanded, setExpanded] = useState("room-0");
 
   //   refs for attaching to the child formik forms
-     const commonFormRef=useRef();
-     const passengerFormRef=useRef([]);
+  const commonFormRef = useRef();
+  const passengerFormRef = useRef([]);
 
+  const handleSubmitAllForms = async () => {
+    const allValues = [];
 
-   useEffect(() => {
-  if (
-    hotelSearchData?.paxRoom?.length &&
-    passengerFormRef.current.length !== hotelSearchData?.paxRoom?.length
-  ) {
-    passengerFormRef.current = Array(hotelSearchData.paxRoom.length)
-      .fill()
-      .map((_, i) => passengerFormRef.current[i] || React.createRef());
-  }
-}, [hotelSearchData?.paxRoom?.length]);
+    for (let i = 0; i < paxRoom?.length; i++) {
+      const formRef = passengerFormRef.current[i];
+      if (formRef) {
+        const values = await formRef.submit();
+        allValues.push(values);
+      }
+    }
 
+    if (allValues.length) {
+      const cleanedGuestPayload = transformToBookingPayload(allValues, {
+        BookingCode: preBookResponse?.HotelResult?.[0]?.Rooms?.[0].BookingCode,
+        GuestNationality: "IN",
+        EndUserIp: userIp,
+        NetAmount: preBookResponse?.HotelResult?.[0].Rooms?.[0]?.NetAmount,
+      });
+      console.log("✅ Filtered form values:", cleanedGuestPayload);
+
+      if (cleanedGuestPayload) {
+        try {
+          //  let response=await hotelController.hotelBook(cleanedGuestPayload);
+          let response = await paymentController.hotelPaymentInit(
+            cleanedGuestPayload
+          );
+          console.log("Response from the Booking API: ", response);
+
+          //  redirect to the short url if url is coming
+          if (response?.data?.data?.short_url) {
+            window.location.href = response?.data?.data?.short_url;
+          } else {
+            console.warn("No short URL found in the response.");
+          }
+        } catch (error) {
+          console.log("There is an error in Booking: ", error);
+        }
+      }
+    }
+  };
   // function for handling the form expansion change
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -71,15 +164,8 @@ const HotelPreBookPage = () => {
     return textarea.value;
   }
 
-
-
   // passengers info
   const [passengers, setPassengers] = useState({ adult: 0, child: 0 });
-
-  // making state variables for preBook Api Call
-  const [preBookResponse, setPreBookResponse] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // extracting the logic status to login and giving access
   const isAuthenticated = useSelector(
@@ -129,13 +215,26 @@ const HotelPreBookPage = () => {
     let adult = 0;
     let child = 0;
 
-    hotelSearchData?.paxRoom?.map((room) => {
+    paxRoom?.map((room) => {
       adult = adult + room.Adults;
       child = child + room.Children;
     });
 
     setPassengers({ adult, child });
-  }, [hotelSearchData]);
+  }, [paxRoom]);
+
+  // calculate Base Fare
+  const calculateBaseFare = (dayRates) => {
+    let total = 0;
+
+    for (const room of dayRates) {
+      for (const night of room) {
+        total += night.BasePrice;
+      }
+    }
+
+    return total;
+  };
 
   if (loading) {
     return (
@@ -289,7 +388,7 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontWeight: 600, fontFamily: roboto.style }}
                       >
-                        {hotelSearchData?.checkIn}
+                        {checkIn}
                       </Typography>
                     </Grid2>
                     <Grid2
@@ -323,7 +422,7 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontWeight: 600, fontFamily: roboto.style }}
                       >
-                        {hotelSearchData?.checkOut}
+                        {checkOut}
                       </Typography>
                     </Grid2>
                     <Grid2
@@ -335,7 +434,7 @@ const HotelPreBookPage = () => {
                         sx={{ fontWeight: 700, fontFamily: roboto.style }}
                       >
                         {passengers?.adult} Adults | {passengers?.child}{" "}
-                        Children | {hotelSearchData?.paxRoom?.length} Room
+                        Children | {paxRoom?.length} Room
                       </Typography>
                     </Grid2>
                   </Grid2>
@@ -351,7 +450,7 @@ const HotelPreBookPage = () => {
                 ) : (
                   <Card>
                     <CardContent>
-                      {hotelSearchData?.paxRoom?.map((room, index) => (
+                      {paxRoom?.map((room, index) => (
                         <Accordion
                           key={index}
                           expanded={expanded === `room-${index}`}
@@ -371,8 +470,12 @@ const HotelPreBookPage = () => {
                           <AccordionDetails>
                             <Box sx={{ mb: 2 }}>
                               <GuestForm
+                                key={index}
                                 roomIndex={index}
-                                validationInfo={preBookResponse?.ValidationInfo}
+                                validationInfo={preBookResponse.ValidationInfo}
+                                ref={(el) =>
+                                  (passengerFormRef.current[index] = el)
+                                }
                               />
                             </Box>
                           </AccordionDetails>
@@ -501,21 +604,18 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                       >
-                        <span>1 Room</span>
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ fontFamily: roboto.style, fontWeight: 700 }}
-                      >
-                        Base Price
+                        <span>TOTAL FARE</span>
                       </Typography>
                     </Grid2>
                     <Grid2 item>
                       <Typography
                         sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                       >
-                        ₹ 5,644
+                        ₹{" "}
+                        {calculateBaseFare(
+                          preBookResponse?.HotelResult?.[0]?.Rooms?.[0]
+                            ?.DayRates
+                        ).toFixed(2)}
                       </Typography>
                     </Grid2>
                   </Grid2>
@@ -533,7 +633,7 @@ const HotelPreBookPage = () => {
                           sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                           mr={1}
                         >
-                          Hotel Taxes
+                          Total Tax
                         </Typography>
                       </Box>
                     </Grid2>
@@ -541,7 +641,10 @@ const HotelPreBookPage = () => {
                       <Typography
                         sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                       >
-                        ₹ 677
+                        ₹{" "}
+                        {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalTax.toFixed(
+                          2
+                        )}
                       </Typography>
                     </Grid2>
                   </Grid2>
@@ -568,7 +671,10 @@ const HotelPreBookPage = () => {
                         variant="h6"
                         sx={{ fontFamily: roboto.style, fontWeight: 800 }}
                       >
-                        ₹ 6,321
+                        ₹{" "}
+                        {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare.toFixed(
+                          2
+                        )}
                       </Typography>
                     </Grid2>
                   </Grid2>
@@ -585,14 +691,24 @@ const HotelPreBookPage = () => {
                       fontFamily: roboto.style,
                       fontWeight: 800,
                     }}
+                    onClick={async () => {
+                      setApiLoading(true);
+                      await commonFormRef.current.submitForm();
 
-                    onClick={async()=>{
-                     await commonFormRef.current.submitForm();
-
-                    
+                      await handleSubmitAllForms();
+                      setApiLoading(false);
                     }}
                   >
-                    Pay Now
+                    {apiLoading ? (
+                      <ReactLoading
+                        type={"bars"}
+                        color={COLORS.BLACK}
+                        height={30}
+                        width={30}
+                      />
+                    ) : (
+                      "Pay Now"
+                    )}
                   </Button>
                 </Box>
               </CardContent>

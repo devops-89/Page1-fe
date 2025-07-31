@@ -262,78 +262,96 @@ export const selfDriveValidationSchema = Yup.object({
 
 export const LeadPassengerValidation = (validationInfo) => {
   return Yup.object().shape({
-    title: Yup.string().required("Title is required"),
+    guests: Yup.array().of(
+      Yup.object().shape({
+        type: Yup.string().required(),
+        Title: Yup.string().required("Title is required"),
+        firstName: Yup.string().required("First name is required"),
+        lastName: Yup.string().required("Last name is required"),
 
-    firstName: Yup.string().required("First name is required"),
-    lastName: Yup.string().required("Last name is required"),
+        Age: Yup.number()
+          .required("Age is required")
+          .test("age-validation", "Age does not match type", function (value) {
+            const { type } = this.parent;
+            if (type === "adult" && value < 12) {
+              return this.createError({
+                message: "Adults must be at least 12 years old",
+              });
+            }
+            if (type === "child" && value >= 12) {
+              return this.createError({
+                message: "Children must be under 12 years old",
+              });
+            }
+            return true;
+          }),
 
-    Age: Yup.number()
-      .required("Age is required")
-      .min(0, "Age cannot be negative"),
-
-    isBelow12: Yup.boolean(),
-
-    PAN: Yup.string().when(["Age"], {
-      is: (age) =>
-        age >= 12 && validationInfo?.PanMandatory && !validationInfo?.Corporate,
-      then: (schema) => schema.required("PAN is required"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-
-    guardianPan: Yup.string().when("Age", {
-      is: (age) => age < 12,
-      then: (schema) => schema.required("Guardian PAN is required"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-
-    GuardianDetail: Yup.object().when("Age", {
-      is: (age) => age < 12,
-      then: () =>
-        Yup.object().shape({
-          Title: Yup.string().required("Guardian title is required"),
-          FirstName: Yup.string().required("Guardian first name is required"),
-          LastName: Yup.string().required("Guardian last name is required"),
-          PAN: Yup.string().required("Guardian PAN is required"),
+        // PAN required only if type is adult
+        PAN: Yup.string().when("type", {
+          is: (type) => {
+            return (
+              type === "adult" &&
+              validationInfo?.PanMandatory &&
+              !validationInfo?.CorporateBookingAllowed
+            );
+          },
+          then: (schema) => schema.required("PAN is required"),
+          otherwise: (schema) => schema.notRequired(),
         }),
-      otherwise: () =>
-        Yup.object().shape({
-          Title: Yup.string().notRequired(),
-          FirstName: Yup.string().notRequired(),
-          LastName: Yup.string().notRequired(),
-          PAN: Yup.string().notRequired(),
+
+        GuardianDetail: Yup.object().when("type", {
+          is: "child",
+          then: () =>
+            Yup.object().shape({
+              Title: Yup.string().required("Guardian title is required"),
+              FirstName: Yup.string().required(
+                "Guardian first name is required"
+              ),
+              LastName: Yup.string().required("Guardian last name is required"),
+              PAN: Yup.string().required("Guardian PAN is required"),
+            }),
+          otherwise: () =>
+            Yup.object().shape({
+              Title: Yup.string().notRequired(),
+              FirstName: Yup.string().notRequired(),
+              LastName: Yup.string().notRequired(),
+              PAN: Yup.string().notRequired(),
+            }),
         }),
-    }),
 
-    // GST fields (conditionally optional – you can modify this logic based on your requirement)
-    GSTCompanyName: Yup.string().notRequired(),
-    GSTCompanyAddress: Yup.string().notRequired(),
-    GSTCompanyContactNumber: Yup.string()
-      .matches(/^[0-9]{10}$/, "Enter valid 10-digit contact number")
-      .notRequired(),
-    GSTCompanyEmail: Yup.string().email("Invalid email").notRequired(),
-    GSTNumber: Yup.string().notRequired(),
+        // GST fields (optional)
+        GSTCompanyName: Yup.string().notRequired(),
+        GSTCompanyAddress: Yup.string().notRequired(),
+        GSTCompanyContactNumber: Yup.string()
+          .matches(/^[0-9]{10}$/, "Enter valid 10-digit contact number")
+          .notRequired(),
+        GSTCompanyEmail: Yup.string().email("Invalid email").notRequired(),
+        GSTNumber: Yup.string().notRequired(),
 
-    PassportNo: Yup.string().when([], {
-      is: () => validationInfo?.PassportMandatory,
-      then: (schema) => schema.required("Passport number is required"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-
-    PassportIssueDate: Yup.date()
-      .nullable()
-      .when([], {
-        is: () => validationInfo?.PassportMandatory,
-        then: (schema) => schema.required("Passport issue date is required"),
-        otherwise: (schema) => schema.nullable(),
-      }),
-
-    PassportExpDate: Yup.date()
-      .nullable()
-      .when([], {
-        is: () => validationInfo?.PassportMandatory,
-        then: (schema) => schema.required("Passport expiry date is required"),
-        otherwise: (schema) => schema.nullable(),
-      }),
+        // Passport fields
+        PassportNo: Yup.string().when([], {
+          is: () => validationInfo?.PassportMandatory,
+          then: (schema) => schema.required("Passport number is required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
+        PassportIssueDate: Yup.date()
+          .nullable()
+          .when([], {
+            is: () => validationInfo?.PassportMandatory,
+            then: (schema) =>
+              schema.required("Passport issue date is required"),
+            otherwise: (schema) => schema.nullable(),
+          }),
+        PassportExpDate: Yup.date()
+          .nullable()
+          .when([], {
+            is: () => validationInfo?.PassportMandatory,
+            then: (schema) =>
+              schema.required("Passport expiry date is required"),
+            otherwise: (schema) => schema.nullable(),
+          }),
+      })
+    ),
   });
 };
 

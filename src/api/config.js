@@ -1,5 +1,6 @@
 const { default: axios } = require("axios");
 const { APIURL } = require("./serverConstant");
+// const { config } = require("next/dist/build/templates/pages");
 
 const securedApi = axios.create({
   baseURL: APIURL.authenticationUrl,
@@ -21,6 +22,10 @@ const securedPaymentUrl = axios.create({
   baseURL: APIURL.authPaymentUrl,
 });
 
+const securedHotelPaymentUrl=axios.create({
+  baseURL:APIURL.hotelAuthPaymentUrl,
+})
+
 const flightPublicApi = axios.create({
   baseURL: APIURL.flightUrl,
 });
@@ -41,6 +46,10 @@ const hotelPublicApi = axios.create({
   baseURL: APIURL.hotelUrl,
 });
 
+const securedHotelApi=axios.create({
+  baseURL:APIURL.hotelUrl,
+})
+
 userSecuredApi.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   config.headers.accesstoken = token;
@@ -59,11 +68,23 @@ securedFlightApi.interceptors.request.use((config) => {
   return config;
 });
 
+securedHotelApi.interceptors.request.use((config)=>{
+    const token=localStorage.getItem("access_token");
+    config.headers.accesstoken=token;
+    return config;
+})
+
 securedPaymentUrl.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   config.headers.accesstoken = token;
   return config;
 });
+
+securedHotelPaymentUrl.interceptors.request.use((config)=>{
+  const token=localStorage.getItem("access_token");
+  config.headers.accesstoken=token;
+  return config;
+})
 
 securedFlightApi.interceptors.response.use(
   (response) => response,
@@ -80,11 +101,13 @@ module.exports = {
   securedApi,
   publicApi,
   securedFlightApi,
+  securedHotelApi,
   userSecuredApi,
   flightPublicApi,
   securedPaymentUrl,
   hotelPublicApi,
   basicPublicApi,
   dashboardPublicApi,
-  packagePublicApi
+  packagePublicApi,
+  securedHotelPaymentUrl
 };
