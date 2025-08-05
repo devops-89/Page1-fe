@@ -36,6 +36,8 @@ const PackageDetail = ({ data }) => {
       })
     : "N/A";
 
+    console.log("Package Details Data: ",data);
+
   return (
     <Grid container spacing={4} sx={{ padding: { xs: 2, md: 4 } }}>
       {/* Left Section */}
@@ -86,6 +88,7 @@ const PackageDetail = ({ data }) => {
             </Box>
           </Box>
 
+ {/* image="https://media.easemytrip.com/media/Deal/DL638572420063544393/SightSeeing/SightSeeing49Q4Do.jpg" */}
           {/* Main Image */}
           <Card sx={{ mt: 3 }}>
             <CardMedia

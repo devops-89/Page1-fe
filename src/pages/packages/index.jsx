@@ -81,7 +81,7 @@ const Packages = () => {
   useEffect(() => {
   const fetchPackages = async () => {
     try {
-      let response = await packageController.getPackageList(5, 1);
+      let response = await packageController.getPackageList(10, 1);
       setPackageList(response.data.data.items);
       console.log("Response from fetching all the packages:", response.data.data);
     } catch (error) {

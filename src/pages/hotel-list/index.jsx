@@ -27,7 +27,7 @@ import Loading from "react-loading";
 
 import HotelCard from "@/components/hotels/hotelCard";
 import { COLORS } from "@/utils/colors";
-import { nunito } from "@/utils/fonts";
+import { nunito,roboto } from "@/utils/fonts";
 import { HOTEL_RATING } from "@/utils/enum";
 
 const HotelList = () => {
@@ -124,9 +124,7 @@ const HotelList = () => {
       ? hotel?.HotelName?.toLowerCase().includes(searchTerm.toLowerCase())
       : true;
 
-    const breakfastMatch = selectedFilters.includes("Breakfast Included")
-      ? hotel?.HotelFacilities?.includes("Breakfast")
-      : true;
+ 
 
     const budgetMatch = selectedFilters.includes("Budget")
       ? hotel?.price <= 1000
@@ -149,7 +147,6 @@ const HotelList = () => {
 
     return (
       nameMatch &&
-      breakfastMatch &&
       budgetMatch &&
       ratingMatch &&
       priceMatch
@@ -195,7 +192,7 @@ const HotelList = () => {
                   <CircularProgress />
                 </Box>
               ) : filteredHotels.length === 0 ? (
-                <Typography variant="h6" sx={{ textAlign: "center", mt: 5, fontFamily: nunito.style }}>
+                <Typography variant="h6" sx={{ textAlign: "center", mt: 5, fontFamily: roboto.style }}>
                   No hotels available.
                 </Typography>
               ) : (
@@ -250,18 +247,18 @@ const FilterCard = ({
   >
     <CardHeader
       title={
-        <Typography sx={{ fontFamily: nunito.style, fontWeight: 700 }} variant="h5">
+        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }} variant="h5">
           Filters
         </Typography>
       }
       action={
-        <Button variant="text" color="primary" size="small" onClick={resetFilters} sx={{ fontFamily: nunito.style, fontWeight: 700 }}>
+        <Button variant="text" color="primary" size="small" onClick={resetFilters} sx={{ fontFamily: roboto.style, fontWeight: 700 }}>
           Reset
         </Button>
       }
     />
     <CardContent>
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, fontFamily: nunito.style }}>
+      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, fontFamily: roboto.style }}>
         Search by Hotel Names
       </Typography>
       <TextField
@@ -275,7 +272,7 @@ const FilterCard = ({
         }}
       />
       <Box mt={3}>
-        <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: nunito.style }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: roboto.style }}>
           Price Range <br/> (₹{priceRange[0]} - ₹{priceRange[1]})
         </Typography>
         <Slider
@@ -288,10 +285,10 @@ const FilterCard = ({
         />
       </Box>
       <Box mt={3}>
-        <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: nunito.style }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: roboto.style }}>
           Popular
         </Typography>
-        {["Breakfast Included", "Budget", "4 Star Hotels", "5 Star Hotels"].map((label) => (
+        {["4 Star Hotels", "5 Star Hotels"].map((label) => (
           <FormControlLabel
             key={label}
             control={
