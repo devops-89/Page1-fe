@@ -30,7 +30,7 @@ const InternationalPassengerForm = ({
   const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
-  const [isPassportRequired, setIsPassportRequired] = useState(false);
+  const [isPassportRequired, setIsPassportRequired] = useState(true);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
@@ -157,7 +157,8 @@ const InternationalPassengerForm = ({
     }
     const results = flightDetails?.[0]?.Results;
     setIsPassportRequired(
-      results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
+      // results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
+    journey?.journey === JOURNEY.INTERNATIONAL
     );
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
@@ -416,7 +417,7 @@ const InternationalPassengerForm = ({
     console.log("finalpayload", finalPayload);
   };
 
-  const currentValidationSchema = validationSchema(isGSTMandatory);
+  const currentValidationSchema = validationSchema(isGSTMandatory,isPassportRequired,isBirthdayRequired);
 
   useEffect(() => {
     

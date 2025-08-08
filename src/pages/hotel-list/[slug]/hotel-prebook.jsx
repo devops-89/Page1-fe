@@ -28,11 +28,14 @@ import { hotelController } from "@/api/hotelController";
 import ReactLoading from "react-loading";
 import { data } from "@/assests/data";
 import UserVerifyForm from "@/components/hotels/UserVerifyForm";
+import {getCombinedValidationSchema} from "@/utils/validationSchema";
 import GuestForm from "@/components/hotels/GuestForm";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useFormatCancellationPolicy } from "@/custom-hook/useFormatHotelCancellationPolicy";
 import { paymentController } from "@/api/paymentController";
+import { Formik,Form } from "formik";
+import RateConditionCard from "@/components/hotels/HomepageHotels/RateConditionCard";
 
 const HotelPreBookPage = () => {
   // make router instance for extracting instance
@@ -48,6 +51,67 @@ const HotelPreBookPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [apiLoading, setApiLoading] = useState(false);
+
+  // centralized initial Values
+  const generateInitialValues = () => ({
+  commonFields: {
+    Email: '',
+    Phoneno: '',
+  },
+  guestForms: paxRoom.map((room) => ({
+    guests: [
+      ...Array.from({ length: room.Adults }, () => ({
+        type: "adult",
+        Title: "mr",
+        firstName: "",
+        lastName: "",
+        isBelow12: false,
+        Age: 30,
+        PAN: "",
+        GuardianDetail: {
+          Title: "mr",
+          FirstName: "",
+          LastName: "",
+          PAN: "",
+        },
+        GSTCompanyAddress: "",
+        GSTCompanyContactNumber: "",
+        GSTCompanyName: "",
+        GSTNumber: "",
+        GSTCompanyEmail: "",
+        PassportNo: preBookResponse?.ValidationInfo?.PassportMandatory ? "" : null,
+        PassportIssueDate: preBookResponse?.ValidationInfo?.PassportMandatory ? "" : null,
+        PassportExpDate:preBookResponse?.ValidationInfo?.PassportMandatory ? "" : null,
+      })),
+      ...room.ChildrenAges.map((age) => ({
+        type: "child",
+        Title: "mr",
+        firstName: "",
+        lastName: "",
+        isBelow12: age < 12,
+        Age: age,
+        PAN: "",
+        GuardianDetail: {
+          Title: "mr",
+          FirstName: "",
+          LastName: "",
+          PAN: "",
+        },
+        GSTCompanyAddress: "",
+        GSTCompanyContactNumber: "",
+        GSTCompanyName: "",
+        GSTNumber: "",
+        GSTCompanyEmail: "",
+        PassportNo: preBookResponse?.ValidationInfo?.PassportMandatory ? "" : null,
+        PassportIssueDate: preBookResponse?.ValidationInfo?.PassportMandatory ? "" : null,
+        PassportExpDate: preBookResponse?.ValidationInfo?.PassportMandatory ? "" : null,
+      }))
+    ]
+  }))
+});
+
+ 
+
 
   // make the payload according to the booking api expectation
   function transformToBookingPayload(allValues, meta = {}) {
@@ -112,46 +176,24 @@ const HotelPreBookPage = () => {
   const commonFormRef = useRef();
   const passengerFormRef = useRef([]);
 
-  const handleSubmitAllForms = async () => {
-    const allValues = [];
 
-    for (let i = 0; i < paxRoom?.length; i++) {
-      const formRef = passengerFormRef.current[i];
-      if (formRef) {
-        const values = await formRef.submit();
-        allValues.push(values);
-      }
+   // validate all passenger forms
+ const validateAllPassengerForms = async () => {
+  const errorsList = [];
+
+  for (const ref of passengerFormRef.current) {
+    if (ref?.validateForm) {
+      const errors = await ref.validateForm();
+      errorsList.push(errors || {});
+    } else {
+      errorsList.push({});
     }
+  }
 
-    if (allValues.length) {
-      const cleanedGuestPayload = transformToBookingPayload(allValues, {
-        BookingCode: preBookResponse?.HotelResult?.[0]?.Rooms?.[0].BookingCode,
-        GuestNationality: "IN",
-        EndUserIp: userIp,
-        NetAmount: preBookResponse?.HotelResult?.[0].Rooms?.[0]?.NetAmount,
-      });
-      console.log("✅ Filtered form values:", cleanedGuestPayload);
+  return errorsList;
+};
 
-      if (cleanedGuestPayload) {
-        try {
-          //  let response=await hotelController.hotelBook(cleanedGuestPayload);
-          let response = await paymentController.hotelPaymentInit(
-            cleanedGuestPayload
-          );
-          console.log("Response from the Booking API: ", response);
-
-          //  redirect to the short url if url is coming
-          if (response?.data?.data?.short_url) {
-            window.location.href = response?.data?.data?.short_url;
-          } else {
-            console.warn("No short URL found in the response.");
-          }
-        } catch (error) {
-          console.log("There is an error in Booking: ", error);
-        }
-      }
-    }
-  };
+ 
   // function for handling the form expansion change
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -167,7 +209,7 @@ const HotelPreBookPage = () => {
   // passengers info
   const [passengers, setPassengers] = useState({ adult: 0, child: 0 });
 
-  // extracting the logic status to login and giving access
+  // extracting the login status to login and giving access
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
   );
@@ -309,6 +351,65 @@ const HotelPreBookPage = () => {
         </Typography>
       </Grid2>
       <Container>
+          <Formik
+  initialValues={generateInitialValues()}
+  validationSchema={getCombinedValidationSchema(preBookResponse?.ValidationInfo)}
+  onSubmit={async (values) => {
+    console.log("Submited Values:",values);
+   
+   
+    // you can dispatch redux action here if needed
+    const cleanedGuestPayload = transformToBookingPayload(
+      values.guestForms.map((room) => room), {
+        BookingCode: preBookResponse?.HotelResult?.[0]?.Rooms?.[0].BookingCode,
+        GuestNationality: "IN",
+        EndUserIp: userIp,
+        NetAmount: preBookResponse?.HotelResult?.[0].Rooms?.[0]?.NetAmount,
+      }
+    );
+
+    const duration=preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.DayRates?.[0]?.length;
+    const extraInformation={
+      hotelName:preBookResponse?.HotelResult?.[0]?.HotelName,
+      hotelAddress:preBookResponse?.HotelResult?.[0]?.HotelAddress,
+      roomType:preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.Name?.[0],
+      firstName:values.guestForms?.[0]?.guests?.[0]?.firstName,
+      lastName:values.guestForms?.[0]?.guests?.[0]?.lastName,
+      rooms:paxRoom?.length || 0,
+      stayDuration:duration || 0,
+      basePrice: preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.PriceBreakUp?.[0].RoomRate || 0,
+      tax:preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalTax || 0,
+      serviceFees:preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.PriceBreakUp?.[0].AgentCommission || 0,
+      checkIn:checkIn,
+      checkOut:checkOut,
+
+    }
+
+    const payload={
+     ...cleanedGuestPayload,
+      extraInfo:extraInformation
+    };
+
+    console.log("Real Payload:",payload);
+
+   
+      setApiLoading(true);
+    let response=await paymentController.hotelPaymentInit(payload);
+     console.log("Response from the Booking API: ", response);
+      setApiLoading(false);
+
+          //  redirect to the short url if url is coming
+          if (response?.data?.data?.short_url) {
+            window.location.href = response?.data?.data?.short_url;
+          } else {
+            console.warn("No short URL found in the response.");
+          }
+    
+  }}
+>
+  {
+    formik=>(
+      <Form>
         <Grid2 container sx={{ my: 4 }} spacing={2}>
           {/* Left container */}
           <Grid2
@@ -448,8 +549,10 @@ const HotelPreBookPage = () => {
                     <UserVerifyForm />
                   </Card>
                 ) : (
+                 
                   <Card>
-                    <CardContent>
+                   
+                   <CardContent>
                       {paxRoom?.map((room, index) => (
                         <Accordion
                           key={index}
@@ -469,14 +572,18 @@ const HotelPreBookPage = () => {
                           </AccordionSummary>
                           <AccordionDetails>
                             <Box sx={{ mb: 2 }}>
-                              <GuestForm
-                                key={index}
-                                roomIndex={index}
-                                validationInfo={preBookResponse.ValidationInfo}
-                                ref={(el) =>
-                                  (passengerFormRef.current[index] = el)
-                                }
-                              />
+                              
+                                <GuestForm
+        values={formik.values.guestForms[index]}
+        errors={formik.errors.guestForms?.[index]}
+        touched={formik.touched.guestForms?.[index]}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+        setFieldValue={formik.setFieldValue}
+        setFieldTouched={formik.setFieldTouched}
+        roomIndex={index}
+        validationInfo={preBookResponse.ValidationInfo}
+      />
                             </Box>
                           </AccordionDetails>
                         </Accordion>
@@ -485,8 +592,17 @@ const HotelPreBookPage = () => {
 
                     {/* Common Fields Section  */}
                     <CardContent>
-                      <CommonFieldsForm formikRef={commonFormRef} />
+                   
+                        <CommonFieldsForm
+        values={formik.values.commonFields}
+        errors={formik.errors.commonFields}
+        touched={formik.touched.commonFields}
+        handleChange={formik.handleChange}
+        handleBlur={formik.handleBlur}
+        setFieldValue={formik.setFieldValue}
+      />
                     </CardContent>
+                     
                   </Card>
                 )}
               </Card>
@@ -500,24 +616,7 @@ const HotelPreBookPage = () => {
                   >
                     Cancellation Policy
                   </Typography>
-                  {/* {room?.CancelPolicies.map((policy, idx) => (
-                    <Box key={idx} mt={1}>
-                      <Typography
-                       color="text.primary"
-                        sx={{ fontFamily: roboto.style, fontWeight: 600 }}
-                      >
-                        From:{" "}
-                        <strong>
-                          {moment(
-                            policy.FromDate,
-                            "DD-MM-YYYY HH:mm:ss"
-                          ).format("DD-MMM-YYYY")}
-                        </strong>{" "}
-                        - <strong>{policy.CancellationCharge}%</strong> charge (
-                        {policy.ChargeType})
-                      </Typography>
-                    </Box>
-                  ))} */}
+                  
 
                   <List>
                     {cancellationMessages.map((msg, idx) => (
@@ -552,7 +651,7 @@ const HotelPreBookPage = () => {
               </Card>
 
               <Card variant="outlined" sx={{ boxShadow: 1 }}>
-                <CardContent>
+                {/* <CardContent>
                   <Typography
                     variant="h6"
                     sx={{ fontWeight: "bold", fontFamily: roboto.style }}
@@ -574,7 +673,8 @@ const HotelPreBookPage = () => {
                       )
                     )}
                   </List>
-                </CardContent>
+                </CardContent> */}
+                <RateConditionCard preBookResponse={preBookResponse} />
               </Card>
             </Box>
           </Grid2>
@@ -682,6 +782,11 @@ const HotelPreBookPage = () => {
                   <Button
                     variant="contained"
                     size="medium"
+                    type="submit"
+                    onSubmit={(values) => {
+    console.log("Submited Values:", values);
+    formik.submitForm();
+        }}
                     sx={{
                       width: "100%",
                       height: "30px",
@@ -691,13 +796,7 @@ const HotelPreBookPage = () => {
                       fontFamily: roboto.style,
                       fontWeight: 800,
                     }}
-                    onClick={async () => {
-                      setApiLoading(true);
-                      await commonFormRef.current.submitForm();
-
-                      await handleSubmitAllForms();
-                      setApiLoading(false);
-                    }}
+                   
                   >
                     {apiLoading ? (
                       <ReactLoading
@@ -713,9 +812,15 @@ const HotelPreBookPage = () => {
                 </Box>
               </CardContent>
             </Card>
+            
           </Grid2>
         </Grid2>
+         </Form>
+    )
+  }
+                    </Formik>
       </Container>
+      
     </Grid2>
   );
 };

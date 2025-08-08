@@ -98,6 +98,7 @@ const UserVerifyForm = () => {
     };
 
     authenticationController.verifyEmailOtp(payload).then((response) => {
+      console.log("authentication Text:",response);
       if (response.statusText === "OK") {
         dispatch(setOtpEmailAuthenticated(email,response?.data?.data?.email));
         dispatch(setAuthenticated(true));

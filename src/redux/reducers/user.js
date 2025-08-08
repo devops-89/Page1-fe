@@ -24,7 +24,7 @@ export const USER = createSlice({
       return (state = initialState);
     },
     setAuthenticated : (state, actions)=>{
-       state.isAuthenticated = action.payload;
+       state.isAuthenticated = actions.payload;
       console.log("current user Object authenticated:",current(state));
       return state;
     },

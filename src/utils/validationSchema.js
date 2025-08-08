@@ -290,9 +290,7 @@ export const LeadPassengerValidation = (validationInfo) => {
         PAN: Yup.string().when("type", {
           is: (type) => {
             return (
-              type === "adult" &&
-              validationInfo?.PanMandatory &&
-              !validationInfo?.CorporateBookingAllowed
+              type === "adult"
             );
           },
           then: (schema) => schema.required("PAN is required"),
@@ -363,4 +361,14 @@ export const CommonFieldValidation = Yup.object({
     .required("Phone No. is required"),
 });
 
-export { passengerSchema, gstFormSchema, addFormSchema };
+// combined Validation schema for prebook
+export const getCombinedValidationSchema = (validationInfo) => {
+  return Yup.object({
+    commonFields: CommonFieldValidation,
+    guestForms: Yup.array().of(
+      LeadPassengerValidation(validationInfo)
+    )
+  });
+};
+
+export { passengerSchema, gstFormSchema, addFormSchema,getCombinedValidationSchema };
