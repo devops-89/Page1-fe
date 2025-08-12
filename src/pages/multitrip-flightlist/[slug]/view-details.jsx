@@ -56,9 +56,7 @@ const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [flightDetails, setFlightDetails] = useState(null);
-  const isAuthenticated = useSelector(
-    (state) => state.USER.UserData.isAuthenticated
-  );
+
   // console.log('isAuthenticated',isAuthenticated)
   const [commission, setCommission] = useState(null);
   const [isLCC, setIsLCC] = useState(null);
@@ -509,13 +507,9 @@ const FlightDetails = () => {
                       }
                     )}
 
-                    {/* OTP Verification Start */}
+                    {/* Multicity Passenger Form */}
 
-                    {!isAuthenticated ? (
-                      <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                        <UserVerifyForm />
-                      </Card>
-                    ) : (
+                   
                       <Card sx={{ mb: "20px" }}>
                         <MultiCityPassengerForm
                           sx={{
@@ -532,7 +526,7 @@ const FlightDetails = () => {
                           setSelectMeal={setSelectMeal}
                         />
                       </Card>
-                    )}
+                
                   </Paper>
                 </Grid2>
                 {/* Fare summary */}

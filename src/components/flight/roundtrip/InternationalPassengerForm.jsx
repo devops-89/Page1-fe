@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Typography, Box } from "@mui/material";
+import { Container, Button, Typography, Box,Card } from "@mui/material";
 import { Formik, Form } from "formik";
 import { roboto } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
@@ -15,14 +15,15 @@ import AddForm from "../AddForm";
 import GstForm from "../GstForm";
 import PassengerFields from "../PassengerFields";
 import FullScreenDialog from "../ssr/roundtrip/international/seats/FullScreenDialog";
-
+import UserVerifyForm from "../UserVerifyForm";
 const InternationalPassengerForm = ({
   flightDetails,
   myState,
-  journey, 
+  journey,
   isLCC,
 }) => {
   const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -33,7 +34,6 @@ const InternationalPassengerForm = ({
   const [isPassportRequired, setIsPassportRequired] = useState(true);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
-
 
   let adultSeatsOutgoing = [];
   let childSeatsOutgoing = [];
@@ -50,17 +50,15 @@ const InternationalPassengerForm = ({
     (state) => state.Flight.MealsInformation.meals || {}
   );
 
-
   // ----------------OutGoing Seat Value----------------
   const selectedSeatsOutgoing = useSelector(
     (state) => state.Flight.RoundInternationalSeatsInformation?.outgoingSeats
   );
 
-    // ----------------Return Seat Value----------------
+  // ----------------Return Seat Value----------------
   const selectedSeatsReturn = useSelector(
     (state) => state.Flight.RoundInternationalSeatsInformation?.incomingSeats
   );
-
 
   // ----------Find All OutGoing Seat Value -------------
   const finalSeatOutGoing = selectedSeatsOutgoing?.map((singleSeat, index) => {
@@ -69,13 +67,12 @@ const InternationalPassengerForm = ({
     });
   });
 
-    // ----------Find All Return Seat Value -------------
+  // ----------Find All Return Seat Value -------------
   const finalSeatReturn = selectedSeatsReturn?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
       return seat;
     });
   });
-
 
   // -----------Transposing Outgoing value----------------
   const maxLengthOutgoing = Math.max(
@@ -96,8 +93,6 @@ const InternationalPassengerForm = ({
       childSeatsOutgoing.push(seat);
     });
 
-
-
   // -----------Transposing Return value----------------
 
   const maxLengthReturn = Math.max(...finalSeatReturn.map((row) => row.length));
@@ -105,8 +100,6 @@ const InternationalPassengerForm = ({
   const transposedOutReturn = Array.from({ length: maxLengthReturn }, (_, i) =>
     finalSeatReturn.map((row) => row?.[i] || [])
   );
-
-  
 
   transposedOutReturn.slice(0, adultCount).forEach((seat) => {
     adultSeatsReturn.push(seat);
@@ -118,15 +111,14 @@ const InternationalPassengerForm = ({
       childSeatsReturn.push(seat);
     });
 
-
-    // console.log("selectedSeatsOutgoing------------------", selectedSeatsOutgoing)
-    // console.log("selectedSeatsReturn------------------", selectedSeatsReturn)
-    // console.log("transposedOutGoing------------------", transposedOutGoing)
-    // console.log("transposedOutReturn----------------", transposedOutReturn)
-    // console.log("adultSeatsOutgoing---------------", adultSeatsOutgoing)
-    // console.log("childSeatsOutgoing---------------", childSeatsOutgoing)
-    // console.log("adultSeatsReturn---------------", adultSeatsReturn)
-    // console.log("childSeatsReturn---------------", childSeatsReturn)
+  // console.log("selectedSeatsOutgoing------------------", selectedSeatsOutgoing)
+  // console.log("selectedSeatsReturn------------------", selectedSeatsReturn)
+  // console.log("transposedOutGoing------------------", transposedOutGoing)
+  // console.log("transposedOutReturn----------------", transposedOutReturn)
+  // console.log("adultSeatsOutgoing---------------", adultSeatsOutgoing)
+  // console.log("childSeatsOutgoing---------------", childSeatsOutgoing)
+  // console.log("adultSeatsReturn---------------", adultSeatsReturn)
+  // console.log("childSeatsReturn---------------", childSeatsReturn)
 
   const {
     Currency,
@@ -145,7 +137,7 @@ const InternationalPassengerForm = ({
     ServiceFee,
   } = flightDetails?.[0]?.Results?.Fare || {};
 
-   console.log("final Payload:",payload);
+  console.log("final Payload:", payload);
 
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
@@ -158,7 +150,7 @@ const InternationalPassengerForm = ({
     const results = flightDetails?.[0]?.Results;
     setIsPassportRequired(
       // results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
-    journey?.journey === JOURNEY.INTERNATIONAL
+      journey?.journey === JOURNEY.INTERNATIONAL
     );
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
@@ -281,8 +273,7 @@ const InternationalPassengerForm = ({
         })) || [],
     };
 
-
-    console.log("value--------------", values)
+    console.log("value--------------", values);
     const passengerDetails = {
       adult:
         values?.adult?.map((passenger, index) => {
@@ -315,15 +306,22 @@ const InternationalPassengerForm = ({
             is_lead_pax: index === 0,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectedMeals &&
-              selectedMeals[`adult-${index}`]?.meals?.map(
-                (single) => single?.meal
-              ) || null,
-            Baggage: selectedBaggages &&
-              selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(
-                (single) => single?.selectedBaggage
-              ) || null,
-            SeatDynamic: (adultSeatsOutgoing?.[index] || adultSeatsReturn?.[index]) ? [...adultSeatsOutgoing[index], ...adultSeatsReturn[index]] : null,
+            MealDynamic:
+              (selectedMeals &&
+                selectedMeals[`adult-${index}`]?.meals?.map(
+                  (single) => single?.meal
+                )) ||
+              null,
+            Baggage:
+              (selectedBaggages &&
+                selectedBaggages[`adult-${index}`]?.selectedBaggages?.map(
+                  (single) => single?.selectedBaggage
+                )) ||
+              null,
+            SeatDynamic:
+              adultSeatsOutgoing?.[index] || adultSeatsReturn?.[index]
+                ? [...adultSeatsOutgoing[index], ...adultSeatsReturn[index]]
+                : null,
           };
         }) || [],
       child:
@@ -357,15 +355,22 @@ const InternationalPassengerForm = ({
             is_lead_pax: false,
             ff_airline_code: null,
             ff_number: null,
-            MealDynamic: selectedMeals &&
-              selectedMeals[`child-${index}`]?.meals?.map(
-                (single) => single?.meal
-              ) || null,
-            Baggage: selectedBaggages &&
-              selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
-                (single) => single?.selectedBaggage
-              ) || null,
-            SeatDynamic: (childSeatsOutgoing || childSeatsReturn) ? [...childSeatsOutgoing[index], ...childSeatsReturn[index]] : null,
+            MealDynamic:
+              (selectedMeals &&
+                selectedMeals[`child-${index}`]?.meals?.map(
+                  (single) => single?.meal
+                )) ||
+              null,
+            Baggage:
+              (selectedBaggages &&
+                selectedBaggages[`child-${index}`]?.selectedBaggages?.map(
+                  (single) => single?.selectedBaggage
+                )) ||
+              null,
+            SeatDynamic:
+              childSeatsOutgoing || childSeatsReturn
+                ? [...childSeatsOutgoing[index], ...childSeatsReturn[index]]
+                : null,
           };
         }) || [],
       infant:
@@ -403,24 +408,24 @@ const InternationalPassengerForm = ({
         }) || [],
     };
 
-    console.log("passengerDetails----------", passengerDetails)
+    console.log("passengerDetails----------", passengerDetails);
 
     const finalPayload = {
       ...commonPayload,
       passenger_details: passengerDetails,
     };
 
-    
-    
-
     setPayload(finalPayload);
     console.log("finalpayload", finalPayload);
   };
 
-  const currentValidationSchema = validationSchema(isGSTMandatory,isPassportRequired,isBirthdayRequired);
+  const currentValidationSchema = validationSchema(
+    isGSTMandatory,
+    isPassportRequired,
+    isBirthdayRequired
+  );
 
   useEffect(() => {
-    
     if (payload.trace_id) {
       const bookingPromise = flightDetails?.[0]?.Results?.IsLCC
         ? flightController.oneWayBookingLLC(payload)
@@ -567,9 +572,8 @@ const InternationalPassengerForm = ({
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
-                    
                     />
                   </Box>
                 ))}
@@ -587,9 +591,8 @@ const InternationalPassengerForm = ({
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
-                    
                     />
                   </Box>
                 ))}
@@ -606,9 +609,8 @@ const InternationalPassengerForm = ({
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
-
                     />
                   </Box>
                 ))}
@@ -623,8 +625,6 @@ const InternationalPassengerForm = ({
                     isGSTMandatory={isGSTMandatory}
                   />
                 )}
-
-              
 
                 <Box
                   sx={{
@@ -644,13 +644,19 @@ const InternationalPassengerForm = ({
                     justifyContent: "flex-end",
                   }}
                 >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                  >
-                    Continue
-                  </Button>
+                  {!isAuthenticated ? (
+                    <Card sx={{ mb: "20px", p: "20px", mx: "auto",width:"100%" }}>
+                      <UserVerifyForm />
+                    </Card>
+                  ) : (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ backgroundColor: COLORS.PRIMARY }}
+                    >
+                      Continue
+                    </Button>
+                  )}
                 </Box>
               </Form>
             );

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Typography, Box } from "@mui/material";
+import { Container, Button, Typography, Box ,Card} from "@mui/material";
 import { Formik, Form } from "formik";
 import GstForm from "./GstForm";
-import { nunito,roboto } from "@/utils/fonts";
+import { nunito, roboto } from "@/utils/fonts";
 import AddForm from "./AddForm";
 import { flightController } from "@/api/flightController";
 import { JOURNEY, TOAST_STATUS } from "@/utils/enum";
@@ -15,12 +15,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import PassengerFields from "./PassengerFields";
 import { JOURNEY_TYPE } from "@/utils/enum";
+import UserVerifyForm from "./UserVerifyForm";
 
 import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
 
 const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
-
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(
+    (state) => state.USER.UserData.isAuthenticated
+  );
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -53,27 +56,21 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   let adultSeats = [];
   let childSeats = [];
 
-
-  const maxLength = Math.max(...finalSeat.map(row => row.length));
+  const maxLength = Math.max(...finalSeat.map((row) => row.length));
 
   const transposed = Array.from({ length: maxLength }, (_, i) =>
-    finalSeat.map(row => row?.[i] || []) 
+    finalSeat.map((row) => row?.[i] || [])
   );
-  
-  // console.log(transposed);
-  
 
+  // console.log(transposed);
 
   transposed.slice(0, adultCount).forEach((seat) => {
-      adultSeats.push(seat);
-    });
+    adultSeats.push(seat);
+  });
 
-    transposed
-      .slice(adultCount, adultCount + childCount)
-      .forEach((seat) => {
-        childSeats.push(seat);
-      });
-  
+  transposed.slice(adultCount, adultCount + childCount).forEach((seat) => {
+    childSeats.push(seat);
+  });
 
   const {
     Currency,
@@ -111,8 +108,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   }, [myState, journey?.journey]);
 
   useEffect(() => {
-   
-    
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
   }, [journey?.journey]);
 
@@ -434,7 +429,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               sx={{
                 color: COLORS.GREEN,
                 fontWeight: 500,
-                fontFamily:roboto.style,
+                fontFamily: roboto.style,
                 fontSize: { lg: 16, xs: 12 },
               }}
             >
@@ -446,7 +441,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
               sx={{
                 color: COLORS.RED,
                 fontWeight: 500,
-                fontFamily:roboto.style,
+                fontFamily: roboto.style,
                 fontSize: { lg: 16, xs: 12 },
               }}
             >
@@ -465,7 +460,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             variant="h5"
             sx={{
               fontSize: { lg: 18, xs: 14 },
-             fontFamily:roboto.style,
+              fontFamily: roboto.style,
               fontWeight: 700,
               mb: "10px",
             }}
@@ -476,7 +471,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             variant="body1"
             sx={{
               fontSize: { lg: 18, xs: 14 },
-            fontFamily:roboto.style,
+              fontFamily: roboto.style,
               fontWeight: 600,
               mb: "10px",
             }}
@@ -518,7 +513,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                     }}
                   >
                     <PassengerFields
-                      
                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
@@ -532,7 +526,6 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       journey={journey}
                       setFieldValue={setFieldValue}
                     />
-                 
                   </Box>
                 ))}
 
@@ -549,7 +542,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
                     />
                   </Box>
@@ -567,7 +560,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
                     />
                   </Box>
@@ -613,13 +606,22 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                     justifyContent: "flex-end",
                   }}
                 >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY,fontFamily:roboto.style }}
-                  >
-                    Continue
-                  </Button>
+                  {!isAuthenticated ? (
+                    <Card sx={{ mb: "20px", p: "20px", mx: "auto",width:"100%" }}>
+                      <UserVerifyForm />
+                    </Card>
+                  ) : (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        backgroundColor: COLORS.PRIMARY,
+                        fontFamily: roboto.style,
+                      }}
+                    >
+                      Continue
+                    </Button>
+                  )}
                 </Box>
               </Form>
             );

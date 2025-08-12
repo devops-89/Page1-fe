@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Typography, Box } from "@mui/material";
+import { Container, Button, Typography, Box, Card } from "@mui/material";
 import { Formik, Form } from "formik";
 import { roboto } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
@@ -15,7 +15,7 @@ import AddForm from "../AddForm";
 import GstForm from "../GstForm";
 import PassengerFields from "../PassengerFields";
 import FullScreenDialog from "../ssr/oneway/seats/FullScreenDialog";
-
+import UserVerifyForm from "../UserVerifyForm";
 const MultiCityPassengerForm = ({
   flightDetails,
   myState,
@@ -27,6 +27,9 @@ const MultiCityPassengerForm = ({
   setSelectMeal,
 }) => {
   const dispatch = useDispatch();
+    const isAuthenticated = useSelector(
+      (state) => state.USER.UserData.isAuthenticated
+    );
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -39,8 +42,6 @@ const MultiCityPassengerForm = ({
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
   // console.log("flightDetails ----", flightDetails[1]?.SeatDynamic)
-
- 
 
   const selectedSeats = useSelector(
     (state) => state.Flight?.SeatsInformation?.seats || []
@@ -527,7 +528,7 @@ const MultiCityPassengerForm = ({
                       handleBaggageValue={handleBaggageValue}
                       isPassportRequired={isPassportRequired}
                       values={values}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
                     />
                   </Box>
@@ -544,7 +545,7 @@ const MultiCityPassengerForm = ({
                       formType="infant"
                       isPassportRequired={isPassportRequired}
                       values={values}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
                     />
                   </Box>
@@ -560,8 +561,6 @@ const MultiCityPassengerForm = ({
                     isGSTMandatory={isGSTMandatory}
                   />
                 )}
-
-              
 
                 {flightDetails[1]?.Response?.SeatDynamic && (
                   <Box
@@ -583,13 +582,19 @@ const MultiCityPassengerForm = ({
                     justifyContent: "flex-end",
                   }}
                 >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                  >
-                    Continue
-                  </Button>
+                  {!isAuthenticated ? (
+                    <Card sx={{ mb: "20px", p: "20px", mx: "auto",width:"100%" }}>
+                      <UserVerifyForm />
+                    </Card>
+                  ) : (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ backgroundColor: COLORS.PRIMARY }}
+                    >
+                      Continue
+                    </Button>
+                  )}
                 </Box>
               </Form>
             );

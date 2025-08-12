@@ -231,13 +231,7 @@ const FlightDetails = () => {
                       />
                     )}
 
-                    {/* OTP Verification Start */}
-
-                    {!isAuthenticated ? (
-                      <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                        <UserVerifyForm />
-                      </Card>
-                    ) : (
+                    {/* International and Domestic Passenger Forms For Roundtrip */}
                       <Card sx={{ mb: "20px" }}>
                         {router.query.journey === JOURNEY.INTERNATIONAL ? (
                           <InternationalPassengerForm
@@ -262,7 +256,7 @@ const FlightDetails = () => {
                           />
                         )}
                       </Card>
-                    )}
+                   
                     {/* Passenger form end */}
                   </Paper>
                 </Grid2>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Typography, Box } from "@mui/material";
+import { Container, Button, Typography, Box,Card } from "@mui/material";
 import { Formik, Form } from "formik";
 import { roboto } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
@@ -16,9 +16,10 @@ import GstForm from "../GstForm";
 import PassengerFields from "../PassengerFields";
 import FullScreenDialog from "../ssr/roundtrip/domestic/seats/FullScreenDialog";
 import useRoundTripDomesticMealAndBaggage from "@/custom-hook/useRoundTripDomesticMealAndBaggage";
-
+import UserVerifyForm from "../UserVerifyForm";
 const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -705,7 +706,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
                     />
                   </Box>
@@ -724,7 +725,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
                     />
                   </Box>
@@ -742,7 +743,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
-                       touched={touched}
+                      touched={touched}
                       setFieldValue={setFieldValue}
                     />
                   </Box>
@@ -758,8 +759,6 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                     isGSTMandatory={isGSTMandatory}
                   />
                 )}
-
-                
 
                 <Box
                   sx={{
@@ -779,13 +778,19 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                     justifyContent: "flex-end",
                   }}
                 >
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ backgroundColor: COLORS.PRIMARY }}
-                  >
-                    Continue
-                  </Button>
+                  {!isAuthenticated ? (
+                    <Card sx={{ mb: "20px", p: "20px", mx: "auto" ,width:"100%"}}>
+                      <UserVerifyForm />
+                    </Card>
+                  ) : (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ backgroundColor: COLORS.PRIMARY }}
+                    >
+                      Continue
+                    </Button>
+                  )}
                 </Box>
               </Form>
             );

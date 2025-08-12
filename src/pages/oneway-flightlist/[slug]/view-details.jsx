@@ -502,12 +502,8 @@ const FlightDetails = () => {
                       </Box>
                       {/* Intermediate flights end */}
                     </Card>
-                    {/* OTP Verification Start */}
-                    {!isAuthenticated ? (
-                      <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
-                        <UserVerifyForm />
-                      </Card>
-                    ) : (
+                    {/*Passenger Form Here*/}
+                  
                       <Card sx={{ mb: "20px" }}>
                         <PassengerForm
                           sx={{
@@ -520,7 +516,7 @@ const FlightDetails = () => {
                           isLCC={isLCC}
                         />
                       </Card>
-                    )}
+                  
                   </Paper>
                 </Grid2>
 
