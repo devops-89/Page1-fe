@@ -426,7 +426,7 @@ const HotelPreBookPage = () => {
                         sx={{ fontWeight: "bold", fontFamily: roboto.style }}
                         gutterBottom
                       >
-                        {preBookResponse.HotelResult[0].HotelName}
+                        {preBookResponse?.HotelResult[0]?.HotelName}
                       </Typography>
                       <Typography
                         variant="subtitle2"
@@ -439,7 +439,7 @@ const HotelPreBookPage = () => {
                             sx={{
                               color:
                                 index <
-                                preBookResponse.HotelResult[0].HotelHotelRating
+                                preBookResponse?.HotelResult[0]?.HotelHotelRating
                                   ? COLORS.PRIMARY
                                   : "#ccc",
                             }}
@@ -456,7 +456,7 @@ const HotelPreBookPage = () => {
                           fontSize: "16px",
                         }}
                       >
-                        {preBookResponse.HotelResult[0].HotelAddress}
+                        {preBookResponse?.HotelResult[0]?.HotelAddress}
                       </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 12, lg: 3 }}>
@@ -582,7 +582,7 @@ const HotelPreBookPage = () => {
         setFieldValue={formik.setFieldValue}
         setFieldTouched={formik.setFieldTouched}
         roomIndex={index}
-        validationInfo={preBookResponse.ValidationInfo}
+        validationInfo={preBookResponse?.ValidationInfo}
       />
                             </Box>
                           </AccordionDetails>
