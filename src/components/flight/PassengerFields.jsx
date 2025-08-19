@@ -44,7 +44,7 @@ const PassengerFields = ({
           variant="h6"
           sx={{
             fontWeight: 700,
-           fontFamily:roboto.style,
+            fontFamily: roboto.style,
             textTransform: "capitalize",
           }}
         >
@@ -57,12 +57,18 @@ const PassengerFields = ({
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px"}}
+              sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
             >
-              First Name
+              First Name (*)
             </Typography>
 
-            <Box sx={{ display: "grid", gridTemplateColumns: "30% 70%",fontFamily:roboto.style }}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "30% 70%",
+                fontFamily: roboto.style,
+              }}
+            >
               <Field
                 as={TextField}
                 size="small"
@@ -92,7 +98,6 @@ const PassengerFields = ({
                       borderTopRightRadius: 0,
                       borderBottomRightRadius: 0,
                     },
-                   
                   },
                 }}
               >
@@ -128,7 +133,6 @@ const PassengerFields = ({
                       borderTopLeftRadius: 0,
                       borderBottomLeftRadius: 0,
                     },
-                   
                   },
                 }}
               />
@@ -138,7 +142,7 @@ const PassengerFields = ({
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
             >
               Middle Name
             </Typography>
@@ -165,17 +169,15 @@ const PassengerFields = ({
                 errors[formType][index] &&
                 errors[formType][index].middle_name
               }
-              
-              
             />
           </Grid2>
 
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
-              sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
+              sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
             >
-              Last Name
+              Last Name (*)
             </Typography>
 
             <Field
@@ -200,12 +202,10 @@ const PassengerFields = ({
                 errors[formType][index] &&
                 errors[formType][index].last_name
               }
-             
-             
             />
           </Grid2>
 
-   <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, mb: "5px", fontFamily: roboto.style }}
@@ -256,9 +256,7 @@ const PassengerFields = ({
 
                         form.setFieldValue(
                           `${formType}[${index}].date_of_birth`,
-                          date
-                            ? date.startOf("day").format("YYYY-MM-DD")
-                            : ""
+                          date ? date.startOf("day").format("YYYY-MM-DD") : ""
                         );
                       }}
                       minDate={minDate}
@@ -288,7 +286,7 @@ const PassengerFields = ({
             </LocalizationProvider>
           </Grid2>
           <Grid2 size={12}>
-            {index == 0 && formType=="adult" ? (
+            {index == 0 && formType == "adult" ? (
               <AddForm
                 values={values}
                 handleChange={handleChange}
@@ -372,13 +370,13 @@ const PassengerFields = ({
 
           {/* Passport Number */}
           {/* Passport Number compulsary show in international flights */}
-          {( journey?.journey === JOURNEY.INTERNATIONAL ) && (
+          {journey?.journey === JOURNEY.INTERNATIONAL && (
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <Typography
                 variant="body1"
-                sx={{ fontWeight: 600,fontFamily:roboto.style, mb: "5px" }}
+                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
               >
-                Passport Number
+                Passport Number   {journey?.journey === JOURNEY.INTERNATIONAL ? "*" : ""}
               </Typography>
               <Field
                 as={TextField}
@@ -402,23 +400,23 @@ const PassengerFields = ({
                   errors[formType][index] &&
                   errors[formType][index].passport_no
                 }
-              
               />
             </Grid2>
           )}
 
           {/* Passport Expiry Date */}
-             {/* Passport Number compulsary show in international flights */}
-          {(journey?.journey === JOURNEY.INTERNATIONAL)&& (
+          {/* Passport Number compulsary show in international flights */}
+          {journey?.journey === JOURNEY.INTERNATIONAL && (
             <Grid2 size={{ xs: 12, sm: 6 }}>
               <Typography
                 variant="body1"
-                sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
+                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
               >
-                Passport Expiry Date
+                Passport Expiry Date{" "}
+                {journey?.journey === JOURNEY.INTERNATIONAL ? "*" : ""}
               </Typography>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Field name={`${formType}[${index}].passport_expiry`} >
+                <Field name={`${formType}[${index}].passport_expiry`}>
                   {({ field, form }) => (
                     <DatePicker
                       format="DD/MM/YYYY"
@@ -462,7 +460,6 @@ const PassengerFields = ({
                       sx={{
                         "& .MuiInputBase-input": { padding: "8.5px 14px" },
                         "& .MuiFormLabel-root": { top: "-7px" },
-                        
                       }}
                       onBlur={field.onBlur}
                       renderInput={(params) => (

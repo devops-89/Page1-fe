@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Grid2 from "@mui/material/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
-import UserVerifyForm from "@/components/flight/UserVerifyForm";
 import {roboto} from "@/utils/fonts.js";
 import {
   Box,

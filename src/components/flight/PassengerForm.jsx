@@ -619,7 +619,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                         fontFamily: roboto.style,
                       }}
                     >
-                      Continue
+                      Book Now
                     </Button>
                   )}
                 </Box>

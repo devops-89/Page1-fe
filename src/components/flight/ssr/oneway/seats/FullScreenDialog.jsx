@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { GrLinkPrevious } from "react-icons/gr";
 import SeatMap from "./SeatMap";
 import { COLORS } from "@/utils/colors.js";
 import { useDispatch } from "react-redux";
@@ -65,7 +66,9 @@ export default function FullScreenDialog({flightDetailType}) {
               onClick={handleClose}
               aria-label="close"
             >
-              <CloseIcon />
+              {/* <CloseIcon /> */}
+              <GrLinkPrevious />
+
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 ,fontFamily:roboto.style,fontSize:{lg:20 , xs:15} }} variant="h6" component="div">
               Seats Selection

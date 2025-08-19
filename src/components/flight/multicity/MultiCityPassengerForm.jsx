@@ -592,7 +592,7 @@ const MultiCityPassengerForm = ({
                       variant="contained"
                       sx={{ backgroundColor: COLORS.PRIMARY }}
                     >
-                      Continue
+                     Book Now
                     </Button>
                   )}
                 </Box>

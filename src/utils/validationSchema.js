@@ -172,7 +172,7 @@ const addFormSchema = Yup.object({
     .required("Phone No. is required"),
   country: Yup.string().trim(),
   address: Yup.string().trim().required("Address is required"),
-  email: Yup.string().trim().email("Invalid email").required("Email required"),
+  email: Yup.string().trim().email("Invalid email").required("Email is Required"),
 });
 
 export const validationSchema = (

@@ -11,7 +11,6 @@ import { setToast } from "@/redux/reducers/toast";
 import { useDispatch, useSelector } from "react-redux";
 import { validationSchema } from "@/utils/validationSchema";
 import ToastBar from "@/components/toastBar";
-import AddForm from "../AddForm";
 import GstForm from "../GstForm";
 import PassengerFields from "../PassengerFields";
 import FullScreenDialog from "../ssr/roundtrip/international/seats/FullScreenDialog";
@@ -150,9 +149,11 @@ const InternationalPassengerForm = ({
     const results = flightDetails?.[0]?.Results;
     setIsPassportRequired(
       // results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
-      journey?.journey === JOURNEY.INTERNATIONAL
+      // journey?.journey === JOURNEY.INTERNATIONAL
+      true
     );
-    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+    // setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+      setIsBirthdayRequired(false);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [myState]);
 
@@ -654,7 +655,7 @@ const InternationalPassengerForm = ({
                       variant="contained"
                       sx={{ backgroundColor: COLORS.PRIMARY }}
                     >
-                      Continue
+                      Book Now
                     </Button>
                   )}
                 </Box>

@@ -33,7 +33,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               variant="body1"
               sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
-              Phone No
+              Phone No (*)
             </Typography>
             <Box sx={{display:'grid',gridTemplateColumns:'30% 70%' }} >
 
@@ -138,7 +138,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               variant="body1"
               sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
-              City
+              City (*)
             </Typography>
             <TextField
               size="small"
@@ -164,7 +164,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               variant="body1"
               sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
-              Address
+              Address (*)
             </Typography>
             <TextField
               fullWidth
@@ -189,7 +189,7 @@ const AddForm = ({ values, handleChange, handleBlur, touched, errors,setFieldVal
               variant="body1"
               sx={{ fontWeight: 600, fontFamily:roboto.style, mb: "5px" }}
             >
-              Email
+              Email (*)
             </Typography>
             <TextField
               fullWidth

@@ -135,7 +135,8 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
     setIsPassportRequired(
       results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     );
-    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+    // setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+    setIsBirthdayRequired(false);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [myState, journey]);
 
@@ -788,7 +789,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       variant="contained"
                       sx={{ backgroundColor: COLORS.PRIMARY }}
                     >
-                      Continue
+                      Book Now
                     </Button>
                   )}
                 </Box>
