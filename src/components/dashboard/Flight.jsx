@@ -21,9 +21,10 @@ import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { dashboardController } from "@/api/dashboardController";
 import moment from "moment";
+import { Cancel } from "@mui/icons-material";
+import CancelDialog from "./CancelDialog";
 
 const columns = [
-  { key: "custom_order_id", label: "Order Id" },
   { key: "journey", label: "Journey Scope" },
   { key: "journey_type", label: "Trip Type" },
   { key: "amount", label: "Price" },
@@ -31,6 +32,7 @@ const columns = [
   { key: "flightDate", label: "Flight Date" },
   { key: "status", label: "Status" },
   { key: "ticket", label: "Ticket" },
+  { key: "cancellation", label: "Cancel Ticket" },
 ];
 
 const Flight = ({ userId }) => {
@@ -38,7 +40,7 @@ const Flight = ({ userId }) => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading,setLoading]=useState(true);
+  const [loading, setLoading] = useState(true);
   const [fetchedData, setFetchedData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
 
@@ -64,13 +66,13 @@ const Flight = ({ userId }) => {
           pageSize,
           debouncedSearch?.trim() || ""
         );
+        console.log("Fetched flight booking list: ", response.data.data.docs);
 
         setFetchedData(response.data.data.docs);
         setTotalItems(response.data.data.totalDocs);
       } catch (error) {
         console.error("API Error: ", error);
-      }
-      finally{
+      } finally {
         setLoading(false);
       }
     };
@@ -82,8 +84,6 @@ const Flight = ({ userId }) => {
   const paginatedData = fetchedData;
   const pageCount = Math.ceil(totalItems / pageSize);
   // console.log("PaginatedData: ", fetchedData);
-
- 
 
   return (
     <Box
@@ -174,13 +174,13 @@ const Flight = ({ userId }) => {
         component={Paper}
         sx={{
           overflowX: "auto",
-          minHeight:"200px"
+          minHeight: "200px",
         }}
       >
         <Table sx={{ minWidth: 650 }}>
           <TableHead sx={{ backgroundColor: COLORS.PRIMARY }}>
             <TableRow>
-              {(columns.map((col) => (
+              {columns.map((col) => (
                 <TableCell
                   key={col.key}
                   sx={{
@@ -193,61 +193,81 @@ const Flight = ({ userId }) => {
                 >
                   {col.label}
                 </TableCell>
-              )))}
+              ))}
             </TableRow>
           </TableHead>
-        <TableBody>
-  {loading ? (
-    <TableRow>
-      <TableCell colSpan={columns.length} align="center">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            py: 5,
-          }}
-        >
-          <ReactLoading type="bars" color={COLORS.PRIMARY} height={40} width={40} />
-        </Box>
-      </TableCell>
-    </TableRow>
-  ) : paginatedData?.length === 0 ? (
-    <TableRow>
-      <TableCell
-        colSpan={columns.length}
-        align="center"
-        sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
-      >
-        No booking data available
-      </TableCell>
-    </TableRow>
-  ) : (
-    paginatedData?.map((row, i) => (
-      <TableRow key={i}>
-        {columns.map((col) => (
-          <TableCell
-            key={col.key}
-            align="center"
-            sx={{
-              fontFamily: nunito.style,
-              fontWeight: 600,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {col.key === "ticket" ? (
-              "--"
-            ) : col.key === "updated_at" || col.key === "flightDate" ? (
-              moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      py: 5,
+                    }}
+                  >
+                    <ReactLoading
+                      type="bars"
+                      color={COLORS.PRIMARY}
+                      height={40}
+                      width={40}
+                    />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : paginatedData?.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  align="center"
+                  sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
+                >
+                  No booking data available
+                </TableCell>
+              </TableRow>
             ) : (
-              row[col.key]
+              paginatedData?.map((row, i) => (
+                <TableRow key={i}>
+                  {columns.map((col) => (
+                    <TableCell
+                      key={col.key}
+                      align="center"
+                      sx={{
+                        fontFamily: nunito.style,
+                        fontWeight: 600,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {col.key === "updated_at" || col.key === "flightDate"
+                        ? moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
+                        : col.key === "cancellation"
+                        ? (() => {
+                            let parsedResponse = null;
+
+                            
+                              parsedResponse =JSON.parse(row["success_response"])
+                              console.log("parsed Response:",parsedResponse);
+                                 
+                         
+
+                            return row.status === "COMPLETED" &&
+                              (parsedResponse != null) ? (
+                              <CancelDialog bookingId={parsedResponse?.Response?.Response?.BookingId || parsedResponse?.BookingId} />
+                            ) : (
+                              "--"
+                            );
+                          })()
+                        : col.key === "ticket"
+                        ? "--"
+                        : row[col.key]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             )}
-          </TableCell>
-        ))}
-      </TableRow>
-    ))
-  )}
-</TableBody>
+          </TableBody>
         </Table>
       </TableContainer>
 

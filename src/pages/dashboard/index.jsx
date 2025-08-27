@@ -9,25 +9,14 @@ import {
   Grid2,
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import BusinessIcon from '@mui/icons-material/Business';
-import BluetoothDriveIcon from '@mui/icons-material/BluetoothDrive';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import BusinessIcon from "@mui/icons-material/Business";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import Package from "@/components/dashboard/Package";
 import Flight from "@/components/dashboard/Flight";
 import Hotel from "@/components/dashboard/Hotel";
-import Helicopter from "@/components/dashboard/Helicopter";
-import Cab from "@/components/dashboard/Cab";
-import SelfDrive from "@/components/dashboard/SelfDrive";
-import Activities from "@/components/dashboard/Activities";
-import DestinationWedding from "@/components/dashboard/DestinationWedding";
-import OutstationCab from "@/components/dashboard/OutstationCab";
 import BookingGrid from "@/components/dashboard/DashboardSection";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -60,9 +49,8 @@ function a11yProps(index) {
 }
 
 const Dashboard = () => {
-
-  const userData=useSelector((state)=>state?.USER?.UserData);
-  const isAuthenticated=userData?.isAuthenticated;
+  const userData = useSelector((state) => state?.USER?.UserData);
+  const isAuthenticated = userData?.isAuthenticated;
 
   const router = useRouter();
   const [value, setValue] = React.useState(0);
@@ -73,17 +61,15 @@ const Dashboard = () => {
     setValue(newValue);
   };
 
-   useEffect(() => {
+  useEffect(() => {
     if (!isAuthenticated) {
       router.replace("/login");
     }
   }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
-    return null; 
+    return null;
   }
-
-  console.log("User Data using Selector:", userData);
 
   return (
     <>
@@ -118,7 +104,10 @@ const Dashboard = () => {
       <Container maxWidth="xl" sx={{ py: 5 }}>
         <Grid2 container spacing={2}>
           {/* Sidebar Tabs */}
-          <Grid2 size={{ xs: 12, sm: 3, md: 2 }} sx={{boxShadow:`1px 0px 2px ${COLORS.GREY}`}}>
+          <Grid2
+            size={{ xs: 12, sm: 3, md: 2 }}
+            sx={{ boxShadow: `1px 0px 2px ${COLORS.GREY}` }}
+          >
             <Tabs
               orientation={isSmallScreen ? "horizontal" : "vertical"}
               variant="scrollable"
@@ -135,16 +124,15 @@ const Dashboard = () => {
                   textTransform: "none",
                   minHeight: 48,
                   gap: "10px",
-                  color:COLORS.BLACK
+                  color: COLORS.BLACK,
                 },
                 "& .Mui-selected": {
                   backgroundColor: COLORS.PRIMARY,
-                  color:'#fff!important',
+                  color: "#fff!important",
                 },
-                "& .MuiTabs-indicator":{
-                  display:'none'
-                }
-
+                "& .MuiTabs-indicator": {
+                  display: "none",
+                },
               }}
             >
               <Tab
@@ -171,77 +159,23 @@ const Dashboard = () => {
                 iconPosition="start"
                 label="Hotel Booking"
               />
-              <Tab
-                {...a11yProps(4)}
-                icon={<AssignmentIcon fontSize="small" />}
-                iconPosition="start"
-                label="Helicopter Booking"
-              />
-              <Tab
-                {...a11yProps(5)}
-                icon={<DirectionsCarIcon fontSize="small" />}
-                iconPosition="start"
-                label="Cabs"
-              />
-              <Tab
-                {...a11yProps(6)}
-                icon={<PeopleAltIcon fontSize="small" />}
-                iconPosition="start"
-                label="Destination Wedding"
-              />
-               <Tab
-                {...a11yProps(7)}
-                icon={<BluetoothDriveIcon fontSize="small" />}
-                iconPosition="start"
-                label="Self Drive"
-              />
-                <Tab
-                {...a11yProps(8)}
-                icon={<DirectionsCarIcon fontSize="small" />}
-                iconPosition="start"
-                label="Outstation Cab"
-              />
-               <Tab
-                {...a11yProps(9)}
-                icon={<NotificationsIcon fontSize="small" />}
-                iconPosition="start"
-                label="Activites"
-              />
             </Tabs>
           </Grid2>
 
           {/* Content Area */}
           <Grid2 size={{ xs: 12, sm: 9, md: 10 }}>
             <TabPanel value={value} index={0}>
-            <BookingGrid/>
+              <BookingGrid />
             </TabPanel>
 
             <TabPanel value={value} index={1}>
-             <Package/>
+              <Package />
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <Flight userId={userData?.id}/>
+              <Flight userId={userData?.id} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-             <Hotel/>
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              <Helicopter/>
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-              <Cab/>
-            </TabPanel>
-            <TabPanel value={value} index={6}>
-              <DestinationWedding/>
-            </TabPanel>
-            <TabPanel value={value} index={7}>
-              <SelfDrive/>
-            </TabPanel>
-             <TabPanel value={value} index={8}>
-              <OutstationCab/>
-            </TabPanel>
-             <TabPanel value={value} index={9}>
-              <Activities/>
+              <Hotel />
             </TabPanel>
           </Grid2>
         </Grid2>

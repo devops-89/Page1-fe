@@ -34,7 +34,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import Link from "next/link";
 import ToastBar from "@/components/toastBar";
-import UserVerifyForm from "@/components/flight/UserVerifyForm";
+
+
 import Loader from "@/utils/Loader";
 import InternationalPassengerForm from "@/components/flight/roundtrip/InternationalPassengerForm";
 import DomesticPassengerForm from "@/components/flight/roundtrip/DomesticPassengerForm";
@@ -63,6 +64,10 @@ const FlightDetails = () => {
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const smallScreen = useMediaQuery("(max-width:1199px)");
+
+
+
+  
 
   // console.log("router", router)
   const handleClose = () => {

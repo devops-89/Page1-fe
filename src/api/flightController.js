@@ -101,4 +101,14 @@ export const flightController = {
       throw error;
     }
   },
+  getCancellationCharges: async (data)=>{
+    try{
+        let result=await flightPublicApi.post("flightdetail/get-cancellation-charges",data);
+        return result;
+    }
+    catch(error){
+      throw error;
+    }
+
+  }
 };

@@ -3,7 +3,11 @@ import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Grid2 from "@mui/material/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
-import {roboto} from "@/utils/fonts.js";
+import { roboto } from "@/utils/fonts.js";
+import { Alert } from "@mui/material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import { keyframes } from "@emotion/react";
 import {
   Box,
   Container,
@@ -53,8 +57,17 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const FlightDetails = () => {
+  // Simple highlight animation (blinking background)
+  const highlight = keyframes`
+  0% { background-color: #fff3cd; }
+  50% { background-color: #ffeeba; }
+  100% { background-color: #fff3cd; }
+`;
+
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state) => state.USER.UserData.isAuthenticated
+  );
   // console.log('isAuthenticated',isAuthenticated)
   const router = useRouter();
   const [isLCC, setIsLCC] = useState(null);
@@ -65,7 +78,6 @@ const FlightDetails = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -146,14 +158,13 @@ const FlightDetails = () => {
             alignItems: "center",
             justifyContent: "center",
             py: "100px",
-            
           }}
         >
           <Typography
             variant="h5"
             sx={{
               color: COLORS.WHITE,
-             fontFamily:roboto.style,
+              fontFamily: roboto.style,
               fontWeight: 700,
             }}
           >
@@ -171,17 +182,16 @@ const FlightDetails = () => {
               textAlign: "center",
             }}
           >
-             <Image src={errorImage.src} alt="Image" width={200} height={200} />
+            <Image src={errorImage.src} alt="Image" width={200} height={200} />
             <Typography
               variant="h6"
               sx={{
                 fontWeight: 600,
-               fontFamily:roboto.style,
+                fontFamily: roboto.style,
                 fontSize: "24px",
                 mb: "10px",
               }}
             >
-             
               {error?.message == null && error?.message == undefined
                 ? "An unexpected error occurred. Please try again later."
                 : "The Session is expired"}
@@ -189,19 +199,17 @@ const FlightDetails = () => {
             <Link href="/">
               <Button
                 variant="contained"
-                
-                sx={{ backgroundColor: COLORS.PRIMARY,fontFamily:roboto.style }}
+                sx={{
+                  backgroundColor: COLORS.PRIMARY,
+                  fontFamily: roboto.style,
+                }}
               >
                 Back to Homepage
               </Button>
             </Link>
           </Grid2>
         ) : flightDetails ? (
-          <Grid2
-            size={{ xs: "12" }}
-            sx={{ width: "100%", py: 4 }}
-            
-          >
+          <Grid2 size={{ xs: "12" }} sx={{ width: "100%", py: 4 }}>
             <Container sx={{ mt: "-70px", px: 0, overflow: "visible" }}>
               <Grid2 container spacing={2} sx={{ position: "relative" }}>
                 {/* Flight Details  */}
@@ -221,7 +229,7 @@ const FlightDetails = () => {
                             variant="h6"
                             gutterBottom
                             sx={{
-                             fontFamily:roboto.style,
+                              fontFamily: roboto.style,
                               fontSize: "20px",
                               fontWeight: 700,
                             }}
@@ -238,14 +246,16 @@ const FlightDetails = () => {
                           <Typography
                             variant="subtitle1"
                             gutterBottomx
-                            sx={{ marginBottom: "10px",fontFamily:roboto.style }}
+                            sx={{
+                              marginBottom: "10px",
+                              fontFamily: roboto.style,
+                            }}
                           >
                             <span
                               style={{
                                 backgroundColor: "#FFEDD1",
                                 padding: "5px",
                                 borderRadius: "4px",
-                              
                               }}
                             >
                               {moment(
@@ -255,13 +265,20 @@ const FlightDetails = () => {
                             {`${
                               flightDetails[0]?.Results?.Segments[0].length - 1
                             } Stop.`}{" "}
-
-
                             {flightDetails[0]?.Results?.Segments[0][
-                                    flightDetails[0]?.Results?.Segments[0]
-                                      .length - 1
-                                  ].AccumulatedDuration!=undefined && `${Math.floor(
-                              moment
+                              flightDetails[0]?.Results?.Segments[0].length - 1
+                            ].AccumulatedDuration != undefined &&
+                              `${Math.floor(
+                                moment
+                                  .duration(
+                                    flightDetails[0]?.Results?.Segments[0][
+                                      flightDetails[0]?.Results?.Segments[0]
+                                        .length - 1
+                                    ].AccumulatedDuration,
+                                    "minutes"
+                                  )
+                                  .asHours()
+                              )} hrs ${moment
                                 .duration(
                                   flightDetails[0]?.Results?.Segments[0][
                                     flightDetails[0]?.Results?.Segments[0]
@@ -269,20 +286,8 @@ const FlightDetails = () => {
                                   ].AccumulatedDuration,
                                   "minutes"
                                 )
-                                .asHours()
-                            )} hrs ${moment
-                              .duration(
-                                flightDetails[0]?.Results?.Segments[0][
-                                  flightDetails[0]?.Results?.Segments[0]
-                                    .length - 1
-                                ].AccumulatedDuration,
-                                "minutes"
-                              )
-                              .minutes()} min`}
-
-
+                                .minutes()} min`}
                           </Typography>
-
                         </Grid2>
                         <Grid2
                           size={{ xs: 4 }}
@@ -295,7 +300,7 @@ const FlightDetails = () => {
                           <Button
                             size="small"
                             sx={{
-                             fontFamily:roboto.style,
+                              fontFamily: roboto.style,
                               fontWeight: 800,
                               fontSize: { lg: 15, md: 15, xs: 12 },
                             }}
@@ -340,7 +345,7 @@ const FlightDetails = () => {
                                       sx={{
                                         fontFamily: nunito.style,
                                         fontWeight: 600,
-                                        fontFamily:roboto.style
+                                        fontFamily: roboto.style,
                                       }}
                                     >
                                       {segment?.Airline?.AirlineName}{" "}
@@ -360,7 +365,7 @@ const FlightDetails = () => {
                                       variant="body1"
                                       sx={{
                                         fontWeight: 700,
-                                      fontFamily:roboto.style
+                                        fontFamily: roboto.style,
                                       }}
                                     >
                                       {moment(segment?.Origin?.DepTime).format(
@@ -376,7 +381,7 @@ const FlightDetails = () => {
                                         alignItems: "center",
                                         gap: "10px",
                                         marginLeft: "65px",
-                                        fontFamily:roboto.style
+                                        fontFamily: roboto.style,
                                       }}
                                     >
                                       <img
@@ -395,7 +400,7 @@ const FlightDetails = () => {
                                       variant="body1"
                                       sx={{
                                         fontWeight: 700,
-                                       fontFamily:roboto.style
+                                        fontFamily: roboto.style,
                                       }}
                                     >
                                       {moment(
@@ -405,7 +410,6 @@ const FlightDetails = () => {
                                       {segment.Destination.Airport.AirportCode})
                                     </Typography>
                                   </Grid2>
-
                                   <Grid2
                                     size={{ xs: 12 }}
                                     sx={{
@@ -420,7 +424,7 @@ const FlightDetails = () => {
                                     <Typography
                                       variant="body2"
                                       sx={{
-                                       fontFamily:roboto.style,
+                                        fontFamily: roboto.style,
                                         fontWeight: 500,
                                       }}
                                     >
@@ -430,7 +434,7 @@ const FlightDetails = () => {
                                     <Typography
                                       variant="body2"
                                       sx={{
-                                      fontFamily:roboto.style,
+                                        fontFamily: roboto.style,
                                         fontWeight: 500,
                                       }}
                                     >
@@ -457,7 +461,7 @@ const FlightDetails = () => {
                                           marginTop: "10px",
                                           color: "orange",
                                           fontWeight: 600,
-                                         fontFamily:roboto.style
+                                          fontFamily: roboto.style,
                                         }}
                                       >
                                         Change of Planes
@@ -467,7 +471,7 @@ const FlightDetails = () => {
                                         sx={{
                                           marginTop: "10px",
                                           fontWeight: 700,
-                                        fontFamily:roboto.style
+                                          fontFamily: roboto.style,
                                         }}
                                       >
                                         {`${moment
@@ -500,22 +504,83 @@ const FlightDetails = () => {
                         )}
                       </Box>
                       {/* Intermediate flights end */}
+
+                      {/* Transit Visa Checking and showing message */}
+                      {flightDetails[0]?.Results?.Segments?.map((leg, i) =>
+                        leg.map((segment, j) =>
+                          segment?.IsTransitVisaRequired === true ? (
+                            <Grid2
+                              size={{ xs: 12 }}
+                              key={`${i}-${j}`}
+                              sx={{
+                                mt: 2,
+                                px: 2,
+                                py: 1.5,
+                                borderRadius: 2,
+                                border: "1px solid",
+                                borderColor: "warning.main",
+                                backgroundColor: "warning.light",
+                                display: "flex",
+                                alignItems: "center",
+                                fontWeight: 600,
+                                width: "100%",
+                                animation: `${highlight} 2s ease-in-out infinite`, // your animation
+                              }}
+                            >
+                              <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                spacing={2}
+                                sx={{ width: "100%" }}
+                              >
+                                <Typography
+                                  fontWeight={600}
+                                  color="warning.dark"
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    font: roboto.style,
+                                  }}
+                                >
+                                  🚨 Transit Visa Required at{" "}
+                                  {segment.Destination?.Airport?.CityName} (
+                                  {segment.Destination?.Airport?.AirportCode})
+                                </Typography>
+
+                                <Tooltip
+                                  title="Some countries require a transit visa even if you’re only passing through the airport. Please check the rules before booking."
+                                  arrow
+                                  placement="top"
+                                >
+                                  <InfoOutlinedIcon
+                                    sx={{
+                                      cursor: "pointer",
+                                      color: "warning.dark",
+                                    }}
+                                  />
+                                </Tooltip>
+                              </Stack>
+                            </Grid2>
+                          ) : null
+                        )
+                      )}
+                      {/* Transit Visa Checking and showing message */}
                     </Card>
                     {/*Passenger Form Here*/}
-                  
-                      <Card sx={{ mb: "20px" }}>
-                        <PassengerForm
-                          sx={{
-                            backgroundColor: COLORS.PRIMARY,
-                            color: COLORS.WHITE,
-                          }}
-                          flightDetails={flightDetails}
-                          myState="state"
-                          journey={journey}
-                          isLCC={isLCC}
-                        />
-                      </Card>
-                  
+
+                    <Card sx={{ mb: "20px" }}>
+                      <PassengerForm
+                        sx={{
+                          backgroundColor: COLORS.PRIMARY,
+                          color: COLORS.WHITE,
+                        }}
+                        flightDetails={flightDetails}
+                        myState="state"
+                        journey={journey}
+                        isLCC={isLCC}
+                      />
+                    </Card>
                   </Paper>
                 </Grid2>
 
@@ -524,7 +589,7 @@ const FlightDetails = () => {
                   size={{ lg: 4, xs: 12 }}
                   sx={{
                     position: "sticky",
-                    fontFamily:roboto.style,
+                    fontFamily: roboto.style,
                     top: "75px",
                     alignSelf: "start",
                     overflow: "visible",
@@ -547,7 +612,7 @@ const FlightDetails = () => {
                       fareData={flightDetails[0]?.Results}
                       toggleDrawer={toggleDrawer}
                       commission={commission}
-                    /> 
+                    />
                   )}
                   {/* <SwipeableEdgeDrawer fairSummary ={<FareSummary fareData={flightDetails[0]?.Results} /> }/> */}
                   {/* <FareSummary fareData={flightDetails[0]?.Results} /> */}
@@ -566,7 +631,6 @@ const FlightDetails = () => {
               padding: "50px",
             }}
           >
-            
             <Loader open={true} />
           </Grid2>
         )}
@@ -579,7 +643,7 @@ const FlightDetails = () => {
       >
         <Stack justifyContent={"space-between"} alignItems={"center"}>
           <DialogTitle
-            sx={{ m: 0, p: 2,fontFamily:roboto.style, fontWeight: 700 }}
+            sx={{ m: 0, p: 2, fontFamily: roboto.style, fontWeight: 700 }}
             id="customized-dialog-title"
           >
             Fare Rules
@@ -608,7 +672,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily:roboto.style
+                      fontFamily: roboto.style,
                     }}
                   >
                     Origin
@@ -618,7 +682,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                     fontFamily:roboto.style
+                      fontFamily: roboto.style,
                     }}
                   >
                     Destination
@@ -628,7 +692,7 @@ const FlightDetails = () => {
                       fontSize: "17px",
                       textAlign: "center",
                       fontWeight: 600,
-                      fontFamily:roboto.style,
+                      fontFamily: roboto.style,
                     }}
                   >
                     Airline
@@ -646,7 +710,7 @@ const FlightDetails = () => {
                               fontSize: "15px",
                               textAlign: "center",
                               fontWeight: 600,
-                            fontFamily:roboto.style
+                              fontFamily: roboto.style,
                             }}
                           >
                             {fareRule.Origin}
@@ -656,7 +720,7 @@ const FlightDetails = () => {
                               fontSize: "15px",
                               textAlign: "center",
                               fontWeight: 600,
-                             fontFamily:roboto.style
+                              fontFamily: roboto.style,
                             }}
                           >
                             {fareRule.Destination}
@@ -666,7 +730,7 @@ const FlightDetails = () => {
                               fontSize: "15px",
                               textAlign: "center",
                               fontWeight: 600,
-                            fontFamily:roboto.style
+                              fontFamily: roboto.style,
                             }}
                           >
                             {fareRule.Airline}
