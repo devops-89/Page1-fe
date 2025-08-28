@@ -99,7 +99,7 @@ export const activityFormSchema = Yup.object({
     .required("Message is required"),
 });
 
-const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
+export const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
   Yup.object({
     title: Yup.string().trim(),
     first_name: Yup.string().trim().required("First Name is required"),
@@ -150,7 +150,7 @@ const baseGstSchema = {
     .required("Company Name is required"),
 };
 
-const gstFormSchema = (isGSTMandatory) => {
+export const gstFormSchema = (isGSTMandatory) => {
   return Yup.object().shape(
     isGSTMandatory
       ? baseGstSchema
@@ -162,7 +162,7 @@ const gstFormSchema = (isGSTMandatory) => {
 };
 
 // Validation schema for AddForm (contact details form)
-const addFormSchema = Yup.object({
+export const addFormSchema = Yup.object({
   cell_country_code: Yup.string().trim(),
   country_code: Yup.string().trim(),
   city: Yup.string().trim().required("City required"),
@@ -288,11 +288,7 @@ export const LeadPassengerValidation = (validationInfo) => {
 
         // PAN required only if type is adult
         PAN: Yup.string().when("type", {
-          is: (type) => {
-            return (
-              type === "adult"
-            );
-          },
+          is: (type) => type === "adult",
           then: (schema) => schema.required("PAN is required"),
           otherwise: (schema) => schema.notRequired(),
         }),
@@ -370,5 +366,3 @@ export const getCombinedValidationSchema = (validationInfo) => {
     )
   });
 };
-
-export { passengerSchema, gstFormSchema, addFormSchema,getCombinedValidationSchema };

@@ -10,7 +10,7 @@ import { roboto } from "@/utils/fonts";
 import Loading from "react-loading";
 import { setToast } from "@/redux/reducers/toast";
 import { TOAST_STATUS } from "@/utils/enum";
-
+// This is userverify form
 const UserVerifyForm = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
