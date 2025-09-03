@@ -27,7 +27,7 @@ import Loading from "react-loading";
 
 import HotelCard from "@/components/hotels/hotelCard";
 import { COLORS } from "@/utils/colors";
-import { nunito,roboto } from "@/utils/fonts";
+import { nunito, roboto } from "@/utils/fonts";
 import { HOTEL_RATING } from "@/utils/enum";
 
 const HotelList = () => {
@@ -89,7 +89,14 @@ const HotelList = () => {
 
       if (node) observer.current.observe(node);
     },
-    [loadingMore, hasMore, hotels.length, selectedFilters, searchTerm, priceRange]
+    [
+      loadingMore,
+      hasMore,
+      hotels.length,
+      selectedFilters,
+      searchTerm,
+      priceRange,
+    ]
   );
 
   const handleRangeChange = (event, newValue) => {
@@ -124,8 +131,6 @@ const HotelList = () => {
       ? hotel?.HotelName?.toLowerCase().includes(searchTerm.toLowerCase())
       : true;
 
- 
-
     const budgetMatch = selectedFilters.includes("Budget")
       ? hotel?.price <= 1000
       : true;
@@ -136,8 +141,10 @@ const HotelList = () => {
     const ratingMatch =
       ratingSelected.length > 0
         ? ratingSelected.some((r) => {
-            if (r === "4 Star Hotels") return HOTEL_RATING[hotel?.HotelRating] === 4;
-            if (r === "5 Star Hotels") return HOTEL_RATING[hotel?.HotelRating] === 5;
+            if (r === "4 Star Hotels")
+              return HOTEL_RATING[hotel?.HotelRating] === 4;
+            if (r === "5 Star Hotels")
+              return HOTEL_RATING[hotel?.HotelRating] === 5;
             return false;
           })
         : true;
@@ -145,12 +152,7 @@ const HotelList = () => {
     const price = hotel?.Rooms?.[0]?.TotalFare;
     const priceMatch = price >= priceRange[0] && price <= priceRange[1];
 
-    return (
-      nameMatch &&
-      budgetMatch &&
-      ratingMatch &&
-      priceMatch
-    );
+    return nameMatch && budgetMatch && ratingMatch && priceMatch;
   });
 
   const theme = useTheme();
@@ -165,14 +167,30 @@ const HotelList = () => {
           <Grid2 container spacing={3}>
             {/* Filters Section */}
             {phone ? (
-              <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%",
+                }}
+              >
                 <Button onClick={toggleDrawer(true)}>
                   <FilterAltIcon sx={{ fontSize: 30, color: COLORS.PRIMARY }} />
                 </Button>
                 <Drawer open={open} onClose={toggleDrawer(false)}>
                   <Box sx={{ width: 300, p: 2 }}>
                     <FilterCard
-                      {...{ searchTerm, setSearchTerm, priceRange, handleRangeChange, selectedFilters, handleCheckboxChange, resetFilters, minPrice, maxPrice }}
+                      {...{
+                        searchTerm,
+                        setSearchTerm,
+                        priceRange,
+                        handleRangeChange,
+                        selectedFilters,
+                        handleCheckboxChange,
+                        resetFilters,
+                        minPrice,
+                        maxPrice,
+                      }}
                     />
                   </Box>
                 </Drawer>
@@ -180,26 +198,46 @@ const HotelList = () => {
             ) : (
               <Grid2 size={{ xs: 12, md: 3 }}>
                 <FilterCard
-                  {...{ searchTerm, setSearchTerm, priceRange, handleRangeChange, selectedFilters, handleCheckboxChange, resetFilters, minPrice, maxPrice }}
+                  {...{
+                    searchTerm,
+                    setSearchTerm,
+                    priceRange,
+                    handleRangeChange,
+                    selectedFilters,
+                    handleCheckboxChange,
+                    resetFilters,
+                    minPrice,
+                    maxPrice,
+                  }}
                 />
               </Grid2>
             )}
 
             {/* Hotel List Section */}
-            <Grid2 size={{ xs: 12, md: 9 }} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Grid2
+              size={{ xs: 12, md: 9 }}
+              sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            >
               {loading ? (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
                   <CircularProgress />
                 </Box>
               ) : filteredHotels.length === 0 ? (
-                <Typography variant="h6" sx={{ textAlign: "center", mt: 5, fontFamily: roboto.style }}>
+                <Typography
+                  variant="h6"
+                  sx={{ textAlign: "center", mt: 5, fontFamily: roboto.style }}
+                >
                   No hotels available.
                 </Typography>
               ) : (
                 filteredHotels.slice(0, visibleCount).map((val, i) => {
                   const isLast = i === visibleCount - 1;
                   return (
-                    <Grid2 xs={12} key={i} ref={isLast ? lastBookElementRef : null}>
+                    <Grid2
+                      xs={12}
+                      key={i}
+                      ref={isLast ? lastBookElementRef : null}
+                    >
                       <HotelCard hotel={val} />
                     </Grid2>
                   );
@@ -209,7 +247,12 @@ const HotelList = () => {
               {hasMore && (
                 <Box sx={{ textAlign: "center", mt: 2, mx: "auto" }}>
                   {loadingMore && (
-                    <Loading type="bars" width={50} height={50} color={COLORS.PRIMARY} />
+                    <Loading
+                      type="bars"
+                      width={50}
+                      height={50}
+                      color={COLORS.PRIMARY}
+                    />
                   )}
                 </Box>
               )}
@@ -247,18 +290,31 @@ const FilterCard = ({
   >
     <CardHeader
       title={
-        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }} variant="h5">
+        <Typography
+          sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+          variant="h5"
+        >
           Filters
         </Typography>
       }
       action={
-        <Button variant="text" color="primary" size="small" onClick={resetFilters} sx={{ fontFamily: roboto.style, fontWeight: 700 }}>
+        <Button
+          variant="text"
+          color="primary"
+          size="small"
+          onClick={resetFilters}
+          sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+        >
           Reset
         </Button>
       }
     />
     <CardContent>
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, fontFamily: roboto.style }}>
+      <Typography
+        variant="h6"
+        gutterBottom
+        sx={{ fontWeight: 600, fontFamily: roboto.style }}
+      >
         Search by Hotel Names
       </Typography>
       <TextField
@@ -272,8 +328,11 @@ const FilterCard = ({
         }}
       />
       <Box mt={3}>
-        <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: roboto.style }}>
-          Price Range <br/> (₹{priceRange[0]} - ₹{priceRange[1]})
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontFamily: roboto.style }}
+        >
+          Price Range <br /> (₹{priceRange[0]} - ₹{priceRange[1]})
         </Typography>
         <Slider
           value={priceRange}
@@ -285,17 +344,26 @@ const FilterCard = ({
         />
       </Box>
       <Box mt={3}>
-        <Typography variant="h6" sx={{ fontWeight: 600, fontFamily: roboto.style }}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontFamily: roboto.style }}
+        >
           Popular
         </Typography>
         {["4 Star Hotels", "5 Star Hotels"].map((label) => (
           <FormControlLabel
             key={label}
             control={
-              <Checkbox checked={selectedFilters.includes(label)} onChange={() => handleCheckboxChange(label)} />
+              <Checkbox
+                checked={selectedFilters.includes(label)}
+                onChange={() => handleCheckboxChange(label)}
+              />
             }
             label={
-              <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: nunito.style }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 600, fontFamily: nunito.style }}
+              >
                 {label}
               </Typography>
             }
