@@ -63,7 +63,6 @@ const RegistrationForm = () => {
         localStorage.setItem("reference_id", res.data.data.reference_id);
         setLoading(false);
         router.push("/verifyOTP");
-        
       })
       .catch((err) => {
         let errMessage =
@@ -94,8 +93,8 @@ const RegistrationForm = () => {
   });
 
   return (
-    <div >
-      <Box sx={{ p: 2  }}>
+    <div>
+      <Box sx={{ p: 2 }}>
         <Typography
           sx={{
             fontSize: 20,
@@ -114,7 +113,7 @@ const RegistrationForm = () => {
             fontWeight: 500,
           }}
         >
-          Sign up to keep exploring amazing destinations around the World.
+          Sign up to keep exploring amazing destinations around the world.
         </Typography>
       </Box>
       <Divider />
@@ -125,7 +124,7 @@ const RegistrationForm = () => {
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
-                label="FullName*"
+                label="Full Name*"
                 id="full_name"
                 onChange={form.handleChange}
                 error={form.touched.full_name && Boolean(form.errors.full_name)}
@@ -210,7 +209,7 @@ const RegistrationForm = () => {
                   }}
                   onClick={() => router.push("/login")}
                 >
-                  Sign In
+                  sign in
                 </Typography>{" "}
               </Typography>
             </Grid2>
