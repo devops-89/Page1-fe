@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2";
+import { Box, Typography, Grid2 } from "@mui/material";
+
 import { nunito } from "@/utils/fonts";
 
 const keyToShow = [

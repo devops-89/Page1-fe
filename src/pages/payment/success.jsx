@@ -8,15 +8,16 @@ import {
   Paper,
   Button,
   Box,
+  Grid2,
   Divider,
 } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2";
+
 import { CheckCircle } from "@mui/icons-material";
 import { keyframes } from "@emotion/react";
 import { COLORS } from "@/utils/colors";
 import background from "@/assests/payment_image/paymentBackground.png";
 import airplan from "@/assests/payment_image/airPlan.png";
-import hotelImg from "@/assests/payment_image/hotel.png"; // add a hotel img in your assets
+import hotelImg from "@/assests/payment_image/miami.jpg";
 import { nunito } from "@/utils/fonts";
 import axios from "axios";
 import { baseUrl } from "@/api/serverConstant";
