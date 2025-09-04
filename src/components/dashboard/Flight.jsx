@@ -60,7 +60,7 @@ const Flight = ({ userId }) => {
     const fetchBookings = async () => {
       try {
         setLoading(true);
-        let response = await dashboardController.getBookingByUserId(
+        let response = await dashboardController.getFlightBookingByUserId(
           userId,
           currentPage,
           pageSize,
