@@ -35,13 +35,10 @@ const Multiway = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-
   const CustomPopper = styled(Popper)(({ theme }) => ({
-      width: '310px !important',
-      zIndex: 1300,
-    }));
-  
-  
+    width: "310px !important",
+    zIndex: 1300,
+  }));
 
   const initialState = {
     ip_address: "",
@@ -309,7 +306,7 @@ const Multiway = () => {
         sx={{
           maxHeight: "400px",
           overflowY: "auto",
-          padding: { xs: 0, sm:1 },
+          padding: { xs: 0, sm: 1 },
           borderRadius: 4,
         }}
       >
@@ -330,11 +327,11 @@ const Multiway = () => {
             {/* From Field */}
             <Grid2
               // size={{lg:3 ,sm:6 ,xs:12}}
-              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
+              size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
-                borderTopLeftRadius: {xs:0, sm:4},
-                borderBottomLeftRadius: {xs:0, sm:4},
+                borderTopLeftRadius: { xs: 0, sm: 4 },
+                borderBottomLeftRadius: { xs: 0, sm: 4 },
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
@@ -355,6 +352,7 @@ const Multiway = () => {
               </Typography>
 
               <Autocomplete
+                size="small"
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -452,7 +450,7 @@ const Multiway = () => {
 
             {/* To Field */}
             <Grid2
-              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
+              size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
                 position: "relative",
@@ -475,6 +473,7 @@ const Multiway = () => {
                 To
               </Typography>
               <Autocomplete
+                size="small"
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -575,7 +574,7 @@ const Multiway = () => {
             {/* Departure Field */}
 
             <Grid2
-              size={{ lg: 3, xs: index == 0 ? 6 : 12, md: 2.4 }}
+              size={{ lg: 3, xs: 12, md: 2.4 }}
               sx={{
                 border: "1px solid #808080",
                 position: "relative",
@@ -600,12 +599,15 @@ const Multiway = () => {
                     },
                   }}
                   disablePast
-                  maxDate={moment().add(90, 'days')}
+                  maxDate={moment().add(90, "days")}
                   format="DD/MM/YYYY"
                   onChange={(newDate) => departureDateHandler(newDate, index)}
                   value={form.departure_date}
                   minDate={index > 0 ? forms[index - 1].departure_date : null}
                   slotProps={{
+                    textField: {
+                      size: "small",
+                    },
                     popper: {
                       sx: {
                         zIndex: 100,
@@ -616,7 +618,7 @@ const Multiway = () => {
               </LocalizationProvider>
             </Grid2>
             <Grid2
-              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
+              size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
               sx={{
                 border: index === 0 && "1px solid #808080",
                 position: "relative",
@@ -755,16 +757,16 @@ const Multiway = () => {
           }}
         >
           <TravellerSelector
-              setAnchorEl={setAnchorEl}
-              state={state}
-              setState={setState}
-              adultValue={adultValue}
-              setAdultValue={setAdultValue}
-              infantValue={infantValue}
-              setInfantValue={setInfantValue}
-              childValue={childValue}
-              setChildValue={setChildValue}
-            />
+            setAnchorEl={setAnchorEl}
+            state={state}
+            setState={setState}
+            adultValue={adultValue}
+            setAdultValue={setAdultValue}
+            infantValue={infantValue}
+            setInfantValue={setInfantValue}
+            childValue={childValue}
+            setChildValue={setChildValue}
+          />
         </Popover>
         {/* Popover End */}
       </Box>

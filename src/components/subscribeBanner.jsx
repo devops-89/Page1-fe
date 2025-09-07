@@ -48,14 +48,14 @@ const SubscribeBanner = () => {
         >
           <Container maxWidth="lg">
             <Grid2 container>
-              <Grid2 size={{lg:6, md:12 ,sm:12, xs:12}}>
+              <Grid2 size={{ lg: 6, md: 12, sm: 12, xs: 12 }}>
                 <Typography
                   sx={{
                     fontSize: 17,
                     fontFamily: nunito.style,
                     color: COLORS.PRIMARY,
                     letterSpacing: 2,
-                    mb: {lg:3 ,sm:2},
+                    mb: { lg: 3, sm: 2 },
                   }}
                 >
                   MEGA OFFER
@@ -63,7 +63,7 @@ const SubscribeBanner = () => {
                 <Typography>
                   <Typography
                     sx={{
-                      fontSize: {lg:40 ,sm:40,xs:30},
+                      fontSize: { lg: 40, sm: 40, xs: 30 },
                       fontFamily: nunito.style,
                       color: COLORS.PRIMARY,
                       fontWeight: 800,
@@ -74,7 +74,7 @@ const SubscribeBanner = () => {
                   </Typography>{" "}
                   <Typography
                     sx={{
-                      fontSize: {lg: 40 ,md: 30},
+                      fontSize: { lg: 40, md: 30 },
                       fontFamily: nunito.style,
                       color: COLORS.WHITE,
                       fontWeight: 800,
@@ -86,16 +86,21 @@ const SubscribeBanner = () => {
                   </Typography>
                 </Typography>
                 <Typography
-                  sx={{ mt: {lg:3 ,sm:2}, fontSize:{ lg:20 ,xs:15} ,color: COLORS.WHITE, fontFamily: raleway.style }}
+                  sx={{
+                    mt: { lg: 3, sm: 2 },
+                    fontSize: { lg: 20, xs: 15 },
+                    color: COLORS.WHITE,
+                    fontFamily: raleway.style,
+                  }}
                 >
                   Love is in the air! Fall in love with a romantic getaway with
                   Page1 Travels' special offer for newlywed couples. We include
                   the most romantic destinations in our honeymoon package to
                   ensure you a once-in-a-lifetime experience.
                 </Typography>
-                <List sx={{mt:{lg:2 ,sm:2 ,xs:1}}}>
+                <List sx={{ mt: { lg: 2, sm: 2, xs: 1 } }}>
                   {list.map((val, i) => (
-                    <ListItem key={i} disablePadding sx={{mb:1}}>
+                    <ListItem key={i} disablePadding sx={{ mb: 1 }}>
                       <ListItemAvatar sx={{ minWidth: 40 }}>
                         <Done sx={{ color: COLORS.PRIMARY }} />
                       </ListItemAvatar>
@@ -103,7 +108,7 @@ const SubscribeBanner = () => {
                         primary={
                           <Typography
                             sx={{
-                              fontSize: {lg:16,sm:15},
+                              fontSize: { lg: 16, sm: 15 },
                               color: COLORS.WHITE,
                               fontFamily: raleway.style,
                             }}
@@ -117,7 +122,7 @@ const SubscribeBanner = () => {
                 </List>
                 <Button
                   sx={{
-                    mt: {lg:4 ,sm:2},
+                    mt: { lg: 4, sm: 2 },
                     fontSize: 14,
                     border: `1px solid ${COLORS.PRIMARY}`,
                     width: 150,

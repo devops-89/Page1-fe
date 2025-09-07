@@ -14,7 +14,7 @@ import {
   styled,
   TextField,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -32,25 +32,23 @@ import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
-import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
-import FlightLandIcon from '@mui/icons-material/FlightLand';
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
 import { resetSeatDetails } from "@/redux/reducers/roundInternationalSeatsInformation";
-import {domesticBaggageReset} from "@/redux/reducers/roundDomesticBaggagesInformation";
-import {domesticMealReset} from "@/redux/reducers/roundDomesticMealsInformation";
+import { domesticBaggageReset } from "@/redux/reducers/roundDomesticBaggagesInformation";
+import { domesticMealReset } from "@/redux/reducers/roundDomesticMealsInformation";
 
 const RoundTrip = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const phone = useMediaQuery("(max-width:600px)");
 
-
-    const CustomPopper = styled(Popper)(({ theme }) => ({
-      width: '310px !important',
-      zIndex: 1300,
-    }));
-  
+  const CustomPopper = styled(Popper)(({ theme }) => ({
+    width: "310px !important",
+    zIndex: 1300,
+  }));
 
   const initialState = {
     ip_address: "",
@@ -59,7 +57,7 @@ const RoundTrip = () => {
     origin: "",
     destination: "",
     departure_date: "",
-    return_date:"",
+    return_date: "",
     cabin_class: "1",
     adult: 1,
     child: 0,
@@ -85,16 +83,13 @@ const RoundTrip = () => {
   const [returnDate, setReturnDate] = useState(null);
   const [cabin_class, setCabinClass] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
-  const [defaultRoute, setDefaultRoute]= useState('/roundtrip-flightlist')
+  const [defaultRoute, setDefaultRoute] = useState("/roundtrip-flightlist");
   const [loading, setLoading] = useState(true);
 
   const open = Boolean(anchorEl);
   const openPopover = (e) => {
     setAnchorEl(e.currentTarget);
   };
-
-
-
 
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
@@ -117,7 +112,7 @@ const RoundTrip = () => {
         ...state,
         departure_date: moment(newDate._d).format("YYYY-MM-DD"),
       });
-  
+
       if (returnDate && moment(returnDate).isSameOrBefore(newDate, "day")) {
         const updatedReturnDate = moment(newDate).add(1, "day");
         setReturnDate(updatedReturnDate);
@@ -128,7 +123,7 @@ const RoundTrip = () => {
       }
     }
   };
-  
+
   const returnDateHandler = (newDate) => {
     setReturnDate(newDate);
     const isValid = moment(newDate).isValid();
@@ -139,8 +134,6 @@ const RoundTrip = () => {
       });
     }
   };
-  
-  
 
   const getAllAirport = () => {
     flightController
@@ -155,7 +148,6 @@ const RoundTrip = () => {
       });
   };
 
-
   const searchFlight = () => {
     setButtonLoading(true);
     flightController
@@ -167,8 +159,8 @@ const RoundTrip = () => {
         localStorage.setItem("roundflightData", JSON.stringify(response));
         setButtonLoading(false);
         router.pathname !== defaultRoute
-        ? router.push(defaultRoute)
-        : window.location.reload();
+          ? router.push(defaultRoute)
+          : window.location.reload();
       })
       .catch((err) => {
         let errMessage =
@@ -184,19 +176,12 @@ const RoundTrip = () => {
       });
   };
 
-
-
-
-
-
-
-
   const submitHandler = () => {
-       dispatch(resetSeatDetails());
-          dispatch(resetMealDetails());
-          dispatch(resetBaggageDetails());
-          dispatch(domesticBaggageReset());
-          dispatch(domesticMealReset());
+    dispatch(resetSeatDetails());
+    dispatch(resetMealDetails());
+    dispatch(resetBaggageDetails());
+    dispatch(domesticBaggageReset());
+    dispatch(domesticMealReset());
     const emptyFields = Object.keys(state).filter(
       (key) =>
         state[key] === "" || state[key] === null || state[key] === undefined
@@ -226,9 +211,8 @@ const RoundTrip = () => {
       return val.value == state.cabin_class;
     });
 
-      setCabinClass(cabinClass);
-    }, [state.cabin_class]);
-  
+    setCabinClass(cabinClass);
+  }, [state.cabin_class]);
 
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
@@ -236,21 +220,17 @@ const RoundTrip = () => {
       .then((data) => setState({ ...state, ip_address: data.ip }));
   };
 
-
-
-  
-
   return (
     <div>
       {/* {console.log("cabin class:", cabin_class)} */}
       <Grid2 container alignItems={"center"}>
         <Grid2
-           size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
+          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
-            borderTopLeftRadius: {xs:0, sm:4},
-            borderBottomLeftRadius: {xs:0, sm:4},
-            borderRight: "none",
+            borderTopLeftRadius: { xs: 0, sm: 4 },
+            borderBottomLeftRadius: { xs: 0, sm: 4 },
+            // borderRight: "none",
           }}
         >
           <Typography
@@ -266,6 +246,7 @@ const RoundTrip = () => {
           </Typography>
 
           <Autocomplete
+            size="small"
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -288,12 +269,24 @@ const RoundTrip = () => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                  <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
-                  <Grid2 size={{xs:0, sm:2}}>
-                    <FlightTakeoffIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
+                <Grid2
+                  container
+                  sx={{
+                    width: "100%",
+                    borderBottom: `1px solid ${COLORS.SEMIGREY}`,
+                  }}
+                >
+                  <Grid2 size={{ xs: 0, sm: 2 }}>
+                    <FlightTakeoffIcon
+                      sx={{
+                        color: COLORS.PRIMARY,
+                        marginRight: "10px",
+                        display: { xs: "none", sm: "block" },
+                      }}
+                    />
                   </Grid2>
-                 
-                  <Grid2 size={{xs:12, sm:6}}>
+
+                  <Grid2 size={{ xs: 12, sm: 6 }}>
                     <Typography
                       sx={{
                         fontSize: 14,
@@ -318,15 +311,15 @@ const RoundTrip = () => {
                     </Typography>
                   </Grid2>
 
-                  <Grid2 size={{xs:0, sm:4}}>
-                  <Typography
+                  <Grid2 size={{ xs: 0, sm: 4 }}>
+                    <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight:800,
+                        fontWeight: 800,
                         color: COLORS.BLACK,
                         textAlign: "end",
-                        display:{xs:'none', sm:'block'}
+                        display: { xs: "none", sm: "block" },
                       }}
                     >
                       {option.city_code}
@@ -339,19 +332,18 @@ const RoundTrip = () => {
             slotProps={{
               popper: {
                 sx: {
-                  zIndex: 100
-                }
-              }
-           }}
+                  zIndex: 100,
+                },
+              },
+            }}
           />
         </Grid2>
         <Grid2
-          size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
+          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
 
             position: "relative",
-          
           }}
         >
           <Typography
@@ -367,6 +359,7 @@ const RoundTrip = () => {
           </Typography>
 
           <Autocomplete
+            size="small"
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -389,12 +382,24 @@ const RoundTrip = () => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                 <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
-                  <Grid2 size={{xs:0, sm:2}}>
-                    <FlightLandIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
+                <Grid2
+                  container
+                  sx={{
+                    width: "100%",
+                    borderBottom: `1px solid ${COLORS.SEMIGREY}`,
+                  }}
+                >
+                  <Grid2 size={{ xs: 0, sm: 2 }}>
+                    <FlightLandIcon
+                      sx={{
+                        color: COLORS.PRIMARY,
+                        marginRight: "10px",
+                        display: { xs: "none", sm: "block" },
+                      }}
+                    />
                   </Grid2>
-                 
-                  <Grid2 size={{xs:12, sm:6}}>
+
+                  <Grid2 size={{ xs: 12, sm: 6 }}>
                     <Typography
                       sx={{
                         fontSize: 14,
@@ -419,15 +424,15 @@ const RoundTrip = () => {
                     </Typography>
                   </Grid2>
 
-                  <Grid2 size={{xs:0, sm:4}}>
-                  <Typography
+                  <Grid2 size={{ xs: 0, sm: 4 }}>
+                    <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight:800,
+                        fontWeight: 800,
                         color: COLORS.BLACK,
                         textAlign: "end",
-                        display:{xs:'none', sm:'block'}
+                        display: { xs: "none", sm: "block" },
                       }}
                     >
                       {option.city_code}
@@ -439,22 +444,19 @@ const RoundTrip = () => {
             slotProps={{
               popper: {
                 sx: {
-                  zIndex: 100
-                }
-              }
-           }}
+                  zIndex: 100,
+                },
+              },
+            }}
           />
         </Grid2>
 
         <Grid2
-           size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
-       
+          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
 
-
             position: "relative",
-            borderRight: "none",
           }}
         >
           <Typography
@@ -473,32 +475,33 @@ const RoundTrip = () => {
               sx={{
                 fieldset: {
                   border: "none",
-                  
                 },
               }}
-              maxDate={moment().add(90, 'days')}
+              maxDate={moment().add(90, "days")}
               minDate={moment()}
               onChange={departureDateHandler}
               value={departureDate}
               format="DD/MM/YYYY"
               slotProps={{
+                textField: {
+                  size: "small",
+                },
                 popper: {
                   sx: {
-                    zIndex: 100
-                  }
-                }
-             }}
+                    zIndex: 100,
+                  },
+                },
+              }}
             />
           </LocalizationProvider>
         </Grid2>
 
         <Grid2
-        size={{ lg: 2.4, md:2.4, xs: 6,sm:6, }}
+          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
 
             position: "relative",
-           
           }}
         >
           <Typography
@@ -514,45 +517,44 @@ const RoundTrip = () => {
           </Typography>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
-           
               sx={{
                 fieldset: {
                   border: "none",
-                  
                 },
-
               }}
-              maxDate={moment().add(90, 'days')}
-              minDate={departureDate ? moment(departureDate).add(1, "day") : moment()}
+              maxDate={moment().add(90, "days")}
+              minDate={
+                departureDate ? moment(departureDate).add(1, "day") : moment()
+              }
               onChange={returnDateHandler}
               value={returnDate}
               format="DD/MM/YYYY"
               slotProps={{
+                textField: {
+                  size: "small",
+                },
                 popper: {
                   sx: {
-                    zIndex: 100
-                  }
-                }
-             }}
+                    zIndex: 100,
+                  },
+                },
+              }}
             />
           </LocalizationProvider>
         </Grid2>
 
         <Grid2
-          size={{ lg: 2.4, md:2.4, xs: 12,sm:12, }}
-
+          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
             border: "1px solid #808080",
-
             position: "relative",
-            height: 90,
-            borderTopRightRadius: {xs:0, sm:4},
-            borderBottomRightRadius: {xs:0, sm:4},
+            borderTopRightRadius: { xs: 0, sm: 4 },
+            borderBottomRightRadius: { xs: 0, sm: 4 },
           }}
         >
           <Typography
             sx={{
-              fontSize: {lg:15, md:13 ,sm:12 ,xs:12},
+              fontSize: { lg: 15, md: 13, sm: 12, xs: 12 },
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
@@ -561,17 +563,25 @@ const RoundTrip = () => {
           >
             Travellers and cabin class
           </Typography>
-                  <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
-                  <Typography sx={{ fontSize: {lg:14 , md:13 ,sm:10 ,xs:12}, fontFamily: nunito.style }}>
-                {state.adult + state.child + state.infant} Persons
-              </Typography>
+          <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
+            <Typography
+              sx={{
+                fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
+                fontFamily: nunito.style,
+              }}
+            >
+              {state.adult + state.child + state.infant} Persons
+            </Typography>
 
-              <Typography fontSize={{lg:14 ,md:13 ,sm:10,xs:12}} fontFamily={nunito.style}>
-                {state.adult} adult
-                {state.child !== 0 &&`, ${state.child} child`}
-                {state.infant !== 0 &&`, ${state.infant} infant`},{" "}
-                {`${cabin_class.label} Class`}
-              </Typography>
+            <Typography
+              fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
+              fontFamily={nunito.style}
+            >
+              {state.adult} adult
+              {state.child !== 0 && `, ${state.child} child`}
+              {state.infant !== 0 && `, ${state.infant} infant`},{" "}
+              {`${cabin_class.label} Class`}
+            </Typography>
           </CardActionArea>
 
           {/* popover start */}
@@ -587,8 +597,8 @@ const RoundTrip = () => {
               "& .MuiPopover-paper": {
                 boxShadow:
                   " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-                  p: { lg: 2 },
-                  py: { xs: 2, sm: 2, md: 2, lg: 2 },
+                p: { lg: 2 },
+                py: { xs: 2, sm: 2, md: 2, lg: 2 },
                 width: { xs: "100%", sm: "80%", md: "60%", lg: "40%" },
               },
             }}
@@ -608,15 +618,19 @@ const RoundTrip = () => {
           {/* popover end */}
         </Grid2>
 
-        <Grid2   size={{ lg: 12, md:12, xs: 12,sm:12, }} textAlign={"center"} mt={{lg:2}} >
+        <Grid2
+          size={{ lg: 12, md: 12, xs: 12, sm: 12 }}
+          textAlign={"center"}
+          mt={{ lg: 2 }}
+        >
           <Button
             disabled={buttonLoading}
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
-              width: {lg:150 , md:150 , sm:120 ,xs:120},
-              py: {lg:1.5 , md:1.5,sm:1 , xs:1},
-              mt: { lg: 0, sm: 1 ,xs:2 },
+              width: { lg: 150, md: 150, sm: 120, xs: 120 },
+              py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
+              mt: { lg: 0, sm: 1, xs: 2 },
               cursor: buttonLoading ? "not-allowed" : "pointer",
             }}
             onClick={submitHandler}

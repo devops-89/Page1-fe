@@ -14,22 +14,26 @@ import React from "react";
 
 const Faq = () => {
   return (
-    <Box sx={{ pb: 10 }}>
+    <Box paddingBottom={{ xs: 2, lg: 10 }}>
       <Container>
         <Typography
-          sx={{ fontSize: {lg:35 ,sm:33}, fontWeight: 700, fontFamily: nunito.style }}
+          sx={{
+            fontSize: { lg: 35, sm: 33 },
+            fontWeight: 700,
+            fontFamily: nunito.style,
+          }}
         >
           Frequently Asked Questions?
         </Typography>
-        <Grid2 container spacing={5} mt={3}>
+        <Grid2 container spacing={{ xs: 2, sm: 3, md: 5 }} mt={3}>
           {data.faq.map((val, i) => (
-            <Grid2 size={{lg:6 ,md:12 ,sm:12}} key={i}>
+            <Grid2 size={{ lg: 6, md: 12, sm: 12 }} key={i}>
               <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography
                     sx={{
                       fontSize: 15,
-                      fontFamily:nunito.style,
+                      fontFamily: nunito.style,
                       fontWeight: 550,
                     }}
                   >

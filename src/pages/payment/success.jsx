@@ -16,8 +16,8 @@ import { CheckCircle } from "@mui/icons-material";
 import { keyframes } from "@emotion/react";
 import { COLORS } from "@/utils/colors";
 import background from "@/assests/payment_image/paymentBackground.png";
-import airplan from "@/assests/payment_image/airPlan.png";
-import hotelImg from "@/assests/payment_image/miami.jpg";
+// import airplan from "@/assests/payment_image/airPlan.png";
+import hotelImg from "@/assests/payment_image/Hotel.jpg";
 import { nunito } from "@/utils/fonts";
 import axios from "axios";
 import { baseUrl } from "@/api/serverConstant";
@@ -83,7 +83,7 @@ export default function PaymentSuccess() {
 
   const handleContinue = () => router.replace("/");
 
-  const headerImage = isHotel ? hotelImg : airplan;
+  const headerImage = isHotel ? hotelImg : background;
 
   return (
     <Box
@@ -96,9 +96,19 @@ export default function PaymentSuccess() {
     >
       <Box
         component="img"
-        src={background.src}
+        src={headerImage.src}
         alt="Background"
-        sx={{ width: "100vw", height: { lg: "35vh", md: "35%", xs: "56%" } }}
+        sx={{
+          width: "100vw",
+          height: {
+            lg: "35vh",
+            md: "35%",
+            xs: "56%",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          },
+        }}
       />
 
       {loading ? (
@@ -112,7 +122,7 @@ export default function PaymentSuccess() {
             p: 6,
           }}
         >
-          <Loader open />
+          <Loader open variant={isHotel ? "hotel" : "flight"} />
         </Grid2>
       ) : (
         <Container
@@ -161,7 +171,7 @@ export default function PaymentSuccess() {
                   Payment Details
                 </Typography>
               </Grid2>
-              <Grid2
+              {/* <Grid2
                 xs={6}
                 sx={{
                   visibility: {
@@ -177,11 +187,11 @@ export default function PaymentSuccess() {
               >
                 <Box
                   component="img"
-                  src={headerImage.src}
+                  // src={headerImage.src}
                   alt="Type"
                   sx={{ width: "35%" }}
                 />
-              </Grid2>
+              </Grid2> */}
             </Grid2>
 
             {/* success icon + title */}
