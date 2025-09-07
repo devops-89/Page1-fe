@@ -31,32 +31,34 @@ const Festivals = () => {
             fontWeight: 700,
             fontSize: 40,
             letterSpacing: 2,
+            fontSize: { xs: 20, sm: 28, md: 34, lg: 40 },
           }}
         >
           Events And Festivals
         </Typography>
         <Grid2 container spacing={2} mt={4}>
-          <Grid2 size={{lg:6,xs:12}}>
+          <Grid2 size={{ lg: 6, xs: 12 }}>
             <FestivalCard
               img={diwali.src}
-              height={"71vh"}
+              // height={"71vh"}
               title={"Diwali"}
               promo={"Get 20% off on Diwali"}
               top={"30%"}
+              height={{ xs: 120, sm: 200, md: 250, lg: "71vh" }}
             />
           </Grid2>
-          <Grid2 size={{lg:6,xs:12}}>
+          <Grid2 size={{ lg: 6, xs: 12 }}>
             <Stack spacing={1}>
               <FestivalCard
                 img={holi.src}
-                height={"34.8vh"}
+                height={{ xs: 120, sm: 200, lg: "34.8vh" }}
                 title={"Holi"}
                 promo={"Get 30% off on Holi"}
                 top={"10%"}
               />
               <FestivalCard
                 img={janmasthmi.src}
-                height={"35vh"}
+                height={{ xs: 120, sm: 200, lg: "34.8vh" }}
                 title={"Janmashtami"}
                 promo={"Get 40% off on Janmashtami"}
                 top={"10%"}

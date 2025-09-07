@@ -3,7 +3,13 @@ import React from "react";
 import diwali from "@/offer/diwali.jpg";
 import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
-const FestivalCard = ({ img, height, title, promo, top }) => {
+const FestivalCard = ({
+  img,
+  height = { xs: 150, sm: 200, md: 300, lg: "50vh" },
+  title,
+  promo,
+  top = { xs: "18%", sm: "20%", md: "25%", lg: "30%" },
+}) => {
   return (
     <CardActionArea>
       <Box
@@ -24,7 +30,7 @@ const FestivalCard = ({ img, height, title, promo, top }) => {
         <Box
           sx={{
             backgroundImage: `url(${img})`,
-            height: { height },
+            height: height,
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",

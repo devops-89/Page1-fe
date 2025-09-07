@@ -5,16 +5,48 @@ import {
   Typography,
   Divider,
   Button,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import PoolIcon from "@mui/icons-material/Pool";
 import { COLORS } from "@/utils/colors";
 import Link from "next/link";
 import HotTubOutlinedIcon from "@mui/icons-material/HotTubOutlined";
-
+import { useState } from "react";
 export default function OurHotalCard({ data }) {
+  const [openAmenities, setOpenAmenities] = useState(false);
+
+  const VISIBLE_COUNT = 3;
+  const amenities = Array.isArray(data.services) ? data.services : [];
+
+  const visibleAmenities = amenities.slice(0, VISIBLE_COUNT);
+  const remainingCount = Math.max(0, amenities.length - VISIBLE_COUNT);
+
+  const handleOpenAmenities = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setOpenAmenities(true);
+  };
+
+  const handleCloseAmenities = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setOpenAmenities(false);
+  };
+
   return (
-    <Link href={`/our-hotels/${data.id}`} style={{ textDecoration: "none" }}>
-      <Container>
+    <Container>
+      <Link
+        href={`/our-hotels/${data.id}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
         <Stack
           direction={{ lg: "row", md: "column" }}
           sx={{
@@ -132,33 +164,38 @@ export default function OurHotalCard({ data }) {
               <Stack
                 direction={{ lg: "row", sm: "column" }}
                 gap={2}
-                sx={{ paddingTop: 1 }}
+                sx={{ paddingTop: 1, alignItems: "center", flexWrap: "wrap" }}
               >
-                {data.services.map((cur) => (
-                  <Stack direction={"row"} gap={1} alignItems={"center"}>
-                    <PoolIcon sx={{ fontSize: 18, color: COLORS.DARKGREY }} />
-                    <Typography variant="subtutle2" color={COLORS.DARKGREY}>
-                      {cur}
-                    </Typography>
-                  </Stack>
+                {/* show visible amenities as chips */}
+                {visibleAmenities.map((amenity, idx) => (
+                  <Chip
+                    key={idx}
+                    label={amenity}
+                    size="small"
+                    sx={{
+                      fontFamily: "inherit",
+                      fontWeight: 600,
+                      borderRadius: "20px",
+                      backgroundColor: COLORS.PRIMARY,
+                    }}
+                  />
                 ))}
 
-                {/* 
-              <Stack direction={"row"} gap={1} alignItems={"center"} >
-                <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
-                <Typography variant="subtutle2" color={COLORS.DARKGREY}>Swimming Pool</Typography>
-              </Stack> */}
-
-                {/* <Stack direction={"row"} gap={1} alignItems={"center"} >
-                <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
-                <Typography variant="subtutle2" color={COLORS.DARKGREY}>Swimming Pool</Typography>
-              </Stack> */}
-
-                {/* <Stack direction={"row"} gap={1} alignItems={"center"} >
-                <PoolIcon sx={{ fontSize:18 ,color:COLORS.DARKGREY}}/>
-                <Typography variant="subtutle2" color={COLORS.DARKGREY}>Swimming Pool</Typography>
-              </Stack>
-               */}
+                {remainingCount > 0 && (
+                  <Button
+                    onClick={handleOpenAmenities}
+                    variant="text"
+                    sx={{
+                      color: COLORS.GREEN,
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      pl: 0,
+                    }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                  >
+                    +{remainingCount} amenities
+                  </Button>
+                )}
               </Stack>
               {/* service stack */}
 
@@ -239,7 +276,7 @@ export default function OurHotalCard({ data }) {
               </Typography>
             </Stack>
 
-            <Typography
+            {/* <Typography
               variant="subtitle2"
               sx={{
                 color: COLORS.SECONDARY,
@@ -250,12 +287,46 @@ export default function OurHotalCard({ data }) {
               }}
             >
               {data.additionalInfo}
-            </Typography>
+            </Typography> */}
           </Stack>
 
           {/* second box */}
         </Stack>
-      </Container>
-    </Link>
+        <Dialog
+          open={openAmenities}
+          onClose={handleCloseAmenities}
+          fullWidth
+          maxWidth="sm"
+          onBackdropClick={handleCloseAmenities}
+        >
+          <DialogTitle>All Amenities</DialogTitle>
+          <DialogContent dividers>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+              {amenities.length === 0 ? (
+                <Typography variant="body2">No amenities available.</Typography>
+              ) : (
+                amenities.map((a, i) => (
+                  <Chip
+                    key={i}
+                    label={a}
+                    size="small"
+                    sx={{
+                      m: 0.5,
+                      borderRadius: "20px",
+                      backgroundColor: "#f5f5f5",
+                    }}
+                  />
+                ))
+              )}
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseAmenities} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Link>
+    </Container>
   );
 }

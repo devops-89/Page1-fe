@@ -36,11 +36,8 @@ const Banner = () => {
     setValue(newValue);
   };
 
-
-
-
   return (
-    <Box sx={{position:"relative" }}>
+    <Box sx={{ position: "relative" }}>
       <Swiper
         modules={[EffectFade, Autoplay]}
         effect="fade"
@@ -53,11 +50,10 @@ const Banner = () => {
           <SwiperSlide>
             <Box
               sx={{
-                backgroundImage: `url(${val.img})`,    
+                backgroundImage: `url(${val.img})`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
-                minHeight:'750px',
               }}
             >
               <Box
@@ -67,10 +63,15 @@ const Banner = () => {
                   display: "flex",
                   alignItems: "start",
                   justifyContent: "center",
-                  minHeight:'750px',
+                  minHeight: "650px",
                 }}
               >
-                <Grid2 container sx={{ mt: 15}}>
+                <Grid2
+                  container
+                  sx={{
+                    mt: { xs: 10, sm: 12, md: 12, lg: 15 },
+                  }}
+                >
                   <Grid2
                     size={10}
                     margin="auto"
@@ -90,7 +91,7 @@ const Banner = () => {
                     </Typography>
                     <Typography
                       sx={{
-                        fontSize: {xs:20, sm:30, md:40, lg:50},
+                        fontSize: { xs: 20, sm: 30, md: 40, lg: 50 },
                         color: COLORS.WHITE,
                         textAlign: "center",
                         fontFamily: raleway.style,
@@ -107,10 +108,18 @@ const Banner = () => {
         ))}
       </Swiper>
 
-
-
       {/* Search  */}
-      <Container sx={{position:'absolute', zIndex:99, bottom:'0',left:0,right:0,transform:'translateX(-50%, 50%)' , pb:"40px"}}>
+      <Container
+        sx={{
+          position: "absolute",
+          zIndex: 99,
+          bottom: "0",
+          left: 0,
+          right: 0,
+          transform: "translateX(-50%, 50%)",
+          pb: "40px",
+        }}
+      >
         <Grid2 container>
           <Grid2
             size={12}
@@ -123,18 +132,24 @@ const Banner = () => {
               mt: 3,
             }}
           >
-            <Box sx={{maxHeight:'380px', overflowY:'scroll', position:"relative"}}>
+            <Box
+              sx={{
+                maxHeight: "380px",
+                overflowY: "scroll",
+                position: "relative",
+              }}
+            >
               <Tabs
                 value={value}
                 onChange={tabChangeHandler}
                 sx={{
-                  position:'sticky',
-                  zIndex:9,
+                  position: "sticky",
+                  zIndex: 9,
                   backgroundColor: COLORS.WHITE,
-                  borderBottom:`1px solid ${COLORS.GREY}`,
-                  borderTopLeftRadius:'16px',
-                  borderTopRightRadius:'16px',
-                  top:0,
+                  borderBottom: `1px solid ${COLORS.GREY}`,
+                  borderTopLeftRadius: "16px",
+                  borderTopRightRadius: "16px",
+                  top: 0,
                   "& .Mui-selected": {
                     color: `${COLORS.WHITE} !important`,
                     backgroundColor: COLORS.SECONDARY,
@@ -144,7 +159,7 @@ const Banner = () => {
                   },
                   "& .MuiTab-root": {
                     width: 120,
-                    minHeight: {lg:40 , md:40 ,sm:35 , xs:35},
+                    minHeight: { lg: 40, md: 40, sm: 35, xs: 35 },
                     top: 5,
                     borderRadius: 8,
                     padding: 0,
