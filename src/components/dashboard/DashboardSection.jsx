@@ -68,7 +68,7 @@ const items = [
   },
 ];
 
-export default function BookingGrid() {
+export default function BookingGrid({setValue}) {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -77,7 +77,11 @@ export default function BookingGrid() {
       {items.map((item, index) => (
         <Grid2
           size={{xs:12, sm:6, md:4, lg:3}}
-          
+          onClick={()=>{
+            if(item.label=="Package Order") setValue(0);
+            if(item.label=="Flight Booking") setValue(2);
+            if(item.label=="Hotel Booking") setValue(3);
+          }}
           key={index}
           sx={{
             borderRadius: "4px",

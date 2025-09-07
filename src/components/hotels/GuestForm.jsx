@@ -55,7 +55,7 @@ const GuestForm = ({
                 size="small"
                 error={Boolean(
                   errors?.guests?.[index]?.Title &&
-                  touched?.guests?.[index]?.Title
+                    touched?.guests?.[index]?.Title
                 )}
               >
                 <Select
@@ -87,7 +87,7 @@ const GuestForm = ({
                 onBlur={handleBlur}
                 error={Boolean(
                   touched?.guests?.[index]?.firstName &&
-                  errors?.guests?.[index]?.firstName
+                    errors?.guests?.[index]?.firstName
                 )}
                 helperText={
                   touched?.guests?.[index]?.firstName &&
@@ -108,7 +108,7 @@ const GuestForm = ({
                 onBlur={handleBlur}
                 error={Boolean(
                   touched?.guests?.[index]?.lastName &&
-                  errors?.guests?.[index]?.lastName
+                    errors?.guests?.[index]?.lastName
                 )}
                 helperText={
                   touched?.guests?.[index]?.lastName &&
@@ -116,28 +116,71 @@ const GuestForm = ({
                 }
               />
             </Grid>
-
-            <Grid item xs={12} md={2}>
-              <Typography sx={{ mb: 1 }}>AGE</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                type="number"
-                name={`guestForms[${roomIndex}].guests[${index}].Age`}
-                value={guest.Age}
-                placeholder="Age"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={Boolean(
-                  touched?.guests?.[index]?.Age &&
-                  errors?.guests?.[index]?.Age
-                )}
-                helperText={
-                  touched?.guests?.[index]?.Age &&
-                  errors?.guests?.[index]?.Age
-                }
-              />
-            </Grid>
+            {/* handle Age Form Field for Disabled field for Age start */}
+            {guest.Age >= 12 ? (
+              <Grid item xs={12} md={2}>
+                <Typography sx={{ mb: 1 }}>AGE</Typography>
+                <FormControl fullWidth size="small">
+                  <Select
+                    name={`guestForms[${roomIndex}].guests[${index}].Age`}
+                    value={guest.Age || ""}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    displayEmpty
+                    error={Boolean(
+                      touched?.guests?.[index]?.Age &&
+                        errors?.guests?.[index]?.Age
+                    )}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 40 * 6, // 6 items * item height (default ~40px)
+                        },
+                      },
+                    }}
+                  >
+                    <MenuItem value="" disabled>
+                      Select Age
+                    </MenuItem>
+                    {Array.from({ length: 89 }, (_, i) => i + 12).map((age) => (
+                      <MenuItem key={age} value={age}>
+                        {age}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {touched?.guests?.[index]?.Age &&
+                    errors?.guests?.[index]?.Age && (
+                      <Typography variant="caption" color="error">
+                        {errors?.guests?.[index]?.Age}
+                      </Typography>
+                    )}
+                </FormControl>
+              </Grid>
+            ) : (
+              <Grid item xs={12} md={2}>
+                <Typography sx={{ mb: 1 }}>AGE</Typography>
+                <TextField
+                  fullWidth
+                  disabled
+                  size="small"
+                  type="number"
+                  name={`guestForms[${roomIndex}].guests[${index}].Age`}
+                  value={guest.Age}
+                  placeholder="Age"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={Boolean(
+                    touched?.guests?.[index]?.Age &&
+                      errors?.guests?.[index]?.Age
+                  )}
+                  helperText={
+                    touched?.guests?.[index]?.Age &&
+                    errors?.guests?.[index]?.Age
+                  }
+                />
+              </Grid>
+            )}
+            {/* handle Age Form Field for Disabled field for Age end */}
           </Grid>
 
           {/* PAN or Guardian fields */}
@@ -155,7 +198,7 @@ const GuestForm = ({
                   placeholder="PAN Number"
                   error={Boolean(
                     touched?.guests?.[index]?.PAN &&
-                    errors?.guests?.[index]?.PAN
+                      errors?.guests?.[index]?.PAN
                   )}
                   helperText={
                     touched?.guests?.[index]?.PAN &&
@@ -177,7 +220,7 @@ const GuestForm = ({
                     size="small"
                     error={Boolean(
                       errors?.guests?.[index]?.GuardianDetail?.Title &&
-                      touched?.guests?.[index]?.GuardianDetail?.Title
+                        touched?.guests?.[index]?.GuardianDetail?.Title
                     )}
                   >
                     <Select
@@ -209,7 +252,7 @@ const GuestForm = ({
                     placeholder="Guardian First Name"
                     error={Boolean(
                       touched?.guests?.[index]?.GuardianDetail?.FirstName &&
-                      errors?.guests?.[index]?.GuardianDetail?.FirstName
+                        errors?.guests?.[index]?.GuardianDetail?.FirstName
                     )}
                     helperText={
                       touched?.guests?.[index]?.GuardianDetail?.FirstName &&
@@ -230,7 +273,7 @@ const GuestForm = ({
                     placeholder="Guardian Last Name"
                     error={Boolean(
                       touched?.guests?.[index]?.GuardianDetail?.LastName &&
-                      errors?.guests?.[index]?.GuardianDetail?.LastName
+                        errors?.guests?.[index]?.GuardianDetail?.LastName
                     )}
                     helperText={
                       touched?.guests?.[index]?.GuardianDetail?.LastName &&
@@ -238,7 +281,7 @@ const GuestForm = ({
                     }
                   />
                 </Grid>
-                 <Grid item xs={12} md={5}>
+                <Grid item xs={12} md={5}>
                   <Typography sx={{ mb: 1 }}>Last Name</Typography>
                   <TextField
                     fullWidth
@@ -250,7 +293,7 @@ const GuestForm = ({
                     placeholder="Guardian PAN"
                     error={Boolean(
                       touched?.guests?.[index]?.GuardianDetail?.PAN &&
-                      errors?.guests?.[index]?.GuardianDetail?.PAN
+                        errors?.guests?.[index]?.GuardianDetail?.PAN
                     )}
                     helperText={
                       touched?.guests?.[index]?.GuardianDetail?.PAN &&
@@ -280,7 +323,7 @@ const GuestForm = ({
                     onBlur={handleBlur}
                     error={Boolean(
                       touched?.guests?.[index]?.PassportNo &&
-                      errors?.guests?.[index]?.PassportNo
+                        errors?.guests?.[index]?.PassportNo
                     )}
                     helperText={
                       touched?.guests?.[index]?.PassportNo &&
@@ -294,7 +337,11 @@ const GuestForm = ({
                     <DatePicker
                       label="Issue Date"
                       disableFuture
-                      value={guest.PassportIssueDate ? dayjs(guest.PassportIssueDate) : null}
+                      value={
+                        guest.PassportIssueDate
+                          ? dayjs(guest.PassportIssueDate)
+                          : null
+                      }
                       onChange={(val) => {
                         setFieldValue(
                           `guestForms[${roomIndex}].guests[${index}].PassportIssueDate`,
@@ -312,7 +359,7 @@ const GuestForm = ({
                             ),
                           error: Boolean(
                             errors?.guests?.[index]?.PassportIssueDate &&
-                            touched?.guests?.[index]?.PassportIssueDate
+                              touched?.guests?.[index]?.PassportIssueDate
                           ),
                           helperText:
                             errors?.guests?.[index]?.PassportIssueDate &&
@@ -332,7 +379,11 @@ const GuestForm = ({
                       label="Expiry Date"
                       disablePast
                       minDate={tomorrow}
-                      value={guest.PassportExpDate ? dayjs(guest.PassportExpDate) : null}
+                      value={
+                        guest.PassportExpDate
+                          ? dayjs(guest.PassportExpDate)
+                          : null
+                      }
                       onChange={(val) => {
                         setFieldValue(
                           `guestForms[${roomIndex}].guests[${index}].PassportExpDate`,
@@ -350,7 +401,7 @@ const GuestForm = ({
                             ),
                           error: Boolean(
                             errors?.guests?.[index]?.PassportExpDate &&
-                            touched?.guests?.[index]?.PassportExpDate
+                              touched?.guests?.[index]?.PassportExpDate
                           ),
                           helperText:
                             errors?.guests?.[index]?.PassportExpDate &&

@@ -16,7 +16,7 @@ const CommonFieldsForm = ({
       </Typography>
 
       <Grid2 container spacing={2}>
-        <Grid2 xs={12} md={6}>
+        <Grid2 size={{xs:12, md:6}}>
           <Typography sx={{ mb: 1 }}>EMAIL</Typography>
           <TextField
             fullWidth
@@ -32,7 +32,7 @@ const CommonFieldsForm = ({
           />
         </Grid2>
 
-        <Grid2 xs={12} md={6}>
+        <Grid2 size={{xs:12,md:6}}>
           <Typography sx={{ mb: 1 }}>MOBILE</Typography>
           <TextField
             fullWidth

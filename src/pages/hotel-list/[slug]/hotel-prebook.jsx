@@ -199,12 +199,7 @@ const HotelPreBookPage = () => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  // parsing html from the api response
-  function decodeHTMLEntities(text) {
-    const textarea = document.createElement("textarea");
-    textarea.innerHTML = text;
-    return textarea.value;
-  }
+  
 
   // passengers info
   const [passengers, setPassengers] = useState({ adult: 0, child: 0 });
@@ -214,8 +209,7 @@ const HotelPreBookPage = () => {
     (state) => state.USER.UserData.isAuthenticated
   );
 
-  console.log("router Value:", router.query.slug);
-  console.log("router is ready or not!:", router.isReady);
+
 
   // extractimg the hotel data to render
   const hotel = data?.hotelPreBook?.HotelResult?.[0];
@@ -390,7 +384,7 @@ const HotelPreBookPage = () => {
       extraInfo:extraInformation
     };
 
-    console.log("Real Payload:",payload);
+    
 
    
       setApiLoading(true);
@@ -651,29 +645,7 @@ const HotelPreBookPage = () => {
               </Card>
 
               <Card variant="outlined" sx={{ boxShadow: 1 }}>
-                {/* <CardContent>
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", fontFamily: roboto.style }}
-                  >
-                    Rate Condition
-                  </Typography>
-                  <List>
-                    {preBookResponse?.HotelResult?.[0]?.RateConditions.map(
-                      (cond, idx) => (
-                        <ListItem key={idx} alignItems="flex-start">
-                          <Typography
-                            color="text.primary"
-                            sx={{ fontFamily: roboto.style, fontWeight: 600 }}
-                            dangerouslySetInnerHTML={{
-                              __html: decodeHTMLEntities(cond),
-                            }}
-                          />
-                        </ListItem>
-                      )
-                    )}
-                  </List>
-                </CardContent> */}
+               
                 <RateConditionCard preBookResponse={preBookResponse} />
               </Card>
             </Box>

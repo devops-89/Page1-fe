@@ -165,7 +165,7 @@ const Dashboard = () => {
           {/* Content Area */}
           <Grid2 size={{ xs: 12, sm: 9, md: 10 }}>
             <TabPanel value={value} index={0}>
-              <BookingGrid />
+              <BookingGrid setValue={setValue} />
             </TabPanel>
 
             <TabPanel value={value} index={1}>
