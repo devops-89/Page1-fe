@@ -10,9 +10,9 @@ import Slide from "@mui/material/Slide";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-
+import ReactLoading from "react-loading";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -86,44 +86,73 @@ export default function CancelDialog({ bookingId }) {
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
+        PaperProps={{
+          sx: {
+            minWidth: 300,
+            maxWidth: 450,
+            width: "100%",
+          },
+        }}
       >
         <DialogTitle>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <FlightTakeoffIcon sx={{color:COLORS.PRIMARY}} />
-            <span style={{ fontWeight: 600,color:COLORS.PRIMARY }}>Confirm Cancellation</span>
+            <FlightTakeoffIcon sx={{ color: COLORS.PRIMARY }} />
+            <span style={{ fontWeight: 600, color: COLORS.PRIMARY }}>
+              Confirm Cancellation
+            </span>
           </div>
         </DialogTitle>
         <DialogContent>
-          {cancellationCharges?.ResponseStatus == 1 ? (
+          {loading ? (
+            <DialogContentText id="alert-dialog-slide-description">
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  py: 5,
+                }}
+              >
+                <ReactLoading
+                  type="bars"
+                  color={COLORS.PRIMARY}
+                  height={40}
+                  width={40}
+                />
+              </Box>
+            </DialogContentText>
+          ) : error ? (
+            <DialogContentText>
+              <Typography sx={{ color: COLORS.DANGER }}>{error}</Typography>
+            </DialogContentText>
+          ) : cancellationCharges?.ResponseStatus === 1 ? (
             <DialogContentText id="alert-dialog-slide-description">
               Are you sure you want to cancel this booking?
               <br />
               <strong>Booking ID:</strong> {bookingId}
               <br />
-              {loading && <span>Loading cancellation charges...</span>}
-              {error && <span style={{ color: "red" }}>{error}</span>}
-              {cancellationCharges && (
-                <>
-                  <br />
-                  <strong>Refund Amount:</strong> ₹
-                  {cancellationCharges.RefundAmount}
-                  <br />
-                  <strong>Cancellation Fee:</strong> ₹
-                  {cancellationCharges.CancellationCharge}
-                </>
-              )}
+              <strong>Refund Amount:</strong> ₹
+              {cancellationCharges.RefundAmount}
+              <br />
+              <strong>Cancellation Fee:</strong> ₹
+              {cancellationCharges.CancellationCharge}
             </DialogContentText>
           ) : (
             <DialogContentText>
               <Typography sx={{ color: COLORS.DANGER }}>
-                Falied To Load The Cancellation Charges.
+                Failed to load the cancellation charges.
               </Typography>
             </DialogContentText>
           )}
         </DialogContent>
+
         <DialogActions>
-          <Button sx={{color:COLORS.PRIMARY}} onClick={handleClose}>No</Button>
-          <Button  sx={{color:COLORS.PRIMARY}} onClick={handleCancel}>Yes, Cancel</Button>
+          <Button sx={{ color: COLORS.PRIMARY }} onClick={handleClose}>
+            No
+          </Button>
+          <Button sx={{ color: COLORS.PRIMARY }} onClick={handleCancel}>
+            Yes, Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

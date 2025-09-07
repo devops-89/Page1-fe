@@ -16,90 +16,33 @@ import {
   Pagination,
   Stack,
 } from "@mui/material";
+import ReactLoading from "react-loading";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
+import { dashboardController } from "@/api/dashboardController";
+import moment from "moment";
+import { Cancel } from "@mui/icons-material";
+import CancelDialog from "./CancelDialog";
 
 const columns = [
-  { key: "sl", label: "SL" },
-  { key: "bookingId", label: "Booking ID" },
-  { key: "guestName", label: "Guest Name" },
-  { key: "email", label: "Email" },
-  { key: "phone", label: "Phone" },
-  { key: "roomType", label: "Room Type" },
-  { key: "checkIn", label: "Check-In" },
-  { key: "checkOut", label: "Check-Out" },
+  { key: "journey", label: "Hotel Name" },
+  { key: "journey_type", label: "Room Type" },
+  { key: "amount", label: "Price" },
+  { key: "updated_at", label: "Check In" },
+  { key: "flightDate", label: "Chec Out" },
   { key: "status", label: "Status" },
-  { key: "invoice", label: "Invoice" },
+  { key: "ticket", label: "Invoice" },
+  { key: "cancellation", label: "Cancel Booking" },
 ];
 
-const dummyData = [
-  {
-    sl: 1,
-    bookingId: "HB001",
-    guestName: "John Doe",
-    email: "john@example.com",
-    phone: "+91 9876543210",
-    roomType: "Deluxe",
-    checkIn: "2025-06-10",
-    checkOut: "2025-06-13",
-    status: "Confirmed",
-    invoice: "INV001.pdf",
-  },
-  {
-    sl: 2,
-    bookingId: "HB002",
-    guestName: "Jane Smith",
-    email: "jane@example.com",
-    phone: "+91 9123456780",
-    roomType: "Suite",
-    checkIn: "2025-06-12",
-    checkOut: "2025-06-14",
-    status: "Pending",
-    invoice: "INV002.pdf",
-  },
-  {
-    sl: 3,
-    bookingId: "HB003",
-    guestName: "Alex Johnson",
-    email: "alex@example.com",
-    phone: "+91 9988776655",
-    roomType: "Standard",
-    checkIn: "2025-06-11",
-    checkOut: "2025-06-13",
-    status: "Cancelled",
-    invoice: "INV003.pdf",
-  },
-  {
-    sl: 4,
-    bookingId: "HB004",
-    guestName: "Emily Brown",
-    email: "emily@example.com",
-    phone: "+91 8877665544",
-    roomType: "Deluxe",
-    checkIn: "2025-06-15",
-    checkOut: "2025-06-17",
-    status: "Confirmed",
-    invoice: "INV004.pdf",
-  },
-  {
-    sl: 5,
-    bookingId: "HB005",
-    guestName: "Michael Green",
-    email: "michael@example.com",
-    phone: "+91 7766554433",
-    roomType: "Suite",
-    checkIn: "2025-06-16",
-    checkOut: "2025-06-18",
-    status: "Pending",
-    invoice: "INV005.pdf",
-  },
-];
-
-const Hotel = () => {
+const Hotel = ({ userId }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [fetchedData, setFetchedData] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -111,20 +54,53 @@ const Hotel = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch, pageSize]);
+useEffect(() => {
+  const fetchBookings = async () => {
+    try {
+      setLoading(true);
+      let response = await dashboardController.getHotelBookingByUserId(
+        userId,
+        currentPage,
+        pageSize,
+        debouncedSearch?.trim() || ""
+      );
 
-  const filteredData = dummyData.filter((item) =>
-    columns.some((col) =>
-      String(item[col.key] || "")
-        .toLowerCase()
-        .includes(debouncedSearch.toLowerCase())
-    )
-  );
+      // Map response → table rows
+      const docs = response.data.data.docs.map((item) => {
+        let orderDetails = {};
+        try {
+          orderDetails = JSON.parse(item.order_request_second || "{}");
+        } catch (e) {
+          console.error("Error parsing order_request_second", e);
+        }
 
-  const pageCount = Math.ceil(filteredData.length / pageSize);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+        return {
+          ...item,
+          journey: orderDetails.hotelName || "--",   // Hotel Name
+          journey_type: orderDetails.roomType || "--", // Room Type
+          updated_at: orderDetails.checkIn || item.updated_at, // Check In
+          flightDate: orderDetails.checkOut || item.updated_at, // Check Out
+          amount: item.amount, // Amount stays same
+        };
+      });
+
+      setFetchedData(docs);
+      setTotalItems(response.data.data.totalDocs);
+    } catch (error) {
+      console.error("Error fetching hotel bookings:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchBookings();
+}, [userId, currentPage, debouncedSearch]);
+
+
+  // required Data
+  const paginatedData = fetchedData;
+  const pageCount = Math.ceil(totalItems / pageSize);
+  // console.log("PaginatedData: ", fetchedData);
 
   return (
     <Box
@@ -135,7 +111,7 @@ const Hotel = () => {
         py: { xs: 3, sm: 4, md: 5 },
       }}
     >
-      {/* Heading */}
+      {/* Heading & Paragraph */}
       <Box mb={4} textAlign="center">
         <Typography
           variant="h5"
@@ -151,8 +127,8 @@ const Hotel = () => {
             color: COLORS.BLACK,
           }}
         >
-          View, manage, and monitor your hotel bookings easily. Search, filter,
-          and export guest booking information in real-time.
+          Manage and monitor your hotel bookings seamlessly. Use search and
+          pagination controls to find and track booking details.
         </Typography>
       </Box>
 
@@ -203,15 +179,21 @@ const Hotel = () => {
           <TextField
             size="small"
             value={searchTerm}
-            placeholder="Search guest or booking ID"
+            placeholder="Search"
             onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ width: 220 }}
+            sx={{ width: 200 }}
           />
         </Box>
       </Box>
 
       {/* Table */}
-      <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
+      <TableContainer
+        component={Paper}
+        sx={{
+          overflowX: "auto",
+          minHeight: "200px",
+        }}
+      >
         <Table sx={{ minWidth: 650 }}>
           <TableHead sx={{ backgroundColor: COLORS.PRIMARY }}>
             <TableRow>
@@ -232,37 +214,87 @@ const Hotel = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedData.length === 0 ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      py: 5,
+                    }}
+                  >
+                    <ReactLoading
+                      type="bars"
+                      color={COLORS.PRIMARY}
+                      height={40}
+                      width={40}
+                    />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : paginatedData?.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
                   align="center"
                   sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
                 >
-                  No bookings found
+                  No booking data available
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedData.map((row, i) => (
+              paginatedData?.map((row, i) => (
                 <TableRow key={i}>
                   {columns.map((col) => (
                     <TableCell
-                      key={col.key}
-                      align="center"
-                      sx={{
-                        fontFamily: nunito.style,
-                        fontWeight: 600,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {col.key === "invoice" ? (
-                        <a href={`/${row[col.key]}`} download>
-                          {row[col.key]}
-                        </a>
-                      ) : (
-                        row[col.key]
-                      )}
-                    </TableCell>
+  key={col.key}
+  align="center"
+  sx={{
+    fontFamily: nunito.style,
+    fontWeight: 600,
+    whiteSpace: "nowrap",
+    maxWidth: 200,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  }}
+>
+  {col.key === "cancellation" ? (
+    (() => {
+      let parsedResponse = null;
+
+      console.log('row response:',row);
+
+      try {
+        parsedResponse = row["success_response"]
+          ? JSON.parse(row["success_response"])
+          : null;
+      } catch (err) {
+        parsedResponse = null;
+      }
+
+      console.log("Parse success_response", parsedResponse);
+
+      const bookingId =
+        parsedResponse?.Response?.Response?.BookingId ||
+        parsedResponse?.BookingId;
+
+      if (
+        row.status === "COMPLETED" &&
+        bookingId &&
+        row.status !== "CANCELLED"
+      ) {
+        return <CancelDialog bookingId={bookingId} />;
+      }
+
+      return "--";
+    })()
+  ) : (
+    row[col.key]
+  )}
+</TableCell>
+
                   ))}
                 </TableRow>
               ))
@@ -282,8 +314,8 @@ const Hotel = () => {
       >
         <Typography sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
           Showing {(currentPage - 1) * pageSize + 1} to{" "}
-          {Math.min(currentPage * pageSize, filteredData.length)} of{" "}
-          {filteredData.length} bookings
+          {Math.min(currentPage * pageSize, paginatedData?.length)} of{" "}
+          {paginatedData?.length} entries
         </Typography>
 
         <Stack spacing={2} direction="row">

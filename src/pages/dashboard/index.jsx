@@ -175,7 +175,7 @@ const Dashboard = () => {
               <Flight userId={userData?.id} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-              <Hotel />
+              <Hotel userId={userData?.id} />
             </TabPanel>
           </Grid2>
         </Grid2>
