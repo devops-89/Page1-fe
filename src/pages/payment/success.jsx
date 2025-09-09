@@ -76,10 +76,11 @@ export default function PaymentSuccess() {
       .finally(() => setLoading(false));
   }, [params]);
 
-  const isHotel = useMemo(
-    () => paymentData?.notes?.module === "hotel",
-    [paymentData]
-  );
+  // const isHotel = useMemo(
+  //   () => paymentData?.notes?.module === "hotel",
+  //   [paymentData]
+  // );
+  const isHotel = paymentData?.notes?.module === "hotel";
 
   const handleContinue = () => router.replace("/");
 

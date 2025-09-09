@@ -1588,15 +1588,18 @@ export const data = {
   heliBenefits: [
     {
       heading: "Traffic Free Experience",
-      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+      description:
+        "Live traffic data and smart routing to avoid congestion and shorten trips.",
     },
     {
       heading: "Travel Better",
-      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+      description:
+        "Well-maintained vehicles and simple in-ride amenities for a smoother journey.",
     },
     {
       heading: "Chauffeur service",
-      description: "Lorem ipsum dolor sit amet, conse ctetur adipiscing elit.",
+      description:
+        "Vetted professional chauffeurs, punctual pickups, and discreet, reliable service.",
     },
   ],
   destinationWeddingSteps: [
@@ -1929,10 +1932,9 @@ export const data = {
     ],
   },
 
-  forexPage:{
-    heading:"Why Page1 Travels for Currency Conversion?",
-    desc:"You need foreign currency while you're traveling or doing business abroad and calculating currency conversion can pose a challenge for many individuals, especially those who are not familiar with exchange rates. Does that sound like a lot of complex calculation. Well, Page1 Travels makes is very convenient for you to calculate your currency conversion and ensure to address all your queries and doubts regarding the same by just a few clicks."
-
+  forexPage: {
+    heading: "Why Page1 Travels for Currency Conversion?",
+    desc: "You need foreign currency while you're traveling or doing business abroad and calculating currency conversion can pose a challenge for many individuals, especially those who are not familiar with exchange rates. Does that sound like a lot of complex calculation. Well, Page1 Travels makes is very convenient for you to calculate your currency conversion and ensure to address all your queries and doubts regarding the same by just a few clicks.",
   },
 
   hotelPreBook: {

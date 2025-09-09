@@ -133,11 +133,11 @@ const HelicopterBooking = () => {
       <form onSubmit={formik.handleSubmit}>
         <Box sx={{ mt: 2 }}>
           <Grid2 container spacing={3}>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
-                label="Full Name"
+                label="Full Name*"
                 id="fullName"
                 onChange={formik.handleChange}
                 error={
@@ -146,11 +146,11 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.fullName && formik.errors.fullName}
               />
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <MuiTelInput
                 sx={{ ...loginTextField }}
                 fullWidth
-                label="Phone Number"
+                label="Phone Number*"
                 defaultCountry="IN"
                 onChange={handleChangePhoneNumber}
                 value={phone}
@@ -163,43 +163,43 @@ const HelicopterBooking = () => {
                 }
               />
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
-                label="Email"
+                label="Email*"
                 id="email"
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
               />
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
-                label="Origin"
+                label="Origin*"
                 id="from"
                 onChange={formik.handleChange}
                 error={formik.touched.from && Boolean(formik.errors.from)}
                 helperText={formik.touched.from && formik.errors.from}
               />
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 sx={{ ...loginTextField }}
                 fullWidth
-                label="Destination"
+                label="Destination*"
                 id="to"
                 onChange={formik.handleChange}
                 error={formik.touched.to && Boolean(formik.errors.to)}
                 helperText={formik.touched.to && formik.errors.to}
               />
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <DatePicker
-                  label="Date"
+                  label="Date*"
                   sx={{ ...loginTextField, width: "100%" }}
                   disablePast
                   onChange={handleDateChangeHandler}
@@ -213,10 +213,10 @@ const HelicopterBooking = () => {
                 />
               </LocalizationProvider>
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <TimePicker
-                  label="Time"
+                  label="Time*"
                   sx={{ ...loginTextField, width: "100%" }}
                   onChange={handleTimeChangeHandler}
                   value={time}
@@ -229,9 +229,9 @@ const HelicopterBooking = () => {
                 />
               </LocalizationProvider>
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
-                label="Adults(in Numbers)"
+                label="Number of Adults*"
                 sx={{ ...loginTextField }}
                 fullWidth
                 id="adults"
@@ -241,9 +241,9 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.adults && formik.errors.adults}
               />
             </Grid2>
-            <Grid2 size={{xs:12, sm:6, md:4}}>
+            <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
-                label="Children(in Numbers)"
+                label="Number of Children"
                 sx={{ ...loginTextField }}
                 fullWidth
                 id="children"
@@ -255,7 +255,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.children && formik.errors.children}
               />
             </Grid2>
-            <Grid2 size={{xs:12}}>
+            <Grid2 size={{ xs: 12 }}>
               <TextField
                 sx={{
                   ...loginTextField,
@@ -264,7 +264,7 @@ const HelicopterBooking = () => {
                     height: "100px !important",
                   },
                 }}
-                label="Message"
+                label="Message*"
                 fullWidth
                 id="message"
                 multiline
@@ -273,7 +273,7 @@ const HelicopterBooking = () => {
                 helperText={formik.touched.message && formik.errors.message}
               />
             </Grid2>
-            <Grid2 size={{xs:12, sm:6}}>
+            <Grid2 size={{ xs: 12, sm: 6 }}>
               <Button
                 sx={{
                   backgroundColor: COLORS.PRIMARY,
@@ -295,8 +295,9 @@ const HelicopterBooking = () => {
                 )}
               </Button>
             </Grid2>
-            <Grid2 size={{xs:12, sm:6}}>
+            <Grid2 size={{ xs: 12, sm: 6 }}>
               <Button
+                onClick={closeModal}
                 sx={{
                   border: `1px solid ${COLORS.PRIMARY}`,
                   color: COLORS.PRIMARY,

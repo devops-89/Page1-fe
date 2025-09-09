@@ -171,7 +171,10 @@ export const addFormSchema = Yup.object({
     .required("Phone No. is required"),
   country: Yup.string().trim(),
   address: Yup.string().trim().required("Address is required"),
-  email: Yup.string().trim().email("Invalid email").required("Email is Required"),
+  email: Yup.string()
+    .trim()
+    .email("Invalid email")
+    .required("Email is Required"),
 });
 
 export const validationSchema = (
@@ -195,7 +198,12 @@ export const validationSchema = (
 };
 
 export const helicopterBookingValidationSchema = Yup.object({
-  fullName: Yup.string().required("Please Enter Full Name"),
+  // fullName: Yup.string().required("Please Enter Full Name"),
+  fullName: Yup.string()
+    .transform((value) => (typeof value === "string" ? value.trim() : value))
+    .required("Please Enter Full Name")
+    .min(2, "Full name must be at least 2 characters")
+    .max(156, "Full name must be at most 156 characters"),
   phoneNumber: Yup.string().required("Please Enter Phone Number"),
   email: Yup.string()
     .required("Please Enter Email")
@@ -360,8 +368,6 @@ export const CommonFieldValidation = Yup.object({
 export const getCombinedValidationSchema = (validationInfo) => {
   return Yup.object({
     commonFields: CommonFieldValidation,
-    guestForms: Yup.array().of(
-      LeadPassengerValidation(validationInfo)
-    )
+    guestForms: Yup.array().of(LeadPassengerValidation(validationInfo)),
   });
 };
