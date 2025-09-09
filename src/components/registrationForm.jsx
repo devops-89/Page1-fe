@@ -126,7 +126,14 @@ const RegistrationForm = () => {
                 fullWidth
                 label="Full Name*"
                 id="full_name"
-                onChange={form.handleChange}
+                value={form.values.full_name}
+                onChange={(e) => {
+                  form.handleChange(e);
+                  form.setFieldValue("full_name", e.target.value.trimStart());
+                }}
+                onBlur={(e) =>
+                  form.setFieldValue("full_name", e.target.value.trim())
+                }
                 error={form.touched.full_name && Boolean(form.errors.full_name)}
                 helperText={form.touched.full_name && form.errors.full_name}
               />

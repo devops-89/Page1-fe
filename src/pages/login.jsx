@@ -17,6 +17,7 @@ const Login = () => {
         <Box
           sx={{
             backgroundImage: `url(${footer.src})`,
+            position: "fixed",
             height: "100%",
             width: "100%",
             backgroundRepeat: "no-repeat",
@@ -36,8 +37,8 @@ const Login = () => {
             <Image src={logo} width={100} />
           </Link>
         </Box>
-        <Grid2 container sx={{px:4}}>
-          <Grid2 size={{lg:4 , md:4 , sm:12 , xs:12}} margin="auto">
+        <Grid2 container sx={{ px: 4 }}>
+          <Grid2 size={{ lg: 4, md: 4, sm: 12, xs: 12 }} margin="auto">
             <Card>
               <LoginForm />
             </Card>
