@@ -31,7 +31,7 @@ const columns = [
   { key: "updated_at", label: "Check In" },
   { key: "flightDate", label: "Chec Out" },
   { key: "status", label: "Status" },
-  { key: "ticket", label: "Invoice" },
+  { key: "pdf_url", label: "Invoice" },
   { key: "cancellation", label: "Cancel Booking" },
 ];
 
@@ -213,93 +213,98 @@ useEffect(() => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={columns.length} align="center">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      py: 5,
-                    }}
-                  >
-                    <ReactLoading
-                      type="bars"
-                      color={COLORS.PRIMARY}
-                      height={40}
-                      width={40}
-                    />
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ) : paginatedData?.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  align="center"
-                  sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
-                >
-                  No booking data available
-                </TableCell>
-              </TableRow>
-            ) : (
-              paginatedData?.map((row, i) => (
-                <TableRow key={i}>
-                  {columns.map((col) => (
-                    <TableCell
-  key={col.key}
-  align="center"
-  sx={{
-    fontFamily: nunito.style,
-    fontWeight: 600,
-    whiteSpace: "nowrap",
-    maxWidth: 200,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  }}
->
-  {col.key === "cancellation" ? (
-    (() => {
-      let parsedResponse = null;
-
-      console.log('row response:',row);
-
-      try {
-        parsedResponse = row["success_response"]
-          ? JSON.parse(row["success_response"])
-          : null;
-      } catch (err) {
-        parsedResponse = null;
-      }
-
-      console.log("Parse success_response", parsedResponse);
-
-      const bookingId =
-        parsedResponse?.Response?.Response?.BookingId ||
-        parsedResponse?.BookingId;
-
-      if (
-        row.status === "COMPLETED" &&
-        bookingId &&
-        row.status !== "CANCELLED"
-      ) {
-        return <CancelDialog bookingId={bookingId} />;
-      }
-
-      return "--";
-    })()
+      <TableBody>
+  {loading ? (
+    <TableRow>
+      <TableCell colSpan={columns.length} align="center">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            py: 5,
+          }}
+        >
+          <ReactLoading
+            type="bars"
+            color={COLORS.PRIMARY}
+            height={40}
+            width={40}
+          />
+        </Box>
+      </TableCell>
+    </TableRow>
+  ) : paginatedData?.length === 0 ? (
+    <TableRow>
+      <TableCell
+        colSpan={columns.length}
+        align="center"
+        sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
+      >
+        No booking data available
+      </TableCell>
+    </TableRow>
   ) : (
-    row[col.key]
-  )}
-</TableCell>
+    paginatedData?.map((row, i) => (
+      <TableRow key={i}>
+        {columns.map((col) => (
+          <TableCell
+            key={col.key}
+            align="center"
+            sx={{
+              fontFamily: nunito.style,
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+              maxWidth: 200,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {col.key === "pdf_url" ? (
+              row.pdf_url ? (
+                <a
+                  href={row.pdf_url}
+                  target="_self"
+                  rel="noopener noreferrer"
+                  style={{ color: COLORS.SECONDARY, textDecoration: "underline" }}
+                  download
+                >
+                  Download
+                </a>
+              ) : (
+                "--"
+              )
+            ) : col.key === "cancellation" ? (
+              (() => {
+                let parsedResponse = null;
+                try {
+                  parsedResponse = row.success_response
+                    ? JSON.parse(row.success_response)
+                    : null;
+                } catch (err) {
+                  parsedResponse = null;
+                }
 
-                  ))}
-                </TableRow>
-              ))
+                const bookingId =
+                  parsedResponse?.Response?.Response?.BookingId ||
+                  parsedResponse?.BookingId;
+
+                if (row.status === "COMPLETED" && bookingId && row.status !== "CANCELLED") {
+                  return <CancelDialog bookingId={bookingId} />;
+                }
+
+                return "--";
+              })()
+            ) : (
+              row[col.key]
             )}
-          </TableBody>
+          </TableCell>
+        ))}
+      </TableRow>
+    ))
+  )}
+</TableBody>
+
         </Table>
       </TableContainer>
 

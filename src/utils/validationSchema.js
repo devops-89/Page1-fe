@@ -34,7 +34,6 @@ export const loginSchema = Yup.object({
     .required("Please Enter Valid Email"),
 
   password: Yup.string()
-    .min(6, "Password Must be 6 Characters Long!")
     .max(20, "Password is Too Long!")
     .required("Please Enter Password"),
 });

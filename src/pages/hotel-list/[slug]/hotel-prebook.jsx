@@ -652,7 +652,12 @@ const HotelPreBookPage = () => {
           </Grid2>
 
           {/* Right container (updated) */}
-          <Grid2 size={{ xs: 12, md: 12, lg: 4 }}>
+          <Grid2 size={{ xs: 12, md: 12, lg: 4 }}  sx={{
+    position: "sticky",
+    top: "80px", // adjust based on your header height
+    alignSelf: "flex-start", // important for sticky inside flex/grid
+    height: "fit-content",   // ensures it doesn’t stretch full height
+  }} >
             <Card
               variant="outlined"
               sx={{ boxShadow: 1, p: 1, borderRadius: 0 }}
