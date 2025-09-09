@@ -57,7 +57,6 @@ const VerifyOtp = () => {
           sx={{
             backgroundColor: COLORS.LIGHTBLUE,
             height: "100vh",
-            pb: 3,
           }}
         >
           <Box
