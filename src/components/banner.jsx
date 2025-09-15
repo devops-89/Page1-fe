@@ -6,6 +6,8 @@ import {
   Tab,
   Tabs,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,6 +21,8 @@ import TabPanel from "./tabPanel";
 import FlightForm from "./flight/flightForm";
 import HotelForm from "./hotelForm";
 const Banner = () => {
+  const theme = useTheme();
+  const showHeroText = useMediaQuery(theme.breakpoints.up("sm"));
   const tabs = [
     {
       icon: <Flight sx={{ fontSize: 14 }} />,
@@ -66,27 +70,28 @@ const Banner = () => {
                   minHeight: "650px",
                 }}
               >
+<<<<<<< HEAD
                 <Grid2
                   container
                   sx={{
                     mt: { xs: 10, sm: 12, md: 12, lg: 15 },
                   }}
                 >
+=======
+                {showHeroText && (
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   <Grid2
-                    size={10}
-                    margin="auto"
-                    className="animate__animated animate__bounceInLeft"
+                    container
+                    sx={{
+                      mt: { xs: 10, sm: 12, md: 12, lg: 15 },
+                    }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: 18,
-                        color: COLORS.WHITE,
-                        fontWeight: 600,
-                        fontFamily: raleway.style,
-                        letterSpacing: 1.2,
-                        textAlign: "center",
-                      }}
+                    <Grid2
+                      size={10}
+                      margin="auto"
+                      className="animate__animated animate__bounceInLeft"
                     >
+<<<<<<< HEAD
                       TOUR & TRAVEL
                     </Typography>
                     <Typography
@@ -100,8 +105,34 @@ const Banner = () => {
                     >
                       {val.title}
                     </Typography>
+=======
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          color: COLORS.WHITE,
+                          fontWeight: 600,
+                          fontFamily: raleway.style,
+                          letterSpacing: 1.2,
+                          textAlign: "center",
+                        }}
+                      >
+                        TOUR & TRAVEL
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: 20, sm: 30, md: 40, lg: 50 },
+                          color: COLORS.WHITE,
+                          textAlign: "center",
+                          fontFamily: raleway.style,
+                          fontWeight: 700,
+                        }}
+                      >
+                        {val.title}
+                      </Typography>
+                    </Grid2>
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   </Grid2>
-                </Grid2>
+                )}
               </Box>
             </Box>
           </SwiperSlide>
@@ -113,11 +144,22 @@ const Banner = () => {
         sx={{
           position: "absolute",
           zIndex: 99,
+<<<<<<< HEAD
           bottom: "0",
           left: 0,
           right: 0,
           transform: "translateX(-50%, 50%)",
           pb: "40px",
+=======
+          bottom: 0,
+          left: "50%",
+          transform: {
+            xs: "translate(-50%, -3%)",
+          },
+          width: "100%",
+          maxWidth: "1200px",
+          px: 2,
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
         }}
       >
         <Grid2 container>
@@ -128,16 +170,23 @@ const Banner = () => {
               boxShadow: "0px 0px 1px 1px #d7d7d7",
               bgcolor: COLORS.WHITE,
               borderRadius: 4,
-              pb: 2,
-              mt: 3,
+              pb: 1,
             }}
           >
             <Box
+<<<<<<< HEAD
               sx={{
                 maxHeight: "380px",
                 overflowY: "scroll",
                 position: "relative",
               }}
+=======
+            // sx={{
+            //   maxHeight: "380px",
+            //   overflowY: "scroll",
+            //   position: "relative",
+            // }}
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
             >
               <Tabs
                 value={value}

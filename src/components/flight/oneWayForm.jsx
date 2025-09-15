@@ -203,15 +203,34 @@ const OnewayForm = () => {
         container
         alignItems={"center"}
         justifyContent={"center"}
+<<<<<<< HEAD
         sx={{ display: "flex", alignItems: "stretch", overflow: "visible" }}
         spacing={0}
+=======
+        sx={{
+          display: "flex",
+          alignItems: "stretch",
+          overflow: "visible",
+          gap: { xs: 0.5, lg: 1 },
+        }}
+        spacing={2}
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
       >
         <Grid2
           size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
           sx={{
+<<<<<<< HEAD
             border: "1px solid #808080",
             borderTopLeftRadius: { xs: 0, sm: 4 },
             borderBottomLeftRadius: { xs: 0, sm: 4 },
+=======
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
             overflow: "visible",
           }}
         >
@@ -221,7 +240,6 @@ const OnewayForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
             }}
           >
             From
@@ -324,9 +342,13 @@ const OnewayForm = () => {
           // size={{ lg: 2.4, xs: 6 }}
           size={{ lg: 3, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #808080",
-
-            position: "relative",
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
           }}
         >
           <Typography
@@ -335,7 +357,6 @@ const OnewayForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
             }}
           >
             To
@@ -435,12 +456,18 @@ const OnewayForm = () => {
         </Grid2>
 
         <Grid2
+<<<<<<< HEAD
           // size={{ lg: 2.4, xs: 6 }}
+=======
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
           size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #808080",
-
-            position: "relative",
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
           }}
         >
@@ -450,7 +477,7 @@ const OnewayForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
+              // pt: 1,
             }}
           >
             Departure
@@ -488,6 +515,7 @@ const OnewayForm = () => {
           // size={{ lg: 2.4, xs: 6 }}
           size={{ lg: 3, md: 2.4, xs: 12, sm: 6 }}
           sx={{
+<<<<<<< HEAD
             border: "1px solid #808080",
 
             position: "relative",
@@ -495,6 +523,15 @@ const OnewayForm = () => {
             borderBottomLeftRadius: { xs: 0, sm: 4 },
             borderBottomRightRadius: { xs: 0, sm: 4 },
             flex: 1,
+=======
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
           }}
         >
           <Typography
@@ -503,7 +540,7 @@ const OnewayForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
+              // pt: 1,
             }}
           >
             Travellers and cabin class
@@ -563,7 +600,6 @@ const OnewayForm = () => {
           {/* popover end */}
         </Grid2>
         <Grid2
-          //  size={{ lg: 2.4, xs: 12 }}
           size={{ lg: 12, md: 2.4, xs: 12, sm: 12 }}
           textAlign={"center"}
         >

@@ -14,6 +14,7 @@ import subscribeBanner from "@/banner/subscribe-banner.jpg";
 import { nunito, raleway } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { Done } from "@mui/icons-material";
+import { useRouter } from "next/router";
 const SubscribeBanner = () => {
   const list = [
     {
@@ -26,6 +27,7 @@ const SubscribeBanner = () => {
       label: "Dreamy experience with your other half.",
     },
   ];
+  const router = useRouter();
   return (
     <div>
       <Box
@@ -120,8 +122,9 @@ const SubscribeBanner = () => {
                     </ListItem>
                   ))}
                 </List>
-                <Button
+                <Box
                   sx={{
+<<<<<<< HEAD
                     mt: { lg: 4, sm: 2 },
                     fontSize: 14,
                     border: `1px solid ${COLORS.PRIMARY}`,
@@ -135,10 +138,33 @@ const SubscribeBanner = () => {
                       border: `1px solid ${COLORS.SECONDARY}`,
                       backgroundColor: COLORS.SECONDARY,
                     },
+=======
+                    display: "flex",
+                    justifyContent: { xs: "center", sm: "flex-start" },
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   }}
                 >
-                  View More
-                </Button>
+                  <Button
+                    onClick={() => router.push("/packages")}
+                    sx={{
+                      mt: { lg: 4, sm: 2 },
+                      fontSize: 14,
+                      border: `1px solid ${COLORS.PRIMARY}`,
+                      width: 150,
+                      color: COLORS.SECONDARY,
+                      backgroundColor: COLORS.PRIMARY,
+                      fontWeight: 600,
+                      fontFamily: raleway.style,
+                      ":hover": {
+                        color: COLORS.PRIMARY,
+                        border: `1px solid ${COLORS.SECONDARY}`,
+                        backgroundColor: COLORS.SECONDARY,
+                      },
+                    }}
+                  >
+                    View More
+                  </Button>
+                </Box>
               </Grid2>
             </Grid2>
           </Container>

@@ -2,13 +2,13 @@ import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
 import TravellerSelector from "./hotels/travellerSelector";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import { hotelController } from "@/api/hotelController"; 
-import { hotelslist } from "@/utils/hotelcitycodes"; 
-import { useDispatch } from "react-redux"; 
-import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList"; 
-import ToastBar from "./toastBar"; 
-import { TOAST_STATUS } from "@/utils/enum"; 
-import { setToast } from "@/redux/reducers/toast"; 
+import { hotelController } from "@/api/hotelController";
+import { hotelslist } from "@/utils/hotelcitycodes";
+import { useDispatch } from "react-redux";
+import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList";
+import ToastBar from "./toastBar";
+import { TOAST_STATUS } from "@/utils/enum";
+import { setToast } from "@/redux/reducers/toast";
 import { setHotelFormData } from "@/redux/reducers/hotel-reducers/HotelSearchData";
 import {
   Autocomplete,
@@ -21,14 +21,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import useFetchIP from "@/custom-hook/useFetchIp"; 
-import { useRouter } from "next/router"; 
+import useFetchIP from "@/custom-hook/useFetchIp";
+import { useRouter } from "next/router";
 
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"; 
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { useState, useMemo } from "react";
-import Loading from "react-loading"; 
-import moment from "moment"; 
+import Loading from "react-loading";
+import moment from "moment";
 
 const HotelForm = () => {
   const router = useRouter();
@@ -69,13 +69,10 @@ const HotelForm = () => {
       .slice(0, 100);
   }, [inputValue]);
 
-
   // console.log("paxRoom------------ home",paxRoom)
   const totalAdults = paxRoom.reduce((sum, room) => sum + room.Adults, 0);
   const totalChildren = paxRoom.reduce((sum, room) => sum + room.Children, 0);
   const totalRooms = paxRoom.length;
-
-  
 
   // -----------Handle Search---------------
   async function handleSearch() {
@@ -101,7 +98,7 @@ const HotelForm = () => {
       IsDetailedResponse: true,
       Filters: {
         Refundable: false,
-        NoOfRooms: 0, 
+        NoOfRooms: 0,
         MealType: 0,
         OrderBy: 0,
         StarRating: 0,
@@ -109,22 +106,22 @@ const HotelForm = () => {
       },
     };
 
-    console.log("paload printing:",payload);
+    console.log("paload printing:", payload);
 
-    dispatch(setHotelFormData({
-      selectedCity,
-      paxRoom,
-      checkIn:checkIn.format("DD-MM-YYYY"),
-      checkOut:checkOut.format("DD-MM-YYYY"),
-      userIp
-    }));
-
-
+    dispatch(
+      setHotelFormData({
+        selectedCity,
+        paxRoom,
+        checkIn: checkIn.format("DD-MM-YYYY"),
+        checkOut: checkOut.format("DD-MM-YYYY"),
+        userIp,
+      })
+    );
 
     try {
       setButtonLoading(true);
-      const response = await hotelController.searchHotel(payload); 
-      if (response.data?.data?.length > 0) { 
+      const response = await hotelController.searchHotel(payload);
+      if (response.data?.data?.length > 0) {
         dispatch(setHotelList(response?.data?.data));
         router.push("/hotel-list");
       } else {
@@ -159,7 +156,6 @@ const HotelForm = () => {
 
   // console.log("paxRoom----------------",paxRoom)
 
-
   return (
     <Box sx={{ p: 2 }}>
       <Typography sx={{ fontSize: 16, fontFamily: raleway.style, mb: 2 }}>
@@ -168,16 +164,20 @@ const HotelForm = () => {
       <Grid2
         container
         alignItems={"center"}
-        sx={{ display: "flex", alignItems: "stretch" }}
+        sx={{ display: "flex", alignItems: "stretch", gap: { xs: 0.5, lg: 1 } }}
+        spacing={2}
       >
         <Grid2
-          size={{ lg: 3, xs: 12, sm: 6 }}
+          // size={{ lg: 3, xs: 12, sm: 6 }}
+          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #808080",
-            borderTopLeftRadius: 4,
-            borderBottomLeftRadius: 4,
-            flexGrow: { xs: 1, sm: 0, lg: 0 },
-            mb: { xs: 1, sm: 0 }, 
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
           }}
         >
           <Typography
@@ -186,7 +186,7 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
+              // pt: 1,
             }}
           >
             Property name or Location
@@ -263,17 +263,16 @@ const HotelForm = () => {
           />
         </Grid2>
         <Grid2
-          size={{ lg: 3, xs: 12, sm: 6 }}
+          // size={{ lg: 3, xs: 12, sm: 6 }}
+          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #808080",
-            position: "relative",
-            flexGrow: { xs: 1, sm: 0, lg: 0 },
-             mb: { xs: 1, sm: 0 },
-            borderTopLeftRadius: { sm: 0, xs: 4 },
-            borderBottomLeftRadius: { sm: 0, xs: 4 },
-             borderTopRightRadius: { sm: 0, xs: 4 },
-            borderBottomRightRadius: { sm: 0, xs: 4 },
-
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
           }}
         >
           <Typography
@@ -282,7 +281,7 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
+              // pt: 1,
             }}
           >
             Check In
@@ -304,16 +303,16 @@ const HotelForm = () => {
           </LocalizationProvider>
         </Grid2>
         <Grid2
-          size={{ lg: 3, xs: 12, sm: 6 }}
+          // size={{ lg: 3, xs: 12, sm: 6 }}
+          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #808080",
-            position: "relative",
-            flexGrow: { xs: 1, sm: 0, lg: 0 },
-             mb: { xs: 1, sm: 0 },
-            borderTopLeftRadius: { sm: 0, xs: 4 },
-            borderBottomLeftRadius: { sm: 0, xs: 4 },
-             borderTopRightRadius: { sm: 0, xs: 4 },
-            borderBottomRightRadius: { sm: 0, xs: 4 },
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
           }}
         >
           <Typography
@@ -322,7 +321,7 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
+              // pt: 1,
             }}
           >
             Check Out
@@ -345,16 +344,16 @@ const HotelForm = () => {
           </LocalizationProvider>
         </Grid2>
         <Grid2
-          size={{ lg: 3, xs: 12, sm: 6 }}
+          // size={{ lg: 3, xs: 12, sm: 6 }}
+          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #808080",
-            position: "relative",
-            height: 90,
-            borderTopLeftRadius: { sm: 0, xs: 4 },
-            borderBottomLeftRadius: { sm: 0, xs: 4 },
-            borderTopRightRadius: { lg: 4, sm: 4, xs: 4 },
-            borderBottomRightRadius: { lg: 4, sm: 4, xs: 4 },
-            flexGrow: { xs: 1, sm: 0, lg: 0 },
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
           }}
         >
           <Typography
@@ -363,7 +362,7 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
+              // pt: 1,
             }}
           >
             Travellers Selection
@@ -373,8 +372,8 @@ const HotelForm = () => {
               {totalAdults + totalChildren} Person, {totalRooms} Rooms
             </Typography>
             <Typography fontSize={13} fontFamily={nunito.style}>
-              {totalAdults} Adult{totalAdults !== 1 ? "s" : ""},{" "}
-              {totalChildren} Child{totalChildren !== 1 ? "ren" : ""}
+              {totalAdults} Adult{totalAdults !== 1 ? "s" : ""}, {totalChildren}{" "}
+              Child{totalChildren !== 1 ? "ren" : ""}
             </Typography>
           </CardActionArea>
 
@@ -386,10 +385,10 @@ const HotelForm = () => {
               vertical: "bottom",
               horizontal: "center",
             }}
-             transformOrigin={{
-               vertical: "top",
-               horizontal: "center",
-             }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
             onClose={() => setAnchorEl(null)}
             sx={{
               "& .MuiPopover-paper": {
@@ -403,13 +402,13 @@ const HotelForm = () => {
             <TravellerSelector
               setPaxRoom={setPaxRoom}
               setAnchorEl={setAnchorEl}
-              paxRoom={paxRoom}              
+              paxRoom={paxRoom}
             />
             {/* Traveller selection form end */}
           </Popover>
           {/* popover end */}
         </Grid2>
-        <Grid2 size={{ lg: 12, xs: 12, sm: 12 }} sx={{ textAlign: "center" }}>
+        <Grid2 size={{ lg: 12, md: 2.4, xs: 12, sm: 12 }} textAlign={"center"}>
           <Button
             disabled={buttonLoading}
             sx={{
@@ -420,7 +419,7 @@ const HotelForm = () => {
               cursor: buttonLoading ? "not-allowed" : "pointer",
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
-               opacity: buttonLoading ? 0.7 : 1, // Add visual disabled state
+              opacity: buttonLoading ? 0.7 : 1, // Add visual disabled state
             }}
             onClick={handleSearch}
           >

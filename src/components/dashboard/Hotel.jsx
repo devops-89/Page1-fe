@@ -20,10 +20,7 @@ import ReactLoading from "react-loading";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { dashboardController } from "@/api/dashboardController";
-import moment from "moment";
-import { Cancel } from "@mui/icons-material";
-import CancelDialog from "./CancelDialog";
-
+import CancelHotelDialog from "./CancelHotelDialog";
 const columns = [
   { key: "journey", label: "Hotel Name" },
   { key: "journey_type", label: "Room Type" },
@@ -54,48 +51,47 @@ const Hotel = ({ userId }) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch, pageSize]);
-useEffect(() => {
-  const fetchBookings = async () => {
-    try {
-      setLoading(true);
-      let response = await dashboardController.getHotelBookingByUserId(
-        userId,
-        currentPage,
-        pageSize,
-        debouncedSearch?.trim() || ""
-      );
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        setLoading(true);
+        let response = await dashboardController.getHotelBookingByUserId(
+          userId,
+          currentPage,
+          pageSize,
+          debouncedSearch?.trim() || ""
+        );
 
-      // Map response → table rows
-      const docs = response.data.data.docs.map((item) => {
-        let orderDetails = {};
-        try {
-          orderDetails = JSON.parse(item.order_request_second || "{}");
-        } catch (e) {
-          console.error("Error parsing order_request_second", e);
-        }
+        // Map response → table rows
+        const docs = response.data.data.docs.map((item) => {
+          let orderDetails = {};
+          try {
+            orderDetails = JSON.parse(item.order_request_second || "{}");
+          } catch (e) {
+            console.error("Error parsing order_request_second", e);
+          }
 
-        return {
-          ...item,
-          journey: orderDetails.hotelName || "--",   // Hotel Name
-          journey_type: orderDetails.roomType || "--", // Room Type
-          updated_at: orderDetails.checkIn || item.updated_at, // Check In
-          flightDate: orderDetails.checkOut || item.updated_at, // Check Out
-          amount: item.amount, // Amount stays same
-        };
-      });
+          return {
+            ...item,
+            journey: orderDetails.hotelName || "--", // Hotel Name
+            journey_type: orderDetails.roomType || "--", // Room Type
+            updated_at: orderDetails.checkIn || item.updated_at, // Check In
+            flightDate: orderDetails.checkOut || item.updated_at, // Check Out
+            amount: item.amount, // Amount stays same
+          };
+        });
 
-      setFetchedData(docs);
-      setTotalItems(response.data.data.totalDocs);
-    } catch (error) {
-      console.error("Error fetching hotel bookings:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setFetchedData(docs);
+        setTotalItems(response.data.data.totalDocs);
+      } catch (error) {
+        console.error("Error fetching hotel bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchBookings();
-}, [userId, currentPage, debouncedSearch]);
-
+    fetchBookings();
+  }, [userId, currentPage, debouncedSearch]);
 
   // required Data
   const paginatedData = fetchedData;
@@ -213,98 +209,104 @@ useEffect(() => {
               ))}
             </TableRow>
           </TableHead>
-      <TableBody>
-  {loading ? (
-    <TableRow>
-      <TableCell colSpan={columns.length} align="center">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            py: 5,
-          }}
-        >
-          <ReactLoading
-            type="bars"
-            color={COLORS.PRIMARY}
-            height={40}
-            width={40}
-          />
-        </Box>
-      </TableCell>
-    </TableRow>
-  ) : paginatedData?.length === 0 ? (
-    <TableRow>
-      <TableCell
-        colSpan={columns.length}
-        align="center"
-        sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
-      >
-        No booking data available
-      </TableCell>
-    </TableRow>
-  ) : (
-    paginatedData?.map((row, i) => (
-      <TableRow key={i}>
-        {columns.map((col) => (
-          <TableCell
-            key={col.key}
-            align="center"
-            sx={{
-              fontFamily: nunito.style,
-              fontWeight: 600,
-              whiteSpace: "nowrap",
-              maxWidth: 200,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {col.key === "pdf_url" ? (
-              row.pdf_url ? (
-                <a
-                  href={row.pdf_url}
-                  target="_self"
-                  rel="noopener noreferrer"
-                  style={{ color: COLORS.SECONDARY, textDecoration: "underline" }}
-                  download
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      py: 5,
+                    }}
+                  >
+                    <ReactLoading
+                      type="bars"
+                      color={COLORS.PRIMARY}
+                      height={40}
+                      width={40}
+                    />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : paginatedData?.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  align="center"
+                  sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
                 >
-                  Download
-                </a>
-              ) : (
-                "--"
-              )
-            ) : col.key === "cancellation" ? (
-              (() => {
-                let parsedResponse = null;
-                try {
-                  parsedResponse = row.success_response
-                    ? JSON.parse(row.success_response)
-                    : null;
-                } catch (err) {
-                  parsedResponse = null;
-                }
-
-                const bookingId =
-                  parsedResponse?.Response?.Response?.BookingId ||
-                  parsedResponse?.BookingId;
-
-                if (row.status === "COMPLETED" && bookingId && row.status !== "CANCELLED") {
-                  return <CancelDialog bookingId={bookingId} />;
-                }
-
-                return "--";
-              })()
+                  No booking data available
+                </TableCell>
+              </TableRow>
             ) : (
-              row[col.key]
-            )}
-          </TableCell>
-        ))}
-      </TableRow>
-    ))
-  )}
-</TableBody>
+              paginatedData?.map((row, i) => (
+                <TableRow key={i}>
+                  {columns.map((col) => (
+                    <TableCell
+                      key={col.key}
+                      align="center"
+                      sx={{
+                        fontFamily: nunito.style,
+                        fontWeight: 600,
+                        whiteSpace: "nowrap",
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {col.key === "pdf_url" ? (
+                        row.pdf_url ? (
+                          <a
+                            href={row.pdf_url}
+                            target="_self"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: COLORS.SECONDARY,
+                              textDecoration: "underline",
+                            }}
+                            download
+                          >
+                            Download
+                          </a>
+                        ) : (
+                          "--"
+                        )
+                      ) : col.key === "cancellation" ? (
+                        (() => {
+                          let parsedResponse = null;
+                          try {
+                            parsedResponse = row.success_response
+                              ? JSON.parse(row.success_response)
+                              : null;
+                          } catch (err) {
+                            parsedResponse = null;
+                          }
 
+                          const bookingId =
+                            parsedResponse?.Response?.Response?.BookingId ||
+                            parsedResponse?.BookingId;
+
+                          if (
+                            row.status === "COMPLETED" &&
+                            bookingId &&
+                            row.status !== "CANCELLED"
+                          ) {
+                            return <CancelHotelDialog bookingId={bookingId} />;
+                          }
+
+                          return "--";
+                        })()
+                      ) : (
+                        row[col.key]
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
         </Table>
       </TableContainer>
 

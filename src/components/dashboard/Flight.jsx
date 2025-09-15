@@ -196,95 +196,99 @@ const Flight = ({ userId }) => {
               ))}
             </TableRow>
           </TableHead>
-        <TableBody>
-  {loading ? (
-    <TableRow>
-      <TableCell colSpan={columns.length} align="center">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            py: 5,
-          }}
-        >
-          <ReactLoading
-            type="bars"
-            color={COLORS.PRIMARY}
-            height={40}
-            width={40}
-          />
-        </Box>
-      </TableCell>
-    </TableRow>
-  ) : paginatedData?.length === 0 ? (
-    <TableRow>
-      <TableCell
-        colSpan={columns.length}
-        align="center"
-        sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
-      >
-        No booking data available
-      </TableCell>
-    </TableRow>
-  ) : (
-    paginatedData?.map((row, i) => (
-      <TableRow key={i}>
-        {columns.map((col) => (
-          <TableCell
-            key={col.key}
-            align="center"
-            sx={{
-              fontFamily: nunito.style,
-              fontWeight: 600,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {col.key === "updated_at" || col.key === "flightDate"
-              ? moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
-              : col.key === "cancellation"
-              ? (() => {
-                  let parsedResponse = null;
-                  try {
-                    parsedResponse = row.success_response
-                      ? JSON.parse(row.success_response)
-                      : null;
-                  } catch (err) {
-                    parsedResponse = null;
-                  }
-
-                  const bookingId =
-                    parsedResponse?.Response?.Response?.BookingId ||
-                    parsedResponse?.BookingId;
-
-                  return row.status === "COMPLETED" && bookingId ? (
-                    <CancelDialog bookingId={bookingId} />
-                  ) : (
-                    "--"
-                  );
-                })()
-              : col.key === "pdf_url"
-              ? row["pdf_url"]
-                ? (
-                  <a
-                    href={row["pdf_url"]}
-                    target="_self"
-                    rel="noopener noreferrer"
-                    style={{ color: COLORS.SECONDARY, textDecoration: "underline" }}
-                    download
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      py: 5,
+                    }}
                   >
-                    Download
-                  </a>
-                )
-                : "--"
-              : row[col.key]}
-          </TableCell>
-        ))}
-      </TableRow>
-    ))
-  )}
-</TableBody>
+                    <ReactLoading
+                      type="bars"
+                      color={COLORS.PRIMARY}
+                      height={40}
+                      width={40}
+                    />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : paginatedData?.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  align="center"
+                  sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
+                >
+                  No booking data available
+                </TableCell>
+              </TableRow>
+            ) : (
+              paginatedData?.map((row, i) => (
+                <TableRow key={i}>
+                  {columns.map((col) => (
+                    <TableCell
+                      key={col.key}
+                      align="center"
+                      sx={{
+                        fontFamily: nunito.style,
+                        fontWeight: 600,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {col.key === "updated_at" || col.key === "flightDate" ? (
+                        moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
+                      ) : col.key === "cancellation" ? (
+                        (() => {
+                          let parsedResponse = null;
+                          try {
+                            parsedResponse = row.success_response
+                              ? JSON.parse(row.success_response)
+                              : null;
+                          } catch (err) {
+                            parsedResponse = null;
+                          }
 
+                          const bookingId =
+                            parsedResponse?.Response?.Response?.BookingId ||
+                            parsedResponse?.BookingId;
+
+                          return row.status === "COMPLETED" && bookingId ? (
+                            <CancelDialog bookingId={bookingId} />
+                          ) : (
+                            "--"
+                          );
+                        })()
+                      ) : col.key === "pdf_url" ? (
+                        row["pdf_url"] ? (
+                          <a
+                            href={row["pdf_url"]}
+                            target="_self"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: COLORS.SECONDARY,
+                              textDecoration: "underline",
+                            }}
+                            download
+                          >
+                            Download
+                          </a>
+                        ) : (
+                          "--"
+                        )
+                      ) : (
+                        row[col.key]
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
         </Table>
       </TableContainer>
 

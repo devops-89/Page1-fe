@@ -223,14 +223,35 @@ const RoundTrip = () => {
   return (
     <div>
       {/* {console.log("cabin class:", cabin_class)} */}
-      <Grid2 container alignItems={"center"}>
+      <Grid2
+        container
+        alignItems={"center"}
+        justifyContent={"center"}
+        sx={{
+          display: "flex",
+          alignItems: "stretch",
+          overflow: "visible",
+          gap: { xs: 0.5, lg: 1 },
+        }}
+        spacing={2}
+      >
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
+<<<<<<< HEAD
             border: "1px solid #808080",
             borderTopLeftRadius: { xs: 0, sm: 4 },
             borderBottomLeftRadius: { xs: 0, sm: 4 },
             // borderRight: "none",
+=======
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
           }}
         >
           <Typography
@@ -239,7 +260,6 @@ const RoundTrip = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
             }}
           >
             From
@@ -341,8 +361,13 @@ const RoundTrip = () => {
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #808080",
-
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
             position: "relative",
           }}
         >
@@ -352,7 +377,6 @@ const RoundTrip = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
             }}
           >
             To
@@ -454,8 +478,18 @@ const RoundTrip = () => {
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
+<<<<<<< HEAD
             border: "1px solid #808080",
 
+=======
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
             position: "relative",
           }}
         >
@@ -465,7 +499,6 @@ const RoundTrip = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
             }}
           >
             Departure
@@ -499,8 +532,13 @@ const RoundTrip = () => {
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #808080",
-
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
             position: "relative",
           }}
         >
@@ -510,7 +548,6 @@ const RoundTrip = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
             }}
           >
             Return Date
@@ -546,10 +583,21 @@ const RoundTrip = () => {
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
+<<<<<<< HEAD
             border: "1px solid #808080",
             position: "relative",
             borderTopRightRadius: { xs: 0, sm: 4 },
             borderBottomRightRadius: { xs: 0, sm: 4 },
+=======
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
+            position: "relative",
+>>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
           }}
         >
           <Typography
@@ -558,7 +606,6 @@ const RoundTrip = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              pt: 1,
             }}
           >
             Travellers and cabin class
