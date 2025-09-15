@@ -18,7 +18,8 @@ import {
 } from "@mui/material";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
-
+import { dashboardController } from "@/api/dashboardController";
+import CancelHotelDialog from "./CancelHotelDialog";
 const columns = [
   { key: "sl", label: "SL" },
   { key: "bookingId", label: "Booking ID" },
@@ -111,20 +112,52 @@ const Hotel = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch, pageSize]);
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        setLoading(true);
+        let response = await dashboardController.getHotelBookingByUserId(
+          userId,
+          currentPage,
+          pageSize,
+          debouncedSearch?.trim() || ""
+        );
 
-  const filteredData = dummyData.filter((item) =>
-    columns.some((col) =>
-      String(item[col.key] || "")
-        .toLowerCase()
-        .includes(debouncedSearch.toLowerCase())
-    )
-  );
+        // Map response → table rows
+        const docs = response.data.data.docs.map((item) => {
+          let orderDetails = {};
+          try {
+            orderDetails = JSON.parse(item.order_request_second || "{}");
+          } catch (e) {
+            console.error("Error parsing order_request_second", e);
+          }
 
-  const pageCount = Math.ceil(filteredData.length / pageSize);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+          return {
+            ...item,
+            journey: orderDetails.hotelName || "--", // Hotel Name
+            journey_type: orderDetails.roomType || "--", // Room Type
+            updated_at: orderDetails.checkIn || item.updated_at, // Check In
+            flightDate: orderDetails.checkOut || item.updated_at, // Check Out
+            amount: item.amount, // Amount stays same
+          };
+        });
+
+        setFetchedData(docs);
+        setTotalItems(response.data.data.totalDocs);
+      } catch (error) {
+        console.error("Error fetching hotel bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [userId, currentPage, debouncedSearch]);
+
+  // required Data
+  const paginatedData = fetchedData;
+  const pageCount = Math.ceil(totalItems / pageSize);
+  // console.log("PaginatedData: ", fetchedData);
 
   return (
     <Box
@@ -232,18 +265,38 @@ const Hotel = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedData.length === 0 ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      py: 5,
+                    }}
+                  >
+                    <ReactLoading
+                      type="bars"
+                      color={COLORS.PRIMARY}
+                      height={40}
+                      width={40}
+                    />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : paginatedData?.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
                   align="center"
                   sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
                 >
-                  No bookings found
+                  No booking data available
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedData.map((row, i) => (
+              paginatedData?.map((row, i) => (
                 <TableRow key={i}>
                   {columns.map((col) => (
                     <TableCell
@@ -253,12 +306,53 @@ const Hotel = () => {
                         fontFamily: nunito.style,
                         fontWeight: 600,
                         whiteSpace: "nowrap",
+                        maxWidth: 200,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
                       }}
                     >
-                      {col.key === "invoice" ? (
-                        <a href={`/${row[col.key]}`} download>
-                          {row[col.key]}
-                        </a>
+                      {col.key === "pdf_url" ? (
+                        row.pdf_url ? (
+                          <a
+                            href={row.pdf_url}
+                            target="_self"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: COLORS.SECONDARY,
+                              textDecoration: "underline",
+                            }}
+                            download
+                          >
+                            Download
+                          </a>
+                        ) : (
+                          "--"
+                        )
+                      ) : col.key === "cancellation" ? (
+                        (() => {
+                          let parsedResponse = null;
+                          try {
+                            parsedResponse = row.success_response
+                              ? JSON.parse(row.success_response)
+                              : null;
+                          } catch (err) {
+                            parsedResponse = null;
+                          }
+
+                          const bookingId =
+                            parsedResponse?.Response?.Response?.BookingId ||
+                            parsedResponse?.BookingId;
+
+                          if (
+                            row.status === "COMPLETED" &&
+                            bookingId &&
+                            row.status !== "CANCELLED"
+                          ) {
+                            return <CancelHotelDialog bookingId={bookingId} />;
+                          }
+
+                          return "--";
+                        })()
                       ) : (
                         row[col.key]
                       )}

@@ -28,7 +28,8 @@ import footer from "@/banner/footer.svg";
 import { TiSocialFacebook } from "react-icons/ti";
 import { RiLinkedinFill } from "react-icons/ri";
 import { useRouter } from "next/router";
-import Link from "next/link";
+import NextLink from "next/link";
+import Link from "@mui/material/Link";
 const Footer = () => {
   const router = useRouter();
   const phone = useMediaQuery("(max-width:600px)");
@@ -102,9 +103,7 @@ const Footer = () => {
             </List>
           </Grid2>
 
-
-
-<Grid2 size={{ lg: 3, sm: 6, xs: 6 }}>
+          <Grid2 size={{ lg: 3, sm: 6, xs: 6 }}>
             <Typography
               sx={{
                 fontSize: { lg: 25, sm: 20, xs: 20 },
@@ -114,13 +113,13 @@ const Footer = () => {
                 textAlign: "center",
               }}
             >
-            Additional Services
+              Additional Services
             </Typography>
             <List>
               {data.destinations.slice(0, 5).map((val, i) => (
                 <ListItemButton key={i} sx={{ padding: 0, mb: 1 }}>
                   <ListItemText
-                   onClick={() => handlePage(val.url)}
+                    onClick={() => handlePage(val.url)}
                     primary={
                       <Typography
                         sx={{
@@ -139,7 +138,6 @@ const Footer = () => {
               ))}
             </List>
           </Grid2>
-
 
           <Grid2 size={{ lg: 3, sm: 6, xs: 6 }}>
             <Typography
@@ -177,10 +175,7 @@ const Footer = () => {
             </List>
           </Grid2>
 
-         
-
-
-           <Grid2 size={{ lg: 3, sm: 6, xs: 6 }}>
+          <Grid2 size={{ lg: 3, sm: 6, xs: 6 }}>
             <Typography
               sx={{
                 fontSize: { lg: 25, sm: 20, xs: 20 },
@@ -219,8 +214,6 @@ const Footer = () => {
               ))}
             </List>
           </Grid2>
-
-
         </Grid2>
         <Box
           sx={{
@@ -469,17 +462,25 @@ const Footer = () => {
               sx={{ fontSize: 14, fontFamily: nunito.style }}
               textAlign={"center"}
             >
-              Copyright © 2025. All Rights Reserved,{" "}
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  color: COLORS.SECONDARY,
-                  fontFamily: nunito.style,
-                }}
-                component={"span"}
+              Copyright © 2025{" "}
+              <Link
+                component={NextLink}
+                href="/"
+                underline="none"
+                sx={{ textDecoration: "none" }}
               >
-                Page1Travels{" "}
-              </Typography>
+                <Typography
+                  sx={{
+                    fontSize: 14,
+                    color: COLORS.SECONDARY,
+                    fontFamily: nunito.style,
+                  }}
+                  component={"span"}
+                >
+                  Page1Travels{" "}
+                </Typography>
+              </Link>
+              All Rights Reserved.
             </Typography>
           </Grid2>
           <Grid2 size={{ lg: 4, sm: 6, xs: 12 }} mt={{ lg: 0, xs: 1 }}>

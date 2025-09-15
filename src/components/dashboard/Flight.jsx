@@ -240,28 +240,49 @@ const Flight = ({ userId }) => {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      {col.key === "updated_at" || col.key === "flightDate"
-                        ? moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
-                        : col.key === "cancellation"
-                        ? (() => {
-                            let parsedResponse = null;
+                      {col.key === "updated_at" || col.key === "flightDate" ? (
+                        moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
+                      ) : col.key === "cancellation" ? (
+                        (() => {
+                          let parsedResponse = null;
+                          try {
+                            parsedResponse = row.success_response
+                              ? JSON.parse(row.success_response)
+                              : null;
+                          } catch (err) {
+                            parsedResponse = null;
+                          }
 
-                            
-                              parsedResponse =JSON.parse(row["success_response"])
-                              console.log("parsed Response:",parsedResponse);
-                                 
-                         
+                          const bookingId =
+                            parsedResponse?.Response?.Response?.BookingId ||
+                            parsedResponse?.BookingId;
 
-                            return row.status === "COMPLETED" &&
-                              (parsedResponse != null) ? (
-                              <CancelDialog bookingId={parsedResponse?.Response?.Response?.BookingId || parsedResponse?.BookingId} />
-                            ) : (
-                              "--"
-                            );
-                          })()
-                        : col.key === "ticket"
-                        ? "--"
-                        : row[col.key]}
+                          return row.status === "COMPLETED" && bookingId ? (
+                            <CancelDialog bookingId={bookingId} />
+                          ) : (
+                            "--"
+                          );
+                        })()
+                      ) : col.key === "pdf_url" ? (
+                        row["pdf_url"] ? (
+                          <a
+                            href={row["pdf_url"]}
+                            target="_self"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: COLORS.SECONDARY,
+                              textDecoration: "underline",
+                            }}
+                            download
+                          >
+                            Download
+                          </a>
+                        ) : (
+                          "--"
+                        )
+                      ) : (
+                        row[col.key]
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>

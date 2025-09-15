@@ -309,7 +309,6 @@ const Multiway = () => {
         sx={{
           maxHeight: "400px",
           overflowY: "auto",
-          padding: { xs: 0, sm:1 },
           borderRadius: 4,
         }}
       >
@@ -322,24 +321,24 @@ const Multiway = () => {
             sx={{
               marginBottom: 2,
               display: "flex",
-              alignItems: "stretch",
-              borderRadius: 4,
-              padding: 2,
+              alignItems: "center",
+              overflow: "visible",
+              justifyContent: "center",
+              gap: { xs: 0.5, lg: 1 },
             }}
+            spacing={2}
           >
             {/* From Field */}
             <Grid2
-              // size={{lg:3 ,sm:6 ,xs:12}}
-              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
+              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
               sx={{
-                border: "1px solid #808080",
-                borderTopLeftRadius: {xs:0, sm:4},
-                borderBottomLeftRadius: {xs:0, sm:4},
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-
-                justifyContent: "center",
+                border: "1px solid #D9D9D9",
+                background: "#F9F9F9",
+                borderTopLeftRadius: { xs: 6, sm: 4 },
+                borderBottomLeftRadius: { xs: 6, sm: 4 },
+                borderTopRightRadius: { xs: 6, sm: 4 },
+                borderBottomRightRadius: { xs: 6, sm: 4 },
+                overflow: "visible",
               }}
             >
               <Typography
@@ -348,7 +347,6 @@ const Multiway = () => {
                   fontFamily: nunito.style,
                   color: COLORS.DARKGREY,
                   px: 2,
-                  pt: 1,
                 }}
               >
                 From
@@ -452,15 +450,16 @@ const Multiway = () => {
 
             {/* To Field */}
             <Grid2
-              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
+              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
               sx={{
-                border: "1px solid #808080",
+                border: "1px solid #D9D9D9",
+                background: "#F9F9F9",
+                borderTopLeftRadius: { xs: 6, sm: 4 },
+                borderBottomLeftRadius: { xs: 6, sm: 4 },
+                borderTopRightRadius: { xs: 6, sm: 4 },
+                borderBottomRightRadius: { xs: 6, sm: 4 },
+                overflow: "visible",
                 position: "relative",
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-
-                justifyContent: "center",
               }}
             >
               <Typography
@@ -469,7 +468,6 @@ const Multiway = () => {
                   fontFamily: nunito.style,
                   color: COLORS.DARKGREY,
                   px: 2,
-                  pt: 1,
                 }}
               >
                 To
@@ -575,9 +573,15 @@ const Multiway = () => {
             {/* Departure Field */}
 
             <Grid2
-              size={{ lg: 3, xs: index == 0 ? 6 : 12, md: 2.4 }}
+              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
               sx={{
-                border: "1px solid #808080",
+                border: "1px solid #D9D9D9",
+                background: "#F9F9F9",
+                borderTopLeftRadius: { xs: 6, sm: 4 },
+                borderBottomLeftRadius: { xs: 6, sm: 4 },
+                borderTopRightRadius: { xs: 6, sm: 4 },
+                borderBottomRightRadius: { xs: 6, sm: 4 },
+                overflow: "visible",
                 position: "relative",
               }}
             >
@@ -587,7 +591,6 @@ const Multiway = () => {
                   fontFamily: nunito.style,
                   color: COLORS.DARKGREY,
                   px: 2,
-                  pt: 1,
                 }}
               >
                 Departure
@@ -616,14 +619,17 @@ const Multiway = () => {
               </LocalizationProvider>
             </Grid2>
             <Grid2
-              size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
+              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
               sx={{
-                border: index === 0 && "1px solid #808080",
+                border: "1px solid #D9D9D9",
+                background: "#F9F9F9",
+                borderTopLeftRadius: { xs: 6, sm: 4 },
+                borderBottomLeftRadius: { xs: 6, sm: 4 },
+                borderTopRightRadius: { xs: 6, sm: 4 },
+                borderBottomRightRadius: { xs: 6, sm: 4 },
+                overflow: "visible",
                 position: "relative",
-
-                pb: 1,
               }}
-              textAlign={{ lg: "center", xs: "start" }}
             >
               {index === 0 ? (
                 <>
@@ -632,8 +638,7 @@ const Multiway = () => {
                       fontSize: { lg: 15, md: 13, sm: 12, xs: 12 },
                       fontFamily: nunito.style,
                       color: COLORS.DARKGREY,
-                      px: 2,
-                      pt: 1,
+                      px: 1,
                     }}
                   >
                     Travellers and cabin class
@@ -662,7 +667,6 @@ const Multiway = () => {
               ) : (
                 <Box
                   sx={{
-                    height: "100%",
                     pb: 2,
                     display: "flex",
                     alignItems: "center",
@@ -686,30 +690,33 @@ const Multiway = () => {
                 // <></>
               )}
             </Grid2>
-
-            {index === forms.length - 1 && forms.length < maxForms && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                  width: "100%",
-                  mt: index === 0 && 1,
-                }}
-              >
-                <Button
-                  variant="contained"
-                  onClick={addForm}
+            <Grid2 size={{ xs: 12 }}>
+              {index === forms.length - 1 && forms.length < maxForms && (
+                <Box
                   sx={{
-                    fontSize: { lg: 15, md: 14, sm: 10, xs: 9.5 },
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-end",
+                    width: "100%",
+
                   }}
                 >
-                  Add Another Flight
-                </Button>
-              </Box>
-            )}
+                  <Button
+                    variant="contained"
+                    onClick={addForm}
+                    sx={{
+                      fontSize: { lg: 15, md: 14, sm: 10, xs: 9.5 },
+                      mr: { xs: 0, md: 1.6},
+                    }}
+                  >
+                    Add Another Flight
+                  </Button>
+                </Box>
+              )}
+            </Grid2>
           </Grid2>
         ))}
+
         <Grid2 size={{ lg: 12, xs: 12, sm: 12, md: 12 }} textAlign={"center"}>
           <Button
             sx={{

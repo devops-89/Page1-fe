@@ -196,7 +196,18 @@ export const validationSchema = (
 };
 
 export const helicopterBookingValidationSchema = Yup.object({
-  fullName: Yup.string().required("Please Enter Full Name"),
+  fullName: Yup.string()
+    .required("Please Enter Full Name")
+    .test(
+      "len",
+      "Full name must be at least 2 characters",
+      (val) => !!val && val.trim().length >= 2
+    )
+    .test(
+      "max-len",
+      "Full name must be at most 156 characters",
+      (val) => !!val && val.trim().length <= 156
+    ),
   phoneNumber: Yup.string().required("Please Enter Phone Number"),
   email: Yup.string()
     .required("Please Enter Email")
