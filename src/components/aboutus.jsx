@@ -55,13 +55,6 @@ const AboutUs = () => {
               <Box
                 sx={{
                   backgroundColor: COLORS.PRIMARY,
-<<<<<<< HEAD
-                  width: { lg: 500, md: "100%", sm: "100%", xs: "100%" },
-                  overflow: "hidden",
-                  height: { lg: 500, md: 420, sm: 360, xs: 220 },
-                  borderRadius: { xs: 3, sm: 5 },
-                  mx: { xs: "auto", sm: 0 },
-=======
                   position: "relative",
                   width: { lg: 500, md: "100%", sm: "100%", xs: "100%" },
                   aspectRatio: {
@@ -73,23 +66,15 @@ const AboutUs = () => {
                   borderRadius: { xs: 3, sm: 5 },
                   mx: { xs: "auto", sm: 0 },
                   overflow: "hidden",
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                 }}
               >
                 <Image
                   src={about}
                   alt="About Page1 Travels"
-<<<<<<< HEAD
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-=======
                   fill
                   style={{
                     objectFit: "contain",
                     objectPosition: "center",
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   }}
                 />
               </Box>
@@ -208,22 +193,8 @@ const AboutUs = () => {
               ) : (
                 <Box
                   sx={{
-<<<<<<< HEAD
-                    fontSize: 12,
-                    p: 1.2,
-                    backgroundColor: "lightGrey",
-                    color: COLORS.BLACK,
-                    borderRadius: 4,
-                    width: 140,
-                    mt: 2,
-                    ":hover": { backgroundColor: COLORS.PRIMARY },
-                    fontFamily: nunito.style,
-                    fontWeight: 600,
-                    textTransform: "capitalize",
-=======
                     display: "flex",
                     justifyContent: { xs: "center", sm: "flex-start" },
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   }}
                 >
                   <Button

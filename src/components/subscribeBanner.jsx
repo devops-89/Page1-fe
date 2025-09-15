@@ -124,24 +124,8 @@ const SubscribeBanner = () => {
                 </List>
                 <Box
                   sx={{
-<<<<<<< HEAD
-                    mt: { lg: 4, sm: 2 },
-                    fontSize: 14,
-                    border: `1px solid ${COLORS.PRIMARY}`,
-                    width: 150,
-                    color: COLORS.SECONDARY,
-                    backgroundColor: COLORS.PRIMARY,
-                    fontWeight: 600,
-                    fontFamily: raleway.style,
-                    ":hover": {
-                      color: COLORS.PRIMARY,
-                      border: `1px solid ${COLORS.SECONDARY}`,
-                      backgroundColor: COLORS.SECONDARY,
-                    },
-=======
                     display: "flex",
                     justifyContent: { xs: "center", sm: "flex-start" },
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   }}
                 >
                   <Button

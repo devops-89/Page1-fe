@@ -70,16 +70,7 @@ const Banner = () => {
                   minHeight: "650px",
                 }}
               >
-<<<<<<< HEAD
-                <Grid2
-                  container
-                  sx={{
-                    mt: { xs: 10, sm: 12, md: 12, lg: 15 },
-                  }}
-                >
-=======
                 {showHeroText && (
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   <Grid2
                     container
                     sx={{
@@ -91,21 +82,6 @@ const Banner = () => {
                       margin="auto"
                       className="animate__animated animate__bounceInLeft"
                     >
-<<<<<<< HEAD
-                      TOUR & TRAVEL
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: { xs: 20, sm: 30, md: 40, lg: 50 },
-                        color: COLORS.WHITE,
-                        textAlign: "center",
-                        fontFamily: raleway.style,
-                        fontWeight: 700,
-                      }}
-                    >
-                      {val.title}
-                    </Typography>
-=======
                       <Typography
                         sx={{
                           fontSize: 18,
@@ -130,7 +106,6 @@ const Banner = () => {
                         {val.title}
                       </Typography>
                     </Grid2>
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
                   </Grid2>
                 )}
               </Box>
@@ -144,13 +119,6 @@ const Banner = () => {
         sx={{
           position: "absolute",
           zIndex: 99,
-<<<<<<< HEAD
-          bottom: "0",
-          left: 0,
-          right: 0,
-          transform: "translateX(-50%, 50%)",
-          pb: "40px",
-=======
           bottom: 0,
           left: "50%",
           transform: {
@@ -159,7 +127,6 @@ const Banner = () => {
           width: "100%",
           maxWidth: "1200px",
           px: 2,
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
         }}
       >
         <Grid2 container>
@@ -174,19 +141,11 @@ const Banner = () => {
             }}
           >
             <Box
-<<<<<<< HEAD
-              sx={{
-                maxHeight: "380px",
-                overflowY: "scroll",
-                position: "relative",
-              }}
-=======
             // sx={{
             //   maxHeight: "380px",
             //   overflowY: "scroll",
             //   position: "relative",
             // }}
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
             >
               <Tabs
                 value={value}

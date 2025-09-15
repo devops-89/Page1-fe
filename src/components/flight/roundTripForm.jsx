@@ -238,12 +238,6 @@ const RoundTrip = () => {
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-<<<<<<< HEAD
-            border: "1px solid #808080",
-            borderTopLeftRadius: { xs: 0, sm: 4 },
-            borderBottomLeftRadius: { xs: 0, sm: 4 },
-            // borderRight: "none",
-=======
             border: "1px solid #D9D9D9",
             background: "#F9F9F9",
             borderTopLeftRadius: { xs: 6, sm: 4 },
@@ -251,7 +245,6 @@ const RoundTrip = () => {
             borderTopRightRadius: { xs: 6, sm: 4 },
             borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
           }}
         >
           <Typography
@@ -478,10 +471,6 @@ const RoundTrip = () => {
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-<<<<<<< HEAD
-            border: "1px solid #808080",
-
-=======
             border: "1px solid #D9D9D9",
             background: "#F9F9F9",
             borderTopLeftRadius: { xs: 6, sm: 4 },
@@ -489,7 +478,6 @@ const RoundTrip = () => {
             borderTopRightRadius: { xs: 6, sm: 4 },
             borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
             position: "relative",
           }}
         >
@@ -583,12 +571,6 @@ const RoundTrip = () => {
         <Grid2
           size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-<<<<<<< HEAD
-            border: "1px solid #808080",
-            position: "relative",
-            borderTopRightRadius: { xs: 0, sm: 4 },
-            borderBottomRightRadius: { xs: 0, sm: 4 },
-=======
             border: "1px solid #D9D9D9",
             background: "#F9F9F9",
             borderTopLeftRadius: { xs: 6, sm: 4 },
@@ -597,7 +579,6 @@ const RoundTrip = () => {
             borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
             position: "relative",
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
           }}
         >
           <Typography

@@ -306,10 +306,6 @@ const Multiway = () => {
         sx={{
           maxHeight: "400px",
           overflowY: "auto",
-<<<<<<< HEAD
-          padding: { xs: 0, sm: 1 },
-=======
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
           borderRadius: 4,
         }}
       >
@@ -331,19 +327,6 @@ const Multiway = () => {
           >
             {/* From Field */}
             <Grid2
-<<<<<<< HEAD
-              // size={{lg:3 ,sm:6 ,xs:12}}
-              size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
-              sx={{
-                border: "1px solid #808080",
-                borderTopLeftRadius: { xs: 0, sm: 4 },
-                borderBottomLeftRadius: { xs: 0, sm: 4 },
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-
-                justifyContent: "center",
-=======
               size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
               sx={{
                 border: "1px solid #D9D9D9",
@@ -353,7 +336,6 @@ const Multiway = () => {
                 borderTopRightRadius: { xs: 6, sm: 4 },
                 borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
               }}
             >
               <Typography
@@ -466,11 +448,7 @@ const Multiway = () => {
 
             {/* To Field */}
             <Grid2
-<<<<<<< HEAD
-              size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
-=======
               size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
               sx={{
                 border: "1px solid #D9D9D9",
                 background: "#F9F9F9",
@@ -594,11 +572,7 @@ const Multiway = () => {
             {/* Departure Field */}
 
             <Grid2
-<<<<<<< HEAD
-              size={{ lg: 3, xs: 12, md: 2.4 }}
-=======
               size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
               sx={{
                 border: "1px solid #D9D9D9",
                 background: "#F9F9F9",
@@ -647,11 +621,7 @@ const Multiway = () => {
               </LocalizationProvider>
             </Grid2>
             <Grid2
-<<<<<<< HEAD
-              size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
-=======
               size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
->>>>>>> 5fec59774fc83ce6d3636101a2987d486c32efaa
               sx={{
                 border: "1px solid #D9D9D9",
                 background: "#F9F9F9",
