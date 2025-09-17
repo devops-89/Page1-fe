@@ -5,6 +5,9 @@ import {
   basicPublicApi,
 } from "./config";
 
+
+import {jwtDecode} from "jwt-decode"
+
 export const authenticationController = {
   registerUser: async (data) => {
     try {
@@ -26,10 +29,21 @@ export const authenticationController = {
   login: async (data) => {
     try {
       let result = await publicApi.post("/login", data);
+      console.log("token decrypted:",jwtDecode(result.data.data.access_token));
       return result;
     } catch (error) {
       throw error;
     }
+  },
+  resetAccessToken: async (data)=>{
+    try{
+        let result=await publicApi.post("/renewAccessToken",data);
+        return result;
+    }
+    catch(error){
+       throw error;
+    }
+
   },
   forgotPassword: async (data) => {
     try {

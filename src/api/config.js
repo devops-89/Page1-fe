@@ -1,117 +1,90 @@
-const { default: axios } = require("axios");
-const { APIURL } = require("./serverConstant");
-// const { config } = require("next/dist/build/templates/pages");
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { APIURL } from "./serverConstant";
+import { fetchNewToken } from "./getToken";
 
-const securedApi = axios.create({
+// ---- Create axios instances ----
+export const securedApi = axios.create({
   baseURL: APIURL.authenticationUrl,
 });
 
-const userSecuredApi = axios.create({
+export const userSecuredApi = axios.create({
   baseURL: APIURL.userUrl,
 });
 
-const basicPublicApi = axios.create({
-  baseURL: APIURL.basicUrl,
-});
-const hotlerPublicApi = axios.create({
-  baseURL: APIURL.hotlerUrl,
-});
-
-const securedFlightApi = axios.create({
+export const securedFlightApi = axios.create({
   baseURL: APIURL.authFlightUrl,
 });
 
-const securedPaymentUrl = axios.create({
+export const securedHotelApi = axios.create({
+  baseURL: APIURL.hotelUrl,
+});
+
+export const securedPaymentUrl = axios.create({
   baseURL: APIURL.authPaymentUrl,
 });
 
-const securedHotelPaymentUrl = axios.create({
+export const securedHotelPaymentUrl = axios.create({
   baseURL: APIURL.hotelAuthPaymentUrl,
 });
 
-const flightPublicApi = axios.create({
+// ---- Attach interceptor for secured requests ----
+const securedInstances = [
+  securedApi,
+  userSecuredApi,
+  securedFlightApi,
+  securedHotelApi,
+  securedPaymentUrl,
+  securedHotelPaymentUrl,
+];
+
+securedInstances.forEach((instance) => {
+  instance.interceptors.request.use(async (config) => {
+    let token = localStorage.getItem("access_token");
+
+    if (token) {
+      const { exp } = jwtDecode(token);
+      const now = Math.floor(Date.now() / 1000);
+
+      if (exp <= now) {
+        token = await fetchNewToken(); 
+      }
+    }
+
+    if (token) {
+      config.headers.accesstoken = token;
+    }
+
+    return config;
+  });
+});
+
+// ---- Public APIs (no token needed) ----
+export const basicPublicApi = axios.create({
+  baseURL: APIURL.basicUrl,
+});
+
+export const hotlerPublicApi = axios.create({
+  baseURL: APIURL.hotlerUrl,
+});
+
+export const flightPublicApi = axios.create({
   baseURL: APIURL.flightUrl,
 });
 
-const dashboardPublicApi = axios.create({
+export const dashboardPublicApi = axios.create({
   baseURL: APIURL.dashboardUrl,
 });
 
-const packagePublicApi = axios.create({
+export const packagePublicApi = axios.create({
   baseURL: APIURL.packageUrl,
 });
 
-const publicApi = axios.create({
+export const publicApi = axios.create({
   baseURL: APIURL.authenticationUrl,
 });
 
-const hotelPublicApi = axios.create({
+export const hotelPublicApi = axios.create({
   baseURL: APIURL.hotelUrl,
 });
 
-const securedHotelApi = axios.create({
-  baseURL: APIURL.hotelUrl,
-});
-
-userSecuredApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accesstoken = token;
-  return config;
-});
-
-securedApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accesstoken = token;
-  return config;
-});
-
-securedFlightApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accesstoken = token;
-  return config;
-});
-
-securedHotelApi.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accesstoken = token;
-  return config;
-});
-
-securedPaymentUrl.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accesstoken = token;
-  return config;
-});
-
-securedHotelPaymentUrl.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  config.headers.accesstoken = token;
-  return config;
-});
-
-securedFlightApi.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject(error.response?.data || error.message)
-);
-
-// error handling for fligh instance
-flightPublicApi.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject(error.response?.data || error.message)
-);
-
-module.exports = {
-  securedApi,
-  publicApi,
-  securedFlightApi,
-  securedHotelApi,
-  userSecuredApi,
-  flightPublicApi,
-  securedPaymentUrl,
-  hotelPublicApi,
-  basicPublicApi,
-  hotlerPublicApi,
-  dashboardPublicApi,
-  packagePublicApi,
-  securedHotelPaymentUrl,
-};
