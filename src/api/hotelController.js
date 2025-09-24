@@ -9,6 +9,14 @@ export const hotelController = {
       throw error;
     }
   },
+  hotelDetail: async (data) => {
+    try {
+      let result = await hotelPublicApi.post("/hotel/clientHotelDetails",data);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
   preBook: async (data) => {
     try {
       let result = await hotelPublicApi.post("/hotel/prebook", data);

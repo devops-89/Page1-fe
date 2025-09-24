@@ -243,8 +243,10 @@ const HotelPreBookPage = () => {
   // extracting the cancellation policy for formating it
   const cancellationPolicies =
     preBookResponse?.HotelResult[0]?.Rooms[0]?.CancelPolicies;
+   
   const cancellationMessages =
     useFormatCancellationPolicy(cancellationPolicies);
+     
 
   // calculating the number of adults and child
   useEffect(() => {
