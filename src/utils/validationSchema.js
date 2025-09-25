@@ -302,7 +302,7 @@ export const LeadPassengerValidation = (validationInfo) => {
         // PAN required only if type is adult
         PAN: Yup.string().when("type", {
           is: (type) => type === "adult",
-          then: (schema) => schema.required("PAN is required"),
+          then: (schema) => schema.required("PAN is required"), 
           otherwise: (schema) => schema.notRequired(),
         }),
 
