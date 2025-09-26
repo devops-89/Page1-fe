@@ -34,8 +34,9 @@ export const loginSchema = Yup.object({
     .required("Please Enter Valid Email"),
 
   password: Yup.string()
-    .max(20, "Password is Too Long!")
-    .required("Please Enter Password"),
+  .min(6, "Password Must be 6 Characters Long!")
+  .max(20, "Password is Too Long!")
+  .required("Please Enter Password"),
 });
 
 export const forgetPasswordSchema = Yup.object({
@@ -171,10 +172,7 @@ export const addFormSchema = Yup.object({
     .required("Phone No. is required"),
   country: Yup.string().trim(),
   address: Yup.string().trim().required("Address is required"),
-  email: Yup.string()
-    .trim()
-    .email("Invalid email")
-    .required("Email is Required"),
+   email: Yup.string().trim().email("Invalid email").required("Email is Required"),
 });
 
 export const validationSchema = (
@@ -374,6 +372,8 @@ export const CommonFieldValidation = Yup.object({
 export const getCombinedValidationSchema = (validationInfo) => {
   return Yup.object({
     commonFields: CommonFieldValidation,
-    guestForms: Yup.array().of(LeadPassengerValidation(validationInfo)),
+    guestForms: Yup.array().of(
+    LeadPassengerValidation(validationInfo)
+  )
   });
 };

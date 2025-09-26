@@ -41,4 +41,12 @@ export const hotelController = {
       throw error;
     }
   },
+  searchCountry: async (data) => {
+    try {
+      let result = await hotelPublicApi.get("/hotel/country-list", data);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
 };

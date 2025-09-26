@@ -14,7 +14,7 @@ import {
   styled,
   TextField,
   Typography,
-  useMediaQuery,
+  useMediaQuery
 } from "@mui/material";
 
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -91,6 +91,9 @@ const RoundTrip = () => {
     setAnchorEl(e.currentTarget);
   };
 
+
+
+
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
     if (newValue) {
@@ -135,6 +138,8 @@ const RoundTrip = () => {
     }
   };
 
+
+
   const getAllAirport = () => {
     flightController
       .getAllAirports()
@@ -147,6 +152,7 @@ const RoundTrip = () => {
         console.log("err", err);
       });
   };
+
 
   const searchFlight = () => {
     setButtonLoading(true);
@@ -175,6 +181,13 @@ const RoundTrip = () => {
         setButtonLoading(false);
       });
   };
+
+
+
+
+
+
+
 
   const submitHandler = () => {
     dispatch(resetSeatDetails());
@@ -214,11 +227,16 @@ const RoundTrip = () => {
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
 
+
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
       .then((data) => setState({ ...state, ip_address: data.ip }));
   };
+
+
+
+
 
   return (
     <div>
@@ -345,9 +363,9 @@ const RoundTrip = () => {
             slotProps={{
               popper: {
                 sx: {
-                  zIndex: 100,
-                },
-              },
+                  zIndex: 100
+                }
+              }
             }}
           />
         </Grid2>
@@ -362,6 +380,7 @@ const RoundTrip = () => {
             borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
             position: "relative",
+
           }}
         >
           <Typography
@@ -461,9 +480,9 @@ const RoundTrip = () => {
             slotProps={{
               popper: {
                 sx: {
-                  zIndex: 100,
-                },
-              },
+                  zIndex: 100
+                }
+              }
             }}
           />
         </Grid2>
@@ -479,6 +498,7 @@ const RoundTrip = () => {
             borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
             position: "relative",
+            borderRight: "none",
           }}
         >
           <Typography
@@ -542,10 +562,13 @@ const RoundTrip = () => {
           </Typography>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
+
               sx={{
                 fieldset: {
                   border: "none",
+
                 },
+
               }}
               maxDate={moment().add(90, "days")}
               minDate={
@@ -560,9 +583,9 @@ const RoundTrip = () => {
                 },
                 popper: {
                   sx: {
-                    zIndex: 100,
-                  },
-                },
+                    zIndex: 100
+                  }
+                }
               }}
             />
           </LocalizationProvider>
