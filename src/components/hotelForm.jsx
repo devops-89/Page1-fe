@@ -10,6 +10,7 @@ import ToastBar from "./toastBar";
 import { TOAST_STATUS } from "@/utils/enum";
 import { setToast } from "@/redux/reducers/toast";
 import { setHotelFormData } from "@/redux/reducers/hotel-reducers/HotelSearchData";
+import { useEffect } from "react";
 import {
   Autocomplete,
   Box,
@@ -44,7 +45,9 @@ const HotelForm = () => {
   const [checkOut, setCheckOut] = useState(null);
   const [userIp, setUserIp] = useState("");
   const [buttonLoading, setButtonLoading] = useState(false);
-
+  const [selectedNationality, setSelectedNationality] = useState(null);
+  const [nationalityOptions, setNationalityOptions] = useState([]);
+  const [nationalityLoading, setNationalityLoading] = useState(false);
   useFetchIP(setUserIp);
 
   const open = Boolean(anchorEl);
@@ -53,6 +56,51 @@ const HotelForm = () => {
   };
 
   const [inputValue, setInputValue] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    async function fetchNationalities() {
+      setNationalityLoading(true);
+      try {
+        const res = await hotelController.searchCountry();
+        const raw = res?.data?.data ?? res?.data ?? res ?? [];
+
+        const normalized = (Array.isArray(raw) ? raw : [])
+          .map((c) => {
+            return {
+              country_code:
+                c.country_code || c.code || c.countryCode || c.iso || c.iso2,
+              country_name:
+                c.country_name ||
+                c.name ||
+                c.countryName ||
+                c.label ||
+                c.country ||
+                c.country_fullname,
+            };
+          })
+          .filter((c) => c.country_code && c.country_name);
+
+        if (mounted) setNationalityOptions(normalized);
+      } catch (error) {
+        console.error("Failed to load nationality list:", error);
+        dispatch(
+          setToast({
+            open: true,
+            message: "Unable to load nationality list.",
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+      } finally {
+        if (mounted) setNationalityLoading(false);
+      }
+    }
+
+    fetchNationalities();
+    return () => {
+      mounted = false;
+    };
+  }, [dispatch]);
 
   // filter the hotel list
   const filteredOptions = useMemo(() => {
@@ -76,7 +124,13 @@ const HotelForm = () => {
 
   // -----------Handle Search---------------
   async function handleSearch() {
-    if (!checkIn || !checkOut || !selectedCity || !userIp) {
+    if (
+      !checkIn ||
+      !checkOut ||
+      !selectedCity ||
+      !userIp ||
+      !selectedNationality
+    ) {
       dispatch(
         setToast({
           open: true,
@@ -91,7 +145,7 @@ const HotelForm = () => {
       CheckIn: checkIn.format("YYYY-MM-DD"),
       CheckOut: checkOut.format("YYYY-MM-DD"),
       CityCodes: selectedCity.city_code,
-      GuestNationality: selectedCity.country_code,
+      GuestNationality: selectedNationality.country_code,
       EndUserIp: userIp,
       PaxRooms: paxRoom,
       ResponseTime: 23.0,
@@ -115,6 +169,7 @@ const HotelForm = () => {
         checkIn: checkIn.format("DD-MM-YYYY"),
         checkOut: checkOut.format("DD-MM-YYYY"),
         userIp,
+        nationality: selectedNationality,
       })
     );
 
@@ -262,9 +317,10 @@ const HotelForm = () => {
             )}
           />
         </Grid2>
+
         <Grid2
           // size={{ lg: 3, xs: 12, sm: 6 }}
-          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #D9D9D9",
             background: "#F9F9F9",
@@ -304,7 +360,7 @@ const HotelForm = () => {
         </Grid2>
         <Grid2
           // size={{ lg: 3, xs: 12, sm: 6 }}
-          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #D9D9D9",
             background: "#F9F9F9",
@@ -343,9 +399,68 @@ const HotelForm = () => {
             />
           </LocalizationProvider>
         </Grid2>
+
+        <Grid2
+          size={{ lg: 2, xs: 12, sm: 6, md: 2.4 }}
+          sx={{
+            border: "1px solid #D9D9D9",
+            background: "#F9F9F9",
+            borderTopLeftRadius: { xs: 6, sm: 4 },
+            borderBottomLeftRadius: { xs: 6, sm: 4 },
+            borderTopRightRadius: { xs: 6, sm: 4 },
+            borderBottomRightRadius: { xs: 6, sm: 4 },
+            overflow: "visible",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 15,
+              fontFamily: nunito.style,
+              color: COLORS.DARKGREY,
+              px: 2,
+            }}
+          >
+            Nationality
+          </Typography>
+
+          <Autocomplete
+            options={nationalityOptions}
+            loading={nationalityLoading}
+            getOptionLabel={(option) =>
+              option.country_name || option.country_code
+            }
+            isOptionEqualToValue={(option, value) =>
+              option.country_code === value.country_code
+            }
+            onChange={(_, value) => setSelectedNationality(value)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Select nationality"
+                sx={{ fieldset: { border: "none" } }}
+              />
+            )}
+            renderOption={(props, option) => (
+              <Box component="li" {...props}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  sx={{ width: "100%" }}
+                >
+                  <Typography sx={{ fontFamily: nunito.style }}>
+                    {option.country_name}
+                  </Typography>
+                  <Typography sx={{ fontFamily: nunito.style }}>
+                    {option.country_code}
+                  </Typography>
+                </Stack>
+              </Box>
+            )}
+          />
+        </Grid2>
         <Grid2
           // size={{ lg: 3, xs: 12, sm: 6 }}
-          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #D9D9D9",
             background: "#F9F9F9",
