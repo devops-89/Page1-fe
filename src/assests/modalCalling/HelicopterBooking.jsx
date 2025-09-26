@@ -139,7 +139,17 @@ const HelicopterBooking = () => {
                 fullWidth
                 label="Full Name"
                 id="fullName"
-                onChange={formik.handleChange}
+                name="fullName"
+                value={formik.values.fullName}
+                onChange={(e) => {
+                  let value = e.target.value;
+
+                  if (value.startsWith(" ")) {
+                    value = value.trimStart();
+                  }
+                  formik.setFieldValue("fullName", value);
+                }}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.fullName && Boolean(formik.errors.fullName)
                 }

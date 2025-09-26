@@ -54,20 +54,26 @@ const AboutUs = () => {
               <Box
                 sx={{
                   backgroundColor: COLORS.PRIMARY,
-                  width: { lg: 500, sm: "100%" },
-
+                  position: "relative",
+                  width: { lg: 500, md: "100%", sm: "100%", xs: "100%" },
+                  aspectRatio: {
+                    lg: "16/12",
+                    md: "16/10",
+                    sm: "16/9",
+                    xs: "16/9",
+                  },
+                  borderRadius: { xs: 3, sm: 5 },
+                  mx: { xs: "auto", sm: 0 },
                   overflow: "hidden",
-
-                  height: 500,
-                  borderRadius: 5,
                 }}
               >
                 <Image
                   src={about}
+                  alt="About Page1 Travels"
+                  fill
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit:"cover" 
+                    objectFit: "contain",
+                    objectPosition: "center",
                   }}
                 />
               </Box>
@@ -176,42 +182,48 @@ const AboutUs = () => {
                   </Typography>
                 </Box>
               ) : (
-                <Button
-                  endIcon={
-                    <Box
-                      sx={{
-                        border: `1px solid ${COLORS.BLACK}`,
-                        fontSize: 10,
-                        borderRadius: "50%",
-                        width: 20,
-                        height: 20,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: COLORS.BLACK,
-                      }}
-                    >
-                      <ArrowForwardIos sx={{ fontSize: 10 }} />
-                    </Box>
-                  }
+                <Box
                   sx={{
-                    fontSize: 12,
-                    p: 1.4,
-                    backgroundColor: "lightGrey",
-                    color: COLORS.BLACK,
-                    borderRadius: 4,
-                    width: 130,
-                    mt: 2,
-                    ":hover": {
-                      backgroundColor: COLORS.PRIMARY,
-                    },
-                    fontFamily: nunito.style,
-                    fontWeight: 600,
-                    textTransform: "capitalize",
+                    display: "flex",
+                    justifyContent: { xs: "center", sm: "flex-start" },
                   }}
                 >
-                  Learn More
-                </Button>
+                  <Button
+                    onClick={() => router.push("/about")}
+                    endIcon={
+                      <Box
+                        sx={{
+                          border: `1px solid ${COLORS.BLACK}`,
+                          fontSize: 10,
+                          borderRadius: "50%",
+                          width: 20,
+                          height: 20,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: COLORS.BLACK,
+                        }}
+                      >
+                        <ArrowForwardIos sx={{ fontSize: 10 }} />
+                      </Box>
+                    }
+                    sx={{
+                      fontSize: 12,
+                      p: 1.2,
+                      backgroundColor: "lightGrey",
+                      color: COLORS.BLACK,
+                      borderRadius: 2,
+                      width: 140,
+                      mt: 2,
+                      ":hover": { backgroundColor: COLORS.PRIMARY },
+                      fontFamily: nunito.style,
+                      fontWeight: 600,
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Learn More
+                  </Button>
+                </Box>
               )}
             </Grid2>
           </Grid2>

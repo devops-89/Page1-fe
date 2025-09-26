@@ -178,7 +178,7 @@ export const data = {
       location: "Lucknow",
       rating: 2.5,
       follower: "1.5k",
-      price: 2999,
+      price: "2,999",
     },
     {
       img: hotel2.src,
@@ -187,7 +187,7 @@ export const data = {
       bathroom: "1 Bathroom",
       location: "Mumbai",
       rating: 3,
-      price: 3599,
+      price: "3,599",
       follower: "2.3k",
     },
     {
@@ -197,7 +197,7 @@ export const data = {
       bathroom: "1 Bathroom",
       location: "Maharashtra",
       rating: 4,
-      price: 3999,
+      price: "3,999",
       follower: "3.5k",
     },
     {
@@ -207,7 +207,7 @@ export const data = {
       bathroom: "1 Bathroom",
       location: "Mumbai",
       rating: 4.5,
-      price: 15000,
+      price: "15,000",
       follower: "3.5k",
     },
     {
@@ -217,7 +217,7 @@ export const data = {
       bathroom: "1 Bathroom",
       location: "Mumbai",
       rating: 3.5,
-      price: 14000,
+      price: "14,000",
       follower: "3.5k",
     },
     {
@@ -227,7 +227,7 @@ export const data = {
       bathroom: "1 Bathroom",
       location: "Delhi",
       rating: 3.5,
-      price: 14000,
+      price: "14,000",
       follower: "3.5k",
     },
     {
@@ -237,7 +237,7 @@ export const data = {
       bathroom: "1 Bathroom",
       location: "Delhi",
       rating: 3.5,
-      price: 14000,
+      price: "14,000",
       follower: "3.5k",
     },
     {
@@ -247,7 +247,7 @@ export const data = {
       bathroom: "1 Bathroom",
       location: "Delhi",
       rating: 3.5,
-      price: 14000,
+      price: "14,000",
       follower: "3.5k",
     },
   ],
@@ -317,9 +317,9 @@ export const data = {
     },
 
     {
-      label: "How safe is my luggage whilst on the trip?",
+      label: "How safe is my luggage while on the trip?",
       value:
-        "We take every measure to keep your valuables safe while travelling. But still, both lockable luggage and travel insurance are a must to avoid any loss.",
+        "We take every measure to keep your valuables safe while traveling. But still, both lockable luggage and travel insurance are a must to avoid any loss.",
     },
     {
       label: "How can I know about the current offers?",
@@ -341,8 +341,8 @@ export const data = {
       url: "/helicopter",
     },
     {
-      label: "holiday Packages",
-      url: "/packages",
+      label: "Forex",
+      url: "/forex",
     },
     {
       label: "Cabs",
