@@ -21,12 +21,13 @@ import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { dashboardController } from "@/api/dashboardController";
 import CancelHotelDialog from "./CancelHotelDialog";
+
 const columns = [
   { key: "journey", label: "Hotel Name" },
   { key: "journey_type", label: "Room Type" },
   { key: "amount", label: "Price" },
   { key: "updated_at", label: "Check In" },
-  { key: "flightDate", label: "Chec Out" },
+  { key: "flightDate", label: "Check Out" },
   { key: "status", label: "Status" },
   { key: "pdf_url", label: "Invoice" },
   { key: "cancellation", label: "Cancel Booking" },
@@ -51,18 +52,18 @@ const Hotel = ({ userId }) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch, pageSize]);
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         setLoading(true);
-        let response = await dashboardController.getHotelBookingByUserId(
+        const response = await dashboardController.getHotelBookingByUserId(
           userId,
           currentPage,
           pageSize,
           debouncedSearch?.trim() || ""
         );
 
-        // Map response → table rows
         const docs = response.data.data.docs.map((item) => {
           let orderDetails = {};
           try {
@@ -73,11 +74,11 @@ const Hotel = ({ userId }) => {
 
           return {
             ...item,
-            journey: orderDetails.hotelName || "--", // Hotel Name
-            journey_type: orderDetails.roomType || "--", // Room Type
-            updated_at: orderDetails.checkIn || item.updated_at, // Check In
-            flightDate: orderDetails.checkOut || item.updated_at, // Check Out
-            amount: item.amount, // Amount stays same
+            journey: orderDetails.hotelName || "--",
+            journey_type: orderDetails.roomType || "--",
+            updated_at: orderDetails.checkIn || item.updated_at,
+            flightDate: orderDetails.checkOut || item.updated_at,
+            amount: item.amount,
           };
         });
 
@@ -93,10 +94,16 @@ const Hotel = ({ userId }) => {
     fetchBookings();
   }, [userId, currentPage, debouncedSearch]);
 
-  // required Data
-  const paginatedData = fetchedData;
   const pageCount = Math.ceil(totalItems / pageSize);
-  // console.log("PaginatedData: ", fetchedData);
+
+  const handleUpdateRow = (orderId, newStatus) => {
+    // Update the row in fetchedData after cancel API response
+    setFetchedData((prev) =>
+      prev.map((row) =>
+        row.order_id === orderId ? { ...row, status: newStatus } : row
+      )
+    );
+  };
 
   return (
     <Box
@@ -107,7 +114,6 @@ const Hotel = ({ userId }) => {
         py: { xs: 3, sm: 4, md: 5 },
       }}
     >
-      {/* Heading & Paragraph */}
       <Box mb={4} textAlign="center">
         <Typography
           variant="h5"
@@ -185,10 +191,7 @@ const Hotel = ({ userId }) => {
       {/* Table */}
       <TableContainer
         component={Paper}
-        sx={{
-          overflowX: "auto",
-          minHeight: "200px",
-        }}
+        sx={{ overflowX: "auto", minHeight: "200px" }}
       >
         <Table sx={{ minWidth: 650 }}>
           <TableHead sx={{ backgroundColor: COLORS.PRIMARY }}>
@@ -209,17 +212,13 @@ const Hotel = ({ userId }) => {
               ))}
             </TableRow>
           </TableHead>
+
           <TableBody>
             {loading ? (
               <TableRow>
                 <TableCell colSpan={columns.length} align="center">
                   <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      py: 5,
-                    }}
+                    sx={{ display: "flex", justifyContent: "center", py: 5 }}
                   >
                     <ReactLoading
                       type="bars"
@@ -230,18 +229,22 @@ const Hotel = ({ userId }) => {
                   </Box>
                 </TableCell>
               </TableRow>
-            ) : paginatedData?.length === 0 ? (
+            ) : fetchedData?.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
                   align="center"
-                  sx={{ py: 3, fontFamily: nunito.style, fontWeight: 600 }}
+                  sx={{
+                    py: 3,
+                    fontFamily: nunito.style,
+                    fontWeight: 600,
+                  }}
                 >
                   No booking data available
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedData?.map((row, i) => (
+              fetchedData.map((row, i) => (
                 <TableRow key={i}>
                   {columns.map((col) => (
                     <TableCell
@@ -274,30 +277,36 @@ const Hotel = ({ userId }) => {
                           "--"
                         )
                       ) : col.key === "cancellation" ? (
-                        (() => {
-                          let parsedResponse = null;
-                          try {
-                            parsedResponse = row.success_response
-                              ? JSON.parse(row.success_response)
-                              : null;
-                          } catch (err) {
-                            parsedResponse = null;
-                          }
-
-                          const bookingId =
-                            parsedResponse?.Response?.Response?.BookingId ||
-                            parsedResponse?.BookingId;
-
-                          if (
-                            row.status === "COMPLETED" &&
-                            bookingId &&
-                            row.status !== "CANCELLED"
-                          ) {
-                            return <CancelHotelDialog bookingId={bookingId} />;
-                          }
-
-                          return "--";
-                        })()
+                        row.status === "CANCELLING" ? (
+                          <button
+                            style={{
+                              padding: "6px 12px",
+                              backgroundColor: COLORS.PRIMARY,
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontFamily: nunito.style,
+                              fontWeight: 600,
+                            }}
+                            onClick={() =>
+                              alert(
+                                "Use Check Cancellation Status API to get the latest status"
+                              )
+                            }
+                          >
+                            Check Status
+                          </button>
+                        ) : row.status === "COMPLETED" ? (
+                          <CancelHotelDialog
+                            orderId={row.order_id}
+                            onInitiate={() => handleUpdateRow(row.order_id, "CANCELLING")}
+                          />
+                        ) : (
+                          "--"
+                        )
+                      ) : col.key === "status" ? (
+                        row.status
                       ) : (
                         row[col.key]
                       )}
@@ -321,8 +330,8 @@ const Hotel = ({ userId }) => {
       >
         <Typography sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
           Showing {(currentPage - 1) * pageSize + 1} to{" "}
-          {Math.min(currentPage * pageSize, paginatedData?.length)} of{" "}
-          {paginatedData?.length} entries
+          {Math.min(currentPage * pageSize, fetchedData?.length)} of{" "}
+          {fetchedData?.length} entries
         </Typography>
 
         <Stack spacing={2} direction="row">

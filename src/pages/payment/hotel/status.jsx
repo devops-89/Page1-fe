@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   Container,
@@ -8,15 +8,15 @@ import {
   Paper,
   Button,
   Box,
-  Grid2,
   Divider,
+  Grid2
 } from "@mui/material";
+
 
 import { CheckCircle } from "@mui/icons-material";
 import { keyframes } from "@emotion/react";
 import { COLORS } from "@/utils/colors";
 import background from "@/assests/payment_image/paymentBackground.png";
-// import airplan from "@/assests/payment_image/airPlan.png";
 import hotelImg from "@/assests/payment_image/Hotel.jpg";
 import { nunito } from "@/utils/fonts";
 import axios from "axios";
@@ -31,12 +31,13 @@ const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 `;
+
 const scaleIn = keyframes`
   from { opacity: 0; transform: scale(0); }
   to { opacity: 1; transform: scale(1); }
 `;
 
-export default function PaymentSuccess() {
+export default function PaymentStatus() {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -63,9 +64,7 @@ export default function PaymentSuccess() {
 
     setLoading(true);
     axios
-      .post(
-        `${baseUrl}/webhook/api/webhook/paymentDetails?paymentId=${paymentID}`
-      )
+      .post(`${baseUrl}/webhook/api/webhook/paymentDetails?paymentId=${paymentID}`)
       .then((res) => {
         setPaymentData(res.data);
         sessionStorage.setItem("payment_info", JSON.stringify(res.data));
@@ -76,14 +75,8 @@ export default function PaymentSuccess() {
       .finally(() => setLoading(false));
   }, [params]);
 
-  // const isHotel = useMemo(
-  //   () => paymentData?.notes?.module === "hotel",
-  //   [paymentData]
-  // );
   const isHotel = paymentData?.notes?.module === "hotel";
-
   const handleContinue = () => router.replace("/");
-
   const headerImage = isHotel ? hotelImg : background;
 
   return (
@@ -172,27 +165,6 @@ export default function PaymentSuccess() {
                   Payment Details
                 </Typography>
               </Grid2>
-              {/* <Grid2
-                xs={6}
-                sx={{
-                  visibility: {
-                    lg: "visible",
-                    md: "visible",
-                    sm: "visible",
-                    xs: "hidden",
-                  },
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  pr: 2,
-                }}
-              >
-                <Box
-                  component="img"
-                  // src={headerImage.src}
-                  alt="Type"
-                  sx={{ width: "35%" }}
-                />
-              </Grid2> */}
             </Grid2>
 
             {/* success icon + title */}
@@ -206,9 +178,7 @@ export default function PaymentSuccess() {
                 animation: `${scaleIn} 0.5s ease-in-out`,
               }}
             >
-              <CheckCircle
-                sx={{ fontSize: 45, color: COLORS.SUCCESS || "green" }}
-              />
+              <CheckCircle sx={{ fontSize: 45, color: COLORS.SUCCESS || "green" }} />
             </Box>
             <Typography
               variant="h5"
@@ -217,12 +187,8 @@ export default function PaymentSuccess() {
             >
               Payment Successful!
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mb: 1, fontFamily: nunito.style }}
-            >
-              Thank you for your payment. Your transaction has been processed
-              successfully.
+            <Typography variant="body2" sx={{ mb: 1, fontFamily: nunito.style }}>
+              Thank you for your payment. Your transaction has been processed successfully.
             </Typography>
             <Divider sx={{ mb: 2 }} />
 

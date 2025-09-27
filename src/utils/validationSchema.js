@@ -34,9 +34,9 @@ export const loginSchema = Yup.object({
     .required("Please Enter Valid Email"),
 
   password: Yup.string()
-  .min(6, "Password Must be 6 Characters Long!")
-  .max(20, "Password is Too Long!")
-  .required("Please Enter Password"),
+    .min(6, "Password Must be 6 Characters Long!")
+    .max(20, "Password is Too Long!")
+    .required("Please Enter Password"),
 });
 
 export const forgetPasswordSchema = Yup.object({
@@ -172,7 +172,10 @@ export const addFormSchema = Yup.object({
     .required("Phone No. is required"),
   country: Yup.string().trim(),
   address: Yup.string().trim().required("Address is required"),
-   email: Yup.string().trim().email("Invalid email").required("Email is Required"),
+  email: Yup.string()
+    .trim()
+    .email("Invalid email")
+    .required("Email is Required"),
 });
 
 export const validationSchema = (
@@ -272,91 +275,125 @@ export const selfDriveValidationSchema = Yup.object({
 });
 
 export const LeadPassengerValidation = (validationInfo) => {
+  const nameRegex = new RegExp(
+    `^[a-zA-Z${validationInfo.SpaceAllowed ? "\\s" : ""}${
+      validationInfo.SpecialCharAllowed ? "!@#$%^&*()\\-+=.,'" : ""
+    }]+$`
+  );
+
+  const nameSchema = Yup.string()
+    .required("Name is required")
+    .matches(nameRegex, "Invalid characters in name")
+    .min(
+      validationInfo.CharLimit ? validationInfo.PaxNameMinLength : 1,
+      `Minimum ${validationInfo.PaxNameMinLength} characters`
+    )
+    .max(
+      validationInfo.CharLimit ? validationInfo.PaxNameMaxLength : 100,
+      `Maximum ${validationInfo.PaxNameMaxLength} characters`
+    );
+
   return Yup.object().shape({
-    guests: Yup.array().of(
-      Yup.object().shape({
-        type: Yup.string().required(),
-        Title: Yup.string().required("Title is required"),
-        firstName: Yup.string().required("First name is required"),
-        lastName: Yup.string().required("Last name is required"),
+    guests: Yup.array()
+      .of(
+        Yup.object().shape({
+          type: Yup.string().required(),
+          Title: Yup.string().required("Title is required"),
+          firstName: nameSchema.label("First name"),
+          lastName: nameSchema.label("Last name"),
 
-        Age: Yup.number()
-          .required("Age is required")
-          .test("age-validation", "Age does not match type", function (value) {
-            const { type } = this.parent;
-            if (type === "adult" && value < 12) {
-              return this.createError({
-                message: "Adults must be at least 12 years old",
-              });
-            }
-            if (type === "child" && value >= 12) {
-              return this.createError({
-                message: "Children must be under 12 years old",
-              });
-            }
-            return true;
-          }),
+          Age: Yup.number()
+            .required("Age is required")
+            .test(
+              "age-validation",
+              "Age does not match type",
+              function (value) {
+                const { type } = this.parent;
+                if (type === "adult" && value < 12) {
+                  return this.createError({
+                    message: "Adults must be at least 12 years old",
+                  });
+                }
+                if (type === "child" && value >= 12) {
+                  return this.createError({
+                    message: "Children must be under 12 years old",
+                  });
+                }
+                return true;
+              }
+            ),
 
-        // PAN required only if type is adult
-        PAN: Yup.string().when("type", {
-          is: (type) => type === "adult",
-          then: (schema) => schema.required("PAN is required"), 
-          otherwise: (schema) => schema.notRequired(),
-        }),
+      PAN: Yup.string().when([], {
+  is: () => validationInfo?.PanMandatory,
+  then: (schema) => schema.required("PAN is required"),
+  otherwise: (schema) => schema.notRequired(),
+}),
+
 
         GuardianDetail: Yup.object().when("type", {
-          is: "child",
-          then: () =>
-            Yup.object().shape({
-              Title: Yup.string().required("Guardian title is required"),
-              FirstName: Yup.string().required(
-                "Guardian first name is required"
-              ),
-              LastName: Yup.string().required("Guardian last name is required"),
-              PAN: Yup.string().required("Guardian PAN is required"),
-            }),
-          otherwise: () =>
-            Yup.object().shape({
-              Title: Yup.string().notRequired(),
-              FirstName: Yup.string().notRequired(),
-              LastName: Yup.string().notRequired(),
-              PAN: Yup.string().notRequired(),
-            }),
-        }),
+  is: "child",
+  then: () =>
+    Yup.object().shape({
+      Title: Yup.string().required("Guardian title is required"),
+      FirstName: Yup.string().required("Guardian first name is required"),
+      LastName: Yup.string().required("Guardian last name is required"),
+      PAN: Yup.string().when([], {
+        is: () => validationInfo?.PanMandatory,
+        then: (schema) => schema.required("Guardian PAN is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+    }),
+  otherwise: () =>
+    Yup.object().shape({
+      Title: Yup.string().notRequired(),
+      FirstName: Yup.string().notRequired(),
+      LastName: Yup.string().notRequired(),
+      PAN: Yup.string().notRequired(),
+    }),
+}),
 
-        // GST fields (optional)
-        GSTCompanyName: Yup.string().notRequired(),
-        GSTCompanyAddress: Yup.string().notRequired(),
-        GSTCompanyContactNumber: Yup.string()
-          .matches(/^[0-9]{10}$/, "Enter valid 10-digit contact number")
-          .notRequired(),
-        GSTCompanyEmail: Yup.string().email("Invalid email").notRequired(),
-        GSTNumber: Yup.string().notRequired(),
+          GSTCompanyName: Yup.string().notRequired(),
+          GSTCompanyAddress: Yup.string().notRequired(),
+          GSTCompanyContactNumber: Yup.string()
+            .matches(/^[0-9]{10}$/, "Enter valid 10-digit contact number")
+            .notRequired(),
+          GSTCompanyEmail: Yup.string().email("Invalid email").notRequired(),
+          GSTNumber: Yup.string().notRequired(),
 
-        // Passport fields
-        PassportNo: Yup.string().when([], {
-          is: () => validationInfo?.PassportMandatory,
-          then: (schema) => schema.required("Passport number is required"),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        PassportIssueDate: Yup.date()
-          .nullable()
-          .when([], {
+          PassportNo: Yup.string().when([], {
             is: () => validationInfo?.PassportMandatory,
-            then: (schema) =>
-              schema.required("Passport issue date is required"),
-            otherwise: (schema) => schema.nullable(),
+            then: (schema) => schema.required("Passport number is required"),
+            otherwise: (schema) => schema.notRequired(),
           }),
-        PassportExpDate: Yup.date()
-          .nullable()
-          .when([], {
-            is: () => validationInfo?.PassportMandatory,
-            then: (schema) =>
-              schema.required("Passport expiry date is required"),
-            otherwise: (schema) => schema.nullable(),
-          }),
-      })
-    ),
+          PassportIssueDate: Yup.date()
+            .nullable()
+            .when([], {
+              is: () => validationInfo?.PassportMandatory,
+              then: (schema) =>
+                schema.required("Passport issue date is required"),
+              otherwise: (schema) => schema.nullable(),
+            }),
+          PassportExpDate: Yup.date()
+            .nullable()
+            .when([], {
+              is: () => validationInfo?.PassportMandatory,
+              then: (schema) =>
+                schema.required("Passport expiry date is required"),
+              otherwise: (schema) => schema.nullable(),
+            }),
+        })
+      )
+      .test(
+        "unique-names",
+        "Duplicate passenger names not allowed",
+        function (guests) {
+          if (validationInfo.SamePaxNameAllowed || !guests) return true;
+          const names = guests.map(
+            (p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`
+          );
+          return new Set(names).size === names.length;
+        }
+      ),
   });
 };
 
@@ -372,8 +409,6 @@ export const CommonFieldValidation = Yup.object({
 export const getCombinedValidationSchema = (validationInfo) => {
   return Yup.object({
     commonFields: CommonFieldValidation,
-    guestForms: Yup.array().of(
-    LeadPassengerValidation(validationInfo)
-  )
+    guestForms: Yup.array().of(LeadPassengerValidation(validationInfo)),
   });
 };

@@ -15,6 +15,7 @@ import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import Package from "@/components/dashboard/Package";
+
 import Flight from "@/components/dashboard/Flight";
 import Hotel from "@/components/dashboard/Hotel";
 import BookingGrid from "@/components/dashboard/DashboardSection";
