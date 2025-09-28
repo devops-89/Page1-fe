@@ -168,7 +168,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
             {/* Room Counter Grid - spans 12 on xs, centers content */}
             <Grid2 size={{ xs: 12, sm: 12, md: 3, lg: 3 }} sx={{ height:'100%',position:'sticky', top:0}}>
               <TravellorCounter
-                disableButton={totalRooms>=6}
+                disableButton={totalRooms>=4}
                 heading="Room"
                 value={totalRooms}
                 onIncrease={() => updateTravellerCount("room", "increase")}
@@ -200,7 +200,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                   </Grid2>
                   <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                     <TravellorCounter
-                      disableButton={room.Adults>=8}
+                      disableButton={room.Adults>=2}
                       heading="Adults"
                       value={room.Adults}
                       onIncrease={
@@ -215,7 +215,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                   </Grid2>
                   <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                     <TravellorCounter
-                     disableButton={room.Children>=4}
+                     disableButton={room.Children>=2}
                       heading="Children"
                       value={room.Children}
                       onIncrease={() =>

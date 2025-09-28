@@ -6,20 +6,20 @@ const useHotelTravellerValidation = () => {
       let errorStatus = false;
   
     
-      if (totalRooms > 5) {
-         errorMessage = "Maximum 6 rooms allowed per booking.";
+      if (totalRooms > 3) {
+         errorMessage = "Maximum 4 rooms allowed per booking.";
          errorStatus = true;
       }
       else {
-         const roomWithTooManyAdultsIndex = tempPaxRooms.findIndex(singleRoom => singleRoom.Adults > 7);
+         const roomWithTooManyAdultsIndex = tempPaxRooms.findIndex(singleRoom => singleRoom.Adults > 1);
          if (roomWithTooManyAdultsIndex !== -1) {
-             errorMessage = `Room ${roomWithTooManyAdultsIndex + 1} cannot have more than 8 adults.`;
+             errorMessage = `Room ${roomWithTooManyAdultsIndex + 1} cannot have more than 2 adults.`;
              errorStatus = true;
          }
          else {
-              const roomWithTooManyChildrenIndex = tempPaxRooms.findIndex(singleRoom => singleRoom.Children > 3);
+              const roomWithTooManyChildrenIndex = tempPaxRooms.findIndex(singleRoom => singleRoom.Children > 1);
               if (roomWithTooManyChildrenIndex !== -1) {
-                  errorMessage = `Room ${roomWithTooManyChildrenIndex + 1} cannot have more than 4 children.`;
+                  errorMessage = `Room ${roomWithTooManyChildrenIndex + 1} cannot have more than 2 children.`;
                   errorStatus = true;
               }
          }
