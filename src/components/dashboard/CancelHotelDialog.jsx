@@ -47,14 +47,15 @@ export default function CancelHotelDialog({ orderId, onInitiate }) {
 
       const response = await hotelController.cancelHotel(payload);
       const data = response?.data?.data;
+      console.log("response data:",data);
 
-      if (data?.apiResponse?.ResponseStatus === 1) {
+      if (data?.ResponseStatus === 1) {
         alert(
           "✅ Booking cancellation initiated. Please check the status periodically using the 'Check Status' Button."
         );
         if (onInitiate) onInitiate(orderId, "CANCELLING"); // <-- update table row status
         handleClose(true);
-      } else if (data?.apiResponse?.ResponseStatus === 2) {
+      } else if (data?.ResponseStatus === 2) {
         alert("❌ Cancellation failed. Please try again.");
       } else if (data?.ResponseStatus === 3) {
         alert("⚠️ Invalid cancellation request.");
