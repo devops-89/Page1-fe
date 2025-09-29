@@ -9,24 +9,22 @@ import {
   Button,
   Box,
   Divider,
-  Grid2
+  Grid2,
 } from "@mui/material";
-
-
 import { CheckCircle } from "@mui/icons-material";
 import { keyframes } from "@emotion/react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+
+import { hotelController } from "@/api/hotelController";
 import { COLORS } from "@/utils/colors";
-import background from "@/assests/payment_image/paymentBackground.png";
 import hotelImg from "@/assests/payment_image/Hotel.jpg";
 import { nunito } from "@/utils/fonts";
-import axios from "axios";
 import { baseUrl } from "@/api/serverConstant";
 import Loader from "@/utils/Loader";
-
-// children
-import FlightSuccess from "@/components/payment/FlightSuccess";
 import HotelSuccess from "@/components/payment/HotelSuccess";
 
+// Animations (define once)
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -41,43 +39,108 @@ export default function PaymentStatus() {
   const router = useRouter();
   const params = useSearchParams();
 
+  // Redux: get IP saved during hotel search
+  const hotelSearchData = useSelector((state) => state?.HOTEL?.HotelSearchData);
+  const reduxIp = hotelSearchData?.userIp || "";
+
+  // Payment info (from webhook paymentDetails)
   const [paymentData, setPaymentData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // read cached data if present (optional)
+  // Booking details API state
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingError, setBookingError] = useState(null);
+  const [bookingDetails, setBookingDetails] = useState(null);
+
+  // Try cached payment_info first (with mounted guard)
   useEffect(() => {
-    const cached = sessionStorage.getItem("payment_info");
-    if (cached) {
+    let mounted = true;
+    (async () => {
+      const cached = sessionStorage.getItem("payment_info");
+      if (!cached) return;
       try {
-        setPaymentData(JSON.parse(cached));
-        setLoading(false);
+        const parsed = JSON.parse(cached);
+        if (mounted) {
+          setPaymentData(parsed);
+          setLoading(false);
+        }
       } catch {
-        /* ignore */
+        // ignore bad cache
       }
-    }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // fetch by ?razorpay_payment_id=
+  // Fetch payment details by ?razorpay_payment_id= (with mounted guard)
   useEffect(() => {
     const paymentID = params?.get("razorpay_payment_id");
     if (!paymentID) return;
 
-    setLoading(true);
-    axios
-      .post(`${baseUrl}/webhook/api/webhook/paymentDetails?paymentId=${paymentID}`)
-      .then((res) => {
-        setPaymentData(res.data);
-        sessionStorage.setItem("payment_info", JSON.stringify(res.data));
-      })
-      .catch((err) => {
+    let mounted = true;
+    (async () => {
+      if (mounted) setLoading(true);
+      try {
+        const res = await axios.post(
+          `${baseUrl}/webhook/api/webhook/paymentDetails?paymentId=${paymentID}`
+        );
+        if (mounted) {
+          setPaymentData(res.data);
+          sessionStorage.setItem("payment_info", JSON.stringify(res.data));
+        }
+      } catch (err) {
         console.error("Payment verification failed:", err);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
   }, [params]);
 
-  const isHotel = paymentData?.notes?.module === "hotel";
+  // After paymentData is available, call booking details API using orderId + ip (with mounted guard)
+  useEffect(() => {
+    if (!paymentData?.notes) return;
+
+    const orderId = paymentData?.notes?.order_id; // strictly order_id
+    const ip = reduxIp; // Redux IP only
+
+    if (!orderId) return; // cannot fetch without order id
+
+    let mounted = true;
+    (async () => {
+      if (mounted) {
+        setBookingLoading(true);
+        setBookingError(null);
+      }
+      try {
+        const res = await hotelController.getBookingStatus({
+          ip,
+          order_id: orderId,
+        });
+        console.log("mwmdkm", res.data.data);
+        if (mounted) setBookingDetails(res?.data?.data || null);
+      } catch (err) {
+        console.error("Booking details fetch failed:", err);
+        if (mounted) {
+          setBookingError(
+            "Unable to fetch booking status. Please try again later."
+          );
+        }
+      } finally {
+        if (mounted) setBookingLoading(false);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [paymentData, reduxIp]);
+
   const handleContinue = () => router.replace("/");
-  const headerImage = isHotel ? hotelImg : background;
 
   return (
     <Box
@@ -90,7 +153,7 @@ export default function PaymentStatus() {
     >
       <Box
         component="img"
-        src={headerImage.src}
+        src={hotelImg.src}
         alt="Background"
         sx={{
           width: "100vw",
@@ -116,7 +179,7 @@ export default function PaymentStatus() {
             p: 6,
           }}
         >
-          <Loader open variant={isHotel ? "hotel" : "flight"} />
+          <Loader open variant="hotel" />
         </Grid2>
       ) : (
         <Container
@@ -178,7 +241,9 @@ export default function PaymentStatus() {
                 animation: `${scaleIn} 0.5s ease-in-out`,
               }}
             >
-              <CheckCircle sx={{ fontSize: 45, color: COLORS.SUCCESS || "green" }} />
+              <CheckCircle
+                sx={{ fontSize: 45, color: COLORS.SUCCESS || "green" }}
+              />
             </Box>
             <Typography
               variant="h5"
@@ -187,26 +252,79 @@ export default function PaymentStatus() {
             >
               Payment Successful!
             </Typography>
-            <Typography variant="body2" sx={{ mb: 1, fontFamily: nunito.style }}>
-              Thank you for your payment. Your transaction has been processed successfully.
+            <Typography
+              variant="body2"
+              sx={{ mb: 1, fontFamily: nunito.style }}
+            >
+              Thank you for your payment. Your transaction has been processed
+              successfully.
             </Typography>
             <Divider sx={{ mb: 2 }} />
 
-            {/* CONDITIONAL RENDER WITH DATA PROP */}
-            {isHotel ? (
-              <HotelSuccess data={paymentData} />
-            ) : (
-              <FlightSuccess data={paymentData} />
-            )}
+            {/* HOTEL DETAILS */}
+            <HotelSuccess data={paymentData} />
+
+            {/* Booking status */}
+            <Box sx={{ mt: 3, textAlign: "left", px: { xs: 2, sm: 4 } }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 700, fontFamily: nunito.style, mb: 1 }}
+              >
+                Booking Status
+              </Typography>
+
+              {bookingLoading ? (
+                <Loader open variant="hotel" />
+              ) : bookingError ? (
+                <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
+                  {bookingError}
+                </Typography>
+              ) : bookingDetails ? (
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", sm: "200px 1fr" },
+                    rowGap: 1,
+                    columnGap: 2,
+                    alignItems: "center",
+                    fontFamily: nunito.style,
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    Booking Status:
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ textTransform: "uppercase" }}
+                  >
+                    {bookingDetails.bookingStatus || "-"}
+                  </Typography>
+
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    Payment Status:
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ textTransform: "uppercase" }}
+                  >
+                    {bookingDetails.paymentStatus || "-"}
+                  </Typography>
+                </Box>
+              ) : (
+                <Typography variant="body2" sx={{ fontFamily: nunito.style }}>
+                  Booking details not available.
+                </Typography>
+              )}
+            </Box>
 
             {/* Continue */}
-            <Box sx={{ mt: 2, animation: `${fadeInUp} 0.6s ease-in-out` }}>
+            <Box sx={{ mt: 3, animation: `${fadeInUp} 0.6s ease-in-out` }}>
               <Button
-                variant="subtitle2"
+                variant="contained"
                 sx={{
                   borderRadius: 1,
-                  px: 1,
-                  py: 0.5,
+                  px: 1.5,
+                  py: 1,
                   color: COLORS.WHITE,
                   backgroundColor: COLORS.PRIMARY,
                   "&:hover": { backgroundColor: COLORS.SECONDARY || "#0056b3" },

@@ -49,4 +49,12 @@ export const hotelController = {
       throw error;
     }
   },
+   getBookingStatus: async (data) => {
+    try {
+      let result = await hotelPublicApi.post("/hotel/getBookingDetails", data);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
