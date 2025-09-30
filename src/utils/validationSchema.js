@@ -274,6 +274,7 @@ export const selfDriveValidationSchema = Yup.object({
   toDate: Yup.string().required("Please Select To Date"),
 });
 
+
 export const LeadPassengerValidation = (validationInfo) => {
   const nameRegex = new RegExp(
     `^[a-zA-Z${validationInfo.SpaceAllowed ? "\\s" : ""}${
@@ -304,53 +305,47 @@ export const LeadPassengerValidation = (validationInfo) => {
 
           Age: Yup.number()
             .required("Age is required")
-            .test(
-              "age-validation",
-              "Age does not match type",
-              function (value) {
-                const { type } = this.parent;
-                if (type === "adult" && value < 12) {
-                  return this.createError({
-                    message: "Adults must be at least 12 years old",
-                  });
-                }
-                if (type === "child" && value >= 12) {
-                  return this.createError({
-                    message: "Children must be under 12 years old",
-                  });
-                }
-                return true;
+            .test("age-validation", "Age does not match type", function (value) {
+              const { type } = this.parent;
+              if (type === "adult" && value < 12) {
+                return this.createError({ message: "Adults must be at least 12 years old" });
               }
-            ),
+              if (type === "child" && value >= 12) {
+                return this.createError({ message: "Children must be under 12 years old" });
+              }
+              return true;
+            }),
 
-      PAN: Yup.string().when([], {
-  is: () => validationInfo?.PanMandatory,
-  then: (schema) => schema.required("PAN is required"),
-  otherwise: (schema) => schema.notRequired(),
-}),
+          // Adult PAN
+          PAN: Yup.lazy((value, options) => {
+            const { type } = options.parent;
+            if (type === "adult" && validationInfo?.PanMandatory) {
+              return Yup.string().required("PAN is required");
+            }
+            return Yup.string().notRequired();
+          }),
 
-
-        GuardianDetail: Yup.object().when("type", {
-  is: "child",
-  then: () =>
-    Yup.object().shape({
-      Title: Yup.string().required("Guardian title is required"),
-      FirstName: Yup.string().required("Guardian first name is required"),
-      LastName: Yup.string().required("Guardian last name is required"),
-      PAN: Yup.string().when([], {
-        is: () => validationInfo?.PanMandatory,
-        then: (schema) => schema.required("Guardian PAN is required"),
-        otherwise: (schema) => schema.notRequired(),
-      }),
-    }),
-  otherwise: () =>
-    Yup.object().shape({
-      Title: Yup.string().notRequired(),
-      FirstName: Yup.string().notRequired(),
-      LastName: Yup.string().notRequired(),
-      PAN: Yup.string().notRequired(),
-    }),
-}),
+          // Guardian Details for Child
+          GuardianDetail: Yup.lazy((value, options) => {
+            const { type } = options.parent;
+            if (type === "child") {
+              return Yup.object().shape({
+                Title: Yup.string().required("Guardian title is required"),
+                FirstName: Yup.string().required("Guardian first name is required"),
+                LastName: Yup.string().required("Guardian last name is required"),
+                PAN: validationInfo?.PanMandatory
+                  ? Yup.string().required("Guardian PAN is required")
+                  : Yup.string().notRequired(),
+              });
+            } else {
+              return Yup.object().shape({
+                Title: Yup.string().notRequired(),
+                FirstName: Yup.string().notRequired(),
+                LastName: Yup.string().notRequired(),
+                PAN: Yup.string().notRequired(),
+              });
+            }
+          }),
 
           GSTCompanyName: Yup.string().notRequired(),
           GSTCompanyAddress: Yup.string().notRequired(),
@@ -360,40 +355,26 @@ export const LeadPassengerValidation = (validationInfo) => {
           GSTCompanyEmail: Yup.string().email("Invalid email").notRequired(),
           GSTNumber: Yup.string().notRequired(),
 
-          PassportNo: Yup.string().when([], {
-            is: () => validationInfo?.PassportMandatory,
-            then: (schema) => schema.required("Passport number is required"),
-            otherwise: (schema) => schema.notRequired(),
-          }),
-          PassportIssueDate: Yup.date()
-            .nullable()
-            .when([], {
-              is: () => validationInfo?.PassportMandatory,
-              then: (schema) =>
-                schema.required("Passport issue date is required"),
-              otherwise: (schema) => schema.nullable(),
-            }),
-          PassportExpDate: Yup.date()
-            .nullable()
-            .when([], {
-              is: () => validationInfo?.PassportMandatory,
-              then: (schema) =>
-                schema.required("Passport expiry date is required"),
-              otherwise: (schema) => schema.nullable(),
-            }),
+          PassportNo: Yup.lazy(() =>
+            validationInfo?.PassportMandatory ? Yup.string().required("Passport number is required") : Yup.string().notRequired()
+          ),
+          PassportIssueDate: Yup.lazy(() =>
+            validationInfo?.PassportMandatory
+              ? Yup.date().required("Passport issue date is required")
+              : Yup.date().nullable()
+          ),
+          PassportExpDate: Yup.lazy(() =>
+            validationInfo?.PassportMandatory
+              ? Yup.date().required("Passport expiry date is required")
+              : Yup.date().nullable()
+          ),
         })
       )
-      .test(
-        "unique-names",
-        "Duplicate passenger names not allowed",
-        function (guests) {
-          if (validationInfo.SamePaxNameAllowed || !guests) return true;
-          const names = guests.map(
-            (p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`
-          );
-          return new Set(names).size === names.length;
-        }
-      ),
+      .test("unique-names", "Duplicate passenger names not allowed", function (guests) {
+        if (validationInfo.SamePaxNameAllowed || !guests) return true;
+        const names = guests.map((p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`);
+        return new Set(names).size === names.length;
+      }),
   });
 };
 
@@ -405,7 +386,7 @@ export const CommonFieldValidation = Yup.object({
     .required("Phone No. is required"),
 });
 
-// combined Validation schema for prebook
+// Combined Validation schema
 export const getCombinedValidationSchema = (validationInfo) => {
   return Yup.object({
     commonFields: CommonFieldValidation,

@@ -853,15 +853,21 @@ const HotelPreBookPage = () => {
                             </Typography>
                           </Grid2>
                         </Grid2>
+                          <Button
+        type="button"
+        onClick={async () => {
+          // Validate the form manually
+          const errors = await formik.validateForm();
+          console.log("Validation Object:", errors);
+        }}
+      >
+        Check Validation
+      </Button>
 
                         <Button
                           variant="contained"
                           size="medium"
                           type="submit"
-                          onSubmit={(values) => {
-                            console.log("Submited Values:", values);
-                            formik.submitForm();
-                          }}
                           sx={{
                             width: "100%",
                             height: "30px",

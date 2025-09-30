@@ -117,7 +117,7 @@ const GuestForm = ({
               />
             </Grid>
             {/* handle Age Form Field for Disabled field for Age start */}
-            {guest.Age >= 12 ? (
+            {guest.Age > 12 ? (
               <Grid item xs={12} md={2}>
                 <Typography sx={{ mb: 1 }}>AGE</Typography>
                 <FormControl fullWidth size="small">
@@ -184,7 +184,7 @@ const GuestForm = ({
           </Grid>
 
           {/* PAN or Guardian fields */}
-          {guest.Age >= 12 ? (
+          {guest.Age > 12 ? (
             <Grid container spacing={2} sx={{ mt: 1 }}>
               <Grid item xs={12} md={4}>
                 <Typography sx={{ mb: 1 }}>PAN</Typography>
@@ -282,7 +282,7 @@ const GuestForm = ({
                   />
                 </Grid>
                 <Grid item xs={12} md={5}>
-                  <Typography sx={{ mb: 1 }}>Last Name</Typography>
+                  <Typography sx={{ mb: 1 }}>Pan</Typography>
                   <TextField
                     fullWidth
                     size="small"

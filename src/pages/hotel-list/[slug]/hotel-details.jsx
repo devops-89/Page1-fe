@@ -96,6 +96,7 @@ const HotelDetails = () => {
 
   const { mainImage, roomImages } = useUniqueHotelImages(hotelDetail);
 
+  console.log("Hotels: ", hotels);
   console.log("selected Hotel Data:", selectedHotel);
   console.log("query slug for Hotel Detail: ", query.slug);
   console.log("query slug main image: ", mainImage);
@@ -129,18 +130,22 @@ const HotelDetails = () => {
   // ====================== address truncation logic end ============================================
 
   //====================== facilities truncation logic start ========================================
-  const [openFacilites, setOpenFacilities] = useState(false);
+  const [openFacilities, setOpenFacilities] = useState(false); // was openFacilites
 
   const handleOpenFacilities = () => setOpenFacilities(true);
   const handleCloseFacilities = () => setOpenFacilities(false);
 
   const maxFacilitiesLength = 5;
-  const facilities = selectedHotel?.HotelFacilities || "";
+
+  const facilities = Array.isArray(hotelDetail?.HotelFacilities)
+    ? hotelDetail.HotelFacilities
+    : [];
 
   const shouldTruncateFacilities = facilities.length > maxFacilitiesLength;
+
   const displayedFacilities = shouldTruncateFacilities
-    ? selectedHotel?.HotelFacilities?.slice(0, maxFacilitiesLength)
-    : selectedHotel.HotelFacilities;
+    ? facilities.slice(0, maxFacilitiesLength)
+    : facilities;
 
   // ======================= facilities truncation logic end =======================================
 
@@ -294,8 +299,23 @@ const HotelDetails = () => {
 
                     {/* Hotel address end */}
 
-                    {/* Website URL start */}
-                    <Link href={`${selectedHotel.HotelWebsiteUrl}`}>
+                    {/* Website */}
+                    {hotelDetail?.HotelWebsiteUrl ? (
+                      <Link href={`${hotelDetail.HotelWebsiteUrl}`}>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontFamily: nunito.style,
+                            mb: "15px",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <LanguageIcon sx={{ mr: 1, color: COLORS.PRIMARY }} />
+                          {hotelDetail.HotelWebsiteUrl}
+                        </Typography>
+                      </Link>
+                    ) : (
                       <Typography
                         variant="body2"
                         sx={{
@@ -303,16 +323,15 @@ const HotelDetails = () => {
                           mb: "15px",
                           display: "flex",
                           alignItems: "center",
+                          color: COLORS.DARKGREY,
                         }}
                       >
                         <LanguageIcon sx={{ mr: 1, color: COLORS.PRIMARY }} />
-                        {selectedHotel.HotelWebsiteUrl}
+                        Not Available
                       </Typography>
-                    </Link>
-                    {/* Website URL end */}
+                    )}
 
-                    {/* Phone Number start */}
-
+                    {/* Phone Number */}
                     <Typography
                       variant="body2"
                       sx={{
@@ -323,9 +342,8 @@ const HotelDetails = () => {
                       }}
                     >
                       <LocalPhoneIcon sx={{ mr: 1, color: COLORS.PRIMARY }} />
-                      {selectedHotel.PhoneNumber}
+                      {hotelDetail?.PhoneNumber || "Not Available"}
                     </Typography>
-                    {/* Phone Number end */}
                   </Container>
 
                   <Container>
@@ -655,7 +673,6 @@ const HotelDetails = () => {
                         borderRadius: "0 0 0 12px",
                       }}
                     >
-                     
                       <Typography
                         variant="h6"
                         sx={{
@@ -668,7 +685,7 @@ const HotelDetails = () => {
                       </Typography>
 
                       <List sx={{ listStyleType: "disc", ml: 2 }}>
-                        {displayedFacilities?.map((facilities, index) => (
+                        {displayedFacilities?.map((facility, index) => (
                           <ListItem
                             key={index}
                             sx={{ display: "list-item", py: 0 }}
@@ -679,15 +696,16 @@ const HotelDetails = () => {
                                 fontFamily: nunito.style,
                               }}
                             >
-                              {facilities}
+                              {facility}{" "}
+                              {/* was facilities, causing shadowing issue */}
                             </Typography>
                           </ListItem>
                         ))}
                       </List>
 
                       <CustomDialogFacilities
-                        data={selectedHotel?.HotelFacilities}
-                        open={openFacilites}
+                        data={facilities || []} // added fallback
+                        open={openFacilities} // corrected typo
                         handleClose={handleCloseFacilities}
                       />
 
@@ -705,8 +723,6 @@ const HotelDetails = () => {
                           View All Facilities..
                         </Typography>
                       )}
-
-                      
                     </Grid2>
 
                     {/* Right: Room Details */}
@@ -722,27 +738,25 @@ const HotelDetails = () => {
                       <Grid2 container spacing={2} sx={{ width: "100%" }}>
                         {/* Facilities and Info */}
                         <Grid2 size={{ xs: 12, sm: 8, md: 8 }}>
-                    
-
                           {/* Cancellation Policy */}
                           {room?.CancelPolicies?.length > 0 && (
                             <Box mt={2}>
-                               <Typography
-                                  variant="h6"
-                                  sx={{
-                                    fontWeight: 600,
-                                    fontFamily: nunito.style,
-                                    mb: 1,
-                                  }}
-                                >
-                                  Cancellation Policy:
-                                </Typography>
+                              <Typography
+                                variant="h6"
+                                sx={{
+                                  fontWeight: 600,
+                                  fontFamily: nunito.style,
+                                  mb: 1,
+                                }}
+                              >
+                                Cancellation Policy:
+                              </Typography>
                               {room.CancelPolicies.map((policy, i) => (
                                 <Typography
                                   key={i}
                                   variant="body2"
                                   sx={{
-                                   fontWeight: 600,
+                                    fontWeight: 600,
                                     fontFamily: nunito.style,
                                     mb: 1,
                                   }}
@@ -831,9 +845,9 @@ const HotelDetails = () => {
                             }}
                           >
                             ₹{" "}
-                            {selectedHotel?.Rooms?.[index]?.TotalFare.toFixed(
-                              2
-                            )}
+                            {selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2) ||
+                              0}
+                            +
                           </Typography>
                           <Typography
                             variant="body2"
@@ -842,7 +856,9 @@ const HotelDetails = () => {
                               fontFamily: nunito.style,
                             }}
                           >
-                            + ₹{selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)}{" "}
+                            ₹{" "}
+                            {selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2) ||
+                              0}{" "}
                             taxes & fees
                           </Typography>
 
@@ -858,29 +874,17 @@ const HotelDetails = () => {
                               >
                                 Day-wise Base Prices:
                               </Typography>
-                              {/* {console.log("room---------", room?.DayRates[0])} */}
                               <Typography
                                 sx={{
                                   fontFamily: nunito.style,
                                   fontWeight: 600,
                                 }}
                               >
-                                ₹ {room?.DayRates[0][0]?.BasePrice.toFixed(2)}
+                                ₹{" "}
+                                {room?.DayRates?.[0]?.[0]?.BasePrice?.toFixed(
+                                  2
+                                ) || 0}
                               </Typography>
-                              {/* <List sx={{ listStyleType: "disc", ml: 3 }}>
-                            {room.DayRates[0].map((rate, i) => (
-                              <ListItem
-                                key={i}
-                                sx={{
-                                  display: "list-item",
-                                  py: 0,
-                                  fontFamily: nunito.style,
-                                }}
-                              >
-                                
-                              </ListItem>
-                            ))}
-                          </List> */}
                               <Button
                                 onClick={() =>
                                   router.push(
