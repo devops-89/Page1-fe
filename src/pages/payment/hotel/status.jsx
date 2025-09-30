@@ -378,7 +378,6 @@ export default function PaymentStatus() {
   const handleContinue = () => router.replace("/");
 
   // Derived
-  // Derived
   const bookingStatus = useMemo(
     () => (bookingDetails?.bookingStatus || "").toString().toUpperCase(),
     [bookingDetails]
@@ -602,9 +601,9 @@ export default function PaymentStatus() {
             </SectionCard>
 
             {/* -------- Payment Section (only payment response here) -------- */}
-            {bookingStatus === "COMPLETED" && (
-              <PaymentDetailsCard payment={paymentData} payStatus={payStatus} />
-            )}
+            {/* {bookingStatus === "COMPLETED" && ( */}
+            <PaymentDetailsCard payment={paymentData} payStatus={payStatus} />
+            {/* // )} */}
           </Stack>
 
           {/* CTA */}
