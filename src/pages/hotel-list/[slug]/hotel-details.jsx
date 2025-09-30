@@ -207,30 +207,6 @@ const HotelDetails = () => {
                       }}
                     >
                       {selectedHotel?.HotelName}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <Rating
-                          name="read-only"
-                          value={HOTEL_RATING[selectedHotel?.HotelRating] || 5}
-                          readOnly
-                          fontSize={{ lg: "30px", md: "24px", xs: "10px" }}
-                        />
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontFamily: nunito.style,
-                            fontWeight: 700,
-                            color: COLORS.BLACK,
-                          }}
-                        >
-                          {HOTEL_RATING_IN_WORDS[selectedHotel?.HotelRating]}
-                        </Typography>
-                      </Box>
                     </Typography>
 
                     <img
@@ -250,23 +226,13 @@ const HotelDetails = () => {
                     <RoomImageSlider roomImages={roomImages} />
                     {/* rooms images end */}
 
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        marginTop: "10px",
-                        fontFamily: nunito.style,
-                        fontSize: { lg: 24, md: 24, sm: 24, xs: 18 },
-                      }}
-                    >
-                      Award-winning Seafront Resort Frequented by Celebrities
-                    </Typography>
-
                     {/* Hotel Address  start*/}
                     <Typography
                       variant="body2"
                       sx={{
                         fontFamily: nunito.style,
                         mb: "15px",
+                        mt: "10px",
                         display: "flex",
                         alignItems: "center",
                       }}
@@ -346,6 +312,209 @@ const HotelDetails = () => {
                     </Typography>
                   </Container>
 
+                </Grid2>
+                <Grid2
+                  size={{ xs: 12, md: 12, lg: 4 }}
+                  sx={{ display: "flex", flexDirection: "column", gap: "15px" }}
+                >
+                  <Box
+                    sx={{
+                      border: `1px solid ${COLORS.GREY}`,
+                      borderRadius: 2,
+                      p: 2,
+                      backgroundColor: "#fff",
+                      boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
+                    }}
+                  >
+                    {/* Header — compact, professional */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        mb: 1,
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontFamily: nunito.style, fontWeight: 700 ,fontSize : 18}}
+                      >
+                        {selectedHotel?.CityName || hotelDetail?.CityName}
+                      </Typography>
+
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                      >
+                        <Rating
+                          name="hotel-rating"
+                          readOnly
+                          value={HOTEL_RATING[hotelDetail?.HotelRating] || 4}
+                          size="small"
+                        />
+                      </Box>
+                    </Box>
+
+                    {/* Subheader — check in/out */}
+                    {(hotelDetail?.CheckInTime ||
+                      hotelDetail?.CheckOutTime) && (
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontFamily: nunito.style,
+                          color: COLORS.SECONDARY,
+                          mb: 1.5,
+                        }}
+                      >
+                        Check-in {hotelDetail?.CheckInTime || "—"} • Check-out{" "}
+                        {hotelDetail?.CheckOutTime || "—"}
+                      </Typography>
+                    )}
+
+                    <Box
+                      sx={{ borderTop: `1px solid ${COLORS.GREY}`, my: 1.5 }}
+                    />
+
+                    {/* Highlights */}
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ fontFamily: nunito.style, fontWeight: 700, mb: 1,fontSize : 18 }}
+                    >
+                      Highlights
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 1,
+                        mb: 1.5,
+                      }}
+                    >
+                      {hotelDetail.HotelFacilities?.some((f) =>
+                        f.toLowerCase().includes("wifi")
+                      ) && (
+                        <Box
+                          sx={{
+                            px: 1.5,
+                            py: 0.5,
+                            borderRadius: "999px",
+                            backgroundColor: COLORS.LIGHTBLUE,
+                            fontSize: 13,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Free Wi-Fi
+                        </Box>
+                      )}
+                      {hotelDetail.HotelFacilities?.some((f) =>
+                        f.toLowerCase().includes("parking")
+                      ) && (
+                        <Box
+                          sx={{
+                            px: 1.5,
+                            py: 0.5,
+                            borderRadius: "999px",
+                            backgroundColor: COLORS.LIGHTBLUE,
+                            fontSize: 13,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Parking
+                        </Box>
+                      )}
+                      {hotelDetail.HotelFacilities?.some((f) =>
+                        f.toLowerCase().includes("pets")
+                      ) && (
+                        <Box
+                          sx={{
+                            px: 1.5,
+                            py: 0.5,
+                            borderRadius: "999px",
+                            backgroundColor: COLORS.LIGHTBLUE,
+                            fontSize: 13,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          Pets allowed
+                        </Box>
+                      )}
+                    </Box>
+
+                    {/* Nearby Attractions (first 5) */}
+                    {hotelDetail?.Attractions &&
+                      Object.values(hotelDetail.Attractions).length > 0 && (
+                        <>
+                          <Box
+                            sx={{
+                              borderTop: `1px solid ${COLORS.GREY}`,
+                              my: 1.5,
+                            }}
+                          />
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontFamily: nunito.style,
+                              fontWeight: 700,
+                              mb: 1,
+                              fontSize : 18
+                            }}
+                          >
+                            Nearby attractions
+                          </Typography>
+                          {Object.values(hotelDetail.Attractions)
+                            .slice(0, 5)
+                            .map((att, i) => (
+                              <Typography
+                                key={i}
+                                variant="body2"
+                                sx={{
+                                  fontFamily: nunito.style,
+                                  color: COLORS.DARKGREY,
+                                }}
+                              >
+                                • {att}
+                              </Typography>
+                            ))}
+                        </>
+                      )}
+
+                    {/* Price */}
+                    <Box
+                      sx={{ borderTop: `1px solid ${COLORS.GREY}`, my: 1.5 }}
+                    />
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontFamily: nunito.style,
+                        fontWeight: 700,
+                        color: COLORS.DARKGREY,
+                        mb: 0.5,
+                        fontSize : 18
+                      }}
+                    >
+                      Per night :
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{ fontWeight: 800, fontFamily: nunito.style, mb: 1 }}
+                    >
+                      ₹{" "}
+                      {selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2) ||
+                        "0.00"}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: COLORS.DARKGREY,
+                        fontFamily: nunito.style,
+                        mb: 1.5,
+                      }}
+                    >
+                      ₹{" "}
+                      {selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2) ||
+                        "0.00"}{" "}
+                      taxes & fees
+                    </Typography>
+                  </Box>
                   <Container>
                     <Typography
                       variant="h5"
@@ -447,179 +616,6 @@ const HotelDetails = () => {
                       </Box>
                     </Box>
                   </Container>
-                </Grid2>
-                <Grid2
-                  size={{ xs: 12, md: 12, lg: 4 }}
-                  sx={{ display: "flex", flexDirection: "column", gap: "15px" }}
-                >
-                  <Box
-                    sx={{
-                      border: `1px solid ${COLORS.GREY}`,
-                      borderRadius: "10px",
-                      padding: "15px",
-                    }}
-                  >
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 700,
-                        fontFamily: nunito.style,
-                        mb: "10px",
-                      }}
-                    >
-                      Premium Suite Sea View with Terrace - King Bed
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        fontFamily: nunito.style,
-                        fontWeight: 500,
-                        color: COLORS.SECONDARY,
-                      }}
-                    >
-                      Fits 2 Adults
-                    </Typography>
-
-                    <List>
-                      <ListItem sx={{ padding: 0 }}>
-                        <ListItemIcon
-                          sx={{ minWidth: "40px", color: COLORS.DARKGREY }}
-                        >
-                          <FilterVintageIcon sx={{ fontSize: "20px" }} />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                fontFamily: nunito.style,
-                                fontSize: "15px",
-                              }}
-                            >
-                              20% off on session of Spa
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-
-                      <ListItem sx={{ padding: 0 }}>
-                        <ListItemIcon
-                          sx={{ minWidth: "40px", color: COLORS.DARKGREY }}
-                        >
-                          <LocalDiningIcon sx={{ fontSize: "20px" }} />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                fontFamily: nunito.style,
-                                fontSize: "15px",
-                              }}
-                            >
-                              20% off on food & beverages at F&B outlets
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-
-                      <ListItem sx={{ padding: 0 }}>
-                        <ListItemIcon
-                          sx={{ minWidth: "40px", color: COLORS.DARKGREY }}
-                        >
-                          <ContentCutIcon sx={{ fontSize: "20px" }} />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                fontFamily: nunito.style,
-                                fontSize: "15px",
-                              }}
-                            >
-                              20% off on Salon services
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    </List>
-
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        fontFamily: nunito.style,
-                        fontWeight: 500,
-                        color: COLORS.SECONDARY,
-                      }}
-                    >
-                      Non-Refundable
-                    </Typography>
-
-                    <List>
-                      <ListItem sx={{ padding: 0 }}>
-                        <ListItemIcon
-                          sx={{ minWidth: "40px", color: COLORS.DARKGREY }}
-                        >
-                          <FilterVintageIcon sx={{ fontSize: "20px" }} />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                fontFamily: nunito.style,
-                                fontSize: "15px",
-                              }}
-                            >
-                              Breakfast included
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    </List>
-
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        fontFamily: nunito.style,
-                        fontWeight: 500,
-                        color: COLORS.SECONDARY,
-                        mb: "15px",
-                      }}
-                    >
-                      Desh Dekho Offer Daily Breakfast with Special Savings
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontFamily: nunito.style,
-                        fontWeight: 700,
-                        color: COLORS.DARKGREY,
-                        mb: "10px",
-                      }}
-                    >
-                      Per Night:
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      sx={{
-                        fontWeight: 700,
-                        fontFamily: nunito.style,
-                        mb: "15px",
-                      }}
-                    >
-                      ₹ {selectedHotel?.Rooms?.[0]?.TotalFare.toFixed(2)}+{" "}
-                      <Typography
-                        component={"div"}
-                        sx={{ color: COLORS.DARKGREY }}
-                      >
-                        ₹ {selectedHotel?.Rooms?.[0]?.TotalTax.toFixed(2)} taxes
-                        & fees
-                      </Typography>
-                    </Typography>
-                  </Box>
                 </Grid2>
               </Grid2>
             </Container>
