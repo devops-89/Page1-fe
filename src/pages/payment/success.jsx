@@ -225,7 +225,7 @@ useEffect(() => {
                 }}
                 onClick={handleContinue}
               >
-                Continue to Dashboard To Check Your Bookings
+                Continue to Dashboard To Check Your Bookings.
               </Button>
             </Box>
           </Paper>
