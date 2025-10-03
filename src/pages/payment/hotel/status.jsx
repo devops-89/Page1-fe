@@ -375,7 +375,7 @@ useEffect(() => {
 }, [paymentData, reduxIp]);
 
 
-  const handleContinue = () => router.replace("/");
+  const handleContinue = () => router.replace("/dashboard");
 
   // Derived
   const bookingStatus = useMemo(
@@ -622,7 +622,7 @@ useEffect(() => {
               }}
               onClick={handleContinue}
             >
-              Continue to Homepage
+              Continue to Dashboard For Checking All Bookings.
             </Button>
           </Box>
         </Container>
