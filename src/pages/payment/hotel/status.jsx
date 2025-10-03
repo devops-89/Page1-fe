@@ -340,40 +340,40 @@ export default function PaymentStatus() {
     };
   }, [params]);
 
-  // Fetch booking status using order_id + ip
-  useEffect(() => {
-    if (!paymentData?.notes) return;
-    const orderId = paymentData?.notes?.order_id;
-    const ip = reduxIp;
-    if (!orderId) return;
+  
+// Fetch booking status using order_id + ip after 120 seconds
+useEffect(() => {
+  if (!paymentData?.notes) return;
+  const orderId = paymentData?.notes?.order_id;
+  const ip = reduxIp;
+  if (!orderId) return;
 
-    let mounted = true;
-    (async () => {
-      if (mounted) {
-        setBookingLoading(true);
-        setBookingError(null);
-      }
-      try {
-        const res = await hotelController.getBookingStatus({
-          ip,
-          order_id: orderId,
-        });
-        if (mounted) setBookingDetails(res?.data?.data || null);
-      } catch (err) {
-        console.error("Booking details fetch failed:", err);
-        if (mounted)
-          setBookingError(
-            "Unable to fetch booking status. Please try again later."
-          );
-      } finally {
-        if (mounted) setBookingLoading(false);
-      }
-    })();
+  let mounted = true;
+  const timer = setTimeout(async () => {
+    if (!mounted) return;
+    setBookingLoading(true);
+    setBookingError(null);
 
-    return () => {
-      mounted = false;
-    };
-  }, [paymentData, reduxIp]);
+    try {
+      const res = await hotelController.getBookingStatus({ ip, order_id: orderId });
+      if (mounted) setBookingDetails(res?.data?.data || null);
+    } catch (err) {
+      console.error("Booking details fetch failed:", err);
+      if (mounted)
+        setBookingError(
+          "Unable to fetch booking status. Please try again later."
+        );
+    } finally {
+      if (mounted) setBookingLoading(false);
+    }
+  }, 120000); // 120,000 ms = 120 seconds
+
+  return () => {
+    mounted = false;
+    clearTimeout(timer);
+  };
+}, [paymentData, reduxIp]);
+
 
   const handleContinue = () => router.replace("/");
 
