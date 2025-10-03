@@ -36,19 +36,24 @@ export default function HotelPaymentStatus() {
   const [paymentData, setPaymentData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const paymentID = params?.get("razorpay_payment_id");
-    if (!paymentID) return;
+useEffect(() => {
+  const paymentID = params?.get("razorpay_payment_id");
+  if (!paymentID) return;
 
-    setLoading(true);
-    axios
-      .post(`${baseUrl}/webhook/api/webhook/paymentDetails?paymentId=${paymentID}`)
-      .then(async (res) => {
-        const payData = res.data;
-        setPaymentData(payData);
+  setLoading(true);
 
-        // Step 2: Call booking details API if payment success
-        if (payData?.paymentStatus === "SUCCESS") {
+  // Step 1: Verify payment
+  axios
+    .post(`${baseUrl}/webhook/api/webhook/paymentDetails?paymentId=${paymentID}`)
+    .then((res) => {
+      const payData = res.data;
+      setPaymentData(payData);
+
+      // Step 2: If payment is success, wait 120 seconds before fetching booking details
+      if (payData?.paymentStatus === "SUCCESS") {
+        setLoading(true); // keep loader until booking details are fetched
+
+        const timer = setTimeout(async () => {
           try {
             const bookingRes = await axios.post(
               `${baseUrl}/hotel/api/hotel/getBookingDetails`,
@@ -57,22 +62,31 @@ export default function HotelPaymentStatus() {
                 order_id: payData.order_id,
               }
             );
-            setPaymentData({
-              ...payData,
+
+            setPaymentData((prev) => ({
+              ...prev,
               ...bookingRes.data.data, // merge booking details
-            });
+            }));
           } catch (err) {
             console.error("Hotel booking details fetch failed:", err);
+          } finally {
+            setLoading(false); // stop loader after booking details fetched
           }
-        }
-      })
-      .catch((err) => {
-        console.error("Hotel payment verification failed:", err);
-      })
-      .finally(() => setLoading(false));
-  }, [params]);
+        }, 120000); // 120 seconds delay
 
-  const handleContinue = () => router.replace("/");
+        // Cleanup timer if component unmounts before 120s
+        return () => clearTimeout(timer);
+      } else {
+        setLoading(false);
+      }
+    })
+    .catch((err) => {
+      console.error("Hotel payment verification failed:", err);
+      setLoading(false);
+    });
+}, [params]);
+
+  const handleContinue = () => router.replace("/dashboard");
 
   return (
     <Box
@@ -211,7 +225,7 @@ export default function HotelPaymentStatus() {
                 }}
                 onClick={handleContinue}
               >
-                Continue to Homepage
+                Continue to Dashboard To Check Your Bookings.
               </Button>
             </Box>
           </Paper>
