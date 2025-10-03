@@ -48,6 +48,7 @@ const HotelForm = () => {
   const [selectedNationality, setSelectedNationality] = useState(null);
   const [nationalityOptions, setNationalityOptions] = useState([]);
   const [nationalityLoading, setNationalityLoading] = useState(false);
+
   useFetchIP(setUserIp);
 
   const open = Boolean(anchorEl);
@@ -122,6 +123,15 @@ const HotelForm = () => {
   const totalChildren = paxRoom.reduce((sum, room) => sum + room.Children, 0);
   const totalRooms = paxRoom.length;
 
+  // helpers for clean pluralization
+  const plural = (n, one, many) => (n === 1 ? one : many);
+
+  // derived labels
+  const totalPeople = totalAdults + totalChildren;
+  const personLabel = plural(totalPeople, "Person", "People");
+  const roomLabel = plural(totalRooms, "Room", "Rooms");
+  const adultLabel = plural(totalAdults, "Adult", "Adults");
+  const childLabel = plural(totalChildren, "Child", "Children");
   // -----------Handle Search---------------
   async function handleSearch() {
     if (
@@ -214,7 +224,7 @@ const HotelForm = () => {
   return (
     <Box sx={{ p: 2 }}>
       <Typography sx={{ fontSize: 16, fontFamily: raleway.style, mb: 2 }}>
-        Book Hotel - Villas, Apartments & more.
+        Book Hotels, Villas & Apartments
       </Typography>
       <Grid2
         container
@@ -244,7 +254,7 @@ const HotelForm = () => {
               // pt: 1,
             }}
           >
-            Property name or Location
+            Property Name or Location
           </Typography>
 
           <Autocomplete
@@ -484,11 +494,11 @@ const HotelForm = () => {
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
             <Typography sx={{ fontSize: 17, fontFamily: nunito.style }}>
-              {totalAdults + totalChildren} Person, {totalRooms} Rooms
+              {totalPeople} {personLabel}, {totalRooms} {roomLabel}
             </Typography>
             <Typography fontSize={13} fontFamily={nunito.style}>
-              {totalAdults} Adult{totalAdults !== 1 ? "s" : ""}, {totalChildren}{" "}
-              Child{totalChildren !== 1 ? "ren" : ""}
+              {totalAdults} {adultLabel}
+              {totalChildren > 0 ? `, ${totalChildren} ${childLabel}` : ""}
             </Typography>
           </CardActionArea>
 

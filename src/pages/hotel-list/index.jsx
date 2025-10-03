@@ -315,12 +315,12 @@ const FilterCard = ({
         gutterBottom
         sx={{ fontWeight: 600, fontFamily: roboto.style }}
       >
-        Search by Hotel Names
+        Search by Hotel Name
       </Typography>
       <TextField
         fullWidth
         size="small"
-        placeholder="Search by Hotel Names"
+        placeholder="Search by Hotel Name"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         InputProps={{
