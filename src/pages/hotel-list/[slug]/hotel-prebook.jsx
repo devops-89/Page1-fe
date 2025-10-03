@@ -46,7 +46,7 @@ const HotelPreBookPage = () => {
   const router = useRouter();
 
   // extracting the search info from redux
-  const { paxRoom, checkIn, checkOut, userIp } = useSelector(
+  const { paxRoom, checkIn, checkOut, userIp, nationality } = useSelector(
     (state) => state?.HOTEL?.HotelSearchData
   );
 
@@ -387,7 +387,7 @@ const HotelPreBookPage = () => {
               {
                 BookingCode:
                   preBookResponse?.HotelResult?.[0]?.Rooms?.[0].BookingCode,
-                GuestNationality: "IN",
+                GuestNationality: nationality.country_code,
                 EndUserIp: userIp,
                 NetAmount:
                   preBookResponse?.HotelResult?.[0].Rooms?.[0]?.NetAmount,
@@ -533,6 +533,34 @@ const HotelPreBookPage = () => {
                                 preBookResponse?.HotelResult[0]?.Rooms[0]
                                   .MealType
                               }
+                            </Typography>
+
+                            {/* Supplements */}
+                            <Typography
+                              variant="body2"
+                              sx={{ fontFamily: nunito.style, mt: 1 }}
+                            >
+                              <strong>Supplements :</strong>{" "}
+                              {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]
+                                ?.Supplements?.length > 0 ? (
+                                preBookResponse.HotelResult[0].Rooms[0].Supplements.map(
+                                  (supplementGroup, groupIndex) => (
+                                    <span key={groupIndex}>
+                                      {supplementGroup.map((supplement, i) => (
+                                        <span key={i}>
+                                          {supplement.Description} -{" "}
+                                          {supplement.Price}{" "}
+                                          {supplement.Currency}
+                                          {i < supplementGroup.length - 1 &&
+                                            ", "}
+                                        </span>
+                                      ))}
+                                    </span>
+                                  )
+                                )
+                              ) : (
+                                <span>No supplements</span>
+                              )}
                             </Typography>
                           </Grid2>
                           <Grid2 size={{ xs: 12, md: 12, lg: 3 }}>

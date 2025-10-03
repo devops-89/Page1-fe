@@ -77,8 +77,17 @@ export default function OneWayCheckout() {
   // handling function to initiate the payment process
   function handlePay() {
     setLoading(true);
+    const flightData = JSON.parse(localStorage.getItem("oneWayflightDetails"));
+
+    const traceId = flightData?.[0]?.TraceId;
+
+    const updatedPaymentPayload = {
+      ...paymentPayload,
+      traceId,
+    };
+    console.log("kkk", updatedPaymentPayload);
     paymentController
-      .paymentInit(paymentPayload)
+      .paymentInit(updatedPaymentPayload)
       .then((response) => {
         setLoading(false);
         console.log("payment response: -------", response);
@@ -91,7 +100,7 @@ export default function OneWayCheckout() {
         dispatch(
           setToast({
             open: true,
-            message: error.message,
+            message: error.response.data.message,
             severity: TOAST_STATUS.ERROR,
           })
         );
