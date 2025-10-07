@@ -18,6 +18,7 @@ import roundDomesticMealsInformationReducer from "../roundDomesticMealsInformati
 import roundDomesticBaggagesInformationReducer from "../roundDomesticBaggagesInformation"
 import mealsInformationReducer from "../mealsInformation";
 import baggagesInformationReducer from "../baggagesInformation";
+import flightValidationReducer from  "../flightValidations";
 
 const flightReducer = combineReducers({
   TravellerInformation: travellerInformationReducer,
@@ -29,6 +30,8 @@ const flightReducer = combineReducers({
   BaggagesInformation: baggagesInformationReducer,
   RoundDomesticMealsInformation: roundDomesticMealsInformationReducer,
   RoundDomesticBaggagesInformation: roundDomesticBaggagesInformationReducer,
+  FlightValidation:flightValidationReducer
+
 });
 
 export default flightReducer;
