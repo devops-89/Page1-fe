@@ -14,7 +14,7 @@ import {
   Grid2,
   Stack,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -30,29 +30,28 @@ export default function RoundTripCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
   const router = useRouter();
 
+  useEffect(() => {
+    if (sessionStorage.getItem("payment_info")) {
+      let payment_credentials = JSON.parse(
+        sessionStorage.getItem("payment_info")
+      );
+      console.log("payment_credentials on payment page:", payment_credentials);
+      setPaymentPayload({ ...payment_credentials, currency: "INR" });
+    } else {
+      router.back();
+    }
+  }, []);
 
-    useEffect(() => {
-      if (sessionStorage.getItem("payment_info")) {
-        let payment_credentials = JSON.parse(
-          sessionStorage.getItem("payment_info")
-        );
-        console.log("payment_credentials on payment page:", payment_credentials);
-        setPaymentPayload({ ...payment_credentials, currency: "INR" });
-      } else {
-        router.back();
-      }
-    }, []);
-  
   const selector = useSelector((state) => state.USER.UserData);
   const { isAuthenticated } = selector;
   const [roundTrip, setRoundTrip] = useState(null);
   const [loading, setLoading] = useState(false);
   const [passengerCount, setPassengerCount] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-   const smallScreen = useMediaQuery("(max-width:1199px)");
+  const smallScreen = useMediaQuery("(max-width:1199px)");
   const toggleDrawer = {
-    open: drawerOpen, 
-    toggle: () => setDrawerOpen((prev) => !prev), 
+    open: drawerOpen,
+    toggle: () => setDrawerOpen((prev) => !prev),
   };
 
   useEffect(() => {
@@ -74,17 +73,49 @@ export default function RoundTripCheckout() {
   // handling function to initiate the payment process
   function handlePay() {
     setLoading(true);
+
+    const flightData = JSON.parse(localStorage.getItem("oneWayflightDetails"));
+
+    const traceId = flightData?.[0]?.TraceId;
+
+    const updatedPaymentPayload = {
+      ...paymentPayload,
+      traceId,
+    };
+
+    console.log("kkk", updatedPaymentPayload);
+
     paymentController
-      .paymentInit(paymentPayload)
+      .paymentInit(updatedPaymentPayload)
       .then((response) => {
         setLoading(false);
         console.log("payment response: ", response);
         if (response?.data?.data?.short_url) {
-          router.replace(response?.data?.data?.short_url)
+          router.replace(response?.data?.data?.short_url);
         }
       })
       .catch((error) => {
         setLoading(false);
+
+        const statusCode =
+          error?.response?.status || error?.response?.data?.statusCode;
+        const message =
+          error?.response?.data?.message || "Something went wrong!";
+
+        if (statusCode === 440) {
+          alert(message);
+
+          router.replace("/");
+        } else {
+          dispatch(
+            setToast({
+              open: true,
+              message,
+              severity: TOAST_STATUS.ERROR,
+            })
+          );
+        }
+
         console.log("Payment Response Error:", error.message);
       });
   }
@@ -139,26 +170,19 @@ export default function RoundTripCheckout() {
                 container
                 spacing={3}
                 alignItems={"flex-start"}
-                
               >
                 <Grid2
-                  size={{ xs: 12, sm: 12, md: 12 ,lg:8 }}
-              
+                  size={{ xs: 12, sm: 12, md: 12, lg: 8 }}
                   sx={{
                     backgroundColor: COLORS.SEMIGREY,
                     p: 2,
                     borderRadius: 2,
-                 
-                    
-                    
-                    
                   }}
                 >
                   <Box
                     sx={{
                       backgroundColor: COLORS.WHITE,
                       p: 2,
-                      
                     }}
                   >
                     {/* form for payment option */}
@@ -572,45 +596,35 @@ export default function RoundTripCheckout() {
                 {/* order-box */}
 
                 <Grid2
-                  size={{ xs: 12, sm: 12, md: 12 ,lg:4 }}
-                
-                  
+                  size={{ xs: 12, sm: 12, md: 12, lg: 4 }}
                   sx={{
                     backgroundColor: COLORS.WHITE,
                     borderRadius: 2,
                     position: "sticky",
                     top: "75px",
-                    
                   }}
                 >
                   {/* --------------fare Summary Start-----------------  */}
-                {
-                  smallScreen ?(
+                  {smallScreen ? (
                     <SwipeableEdgeDrawer
-                    toggleDrawer={toggleDrawer}
-                    fairSummary ={
-                      roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
-                        <InternationalFareSummary
-                          fareData={roundTrip[0]?.Results}
-                          commission={roundTrip[2]}
-                          toggleDrawer={toggleDrawer}
-                        />
-                      ) : (
-                        <RoundFareSummary
-                          fareData={roundTrip}
-                          commission={roundTrip[2]}
-                          toggleDrawer={toggleDrawer}
-                        />
-                      )
-
-                    }
-
+                      toggleDrawer={toggleDrawer}
+                      fairSummary={
+                        roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
+                          <InternationalFareSummary
+                            fareData={roundTrip[0]?.Results}
+                            commission={roundTrip[2]}
+                            toggleDrawer={toggleDrawer}
+                          />
+                        ) : (
+                          <RoundFareSummary
+                            fareData={roundTrip}
+                            commission={roundTrip[2]}
+                            toggleDrawer={toggleDrawer}
+                          />
+                        )
+                      }
                     />
-                      
-                  
-
-                  ):(
-                      roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
+                  ) : roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
                     <InternationalFareSummary
                       fareData={roundTrip[0]?.Results}
                       commission={roundTrip[2]}
@@ -620,10 +634,7 @@ export default function RoundTripCheckout() {
                       fareData={roundTrip}
                       commission={roundTrip[2]}
                     />
-                  )
-
-                  )
-                }
+                  )}
 
                   {/* {roundTrip[3]?.journey === JOURNEY.INTERNATIONAL ? (
                     <FareSummary
@@ -653,7 +664,7 @@ export default function RoundTripCheckout() {
                         backgroundColor: COLORS.PRIMARY,
                         color: COLORS.WHITE,
                         minWidth: "120px",
-                        
+
                         cursor: loading ? "not-allowed" : "pointer",
                       }}
                       disabled={!paymentPayload}
@@ -676,17 +687,19 @@ export default function RoundTripCheckout() {
             </Container>
           </Grid2>
         </Grid2>
-      ) : <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "50px",
-                  marginBottom: "50px",
-                }}
-              >
-                <Loader open={true} />
-              </Box>}
+      ) : (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "50px",
+            marginBottom: "50px",
+          }}
+        >
+          <Loader open={true} />
+        </Box>
+      )}
     </>
   );
 }
