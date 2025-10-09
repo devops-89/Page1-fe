@@ -15,13 +15,15 @@ import {
   FormControl,
   Pagination,
   Stack,
+  Button,
 } from "@mui/material";
 import ReactLoading from "react-loading";
 import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { dashboardController } from "@/api/dashboardController";
 import CancelHotelDialog from "./CancelHotelDialog";
-
+import { hotelController } from "@/api/hotelController";
+import { useSelector } from "react-redux";
 const columns = [
   { key: "journey", label: "Hotel Name" },
   { key: "journey_type", label: "Room Type" },
@@ -41,7 +43,10 @@ const Hotel = ({ userId }) => {
   const [loading, setLoading] = useState(true);
   const [fetchedData, setFetchedData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-
+  const [checkingId, setCheckingId] = useState(null);
+  const Ip_address = useSelector(
+    (state) => state?.HOTEL?.HotelSearchData?.userIp
+  );
   useEffect(() => {
     const delay = setTimeout(() => {
       setDebouncedSearch(searchTerm);
@@ -105,6 +110,101 @@ const Hotel = ({ userId }) => {
     );
   };
 
+  const formatBreakup = (breakup) => {
+    if (!breakup) return "No breakup details available.";
+    try {
+      if (Array.isArray(breakup)) {
+        if (breakup.length === 0) return "No breakup details available.";
+        return breakup
+          .map((b, idx) =>
+            typeof b === "object"
+              ? `${idx + 1}. ${Object.entries(b)
+                  .map(([k, v]) => `${k}: ${v}`)
+                  .join(", ")}`
+              : `${idx + 1}. ${String(b)}`
+          )
+          .join("\n");
+      }
+      if (typeof breakup === "object") {
+        const entries = Object.entries(breakup);
+        if (entries.length === 0) return "No breakup details available.";
+        return entries.map(([k, v]) => `${k}: ${v}`).join("\n");
+      }
+      // primitive/string
+      return String(breakup);
+    } catch {
+      return "No breakup details available.";
+    }
+  };
+
+  const handleCheckStatus = async (orderId) => {
+    if (!orderId) return;
+    if (!Ip_address) {
+      alert("IP address missing. Please retry after a fresh search.");
+      return;
+    }
+
+    setCheckingId(orderId);
+    try {
+      const payload = { orderId, ip: Ip_address };
+
+      // Call your check-status API
+      const response = await hotelController.checkCancellationStatus(payload);
+      const data = response?.data;
+      if (data?.ResponseStatus !== 1) {
+        const msg =
+          data?.Error?.ErrorMessage || "Unable to fetch cancellation status.";
+        alert(`❌ ${msg}`);
+        return;
+      }
+      const crId = data?.ChangeRequestId;
+      const status = data?.ChangeRequestStatus;
+      console.log("njncjd", status);
+      // Map messages per enum
+      if (status === 1) {
+        alert(
+          `🕓 Your booking cancellation is in PENDING.\nChange Request ID: ${crId}`
+        );
+        handleUpdateRow(orderId, "CANCELLING");
+      } else if (status === 2) {
+        alert(
+          `🔄 Your booking cancellation is IN PROGRESS.\nChange Request ID: ${crId}`
+        );
+        handleUpdateRow(orderId, "CANCELLING");
+      } else if (status === 3) {
+        // Processed → show all details and mark as cancelled
+        const details = [
+          `✅ Your booking cancellation is PROCESSED.`,
+          `Change Request ID: ${crId}`,
+          `Trace ID: ${data?.TraceId || "-"}`,
+          `Total Service Charge: ${data?.TotalServiceCharge ?? 0}`,
+          `B2B2B Status: ${data?.B2B2BStatus ? "True" : "False"}`,
+          `Cancellation Charge Breakup:\n${formatBreakup(
+            data?.CancellationChargeBreakUp
+          )}`,
+        ].join("\n");
+        alert(details);
+        handleUpdateRow(orderId, "CANCELLED");
+      } else if (status === 4) {
+        alert(
+          `⛔ Your booking cancellation is REJECTED.\nChange Request ID: ${crId}`
+        );
+        // keep status as whatever it was prior; don't force change
+      } else {
+        alert(
+          `ℹ️ Unknown status (${status}).\nChange Request ID: ${crId}\nTrace ID: ${
+            data?.TraceId || "-"
+          }`
+        );
+      }
+    } catch (err) {
+      console.error("Error checking cancellation status:", err);
+      alert("❌ Failed to check cancellation status. Please try again.");
+    } finally {
+      setCheckingId(null);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -152,7 +252,7 @@ const Hotel = ({ userId }) => {
           <FormControl size="small">
             <Select
               value={pageSize}
-              onChange={(e) => setPageSize(e.target.value)}
+              onChange={(e) => setPageSize(Number(e.target.value))}
               sx={{ minWidth: 60, fontFamily: nunito.style, fontWeight: 600 }}
             >
               {[5, 10, 25, 50].map((val) => (
@@ -245,73 +345,81 @@ const Hotel = ({ userId }) => {
               </TableRow>
             ) : (
               fetchedData.map((row, i) => (
-                <TableRow key={i}>
-                  {columns.map((col) => (
-                    <TableCell
-                      key={col.key}
-                      align="center"
-                      sx={{
-                        fontFamily: nunito.style,
-                        fontWeight: 600,
-                        whiteSpace: "nowrap",
-                        maxWidth: 200,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {col.key === "pdf_url" ? (
-                        row.pdf_url ? (
-                          <a
-                            href={row.pdf_url}
-                            target="_self"
-                            rel="noopener noreferrer"
-                            style={{
-                              color: COLORS.SECONDARY,
-                              textDecoration: "underline",
-                            }}
-                            download
-                          >
-                            Download
-                          </a>
-                        ) : (
-                          "--"
-                        )
-                      ) : col.key === "cancellation" ? (
-                        row.status === "CANCELLING" ? (
-                          <button
-                            style={{
-                              padding: "6px 12px",
-                              backgroundColor: COLORS.PRIMARY,
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "4px",
-                              cursor: "pointer",
-                              fontFamily: nunito.style,
-                              fontWeight: 600,
-                            }}
-                            onClick={() =>
-                              alert(
-                                "Use Check Cancellation Status API to get the latest status"
-                              )
-                            }
-                          >
-                            Check Status
-                          </button>
-                        ) : row.status === "COMPLETED" ? (
-                          <CancelHotelDialog
-                            orderId={row.order_id}
-                            onInitiate={() => handleUpdateRow(row.order_id, "CANCELLING")}
-                          />
-                        ) : (
-                          "--"
-                        )
-                      ) : col.key === "status" ? (
-                        row.status
-                      ) : (
-                        row[col.key]
-                      )}
-                    </TableCell>
-                  ))}
+                <TableRow key={`${row?.order_id || i}-${i}`}>
+                  {columns.map((col) => {
+                    const commonSx = {
+                      fontFamily: nunito.style,
+                      fontWeight: 600,
+                      whiteSpace: "nowrap",
+                      maxWidth: 220,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    };
+
+                    if (col.key === "pdf_url") {
+                      return (
+                        <TableCell key={col.key} align="center" sx={commonSx}>
+                          {row.pdf_url ? (
+                            <a
+                              href={row.pdf_url}
+                              target="_self"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: COLORS.SECONDARY,
+                                textDecoration: "underline",
+                              }}
+                              download
+                            >
+                              Download
+                            </a>
+                          ) : (
+                            "--"
+                          )}
+                        </TableCell>
+                      );
+                    }
+
+                    if (col.key === "cancellation") {
+                      return (
+                        <TableCell key={col.key} align="center" sx={commonSx}>
+                          {row.status === "CANCELLING" ? (
+                            <Button
+                              variant="contained"
+                              size="small"
+                              onClick={() => handleCheckStatus(row.order_id)}
+                              disabled={checkingId === row.order_id}
+                              sx={{
+                                backgroundColor: COLORS.PRIMARY,
+                                textTransform: "none",
+                                fontWeight: 700,
+                              }}
+                            >
+                              {checkingId === row.order_id
+                                ? "Checking..."
+                                : "Check Status"}
+                            </Button>
+                          ) : row.status === "COMPLETED" ? (
+                            <CancelHotelDialog
+                              orderId={row.order_id}
+                              onInitiate={() =>
+                                handleUpdateRow(row.order_id, "CANCELLING")
+                              }
+                            />
+                          ) : (
+                            "--"
+                          )}
+                        </TableCell>
+                      );
+                    }
+
+                    return (
+                      <TableCell key={col.key} align="center" sx={commonSx}>
+                        {col.key === "status"
+                          ? row.status
+                          : row[col.key] ?? "--"}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             )}
@@ -329,9 +437,8 @@ const Hotel = ({ userId }) => {
         gap={1}
       >
         <Typography sx={{ fontFamily: nunito.style, fontWeight: 500 }}>
-          Showing {(currentPage - 1) * pageSize + 1} to{" "}
-          {Math.min(currentPage * pageSize, fetchedData?.length)} of{" "}
-          {fetchedData?.length} entries
+          Showing {totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1} to{" "}
+          {Math.min(currentPage * pageSize, totalItems)} of {totalItems} entries
         </Typography>
 
         <Stack spacing={2} direction="row">

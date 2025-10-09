@@ -57,4 +57,12 @@ export const hotelController = {
       throw error;
     }
   },
+  checkCancellationStatus : async (data) =>{
+     try {
+      let result = await hotelPublicApi.post("/hotel/cancelStatus", data);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 };

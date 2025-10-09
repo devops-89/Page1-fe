@@ -10,7 +10,8 @@ import ToastBar from "./toastBar";
 import { TOAST_STATUS } from "@/utils/enum";
 import { setToast } from "@/redux/reducers/toast";
 import { setHotelFormData } from "@/redux/reducers/hotel-reducers/HotelSearchData";
-import { useEffect } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import NewLoader from "./NewLoader";
 import {
   Autocomplete,
   Box,
@@ -18,22 +19,21 @@ import {
   CardActionArea,
   Grid2,
   Popover,
+  Portal, 
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import useFetchIP from "@/custom-hook/useFetchIp";
 import { useRouter } from "next/router";
-
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { useState, useMemo } from "react";
-import Loading from "react-loading";
 import moment from "moment";
 
-const HotelForm = () => {
+const HotelForm = ({ setUiLocked, uiLocked }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+
   const [selectedCity, setSelectedCity] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -44,20 +44,45 @@ const HotelForm = () => {
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [userIp, setUserIp] = useState("");
-  const [buttonLoading, setButtonLoading] = useState(false);
   const [selectedNationality, setSelectedNationality] = useState(null);
   const [nationalityOptions, setNationalityOptions] = useState([]);
   const [nationalityLoading, setNationalityLoading] = useState(false);
+
+  const navigatedRef = useRef(false);
+
+  // lock body scroll
+  useEffect(() => {
+    document.body.style.overflow = uiLocked ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [uiLocked]);
+
+  // unlock when route finishes
+  useEffect(() => {
+    const handleDone = () => {
+      navigatedRef.current = true;
+      setUiLocked(false);
+    };
+    router.events.on("routeChangeComplete", handleDone);
+    router.events.on("routeChangeError", handleDone);
+    return () => {
+      router.events.off("routeChangeComplete", handleDone);
+      router.events.off("routeChangeError", handleDone);
+    };
+  }, [router.events, setUiLocked]);
 
   useFetchIP(setUserIp);
 
   const open = Boolean(anchorEl);
   const openPopover = (e) => {
+    if (uiLocked) return;
     setAnchorEl(e.currentTarget);
   };
 
-  const [inputValue, setInputValue] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
+  // nationality list
   useEffect(() => {
     let mounted = true;
     async function fetchNationalities() {
@@ -65,23 +90,19 @@ const HotelForm = () => {
       try {
         const res = await hotelController.searchCountry();
         const raw = res?.data?.data ?? res?.data ?? res ?? [];
-
         const normalized = (Array.isArray(raw) ? raw : [])
-          .map((c) => {
-            return {
-              country_code:
-                c.country_code || c.code || c.countryCode || c.iso || c.iso2,
-              country_name:
-                c.country_name ||
-                c.name ||
-                c.countryName ||
-                c.label ||
-                c.country ||
-                c.country_fullname,
-            };
-          })
+          .map((c) => ({
+            country_code:
+              c.country_code || c.code || c.countryCode || c.iso || c.iso2,
+            country_name:
+              c.country_name ||
+              c.name ||
+              c.countryName ||
+              c.label ||
+              c.country ||
+              c.country_fullname,
+          }))
           .filter((c) => c.country_code && c.country_name);
-
         if (mounted) setNationalityOptions(normalized);
       } catch (error) {
         console.error("Failed to load nationality list:", error);
@@ -96,44 +117,34 @@ const HotelForm = () => {
         if (mounted) setNationalityLoading(false);
       }
     }
-
     fetchNationalities();
     return () => {
       mounted = false;
     };
   }, [dispatch]);
 
-  // filter the hotel list
+  // city filter
   const filteredOptions = useMemo(() => {
     if (!inputValue) return hotelslist.slice(0, 20);
-
-    const cityQuery = inputValue.toLowerCase();
+    const q = inputValue.toLowerCase();
     return hotelslist
       .filter(
         (item) =>
-          item.city_name?.toLowerCase().includes(cityQuery) ||
-          item.country_name?.toLowerCase().includes(cityQuery) ||
-          item.country_code?.toLowerCase().includes(cityQuery)
+          item.city_name?.toLowerCase().includes(q) ||
+          item.country_name?.toLowerCase().includes(q) ||
+          item.country_code?.toLowerCase().includes(q)
       )
       .slice(0, 100);
   }, [inputValue]);
 
-  // console.log("paxRoom------------ home",paxRoom)
-  const totalAdults = paxRoom.reduce((sum, room) => sum + room.Adults, 0);
-  const totalChildren = paxRoom.reduce((sum, room) => sum + room.Children, 0);
+  const totalAdults = paxRoom.reduce((s, r) => s + r.Adults, 0);
+  const totalChildren = paxRoom.reduce((s, r) => s + r.Children, 0);
   const totalRooms = paxRoom.length;
-
-  // helpers for clean pluralization
-  const plural = (n, one, many) => (n === 1 ? one : many);
-
-  // derived labels
   const totalPeople = totalAdults + totalChildren;
-  const personLabel = plural(totalPeople, "Person", "People");
-  const roomLabel = plural(totalRooms, "Room", "Rooms");
-  const adultLabel = plural(totalAdults, "Adult", "Adults");
-  const childLabel = plural(totalChildren, "Child", "Children");
-  // -----------Handle Search---------------
+
+  // search
   async function handleSearch() {
+    if (uiLocked) return;
     if (
       !checkIn ||
       !checkOut ||
@@ -150,6 +161,10 @@ const HotelForm = () => {
       );
       return;
     }
+
+    setAnchorEl(null);
+    setUiLocked(true);
+    navigatedRef.current = false;
 
     const payload = {
       CheckIn: checkIn.format("YYYY-MM-DD"),
@@ -170,8 +185,6 @@ const HotelForm = () => {
       },
     };
 
-    console.log("paload printing:", payload);
-
     dispatch(
       setHotelFormData({
         selectedCity,
@@ -184,11 +197,13 @@ const HotelForm = () => {
     );
 
     try {
-      setButtonLoading(true);
       const response = await hotelController.searchHotel(payload);
-      if (response.data?.data?.length > 0) {
-        dispatch(setHotelList(response?.data?.data));
-        router.push("/hotel-list");
+      const list = response?.data?.data ?? [];
+      if (Array.isArray(list) && list.length > 0) {
+        dispatch(setHotelList(list));
+        router.push("/hotel-list").then((ok) => {
+          if (ok) navigatedRef.current = true;
+        });
       } else {
         dispatch(
           setToast({
@@ -198,42 +213,85 @@ const HotelForm = () => {
           })
         );
       }
-      setButtonLoading(false);
     } catch (error) {
       dispatch(
         setToast({
           open: true,
-          message: error.message || "An error occurred during the search.",
+          message: error?.message || "An error occurred during the search.",
           severity: TOAST_STATUS.ERROR,
         })
       );
-      setButtonLoading(false);
+    } finally {
+      if (!navigatedRef.current) setUiLocked(false);
     }
   }
 
-  function handleCheckin(newvalue) {
-    setCheckIn(newvalue);
+  function handleCheckin(v) {
+    setCheckIn(v);
+    if (checkOut && v && moment(checkOut).isSameOrBefore(v, "day")) {
+      setCheckOut(moment(v).add(1, "day"));
+    }
   }
-
-  function handleCheckout(newvalue) {
-    setCheckOut(newvalue);
+  function handleCheckout(v) {
+    setCheckOut(v);
   }
-
-  // console.log("paxRoom----------------",paxRoom)
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, position: "relative" }} aria-busy={uiLocked}>
+      {/* Full-screen blur overlay + NewLoader (replaces Backdrop) */}
+      <Portal>
+        {uiLocked && (
+          <Box
+            role="dialog"
+            aria-label="Loading"
+            sx={{
+              position: "fixed",
+              inset: 0,
+              zIndex: (t) => t.zIndex.modal + 10,
+              // blur the whole app behind, keep content dimmed
+              backdropFilter: "blur(6px)",
+              WebkitBackdropFilter: "blur(6px)",
+              backgroundColor: "rgba(0,0,0,0.25)",
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "auto",
+            }}
+          >
+            <Stack alignItems="center" spacing={2}>
+              <NewLoader open />
+              <Typography
+                sx={{
+                  fontFamily: nunito.style,
+                  fontWeight: 700,
+                  color: "#FFF",
+                  fontSize : 20
+                }}
+              >
+                Searching hotels…
+              </Typography>
+            </Stack>
+          </Box>
+        )}
+      </Portal>
+
       <Typography sx={{ fontSize: 16, fontFamily: raleway.style, mb: 2 }}>
         Book Hotels, Villas & Apartments
       </Typography>
+
       <Grid2
         container
-        alignItems={"center"}
-        sx={{ display: "flex", alignItems: "stretch", gap: { xs: 0.5, lg: 1 } }}
+        alignItems="center"
         spacing={2}
+        sx={{
+          display: "flex",
+          alignItems: "stretch",
+          gap: { xs: 0.5, lg: 1 },
+          pointerEvents: uiLocked ? "none" : "auto",
+          userSelect: uiLocked ? "none" : "auto",
+        }}
       >
+        {/* city */}
         <Grid2
-          // size={{ lg: 3, xs: 12, sm: 6 }}
           size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #D9D9D9",
@@ -251,16 +309,14 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              // pt: 1,
             }}
           >
             Property Name or Location
           </Typography>
-
           <Autocomplete
             options={filteredOptions}
             inputValue={inputValue}
-            onChange={(event, value) => setSelectedCity(value)}
+            onChange={(_, value) => setSelectedCity(value)}
             onInputChange={(_, value) => setInputValue(value)}
             getOptionLabel={(option) =>
               typeof option === "string" ? option : option?.city_name || ""
@@ -309,12 +365,9 @@ const HotelForm = () => {
                       </Typography>
                     </Box>
                   </Stack>
-
-                  {/* Right: country code */}
                   <Typography
                     sx={{
                       fontSize: 13,
-                      fontWeight: 500,
                       color: COLORS.DARKGREY,
                       fontFamily: nunito.style,
                       fontWeight: 600,
@@ -328,8 +381,8 @@ const HotelForm = () => {
           />
         </Grid2>
 
+        {/* check-in */}
         <Grid2
-          // size={{ lg: 3, xs: 12, sm: 6 }}
           size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #D9D9D9",
@@ -347,18 +400,13 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              // pt: 1,
             }}
           >
             Check In
           </Typography>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
-              sx={{
-                fieldset: {
-                  border: "none",
-                },
-              }}
+              sx={{ fieldset: { border: "none" } }}
               disablePast
               value={checkIn}
               onChange={handleCheckin}
@@ -368,8 +416,9 @@ const HotelForm = () => {
             />
           </LocalizationProvider>
         </Grid2>
+
+        {/* check-out */}
         <Grid2
-          // size={{ lg: 3, xs: 12, sm: 6 }}
           size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #D9D9D9",
@@ -387,20 +436,14 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              // pt: 1,
             }}
           >
             Check Out
           </Typography>
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
-              sx={{
-                fieldset: {
-                  border: "none",
-                },
-              }}
+              sx={{ fieldset: { border: "none" } }}
               maxDate={moment().add(90, "days")}
-              // Ensure check-out is after check-in
               minDate={checkIn ? moment(checkIn).add(1, "day") : moment()}
               value={checkOut}
               onChange={handleCheckout}
@@ -410,6 +453,7 @@ const HotelForm = () => {
           </LocalizationProvider>
         </Grid2>
 
+        {/* nationality */}
         <Grid2
           size={{ lg: 2, xs: 12, sm: 6, md: 2.4 }}
           sx={{
@@ -432,7 +476,6 @@ const HotelForm = () => {
           >
             Nationality
           </Typography>
-
           <Autocomplete
             options={nationalityOptions}
             loading={nationalityLoading}
@@ -468,8 +511,9 @@ const HotelForm = () => {
             )}
           />
         </Grid2>
+
+        {/* travellers */}
         <Grid2
-          // size={{ lg: 3, xs: 12, sm: 6 }}
           size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #D9D9D9",
@@ -487,38 +531,35 @@ const HotelForm = () => {
               fontFamily: nunito.style,
               color: COLORS.DARKGREY,
               px: 2,
-              // pt: 1,
             }}
           >
             Travellers Selection
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
             <Typography sx={{ fontSize: 17, fontFamily: nunito.style }}>
-              {totalPeople} {personLabel}, {totalRooms} {roomLabel}
+              {totalPeople} {totalPeople === 1 ? "Person" : "People"},{" "}
+              {paxRoom.length} {paxRoom.length === 1 ? "Room" : "Rooms"}
             </Typography>
             <Typography fontSize={13} fontFamily={nunito.style}>
-              {totalAdults} {adultLabel}
-              {totalChildren > 0 ? `, ${totalChildren} ${childLabel}` : ""}
+              {totalAdults} {totalAdults === 1 ? "Adult" : "Adults"}
+              {totalChildren > 0
+                ? `, ${totalChildren} ${
+                    totalChildren === 1 ? "Child" : "Children"
+                  }`
+                : ""}
             </Typography>
           </CardActionArea>
 
-          {/* popover start */}
           <Popover
             open={open}
             anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            transformOrigin={{ vertical: "top", horizontal: "center" }}
             onClose={() => setAnchorEl(null)}
             sx={{
               "& .MuiPopover-paper": {
                 boxShadow:
-                  " rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+                  "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
                 p: 2,
                 width: { lg: "40%", md: "60%", sm: "80%", xs: "95%" },
               },
@@ -529,38 +570,29 @@ const HotelForm = () => {
               setAnchorEl={setAnchorEl}
               paxRoom={paxRoom}
             />
-            {/* Traveller selection form end */}
           </Popover>
-          {/* popover end */}
         </Grid2>
-        <Grid2 size={{ lg: 12, md: 2.4, xs: 12, sm: 12 }} textAlign={"center"}>
+
+        {/* search button */}
+        <Grid2 size={{ lg: 12, md: 2.4, xs: 12, sm: 12 }} textAlign="center">
           <Button
-            disabled={buttonLoading}
+            disabled={uiLocked}
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
               width: { lg: 150, md: 150, sm: 120, xs: 120 },
               mt: { lg: 2, sm: 1, xs: 2 },
-              cursor: buttonLoading ? "not-allowed" : "pointer",
+              cursor: uiLocked ? "not-allowed" : "pointer",
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
-              opacity: buttonLoading ? 0.7 : 1, // Add visual disabled state
             }}
             onClick={handleSearch}
           >
-            {buttonLoading ? (
-              <Loading
-                type="bars"
-                width={20}
-                height={20}
-                color={COLORS.WHITE}
-              />
-            ) : (
-              "Search"
-            )}
+            Search
           </Button>
         </Grid2>
       </Grid2>
+
       <ToastBar />
     </Box>
   );

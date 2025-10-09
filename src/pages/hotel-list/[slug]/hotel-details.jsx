@@ -95,6 +95,10 @@ const HotelDetails = () => {
   }, [query.slug]);
 
   const { mainImage, roomImages } = useUniqueHotelImages(hotelDetail);
+  const [heroImage, setHeroImage] = useState(mainImage);
+  useEffect(() => {
+    setHeroImage(mainImage);
+  }, [mainImage]);
 
   console.log("Hotels: ", hotels);
   console.log("selected Hotel Data:", selectedHotel);
@@ -210,20 +214,23 @@ const HotelDetails = () => {
                     </Typography>
 
                     <img
-                      src={mainImage}
+                      src={heroImage || "/placeholder.jpg"}
                       style={{
                         width: "100%",
                         borderRadius: "16px",
                         height: "300px",
                         objectFit: "cover",
-                        backgroundPosition: "center",
-                        display: "block",
+                        cursor: "zoom-in",
                       }}
                     />
 
                     {/* rooms images start */}
 
-                    <RoomImageSlider roomImages={roomImages} />
+                    <RoomImageSlider
+                      roomImages={roomImages}
+                      onImageClick={(imgUrl) => setHeroImage(imgUrl)} // 👈 added
+                    />
+
                     {/* rooms images end */}
 
                     {/* Hotel Address  start*/}

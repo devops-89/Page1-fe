@@ -9,10 +9,8 @@ import {
   ListItem,
   Divider,
   Container,
-  Paper,
   Grid2,
   Button,
-  ListItemIcon,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -20,6 +18,12 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import CommonFieldsForm from "@/components/hotels/CommonFieldsForm";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -41,16 +45,14 @@ import { paymentController } from "@/api/paymentController";
 import { Formik, Form } from "formik";
 import RateConditionCard from "@/components/hotels/HomepageHotels/RateConditionCard";
 import { getRandomColor } from "@/custom-hook/getRandomColor";
+
 const HotelPreBookPage = () => {
-  // make router instance for extracting instance
   const router = useRouter();
 
-  // extracting the search info from redux
   const { paxRoom, checkIn, checkOut, userIp, nationality } = useSelector(
     (state) => state?.HOTEL?.HotelSearchData
   );
 
-  // making state variables for preBook Api Call
   const [preBookResponse, setPreBookResponse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -59,6 +61,23 @@ const HotelPreBookPage = () => {
   const [openFacilities, setOpenFacilities] = useState(false);
   const handleOpenFacilities = () => setOpenFacilities(true);
   const handleCloseFacilities = () => setOpenFacilities(false);
+
+  // helper to read flags (supports multiple naming patterns)
+  const getFlag = (flagName) => {
+    if (!preBookResponse) return false;
+    return (
+      preBookResponse?.[flagName] ??
+      preBookResponse?.[`Is${flagName}`] ??
+      preBookResponse?.ValidationInfo?.[flagName] ??
+      preBookResponse?.ValidationInfo?.[`Is${flagName}`] ??
+      false
+    );
+  };
+
+  // flags used for package/transport validation
+  const hasPackageFare = getFlag("PackageFare");
+  const packageDetailsMandatory = getFlag("PackageDetailsMandatory");
+  const departureDetailsMandatory = getFlag("DepartureDetailsMandatory");
 
   const amenities = Array.isArray(
     preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.Amenities
@@ -76,7 +95,7 @@ const HotelPreBookPage = () => {
   );
   const shouldTruncateFacilities = remainingAmenities > 0;
 
-  // centralized initial Values
+  // centralized initial Values (transport objects included)
   const generateInitialValues = () => ({
     commonFields: {
       Email: "",
@@ -144,9 +163,18 @@ const HotelPreBookPage = () => {
         })),
       ],
     })),
+    arrivalTransport: {
+      ArrivalTransportType: "",
+      TransportInfoId: "",
+      Time: "",
+    },
+    departureTransport: {
+      DepartureTransportType: "",
+      TransportInfoId: "",
+      Time: "",
+    },
   });
 
-  // make the payload according to the booking api expectation
   function transformToBookingPayload(allValues, meta = {}) {
     return {
       BookingCode: meta.BookingCode,
@@ -182,10 +210,7 @@ const HotelPreBookPage = () => {
             GSTCompanyEmail: pax.GSTCompanyEmail || null,
           };
 
-          // ✅ Only add PAN if the passenger is an adult
-          if (isAdult && pax.PAN) {
-            passenger.PAN = pax.PAN;
-          }
+          if (isAdult && pax.PAN) passenger.PAN = pax.PAN;
 
           if (!isAdult && pax.GuardianDetail) {
             passenger.GuardianDetail = {
@@ -202,17 +227,16 @@ const HotelPreBookPage = () => {
     };
   }
 
-  // states for expanding the guest form
   const [expanded, setExpanded] = useState("room-0");
+  const handleChange = (panel) => (_event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
-  //   refs for attaching to the child formik forms
   const commonFormRef = useRef();
   const passengerFormRef = useRef([]);
 
-  // validate all passenger forms
   const validateAllPassengerForms = async () => {
     const errorsList = [];
-
     for (const ref of passengerFormRef.current) {
       if (ref?.validateForm) {
         const errors = await ref.validateForm();
@@ -221,28 +245,18 @@ const HotelPreBookPage = () => {
         errorsList.push({});
       }
     }
-
     return errorsList;
   };
 
-  // function for handling the form expansion change
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
-  // passengers info
   const [passengers, setPassengers] = useState({ adult: 0, child: 0 });
 
-  // extracting the login status to login and giving access
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
   );
 
-  // extractimg the hotel data to render
   const hotel = data?.hotelPreBook?.HotelResult?.[0];
   const room = hotel?.Rooms?.[0];
 
-  // preBook API Calling Here
   useEffect(() => {
     if (!router.isReady) return;
 
@@ -267,19 +281,16 @@ const HotelPreBookPage = () => {
     fetchPreBook();
   }, [router.isReady, router.query.slug]);
 
-  // extracting the cancellation policy for formating it
   const cancellationPolicies =
-    preBookResponse?.HotelResult[0]?.Rooms[0]?.CancelPolicies;
-
+    preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.CancelPolicies ?? [];
   const cancellationMessages =
     useFormatCancellationPolicy(cancellationPolicies);
 
-  // calculating the number of adults and child
   useEffect(() => {
     let adult = 0;
     let child = 0;
 
-    paxRoom?.map((room) => {
+    paxRoom?.forEach((room) => {
       adult = adult + room.Adults;
       child = child + room.Children;
     });
@@ -287,17 +298,57 @@ const HotelPreBookPage = () => {
     setPassengers({ adult, child });
   }, [paxRoom]);
 
-  // calculate Base Fare
   const calculateBaseFare = (dayRates) => {
     let total = 0;
-
-    for (const room of dayRates) {
-      for (const night of room) {
-        total += night.BasePrice;
+    for (const room of dayRates || []) {
+      for (const night of room || []) {
+        total += night?.BasePrice || 0;
       }
     }
-
     return total;
+  };
+
+  // helper validators reused in onSubmit
+  const isArrivalValid = (arrival) => {
+    if (!arrival) return false;
+    if (!arrival.TransportInfoId || !arrival.TransportInfoId.toString().trim())
+      return false;
+    if (![0, 1].includes(Number(arrival.ArrivalTransportType))) return false;
+    if (!arrival.Time || isNaN(Date.parse(arrival.Time))) return false;
+    return true;
+  };
+
+  const isDepartureValid = (departure) => {
+    if (!departure) return false;
+    if (
+      !departure.TransportInfoId ||
+      !departure.TransportInfoId.toString().trim()
+    )
+      return false;
+    if (![0, 1].includes(Number(departure.DepartureTransportType)))
+      return false;
+    if (!departure.Time || isNaN(Date.parse(departure.Time))) return false;
+    return true;
+  };
+
+  const submitBooking = async (finalPayload) => {
+    try {
+      setApiLoading(true);
+      const res = await paymentController.hotelPaymentInit(finalPayload);
+      setApiLoading(false);
+      console.log("Booking response", res);
+      if (res?.data?.data?.short_url) {
+        window.location.href = res.data.data.short_url;
+      } else {
+        window.alert("Booking created but no redirect URL provided.");
+      }
+    } catch (err) {
+      setApiLoading(false);
+      console.error(err);
+      window.alert(
+        err?.response?.data?.message || err.message || "Booking failed"
+      );
+    }
   };
 
   if (loading) {
@@ -374,23 +425,109 @@ const HotelPreBookPage = () => {
       </Grid2>
       <Container>
         <Formik
+          enableReinitialize
           initialValues={generateInitialValues()}
           validationSchema={getCombinedValidationSchema(
             preBookResponse?.ValidationInfo
           )}
-          onSubmit={async (values) => {
-            console.log("Submited Values:", values);
+          // validate only when backend flags require it (true case)
+          validate={(values) => {
+            const errors = {};
+            const arrival = values.arrivalTransport || {};
+            const departure = values.departureTransport || {};
 
-            // you can dispatch redux action here if needed
+            if (packageDetailsMandatory) {
+              if (
+                !arrival.TransportInfoId ||
+                !arrival.TransportInfoId.toString().trim()
+              ) {
+                errors.arrivalTransport = errors.arrivalTransport || {};
+                errors.arrivalTransport.TransportInfoId =
+                  "Arrival transport info id is required";
+              }
+              if (![0, 1].includes(Number(arrival.ArrivalTransportType))) {
+                errors.arrivalTransport = errors.arrivalTransport || {};
+                errors.arrivalTransport.ArrivalTransportType =
+                  "Select arrival transport type";
+              }
+              if (!arrival.Time || isNaN(Date.parse(arrival.Time))) {
+                errors.arrivalTransport = errors.arrivalTransport || {};
+                errors.arrivalTransport.Time =
+                  "Arrival time is required and must be valid";
+              }
+            }
+
+            if (departureDetailsMandatory) {
+              if (
+                !departure.TransportInfoId ||
+                !departure.TransportInfoId.toString().trim()
+              ) {
+                errors.departureTransport = errors.departureTransport || {};
+                errors.departureTransport.TransportInfoId =
+                  "Departure transport info id is required";
+              }
+              if (![0, 1].includes(Number(departure.DepartureTransportType))) {
+                errors.departureTransport = errors.departureTransport || {};
+                errors.departureTransport.DepartureTransportType =
+                  "Select departure transport type";
+              }
+              if (!departure.Time || isNaN(Date.parse(departure.Time))) {
+                errors.departureTransport = errors.departureTransport || {};
+                errors.departureTransport.Time =
+                  "Departure time is required and must be valid";
+              }
+            }
+
+            return errors;
+          }}
+          onSubmit={async (values, formikHelpers) => {
+            const needArrival = packageDetailsMandatory;
+            const needDeparture = departureDetailsMandatory;
+
+            if (needArrival && !isArrivalValid(values.arrivalTransport)) {
+              formikHelpers.setFieldError(
+                "arrivalTransport.TransportInfoId",
+                "Arrival transport id is required"
+              );
+              formikHelpers.setFieldError(
+                "arrivalTransport.ArrivalTransportType",
+                "Select arrival transport type"
+              );
+              formikHelpers.setFieldError(
+                "arrivalTransport.Time",
+                "Provide a valid arrival time"
+              );
+              window.alert("Please provide valid Arrival transport details.");
+              return;
+            }
+
+            if (needDeparture && !isDepartureValid(values.departureTransport)) {
+              formikHelpers.setFieldError(
+                "departureTransport.TransportInfoId",
+                "Departure transport id is required"
+              );
+              formikHelpers.setFieldError(
+                "departureTransport.DepartureTransportType",
+                "Select departure transport type"
+              );
+              formikHelpers.setFieldError(
+                "departureTransport.Time",
+                "Provide a valid departure time"
+              );
+              window.alert("Please provide valid Departure transport details.");
+              return;
+            }
+
+            // build payload core
             const cleanedGuestPayload = transformToBookingPayload(
               values.guestForms.map((room) => room),
               {
                 BookingCode:
-                  preBookResponse?.HotelResult?.[0]?.Rooms?.[0].BookingCode,
-                GuestNationality: nationality.country_code,
+                  preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.BookingCode,
+                GuestNationality: nationality?.country_code,
                 EndUserIp: userIp,
                 NetAmount:
-                  preBookResponse?.HotelResult?.[0].Rooms?.[0]?.NetAmount,
+                  preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.NetAmount,
               }
             );
 
@@ -408,31 +545,63 @@ const HotelPreBookPage = () => {
               stayDuration: duration || 0,
               basePrice:
                 preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.PriceBreakUp?.[0]
-                  .RoomRate || 0,
+                  ?.RoomRate || 0,
               tax: preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalTax || 0,
               serviceFees:
                 preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.PriceBreakUp?.[0]
-                  .AgentCommission || 0,
+                  ?.AgentCommission || 0,
               checkIn: checkIn,
               checkOut: checkOut,
             };
 
+            // NEW: PackageFare object (grouping all package fare validation data)
+            const packageFare = {};
+            if (hasPackageFare) {
+              packageFare.IsPackageFare = true;
+
+              if (needArrival || values.arrivalTransport?.TransportInfoId) {
+                packageFare.ArrivalTransport = {
+                  ArrivalTransportType: Number(
+                    values.arrivalTransport?.ArrivalTransportType ?? 0
+                  ),
+                  TransportInfoId:
+                    values.arrivalTransport?.TransportInfoId ?? "",
+                  Time: values.arrivalTransport?.Time
+                    ? new Date(values.arrivalTransport.Time).toISOString()
+                    : undefined,
+                };
+              }
+
+              if (needDeparture || values.departureTransport?.TransportInfoId) {
+                packageFare.DepartureTransport = {
+                  DepartureTransportType: Number(
+                    values.departureTransport?.DepartureTransportType ?? 0
+                  ),
+                  TransportInfoId:
+                    values.departureTransport?.TransportInfoId ?? "",
+                  Time: values.departureTransport?.Time
+                    ? new Date(values.departureTransport.Time).toISOString()
+                    : undefined,
+                };
+              }
+
+              // Optional echoes (safe to remove if not needed)
+              packageFare.IsPackageDetailsMandatory = Boolean(
+                packageDetailsMandatory
+              );
+              packageFare.IsDepartureDetailsMandatory = Boolean(
+                departureDetailsMandatory
+              );
+            }
+
             const payload = {
               ...cleanedGuestPayload,
               extraInfo: extraInformation,
+              ...(hasPackageFare ? { PackageFare: packageFare } : {}),
             };
 
             setApiLoading(true);
-            let response = await paymentController.hotelPaymentInit(payload);
-            console.log("Response from the Booking API: ", response);
-            setApiLoading(false);
-
-            //  redirect to the short url if url is coming
-            if (response?.data?.data?.short_url) {
-              window.location.href = response?.data?.data?.short_url;
-            } else {
-              console.warn("No short URL found in the response.");
-            }
+            await submitBooking(payload);
           }}
         >
           {(formik) => (
@@ -456,7 +625,7 @@ const HotelPreBookPage = () => {
                               }}
                               gutterBottom
                             >
-                              {preBookResponse?.HotelResult[0]?.HotelName}
+                              {preBookResponse?.HotelResult?.[0]?.HotelName}
                             </Typography>
                             <Typography
                               variant="subtitle2"
@@ -469,8 +638,8 @@ const HotelPreBookPage = () => {
                                   sx={{
                                     color:
                                       index <
-                                      preBookResponse?.HotelResult[0]
-                                        ?.HotelHotelRating
+                                      (preBookResponse?.HotelResult?.[0]
+                                        ?.HotelHotelRating || 0)
                                         ? COLORS.PRIMARY
                                         : "#ccc",
                                   }}
@@ -487,11 +656,10 @@ const HotelPreBookPage = () => {
                                 fontSize: "16px",
                               }}
                             >
-                              {preBookResponse?.HotelResult[0]?.HotelAddress}
+                              {preBookResponse?.HotelResult?.[0]?.HotelAddress}
                             </Typography>
 
                             {/* Room Promotions */}
-
                             <Typography
                               variant="body2"
                               sx={{ fontFamily: nunito.style, mt: 1 }}
@@ -510,28 +678,26 @@ const HotelPreBookPage = () => {
                             </Typography>
 
                             {/* Room Inclusion */}
-
                             <Typography
                               variant="body2"
                               sx={{ fontFamily: nunito.style, mt: 1 }}
                             >
                               <strong>Inclusion :</strong>{" "}
                               {
-                                preBookResponse?.HotelResult[0]?.Rooms[0]
-                                  .Inclusion
+                                preBookResponse?.HotelResult?.[0]?.Rooms?.[0]
+                                  ?.Inclusion
                               }
                             </Typography>
 
                             {/* Meal Type */}
-
                             <Typography
                               variant="body2"
                               sx={{ fontFamily: nunito.style, mt: 1 }}
                             >
                               <strong>Meal Type :</strong>{" "}
                               {
-                                preBookResponse?.HotelResult[0]?.Rooms[0]
-                                  .MealType
+                                preBookResponse?.HotelResult?.[0]?.Rooms?.[0]
+                                  ?.MealType
                               }
                             </Typography>
 
@@ -576,7 +742,7 @@ const HotelPreBookPage = () => {
                       </CardContent>
                     </Card>
 
-                    {/* this section is used to show the check in and checkout information */}
+                    {/* Check in/out card */}
                     <Card variant="outlined" sx={{ boxShadow: 1, mb: 3 }}>
                       <CardContent>
                         <Grid2
@@ -650,7 +816,7 @@ const HotelPreBookPage = () => {
                       </CardContent>
                     </Card>
 
-                    {/* this section is for adding guest information to proceed for booking */}
+                    {/* Guest forms */}
                     <Card variant="outlined" sx={{ boxShadow: 1, mb: 3 }}>
                       {!isAuthenticated ? (
                         <Card sx={{ mb: "20px", p: "20px", mx: "auto" }}>
@@ -716,7 +882,173 @@ const HotelPreBookPage = () => {
                       )}
                     </Card>
 
-                    {/* this section is used to show the additional information to be shown for the hotels */}
+                    {/* TRANSPORT: show only when server flags require it (true case) */}
+                    {(packageDetailsMandatory || departureDetailsMandatory) && (
+                      <Card variant="outlined" sx={{ boxShadow: 1, mb: 3 }}>
+                        <CardContent>
+                          <Typography
+                            variant="h6"
+                            sx={{ fontWeight: "700", fontFamily: roboto.style }}
+                          >
+                            Transport Details (required)
+                          </Typography>
+
+                          {/* Arrival */}
+                          {packageDetailsMandatory && (
+                            <Box sx={{ mt: 1 }}>
+                              <Typography variant="subtitle2">
+                                Arrival Transport
+                              </Typography>
+
+                              <FormControl
+                                fullWidth
+                                sx={{ mt: 1 }}
+                                error={Boolean(
+                                  formik.errors?.arrivalTransport
+                                    ?.ArrivalTransportType
+                                )}
+                              >
+                                <InputLabel id="arrival-type-label">
+                                  Type
+                                </InputLabel>
+                                <Select
+                                  labelId="arrival-type-label"
+                                  label="Type"
+                                  {...formik.getFieldProps(
+                                    "arrivalTransport.ArrivalTransportType"
+                                  )}
+                                  value={
+                                    formik.values.arrivalTransport
+                                      .ArrivalTransportType
+                                  }
+                                >
+                                  <MenuItem value={0}>Flight</MenuItem>
+                                  <MenuItem value={1}>Surface</MenuItem>
+                                </Select>
+                                <FormHelperText>
+                                  {
+                                    formik.errors?.arrivalTransport
+                                      ?.ArrivalTransportType
+                                  }
+                                </FormHelperText>
+                              </FormControl>
+
+                              <TextField
+                                fullWidth
+                                label="Transport Info Id (e.g. flight no)"
+                                sx={{ mt: 2 }}
+                                {...formik.getFieldProps(
+                                  "arrivalTransport.TransportInfoId"
+                                )}
+                                error={Boolean(
+                                  formik.errors?.arrivalTransport
+                                    ?.TransportInfoId
+                                )}
+                                helperText={
+                                  formik.errors?.arrivalTransport
+                                    ?.TransportInfoId
+                                }
+                              />
+
+                              <TextField
+                                fullWidth
+                                label="Arrival Time"
+                                type="datetime-local"
+                                sx={{ mt: 2 }}
+                                InputLabelProps={{ shrink: true }}
+                                {...formik.getFieldProps(
+                                  "arrivalTransport.Time"
+                                )}
+                                error={Boolean(
+                                  formik.errors?.arrivalTransport?.Time
+                                )}
+                                helperText={
+                                  formik.errors?.arrivalTransport?.Time
+                                }
+                              />
+                            </Box>
+                          )}
+
+                          {/* Departure */}
+                          {departureDetailsMandatory && (
+                            <Box sx={{ mt: 2 }}>
+                              <Typography variant="subtitle2">
+                                Departure Transport
+                              </Typography>
+
+                              <FormControl
+                                fullWidth
+                                sx={{ mt: 1 }}
+                                error={Boolean(
+                                  formik.errors?.departureTransport
+                                    ?.DepartureTransportType
+                                )}
+                              >
+                                <InputLabel id="departure-type-label">
+                                  Type
+                                </InputLabel>
+                                <Select
+                                  labelId="departure-type-label"
+                                  label="Type"
+                                  {...formik.getFieldProps(
+                                    "departureTransport.DepartureTransportType"
+                                  )}
+                                  value={
+                                    formik.values.departureTransport
+                                      .DepartureTransportType
+                                  }
+                                >
+                                  <MenuItem value={0}>Flight</MenuItem>
+                                  <MenuItem value={1}>Surface</MenuItem>
+                                </Select>
+                                <FormHelperText>
+                                  {
+                                    formik.errors?.departureTransport
+                                      ?.DepartureTransportType
+                                  }
+                                </FormHelperText>
+                              </FormControl>
+
+                              <TextField
+                                fullWidth
+                                label="Transport Info Id (e.g. flight no)"
+                                sx={{ mt: 2 }}
+                                {...formik.getFieldProps(
+                                  "departureTransport.TransportInfoId"
+                                )}
+                                error={Boolean(
+                                  formik.errors?.departureTransport
+                                    ?.TransportInfoId
+                                )}
+                                helperText={
+                                  formik.errors?.departureTransport
+                                    ?.TransportInfoId
+                                }
+                              />
+
+                              <TextField
+                                fullWidth
+                                label="Departure Time"
+                                type="datetime-local"
+                                sx={{ mt: 2 }}
+                                InputLabelProps={{ shrink: true }}
+                                {...formik.getFieldProps(
+                                  "departureTransport.Time"
+                                )}
+                                error={Boolean(
+                                  formik.errors?.departureTransport?.Time
+                                )}
+                                helperText={
+                                  formik.errors?.departureTransport?.Time
+                                }
+                              />
+                            </Box>
+                          )}
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Cancellation policy card */}
                     <Card variant="outlined" sx={{ boxShadow: 1, mb: 3 }}>
                       <CardContent>
                         <Typography
@@ -744,7 +1076,6 @@ const HotelPreBookPage = () => {
                           ))}
                         </List>
                         <Divider sx={{ my: 2 }} />
-                        {/* Last Cancellation Deadline */}
                         <Typography
                           mt={2}
                           color="text.primary"
@@ -757,7 +1088,8 @@ const HotelPreBookPage = () => {
                           Last Cancellation Deadline:{" "}
                           <strong>
                             {moment(
-                              room?.LastCancellationDeadline,
+                              preBookResponse?.HotelResult?.[0]?.Rooms?.[0]
+                                ?.LastCancellationDeadline,
                               "DD-MM-YYYY HH:mm:ss"
                             ).format("DD-MMM-YYYY, HH:mm")}
                           </strong>
@@ -771,14 +1103,14 @@ const HotelPreBookPage = () => {
                   </Box>
                 </Grid2>
 
-                {/* Right container (updated) */}
+                {/* Right container */}
                 <Grid2
                   size={{ xs: 12, md: 12, lg: 4 }}
                   sx={{
                     position: "sticky",
-                    top: "80px", // adjust based on your header height
-                    alignSelf: "flex-start", // important for sticky inside flex/grid
-                    height: "fit-content", // ensures it doesn’t stretch full height
+                    top: "80px",
+                    alignSelf: "flex-start",
+                    height: "fit-content",
                   }}
                 >
                   <Card
@@ -845,7 +1177,7 @@ const HotelPreBookPage = () => {
                               sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                             >
                               ₹{" "}
-                              {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalTax.toFixed(
+                              {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalTax?.toFixed(
                                 2
                               )}
                             </Typography>
@@ -875,7 +1207,7 @@ const HotelPreBookPage = () => {
                               sx={{ fontFamily: roboto.style, fontWeight: 800 }}
                             >
                               ₹{" "}
-                              {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare.toFixed(
+                              {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare?.toFixed(
                                 2
                               )}
                             </Typography>
