@@ -142,7 +142,7 @@ const GuestForm = ({
                     <MenuItem value="" disabled>
                       Select Age
                     </MenuItem>
-                    {Array.from({ length: 89 }, (_, i) => i + 12).map((age) => (
+                    {Array.from({ length: 89 }, (_, i) => i + 13).map((age) => (
                       <MenuItem key={age} value={age}>
                         {age}
                       </MenuItem>

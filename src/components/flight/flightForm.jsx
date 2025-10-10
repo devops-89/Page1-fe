@@ -16,7 +16,7 @@ import Multiway from "./multiForm";
 import { useRouter } from "next/router";
 import PersistOneWayForm from "../persistForms/PersistOneWayForm";
 
-const FlightForm = () => {
+const FlightForm = ({ setUiLocked, uiLocked }) => {
   const tab = [
     {
       label: "Oneway",
@@ -122,13 +122,13 @@ const FlightForm = () => {
 
       <TabPanel value={flightValue} index={0}>
         {/* one way done */}
-        <OnewayForm />
+        <OnewayForm setUiLocked={setUiLocked} uiLocked={uiLocked} />
       </TabPanel>
       <TabPanel value={flightValue} index={1}>
-        <RoundTrip />
+        <RoundTrip setUiLocked={setUiLocked} uiLocked={uiLocked} />
       </TabPanel>
       <TabPanel value={flightValue} index={2}>
-        <Multiway />
+        <Multiway setUiLocked={setUiLocked} uiLocked={uiLocked} />
       </TabPanel>
     </Box>
   );

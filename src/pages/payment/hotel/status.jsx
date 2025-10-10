@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import {
   Container,
   Typography,
-  Paper,
   Button,
   Box,
   Divider,
@@ -20,7 +19,6 @@ import {
 import {
   CheckCircle,
   Error as ErrorIcon,
-  HourglassEmpty,
 } from "@mui/icons-material";
 import { keyframes } from "@emotion/react";
 import { useSelector } from "react-redux";
@@ -62,10 +60,7 @@ const formatDate = (iso) => {
 
 // Section wrapper
 const SectionCard = ({ title, children, sx }) => (
-  <Card
-    elevation={1}
-    sx={{ borderRadius: 2, animation: `${scaleIn} .25s`, ...sx }}
-  >
+  <Card elevation={1} sx={{ borderRadius: 2, animation: `${scaleIn} .25s`, ...sx }}>
     <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
       {title ? (
         <>
@@ -290,7 +285,7 @@ export default function PaymentStatus() {
   // State
   const [paymentData, setPaymentData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingLoading, setBookingLoading] = useState(false); // kept for logic, no spinner usage
   const [bookingError, setBookingError] = useState(null);
   const [bookingDetails, setBookingDetails] = useState(null);
 
@@ -421,13 +416,7 @@ export default function PaymentStatus() {
       subtitle: "We’ll show booking details here when available.",
       iconColor: "text.secondary",
     };
-  }, [bookingStatus, payStatus, COLORS]);
-
-  // const payStatus = (bookingDetails?.paymentStatus || "")
-  //   .toString()
-  //   .toUpperCase();
-  // const tboResult =
-  //   bookingDetails?.bookingDetails?.GetBookingDetailResult || null;
+  }, [bookingStatus, payStatus]);
 
   return (
     <Box>
@@ -458,6 +447,7 @@ export default function PaymentStatus() {
       </Grid2>
 
       {loading ? (
+        // -------- ONLY THIS LOADER REMAINS --------
         <Grid2
           xs={12}
           sx={{
@@ -513,11 +503,9 @@ export default function PaymentStatus() {
           </Stack>
 
           <Stack spacing={3.5}>
-            {/* -------- Booking Section (only booking response here) -------- */}
+            {/* -------- Booking Section (no separate loader here) -------- */}
             <SectionCard title="Booking Details">
-              {bookingLoading ? (
-                <Loader open variant="hotel" />
-              ) : bookingError ? (
+              {bookingError ? (
                 <Alert severity="warning" variant="outlined">
                   <AlertTitle>We couldn’t fetch booking details</AlertTitle>
                   {bookingError}
@@ -539,11 +527,12 @@ export default function PaymentStatus() {
                       variant="filled"
                     />
                   </Stack>
+
                   {bookingStatus === "COMPLETED" && tboResult ? (
                     <BookingDetailCard result={tboResult} />
                   ) : bookingStatus === "FAILED" ? (
+                    // --- NO SPINNER, JUST MESSAGES ---
                     payStatus !== "SUCCESS" ? (
-                      // --- PAYMENT FAILED ---
                       <Alert
                         severity="error"
                         variant="filled"
@@ -566,7 +555,8 @@ export default function PaymentStatus() {
                               textTransform: "none",
                               fontWeight: 700,
                               "&:hover": {
-                                backgroundColor: COLORS.SECONDARY || "#0056b3",
+                                backgroundColor:
+                                  COLORS.SECONDARY || "#0056b3",
                               },
                             }}
                           >
@@ -575,7 +565,6 @@ export default function PaymentStatus() {
                         </Box>
                       </Alert>
                     ) : (
-                      // --- BOOKING FAILED BUT PAYMENT SUCCESS ---
                       <Alert severity="error" variant="filled">
                         <AlertTitle>Booking Failed</AlertTitle>
                         Your payment was received but the booking could not be
@@ -587,9 +576,11 @@ export default function PaymentStatus() {
                   ) : (
                     <Alert severity="info">
                       <AlertTitle>
-                        Status: {bookingStatus || "Unknown"}
+                        {bookingLoading ? "Fetching booking status..." : "Status"}
                       </AlertTitle>
-                      We’ll show booking details here when available.
+                      {bookingLoading
+                        ? "We’re checking the latest booking details. This may take a moment."
+                        : `Status: ${bookingStatus || "Unknown"}`}
                     </Alert>
                   )}
                 </Stack>
@@ -601,9 +592,7 @@ export default function PaymentStatus() {
             </SectionCard>
 
             {/* -------- Payment Section (only payment response here) -------- */}
-            {/* {bookingStatus === "COMPLETED" && ( */}
             <PaymentDetailsCard payment={paymentData} payStatus={payStatus} />
-            {/* // )} */}
           </Stack>
 
           {/* CTA */}

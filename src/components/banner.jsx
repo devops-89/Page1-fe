@@ -20,38 +20,47 @@ import { Flight, Hotel } from "@mui/icons-material";
 import TabPanel from "./tabPanel";
 import FlightForm from "./flight/flightForm";
 import HotelForm from "./hotelForm";
+
 const Banner = () => {
   const theme = useTheme();
   const showHeroText = useMediaQuery(theme.breakpoints.up("sm"));
+
   const tabs = [
-    {
-      icon: <Flight sx={{ fontSize: 14 }} />,
-      label: "Flights",
-    },
-    {
-      icon: <Hotel sx={{ fontSize: 14 }} />,
-      label: "Hotels",
-    },
+    { icon: <Flight sx={{ fontSize: 14 }} />, label: "Flights" },
+    { icon: <Hotel sx={{ fontSize: 14 }} />, label: "Hotels" },
   ];
 
   const [value, setValue] = useState(0);
+  const [uiLocked, setUiLocked] = useState(false);
 
-  const tabChangeHandler = (e, newValue) => {
-    setValue(newValue);
-  };
+  const tabChangeHandler = (_e, v) => setValue(v);
 
   return (
     <Box sx={{ position: "relative" }}>
+      {/* Fullscreen blur overlay BELOW the loader */}
+      {uiLocked && (
+        <Box
+          aria-hidden
+          sx={{
+            position: "fixed",
+            inset: 0,
+            zIndex: (t) => t.zIndex.modal, // 1300 by default
+            pointerEvents: "none",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            backgroundColor: "rgba(0,0,0,0.25)",
+          }}
+        />
+      )}
+
       <Swiper
         modules={[EffectFade, Autoplay]}
         effect="fade"
         loop
-        autoplay={{
-          delay: 4000,
-        }}
+        autoplay={{ delay: 4000 }}
       >
         {data.heroSectionData.map((val, i) => (
-          <SwiperSlide>
+          <SwiperSlide key={i}>
             <Box
               sx={{
                 backgroundImage: `url(${val.img})`,
@@ -63,19 +72,16 @@ const Banner = () => {
               <Box
                 sx={{
                   backgroundColor: "#00000030",
-                  height: "100%",
+                  minHeight: "650px",
                   display: "flex",
                   alignItems: "start",
                   justifyContent: "center",
-                  minHeight: "650px",
                 }}
               >
                 {showHeroText && (
                   <Grid2
                     container
-                    sx={{
-                      mt: { xs: 10, sm: 12, md: 12, lg: 15 },
-                    }}
+                    sx={{ mt: { xs: 10, sm: 12, md: 12, lg: 15 } }}
                   >
                     <Grid2
                       size={10}
@@ -121,9 +127,7 @@ const Banner = () => {
           zIndex: 99,
           bottom: 0,
           left: "50%",
-          transform: {
-            xs: "translate(-50%, -3%)",
-          },
+          transform: { xs: "translate(-50%, -3%)" },
           width: "100%",
           maxWidth: "1200px",
           px: 2,
@@ -132,7 +136,7 @@ const Banner = () => {
         <Grid2 container>
           <Grid2
             size={12}
-            margin={"auto"}
+            margin="auto"
             sx={{
               boxShadow: "0px 0px 1px 1px #d7d7d7",
               bgcolor: COLORS.WHITE,
@@ -140,13 +144,7 @@ const Banner = () => {
               pb: 1,
             }}
           >
-            <Box
-            // sx={{
-            //   maxHeight: "380px",
-            //   overflowY: "scroll",
-            //   position: "relative",
-            // }}
-            >
+            <Box>
               <Tabs
                 value={value}
                 onChange={tabChangeHandler}
@@ -162,9 +160,7 @@ const Banner = () => {
                     color: `${COLORS.WHITE} !important`,
                     backgroundColor: COLORS.SECONDARY,
                   },
-                  "& .MuiTabs-indicator": {
-                    display: "none !important",
-                  },
+                  "& .MuiTabs-indicator": { display: "none !important" },
                   "& .MuiTab-root": {
                     width: 120,
                     minHeight: { lg: 40, md: 40, sm: 35, xs: 35 },
@@ -173,7 +169,6 @@ const Banner = () => {
                     padding: 0,
                     transition: "0.5s ease all",
                   },
-
                   "& .MuiTab-root:hover": {
                     color: `${COLORS.WHITE} !important`,
                     backgroundColor: COLORS.SECONDARY,
@@ -182,6 +177,7 @@ const Banner = () => {
               >
                 {tabs.map((val, i) => (
                   <Tab
+                    key={i}
                     label={
                       <Typography
                         fontSize={12}
@@ -193,20 +189,18 @@ const Banner = () => {
                     }
                     icon={val.icon}
                     iconPosition="start"
-                    sx={{
-                      mx: 1,
-                    }}
-                    key={i}
+                    sx={{ mx: 1 }}
                   />
                 ))}
               </Tabs>
+
               <Divider />
               <Box>
                 <TabPanel value={value} index={0}>
-                  <FlightForm />
+                  <FlightForm setUiLocked={setUiLocked} uiLocked={uiLocked}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  <HotelForm />
+                  <HotelForm setUiLocked={setUiLocked} uiLocked={uiLocked} />
                 </TabPanel>
               </Box>
             </Box>

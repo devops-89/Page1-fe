@@ -26,13 +26,15 @@ export default function CancelHotelDialog({ orderId, onInitiate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const Ip_address = useSelector(
-    (state) => state.HOTEL.HotelSearchData.userIp
-  );
+  const Ip_address = useSelector((state) => state?.HOTEL?.HotelSearchData?.userIp);
 
   const cancelHotelBooking = async () => {
     if (!remarks.trim()) {
       setError("Please provide a reason for cancellation.");
+      return;
+    }
+    if (!Ip_address) {
+      setError("Missing user IP. Please try again.");
       return;
     }
 
@@ -47,13 +49,12 @@ export default function CancelHotelDialog({ orderId, onInitiate }) {
 
       const response = await hotelController.cancelHotel(payload);
       const data = response?.data?.data;
-      console.log("response data:",data);
 
       if (data?.ResponseStatus === 1) {
         alert(
-          "✅ Booking cancellation initiated. Please check the status periodically using the 'Check Status' Button."
+          "✅ Booking cancellation initiated. Please use 'Check Status' to track progress."
         );
-        if (onInitiate) onInitiate(orderId, "CANCELLING"); // <-- update table row status
+        if (typeof onInitiate === "function") onInitiate(orderId, "CANCELLING");
         handleClose(true);
       } else if (data?.ResponseStatus === 2) {
         alert("❌ Cancellation failed. Please try again.");

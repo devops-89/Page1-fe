@@ -9,8 +9,7 @@ import {
   Checkbox,
   Grid2,
   Card,
-  useMediaQuery
-  
+  useMediaQuery,
 } from "@mui/material";
 import moment from "moment";
 import pointerImage from "@/../public/images/pointer.png";
@@ -73,8 +72,19 @@ export default function OneWayCheckout() {
 
   function handlePay() {
     setLoading(true);
+    const flightData = JSON.parse(localStorage.getItem("oneWayflightDetails"));
+
+    const traceId = flightData?.[0]?.TraceId;
+
+    const updatedPaymentPayload = {
+      ...paymentPayload,
+      traceId,
+    };
+
+    console.log("kkk", updatedPaymentPayload);
+
     paymentController
-      .paymentInit(paymentPayload)
+      .paymentInit(updatedPaymentPayload)
       .then((response) => {
         setLoading(false);
         console.log("payment response: ", response);
@@ -84,6 +94,26 @@ export default function OneWayCheckout() {
       })
       .catch((error) => {
         setLoading(false);
+
+        const statusCode =
+          error?.response?.status || error?.response?.data?.statusCode;
+        const message =
+          error?.response?.data?.message || "Something went wrong!";
+
+        if (statusCode === 440) {
+          alert(message);
+
+          router.replace("/");
+        } else {
+          dispatch(
+            setToast({
+              open: true,
+              message,
+              severity: TOAST_STATUS.ERROR,
+            })
+          );
+        }
+
         console.log("Payment Response Error:", error.message);
       });
   }
@@ -163,7 +193,7 @@ export default function OneWayCheckout() {
                           key={index}
                         >
                           <Grid2 container>
-                            <Grid2 size={{ lg:8 , md:8 ,sm:8 , xs:12 }}>
+                            <Grid2 size={{ lg: 8, md: 8, sm: 8, xs: 12 }}>
                               <Typography
                                 variant="h6"
                                 gutterBottom
@@ -197,24 +227,23 @@ export default function OneWayCheckout() {
                                   )}
                                 </span>{" "}
                                 {`${flight.length - 1} Stop.`}{" "}
-
-
                                 {flight[flight.length - 1]
-                                        .AccumulatedDuration!=undefined && `${Math.floor(
-                                  moment
+                                  .AccumulatedDuration != undefined &&
+                                  `${Math.floor(
+                                    moment
+                                      .duration(
+                                        flight[flight.length - 1]
+                                          .AccumulatedDuration,
+                                        "minutes"
+                                      )
+                                      .asHours()
+                                  )} hrs ${moment
                                     .duration(
                                       flight[flight.length - 1]
                                         .AccumulatedDuration,
                                       "minutes"
                                     )
-                                    .asHours()
-                                )} hrs ${moment
-                                  .duration(
-                                    flight[flight.length - 1]
-                                      .AccumulatedDuration,
-                                    "minutes"
-                                  )
-                                  .minutes()} min`}
+                                    .minutes()} min`}
                               </Typography>
                             </Grid2>
                             <Grid2
@@ -676,15 +705,15 @@ export default function OneWayCheckout() {
                       toggleDrawer={toggleDrawer}
                       fairSummary={
                         <FareSummary
-                        toggleDrawer={toggleDrawer}
-                      fareData={multiCity[0]?.Results}
-                      commission={multiCity[2]}
-                    />
+                          toggleDrawer={toggleDrawer}
+                          fareData={multiCity[0]?.Results}
+                          commission={multiCity[2]}
+                        />
                       }
                     />
                   ) : (
                     <FareSummary
-                    toggleDrawer={toggleDrawer}
+                      toggleDrawer={toggleDrawer}
                       fareData={multiCity[0]?.Results}
                       commission={multiCity[2]}
                     />

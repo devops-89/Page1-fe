@@ -3,7 +3,7 @@ import { Box, Stack, IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-const RoomImageSlider = ({ roomImages }) => {
+const RoomImageSlider = ({ roomImages, onImageClick }) => {
   const scrollRef = useRef(null);
 
   const scroll = (direction) => {
@@ -43,7 +43,6 @@ const RoomImageSlider = ({ roomImages }) => {
           overflowX: "auto",
           scrollBehavior: "smooth",
           py: 1,
-        //   px: 4, // padding so arrows don’t overlap images
           "&::-webkit-scrollbar": { display: "none" },
           scrollbarWidth: "none",
         }}
@@ -55,12 +54,19 @@ const RoomImageSlider = ({ roomImages }) => {
               component="img"
               src={image}
               alt={`Room ${index + 1}`}
+              onClick={() => onImageClick?.(image)} // 👈 ADDED
               sx={{
                 width: 180,
                 height: 120,
                 borderRadius: 2,
                 objectFit: "cover",
                 flexShrink: 0,
+                cursor: "pointer", // 👈 feedback for clickable
+                border: "2px solid transparent",
+                transition: "border-color 0.2s",
+                "&:hover": {
+                  borderColor: "#1976d2",
+                },
               }}
             />
           ))}

@@ -77,24 +77,49 @@ export default function OneWayCheckout() {
   // handling function to initiate the payment process
   function handlePay() {
     setLoading(true);
+    const flightData = JSON.parse(localStorage.getItem("oneWayflightDetails"));
+
+    const traceId = flightData?.[0]?.TraceId;
+
+    const updatedPaymentPayload = {
+      ...paymentPayload,
+      traceId,
+    };
+
+    console.log("kkk", updatedPaymentPayload);
+
     paymentController
-      .paymentInit(paymentPayload)
+      .paymentInit(updatedPaymentPayload)
       .then((response) => {
         setLoading(false);
         console.log("payment response: -------", response);
+
         if (response?.data?.data?.short_url) {
           router.replace(response.data.data.short_url);
         }
       })
       .catch((error) => {
         setLoading(false);
-        dispatch(
-          setToast({
-            open: true,
-            message: error.message,
-            severity: TOAST_STATUS.ERROR,
-          })
-        );
+
+        const statusCode =
+          error?.response?.status || error?.response?.data?.statusCode;
+        const message =
+          error?.response?.data?.message || "Something went wrong!";
+
+        if (statusCode === 440) {
+          alert(message);
+
+          router.replace("/");
+        } else {
+          dispatch(
+            setToast({
+              open: true,
+              message,
+              severity: TOAST_STATUS.ERROR,
+            })
+          );
+        }
+
         console.log("Payment Response Error:", error);
       });
   }

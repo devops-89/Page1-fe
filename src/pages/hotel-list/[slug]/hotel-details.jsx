@@ -95,6 +95,10 @@ const HotelDetails = () => {
   }, [query.slug]);
 
   const { mainImage, roomImages } = useUniqueHotelImages(hotelDetail);
+  const [heroImage, setHeroImage] = useState(mainImage);
+  useEffect(() => {
+    setHeroImage(mainImage);
+  }, [mainImage]);
 
   console.log("Hotels: ", hotels);
   console.log("selected Hotel Data:", selectedHotel);
@@ -210,20 +214,23 @@ const HotelDetails = () => {
                     </Typography>
 
                     <img
-                      src={mainImage}
+                      src={heroImage || "/placeholder.jpg"}
                       style={{
                         width: "100%",
                         borderRadius: "16px",
                         height: "300px",
                         objectFit: "cover",
-                        backgroundPosition: "center",
-                        display: "block",
+                        cursor: "zoom-in",
                       }}
                     />
 
                     {/* rooms images start */}
 
-                    <RoomImageSlider roomImages={roomImages} />
+                    <RoomImageSlider
+                      roomImages={roomImages}
+                      onImageClick={(imgUrl) => setHeroImage(imgUrl)} // 👈 added
+                    />
+
                     {/* rooms images end */}
 
                     {/* Hotel Address  start*/}
@@ -311,7 +318,6 @@ const HotelDetails = () => {
                       {hotelDetail?.PhoneNumber || "Not Available"}
                     </Typography>
                   </Container>
-
                 </Grid2>
                 <Grid2
                   size={{ xs: 12, md: 12, lg: 4 }}
@@ -337,7 +343,11 @@ const HotelDetails = () => {
                     >
                       <Typography
                         variant="subtitle1"
-                        sx={{ fontFamily: nunito.style, fontWeight: 700 ,fontSize : 18}}
+                        sx={{
+                          fontFamily: nunito.style,
+                          fontWeight: 700,
+                          fontSize: 18,
+                        }}
                       >
                         {selectedHotel?.CityName || hotelDetail?.CityName}
                       </Typography>
@@ -377,7 +387,12 @@ const HotelDetails = () => {
                     {/* Highlights */}
                     <Typography
                       variant="subtitle2"
-                      sx={{ fontFamily: nunito.style, fontWeight: 700, mb: 1,fontSize : 18 }}
+                      sx={{
+                        fontFamily: nunito.style,
+                        fontWeight: 700,
+                        mb: 1,
+                        fontSize: 18,
+                      }}
                     >
                       Highlights
                     </Typography>
@@ -455,7 +470,7 @@ const HotelDetails = () => {
                               fontFamily: nunito.style,
                               fontWeight: 700,
                               mb: 1,
-                              fontSize : 18
+                              fontSize: 18,
                             }}
                           >
                             Nearby attractions
@@ -488,7 +503,7 @@ const HotelDetails = () => {
                         fontWeight: 700,
                         color: COLORS.DARKGREY,
                         mb: 0.5,
-                        fontSize : 18
+                        fontSize: 18,
                       }}
                     >
                       Per night :
@@ -793,17 +808,6 @@ const HotelDetails = () => {
                                   >
                                     <strong>Meal Type:</strong>{" "}
                                     {room.MealType.replace(/_/g, " ")}
-                                  </Typography>
-                                )}
-
-                                {/* Supplement Section */}
-                                {room.Supplement && (
-                                  <Typography
-                                    variant="body2"
-                                    sx={{ fontFamily: nunito.style }}
-                                  >
-                                    <strong>Supplement:</strong>{" "}
-                                    {room.Supplement}
                                   </Typography>
                                 )}
 
