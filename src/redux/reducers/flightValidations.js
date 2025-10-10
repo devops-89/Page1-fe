@@ -13,9 +13,7 @@ const flightValidationSlice=createSlice({
             state.rules={...state.rules, ...action.payload};
 
         },
-    },
-    
-    // New action: update from FareQuote API response
+        // New action: update from FareQuote API response
     setFareQuoteValidations: (state, action) => {
       const fq = action.payload?.Results; // The FareQuote response
 
@@ -42,7 +40,10 @@ const flightValidationSlice=createSlice({
       // e.g., specialFare.isSeatMandatory = fq.IsSeatMandatory ?? false
     },
   
+    },
+    
+    
 });
 
-export const {setValidationRules}=flightValidationSlice.actions;
+export const {setValidationRules,setFareQuoteValidations}=flightValidationSlice.actions;
 export default flightValidationSlice.reducer;

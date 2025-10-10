@@ -6,7 +6,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { roboto } from "@/utils/fonts.js";
 import { Alert } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { useDispatch,useSelector } from "react-redux";
 import Tooltip from "@mui/material/Tooltip";
+import { setFareQuoteValidations } from "@/redux/reducers/flightValidations";
 import { keyframes } from "@emotion/react";
 import {
   Box,
@@ -38,7 +40,6 @@ import { nunito } from "@/utils/fonts";
 import pointerImage from "@/../public/images/pointer.png";
 import { COLORS } from "@/utils/colors";
 import { JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
-import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import ToastBar from "@/components/toastBar";
 import PassengerForm from "@/components/flight/PassengerForm";
@@ -99,6 +100,7 @@ const FlightDetails = () => {
         })
         .then((response) => {
           if (response?.data?.data) {
+            dispatch(setFareQuoteValidations(response?.data?.data[0]));
             setFlightDetails(response?.data?.data);
             setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setOtherDetails(response?.data?.data[1]);
@@ -144,6 +146,8 @@ const FlightDetails = () => {
     open: drawerOpen, // Current state of the drawer
     toggle: () => setDrawerOpen((prev) => !prev), // Function to toggle the state
   };
+
+ 
 
   return (
     <>

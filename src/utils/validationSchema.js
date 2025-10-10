@@ -1,5 +1,19 @@
 import * as Yup from "yup";
+import { differenceInYears } from "date-fns";
+
 import { phoneNumberRegex } from "./regex";
+
+const getAge = (dob) => {
+  if (!dob) return 0;
+  const birth = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+};
 
 export const registrationSchema = Yup.object({
   full_name: Yup.string()
@@ -99,7 +113,11 @@ export const activityFormSchema = Yup.object({
     .required("Message is required"),
 });
 
-export const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
+export const passengerSchema = (
+  isNewPassportMandatory,
+  isNewPanMandatory,
+  isBirthdayRequired
+) =>
   Yup.object({
     title: Yup.string().trim(),
     first_name: Yup.string().trim().required("First Name is required"),
@@ -109,15 +127,47 @@ export const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
       then: (schema) => schema.required("Date of Birth is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    passport_no: isPassportRequired
+    passport_no: isNewPassportMandatory
       ? Yup.string()
           .trim()
           .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport No. format")
           .required("Passport No. is required")
       : Yup.string().notRequired(),
-    passport_expiry: isPassportRequired
+    passport_expiry: isNewPassportMandatory
       ? Yup.date().required("Passport Expiry Date is required")
       : Yup.date().notRequired(),
+    pan_no: Yup.string()
+          .trim()
+          .when("date_of_birth", (dob, schema) => {
+            // 👉 If PAN validation is not required at all, skip everything
+            if (!isNewPanMandatory) return schema.notRequired();
+
+            const age = dob
+              ? differenceInYears(new Date(), new Date(dob))
+              : null;
+
+            // Case 1: Adult (18+) — PAN mandatory, guardian PAN not allowed
+            if (age >= 18)
+              return schema
+                .matches(
+                  /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
+                  "Invalid PAN format (e.g. ABCDE1234F)"
+                )
+                .required(
+                  "PAN is required. Parent/Guardian PAN will not be considered. Please contact Ops team if not available."
+                );
+
+            // Case 2: Teen (12–18) — PAN optional but validated if provided
+            if (age >= 12 && age < 18)
+              return schema.matches(
+                /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
+                "Invalid PAN format (e.g. ABCDE1234F)"
+              );
+
+            // Case 3: Below 12 — PAN optional (guardian handled separately)
+            return schema.notRequired();
+          })
+    
   });
 
 const baseGstSchema = {
@@ -181,17 +231,32 @@ export const addFormSchema = Yup.object({
 export const validationSchema = (
   isGSTMandatory,
   isPassportRequired,
-  isBirthdayRequired
+  isBirthdayRequired,
+  isNewPassportMandatory,
+  isNewPanMandatory,
+  newFlightValidations
 ) => {
   return Yup.object().shape({
     adult: Yup.array().of(
-      passengerSchema(isPassportRequired, isBirthdayRequired)
+      passengerSchema(
+        isNewPassportMandatory,
+        isNewPanMandatory,
+        isBirthdayRequired
+      )
     ),
     child: Yup.array().of(
-      passengerSchema(isPassportRequired, isBirthdayRequired)
+      passengerSchema(
+        isNewPassportMandatory,
+        isNewPanMandatory,
+        isBirthdayRequired
+      )
     ),
     infant: Yup.array().of(
-      passengerSchema(isPassportRequired, isBirthdayRequired)
+      passengerSchema(
+        isNewPassportMandatory,
+        isNewPanMandatory,
+        isBirthdayRequired
+      )
     ),
     gstForm: isGSTMandatory ? gstFormSchema(true) : Yup.object().optional(),
     ...addFormSchema.fields,
@@ -274,7 +339,6 @@ export const selfDriveValidationSchema = Yup.object({
   toDate: Yup.string().required("Please Select To Date"),
 });
 
-
 export const LeadPassengerValidation = (validationInfo) => {
   const nameRegex = new RegExp(
     `^[a-zA-Z${validationInfo.SpaceAllowed ? "\\s" : ""}${
@@ -305,16 +369,24 @@ export const LeadPassengerValidation = (validationInfo) => {
 
           Age: Yup.number()
             .required("Age is required")
-            .test("age-validation", "Age does not match type", function (value) {
-              const { type } = this.parent;
-              if (type === "adult" && value < 12) {
-                return this.createError({ message: "Adults must be at least 12 years old" });
+            .test(
+              "age-validation",
+              "Age does not match type",
+              function (value) {
+                const { type } = this.parent;
+                if (type === "adult" && value < 12) {
+                  return this.createError({
+                    message: "Adults must be at least 12 years old",
+                  });
+                }
+                if (type === "child" && value >= 12) {
+                  return this.createError({
+                    message: "Children must be under 12 years old",
+                  });
+                }
+                return true;
               }
-              if (type === "child" && value >= 12) {
-                return this.createError({ message: "Children must be under 12 years old" });
-              }
-              return true;
-            }),
+            ),
 
           // Adult PAN
           PAN: Yup.lazy((value, options) => {
@@ -331,8 +403,12 @@ export const LeadPassengerValidation = (validationInfo) => {
             if (type === "child") {
               return Yup.object().shape({
                 Title: Yup.string().required("Guardian title is required"),
-                FirstName: Yup.string().required("Guardian first name is required"),
-                LastName: Yup.string().required("Guardian last name is required"),
+                FirstName: Yup.string().required(
+                  "Guardian first name is required"
+                ),
+                LastName: Yup.string().required(
+                  "Guardian last name is required"
+                ),
                 PAN: validationInfo?.PanMandatory
                   ? Yup.string().required("Guardian PAN is required")
                   : Yup.string().notRequired(),
@@ -356,7 +432,9 @@ export const LeadPassengerValidation = (validationInfo) => {
           GSTNumber: Yup.string().notRequired(),
 
           PassportNo: Yup.lazy(() =>
-            validationInfo?.PassportMandatory ? Yup.string().required("Passport number is required") : Yup.string().notRequired()
+            validationInfo?.PassportMandatory
+              ? Yup.string().required("Passport number is required")
+              : Yup.string().notRequired()
           ),
           PassportIssueDate: Yup.lazy(() =>
             validationInfo?.PassportMandatory
@@ -370,11 +448,17 @@ export const LeadPassengerValidation = (validationInfo) => {
           ),
         })
       )
-      .test("unique-names", "Duplicate passenger names not allowed", function (guests) {
-        if (validationInfo.SamePaxNameAllowed || !guests) return true;
-        const names = guests.map((p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`);
-        return new Set(names).size === names.length;
-      }),
+      .test(
+        "unique-names",
+        "Duplicate passenger names not allowed",
+        function (guests) {
+          if (validationInfo.SamePaxNameAllowed || !guests) return true;
+          const names = guests.map(
+            (p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`
+          );
+          return new Set(names).size === names.length;
+        }
+      ),
   });
 };
 

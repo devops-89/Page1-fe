@@ -35,6 +35,28 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
+  // Extrating the flight Validation from the Redux start
+
+ const newFlightValidations=useSelector((state)=>state.Flight.FlightValidation);
+ console.log("new Flight Validations: ",newFlightValidations);
+
+ // ✅ Extract PANPassport section
+const panPassportRules = flightRules.PANPassport || {};
+const validationNodes = panPassportRules.validationNodes || [];
+
+ // ✅ Check if passport is required (either at Book or Ticket)
+const isNewPassportMandatory =
+  validationNodes.includes("IsPassportRequiredAtBook") ||
+  validationNodes.includes("IsPassportRequiredAtTicket");
+
+// ✅ Check if PAN is required (either at Book or Ticket)
+const isNewPanMandatory =
+  validationNodes.includes("IsPanRequiredAtBook") ||
+  validationNodes.includes("IsPanRequiredAtTicket");
+
+
+   // Extrating the flight Validation from the Redux end
+
   const selectedBaggages = useSelector(
     (state) => state.Flight.BaggagesInformation.baggages || {}
   );
@@ -485,7 +507,10 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           validationSchema={validationSchema(
             isGSTMandatory,
             isPassportRequired,
-            isBirthdayRequired
+            isBirthdayRequired,
+            isNewPassportMandatory,
+            isNewPanMandatory,
+            newFlightValidations
           )}
           onSubmit={handleSubmit}
           enableReinitialize
