@@ -298,16 +298,24 @@ const HotelPreBookPage = () => {
     setPassengers({ adult, child });
   }, [paxRoom]);
 
-  const calculateBaseFare = (dayRates) => {
+  const calculateBaseFare = (dayRates = []) => {
     let total = 0;
-    for (const room of dayRates || []) {
-      for (const night of room || []) {
-        total += night?.BasePrice || 0;
+    let roomCount = dayRates.length;
+    let nightCount = 0;
+
+    for (const room of dayRates) {
+      if (Array.isArray(room)) {
+        nightCount = Math.max(nightCount, room.length);
+        for (const night of room) {
+          total += night?.BasePrice || 0;
+        }
       }
     }
-    return total;
+    return { total, roomCount, nightCount };
   };
-
+  const { total, roomCount, nightCount } = calculateBaseFare(
+    preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.DayRates
+  );
   // helper validators reused in onSubmit
   const isArrivalValid = (arrival) => {
     if (!arrival) return false;
@@ -1136,18 +1144,22 @@ const HotelPreBookPage = () => {
                             <Typography
                               sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                             >
-                              <span>TOTAL FARE</span>
+                              Total Fare
+                            </Typography>
+
+                            <Typography
+                              sx={{ fontFamily: roboto.style, fontWeight: 400, fontSize : 14 }}
+                            >
+                              ({roomCount} Room
+                              {roomCount > 1 ? "s" : ""} × {nightCount} Night
+                              {nightCount > 1 ? "s" : ""})
                             </Typography>
                           </Grid2>
                           <Grid2 item>
                             <Typography
                               sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                             >
-                              ₹{" "}
-                              {calculateBaseFare(
-                                preBookResponse?.HotelResult?.[0]?.Rooms?.[0]
-                                  ?.DayRates
-                              ).toFixed(2)}
+                              ₹ {total.toFixed(2)}
                             </Typography>
                           </Grid2>
                         </Grid2>

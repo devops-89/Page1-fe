@@ -1,5 +1,5 @@
 import InnerBanner from "@/components/innerBanner";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import banner from "@/banner/hotel.jpg";
 import { useSelector } from "react-redux";
 import {
@@ -10,25 +10,27 @@ import {
   Typography,
   CardHeader,
   CardContent,
-  Checkbox,
-  FormControlLabel,
   TextField,
   Button,
   Slider,
   Grid2,
+  Pagination,
+  Stack,
   useMediaQuery,
   useTheme,
   CircularProgress,
+  Rating,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import Loading from "react-loading";
 
 import HotelCard from "@/components/hotels/hotelCard";
 import { COLORS } from "@/utils/colors";
 import { nunito, roboto } from "@/utils/fonts";
 import { HOTEL_RATING } from "@/utils/enum";
+
+const PAGE_SIZE = 10;
 
 const HotelList = () => {
   const [hotels, setHotels] = useState([]);
@@ -39,12 +41,15 @@ const HotelList = () => {
   const [maxPrice, setMaxPrice] = useState(5000);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const [open, setOpen] = useState(false);
 
-  const [visibleCount, setVisibleCount] = useState(10);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  // keep for any additional flags you may add later (e.g., "Budget")
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
+  // ⭐ star filter (default 2 stars)
+  const [selectedStar, setSelectedStar] = useState(2);
+
+  const [open, setOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   const hotellist = useSelector((state) => state.HOTEL.HotelList.hotelList);
 
@@ -55,75 +60,42 @@ const HotelList = () => {
 
       const prices = hotellist
         .map((hotel) => hotel?.Rooms?.[0]?.TotalFare)
-        .filter((fare) => typeof fare === "number");
+        .filter((fare) => typeof fare === "number" && !Number.isNaN(fare));
 
-      const min = Math.floor(Math.min(...prices));
-      const max = Math.ceil(Math.max(...prices));
+      const min = prices.length ? Math.floor(Math.min(...prices)) : 0;
+      const max = prices.length ? Math.ceil(Math.max(...prices)) : 5000;
 
       setMinPrice(min);
       setMaxPrice(max);
       setPriceRange([min, max]);
+    } else {
+      setLoading(false);
     }
   }, [hotellist]);
 
-  const observer = useRef();
-
-  const lastBookElementRef = useCallback(
-    (node) => {
-      if (loadingMore || !hasMore) return;
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          setLoadingMore(true);
-          setTimeout(() => {
-            setVisibleCount((prev) => {
-              const newCount = prev + 10;
-              setHasMore(newCount < filteredHotels.length);
-              return newCount;
-            });
-            setLoadingMore(false);
-          }, 1000);
-        }
-      });
-
-      if (node) observer.current.observe(node);
-    },
-    [
-      loadingMore,
-      hasMore,
-      hotels.length,
-      selectedFilters,
-      searchTerm,
-      priceRange,
-    ]
-  );
-
-  const handleRangeChange = (event, newValue) => {
+  const handleRangeChange = (_event, newValue) => {
     setPriceRange(newValue);
+    setPage(1);
   };
 
   const toggleDrawer = (openState) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    )
-      return;
+    if (event?.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) return;
     setOpen(openState);
   };
 
   const handleCheckboxChange = (label) => {
     setSelectedFilters((prev) =>
-      prev.includes(label)
-        ? prev.filter((item) => item !== label)
-        : [...prev, label]
+      prev.includes(label) ? prev.filter((item) => item !== label) : [...prev, label]
     );
+    setPage(1);
   };
 
   const resetFilters = () => {
     setSearchTerm("");
     setSelectedFilters([]);
     setPriceRange([minPrice, maxPrice]);
+    setSelectedStar(2); // ⭐ back to 2 stars
+    setPage(1);
   };
 
   const filteredHotels = hotels.filter((hotel) => {
@@ -131,32 +103,29 @@ const HotelList = () => {
       ? hotel?.HotelName?.toLowerCase().includes(searchTerm.toLowerCase())
       : true;
 
-    const budgetMatch = selectedFilters.includes("Budget")
-      ? hotel?.price <= 1000
-      : true;
+    // optional: if you later add a "Budget" toggle somewhere
+    const budgetMatch = selectedFilters.includes("Budget") ? hotel?.price <= 1000 : true;
 
-    const ratingSelected = selectedFilters.filter((f) =>
-      ["4 Star Hotels", "5 Star Hotels"].includes(f)
-    );
-    const ratingMatch =
-      ratingSelected.length > 0
-        ? ratingSelected.some((r) => {
-            if (r === "4 Star Hotels")
-              return HOTEL_RATING[hotel?.HotelRating] === 4;
-            if (r === "5 Star Hotels")
-              return HOTEL_RATING[hotel?.HotelRating] === 5;
-            return false;
-          })
-        : true;
+    // ⭐ exact star match; change to >= if you want “at least N stars”
+    const hotelStars = HOTEL_RATING[hotel?.HotelRating];
+    const ratingMatch = selectedStar ? hotelStars === selectedStar : true;
 
-    const price = hotel?.Rooms?.[0]?.TotalFare;
+    const price = hotel?.Rooms?.[0]?.TotalFare ?? 0;
     const priceMatch = price >= priceRange[0] && price <= priceRange[1];
 
     return nameMatch && budgetMatch && ratingMatch && priceMatch;
   });
 
+  const totalPages = Math.max(1, Math.ceil(filteredHotels.length / PAGE_SIZE));
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const currentHotels = filteredHotels.slice(startIndex, startIndex + PAGE_SIZE);
+
   const theme = useTheme();
   const phone = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   return (
     <div>
@@ -167,13 +136,7 @@ const HotelList = () => {
           <Grid2 container spacing={3}>
             {/* Filters Section */}
             {phone ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%",
-                }}
-              >
+              <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
                 <Button onClick={toggleDrawer(true)}>
                   <FilterAltIcon sx={{ fontSize: 30, color: COLORS.PRIMARY }} />
                 </Button>
@@ -190,6 +153,9 @@ const HotelList = () => {
                         resetFilters,
                         minPrice,
                         maxPrice,
+                        selectedStar,
+                        setSelectedStar,
+                        setPage,
                       }}
                     />
                   </Box>
@@ -208,6 +174,9 @@ const HotelList = () => {
                     resetFilters,
                     minPrice,
                     maxPrice,
+                    selectedStar,
+                    setSelectedStar,
+                    setPage,
                   }}
                 />
               </Grid2>
@@ -230,31 +199,27 @@ const HotelList = () => {
                   No hotels available.
                 </Typography>
               ) : (
-                filteredHotels.slice(0, visibleCount).map((val, i) => {
-                  const isLast = i === visibleCount - 1;
-                  return (
-                    <Grid2
-                      xs={12}
-                      key={i}
-                      ref={isLast ? lastBookElementRef : null}
-                    >
+                <>
+                  {currentHotels.map((val, i) => (
+                    <Grid2 xs={12} key={`${val?.HotelCode || i}-${i}`}>
                       <HotelCard hotel={val} />
                     </Grid2>
-                  );
-                })
-              )}
+                  ))}
 
-              {hasMore && (
-                <Box sx={{ textAlign: "center", mt: 2, mx: "auto" }}>
-                  {loadingMore && (
-                    <Loading
-                      type="bars"
-                      width={50}
-                      height={50}
-                      color={COLORS.PRIMARY}
+                  {/* Pagination */}
+                  <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+                    <Pagination
+                      count={totalPages}
+                      page={page}
+                      onChange={(_, value) => setPage(value)}
+                      color="primary"
+                      shape="rounded"
+                      size={phone ? "small" : "medium"}
+                      showFirstButton
+                      showLastButton
                     />
-                  )}
-                </Box>
+                  </Stack>
+                </>
               )}
             </Grid2>
           </Grid2>
@@ -274,6 +239,9 @@ const FilterCard = ({
   resetFilters,
   minPrice,
   maxPrice,
+  selectedStar,
+  setSelectedStar,
+  setPage,
 }) => (
   <Card
     sx={{
@@ -290,10 +258,7 @@ const FilterCard = ({
   >
     <CardHeader
       title={
-        <Typography
-          sx={{ fontFamily: roboto.style, fontWeight: 700 }}
-          variant="h5"
-        >
+        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }} variant="h5">
           Filters
         </Typography>
       }
@@ -327,6 +292,7 @@ const FilterCard = ({
           startAdornment: <SearchIcon style={{ marginRight: "8px" }} />,
         }}
       />
+
       <Box mt={3}>
         <Typography
           variant="h6"
@@ -343,33 +309,29 @@ const FilterCard = ({
           step={100}
         />
       </Box>
+
       <Box mt={3}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 600, fontFamily: roboto.style }}
         >
-          Popular
+          Star Rating
         </Typography>
-        {["4 Star Hotels", "5 Star Hotels"].map((label) => (
-          <FormControlLabel
-            key={label}
-            control={
-              <Checkbox
-                checked={selectedFilters.includes(label)}
-                onChange={() => handleCheckboxChange(label)}
-              />
-            }
-            label={
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, fontFamily: nunito.style }}
-              >
-                {label}
-              </Typography>
-            }
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
+          <Rating
+            name="hotel-star-filter"
+            value={selectedStar}
+            max={5}
+            precision={1}
+            onChange={(_, value) => {
+              setSelectedStar(value);
+              setPage(1);
+            }}
           />
-        ))}
+ 
+        </Box>
       </Box>
+
     </CardContent>
   </Card>
 );
