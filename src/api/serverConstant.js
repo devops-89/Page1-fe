@@ -1,4 +1,4 @@
-export const baseUrl = "https://dev.page1travels.com";
+export const baseUrl = "https://api.page1travels.com";
 
 export const APIURL = {
   authenticationUrl: `${baseUrl}/auth/api/auth`,
