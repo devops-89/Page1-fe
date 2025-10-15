@@ -7,6 +7,7 @@ const nextConfig = {
     "mui-one-time-password-input",
   ],
   images:{
+    unoptimized: true,
     remotePatterns:[
       {
         hostname:"dev.page1travels.com",
