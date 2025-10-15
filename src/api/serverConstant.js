@@ -1,5 +1,5 @@
 export const baseUrl = "https://api.uat.page1travels.com";
-
+ 
 export const APIURL = {
   authenticationUrl: `${baseUrl}/auth/api/auth`,
   userUrl: `${baseUrl}/user/api/users`,
