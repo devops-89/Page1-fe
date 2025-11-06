@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo } from "react";
 import { Button, Typography, Box, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setSeatDetails, resetSeatDetails } from "@/redux/reducers/seatsInformation.js";
+import { setSeatDetails,removeSeatDetails, resetSeatDetails } from "@/redux/reducers/seatsInformation.js";
 import { COLORS } from "@/utils/colors.js";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
@@ -36,7 +36,11 @@ const SEAT_TYPE = {
 }
 
 const Seat = ({ extraDetails,planeIndex }) => {
-
+  const dispatch = useDispatch();
+    const specialFareForSeat = useSelector(
+    (state) => state.Flight?.FlightValidation?.rules?.specialFare?.isSeatMandatory
+  );
+  const radioEnabled = Boolean(specialFareForSeat);
   
   // Use useSelector to directly access seats from Redux state
   const reservedSeats = useSelector((state) => {
@@ -50,7 +54,6 @@ const Seat = ({ extraDetails,planeIndex }) => {
   // console.log("Seat :",reservedSeats);
   
  
-  const dispatch = useDispatch();
   const [maxPassengerCount, setMaxPassengerCount] = useState(null);
   const [columns, setColumns] = useState([]); // State for columns
 
@@ -82,10 +85,57 @@ const Seat = ({ extraDetails,planeIndex }) => {
   }, [extraDetails]); 
 
 
-  // No need for a useEffect to update reservedSeats based on Redux state 'value'
-  // reservedSeats is now directly derived from Redux using useSelector
+  // ---------- helpers for sorting & picking default ----------
+  const getSeatPrice = (s) => {
+    const n = Number(s?.Price);
+    return Number.isFinite(n) ? n : null;
+  };
 
+  const compareByPriceAsc = (a, b) => {
+    const pa = getSeatPrice(a);
+    const pb = getSeatPrice(b);
+    if (pa === null && pb === null) return 0;
+    if (pa === null) return 1;    // unknown price last
+    if (pb === null) return -1;
+    return pa - pb;
+  };
+
+  // Flatten available seats and sort by price (ASC)
+  const availableSeatsSorted = useMemo(() => {
+    if (!extraDetails?.RowSeats) return [];
+    const all = extraDetails.RowSeats.flatMap((row) => row.Seats || []);
+    const available = all.filter((s) => s?.AvailablityType === 1);
+    return available.slice().sort(compareByPriceAsc);
+  }, [extraDetails]);
+
+  // Map of currently-selected seat codes for quick checks
+  const selectedCodesSet = useMemo(() => {
+    const set = new Set();
+    (reservedSeats || []).forEach((s) => set.add(s.Code));
+    return set;
+  }, [reservedSeats]);
+
+  useEffect(() => {
+    if (!radioEnabled) return;
+    if (!Array.isArray(availableSeatsSorted) || availableSeatsSorted.length === 0)
+      return;
+
+    const alreadySelected = reservedSeats.length > 0;
+    if (alreadySelected) return;
+
+    const anyFree = availableSeatsSorted.find((s) => Number(getSeatPrice(s)) === 0);
+    const first = anyFree && availableSeatsSorted[0];
+
+    if (first) {
+      dispatch(setSeatDetails({ airplaneId: planeIndex, selected: first }));
+    }
+  }, [radioEnabled, availableSeatsSorted, reservedSeats, planeIndex, dispatch]);
+
+  // ---------- click handling ----------
   const handleSeatClick = (seat) => {
+    // Block unavailable seats
+    if (![1].includes(seat?.AvailablityType)) return;
+
     if (!maxPassengerCount) {
       dispatch(
         setToast({
@@ -94,43 +144,48 @@ const Seat = ({ extraDetails,planeIndex }) => {
           severity: TOAST_STATUS.ERROR,
         })
       );
-      return; // Exit if passenger count is not loaded
+      return;
     }
 
     const totalAllowedSeats =
       parseInt(maxPassengerCount?.adult || 0) +
       parseInt(maxPassengerCount?.child || 0);
-    const currentSelectedSeatsCount = reservedSeats.length;                                                                                                     
-    const isSeatAlreadyReserved = reservedSeats.some((s) => s.Code === seat.Code);
+    const currentSelectedSeatsCount = reservedSeats.length;
+    const isSeatAlreadyReserved = selectedCodesSet.has(seat.Code);
 
-    // console.log("totalAllowedSeats",totalAllowedSeats, "currentSelectedSeatsCount",currentSelectedSeatsCount)
-
-    if (
-      currentSelectedSeatsCount >= totalAllowedSeats &&
-      !isSeatAlreadyReserved
-    ) {
-      dispatch(
-        setToast({
-          open: true,
-          message: `You can select only seat for ${maxPassengerCount?.adult} adult and ${maxPassengerCount?.child} child`,
-          severity: TOAST_STATUS.ERROR,
-        })
-      );
-      return; // Prevent selecting more seats than allowed
+    if (!radioEnabled) {
+      // ----- NON-RADIO: keep your existing toggle + limit -----
+      if (
+        currentSelectedSeatsCount >= totalAllowedSeats &&
+        !isSeatAlreadyReserved
+      ) {
+        dispatch(
+          setToast({
+            open: true,
+            message: `You can select only seat for ${maxPassengerCount?.adult} adult and ${maxPassengerCount?.child} child`,
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+        return;
+      }
+      // toggle (your reducer already toggles on same Code)
+      dispatch(setSeatDetails({ airplaneId: planeIndex, selected: seat }));
+      return;
     }
-   
-    dispatch(setSeatDetails({airplaneId:planeIndex, selected:seat}));
-   
+
+    // ----- RADIO MODE -----
+    // If same seat clicked again → do nothing (no deselect to none)
+    if (isSeatAlreadyReserved) return;
+
+    // Replace: if any seat already selected for this airplane, remove it, then add the new one
+    if (reservedSeats.length > 0) {
+      const prev = reservedSeats[0]; // radio → at most 1 in practice
+      if (prev?.Code && prev?.Code !== seat.Code) {
+        dispatch(removeSeatDetails({ airplaneId: planeIndex, seatCode: prev.Code }));
+      }
+    }
+    dispatch(setSeatDetails({ airplaneId: planeIndex, selected: seat }));
   };
-
-
-  // useEffect(()=>{
-  //   dispatch(
-  //     setSeatDetails({airplaneId:planeIndex, selectedSeats:tempSeats})
-  //   )
-  // },[tempSeats])
-
-  
   return (
     <Box sx={{ backgroundColor: COLORS.WHITE, width:"100%", display:'flex', flexDirection:'column', alignItems:'center', py:2 }}>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 3, gap:1.5 }}>

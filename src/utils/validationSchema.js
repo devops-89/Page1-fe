@@ -1,5 +1,19 @@
 import * as Yup from "yup";
+import { differenceInYears } from "date-fns";
+
 import { phoneNumberRegex } from "./regex";
+
+const getAge = (dob) => {
+  if (!dob) return 0;
+  const birth = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+};
 
 export const registrationSchema = Yup.object({
   full_name: Yup.string()
@@ -98,27 +112,133 @@ export const activityFormSchema = Yup.object({
     .min(10, "Message must be at least 10 characters")
     .required("Message is required"),
 });
+// Disallow these characters anywhere in a name: . , / ( )
+export const DISALLOWED_NAME_CHARS = /[^A-Za-z\s]/;
 
-export const passengerSchema = (isPassportRequired, isBirthdayRequired) =>
-  Yup.object({
+export const disallowedNameCharsMsg = "Name cannot contain special characters";
+
+export const passengerSchema = (
+  isNewPassportMandatory,
+  isNewPanMandatory,
+  isBirthdayRequired,
+  isPassportFullDetailRequired,
+  isPassportShow,
+  isPassportShowForAdultChild,
+  isSpiceJet,
+  isSourceAirAsia,
+  isTrueJetAndZoomAir
+) => {
+  const nameNoBadChars = (label) =>
+    Yup.string()
+      .trim()
+      .test("no-bad-chars", disallowedNameCharsMsg, (v) =>
+        v ? !DISALLOWED_NAME_CHARS.test(v) : true
+      )
+      .label(label);
+  const norm = (s) => (s || "").trim().replace(/\s+/g, "").toUpperCase();
+  return Yup.object({
     title: Yup.string().trim(),
-    first_name: Yup.string().trim().required("First Name is required"),
-    last_name: Yup.string().trim().required("Last Name is required"),
+    first_name: nameNoBadChars("First Name").required("First Name is required"),
+    middle_name: nameNoBadChars("Middle Name").notRequired(),
+    last_name: nameNoBadChars("Last Name")
+      .required("Last Name is required")
+      .test(
+        "no-space-anywhere-trujet-zoomair",
+        "Spaces are not allowed in Last Name.",
+        function (value) {
+          if (!isTrueJetAndZoomAir) return true;
+          const raw =
+            this.originalValue == null ? "" : String(this.originalValue);
+          return /^[^\s]+$/.test(raw);
+        }
+      )
+      .test(
+        "spicejet-name-distinct",
+        "First Name and Last Name must be different.",
+        function (value) {
+          if (!isSpiceJet) return true;
+          const first = this.parent?.first_name;
+          const norm = (s) =>
+            (s || "").trim().replace(/\s+/g, "").toUpperCase();
+          return !(norm(value) && norm(first) && norm(value) === norm(first));
+        }
+      ),
+
     date_of_birth: Yup.date().when([], {
-      is: () => isBirthdayRequired,
+      is: () => isBirthdayRequired || isSourceAirAsia,
       then: (schema) => schema.required("Date of Birth is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    passport_no: isPassportRequired
+    gender: Yup.string()
+      .oneOf(["Male", "Female", "Other"])
+      .required("Gender is required"),
+
+    passport_no: Yup.string()
+      .trim()
+      .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport No. format")
+      .when([], {
+        is: () =>
+          isNewPassportMandatory ||
+          isPassportShowForAdultChild ||
+          isPassportShow,
+        then: (schema) => schema.required("Passport No. is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+
+    passport_expiry: Yup.date()
+      .typeError("Invalid expiry date")
+      .when([], {
+        is: () =>
+          isNewPassportMandatory ||
+          isPassportShowForAdultChild ||
+          isPassportShow,
+        then: (schema) => schema.required("Passport Expiry Date is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+
+    passport_issue_date: isPassportFullDetailRequired
+      ? Yup.date()
+          .typeError("Invalid issue date")
+          .required("Passport Issue Date is required")
+      : Yup.date().nullable().notRequired(),
+
+    passport_issue_country_code: isPassportFullDetailRequired
       ? Yup.string()
           .trim()
-          .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport No. format")
-          .required("Passport No. is required")
-      : Yup.string().notRequired(),
-    passport_expiry: isPassportRequired
-      ? Yup.date().required("Passport Expiry Date is required")
-      : Yup.date().notRequired(),
+          .matches(/^[A-Z]{2}$/, "Use 2-letter ISO code (e.g., IN)")
+          .required("Passport Issue Country Code is required")
+      : Yup.string().trim().nullable().notRequired(),
+
+    pan_no: Yup.string()
+      .trim()
+      .when("date_of_birth", (dob, schema) => {
+        if (!isNewPanMandatory) return schema.notRequired();
+
+        const age = dob ? differenceInYears(new Date(), new Date(dob)) : null;
+
+        // Case 1: Adult (18+) — PAN mandatory, guardian PAN not allowed
+        if (age >= 18)
+          return schema
+            .matches(
+              /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
+              "Invalid PAN format (e.g. ABCDE1234F)"
+            )
+            .required(
+              "PAN is required. Parent/Guardian PAN will not be considered. Please contact Ops team if not available."
+            );
+
+        // Case 2: Teen (12–18) — PAN optional but validated if provided
+        if (age >= 12 && age < 18)
+          return schema.matches(
+            /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
+            "Invalid PAN format (e.g. ABCDE1234F)"
+          );
+
+        // Case 3: Below 12 — PAN optional (guardian handled separately)
+        return schema.notRequired();
+      }),
   });
+};
 
 const baseGstSchema = {
   gst_company_email: Yup.string()
@@ -162,36 +282,84 @@ export const gstFormSchema = (isGSTMandatory) => {
 };
 
 // Validation schema for AddForm (contact details form)
-export const addFormSchema = Yup.object({
-  cell_country_code: Yup.string().trim(),
-  country_code: Yup.string().trim(),
-  city: Yup.string().trim().required("City required"),
-  contact_no: Yup.string()
-    .trim()
-    .matches(/^[0-9]{10}$/, "10 digits required")
-    .required("Phone No. is required"),
-  country: Yup.string().trim(),
-  address: Yup.string().trim().required("Address is required"),
-  email: Yup.string()
-    .trim()
-    .email("Invalid email")
-    .required("Email is Required"),
-});
+export const buildAddFormSchema = (isAirAsia, isLCC) =>
+  Yup.object({
+    cell_country_code: Yup.string().trim(),
+    country_code:
+      isAirAsia && isLCC
+        ? Yup.string().trim().required("Country Code is required")
+        : Yup.string().trim(),
+    city: Yup.string().trim().required("City required"),
+    contact_no: Yup.string()
+      .trim()
+      .matches(/^[0-9]{10}$/, "10 digits required")
+      .required("Phone No. is required"),
+    country:
+      isAirAsia && isLCC
+        ? Yup.string().trim().required("Country is required")
+        : Yup.string().trim(),
+    address: isLCC
+      ? Yup.string().trim().required("Address is required")
+      : Yup.string().trim(),
+    email: isLCC
+      ? Yup.string().trim().email("Invalid email").required("Email is Required")
+      : Yup.string().trim().email("Invalid email"),
+  });
 
 export const validationSchema = (
   isGSTMandatory,
-  isPassportRequired,
-  isBirthdayRequired
+  isBirthdayRequired,
+  isNewPassportMandatory,
+  isNewPanMandatory,
+  isPassportFullDetailRequired,
+  isAirAsia,
+  isLCC,
+  isPassportShow,
+  isPassportShowForAdultChild,
+  isSpiceJet,
+  isSourceAirAsia,
+  isTrueJetAndZoomAir
 ) => {
+  const addFormSchema = buildAddFormSchema(isAirAsia, isLCC);
   return Yup.object().shape({
     adult: Yup.array().of(
-      passengerSchema(isPassportRequired, isBirthdayRequired)
+      passengerSchema(
+        isNewPassportMandatory,
+        isNewPanMandatory,
+        false,
+        isPassportFullDetailRequired,
+        isPassportShow,
+        isPassportShowForAdultChild,
+        isSpiceJet,
+        isSourceAirAsia,
+        isTrueJetAndZoomAir
+      )
     ),
     child: Yup.array().of(
-      passengerSchema(isPassportRequired, isBirthdayRequired)
+      passengerSchema(
+        isNewPassportMandatory,
+        isNewPanMandatory,
+        isBirthdayRequired,
+        isPassportFullDetailRequired,
+        isPassportShow,
+        isPassportShowForAdultChild,
+        isSpiceJet,
+        false,
+        isTrueJetAndZoomAir
+      )
     ),
     infant: Yup.array().of(
-      passengerSchema(isPassportRequired, isBirthdayRequired)
+      passengerSchema(
+        isNewPassportMandatory,
+        isNewPanMandatory,
+        isBirthdayRequired,
+        isPassportFullDetailRequired,
+        isPassportShow,
+        false,
+        isSpiceJet,
+        false,
+        isTrueJetAndZoomAir
+      )
     ),
     gstForm: isGSTMandatory ? gstFormSchema(true) : Yup.object().optional(),
     ...addFormSchema.fields,
@@ -274,7 +442,6 @@ export const selfDriveValidationSchema = Yup.object({
   toDate: Yup.string().required("Please Select To Date"),
 });
 
-
 export const LeadPassengerValidation = (validationInfo) => {
   const nameRegex = new RegExp(
     `^[a-zA-Z${validationInfo.SpaceAllowed ? "\\s" : ""}${
@@ -305,16 +472,24 @@ export const LeadPassengerValidation = (validationInfo) => {
 
           Age: Yup.number()
             .required("Age is required")
-            .test("age-validation", "Age does not match type", function (value) {
-              const { type } = this.parent;
-              if (type === "adult" && value < 12) {
-                return this.createError({ message: "Adults must be at least 12 years old" });
+            .test(
+              "age-validation",
+              "Age does not match type",
+              function (value) {
+                const { type } = this.parent;
+                if (type === "adult" && value < 12) {
+                  return this.createError({
+                    message: "Adults must be at least 12 years old",
+                  });
+                }
+                if (type === "child" && value >= 12) {
+                  return this.createError({
+                    message: "Children must be under 12 years old",
+                  });
+                }
+                return true;
               }
-              if (type === "child" && value >= 12) {
-                return this.createError({ message: "Children must be under 12 years old" });
-              }
-              return true;
-            }),
+            ),
 
           // Adult PAN
           PAN: Yup.lazy((value, options) => {
@@ -331,8 +506,12 @@ export const LeadPassengerValidation = (validationInfo) => {
             if (type === "child") {
               return Yup.object().shape({
                 Title: Yup.string().required("Guardian title is required"),
-                FirstName: Yup.string().required("Guardian first name is required"),
-                LastName: Yup.string().required("Guardian last name is required"),
+                FirstName: Yup.string().required(
+                  "Guardian first name is required"
+                ),
+                LastName: Yup.string().required(
+                  "Guardian last name is required"
+                ),
                 PAN: validationInfo?.PanMandatory
                   ? Yup.string().required("Guardian PAN is required")
                   : Yup.string().notRequired(),
@@ -355,26 +534,34 @@ export const LeadPassengerValidation = (validationInfo) => {
           GSTCompanyEmail: Yup.string().email("Invalid email").notRequired(),
           GSTNumber: Yup.string().notRequired(),
 
-          PassportNo: Yup.lazy(() =>
-            validationInfo?.PassportMandatory ? Yup.string().required("Passport number is required") : Yup.string().notRequired()
-          ),
-          PassportIssueDate: Yup.lazy(() =>
-            validationInfo?.PassportMandatory
-              ? Yup.date().required("Passport issue date is required")
-              : Yup.date().nullable()
-          ),
-          PassportExpDate: Yup.lazy(() =>
-            validationInfo?.PassportMandatory
-              ? Yup.date().required("Passport expiry date is required")
-              : Yup.date().nullable()
-          ),
+          // PassportNo: Yup.lazy(() =>
+          //   validationInfo?.PassportMandatory
+          //     ? Yup.string().required("Passport number is required")
+          //     : Yup.string().notRequired()
+          // ),
+          // PassportIssueDate: Yup.lazy(() =>
+          //   validationInfo?.PassportMandatory
+          //     ? Yup.date().required("Passport issue date is required")
+          //     : Yup.date().nullable()
+          // ),
+          // PassportExpDate: Yup.lazy(() =>
+          //   validationInfo?.PassportMandatory
+          //     ? Yup.date().required("Passport expiry date is required")
+          //     : Yup.date().nullable()
+          // ),
         })
       )
-      .test("unique-names", "Duplicate passenger names not allowed", function (guests) {
-        if (validationInfo.SamePaxNameAllowed || !guests) return true;
-        const names = guests.map((p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`);
-        return new Set(names).size === names.length;
-      }),
+      .test(
+        "unique-names",
+        "Duplicate passenger names not allowed",
+        function (guests) {
+          if (validationInfo.SamePaxNameAllowed || !guests) return true;
+          const names = guests.map(
+            (p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`
+          );
+          return new Set(names).size === names.length;
+        }
+      ),
   });
 };
 
