@@ -1,6 +1,6 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
-import {roboto} from "@/utils/fonts.js";
+import { roboto } from "@/utils/fonts.js";
 import Typography from "@mui/material/Typography";
 import { Button, Grid2, Stack } from "@mui/material";
 import { nunito } from "@/utils/fonts";
@@ -8,8 +8,12 @@ import { COLORS } from "@/utils/colors";
 import Image from "next/image";
 import foodImage from "@/../public/images/food.png";
 
-export default function MealCard({ meal, handleMealValue, isSelected }) {
-
+export default function MealCard({
+  meal,
+  handleMealValue,
+  isSelected,
+  radioMode = false,
+}) {
   // console.log("isSelected", isSelected)
 
   return (
@@ -24,19 +28,20 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
         <Typography
           variant="body1"
           sx={{
-           fontFamily:roboto.style,
+            fontFamily: roboto.style,
             fontWeight: 600,
             color: COLORS.PRIMARY,
             mb: "10px",
             whiteSpace: "nowrap",
           }}
         >
-         {meal?.AirlineDescription ? `${meal.AirlineDescription.substring(0, 20)}...` : "--"}
-
+          {meal?.AirlineDescription
+            ? `${meal.AirlineDescription.substring(0, 20)}...`
+            : "--"}
         </Typography>
         <Typography
           variant="body2"
-          sx={{ fontFamily:roboto.style, fontWeight: 600 }}
+          sx={{ fontFamily: roboto.style, fontWeight: 600 }}
         >
           {meal?.Code || "--"}
         </Typography>
@@ -50,7 +55,7 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
         >
           <Typography
             variant="body1"
-            sx={{ fontFamily:roboto.style, fontWeight: 600 }}
+            sx={{ fontFamily: roboto.style, fontWeight: 600 }}
           >
             {meal?.Price} {meal?.Currency}
           </Typography>
@@ -59,11 +64,17 @@ export default function MealCard({ meal, handleMealValue, isSelected }) {
             size="small"
             sx={{
               backgroundColor: isSelected ? COLORS.SECONDARY : COLORS.GRAY,
-              fontFamily:roboto.style
+              fontFamily: roboto.style,
             }}
             onClick={() => handleMealValue(meal)}
           >
-            {isSelected ? "Added" : "Add"}
+            {radioMode
+              ? isSelected
+                ? "Selected"
+                : "Select"
+              : isSelected
+              ? "Remove"
+              : "Add"}
           </Button>
         </Stack>
       </Grid2>

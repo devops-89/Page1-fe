@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Field } from "formik";
 import { Grid2, TextField, Typography, MenuItem, Box } from "@mui/material";
 import { roboto } from "@/utils/fonts";
@@ -7,7 +7,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import { JOURNEY, JOURNEY_TYPE, TOAST_STATUS } from "@/utils/enum";
 import InternationalMealSelection from "./ssr/roundtrip/international/InternationalMealSelection";
@@ -17,6 +17,20 @@ import BaggageSelection from "./ssr/oneway/BaggageSelection";
 import DomesticMealSelection from "./ssr/roundtrip/domestic/DomesticMealSelection";
 import DomesticBaggageSelection from "./ssr/roundtrip/domestic/DomesticBaggageSelection";
 import AddForm from "./AddForm";
+import PassengerPassport from "./PassengerPassport";
+
+const TITLE_OPTIONS = {
+  adult: ["Mr", "Ms", "Mrs"],
+  child: ["Mr", "Ms"],
+  infant: ["Mstr", "Mr", "Ms"],
+};
+
+const TITLE_LABEL = {
+  Mr: "Mr.",
+  Ms: "Ms.",
+  Mrs: "Mrs.",
+  Mstr: "Mstr",
+};
 
 const PassengerFields = ({
   touched,
@@ -26,17 +40,47 @@ const PassengerFields = ({
   handleChange,
   handleBlur,
   errors,
+  submitCount,
   formType,
-  isPassportRequired,
+  // isPassportRequired,
   journey,
-  values, // Added the missing values prop
+  values,
+  isPassportFullDetailRequired,
+  isNewPassportMandatory,
+  isPassportShow,
+  isPassportShowForAdultChild,
+  specialFareForMeal,
 }) => {
   const passengerKey = `${formType}-${index}`;
   // console.log("formType", formType, "index", index);
-
+  console.log("jkwjdkjwdsk", isPassportShowForAdultChild);
   const dispatch = useDispatch();
-  // console.log("journey---------",journey)
+  console.log("journey---------", journey);
+  useEffect(() => {
+    const allowedTitles = TITLE_OPTIONS[formType] || [];
+    const currentTitle = values?.[formType]?.[index]?.title || "";
+    if (currentTitle && !allowedTitles.includes(currentTitle)) {
+      setFieldValue(`${formType}[${index}].title`, "");
+    }
+  }, [formType, index, setFieldValue, values]);
 
+  // Helper function to calculate age from date of birth
+  const calculateAge = (dob) => {
+    if (!dob) return null; // Handle missing date
+    const birthDate = dayjs(dob);
+    const today = dayjs();
+    const age = today.diff(birthDate, "year");
+    return age;
+  };
+  const age = calculateAge(values?.[formType]?.[index]?.date_of_birth);
+
+  // const newFlightValidations = useSelector(
+  //   (state) => state.Flight.FlightValidation
+  // );
+  // console.log("abcdefh", newFlightValidations.rules.LCC.destination.isPan);
+  // const isPassportShow = newFlightValidations.rules.LCC.destination.isPan;
+  // const isSpiceJet =
+  //   newFlightValidations.rules.LCC.airlineSpecific.spiceJet.isSpiceJet;
   return (
     <Accordion defaultExpanded={index === 0} key={passengerKey}>
       <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
@@ -101,9 +145,11 @@ const PassengerFields = ({
                   },
                 }}
               >
-                <MenuItem value="Mr">Mr.</MenuItem>
-                <MenuItem value="Ms">Ms.</MenuItem>
-                <MenuItem value="Mrs">Mrs.</MenuItem>
+                {(TITLE_OPTIONS[formType] || []).map((opt) => (
+                  <MenuItem key={opt} value={opt}>
+                    {TITLE_LABEL[opt] || opt}
+                  </MenuItem>
+                ))}
               </Field>
               <Field
                 as={TextField}
@@ -138,7 +184,6 @@ const PassengerFields = ({
               />
             </Box>
           </Grid2>
-
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
@@ -171,7 +216,6 @@ const PassengerFields = ({
               }
             />
           </Grid2>
-
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
@@ -204,13 +248,12 @@ const PassengerFields = ({
               }
             />
           </Grid2>
-
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
               variant="body1"
               sx={{ fontWeight: 600, mb: "5px", fontFamily: roboto.style }}
             >
-              Date of Birth
+              Date of Birth {age !== null && `(Age: ${age} years)`}
             </Typography>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -285,19 +328,58 @@ const PassengerFields = ({
               </Field>
             </LocalizationProvider>
           </Grid2>
+          {/* Gender */}
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 600, mb: "5px", fontFamily: roboto.style }}
+            >
+              Gender (*)
+            </Typography>
+
+            <Field
+              as={TextField}
+              select
+              size="small"
+              fullWidth
+              name={`${formType}[${index}].gender`}
+              variant="outlined"
+              placeholder="Select Gender"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values[formType][index]?.gender ?? ""}
+              error={!!errors?.[formType]?.[index]?.gender}
+              helperText={errors?.[formType]?.[index]?.gender}
+              SelectProps={{
+                displayEmpty: true,
+                renderValue: (val) =>
+                  val !== "" ? (
+                    val
+                  ) : (
+                    <span style={{ color: "#9e9e9e" }}>Select Gender</span>
+                  ),
+              }}
+            >
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Field>
+          </Grid2>
+
           <Grid2 size={12}>
             {index == 0 && formType == "adult" ? (
               <AddForm
+                isLCC={data?.isLCC}
                 values={values}
                 handleChange={handleChange}
                 handleBlur={handleBlur}
                 errors={errors}
                 touched={touched}
                 setFieldValue={setFieldValue}
+                submitCount={submitCount}
               />
             ) : null}
           </Grid2>
-
           {journey?.journey_type === JOURNEY_TYPE.ROUNDTRIP &&
           journey?.journey === JOURNEY.DOMESTIC ? (
             <>
@@ -353,6 +435,7 @@ const PassengerFields = ({
                     mealData={data?.MealDynamic}
                     isLCC={data?.isLCC}
                     passengerType={formType}
+                    specialFareForMeal={specialFareForMeal}
                   />
                 )}
               </Grid2>
@@ -362,120 +445,32 @@ const PassengerFields = ({
                     passengerId={index}
                     passengerType={formType}
                     baggageData={data?.Baggage}
+                    isLCC={data?.isLCC}
+                    isInternationalJourney={
+                      journey?.journey === JOURNEY.INTERNATIONAL
+                    }
                   />
                 )}
               </Grid2>
             </>
           )}
-
-          {/* Passport Number */}
-          {/* Passport Number compulsary show in international flights */}
-          {journey?.journey === JOURNEY.INTERNATIONAL && (
-            <Grid2 size={{ xs: 12, sm: 6 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
-              >
-                Passport Number   {journey?.journey === JOURNEY.INTERNATIONAL ? "*" : ""}
-              </Typography>
-              <Field
-                as={TextField}
-                placeholder="Passport Number"
-                name={`${formType}[${index}].passport_no`}
-                fullWidth
-                size="small"
-                variant="outlined"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values[formType][index]?.passport_no || ""}
-                error={
-                  errors &&
-                  errors[formType] &&
-                  errors[formType][index] &&
-                  errors[formType][index].passport_no
-                }
-                helperText={
-                  errors &&
-                  errors[formType] &&
-                  errors[formType][index] &&
-                  errors[formType][index].passport_no
-                }
+          {journey?.journey === JOURNEY.INTERNATIONAL &&
+            (isNewPassportMandatory ||
+              isPassportShow ||
+              isPassportShowForAdultChild) && (
+              <PassengerPassport
+                journey={journey}
+                formType={formType}
+                index={index}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                values={values}
+                errors={errors}
+                setFieldValue={setFieldValue}
+                age={age}
+                isPassportFullDetailRequired={isPassportFullDetailRequired}
               />
-            </Grid2>
-          )}
-
-          {/* Passport Expiry Date */}
-          {/* Passport Number compulsary show in international flights */}
-          {journey?.journey === JOURNEY.INTERNATIONAL && (
-            <Grid2 size={{ xs: 12, sm: 6 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
-              >
-                Passport Expiry Date{" "}
-                {journey?.journey === JOURNEY.INTERNATIONAL ? "*" : ""}
-              </Typography>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Field name={`${formType}[${index}].passport_expiry`}>
-                  {({ field, form }) => (
-                    <DatePicker
-                      format="DD/MM/YYYY"
-                      disablePast
-                      id="passport.passport_expiry"
-                      placeholder="Passport Expiry Date"
-                      inputFormat="DD/MM/YYYY"
-                      fullWidth
-                      value={
-                        values?.[formType]?.[index]?.passport_expiry
-                          ? dayjs(values[formType][index].passport_expiry)
-                          : null
-                      }
-                      slotProps={{
-                        textField: {
-                          size: "small",
-                          fullWidth: true,
-                          error:
-                            errors &&
-                            errors[formType] &&
-                            errors[formType][index] &&
-                            errors[formType][index].passport_expiry,
-                          helperText:
-                            errors &&
-                            errors[formType] &&
-                            errors[formType][index] &&
-                            errors[formType][index].passport_expiry,
-                        },
-                        popper: {
-                          sx: {
-                            zIndex: 100,
-                          },
-                        },
-                      }}
-                      onChange={(date) =>
-                        form.setFieldValue(
-                          field.name,
-                          date ? date.format("YYYY-MM-DD") : null
-                        )
-                      }
-                      sx={{
-                        "& .MuiInputBase-input": { padding: "8.5px 14px" },
-                        "& .MuiFormLabel-root": { top: "-7px" },
-                      }}
-                      onBlur={field.onBlur}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          size="small"
-                          variant="outlined"
-                        />
-                      )}
-                    />
-                  )}
-                </Field>
-              </LocalizationProvider>
-            </Grid2>
-          )}
+            )}
         </Grid2>
       </AccordionDetails>
     </Accordion>
