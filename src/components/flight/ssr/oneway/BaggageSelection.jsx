@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid2, Typography } from "@mui/material";
 import { nunito } from "@/utils/fonts";
@@ -18,10 +18,12 @@ export default function BaggageSelection({
   baggageData,
   passengerId,
   passengerType,
+  isLCC,
+  isInternationalJourney,
 }) {
   // console.log("baggageData-----------", baggageData);
   const dispatch = useDispatch();
-
+  const radioEnabled = Boolean(isLCC) && Boolean(isInternationalJourney);
   // Create a unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
@@ -34,40 +36,111 @@ export default function BaggageSelection({
   const selectedPassengerBaggages = selectedBaggages[uniquePassengerKey] || {
     selectedBaggages: [],
   };
+  const selectedByFlightId = useMemo(() => {
+    const map = new Map();
+    (selectedPassengerBaggages.selectedBaggages || []).forEach((b) => {
+      const code = b.selectedBaggage?.Code ?? b.selected?.Code;
+      const fid = b.flightId ?? b.baggageId ?? b.flightNumber; // <-- fallback
+      if (fid != null && code) map.set(String(fid), code);
+    });
+    return map;
+  }, [selectedPassengerBaggages]);
 
+  // Auto-select FIRST (cheapest) ONLY in radio mode
+  useEffect(() => {
+    if (!radioEnabled) return;
+    if (!Array.isArray(baggageData)) return;
+
+    baggageData.forEach((singleBaggage) => {
+      if (!Array.isArray(singleBaggage) || singleBaggage.length === 0) return;
+      const flightNumber = singleBaggage[0]?.FlightNumber;
+      if (!flightNumber) return;
+
+      const alreadySelectedCode = selectedByFlightId.get(String(flightNumber));
+      if (alreadySelectedCode) return;
+
+      const freeBaggage = singleBaggage.find((b) => Number(b.Price) === 0);
+
+      const sorted = [...singleBaggage].sort(
+        (a, b) => Number(a.Price) - Number(b.Price)
+      );
+      const first = freeBaggage && sorted[0];
+
+      if (first) {
+        dispatch(
+          setBaggageDetails({
+            passengerType,
+            passengerId,
+            baggageId: flightNumber,
+            selected: first,
+          })
+        );
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    baggageData,
+    passengerId,
+    passengerType,
+    radioEnabled,
+    selectedByFlightId,
+  ]);
   // console.log('selectedPassengerBaggages------------',selectedPassengerBaggages)
 
   // Handle baggage click (select or remove)
   const handleBaggageClick = (baggage, flightNumber) => {
-    // console.log('baggage-----------', baggage, flightNumber);
-    const passengerBaggages = selectedPassengerBaggages.selectedBaggages;
-    const existingBaggage = passengerBaggages.find(
-      (b) => b.flightId === flightNumber
-    );
-    // console.log('---------existingBaggage',existingBaggage)
+    console.log("kedf", flightNumber);
+    const currentCode = selectedByFlightId.get(String(flightNumber));
 
-    if (existingBaggage?.selectedBaggage.Code === baggage.Code) {
-      // Deselect the baggage if it's already selected
+    if (radioEnabled) {
+      // Radio mode — only replace, never remove
+      if (currentCode === baggage.Code) return;
+      dispatch(
+        setBaggageDetails({
+          passengerType,
+          passengerId,
+          baggageId: flightNumber,
+          selected: baggage,
+        })
+      );
+      return;
+    }
+
+    // Non-radio mode (toggle/remove logic)
+    const passengerBaggages = selectedPassengerBaggages.selectedBaggages || [];
+
+    // ✅ Safely find any existing baggage for this flight
+    const existingBaggage = passengerBaggages.find(
+      (b) => String(b.flightId) === String(flightNumber)
+    );
+
+    const existingCode =
+      existingBaggage?.selectedBaggage?.Code || existingBaggage?.selected?.Code;
+
+    // ✅ Handle toggle safely
+    if (existingCode === baggage.Code) {
+      // deselect
       dispatch(
         removeBaggageDetails({
           passengerType,
           passengerId,
           baggageId: flightNumber,
-          baggageCode: baggage.Code,
+          baggageCode: existingCode,
         })
       );
     } else {
-      // Ensure only one baggage is selected per flight
-      if (existingBaggage) {
+      // Replace selection (one per flight)
+      if (existingBaggage && existingCode) {
         dispatch(
           removeBaggageDetails({
             passengerType,
             passengerId,
             baggageId: flightNumber,
-            baggageCode: existingBaggage.selectedBaggage.Code,
+            baggageCode: existingCode,
           })
         );
       }
+
       dispatch(
         setBaggageDetails({
           passengerType,
@@ -102,6 +175,10 @@ export default function BaggageSelection({
       </AccordionSummary>
       <AccordionDetails sx={{ p: 1, overflowY: "auto", maxHeight: "240px" }}>
         {baggageData?.map((singleBaggage, baggageIndex) => {
+          const flightNumber = singleBaggage?.[0]?.FlightNumber;
+          const sortedBaggage = [...singleBaggage].sort(
+            (a, b) => Number(a.Price) - Number(b.Price)
+          );
           return (
             <>
               <Typography
@@ -123,25 +200,21 @@ export default function BaggageSelection({
                 key={baggageIndex}
               >
                 {singleBaggage[0]?.FlightNumber ? (
-                  singleBaggage?.map((baggage, baggageIndex) => {
+                  sortedBaggage?.map((baggage, baggageIndex) => {
                     return (
-                      (baggage?.Price!=0)?(
-                          <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                      <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                         <BaggageCard
                           baggage={baggage}
                           handleBaggageValue={() =>
                             handleBaggageClick(baggage, baggage?.FlightNumber)
                           }
-                          isSelected={selectedPassengerBaggages.selectedBaggages?.some(
-                            (b) =>
-                              String(b.flightId) ===
-                                String(baggage.FlightNumber) &&
-                              b.selectedBaggage.Code === baggage.Code
-                          )}
+                          isSelected={
+                            selectedByFlightId.get(String(flightNumber)) ===
+                            baggage.Code
+                          }
+                          radioMode={radioEnabled}
                         />
                       </Grid2>
-                      ):(null)
-                     
                     );
                   })
                 ) : (

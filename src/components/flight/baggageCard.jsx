@@ -7,8 +7,13 @@ import { COLORS } from "@/utils/colors";
 import Image from "next/image";
 import baggageImage from "@/../public/images/baggage.png";
 
-export default function BaggageCard({ baggage, handleBaggageValue, isSelected }) {
-  // console.log("myCod-----", isSelected)
+export default function BaggageCard({
+  baggage,
+  handleBaggageValue,
+  isSelected,
+  radioMode = false,
+}) {
+  console.log("myCod-----", baggage);
   return (
     <Grid2 container spacing={2} component={Card} sx={{ maxHeight: "150px" }}>
       <Grid2
@@ -21,18 +26,18 @@ export default function BaggageCard({ baggage, handleBaggageValue, isSelected })
         <Typography
           variant="body1"
           sx={{
-            fontFamily:roboto.style,
+            fontFamily: roboto.style,
             fontWeight: 600,
             color: COLORS.PRIMARY,
             mb: "10px",
             whiteSpace: "nowrap",
           }}
         >
-          {`${baggage?.Weight} kg` || '--'}
+          {`${baggage?.Weight} kg` || "--"}
         </Typography>
         <Typography
           variant="body2"
-          sx={{ fontFamily:roboto.style, fontWeight: 600 }}
+          sx={{ fontFamily: roboto.style, fontWeight: 600 }}
         >
           {baggage?.Code || "--"}
         </Typography>
@@ -46,7 +51,7 @@ export default function BaggageCard({ baggage, handleBaggageValue, isSelected })
         >
           <Typography
             variant="body1"
-            sx={{ fontFamily:roboto.style, fontWeight: 600 }}
+            sx={{ fontFamily: roboto.style, fontWeight: 600 }}
           >
             {baggage?.Price} {baggage?.Currency}
           </Typography>
@@ -54,11 +59,19 @@ export default function BaggageCard({ baggage, handleBaggageValue, isSelected })
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: isSelected ? COLORS.SECONDARY : COLORS.GRAY,fontFamily:roboto.style
+              backgroundColor: isSelected ? COLORS.SECONDARY : COLORS.GRAY,
+              fontFamily: roboto.style,
             }}
             onClick={() => handleBaggageValue(baggage)}
           >
-            {isSelected ? "Added" : "Add"}
+            {/* {isSelected ? "Remove" : "Add"} */}
+            {radioMode
+              ? isSelected
+                ? "Selected"
+                : "Select"
+              : isSelected
+              ? "Remove"
+              : "Add"}
           </Button>
         </Stack>
       </Grid2>

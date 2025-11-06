@@ -41,7 +41,7 @@ export default function FullScreenDialog({flightDetailType}) {
   }
 
  
-
+ 
   return (
     <>
       <Button

@@ -5,60 +5,61 @@ export const flightValidations = {
       titleRequired: true,
       firstNameRequired: true,
       lastNameRequired: true,
-      distinctNameForSpiceJet: true,
       genderRequired: true,
-      dobRequiredFor: ['child', 'infant'],
+      dobRequiredFor: ["child", "infant"],
       phoneNumberRequired: true,
     },
     paxTitles: {
-      male: ['MR'],
-      female: ['MRS', 'MS'],
-      child: ['MR', 'MS'],
-      infant: ['MSTR', 'MR', 'MS'],
+      male: ["MR"],
+      female: ["MRS", "MS"],
+      child: ["MR", "MS"],
+      infant: ["MSTR", "MR", "MS"],
     },
     nameRestrictions: {
-      invalidCharacters: ['.', ',', '/'],
+      invalidCharacters: [".", ",", "/"],
     },
   },
 
   LCC: {
-    base: {
-      addressRequired: false, // dynamic, set after FareQuote if LCC requires
-      emailRequired: false,   // dynamic
-    },
+    isLCC: false,
     airlineSpecific: {
       AirAsia: {
-        countryCodeRequired: false,
-        countryNameRequired: false,
-        dobRequiredForAdultIntl: false,
+        codes: ["I5", "AK", "FD", "QZ", "D7", "Z2"],
+        isSourceAirAsia: false,
+        isAirAsia: false,
       },
-      FlyDubai: {
-        baggageFromSSRRequired: false,
-        baggagePriceMustBeZero: false,
+      spiceJet: {
+        code: ["SG"],
+        isSpiceJet: false,
       },
-      SpiceJet: {
-        distinctNameRequired: false,
-        passportMandatoryForIntlTo: [], // fill dynamically based on SSR
+      flyDubai: {
+        code: ["FZ"],
+        isFlyDubai: false,
       },
-      IndiGo: {
-        passportMandatoryForIntlTo: [],
-      },
-      TruJet: {
-        noSpaceInLastName: false,
-      },
-      ZoomAir: {
-        noSpaceInLastName: false,
+      TrueJetAndZoomAir: {
+        codes: ["ZO", "2T", "6E"],
+        isTrueJetAndZoomAir: false,
       },
     },
+    bhutanAirlines: {
+      code: "B3",
+      isBhutanAirlines: false,
+    },
+    destination: {
+      countrycode: ["AE", "SA"],
+      nepalCountry: "NP",
+    },
+    isPassport: false,
+    isPassportAdultChildOnly: false,
   },
 
   PANPassport: {
     validationNodes: [
-      'IsPanRequiredAtBook',
-      'IsPanRequiredAtTicket',
-      'IsPassportRequiredAtBook',
-      'IsPassportRequiredAtTicket',
-      'IsPassportFullDetailRequiredAtBook',
+      "IsPanRequiredAtBook",
+      "IsPanRequiredAtTicket",
+      "IsPassportRequiredAtBook",
+      "IsPassportRequiredAtTicket",
+      "IsPassportFullDetailRequiredAtBook",
     ],
     rules: {
       adult: {
@@ -75,28 +76,32 @@ export const flightValidations = {
       },
     },
     guardianDetailsFormat: {
-      Title: 'Mr',
-      FirstName: 'ANKIT',
-      LastName: 'MEHTA',
-      PAN: 'GSBPM2112A',
+      Title: "Mr",
+      FirstName: "ANKIT",
+      LastName: "MEHTA",
+      PAN: "GSBPM2112A",
     },
-    passportDetailRequiredIf: {
-      IsPassportFullDetailRequiredAtBook: false, // dynamic
-      fields: ['PassportNo', 'PassportExpiry', 'PassportIssueDate', 'PassportIssueCountryCode'],
-    },
+    // passportDetailRequiredIf: {
+    //   IsPassportFullDetailRequiredAtBook: false, // dynamic
+    //   fields: [
+    //     "PassportNo",
+    //     "PassportExpiry",
+    //     "PassportIssueDate",
+    //     "PassportIssueCountryCode",
+    //   ],
+    // },
   },
 
   specialFare: {
-    isSeatMandatory: false,  // dynamic
-    isMealMandatory: false,  // dynamic
-    mustSelectFreeSSRFromResponse: true,
+    isSeatMandatory: false,
+    isMealMandatory: false,
   },
 
   baggage: {
     intlLCC: {
       mustAddFreeBaggageFromSSR: false, // dynamic
       baggagePriceNode: 0,
-      note: 'Free baggage (20kg/30kg/40kg) must be selected explicitly in Ticket request.',
+      note: "Free baggage (20kg/30kg/40kg) must be selected explicitly in Ticket request.",
     },
     domestic: {
       ifSourceIsI5: {
@@ -109,16 +114,18 @@ export const flightValidations = {
     mustDivideBaseFareAndTaxByPassengerCount: true,
     mustRecalculatePublishedAndOfferedFare: true,
     handlePriceChangeFlow: {
-      fareQuote: 'If ispricechanged: true → send updated price in Book/Ticket',
-      bookResponse: 'If ispricechanged: true → set ispricechangedaccepted: true in Ticket request',
-      ticketResponse: 'If ispricechanged: true → re-call Ticket with ispricechangedaccepted: true',
+      fareQuote: "If ispricechanged: true → send updated price in Book/Ticket",
+      bookResponse:
+        "If ispricechanged: true → set ispricechangedaccepted: true in Ticket request",
+      ticketResponse:
+        "If ispricechanged: true → re-call Ticket with ispricechangedaccepted: true",
     },
     cancellationAccordingToUpdatedPrice: true,
   },
 
   gstValidation: {
-    checkNode: 'IsGSTMandatory',
-    IsGSTMandatory:false,
-    mustPassGSTIfTrue: true,
+    checkNode: "IsGSTMandatory",
+    IsGSTMandatory: false,
+    // mustPassGSTIfTrue: true,
   },
 };
