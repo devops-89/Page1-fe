@@ -27,9 +27,9 @@ const MultiCityPassengerForm = ({
   setSelectMeal,
 }) => {
   const dispatch = useDispatch();
-    const isAuthenticated = useSelector(
-      (state) => state.USER.UserData.isAuthenticated
-    );
+  const isAuthenticated = useSelector(
+    (state) => state.USER.UserData.isAuthenticated
+  );
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -161,7 +161,9 @@ const MultiCityPassengerForm = ({
       };
     });
   };
-
+  const handleClick = (values, errors) => {
+    console.log("nsmanmnmxnmsnxnanxnkdnskx", values, errors);
+  };
   const handleSubmit = async (values) => {
     const contactEmail = values.email;
     const phoneNumber = values.contact_no;
@@ -583,7 +585,9 @@ const MultiCityPassengerForm = ({
                   }}
                 >
                   {!isAuthenticated ? (
-                    <Card sx={{ mb: "20px", p: "20px", mx: "auto",width:"100%" }}>
+                    <Card
+                      sx={{ mb: "20px", p: "20px", mx: "auto", width: "100%" }}
+                    >
                       <UserVerifyForm />
                     </Card>
                   ) : (
@@ -591,8 +595,11 @@ const MultiCityPassengerForm = ({
                       type="submit"
                       variant="contained"
                       sx={{ backgroundColor: COLORS.PRIMARY }}
+                      onClick={(e) => {
+                        handleClick(values, errors);
+                      }}
                     >
-                     Book Now
+                      Book Now
                     </Button>
                   )}
                 </Box>

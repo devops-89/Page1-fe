@@ -1,4 +1,3 @@
-
 "use client";
 import InnerBanner from "@/components/innerBanner";
 import React, { useEffect, useState } from "react";
@@ -43,13 +42,8 @@ const FlightList = () => {
   const [priceRange, setPriceRange] = useState([0, 500000]);
   const [filteredFlights, setFilteredFlights] = useState([]);
   const [selectedTime, setSelectedTime] = useState("Anytime");
- 
+
   const [loading, setLoading] = useState(true);
-
-
-
-   
- 
 
   useEffect(() => {
     const fetchInitialData = () => {
@@ -61,8 +55,6 @@ const FlightList = () => {
           setFlightList(flightData);
           setTraceId(flightData.trace_id);
           setJourney(flightData.type);
-      
-         
         } else {
           console.log("No valid flight data found in localStorage");
         }
@@ -75,9 +67,6 @@ const FlightList = () => {
 
     fetchInitialData();
   }, []);
-
-
-
 
   const handleRangeChange = (event, newValue) => {
     setPriceRange(newValue);
@@ -110,10 +99,9 @@ const FlightList = () => {
     if (flightList?.segments?.flightData) {
       setLoading(true);
       const filtered = flightList.segments.flightData.filter((flight) => {
-        const airlineMatch =
-          flight?.departure?.[0]?.Airline?.AirlineName.toLowerCase().includes(
-            searchAirline.toLowerCase()
-          );
+        const airlineName =
+          flight?.departure?.[0]?.Airline?.AirlineName?.toLowerCase() || "";
+        const airlineMatch = airlineName.includes(searchAirline.toLowerCase());
         const priceMatch =
           flight?.TotalFare >= priceRange[0] &&
           flight?.TotalFare <= priceRange[1];
@@ -172,33 +160,30 @@ const FlightList = () => {
     </>
   );
 
- 
- 
-
   return (
     <>
       <InnerBanner img={banner.src} heading={"OnewayFlight"} />
 
-      <Box sx={{ pt: 10, }}>
-        <Container  >
-         <Card
-      sx={{
-        boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)",
-        p: 2,
-        backgroundColor: "#fff", // Important for overlaying content below
-      }}
-    >
-      <Typography sx={{ fontSize: 18, fontFamily: nunito.style }}>
-        Search Flight
-      </Typography>
-      <PersistFlightForm />
-    </Card>
+      <Box sx={{ pt: 10 }}>
+        <Container>
+          <Card
+            sx={{
+              boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)",
+              p: 2,
+              backgroundColor: "#fff", // Important for overlaying content below
+            }}
+          >
+            <Typography sx={{ fontSize: 18, fontFamily: nunito.style }}>
+              Search Flight
+            </Typography>
+            <PersistFlightForm />
+          </Card>
         </Container>
       </Box>
 
       <Box sx={{ pt: { lg: 10, md: 5, sm: 5, xs: 5 }, pb: 10 }}>
         <Container>
-          <Grid2 container spacing={{lg:4 , md:4 , sm:2,xs:1}}>
+          <Grid2 container spacing={{ lg: 4, md: 4, sm: 2, xs: 1 }}>
             {phone ? (
               <Box
                 sx={{
@@ -235,7 +220,6 @@ const FlightList = () => {
                         boxShadow: "0px 0px 3px 3px rgb(0,0,0,0.10)",
                       }}
                     >
-                    
                       <CardHeader
                         action={
                           <Button onClick={toggleDrawer(false)}>
@@ -247,10 +231,8 @@ const FlightList = () => {
                                 fontSize: 30,
                                 fontWeight: "bold",
                               }}
-                            
                             />
                           </Button>
-                         
                         }
                       />
                       <CardHeader
@@ -546,7 +528,7 @@ const FlightList = () => {
             )}
 
             <Grid2 size={{ lg: 8, md: 8, sm: 12, xs: 12 }}>
-              <Grid2 container spacing={3} >
+              <Grid2 container spacing={3}>
                 {loading ? (
                   <Grid2
                     size={12}

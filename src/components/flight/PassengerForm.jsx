@@ -20,6 +20,7 @@ import UserVerifyForm from "./UserVerifyForm";
 import FullScreenDialog from "./ssr/oneway/seats/FullScreenDialog";
 
 const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
+  // console.log("abcdefhjdkck", flightDetails[0]?.Results?.Segments?.[0]?.[0]?.Airline?.AirlineCode);
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
@@ -70,10 +71,12 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const isPassportShow = newFlightValidations.rules.LCC.isPassport;
   const isPassportShowForAdultChild =
     newFlightValidations.rules.LCC.isPassportAdultChildOnly;
-  const isSpiceJet = newFlightValidations.rules.LCC.airlineSpecific.spiceJet.isSpiceJet;
+  const isSpiceJet =
+    newFlightValidations.rules.LCC.airlineSpecific.spiceJet.isSpiceJet;
 
-    const isTrueJetAndZoomAir =
-    newFlightValidations.rules.LCC.airlineSpecific.TrueJetAndZoomAir.isTrueJetAndZoomAir;
+  const isTrueJetAndZoomAir =
+    newFlightValidations.rules.LCC.airlineSpecific.TrueJetAndZoomAir
+      .isTrueJetAndZoomAir;
   // Extrating the flight Validation from the Redux end
 
   const selectedBaggages = useSelector(
@@ -229,6 +232,22 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     nationality: "In",
     email: "",
   };
+  // const source =
+  //   flightDetails[0]?.Results?.Segments?.[0]?.[0]?.Origin?.Airport?.CityCode;
+
+  // const destination =
+  //   flightDetails[0]?.Results?.Segments?.[0]?.[
+  //     flightDetails[0]?.Results?.Segments?.[0]?.length - 1
+  //   ]?.Destination?.Airport?.CityCode;
+
+  // const airlineCode =
+  //   flightDetails[0]?.Results?.Segments?.[0]?.[0]?.Airline?.AirlineCode;
+  // console.log(
+  //   "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+  //   source,
+  //   destination,
+  //   airlineCode
+  // );
   const handleClick = (values, errors) => {
     console.log("ksdjehuehduhefuhuj", values, errors);
     console.log("mmmm", isPassportFullDetailRequired);
@@ -415,9 +434,42 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
         }) || [],
     };
 
+    const passengerDetailsArray = [
+      ...(values?.adult || []),
+      ...(values?.child || []),
+      ...(values?.infant || []),
+    ].map((p) => ({
+      first_name: p?.first_name || "",
+      last_name: p?.last_name || "",
+      title: p?.title || "",
+    }));
+
+    // Handle nested structure safely (Segments[0] could be an array of legs)
+    const segmentArray = Array.isArray(
+      flightDetails?.[0]?.Results?.Segments?.[0]
+    )
+      ? flightDetails?.[0]?.Results?.Segments?.[0]
+      : flightDetails?.[0]?.Results?.Segments || [];
+
+    // Map through each segment to extract required data
+    const segmentDetails = segmentArray.map((segment) => ({
+      OriginCityCode: segment?.Origin?.Airport?.CityCode,
+      DestinationCityCode: segment?.Destination?.Airport?.CityCode,
+      AirlineCode: segment?.Airline?.AirlineCode || "",
+      FlightNumber: segment?.Airline?.FlightNumber || "",
+      DepTime: segment?.Origin?.DepTime || "",
+      ArrTime: segment?.Destination?.ArrTime || "",
+    }));
+
+    const order_request_second = {
+      passengerDetailsArray,
+      segment_details: segmentDetails,
+    };
+
     const finalPayload = {
       ...commonPayload,
       passenger_details: passengerDetails,
+      order_request_second,
     };
 
     setPayload(finalPayload);

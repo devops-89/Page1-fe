@@ -20,12 +20,13 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loading from "react-loading";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DomesticDetail from "../domesticDetail";
 import InternationalDetail from "../internationalDetail";
 import InternationalFareSummary from "../InternationalFareSummary";
 import RoundFareSummary from "../RoundFareSummary";
-
+import { setToast } from "@/redux/reducers/toast";
+import { TOAST_STATUS } from "@/utils/enum";
 export default function RoundTripCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
   const router = useRouter();
@@ -49,6 +50,7 @@ export default function RoundTripCheckout() {
   const [passengerCount, setPassengerCount] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const smallScreen = useMediaQuery("(max-width:1199px)");
+  const dispatch = useDispatch();
   const toggleDrawer = {
     open: drawerOpen,
     toggle: () => setDrawerOpen((prev) => !prev),
@@ -74,10 +76,12 @@ export default function RoundTripCheckout() {
   function handlePay() {
     setLoading(true);
 
-    const flightData = JSON.parse(localStorage.getItem("oneWayflightDetails"));
+    const flightData = JSON.parse(
+      localStorage.getItem("roundTripflightDetails")
+    );
 
-    const traceId = flightData?.[0]?.TraceId;
-
+    const traceId = flightData?.[0]?.[0]?.TraceId || flightData?.[0]?.TraceId;
+    console.log("jjjjjj", traceId);
     const updatedPaymentPayload = {
       ...paymentPayload,
       traceId,

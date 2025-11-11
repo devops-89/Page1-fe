@@ -72,7 +72,9 @@ export default function OneWayCheckout() {
 
   function handlePay() {
     setLoading(true);
-    const flightData = JSON.parse(localStorage.getItem("oneWayflightDetails"));
+    const flightData = JSON.parse(
+      localStorage.getItem("multitripflightDetails")
+    );
 
     const traceId = flightData?.[0]?.TraceId;
 

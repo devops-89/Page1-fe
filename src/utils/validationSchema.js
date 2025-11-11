@@ -326,7 +326,7 @@ export const validationSchema = (
       passengerSchema(
         isNewPassportMandatory,
         isNewPanMandatory,
-        false,
+        isBirthdayRequired,
         isPassportFullDetailRequired,
         isPassportShow,
         isPassportShowForAdultChild,
