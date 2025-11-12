@@ -202,13 +202,18 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
-      .then((data) =>
-        setState((prevState) => ({ ...prevState, ip_address: data.ip }))
+      .then((data) =>{
+        setState((prevState) => ({ ...prevState, ip_address: data.ip }));
+        localStorage.setItem("ip",data.ip);
+      }
+       
       )
       .catch((err) => {
         console.error("Error fetching IP address:", err);
       });
   };
+
+  
 
   const searchFlight = async (payload) => {
     // full-page loader ON
