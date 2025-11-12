@@ -147,7 +147,11 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
-      .then((data) => setState((s) => ({ ...s, ip_address: data.ip })));
+      .then((data) => {
+        setState((s) => ({ ...s, ip_address: data.ip }));
+        localStorage.setItem("ip",data.ip);
+      }
+      );
   };
 
   const searchFlight = async () => {
