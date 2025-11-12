@@ -251,6 +251,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const handleClick = (values, errors) => {
     console.log("ksdjehuehduhefuhuj", values, errors);
     console.log("mmmm", isPassportFullDetailRequired);
+    console.log("dscmkkdscjkjkskckm", journey);
   };
   const handleSubmit = async (values) => {
     const contactEmail = values.email;
@@ -608,7 +609,8 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             isPassportShowForAdultChild,
             isSpiceJet,
             isSourceAirAsia,
-            isTrueJetAndZoomAir
+            isTrueJetAndZoomAir,
+            journey
           )}
           onSubmit={handleSubmit}
           enableReinitialize

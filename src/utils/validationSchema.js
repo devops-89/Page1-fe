@@ -126,7 +126,8 @@ export const passengerSchema = (
   isPassportShowForAdultChild,
   isSpiceJet,
   isSourceAirAsia,
-  isTrueJetAndZoomAir
+  isTrueJetAndZoomAir,
+  journey
 ) => {
   const nameNoBadChars = (label) =>
     Yup.string()
@@ -138,10 +139,15 @@ export const passengerSchema = (
   const norm = (s) => (s || "").trim().replace(/\s+/g, "").toUpperCase();
   return Yup.object({
     title: Yup.string().trim(),
-    first_name: nameNoBadChars("First Name").required("First Name is required"),
+    first_name: nameNoBadChars("First Name")
+      .required("First Name is required")
+      .min(1, "First Name must be at least 2 characters long")
+      .max(32, "First Name cannot exceed 32 characters"),
     middle_name: nameNoBadChars("Middle Name").notRequired(),
     last_name: nameNoBadChars("Last Name")
       .required("Last Name is required")
+      .min(2, "Last Name must be at least 2 characters long")
+      .max(32, "Last Name cannot exceed 32 characters")
       .test(
         "no-space-anywhere-trujet-zoomair",
         "Spaces are not allowed in Last Name.",
@@ -178,9 +184,10 @@ export const passengerSchema = (
       .matches(/^[A-Z0-9]{6,9}$/, "Invalid Passport No. format")
       .when([], {
         is: () =>
-          isNewPassportMandatory ||
-          isPassportShowForAdultChild ||
-          isPassportShow,
+          journey?.journey === "INTERNATIONAL" &&
+          (isNewPassportMandatory ||
+            isPassportShowForAdultChild ||
+            isPassportShow),
         then: (schema) => schema.required("Passport No. is required"),
         otherwise: (schema) => schema.notRequired(),
       }),
@@ -189,9 +196,10 @@ export const passengerSchema = (
       .typeError("Invalid expiry date")
       .when([], {
         is: () =>
-          isNewPassportMandatory ||
-          isPassportShowForAdultChild ||
-          isPassportShow,
+          journey?.journey === "INTERNATIONAL" &&
+          (isNewPassportMandatory ||
+            isPassportShowForAdultChild ||
+            isPassportShow),
         then: (schema) => schema.required("Passport Expiry Date is required"),
         otherwise: (schema) => schema.notRequired(),
       }),
@@ -285,25 +293,34 @@ export const gstFormSchema = (isGSTMandatory) => {
 export const buildAddFormSchema = (isAirAsia, isLCC) =>
   Yup.object({
     cell_country_code: Yup.string().trim(),
-    country_code:
-      isAirAsia && isLCC
-        ? Yup.string().trim().required("Country Code is required")
-        : Yup.string().trim(),
+    // country_code:
+    //   isAirAsia && isLCC
+    //     ? Yup.string().trim().required("Country Code is required")
+    //     : Yup.string().trim(),
+    country_code: Yup.string().trim().required("Country Code is required"),
     city: Yup.string().trim().required("City required"),
     contact_no: Yup.string()
       .trim()
       .matches(/^[0-9]{10}$/, "10 digits required")
       .required("Phone No. is required"),
-    country:
-      isAirAsia && isLCC
-        ? Yup.string().trim().required("Country is required")
-        : Yup.string().trim(),
-    address: isLCC
-      ? Yup.string().trim().required("Address is required")
-      : Yup.string().trim(),
-    email: isLCC
-      ? Yup.string().trim().email("Invalid email").required("Email is Required")
-      : Yup.string().trim().email("Invalid email"),
+    // country:
+    //   isAirAsia && isLCC
+    //     ? Yup.string().trim().required("Country is required")
+    //     : Yup.string().trim(),
+    // address: isLCC
+    //   ? Yup.string().trim().required("Address is required")
+    //   : Yup.string().trim(),
+    // email: isLCC
+    //   ? Yup.string().trim().email("Invalid email").required("Email is Required")
+    //   : Yup.string().trim().email("Invalid email"),
+    country: Yup.string().trim().required("Country is required"),
+
+    address: Yup.string().trim().required("Address is required"),
+
+    email: Yup.string()
+      .trim()
+      .email("Invalid email")
+      .required("Email is Required"),
   });
 
 export const validationSchema = (
@@ -318,7 +335,8 @@ export const validationSchema = (
   isPassportShowForAdultChild,
   isSpiceJet,
   isSourceAirAsia,
-  isTrueJetAndZoomAir
+  isTrueJetAndZoomAir,
+  journey
 ) => {
   const addFormSchema = buildAddFormSchema(isAirAsia, isLCC);
   return Yup.object().shape({
@@ -332,7 +350,8 @@ export const validationSchema = (
         isPassportShowForAdultChild,
         isSpiceJet,
         isSourceAirAsia,
-        isTrueJetAndZoomAir
+        isTrueJetAndZoomAir,
+        journey
       )
     ),
     child: Yup.array().of(
@@ -345,7 +364,8 @@ export const validationSchema = (
         isPassportShowForAdultChild,
         isSpiceJet,
         false,
-        isTrueJetAndZoomAir
+        isTrueJetAndZoomAir,
+        journey
       )
     ),
     infant: Yup.array().of(
@@ -358,7 +378,8 @@ export const validationSchema = (
         false,
         isSpiceJet,
         false,
-        isTrueJetAndZoomAir
+        isTrueJetAndZoomAir,
+        journey
       )
     ),
     gstForm: isGSTMandatory ? gstFormSchema(true) : Yup.object().optional(),

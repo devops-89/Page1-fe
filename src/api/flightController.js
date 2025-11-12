@@ -37,7 +37,7 @@ export const flightController = {
         "flight-booking/non_LCC_booking",
         data
       );
-       console.log("result nonLLC", result)
+      console.log("result nonLLC", result);
       return result;
     } catch (error) {
       // console.log("error nonLLC", error)
@@ -47,9 +47,9 @@ export const flightController = {
 
   oneWayBookingLLC: async (data) => {
     try {
-       console.log("LCC API called");
+      console.log("LCC API called");
       let result = await securedFlightApi.post("flight-booking/booking", data);
-       console.log("result LLC", result)
+      console.log("result LLC", result);
       return result;
     } catch (error) {
       // console.log("error LLC", error)
@@ -81,11 +81,14 @@ export const flightController = {
 
   roundTripDomesticBooking: async (data) => {
     try {
-      let result = await securedFlightApi.post("flight-booking/round-trip",data);
-      console.log("result", result)
+      let result = await securedFlightApi.post(
+        "flight-booking/round-trip",
+        data
+      );
+      console.log("result", result);
       return result;
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
       throw error;
     }
   },
@@ -101,14 +104,23 @@ export const flightController = {
       throw error;
     }
   },
-  getCancellationCharges: async (data)=>{
-    try{
-        let result=await flightPublicApi.post("flightdetail/get-cancellation-charges",data);
-        return result;
-    }
-    catch(error){
+  getCancellationCharges: async (data) => {
+    try {
+      let result = await flightPublicApi.post(
+        "flightdetail/get-cancellation-charges",
+        data
+      );
+      return result;
+    } catch (error) {
       throw error;
     }
-
-  }
+  },
+  getBookingStatus: async (data) => {
+    try {
+      let result = await flightPublicApi.post("/flightdetail/getBookingDetails", data);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
 };

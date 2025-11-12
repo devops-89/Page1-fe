@@ -27,7 +27,7 @@ const AddForm = ({
 
   const selectedCountryByLabel =
     data.countries.find((c) => c.label === values?.country) || null;
-
+  console.log("this is llc", isLCC);
   return (
     <>
       <Box sx={{ paddingBlock: "20px" }}>
@@ -57,7 +57,7 @@ const AddForm = ({
               <Autocomplete
                 disablePortal
                 options={data.countries || []}
-                getOptionLabel={(option) => `${option.phone}`}
+                getOptionLabel={(option) => `+${option.phone}`}
                 sx={{
                   width: "100%",
                   fontSize: "16px",
@@ -138,7 +138,6 @@ const AddForm = ({
               />
             </Box>
           </Grid2>
-
           {/* City */}
           <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography
@@ -162,166 +161,162 @@ const AddForm = ({
               sx={{ fontFamily: roboto.style }}
             />
           </Grid2>
-
           {/* Country + Country Code (ONLY when isAirAsia && isLCC) */}
-          {isAirAsia && isLCC && (
-            <>
-              {/* Country (required via schema) */}
-              <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
-                >
-                  Country (*)
-                </Typography>
-                <Autocomplete
-                  disablePortal
-                  options={data.countries || []}
-                  getOptionLabel={(option) => option.label}
-                  value={selectedCountryByLabel}
-                  onChange={(e, newValue) => {
-                    setFieldValue("country", newValue?.label || "");
-                    setFieldValue("country_code", newValue?.code || "");
-                    // optionally sync dial code too:
-                    // setFieldValue("cell_country_code", newValue?.phone || "");
-                  }}
-                  // onBlur={handleBlur}
+          {/* {isAirAsia && isLCC && ( */}
+          <>
+            {/* Country (required via schema) */}
+            <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
+              >
+                Country (*)
+              </Typography>
+              <Autocomplete
+                disablePortal
+                options={data.countries || []}
+                getOptionLabel={(option) => option.label}
+                value={selectedCountryByLabel}
+                onChange={(e, newValue) => {
+                  setFieldValue("country", newValue?.label || "");
+                  setFieldValue("country_code", newValue?.code || "");
+                  // optionally sync dial code too:
+                  // setFieldValue("cell_country_code", newValue?.phone || "");
+                }}
+                // onBlur={handleBlur}
 
-                  renderOption={(props, option) => (
-                    <li {...props} key={option.code}>
-                      <img
-                        loading="lazy"
-                        width="18"
-                        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                        alt={option.label}
-                        style={{ marginRight: 10 }}
-                      />
-                      <span style={{ fontSize: "13px" }}>{option.label}</span>
-                    </li>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      name="country"
-                      onBlur={handleBlur}
-                      placeholder="Select Country"
-                      size="small"
-                      error={
-                        (touched?.country || submitCount > 0) &&
-                        !!errors?.country
-                      }
-                      helperText={
-                        (touched?.country || submitCount > 0) && errors?.country
-                      }
+                renderOption={(props, option) => (
+                  <li {...props} key={option.code}>
+                    <img
+                      loading="lazy"
+                      width="18"
+                      srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                      src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                      alt={option.label}
+                      style={{ marginRight: 10 }}
                     />
-                  )}
-                  slotProps={{ popper: { sx: { zIndex: 100 } } }}
-                />
-              </Grid2>
+                    <span style={{ fontSize: "13px" }}>{option.label}</span>
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="country"
+                    onBlur={handleBlur}
+                    placeholder="Select Country"
+                    size="small"
+                    error={
+                      (touched?.country || submitCount > 0) && !!errors?.country
+                    }
+                    helperText={
+                      (touched?.country || submitCount > 0) && errors?.country
+                    }
+                  />
+                )}
+                slotProps={{ popper: { sx: { zIndex: 100 } } }}
+              />
+            </Grid2>
 
-              {/* Country Code (ISO) (required via schema) */}
-              <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
-                >
-                  Country Code (*)
-                </Typography>
-                <Autocomplete
-                  disablePortal
-                  options={data.countries || []}
-                  getOptionLabel={(option) => option.code}
-                  value={selectedCountryByCode}
-                  onChange={(e, newValue) => {
-                    setFieldValue("country_code", newValue?.code || "");
-                    setFieldValue("country", newValue?.label || "");
-                  }}
-                  renderOption={(props, option) => (
-                    <li {...props} key={option.code}>
-                      <span style={{ fontSize: "13px", marginRight: 8 }}>
-                        {option.code}
-                      </span>
-                      <span style={{ fontSize: "12px", opacity: 0.8 }}>
-                        {option.label}
-                      </span>
-                    </li>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      name="country_code"
-                      onBlur={handleBlur}
-                      placeholder="Select Country Code"
-                      size="small"
-                      error={
-                        (touched?.country_code || submitCount > 0) &&
-                        !!errors?.country_code
-                      }
-                      helperText={
-                        (touched?.country_code || submitCount > 0) &&
-                        errors?.country_code
-                      }
-                    />
-                  )}
-                  slotProps={{ popper: { sx: { zIndex: 100 } } }}
-                />
-              </Grid2>
-            </>
-          )}
-
+            {/* Country Code (ISO) (required via schema) */}
+            <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
+              >
+                Country Code (*)
+              </Typography>
+              <Autocomplete
+                disablePortal
+                options={data.countries || []}
+                getOptionLabel={(option) => option.code}
+                value={selectedCountryByCode}
+                onChange={(e, newValue) => {
+                  setFieldValue("country_code", newValue?.code || "");
+                  setFieldValue("country", newValue?.label || "");
+                }}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.code}>
+                    <span style={{ fontSize: "13px", marginRight: 8 }}>
+                      {option.code}
+                    </span>
+                    <span style={{ fontSize: "12px", opacity: 0.8 }}>
+                      {option.label}
+                    </span>
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="country_code"
+                    onBlur={handleBlur}
+                    placeholder="Select Country Code"
+                    size="small"
+                    error={
+                      (touched?.country_code || submitCount > 0) &&
+                      !!errors?.country_code
+                    }
+                    helperText={
+                      (touched?.country_code || submitCount > 0) &&
+                      errors?.country_code
+                    }
+                  />
+                )}
+                slotProps={{ popper: { sx: { zIndex: 100 } } }}
+              />
+            </Grid2>
+          </>
+          {/* )} */}
           {/* Address */}
-          {isLCC && (
-            <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
-              >
-                Address (*)
-              </Typography>
-              <TextField
-                fullWidth
-                size="small"
-                id="address"
-                name="address"
-                placeholder="Enter Address"
-                value={values?.address}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched?.address && !!errors?.address}
-                helperText={touched?.address && errors?.address}
-                variant="outlined"
-                sx={{ fontFamily: roboto.style }}
-              />
-            </Grid2>
-          )}
-
+          {/* {isLCC && ( */}
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
+            >
+              Address (*)
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              id="address"
+              name="address"
+              placeholder="Enter Address"
+              value={values?.address}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.address && !!errors?.address}
+              helperText={touched?.address && errors?.address}
+              variant="outlined"
+              sx={{ fontFamily: roboto.style }}
+            />
+          </Grid2>
+          {/* )} */}
           {/* Email */}
-          {isLCC && (
-            <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
-              <Typography
-                variant="body1"
-                sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
-              >
-                Email (*)
-              </Typography>
-              <TextField
-                fullWidth
-                size="small"
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter Email"
-                value={values?.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched?.email && !!errors?.email}
-                helperText={touched?.email && errors?.email}
-                variant="outlined"
-                sx={{ fontFamily: roboto.style }}
-              />
-            </Grid2>
-          )}
+          {/* {isLCC && ( */}
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: 600, fontFamily: roboto.style, mb: "5px" }}
+            >
+              Email (*)
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter Email"
+              value={values?.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched?.email && !!errors?.email}
+              helperText={touched?.email && errors?.email}
+              variant="outlined"
+              sx={{ fontFamily: roboto.style }}
+            />
+          </Grid2>
+          {/* )} */}
         </Grid2>
       </Box>
     </>
