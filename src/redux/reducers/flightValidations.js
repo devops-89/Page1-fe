@@ -140,10 +140,10 @@ const flightValidationSlice = createSlice({
       //special fares
 
       const mealMandatory = toBool(
-        fq?.ismealmandatory ?? fq?.IsMealMandatory ?? false
+        fq?.RequiredFieldValidators?.IsMealRequired ?? false
       );
       const seatMandatory = toBool(
-        fq?.isseatmandatory ?? fq?.isSeatMandatory ?? false
+        fq?.RequiredFieldValidators?.IsSeatRequired ?? false
       );
       state.rules.specialFare.isMealMandatory = mealMandatory;
       state.rules.specialFare.isSeatMandatory = seatMandatory;
