@@ -268,7 +268,10 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
-      cell_country_code: values?.cell_country_code || "",
+      // cell_country_code: values?.cell_country_code || "",
+      cell_country_code: values?.cell_country_code
+        ? `+${String(values.cell_country_code).replace(/^\+/, "")}-`
+        : "",
       country_code: values?.country_code || "",
       contact_no: values?.contact_no || "",
       city: values?.city || "",

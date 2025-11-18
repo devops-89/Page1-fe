@@ -43,6 +43,7 @@ import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import errorImage from "@/assests/flight_image/filter.svg";
 import Image from "next/image";
 import InternationalFareSummary from "@/components/flight/InternationalFareSummary";
+import { setFareQuoteValidations } from "@/redux/reducers/flightValidations";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -106,6 +107,7 @@ const FlightDetails = () => {
         )
         .then((response) => {
           if (response?.data?.data) {
+              dispatch(setFareQuoteValidations(response?.data?.data[0]));
             setFlightDetails(response?.data?.data);
             setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setCommission(response?.data?.data[2]);

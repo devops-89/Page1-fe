@@ -53,6 +53,7 @@ const PassengerFields = ({
 }) => {
   const passengerKey = `${formType}-${index}`;
   // console.log("formType", formType, "index", index);
+  console.log("abcdes", isNewPassportMandatory);
   console.log("jkwjdkjwdsk", isPassportShowForAdultChild);
   const dispatch = useDispatch();
   console.log("journey---------", journey);
@@ -390,6 +391,7 @@ const PassengerFields = ({
                     mealData={data?.MealDynamic}
                     isLCC={data?.isLCC}
                     passengerType={formType}
+                    specialFareForMeal={specialFareForMeal}
                   />
                 )}
               </Grid2>
@@ -413,6 +415,7 @@ const PassengerFields = ({
                     mealData={data?.MealDynamic}
                     isLCC={data?.isLCC}
                     passengerType={formType}
+                    specialFareForMeal={specialFareForMeal}
                   />
                 )}
               </Grid2>

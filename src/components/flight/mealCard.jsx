@@ -15,7 +15,7 @@ export default function MealCard({
   radioMode = false,
 }) {
   // console.log("isSelected", isSelected)
-
+  const isNoMeal = String(meal?.Code) === "NoMeal";
   return (
     <Grid2 container spacing={1} component={Card} sx={{ maxHeight: "150px" }}>
       <Grid2
@@ -62,6 +62,7 @@ export default function MealCard({
           <Button
             variant="contained"
             size="small"
+            disabled={isNoMeal}
             sx={{
               backgroundColor: isSelected ? COLORS.SECONDARY : COLORS.GRAY,
               fontFamily: roboto.style,

@@ -42,6 +42,7 @@ import Loader from "@/utils/Loader";
 import MultiCityPassengerForm from "@/components/flight/multicity/MultiCityPassengerForm";
 import SwipeableEdgeDrawer from "@/components/flight/SwipeableEdgeDrawer";
 import errorImage from "@/assests/flight_image/filter.svg";
+import { setFareQuoteValidations } from "@/redux/reducers/flightValidations";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -90,6 +91,7 @@ const FlightDetails = () => {
         })
         .then((response) => {
           if (response?.data?.data) {
+            dispatch(setFareQuoteValidations(response?.data?.data[0]));
             setFlightDetails(response?.data?.data);
             setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             // setOtherDetails(response?.data?.data[1]);
@@ -502,8 +504,6 @@ const FlightDetails = () => {
                                 </>
                               );
                             })}
-
-                            
                           </Card>
                         );
                       }
@@ -511,24 +511,22 @@ const FlightDetails = () => {
 
                     {/* Multicity Passenger Form */}
 
-                   
-                      <Card sx={{ mb: "20px" }}>
-                        <MultiCityPassengerForm
-                          sx={{
-                            backgroundColor: COLORS.PRIMARY,
-                            color: COLORS.WHITE,
-                          }}
-                          flightDetails={flightDetails}
-                          myState="multistate"
-                          journey={journey}
-                          isLCC={isLCC}
-                          selectMeal={selectMeal}
-                          selectBaggage={selectBaggage}
-                          setSelectBaggage={setSelectBaggage}
-                          setSelectMeal={setSelectMeal}
-                        />
-                      </Card>
-                
+                    <Card sx={{ mb: "20px" }}>
+                      <MultiCityPassengerForm
+                        sx={{
+                          backgroundColor: COLORS.PRIMARY,
+                          color: COLORS.WHITE,
+                        }}
+                        flightDetails={flightDetails}
+                        myState="multistate"
+                        journey={journey}
+                        isLCC={isLCC}
+                        selectMeal={selectMeal}
+                        selectBaggage={selectBaggage}
+                        setSelectBaggage={setSelectBaggage}
+                        setSelectMeal={setSelectMeal}
+                      />
+                    </Card>
                   </Paper>
                 </Grid2>
                 {/* Fare summary */}

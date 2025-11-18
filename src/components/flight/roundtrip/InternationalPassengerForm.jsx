@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Typography, Box,Card } from "@mui/material";
+import { Container, Button, Typography, Box, Card } from "@mui/material";
 import { Formik, Form } from "formik";
 import { roboto } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
@@ -22,7 +22,9 @@ const InternationalPassengerForm = ({
   isLCC,
 }) => {
   const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state) => state.USER.UserData.isAuthenticated
+  );
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -33,6 +35,47 @@ const InternationalPassengerForm = ({
   const [isPassportRequired, setIsPassportRequired] = useState(true);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
+  // Extrating the flight Validation from the Redux start
+
+  const newFlightValidations = useSelector(
+    (state) => state.Flight.FlightValidation
+  );
+  console.log("new Flight Validations: ", newFlightValidations);
+  const specialFareForMeal =
+    newFlightValidations.rules.specialFare.isMealMandatory;
+  // ✅ Extract PANPassport section
+  const panPassportRules = newFlightValidations.rules.PANPassport || {};
+  const validationNodes = panPassportRules.validationNodes || [];
+
+  // ✅ Check if passport is required (either at Book or Ticket)
+  const isNewPassportMandatory =
+    validationNodes.includes("IsPassportRequiredAtBook") ||
+    validationNodes.includes("IsPassportRequiredAtTicket");
+
+  // ✅ Check if PAN is required (either at Book or Ticket)
+  const isNewPanMandatory =
+    validationNodes.includes("IsPanRequiredAtBook") ||
+    validationNodes.includes("IsPanRequiredAtTicket");
+
+  // check if passportfulldetails is required
+  const isPassportFullDetailRequired = validationNodes.includes(
+    "IsPassportFullDetailRequiredAtBook"
+  );
+
+  const isAirAsia =
+    newFlightValidations.rules.LCC.airlineSpecific.AirAsia.isAirAsia;
+
+  const isSourceAirAsia =
+    newFlightValidations.rules.LCC.airlineSpecific.AirAsia.isSourceAirAsia;
+  const isPassportShow = newFlightValidations.rules.LCC.isPassport;
+  const isPassportShowForAdultChild =
+    newFlightValidations.rules.LCC.isPassportAdultChildOnly;
+  const isSpiceJet =
+    newFlightValidations.rules.LCC.airlineSpecific.spiceJet.isSpiceJet;
+
+  const isTrueJetAndZoomAir =
+    newFlightValidations.rules.LCC.airlineSpecific.TrueJetAndZoomAir
+      .isTrueJetAndZoomAir;
 
   let adultSeatsOutgoing = [];
   let childSeatsOutgoing = [];
@@ -153,7 +196,7 @@ const InternationalPassengerForm = ({
       true
     );
     // setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
-      setIsBirthdayRequired(false);
+    setIsBirthdayRequired(false);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [myState]);
 
@@ -422,8 +465,19 @@ const InternationalPassengerForm = ({
 
   const currentValidationSchema = validationSchema(
     isGSTMandatory,
-    isPassportRequired,
-    isBirthdayRequired
+    // isPassportRequired,
+    isBirthdayRequired,
+    isNewPassportMandatory,
+    isNewPanMandatory,
+    isPassportFullDetailRequired,
+    isAirAsia,
+    isLCC,
+    isPassportShow,
+    isPassportShowForAdultChild,
+    isSpiceJet,
+    isSourceAirAsia,
+    isTrueJetAndZoomAir,
+    journey
   );
 
   useEffect(() => {
@@ -575,6 +629,13 @@ const InternationalPassengerForm = ({
                       journey={journey}
                       touched={touched}
                       setFieldValue={setFieldValue}
+                      isPassportFullDetailRequired={
+                        isPassportFullDetailRequired
+                      }
+                      isNewPassportMandatory={isNewPassportMandatory}
+                      isPassportShow={isPassportShow}
+                      isPassportShowForAdultChild={isPassportShowForAdultChild}
+                      specialFareForMeal={specialFareForMeal}
                     />
                   </Box>
                 ))}
@@ -594,6 +655,13 @@ const InternationalPassengerForm = ({
                       journey={journey}
                       touched={touched}
                       setFieldValue={setFieldValue}
+                      isPassportFullDetailRequired={
+                        isPassportFullDetailRequired
+                      }
+                      isNewPassportMandatory={isNewPassportMandatory}
+                      isPassportShow={isPassportShow}
+                      isPassportShowForAdultChild={isPassportShowForAdultChild}
+                      specialFareForMeal={specialFareForMeal}
                     />
                   </Box>
                 ))}
@@ -612,6 +680,13 @@ const InternationalPassengerForm = ({
                       journey={journey}
                       touched={touched}
                       setFieldValue={setFieldValue}
+                      isPassportFullDetailRequired={
+                        isPassportFullDetailRequired
+                      }
+                      isNewPassportMandatory={isNewPassportMandatory}
+                      isPassportShow={isPassportShow}
+                      isPassportShowForAdultChild={isPassportShowForAdultChild}
+                      specialFareForMeal={specialFareForMeal}
                     />
                   </Box>
                 ))}
@@ -646,7 +721,9 @@ const InternationalPassengerForm = ({
                   }}
                 >
                   {!isAuthenticated ? (
-                    <Card sx={{ mb: "20px", p: "20px", mx: "auto",width:"100%" }}>
+                    <Card
+                      sx={{ mb: "20px", p: "20px", mx: "auto", width: "100%" }}
+                    >
                       <UserVerifyForm />
                     </Card>
                   ) : (

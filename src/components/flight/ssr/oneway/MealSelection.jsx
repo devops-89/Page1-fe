@@ -38,7 +38,7 @@ export default function MealSelection({
 
   // console.log("selectedMeals----------", selectedMeals);
 
-  let filteredData = {};
+  // let filteredData = {};
 
   const handleMealClick = (meal, flightNumber) => {
     const currentCode = selectedByFlightId.get(String(flightNumber));
@@ -166,20 +166,24 @@ export default function MealSelection({
       const alreadySelectedCode = selectedByFlightId.get(String(flightNumber));
       if (alreadySelectedCode) return;
 
-      const freeMeal = meals.find((m) => Number(getMealPrice(m)) === 0);
-
-      // sort by price asc (same as baggage)
       const sorted = [...meals].sort(compareByPriceAsc);
+      // Prefer a free meal that is NOT the "NoMeal" placeholder
+      const firstFreeValid = sorted.find(
+        (m) => Number(getMealPrice(m)) === 0 && String(m?.Code) !== "NoMeal"
+      );
 
-      const first = freeMeal && sorted[0];
+      // If no free valid meal, fallback to first non-NoMeal item
+      const firstNonNoMeal = sorted.find((m) => String(m?.Code) !== "NoMeal");
 
-      if (first) {
+      const toSelect = firstFreeValid || firstNonNoMeal || null;
+
+      if (toSelect) {
         dispatch(
           setMealDetails({
             passengerType,
             passengerId,
             mealsId: flightNumber,
-            selected: first,
+            selected: toSelect,
           })
         );
       }

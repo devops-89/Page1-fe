@@ -23,6 +23,7 @@ export default function InternationalMealSelection({
   isLCC,
   passengerId,
   passengerType,
+  specialFareForMeal
 }) {
   const dispatch = useDispatch();
   const [tabIndex, setTabIndex] = useState(0);

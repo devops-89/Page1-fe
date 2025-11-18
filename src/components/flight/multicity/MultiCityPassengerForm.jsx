@@ -84,6 +84,48 @@ const MultiCityPassengerForm = ({
 
   const totalPassengers = adultCount + childCount + infantCount;
 
+  // Extrating the flight Validation from the Redux start
+
+  const newFlightValidations = useSelector(
+    (state) => state.Flight.FlightValidation
+  );
+  console.log("new Flight Validations: ", newFlightValidations);
+  const specialFareForMeal =
+    newFlightValidations.rules.specialFare.isMealMandatory;
+  // ✅ Extract PANPassport section
+  const panPassportRules = newFlightValidations.rules.PANPassport || {};
+  const validationNodes = panPassportRules.validationNodes || [];
+
+  // ✅ Check if passport is required (either at Book or Ticket)
+  const isNewPassportMandatory =
+    validationNodes.includes("IsPassportRequiredAtBook") ||
+    validationNodes.includes("IsPassportRequiredAtTicket");
+
+  // ✅ Check if PAN is required (either at Book or Ticket)
+  const isNewPanMandatory =
+    validationNodes.includes("IsPanRequiredAtBook") ||
+    validationNodes.includes("IsPanRequiredAtTicket");
+
+  // check if passportfulldetails is required
+  const isPassportFullDetailRequired = validationNodes.includes(
+    "IsPassportFullDetailRequiredAtBook"
+  );
+
+  const isAirAsia =
+    newFlightValidations.rules.LCC.airlineSpecific.AirAsia.isAirAsia;
+
+  const isSourceAirAsia =
+    newFlightValidations.rules.LCC.airlineSpecific.AirAsia.isSourceAirAsia;
+  const isPassportShow = newFlightValidations.rules.LCC.isPassport;
+  const isPassportShowForAdultChild =
+    newFlightValidations.rules.LCC.isPassportAdultChildOnly;
+  const isSpiceJet =
+    newFlightValidations.rules.LCC.airlineSpecific.spiceJet.isSpiceJet;
+
+  const isTrueJetAndZoomAir =
+    newFlightValidations.rules.LCC.airlineSpecific.TrueJetAndZoomAir
+      .isTrueJetAndZoomAir;
+
   // Define initialValues inside the component to be recalculated on each render
   const initialValues = {
     adult: Array.from({ length: adultCount }, (_, index) => ({
@@ -339,11 +381,11 @@ const MultiCityPassengerForm = ({
     console.log("finalpayload", finalPayload);
   };
 
-  const currentValidationSchema = validationSchema(
-    isGSTMandatory,
-    isBirthdayRequired,
-    isPassportRequired
-  );
+  // const currentValidationSchema = validationSchema(
+  //   isGSTMandatory,
+  //   isBirthdayRequired,
+  //   isPassportRequired
+  // );
 
   useEffect(() => {
     if (payload.trace_id) {
@@ -465,8 +507,19 @@ const MultiCityPassengerForm = ({
           initialValues={initialValues}
           validationSchema={validationSchema(
             isGSTMandatory,
-            isPassportRequired,
-            isBirthdayRequired
+            // isPassportRequired,
+            isBirthdayRequired,
+            isNewPassportMandatory,
+            isNewPanMandatory,
+            isPassportFullDetailRequired,
+            isAirAsia,
+            isLCC,
+            isPassportShow,
+            isPassportShowForAdultChild,
+            isSpiceJet,
+            isSourceAirAsia,
+            isTrueJetAndZoomAir,
+            journey
           )}
           onSubmit={handleSubmit}
           enableReinitialize
@@ -510,6 +563,13 @@ const MultiCityPassengerForm = ({
                       touched={touched}
                       setFieldValue={setFieldValue}
                       journey={journey}
+                      isPassportFullDetailRequired={
+                        isPassportFullDetailRequired
+                      }
+                      isNewPassportMandatory={isNewPassportMandatory}
+                      isPassportShow={isPassportShow}
+                      isPassportShowForAdultChild={isPassportShowForAdultChild}
+                      specialFareForMeal={specialFareForMeal}
                     />
                   </Box>
                 ))}
@@ -532,6 +592,13 @@ const MultiCityPassengerForm = ({
                       values={values}
                       touched={touched}
                       setFieldValue={setFieldValue}
+                      isPassportFullDetailRequired={
+                        isPassportFullDetailRequired
+                      }
+                      isNewPassportMandatory={isNewPassportMandatory}
+                      isPassportShow={isPassportShow}
+                      isPassportShowForAdultChild={isPassportShowForAdultChild}
+                      specialFareForMeal={specialFareForMeal}
                     />
                   </Box>
                 ))}
@@ -549,6 +616,13 @@ const MultiCityPassengerForm = ({
                       values={values}
                       touched={touched}
                       setFieldValue={setFieldValue}
+                      isPassportFullDetailRequired={
+                        isPassportFullDetailRequired
+                      }
+                      isNewPassportMandatory={isNewPassportMandatory}
+                      isPassportShow={isPassportShow}
+                      isPassportShowForAdultChild={isPassportShowForAdultChild}
+                      specialFareForMeal={specialFareForMeal}
                     />
                   </Box>
                 ))}
