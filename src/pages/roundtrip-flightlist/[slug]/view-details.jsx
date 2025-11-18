@@ -121,7 +121,7 @@ const FlightDetails = () => {
         })
         .catch((error) => {
           setError(error);
-          // console.log("myError",error)
+          console.log("myError",error)
           dispatch(
             setToast({
               open: true,
@@ -202,7 +202,7 @@ const FlightDetails = () => {
             >
               {error?.message == null && error?.message == undefined
                 ? "An unexpected error occurred. Please try again later."
-                : "The Session is expired"}
+                : `The Session is expired ,${error?.message}`}
             </Typography>
             <Link href="/">
               <Button

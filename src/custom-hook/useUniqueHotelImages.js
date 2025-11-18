@@ -10,10 +10,10 @@ export const useUniqueHotelImages = (hotelDetails) => {
       };
     }
 
-    const mainImage = hotelDetails.Image || null;
+    const mainImage = hotelDetails?.Image || null;
 
     // Remove duplicate room images using Set
-    const uniqueRoomImages = [...new Set(hotelDetails.Images || [])];
+    const uniqueRoomImages = [...new Set(hotelDetails?.Images || [])];
 
     return {
       mainImage,

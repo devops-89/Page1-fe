@@ -67,7 +67,7 @@ const flightValidationSlice = createSlice({
       state.rules.LCC.airlineSpecific.AirAsia.isSourceAirAsia = isAirAsia;
 
       // Check if any airline code matches the LCC list
-      const isAirAsiaFlight = segmentAirlines.some((code) =>
+      const isAirAsiaFlight = segmentAirlines?.some((code) =>
         lccAirlines.includes(code)
       );
 
@@ -84,7 +84,7 @@ const flightValidationSlice = createSlice({
       //set bhutan code
       const BhutanCode = state.rules?.LCC?.bhutanAirlines?.code || "B3";
 
-      const isBhutanAirlinesFlight = segmentAirlines.some(
+      const isBhutanAirlinesFlight = segmentAirlines?.some(
         (code) => code === BhutanCode
       );
       // --- Check for SpiceJet ---
@@ -96,13 +96,13 @@ const flightValidationSlice = createSlice({
         state.rules?.LCC?.airlineSpecific?.flyDubai?.code || []
       ).map((c) => c.toUpperCase().trim());
 
-      const isFlyDubai = segmentAirlines.some((code) =>
+      const isFlyDubai = segmentAirlines?.some((code) =>
         flyDubaiCodes.includes(code)
       );
       state.rules.LCC.airlineSpecific.flyDubai.isFlyDubai = isFlyDubai;
 
       state.rules.LCC.bhutanAirlines.isBhutanAirlines = isBhutanAirlinesFlight;
-      const isSpiceJetFlight = segmentAirlines.some((code) =>
+      const isSpiceJetFlight = segmentAirlines?.some((code) =>
         spiceJetCodes.includes(code)
       );
       state.rules.LCC.airlineSpecific.spiceJet.isSpiceJet = isSpiceJetFlight;

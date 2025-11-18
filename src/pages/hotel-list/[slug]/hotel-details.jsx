@@ -94,10 +94,11 @@ const HotelDetails = () => {
     fetchHotelDetail();
   }, [query.slug]);
 
+  const fallbackImage="/images/hotel/hotel-default.jpg";
   const { mainImage, roomImages } = useUniqueHotelImages(hotelDetail);
-  const [heroImage, setHeroImage] = useState(mainImage);
+  const [heroImage, setHeroImage] = useState(mainImage || fallbackImage);
   useEffect(() => {
-    setHeroImage(mainImage);
+    setHeroImage(mainImage || fallbackImage);
   }, [mainImage]);
 
   console.log("Hotels: ", hotels);

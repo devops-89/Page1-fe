@@ -210,6 +210,12 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
       )
       .catch((err) => {
         console.error("Error fetching IP address:", err);
+
+         // Fallback to hardcoded IP
+      const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
+      setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
+      localStorage.setItem("ip", fallbackIp);
+
       });
   };
 

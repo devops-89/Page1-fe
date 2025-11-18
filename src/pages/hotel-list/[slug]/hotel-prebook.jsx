@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-
+import { COMMISSION_TYPE } from "@/utils/enum";
 import {
   Box,
   Card,
@@ -62,6 +62,24 @@ const HotelPreBookPage = () => {
   const handleOpenFacilities = () => setOpenFacilities(true);
   const handleCloseFacilities = () => setOpenFacilities(false);
 
+  // handling service fees calculation start using comission
+
+const percentage = Number(preBookResponse?.COMMISSION?.percentage);
+console.log("percentage:",percentage);
+const isFixed=preBookResponse?.COMMISSION?.commission_type===COMMISSION_TYPE.FIXED;
+let charge=0;
+if(isFixed){
+  charge=percentage;
+}
+else{
+  charge=(preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare*percentage)/100;
+}
+
+const serviceCharge=charge;
+
+
+  // handling services fees calculcation end 
+
   // helper to read flags (supports multiple naming patterns)
   const getFlag = (flagName) => {
     if (!preBookResponse) return false;
@@ -109,7 +127,7 @@ const HotelPreBookPage = () => {
           firstName: "",
           lastName: "",
           isBelow12: false,
-          Age: 30,
+          Age: 13,
           PAN: "",
           GuardianDetail: {
             Title: "mr",
@@ -1197,6 +1215,36 @@ const HotelPreBookPage = () => {
                         </Grid2>
                       </Box>
 
+                      <Box sx={{ mb: 2 }}>
+                        <Grid2
+                          container
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
+                          <Grid2 item>
+                            <Box display="flex" alignItems="center">
+                              <Typography
+                                sx={{
+                                  fontFamily: roboto.style,
+                                  fontWeight: 700,
+                                }}
+                                mr={1}
+                              >
+                                Service Fees
+                              </Typography>
+                            </Box>
+                          </Grid2>
+                          <Grid2 item>
+                            <Typography
+                              sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+                            >
+                              ₹{" "}
+                              {serviceCharge?.toFixed(2)}
+                            </Typography>
+                          </Grid2>
+                        </Grid2>
+                      </Box>
+
                       <Divider sx={{ my: 2 }} />
 
                       <Box sx={{ pt: 1 }}>
@@ -1219,7 +1267,7 @@ const HotelPreBookPage = () => {
                               sx={{ fontFamily: roboto.style, fontWeight: 800 }}
                             >
                               ₹{" "}
-                              {preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare?.toFixed(
+                              {(preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare+serviceCharge).toFixed(
                                 2
                               )}
                             </Typography>

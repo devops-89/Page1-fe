@@ -110,10 +110,10 @@ const FlightList = () => {
   const handleFlightSelection = (type, flight) => {
     if (type === "departure") {
       setSelectedDeparture(flight);
-      // console.log(selectedDeparture);
+      console.log(selectedDeparture);
     } else if (type === "arrival") {
       setSelectedArrival(flight);
-      // console.log(selectedArrival)
+      console.log(selectedArrival)
     }
   };
   // ---------------handle function to select flight domestic end---------------
@@ -123,6 +123,7 @@ const FlightList = () => {
     arrival: selectedArrival?.ResultIndex,
     departure: selectedDeparture?.ResultIndex,
   };
+  console.log("resuullt index:",newResultIndex);
   // ----------set select flight resultIndex in Object end---------
 
   // --------------Redirection start-----------------

@@ -151,7 +151,15 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
         setState((s) => ({ ...s, ip_address: data.ip }));
         localStorage.setItem("ip",data.ip);
       }
-      );
+      ).catch((err) => {
+        console.error("Error fetching IP address:", err);
+
+         // Fallback to hardcoded IP
+      const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
+      setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
+      localStorage.setItem("ip", fallbackIp);
+
+      });
   };
 
   const searchFlight = async () => {
