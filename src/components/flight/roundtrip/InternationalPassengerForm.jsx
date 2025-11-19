@@ -195,11 +195,11 @@ const InternationalPassengerForm = ({
       // journey?.journey === JOURNEY.INTERNATIONAL
       true
     );
-    // setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
-    setIsBirthdayRequired(false);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [myState]);
-
+  useEffect(() => {
+    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+  }, [journey?.journey]);
   const totalPassengers = adultCount + childCount + infantCount;
 
   // Define initialValues inside the component to be recalculated on each render
@@ -258,7 +258,7 @@ const InternationalPassengerForm = ({
     nationality: "In",
     email: "",
   };
-
+  console.log("is birthday required : ", isBirthdayRequired);
   const handleSubmit = async (values) => {
     const contactEmail = values.email;
     const phoneNumber = values.contact_no;
