@@ -103,6 +103,7 @@ const HotelDetails = () => {
 
   console.log("Hotels: ", hotels);
   console.log("selected Hotel Data:", selectedHotel);
+  console.log("Hotel Details: ",hotelDetail);
   console.log("query slug for Hotel Detail: ", query.slug);
   console.log("query slug main image: ", mainImage);
   console.log("query slug rooms images: ", roomImages);
@@ -359,7 +360,7 @@ const HotelDetails = () => {
                         <Rating
                           name="hotel-rating"
                           readOnly
-                          value={HOTEL_RATING[hotelDetail?.HotelRating] || 4}
+                          value={hotelDetail?.HotelRating|| 5}
                           size="small"
                         />
                       </Box>

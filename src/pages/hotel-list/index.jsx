@@ -46,7 +46,7 @@ const HotelList = () => {
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   // ⭐ star filter (default 2 stars)
-  const [selectedStar, setSelectedStar] = useState(2);
+  const [selectedStar, setSelectedStar] = useState(0);
 
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -94,7 +94,7 @@ const HotelList = () => {
     setSearchTerm("");
     setSelectedFilters([]);
     setPriceRange([minPrice, maxPrice]);
-    setSelectedStar(2); // ⭐ back to 2 stars
+    setSelectedStar(0); // ⭐ back to 2 stars
     setPage(1);
   };
 

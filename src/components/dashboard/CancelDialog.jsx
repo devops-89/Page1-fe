@@ -10,9 +10,10 @@ import Slide from "@mui/material/Slide";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, TextField } from "@mui/material";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import ReactLoading from "react-loading";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -22,6 +23,9 @@ export default function CancelDialog({ bookingId }) {
   const [cancellationCharges, setCancellationCharges] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+
+  const [remarks, setRemarks] = React.useState("");
+  const [showRemarks, setShowRemarks] = React.useState(false); // 👈 NEW
 
   const fetchCancellationCharges = async () => {
     setLoading(true);
@@ -36,7 +40,6 @@ export default function CancelDialog({ bookingId }) {
       };
 
       const response = await flightController.getCancellationCharges(payload);
-      console.log("Cancellation Charges Response: ", response.data);
       setCancellationCharges(response.data?.data);
     } catch (err) {
       console.error("Error fetching cancellation charges:", err);
@@ -55,16 +58,33 @@ export default function CancelDialog({ bookingId }) {
     setOpen(false);
     setCancellationCharges(null);
     setError(null);
+    setRemarks("");
+    setShowRemarks(false); // RESET
   };
 
   const handleCancel = () => {
-    console.log("Cancel booking for ID:", bookingId);
-    // Add your cancellation logic here
+    // First click should show the remarks field
+    if (!showRemarks) {
+      setShowRemarks(true);
+      return;
+    }
+
+    // Now validate remarks
+    if (!remarks.trim()) {
+      setError("Please provide cancellation remarks.");
+      return;
+    }
+
+    console.log("Cancel booking for ID:", bookingId, "Remarks:", remarks);
+    alert(`Cancellation is Successffullly  Initiated For Booking Id: ${bookingId}`);
+    // TODO: Add cancellation API call
+    // await flightController.cancelFlight({ bookingId, remarks })
+
     handleClose();
   };
 
   return (
-    <React.Fragment>
+    <>
       <button
         style={{
           padding: "6px 12px",
@@ -80,69 +100,62 @@ export default function CancelDialog({ bookingId }) {
       >
         Cancel
       </button>
+
       <Dialog
         open={open}
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-        PaperProps={{
-          sx: {
-            minWidth: 300,
-            maxWidth: 450,
-            width: "100%",
-          },
-        }}
+        PaperProps={{ sx: { minWidth: 300, maxWidth: 450, width: "100%" } }}
       >
         <DialogTitle>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <FlightTakeoffIcon sx={{ color: COLORS.PRIMARY }} />
-            <span style={{ fontWeight: 600, color: COLORS.PRIMARY }}>
+            <Typography sx={{ fontWeight: 600, color: COLORS.PRIMARY }}>
               Confirm Cancellation
-            </span>
-          </div>
+            </Typography>
+          </Box>
         </DialogTitle>
+
         <DialogContent>
           {loading ? (
-            <DialogContentText id="alert-dialog-slide-description">
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  py: 5,
-                }}
-              >
-                <ReactLoading
-                  type="bars"
-                  color={COLORS.PRIMARY}
-                  height={40}
-                  width={40}
-                />
-              </Box>
-            </DialogContentText>
+            <Box sx={{ display: "flex", justifyContent: "center", py: 5 }}>
+              <ReactLoading type="bars" color={COLORS.PRIMARY} height={40} width={40} />
+            </Box>
           ) : error ? (
-            <DialogContentText>
-              <Typography sx={{ color: COLORS.DANGER }}>{error}</Typography>
-            </DialogContentText>
+            <Typography sx={{ color: COLORS.DANGER }}>{error}</Typography>
           ) : cancellationCharges?.ResponseStatus === 1 ? (
-            <DialogContentText id="alert-dialog-slide-description">
-              Are you sure you want to cancel this booking?
-              <br />
-              <strong>Booking ID:</strong> {bookingId}
-              <br />
-              <strong>Refund Amount:</strong> ₹
-              {cancellationCharges.RefundAmount}
-              <br />
-              <strong>Cancellation Fee:</strong> ₹
-              {cancellationCharges.CancellationCharge}
-            </DialogContentText>
+            <>
+              {!showRemarks && (
+                <DialogContentText>
+                  Are you sure you want to cancel this booking?
+                  <br />
+                  <strong>Booking ID:</strong> {bookingId}
+                  <br />
+                  <strong>Refund Amount:</strong> ₹{cancellationCharges.RefundAmount}
+                  <br />
+                  <strong>Cancellation Fee:</strong> ₹{cancellationCharges.CancellationCharge}
+                </DialogContentText>
+              )}
+
+              {/* 👇 Show remarks only after YES CANCEL clicked */}
+              {showRemarks && (
+                <TextField
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  maxRows={4}
+                  label="Remarks (Reason for cancellation) *"
+                  sx={{ mt: 2 }}
+                  value={remarks}
+                  onChange={(e) => setRemarks(e.target.value)}
+                />
+              )}
+            </>
           ) : (
-            <DialogContentText>
-              <Typography sx={{ color: COLORS.DANGER }}>
-                Failed to load the cancellation charges.
-              </Typography>
-            </DialogContentText>
+            <Typography sx={{ color: COLORS.DANGER }}>
+              Failed to load the cancellation charges.
+            </Typography>
           )}
         </DialogContent>
 
@@ -150,11 +163,13 @@ export default function CancelDialog({ bookingId }) {
           <Button sx={{ color: COLORS.PRIMARY }} onClick={handleClose}>
             No
           </Button>
+
+          {/* Button text changes dynamically */}
           <Button sx={{ color: COLORS.PRIMARY }} onClick={handleCancel}>
-            Yes, Cancel
+            {showRemarks ? "Confirm Cancel" : "Yes, Cancel"}
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }
