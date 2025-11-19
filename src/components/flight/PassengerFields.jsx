@@ -35,6 +35,7 @@ const TITLE_LABEL = {
 const PassengerFields = ({
   touched,
   setFieldValue,
+  DepTime,
   data,
   index,
   handleChange,
@@ -51,6 +52,7 @@ const PassengerFields = ({
   isPassportShowForAdultChild,
   specialFareForMeal,
 }) => {
+  console.log("hjshajhjshdjshjchjhcsjhjchsjhsj", DepTime);
   const passengerKey = `${formType}-${index}`;
   // console.log("formType", formType, "index", index);
   console.log("abcdes", isNewPassportMandatory);
@@ -472,6 +474,7 @@ const PassengerFields = ({
                 setFieldValue={setFieldValue}
                 age={age}
                 isPassportFullDetailRequired={isPassportFullDetailRequired}
+                DepTime={DepTime}
               />
             )}
         </Grid2>

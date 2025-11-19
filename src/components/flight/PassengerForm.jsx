@@ -156,7 +156,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   }, [journey?.journey]);
 
   const totalPassengers = adultCount + childCount + infantCount;
-
+  console.log("nknknknknk", payload.trace_id);
   // Define initialValues inside the component to be recalculated on each render
   const initialValues = {
     adult: Array.from({ length: adultCount }, (_, index) => ({
@@ -642,6 +642,9 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                     }}
                   >
                     <PassengerFields
+                      DepTime={
+                        flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime
+                      }
                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
@@ -669,6 +672,9 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 {values.child.map((dataObj, index) => (
                   <Box key={`child-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
+                      DepTime={
+                        flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime
+                      }
                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
@@ -696,6 +702,9 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 {values.infant.map((dataObj, index) => (
                   <Box key={`infant-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
+                      DepTime={
+                        flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime
+                      }
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}

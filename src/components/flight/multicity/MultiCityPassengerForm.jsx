@@ -220,7 +220,10 @@ const MultiCityPassengerForm = ({
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
-      cell_country_code: values?.cell_country_code || "",
+      // cell_country_code: values?.cell_country_code || "",
+      cell_country_code: values?.cell_country_code
+        ? `+${String(values.cell_country_code).replace(/^\+/, "")}-`
+        : "",
       country_code: values?.country_code || "",
       city: values?.city || "",
       contact_no: values?.contact_no || "",
@@ -547,6 +550,9 @@ const MultiCityPassengerForm = ({
                     }}
                   >
                     <PassengerFields
+                      DepTime={
+                        flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime
+                      }
                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
@@ -577,6 +583,9 @@ const MultiCityPassengerForm = ({
                 {values.child.map((dataObj, index) => (
                   <Box key={`child-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
+                      DepTime={
+                        flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime
+                      }
                       data={flightDetails[1]}
                       passenger={dataObj}
                       index={index}
@@ -606,6 +615,9 @@ const MultiCityPassengerForm = ({
                 {values.infant.map((dataObj, index) => (
                   <Box key={`infant-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
+                      DepTime={
+                        flightDetails[0]?.Results?.Segments[0][0].Origin.DepTime
+                      }
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}

@@ -15,6 +15,7 @@ const PassengerPassport = ({
   setFieldValue,
   age, // <- we use this to switch labels
   isPassportFullDetailRequired,
+  DepTime,
 }) => {
   // --- Determine label set from age ---
   // If age is not provided yet, default to "simple" labels.
@@ -56,7 +57,9 @@ const PassengerPassport = ({
   };
 
   const L = labelsByGroup[group];
-
+  // compute min date for expiry: DepTime if valid, otherwise today
+  const depAsDayjs = DepTime ? dayjs(DepTime) : null;
+  const minExpiry = depAsDayjs && depAsDayjs.isValid() ? depAsDayjs : dayjs();
   return (
     <>
       {/* Optional small caption under the section */}
@@ -119,7 +122,14 @@ const PassengerPassport = ({
             {({ field, form }) => (
               <DatePicker
                 format="DD/MM/YYYY"
-                disablePast
+                minDate={minExpiry}
+                shouldDisableDate={(date) => {
+                  if (!date) return false;
+                  return (
+                    date.isBefore(minExpiry, "day") ||
+                    date.isSame(minExpiry, "day")
+                  );
+                }}
                 id="passport.passport_expiry"
                 placeholder="Passport Expiry Date"
                 inputFormat="DD/MM/YYYY"

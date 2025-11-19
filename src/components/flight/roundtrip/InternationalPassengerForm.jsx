@@ -180,7 +180,9 @@ const InternationalPassengerForm = ({
   } = flightDetails?.[0]?.Results?.Fare || {};
 
   console.log("final Payload:", payload);
-
+  const handleClick = (values, error) => {
+    console.log("err and val is :", values, error);
+  };
   useEffect(() => {
     const storedState = localStorage.getItem(myState);
     if (storedState) {
@@ -728,6 +730,7 @@ const InternationalPassengerForm = ({
                     </Card>
                   ) : (
                     <Button
+                      onClick={() => handleClick(values, errors)}
                       type="submit"
                       variant="contained"
                       sx={{ backgroundColor: COLORS.PRIMARY }}
