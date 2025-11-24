@@ -56,6 +56,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const FlightDetails = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+
+  // extracting the flightState from the redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
   const [flightDetails, setFlightDetails] = useState(null);
 
   // console.log('isAuthenticated',isAuthenticated)
@@ -84,8 +88,8 @@ const FlightDetails = () => {
         .multiflightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: JSON.parse(localStorage.getItem("multistate"))
-            ?.ip_address,
+          // setting the ip_address from flightState of multistate from redux persist
+          ip_address: flightState?.ip_address,
           journey: router.query.journey,
           journey_type: JOURNEY_TYPE.MULTIWAY,
         })

@@ -58,14 +58,20 @@ export default function Seat({ extraDetails, planeIndex }) {
       return airplane?.selectedSeats || [];
     }) || [];
 
+    // extracting the flightState from the one way redux persist
+    const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
   const [maxPassengerCount, setMaxPassengerCount] = useState(null);
   const [columns, setColumns] = useState([]);
 
   useEffect(() => {
-    const storedState = localStorage.getItem("state");
-    if (storedState) {
+    // const storedState = localStorage.getItem("state");
+    // extractig the flight State of one way from redux persist
+    const passengerData= flightState;
+    if (passengerData) {
       try {
-        const passengerData = JSON.parse(storedState);
+        // used when using the localStorage
+        // const passengerData = JSON.parse(storedState);
         setMaxPassengerCount(passengerData);
       } catch (e) {
         console.warn("failed parsing passenger count from localStorage", e);

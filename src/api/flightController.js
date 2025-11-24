@@ -116,6 +116,7 @@ export const flightController = {
       throw error;
     }
   },
+  
   getBookingStatus: async (data) => {
     try {
       let result = await flightPublicApi.post("/flightdetail/getBookingDetails", data);

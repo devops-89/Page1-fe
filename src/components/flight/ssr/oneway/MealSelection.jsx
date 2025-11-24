@@ -1,4 +1,5 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useEffect } from "react";
+import { generateMealsForAllPassengers } from "@/redux/reducers/mealsInformation";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid2, Typography } from "@mui/material";
 import { nunito } from "@/utils/fonts";
@@ -18,16 +19,59 @@ import {
   setMealDetails,
 } from "@/redux/reducers/mealsInformation";
 
+import { mealSortingByPriceAndNoMealFilter } from "@/utils/utility-functions/mealUtility";
+
 export default function MealSelection({
   mealData,
   isLCC,
   passengerId,
   passengerType,
-  specialFareForMeal,
 }) {
   const dispatch = useDispatch();
-  const radioEnabled = Boolean(specialFareForMeal);
-  // console.log('mealData------------',mealData)
+
+  // extracting the meals manadatory condition
+  const isMealMandatory = useSelector((state) => {
+    return state?.Flight?.FlightValidation?.rules?.specialFare?.isMealMandatory;
+  });
+  // extracting the flight state from redux persist for one way
+  const flightState= useSelector((state)=> state?.FlightPersist?.FlightState);
+
+  console.log("mealData------------", mealData[0]);
+  const sortedAndNoMealFilteredMealData = mealSortingByPriceAndNoMealFilter(
+    mealData[0]
+  );
+  mealData[0] = [...sortedAndNoMealFilteredMealData];
+
+  useEffect(() => {
+    function mealManadatoryLogic() {
+      if (isMealMandatory) {
+        // const storedState = localStorage.getItem("state");
+        // extracting the one way flight state from redux presist
+        const storedState= flightState;
+
+        if (storedState) {
+          // use when extracting from localStorage
+          // const parsedState = JSON.parse(storedState);
+          let passengerCounts = {
+            adult: storedState?.adult || 1,
+            child: storedState?.child || 0,
+          };
+          console.log("passenger Counts:", passengerCounts);
+
+          dispatch(
+            generateMealsForAllPassengers({
+              passengerCounts,
+             allMeals: mealData[0],
+            })
+          );
+        }
+      }
+    }
+
+    mealManadatoryLogic();
+  }, []);
+
+  // console.log("IsMeal Manadatory: ", isMealManadatory);
 
   // Create unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
@@ -38,42 +82,17 @@ export default function MealSelection({
 
   // console.log("selectedMeals----------", selectedMeals);
 
-  // let filteredData = {};
+  let filteredData = {};
 
   const handleMealClick = (meal, flightNumber) => {
-    const currentCode = selectedByFlightId.get(String(flightNumber));
-
-    if (radioEnabled) {
-      // radio mode: replace selection; never toggle to none
-      if (currentCode === meal.Code) return; // no-op if same
-      if (currentCode) {
-        dispatch(
-          removeMealDetails({
-            passengerType,
-            passengerId,
-            mealsId: flightNumber,
-            mealCode: currentCode,
-          })
-        );
-      }
-      dispatch(
-        setMealDetails({
-          passengerType,
-          passengerId,
-          mealsId: flightNumber,
-          selected: meal,
-        })
-      );
-      return;
-    }
-
-    // non-radio (your existing toggle/replace behavior)
+    // console.log('meal-----',meal)
     const passengerMeals = selectedMeals[uniquePassengerKey]?.meals || [];
     const existingMeal = passengerMeals.find(
       (m) => m.flightId === flightNumber
     );
 
     if (existingMeal?.meal.Code === meal.Code) {
+      // Deselect the meal if it's already selected
       dispatch(
         removeMealDetails({
           passengerType,
@@ -83,6 +102,7 @@ export default function MealSelection({
         })
       );
     } else {
+      // Ensure only one meal is selected per flight
       if (existingMeal) {
         dispatch(
           removeMealDetails({
@@ -104,97 +124,17 @@ export default function MealSelection({
     }
   };
 
-  // Safely read a numeric price (adjust keys if your API differs)
-  const getMealPrice = (m) => {
-    const raw = m?.Price ?? m?.Amount ?? m?.TotalAmount ?? m?.Fare ?? null;
-    const n = Number(raw);
-    return Number.isFinite(n) ? n : null; // null => treat as "no price"
-  };
-
-  const compareByPriceAsc = (a, b) => {
-    const pa = getMealPrice(a);
-    const pb = getMealPrice(b);
-    if (pa === null && pb === null) return 0;
-    if (pa === null) return 1; // no-price goes last
-    if (pb === null) return -1; // no-price goes last
-    return pa - pb; // ascending
-  };
-  const mealsByFlight = useMemo(() => {
-    const grouped = {};
-    if (isLCC) {
-      // your old filteredData behavior
-      mealData?.forEach((singleMeal) => {
-        singleMeal?.forEach((data) => {
-          if (!grouped[data.FlightNumber]) grouped[data.FlightNumber] = [];
-          grouped[data.FlightNumber].push(data);
-        });
+  // If lcc
+  if (isLCC) {
+    mealData?.forEach((singleMeal) => {
+      singleMeal?.forEach((data) => {
+        if (!filteredData[data.FlightNumber]) {
+          filteredData[data.FlightNumber] = [];
+        }
+        filteredData[data.FlightNumber].push(data);
       });
-    } else {
-      // non-LCC: group by FlightNumber
-      (mealData ?? []).forEach((m) => {
-        const fn = m?.FlightNumber;
-        if (!fn) return;
-        if (!grouped[fn]) grouped[fn] = [];
-        grouped[fn].push(m);
-      });
-    }
-    // sort each flight list by price asc
-    Object.keys(grouped).forEach((fn) => {
-      grouped[fn] = grouped[fn].slice().sort(compareByPriceAsc);
     });
-    return grouped;
-  }, [isLCC, mealData]);
-
-  // --- map: flightId -> selected meal code (like baggage) ---
-  const selectedByFlightId = useMemo(() => {
-    const map = new Map();
-    const entry = selectedMeals[uniquePassengerKey]?.meals || [];
-    entry.forEach((m) => {
-      const fid = m.flightId;
-      const code = m.meal?.Code;
-      if (fid != null && code) map.set(String(fid), code);
-    });
-    return map;
-  }, [selectedMeals, uniquePassengerKey]);
-
-  useEffect(() => {
-    if (!radioEnabled) return;
-
-    Object.entries(mealsByFlight).forEach(([flightNumber, meals]) => {
-      if (!Array.isArray(meals) || meals.length === 0) return;
-
-      const alreadySelectedCode = selectedByFlightId.get(String(flightNumber));
-      if (alreadySelectedCode) return;
-
-      const sorted = [...meals].sort(compareByPriceAsc);
-      // Prefer a free meal that is NOT the "NoMeal" placeholder
-      const firstFreeValid = sorted.find(
-        (m) => Number(getMealPrice(m)) === 0 && String(m?.Code) !== "NoMeal"
-      );
-
-      // If no free valid meal, fallback to first non-NoMeal item
-      const firstNonNoMeal = sorted.find((m) => String(m?.Code) !== "NoMeal");
-
-      const toSelect = firstFreeValid || firstNonNoMeal || null;
-
-      if (toSelect) {
-        dispatch(
-          setMealDetails({
-            passengerType,
-            passengerId,
-            mealsId: flightNumber,
-            selected: toSelect,
-          })
-        );
-      }
-    });
-  }, [
-    radioEnabled,
-    mealsByFlight,
-    selectedByFlightId,
-    passengerId,
-    passengerType,
-  ]);
+  }
 
   return (
     <Accordion sx={{ mb: "10px" }}>
@@ -226,103 +166,78 @@ export default function MealSelection({
             modules={[Navigation]}
             id="meal_box"
           >
-            {Object.keys(mealsByFlight).map((flightNumber) => {
-              const sortedMeals = mealsByFlight[flightNumber];
-              return (
-                <SwiperSlide
-                  key={flightNumber}
-                  style={{ overflow: "auto", maxHeight: "240px" }}
+            {Object.keys(filteredData).map((flightNumber) => (
+              <SwiperSlide
+                key={flightNumber}
+                style={{ overflow: "auto", maxHeight: "240px" }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontFamily: nunito.style,
+                    fontWeight: 800,
+                    mb: "20px",
+                    p: "10px",
+                    backgroundColor: COLORS.SEMIGREY,
+                  }}
                 >
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontFamily: nunito.style,
-                      fontWeight: 800,
-                      mb: "20px",
-                      p: "10px",
-                      backgroundColor: COLORS.SEMIGREY,
-                    }}
-                  >
-                    {`${sortedMeals?.[0]?.Origin ?? ""} - ${
-                      sortedMeals?.[0]?.Destination ?? ""
-                    }`}
-                  </Typography>
-                  <Grid2 container spacing={2}>
-                    {sortedMeals?.[0]?.FlightNumber ? (
-                      sortedMeals?.map((meal, mealIndex) => (
-                        <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
-                          <MealCard
-                            meal={meal}
-                            handleMealValue={() =>
-                              handleMealClick(meal, flightNumber)
-                            }
-                            isSelected={
-                              selectedByFlightId.get(String(flightNumber)) ===
-                              meal.Code
-                            }
-                            radioMode={radioEnabled}
-                          />
-                        </Grid2>
-                      ))
-                    ) : (
-                      <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
-                        <Typography
-                          variant="body1"
-                          sx={{ textAlign: "center", fontFamily: nunito.style }}
-                        >
-                          No Meal Available
-                        </Typography>
+                  {`${filteredData[flightNumber][0]?.Origin} - ${filteredData[flightNumber][0]?.Destination}`}
+                </Typography>
+                <Grid2 container spacing={2}>
+                  {/* filtering the nomeal to not show */}
+                  {filteredData[flightNumber]?.[0].FlightNumber ? (
+                    filteredData[flightNumber]?.map((meal, mealIndex) => (
+                      <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                        <MealCard
+                          meal={meal}
+                          handleMealValue={() =>
+                            handleMealClick(meal, flightNumber)
+                          }
+                          isSelected={
+                            selectedMeals[uniquePassengerKey]?.meals?.some(
+                              (m) =>
+                                m.flightId === flightNumber &&
+                                m.meal.Code === meal.Code
+                            ) || false
+                          }
+                        />
                       </Grid2>
-                    )}
-                  </Grid2>
-                </SwiperSlide>
-              );
-            })}
+                    ))
+                  ) : (
+                    <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ textAlign: "center", fontFamily: nunito.style }}
+                      >
+                        No Meal Available
+                      </Typography>
+                    </Grid2>
+                  )}
+                </Grid2>
+              </SwiperSlide>
+            ))}
           </Swiper>
         ) : (
           <Grid2 container spacing={2}>
-            {Array.isArray(mealData) && mealData.length > 0 ? (
-              mealsByFlight[Object.keys(mealsByFlight)[0]] ? ( // just render flat as before
-                Object.entries(mealsByFlight).flatMap(([flightNumber, list]) =>
-                  list.map((meal, mealIndex) => (
-                    <Grid2
-                      size={{ xs: 12, lg: 6 }}
-                      key={`${flightNumber}-${mealIndex}`}
-                    >
-                      <MealCard
-                        meal={meal}
-                        handleMealValue={() =>
-                          handleMealClick(meal, meal.FlightNumber)
-                        }
-                        isSelected={
-                          selectedByFlightId.get(String(meal.FlightNumber)) ===
-                          meal.Code
-                        }
-                        radioMode={radioEnabled}
-                      />
-                    </Grid2>
-                  ))
-                )
-              ) : (
-                mealData.map(
-                  (
-                    meal,
-                    mealIndex // fallback; should rarely hit
-                  ) => (
-                    <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
-                      <MealCard
-                        meal={meal}
-                        handleMealValue={() =>
-                          handleMealClick(meal, meal.FlightNumber)
-                        }
-                        isSelected={
-                          selectedByFlightId.get(String(meal.FlightNumber)) ===
-                          meal.Code
-                        }
-                      />
-                    </Grid2>
-                  )
-                )
+            {mealData?.[0]?.FlightNumber ? (
+              sortedMealData?.map((meal, mealIndex) =>
+                meal?.Price != 0 ? (
+                  <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
+                    <MealCard
+                      meal={meal}
+                      handleMealValue={() =>
+                        handleMealClick(meal, meal.FlightNumber)
+                      }
+                      isSelected={
+                        selectedMeals[uniquePassengerKey]?.meals?.some(
+                          (m) =>
+                            m.flightId === meal.FlightNumber &&
+                            m.meal.Code === meal.Code
+                        ) || false
+                      }
+                    />
+                  </Grid2>
+                ) : null
               )
             ) : (
               <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>

@@ -57,14 +57,12 @@ const seatsInformation = createSlice({
         state.seats[airplaneIndex].selectedSeats = state.seats[
           airplaneIndex
         ].selectedSeats.filter((seat) => seat.Code !== seatCode);
-
-      
       }
     },
 
     resetSeatDetails: (state) => {
       state.seats = [];
-    },       
+    },
   },
 });
 

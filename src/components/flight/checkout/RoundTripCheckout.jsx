@@ -44,6 +44,8 @@ export default function RoundTripCheckout() {
   }, []);
 
   const selector = useSelector((state) => state.USER.UserData);
+  // extracting the flightState from the redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
   const { isAuthenticated } = selector;
   const [roundTrip, setRoundTrip] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -58,12 +60,15 @@ export default function RoundTripCheckout() {
 
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("roundTripflightDetails");
-    const storedPassengerCount = localStorage.getItem("roundState");
+   
+    // const storedPassengerCount = localStorage.getItem("roundState");
+     // setting the flight State for round State
+     const storedPassengerCount=flightState;
     if (storedFlightDetails) {
       setRoundTrip(JSON.parse(storedFlightDetails));
     }
     if (storedPassengerCount) {
-      setPassengerCount(JSON.parse(storedPassengerCount));
+      setPassengerCount(storedPassengerCount);
     }
     if (!isAuthenticated || !storedFlightDetails) {
       router.replace("/login");

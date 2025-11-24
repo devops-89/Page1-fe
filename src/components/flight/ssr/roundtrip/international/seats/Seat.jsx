@@ -37,6 +37,9 @@ const SEAT_TYPE = {
 
 const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
 
+  // extracting the flightState from the redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
   
   // Use useSelector to directly access seats from Redux state
   const reservedSeats = useSelector((state) => {
@@ -63,9 +66,11 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
   const [columns, setColumns] = useState([]); 
 
   useEffect(() => {
-    const storedState = localStorage.getItem("roundState");
+    // const storedState = localStorage.getItem("roundState");
+    // setting the flightState from the redux persis roundstate
+    const storedState=flightState;
     if (storedState) {
-      const passengerData = JSON.parse(storedState);
+      const passengerData = storedState;
       setMaxPassengerCount(passengerData);
     }
   }, []); // Fetch passenger count from localStorage only once on component mount

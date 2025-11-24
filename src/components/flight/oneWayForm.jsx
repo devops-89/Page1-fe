@@ -14,7 +14,7 @@ import {
   Portal,
   Stack,
 } from "@mui/material";
-
+import { setFlightState,resetFlightState } from "@/redux/reducers/flightState";
 import { Grid2 } from "@mui/material";
 
 import { flightController } from "@/api/flightController";
@@ -216,7 +216,13 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
         })
       );
     } else {
-      localStorage.setItem("state", JSON.stringify(state));
+
+      // localStorage.setItem("state", JSON.stringify(state));
+      // resetting the oneway flight state in the redux persist
+      dispatch(resetFlightState());
+      //  setting the oneway flight state in the redux persist
+      dispatch(setFlightState(state));
+
       searchFlight();
     }
   };

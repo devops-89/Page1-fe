@@ -13,7 +13,7 @@ import { flightController } from "@/api/flightController";
 import { Typography, Box, TextField } from "@mui/material";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import ReactLoading from "react-loading";
-
+import { useSelector } from "react-redux";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -26,12 +26,17 @@ export default function CancelDialog({ bookingId }) {
 
   const [remarks, setRemarks] = React.useState("");
   const [showRemarks, setShowRemarks] = React.useState(false); // 👈 NEW
+  // extracting the flightState here
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+  console.log("Flight State:",flightState);
 
   const fetchCancellationCharges = async () => {
     setLoading(true);
     setError(null);
     try {
-      const { ip_address } = JSON.parse(localStorage.getItem("state"));
+      // const { ip_address } = JSON.parse(localStorage.getItem("state"));
+      // extracting the ip_address from the flight State for one-way
+      const { ip_address }=flightState;
       const payload = {
         BookingId: bookingId,
         RequestType: "1",

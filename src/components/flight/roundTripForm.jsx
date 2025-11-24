@@ -3,6 +3,7 @@ import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import { useState, useEffect, useRef } from "react";
+import {setFlightState, resetFlightState} from "@/redux/reducers/flightState";
 import {
   Autocomplete,
   Box,
@@ -249,7 +250,12 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
         })
       );
     } else {
-      localStorage.setItem("roundState", JSON.stringify(state));
+      // localStorage.setItem("roundState", JSON.stringify(state));
+      // resetting the flightState to reset the Round State
+      dispatch(resetFlightState());
+      // setting the flightState to the Round State
+      dispatch(setFlightState(state));
+
       searchFlight();
     }
   };

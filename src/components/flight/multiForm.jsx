@@ -296,7 +296,11 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
       return;
     }
 
-    localStorage.setItem("multistate", JSON.stringify(state));
+    // localStorage.setItem("multistate", JSON.stringify(state));
+    // resetting the oneway flight state in the redux persist
+    dispatch(resetFlightState());
+    //  setting the oneway flight state in the redux persist
+    dispatch(setFlightState(state));
 
     const modifiedState = { ...state };
     modifiedState.multicity = modifiedState.multicity.map((city) => {

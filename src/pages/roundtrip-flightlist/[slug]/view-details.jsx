@@ -57,6 +57,11 @@ const FlightDetails = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
+
+  // extracting the flightState from the redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+  
+
   const [flightDetails, setFlightDetails] = useState(null);
   const [isLCC, setIsLCC] = useState(null);
   const [commission, setCommission] = useState(null);
@@ -82,7 +87,9 @@ const FlightDetails = () => {
       router.query.journey
     ) {
       const body = {
-        ip_address: JSON.parse(localStorage.getItem("roundState")).ip_address,
+        // ip_address: JSON.parse(localStorage.getItem("roundState")).ip_address,
+        // setting the flight State ip address round state from redux persist
+        ip_address: flightState.ip_address,
         journey_type: JOURNEY_TYPE.ROUNDTRIP,
       };
 

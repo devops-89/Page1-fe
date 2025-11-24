@@ -13,7 +13,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
 import { flightController } from "@/api/flightController";
 import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
 import { customFilter } from "@/utils/regex";
@@ -21,7 +20,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import VirtualList from "../flight/fixedSizeList";
 import TravellerSelector from "../flight/travellerSelector";
 import { setToast } from "@/redux/reducers/toast";
@@ -34,6 +33,7 @@ import FlightLandIcon from '@mui/icons-material/FlightLand';
 import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
 import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
+
 
 const PersistOneWayForm = () =>  {
   const router = useRouter();
@@ -135,6 +135,9 @@ const PersistOneWayForm = () =>  {
       });
   };
 
+  // extracting the flightState from one way redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+  
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
@@ -188,7 +191,11 @@ const PersistOneWayForm = () =>  {
         })
       );
     } else {
-      localStorage.setItem("state", JSON.stringify(state));
+      // localStorage.setItem("state", JSON.stringify(state));
+        // resetting the oneway flight state in the redux persist
+    dispatch(resetFlightState());
+    //  setting the oneway flight state in the redux persist
+    dispatch(setFlightState(state));
       searchFlight();
 
     }
@@ -213,7 +220,9 @@ const PersistOneWayForm = () =>  {
 //   setting the input filelds of the form with previous search
 useEffect(() => {
   if (!loading && airportList.length) {
-    const savedState = JSON.parse(localStorage.getItem("state") || "{}");
+    // const savedState = JSON.parse(localStorage.getItem("state") || "{}");
+    // setting the flightState from oneway redux persist
+    const savedState= flightState || {};
 
     if (savedState.origin) {
       const originAirport = airportList.find(

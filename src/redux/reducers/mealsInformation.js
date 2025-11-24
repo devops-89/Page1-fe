@@ -9,9 +9,19 @@ const mealsInformation = createSlice({
   initialState,
   reducers: {
     setMealDetails: (state, action) => {
+      // here passengerId is the index, mealsId is the flightId, selected is the selected or clicked meal, passenger type is adult or infant or child
       const { passengerId, mealsId, selected, passengerType } = action.payload;
-      const uniquePassengerKey = `${passengerType}-${passengerId}`; 
+      console.log(
+        "redux meal data:",
+        passengerId,
+        mealsId,
+        selected,
+        passengerType
+      );
+      // generate a unique passenger key
+      const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
+      // creating the structure for unique passenger
       if (!state.meals[uniquePassengerKey]) {
         state.meals[uniquePassengerKey] = { meals: [], passengerType };
       }
@@ -21,7 +31,10 @@ const mealsInformation = createSlice({
       );
 
       if (existingMealIndex === -1) {
-        state.meals[uniquePassengerKey].meals.push({ flightId: mealsId, meal: selected });
+        state.meals[uniquePassengerKey].meals.push({
+          flightId: mealsId,
+          meal: selected,
+        });
       }
     },
 
@@ -30,7 +43,9 @@ const mealsInformation = createSlice({
       const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
       if (state.meals[uniquePassengerKey]) {
-        state.meals[uniquePassengerKey].meals = state.meals[uniquePassengerKey].meals.filter(
+        state.meals[uniquePassengerKey].meals = state.meals[
+          uniquePassengerKey
+        ].meals.filter(
           (meal) => !(meal.flightId === mealsId && meal.meal.Code === mealCode)
         );
 
@@ -40,12 +55,58 @@ const mealsInformation = createSlice({
         }
       }
     },
+    generateMealsForAllPassengers: (state, action) => {
+  const { passengerCounts, allMeals } = action.payload;
 
+  // Step 1: Transform meals by FlightNumber
+  const mealsByFlight = {};
+  allMeals.forEach(meal => {
+    const flightId = meal.FlightNumber;
+    if (!mealsByFlight[flightId]) mealsByFlight[flightId] = [];
+    mealsByFlight[flightId].push(meal);
+  });
+
+  // Step 2: Build passenger keys
+  const passengerKeys = [];
+  const addKeys = (count, type) => {
+    for (let i = 0; i < count; i++) {
+      passengerKeys.push({ key: `${type}-${i}`, type });
+    }
+  };
+  addKeys(passengerCounts.adult || 0, "adult");
+  addKeys(passengerCounts.child || 0, "child");
+  addKeys(passengerCounts.infant || 0, "infant");
+
+  // Step 3: Assign one meal per flight per passenger
+  passengerKeys.forEach(({ key, type }, index) => {
+    if (!state.meals[key]) {
+      state.meals[key] = { meals: [], passengerType: type };
+    }
+
+    Object.entries(mealsByFlight).forEach(([flightId, meals]) => {
+      const meal = meals[0]; // assing first meal to every passenger as they are seperate unlike seat
+      if (!meal) return;
+
+      const alreadyAssigned = state.meals[key].meals.some(
+        m => m.flightId === flightId && m.meal.Code === meal.Code
+      );
+
+      if (!alreadyAssigned) {
+        state.meals[key].meals.push({ flightId, meal });
+      }
+    });
+  });
+},
     resetMealDetails: (state) => {
       state.meals = {};
-    }
+    },
   },
 });
 
-export const { setMealDetails, removeMealDetails, resetMealDetails } = mealsInformation.actions;
+export const {
+  setMealDetails,
+  removeMealDetails,
+  generateMealsForAllPassengers,
+  resetMealDetails,
+} = mealsInformation.actions;
 export default mealsInformation.reducer;

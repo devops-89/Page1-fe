@@ -10,6 +10,7 @@ import { useDispatch,useSelector } from "react-redux";
 import Tooltip from "@mui/material/Tooltip";
 import { setFareQuoteValidations } from "@/redux/reducers/flightValidations";
 import { keyframes } from "@emotion/react";
+
 import {
   Box,
   Container,
@@ -69,6 +70,11 @@ const FlightDetails = () => {
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
   );
+
+  // extracting the flightState from the redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
+
   // console.log('isAuthenticated',isAuthenticated)
   const router = useRouter();
   const [isLCC, setIsLCC] = useState(null);
@@ -94,7 +100,9 @@ const FlightDetails = () => {
         .flightDetails({
           result_index: router.query.ResultIndex,
           trace_id: router.query.traceId,
-          ip_address: JSON.parse(localStorage.getItem("state"))?.ip_address,
+          // ip_address: JSON.parse(localStorage.getItem("state"))?.ip_address,
+          // setting the ip address using the redux persist flightState of oneway
+          ip_address: flightState?.ip_address,
           journey_type: JOURNEY_TYPE.ONEWAY,
           journey: router.query.journey,
         })

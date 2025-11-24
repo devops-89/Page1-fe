@@ -13,6 +13,7 @@ import {
 import createIndexedDBStorage from "redux-persist-indexeddb-storage";
 
 import flightReducer from "../reducers/flight";
+import flightPersistReducer from "../reducers/flightPersist";
 import userReducer from "../reducers/userReducer";
 import toastReducer from "../reducers/toastReducer";
 import hotelReducer from "../reducers/hotel";
@@ -25,16 +26,18 @@ const storage = createIndexedDBStorage("TRDB");
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["HOTEL", "USER", "Hoteler"],
+  whitelist: ["HOTEL", "USER", "Hoteler","FlightPersist"],
 };
 
 const rootReducer = combineReducers({
   USER: userReducer,
   Toast: toastReducer,
   Flight: flightReducer,
+  FlightPersist: flightPersistReducer,
   HOTEL: hotelReducer,
   Hoteler: hotelerReducer,
   NOPERSIST: noPersistReducer,
+
   modal: modalReducer,
   destinationWedding: destinationReducer,
 });

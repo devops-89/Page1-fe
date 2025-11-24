@@ -29,6 +29,10 @@ import Loader from "@/utils/Loader";
 export default function OneWayCheckout() {
   const router = useRouter();
   const selector = useSelector((state) => state.USER.UserData);
+  // extracting the FlightState from redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
+
   const { isAuthenticated } = selector;
   const [multiCity, setMultiCity] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -54,12 +58,14 @@ export default function OneWayCheckout() {
 
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("multitripflightDetails");
-    const storedPassengerCount = localStorage.getItem("multistate");
+    // const storedPassengerCount = localStorage.getItem("multistate");
+    // setting the multistate from flightState redux perist
+    const storedPassengerCount=flightState;
     if (storedFlightDetails) {
       setMultiCity(JSON.parse(storedFlightDetails));
     }
     if (storedPassengerCount) {
-      setPassengerCount(JSON.parse(storedPassengerCount));
+      setPassengerCount(storedPassengerCount);
     }
     if (!isAuthenticated || !storedFlightDetails) {
       router.replace("/login");

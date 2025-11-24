@@ -7,7 +7,7 @@ import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
 import { setToast } from "@/redux/reducers/toast";
 import VirtualList from "../flight/fixedSizeList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "react-loading";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -34,6 +34,9 @@ import TravellerSelector from "../flight/travellerSelector";
 const PersistMultiForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  // extracting the flightState from the redux Persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
 
 
   const CustomPopper = styled(Popper)(({ theme }) => ({
@@ -277,7 +280,11 @@ const PersistMultiForm = () => {
         })
       );
     } else {
-      localStorage.setItem("multistate", JSON.stringify(state));
+      // localStorage.setItem("multistate", JSON.stringify(state));
+        // resetting the oneway flight state in the redux persist
+    dispatch(resetFlightState());
+    //  setting the oneway flight state in the redux persist
+    dispatch(setFlightState(state));
       const modifiedState = { ...state };
       modifiedState.multicity = modifiedState.multicity.map((city) => {
         const cityWithCabinClass = { ...city, cabin_class: state.cabin_class };
@@ -306,7 +313,9 @@ const PersistMultiForm = () => {
   useEffect(()=>{
     if(!loading && airportList.length)
     {
-        const savedState=JSON.parse(localStorage.getItem("multistate") || "{}");
+        // const savedState=JSON.parse(localStorage.getItem("multistate") || "{}");
+        // setting the flightState of the multistate from redux persist
+        const savedState=flightState || {};
 
         if(savedState){
             setState(savedState);

@@ -55,6 +55,9 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
     } 
   });
 
+  // extracting the flightState from redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
   
   
  
@@ -63,9 +66,11 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
   const [columns, setColumns] = useState([]); 
 
   useEffect(() => {
-    const storedState = localStorage.getItem("roundState");
+    // const storedState = localStorage.getItem("roundState");
+    // extracting the flightState from redux persist for round State
+    const storedState=flightState;
     if (storedState) {
-      const passengerData = JSON.parse(storedState);
+      const passengerData = storedState;
       setMaxPassengerCount(passengerData);
     }
   }, []); // Fetch passenger count from localStorage only once on component mount

@@ -20,7 +20,7 @@ import {
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { useRouter } from "next/router";
-
+import {setFlightState,resetFlightState} from "@/redux/reducers/flightState";
 import TravellerSelector from "../flight/travellerSelector";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
@@ -28,7 +28,7 @@ import { flightController } from "@/api/flightController";
 import VirtualList from "../flight/fixedSizeList";
 import { customFilter } from "@/utils/regex";
 import ToastBar from "../toastBar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
@@ -40,10 +40,14 @@ import { resetSeatDetails } from "@/redux/reducers/roundInternationalSeatsInform
 import {domesticBaggageReset} from "@/redux/reducers/roundDomesticBaggagesInformation";
 import {domesticMealReset} from "@/redux/reducers/roundDomesticMealsInformation";
 
+
 const PersistRoundTripForm= () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const phone = useMediaQuery("(max-width:600px)");
+
+  // extracting the flightState from redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
 
 
     const CustomPopper = styled(Popper)(({ theme }) => ({
@@ -211,7 +215,12 @@ const PersistRoundTripForm= () => {
         })
       );
     } else {
-      localStorage.setItem("roundState", JSON.stringify(state));
+      // localStorage.setItem("roundState", JSON.stringify(state));
+      // resetting the flightState for the roundState
+      dispatch(resetFlightState());
+      // setting the flightState for the roundState
+      dispatch(setFlightState(state));
+
       searchFlight();
     }
   };
@@ -239,7 +248,9 @@ const PersistRoundTripForm= () => {
 //   setting the values dynamically to the search fields
 useEffect(()=>{
     if(!loading && airportList.length){
-        const savedState=JSON.parse(localStorage.getItem("roundState") || "{}");
+        // const savedState=JSON.parse(localStorage.getItem("roundState") || "{}");
+        // setting the flight State of roundState from redux persist
+        const savedState=flightState || {};
 
         // setting the origin object
         if(savedState.origin){

@@ -28,9 +28,11 @@ import Loader from "@/utils/Loader";
 import { setToast } from "@/redux/reducers/toast";
 import { TOAST_STATUS } from "@/utils/enum";
 
+
 export default function OneWayCheckout() {
   const [paymentPayload, setPaymentPayload] = useState(null);
-
+  // extracting the flightState oneway from redux persist
+  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,12 +65,15 @@ export default function OneWayCheckout() {
 
   useEffect(() => {
     const storedFlightDetails = localStorage.getItem("oneWayflightDetails");
-    const storedPassengerCount = localStorage.getItem("state");
+    // const storedPassengerCount = localStorage.getItem("state");
+    // extracting the one way state from redux persist
+    const storedPassengerCount=flightState;
+   
     if (storedFlightDetails) {
       setOneWay(JSON.parse(storedFlightDetails));
     }
     if (storedPassengerCount) {
-      setPassengerCount(JSON.parse(storedPassengerCount));
+      setPassengerCount(storedPassengerCount);
     } else {
       setLoading(false);
     }
