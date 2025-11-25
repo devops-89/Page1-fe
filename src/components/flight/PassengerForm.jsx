@@ -25,6 +25,10 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
   );
+
+  // extracting the flightState from the redux persist
+    const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -134,9 +138,10 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   } = flightDetails?.[0]?.Results?.Fare || {};
 
   useEffect(() => {
-    const storedState = localStorage.getItem(myState);
+    // const storedState = localStorage.getItem(myState);
+      const storedState=flightState;
     if (storedState) {
-      const parsedState = JSON.parse(storedState);
+      const parsedState = storedState;
       setAdultCount(parsedState?.adult || 1);
       setChildCount(parsedState?.child || 0);
       setInfantCount(parsedState?.infant || 0);
@@ -149,7 +154,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
     // console.log("------------", isBirthdayRequired)
 
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState, journey?.journey]);
+  }, [flightState, journey?.journey]);
 
   useEffect(() => {
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
@@ -259,7 +264,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
 
     console.log("submit value", values);
     setLoading(true);
-    const storedState = localStorage.getItem(myState);
+    const storedState = flightState;
     const commonPayload = {
       journey_type: journey?.journey_type,
       journey: journey?.journey,
@@ -267,7 +272,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       address: values?.address || "",
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
-      ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
+      ip_address: storedState ? storedState.ip_address || "" : "",
       // cell_country_code: values?.cell_country_code || "",
       cell_country_code: values?.cell_country_code
         ? `+${String(values.cell_country_code).replace(/^\+/, "")}-`

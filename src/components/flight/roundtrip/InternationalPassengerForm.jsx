@@ -25,6 +25,11 @@ const InternationalPassengerForm = ({
   const isAuthenticated = useSelector(
     (state) => state.USER.UserData.isAuthenticated
   );
+
+    // extracting the flightState from the redux persist
+    const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -184,9 +189,9 @@ const InternationalPassengerForm = ({
     console.log("err and val is :", values, error);
   };
   useEffect(() => {
-    const storedState = localStorage.getItem(myState);
+    const storedState = flightState;
     if (storedState) {
-      const parsedState = JSON.parse(storedState);
+      const parsedState = storedState;
       setAdultCount(parsedState?.adult || 1);
       setChildCount(parsedState?.child || 0);
       setInfantCount(parsedState?.infant || 0);
@@ -198,7 +203,7 @@ const InternationalPassengerForm = ({
       true
     );
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState]);
+  }, [flightState]);
   useEffect(() => {
     setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
   }, [journey?.journey]);
@@ -266,7 +271,7 @@ const InternationalPassengerForm = ({
     const phoneNumber = values.contact_no;
     console.log("submit value", values);
     setLoading(true);
-    const storedState = localStorage.getItem(myState);
+    const storedState = flightState;
     const commonPayload = {
       journey_type: journey?.journey_type,
       journey: journey?.journey,
@@ -274,7 +279,7 @@ const InternationalPassengerForm = ({
       address: values?.address || "",
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
-      ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
+      ip_address: storedState ? storedState.ip_address || "" : "",
       cell_country_code: values?.cell_country_code || "",
       country_code: values?.country_code || "",
       city: values?.city || "",

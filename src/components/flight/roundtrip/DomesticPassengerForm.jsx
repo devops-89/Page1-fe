@@ -19,7 +19,12 @@ import useRoundTripDomesticMealAndBaggage from "@/custom-hook/useRoundTripDomest
 import UserVerifyForm from "../UserVerifyForm";
 const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
   const dispatch = useDispatch();
+
   const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
+
+    // extracting the flightState from the redux persist
+    const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({});
@@ -124,9 +129,10 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
   const IB_Fare = flightDetails?.[1]?.[0]?.Results?.Fare || {};
 
   useEffect(() => {
-    const storedState = localStorage.getItem(myState);
+    // const storedState = localStorage.getItem(myState);
+      const storedState=flightState;
     if (storedState) {
-      const parsedState = JSON.parse(storedState);
+      const parsedState = storedState;
       setAdultCount(parsedState?.adult || 1);
       setChildCount(parsedState?.child || 0);
       setInfantCount(parsedState?.infant || 0);
@@ -138,7 +144,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
     // setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsBirthdayRequired(false);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
-  }, [myState, journey]);
+  }, [flightState, journey]);
 
   const totalPassengers = adultCount + childCount + infantCount;
 
@@ -205,7 +211,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
 
     // console.log("submit value", values);
     setLoading(true);
-    const storedState = localStorage.getItem(myState);
+    const storedState = flightState;
 
     const passengerDetails_OB = {
       adult:
@@ -447,7 +453,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
       ob: {
         result_index: flightDetails?.[0][0]?.Results?.ResultIndex || null,
         trace_id: flightDetails?.[0][0]?.TraceId,
-        ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
+        ip_address: storedState ?storedState.ip_address || "" : "",
         cell_country_code: values?.cell_country_code || "",
         country_code: values?.country_code || "",
         city: values?.city || "",
@@ -499,7 +505,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
       ib: {
         result_index: flightDetails?.[1][0]?.Results?.ResultIndex || null,
         trace_id: flightDetails?.[1][0]?.TraceId,
-        ip_address: storedState ? JSON.parse(storedState).ip_address || "" : "",
+        ip_address: storedState ? storedState.ip_address || "" : "",
         cell_country_code: values?.cell_country_code || "",
         country_code: values?.country_code || "",
         city: values?.city || "",
