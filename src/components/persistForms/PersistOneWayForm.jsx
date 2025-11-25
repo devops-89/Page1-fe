@@ -28,8 +28,8 @@ import { data } from "@/assests/data";
 import Loading from "react-loading";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
 import { useRouter } from "next/router";
-import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
-import FlightLandIcon from '@mui/icons-material/FlightLand';
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
 import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
@@ -44,19 +44,10 @@ const PersistOneWayForm = () =>  {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [defaultRoute, setDefaultRoute] = useState("/oneway-flightlist");
 
-
-
-
-
   const CustomPopper = styled(Popper)(({ theme }) => ({
-    width: '310px !important',
+    width: "310px !important",
     zIndex: 1300,
   }));
-
-
-
-
-
 
   const open = Boolean(anchorEl);
   const openPopover = (e) => {
@@ -101,7 +92,6 @@ const PersistOneWayForm = () =>  {
         ...state,
         destination: newValue.iata_code,
       });
-   
     }
   };
 
@@ -114,8 +104,6 @@ const PersistOneWayForm = () =>  {
         departure_date: moment(newDate._d).format("YYYY-MM-DD"),
       });
     }
-
-    
   };
 
   const [airportList, setAirportList] = useState([]);
@@ -172,15 +160,14 @@ const PersistOneWayForm = () =>  {
   };
 
   const submitHandler = () => {
-      dispatch(resetSeatDetails());
-      dispatch(resetMealDetails());
-      dispatch(resetBaggageDetails());
-       const emptyFields = Object.keys(state).filter(
-        (key) =>
-          state[key] === "" || state[key] === null || state[key] === undefined
-      );
+    dispatch(resetSeatDetails());
+    dispatch(resetMealDetails());
+    dispatch(resetBaggageDetails());
+    const emptyFields = Object.keys(state).filter(
+      (key) =>
+        state[key] === "" || state[key] === null || state[key] === undefined
+    );
     // }
-
 
     if (emptyFields.length > 0) {
       dispatch(
@@ -197,11 +184,8 @@ const PersistOneWayForm = () =>  {
     //  setting the oneway flight state in the redux persist
     dispatch(setFlightState(state));
       searchFlight();
-
     }
   };
-
-
 
   const [cabin_class, setCabinClass] = useState("");
   useEffect(() => {
@@ -224,51 +208,55 @@ useEffect(() => {
     // setting the flightState from oneway redux persist
     const savedState= flightState || {};
 
-    if (savedState.origin) {
-      const originAirport = airportList.find(
-        (a) => a.iata_code === savedState.origin
-      );
-      if (originAirport) {
-        setOrigin(originAirport);
-        setState((prev) => ({ ...prev, origin: originAirport.iata_code }));
+      if (savedState.origin) {
+        const originAirport = airportList.find(
+          (a) => a.iata_code === savedState.origin
+        );
+        if (originAirport) {
+          setOrigin(originAirport);
+          setState((prev) => ({ ...prev, origin: originAirport.iata_code }));
+        }
       }
-    }
 
-    if (savedState.destination) {
-      const destinationAirport = airportList.find(
-        (a) => a.iata_code === savedState.destination
-      );
-      if (destinationAirport) {
-        setDestination(destinationAirport);
+      if (savedState.destination) {
+        const destinationAirport = airportList.find(
+          (a) => a.iata_code === savedState.destination
+        );
+        if (destinationAirport) {
+          setDestination(destinationAirport);
+          setState((prev) => ({
+            ...prev,
+            destination: destinationAirport.iata_code,
+          }));
+        }
+      }
+
+      if (savedState.departure_date) {
+        setDepartureDate(moment(savedState.departure_date));
         setState((prev) => ({
           ...prev,
-          destination: destinationAirport.iata_code,
+          departure_date: savedState.departure_date,
         }));
       }
+
+      // Optional: Load adults/children/infants/cabin_class if needed
     }
-
-    if (savedState.departure_date) {
-      setDepartureDate(moment(savedState.departure_date));
-      setState((prev) => ({
-        ...prev,
-        departure_date: savedState.departure_date,
-      }));
-    }
-
-    // Optional: Load adults/children/infants/cabin_class if needed
-  }
-}, [loading, airportList]);
-
+  }, [loading, airportList]);
 
   return (
     <>
-      <Grid2 container alignItems={"center"} justifyContent={"center"} sx={{ display:"flex" , alignItems:"stretch"}}>
+      <Grid2
+        container
+        alignItems={"center"}
+        justifyContent={"center"}
+        sx={{ display: "flex", alignItems: "stretch" }}
+      >
         <Grid2
           size={{ lg: 3, xs: 6, sm: 6, md: 2.4 }}
           sx={{
             border: "1px solid #808080",
-            borderTopLeftRadius: {xs:0, sm:4},
-            borderBottomLeftRadius: {xs:0, sm:4},
+            borderTopLeftRadius: { xs: 0, sm: 4 },
+            borderBottomLeftRadius: { xs: 0, sm: 4 },
           }}
         >
           <Typography
@@ -280,7 +268,7 @@ useEffect(() => {
               pt: 1,
             }}
           >
-            From mm
+            From
           </Typography>
 
           <Autocomplete
@@ -291,7 +279,7 @@ useEffect(() => {
                 sx={{
                   fieldset: { border: "none" },
                   input: { textAlign: "start" },
-                }} 
+                }}
               />
             )}
             onChange={originhandler}
@@ -306,12 +294,24 @@ useEffect(() => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
-                  <Grid2 size={{xs:0, sm:2}}>
-                    <FlightTakeoffIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
+                <Grid2
+                  container
+                  sx={{
+                    width: "100%",
+                    borderBottom: `1px solid ${COLORS.SEMIGREY}`,
+                  }}
+                >
+                  <Grid2 size={{ xs: 0, sm: 2 }}>
+                    <FlightTakeoffIcon
+                      sx={{
+                        color: COLORS.PRIMARY,
+                        marginRight: "10px",
+                        display: { xs: "none", sm: "block" },
+                      }}
+                    />
                   </Grid2>
-                 
-                  <Grid2 size={{xs:12, sm:6}}>
+
+                  <Grid2 size={{ xs: 12, sm: 6 }}>
                     <Typography
                       sx={{
                         fontSize: 14,
@@ -336,15 +336,15 @@ useEffect(() => {
                     </Typography>
                   </Grid2>
 
-                  <Grid2 size={{xs:0, sm:4}}>
-                  <Typography
+                  <Grid2 size={{ xs: 0, sm: 4 }}>
+                    <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight:800,
+                        fontWeight: 800,
                         color: COLORS.BLACK,
                         textAlign: "end",
-                        display:{xs:'none', sm:'block'}
+                        display: { xs: "none", sm: "block" },
                       }}
                     >
                       {option.city_code}
@@ -381,7 +381,7 @@ useEffect(() => {
               pt: 1,
             }}
           >
-            To mm
+            To
           </Typography>
 
           <Autocomplete
@@ -407,12 +407,24 @@ useEffect(() => {
             }
             renderOption={(props, option) => (
               <Box {...props}>
-                 <Grid2 container sx={{width:'100%', borderBottom:`1px solid ${COLORS.SEMIGREY}`}}>
-                  <Grid2 size={{xs:0, sm:2}}>
-                    <FlightLandIcon sx={{color:COLORS.PRIMARY, marginRight:'10px', display:{xs:'none', sm:'block'}}}/>
+                <Grid2
+                  container
+                  sx={{
+                    width: "100%",
+                    borderBottom: `1px solid ${COLORS.SEMIGREY}`,
+                  }}
+                >
+                  <Grid2 size={{ xs: 0, sm: 2 }}>
+                    <FlightLandIcon
+                      sx={{
+                        color: COLORS.PRIMARY,
+                        marginRight: "10px",
+                        display: { xs: "none", sm: "block" },
+                      }}
+                    />
                   </Grid2>
-                 
-                  <Grid2 size={{xs:12, sm:6}}>
+
+                  <Grid2 size={{ xs: 12, sm: 6 }}>
                     <Typography
                       sx={{
                         fontSize: 14,
@@ -437,15 +449,15 @@ useEffect(() => {
                     </Typography>
                   </Grid2>
 
-                  <Grid2 size={{xs:0, sm:4}}>
-                  <Typography
+                  <Grid2 size={{ xs: 0, sm: 4 }}>
+                    <Typography
                       sx={{
                         fontSize: 14,
                         fontFamily: nunito.style,
-                        fontWeight:800,
+                        fontWeight: 800,
                         color: COLORS.BLACK,
                         textAlign: "end",
-                        display:{xs:'none', sm:'block'}
+                        display: { xs: "none", sm: "block" },
                       }}
                     >
                       {option.city_code}
@@ -497,7 +509,7 @@ useEffect(() => {
                 },
               }}
               disablePast
-              maxDate={moment().add(90, 'days')}
+              maxDate={moment().add(90, "days")}
               onChange={departureDateHandler}
               value={departureDate}
               format="DD/MM/YYYY"
@@ -518,10 +530,10 @@ useEffect(() => {
             border: "1px solid #808080",
 
             position: "relative",
-            alignItems:"stretch",
-            borderBottomLeftRadius: {xs:0, sm:4},
-            borderBottomRightRadius: {xs:0, sm:4},
-            flex:1
+            alignItems: "stretch",
+            borderBottomLeftRadius: { xs: 0, sm: 4 },
+            borderBottomRightRadius: { xs: 0, sm: 4 },
+            flex: 1,
           }}
         >
           <Typography
@@ -536,24 +548,24 @@ useEffect(() => {
             Travellers and cabin class
           </Typography>
           <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
-          <Typography
-                sx={{
-                  fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
-                  fontFamily: nunito.style,
-                }}
-              >
-                {state.adult + state.child + state.infant} Persons
-              </Typography>
+            <Typography
+              sx={{
+                fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
+                fontFamily: nunito.style,
+              }}
+            >
+              {state.adult + state.child + state.infant} Persons
+            </Typography>
 
-              <Typography
-                fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
-                fontFamily={nunito.style}
-              >
-                {state.adult} adult
-                {state.child !== 0 && `, ${state.child} child`}
-                {state.infant !== 0 && `, ${state.infant} infant`},{" "}
-                {`${cabin_class.label} Class`}
-              </Typography>
+            <Typography
+              fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
+              fontFamily={nunito.style}
+            >
+              {state.adult} adult
+              {state.child !== 0 && `, ${state.child} child`}
+              {state.infant !== 0 && `, ${state.infant} infant`},{" "}
+              {`${cabin_class.label} Class`}
+            </Typography>
           </CardActionArea>
 
           {/* popover start */}
@@ -599,12 +611,12 @@ useEffect(() => {
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
-              width: {lg:150 , md:150 , sm:120 ,xs:120},
-             
+              width: { lg: 150, md: 150, sm: 120, xs: 120 },
+
               mt: { lg: 2, sm: 1, xs: 2 },
               cursor: buttonLoading ? "not-allowed" : "pointer",
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
-              py: {lg:1.5 , md:1.5,sm:1 , xs:1},
+              py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
             }}
             onClick={submitHandler}
           >

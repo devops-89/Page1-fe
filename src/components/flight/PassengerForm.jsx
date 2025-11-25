@@ -38,7 +38,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const [infantCount, setInfantCount] = useState(0);
   // const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
-  const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
+  // const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
   // Extrating the flight Validation from the Redux start
 
@@ -86,13 +86,15 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const selectedBaggages = useSelector(
     (state) => state.Flight.BaggagesInformation.baggages || {}
   );
-  const selectedMeals = useSelector(
-    (state) => state.Flight.MealsInformation.meals || {}
-  );
+  const selectedMeals = useSelector((state) => {
+    console.log("meal stae", state.Flight.MealsInformation.meals);
+    return state.Flight.MealsInformation.meals || {};
+  });
+  console.log("selected meals", selectedMeals);
   const selectedSeats = useSelector(
     (state) => state.Flight.SeatsInformation?.seats || []
   );
-
+  console.log("selected seats", selectedSeats);
   const finalSeat = selectedSeats?.map((singleSeat, index) => {
     return singleSeat?.selectedSeats?.map((seat) => {
       return seat;
@@ -145,20 +147,19 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       setAdultCount(parsedState?.adult || 1);
       setChildCount(parsedState?.child || 0);
       setInfantCount(parsedState?.infant || 0);
+      console.log("parsed state is : ", parsedState);
     }
     const results = flightDetails?.[0]?.Results;
     // setIsPassportRequired(
     //   results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
     // );
 
-    // console.log("------------", isBirthdayRequired)
-
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [flightState, journey?.journey]);
 
-  useEffect(() => {
-    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
-  }, [journey?.journey]);
+  // useEffect(() => {
+  //   setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+  // }, [journey?.journey]);
 
   const totalPassengers = adultCount + childCount + infantCount;
   console.log("nknknknknk", payload.trace_id);
@@ -225,7 +226,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
       gst_company_contact_number: "",
       gst_company_email: "",
     },
-    cell_country_code: "",
+    cell_country_code: "91",
     country_code: "",
     country: "",
     // cell_country_code: "91",
@@ -344,9 +345,11 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             email: contactEmail,
             contact_no: phoneNumber,
 
-            date_of_birth: isBirthdayRequired
-              ? passenger.date_of_birth
-              : passenger.date_of_birth || null,
+            date_of_birth:
+              // isBirthdayRequired
+              //   ? passenger.date_of_birth
+              //   :
+              passenger.date_of_birth || null,
 
             gender: gender,
 
@@ -387,9 +390,12 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             email: contactEmail,
             contact_no: phoneNumber,
 
-            date_of_birth: isBirthdayRequired
-              ? passenger.date_of_birth
-              : passenger.date_of_birth || null,
+            date_of_birth:
+              // isBirthdayRequired
+              //   ?
+              //    passenger.date_of_birth
+              //   :
+              passenger.date_of_birth || null,
 
             gender: gender,
 
@@ -430,9 +436,11 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
             email: contactEmail,
             contact_no: phoneNumber,
 
-            date_of_birth: isBirthdayRequired
-              ? passenger.date_of_birth
-              : passenger.date_of_birth || null,
+            date_of_birth:
+              //  isBirthdayRequired
+              //   ? passenger.date_of_birth
+              //   :
+              passenger.date_of_birth || null,
 
             gender: gender,
             pax_type: 3,
@@ -602,12 +610,12 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
           </Typography>
         </Box>
         <Formik
-          key={`${isGSTMandatory}-${isNewPassportMandatory}-${isBirthdayRequired}`}
+          key={`${isGSTMandatory}-${isNewPassportMandatory}-${isSourceAirAsia}-${journey?.journey}`}
           initialValues={initialValues}
           validationSchema={validationSchema(
             isGSTMandatory,
             // isPassportRequired,
-            isBirthdayRequired,
+            // isBirthdayRequired,
             isNewPassportMandatory,
             isNewPanMandatory,
             isPassportFullDetailRequired,

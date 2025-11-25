@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Typography, Box,Card } from "@mui/material";
+import { Container, Button, Typography, Box, Card } from "@mui/material";
 import { Formik, Form } from "formik";
 import { roboto } from "@/utils/fonts";
 import { flightController } from "@/api/flightController";
@@ -17,13 +17,15 @@ import PassengerFields from "../PassengerFields";
 import FullScreenDialog from "../ssr/roundtrip/domestic/seats/FullScreenDialog";
 import useRoundTripDomesticMealAndBaggage from "@/custom-hook/useRoundTripDomesticMealAndBaggage";
 import UserVerifyForm from "../UserVerifyForm";
-const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
+const DomesticPassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   const dispatch = useDispatch();
 
-  const isAuthenticated = useSelector((state) => state.USER.UserData.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state) => state.USER.UserData.isAuthenticated
+  );
 
-    // extracting the flightState from the redux persist
-    const flightState=useSelector((state)=>state.FlightPersist.FlightState);
+  // extracting the flightState from the redux persist
+  const flightState = useSelector((state) => state.FlightPersist.FlightState);
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -32,10 +34,25 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
   const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
-  const [isPassportRequired, setIsPassportRequired] = useState(false);
+  // const [isPassportRequired, setIsPassportRequired] = useState(false);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
   const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
 
+  const newFlightValidations = useSelector(
+    (state) => state.Flight.FlightValidation
+  );
+  console.log("new Flight Validations: ", newFlightValidations);
+  const isAirAsia =
+    newFlightValidations.rules.LCC.airlineSpecific.AirAsia.isAirAsia;
+
+  const isSourceAirAsia =
+    newFlightValidations.rules.LCC.airlineSpecific.AirAsia.isSourceAirAsia;
+  const isSpiceJet =
+    newFlightValidations.rules.LCC.airlineSpecific.spiceJet.isSpiceJet;
+
+  const isTrueJetAndZoomAir =
+    newFlightValidations.rules.LCC.airlineSpecific.TrueJetAndZoomAir
+      .isTrueJetAndZoomAir;
   let adultSeatsOutgoing = [];
   let childSeatsOutgoing = [];
   let adultSeatsReturn = [];
@@ -130,7 +147,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
 
   useEffect(() => {
     // const storedState = localStorage.getItem(myState);
-      const storedState=flightState;
+    const storedState = flightState;
     if (storedState) {
       const parsedState = storedState;
       setAdultCount(parsedState?.adult || 1);
@@ -138,9 +155,9 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
       setInfantCount(parsedState?.infant || 0);
     }
     const results = flightDetails?.[0]?.Results;
-    setIsPassportRequired(
-      results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
-    );
+    // setIsPassportRequired(
+    //   results?.IsPassportRequiredAtBook || results?.IsPassportRequiredAtTicket
+    // );
     // setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
     setIsBirthdayRequired(false);
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
@@ -453,8 +470,10 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
       ob: {
         result_index: flightDetails?.[0][0]?.Results?.ResultIndex || null,
         trace_id: flightDetails?.[0][0]?.TraceId,
-        ip_address: storedState ?storedState.ip_address || "" : "",
-        cell_country_code: values?.cell_country_code || "",
+        ip_address: storedState ? storedState.ip_address || "" : "",
+        cell_country_code: values?.cell_country_code
+          ? `+${String(values.cell_country_code).replace(/^\+/, "")}-`
+          : "",
         country_code: values?.country_code || "",
         city: values?.city || "",
         address: values?.address || "",
@@ -507,7 +526,9 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
         trace_id: flightDetails?.[1][0]?.TraceId,
         ip_address: storedState ? storedState.ip_address || "" : "",
         cell_country_code: values?.cell_country_code || "",
-        country_code: values?.country_code || "",
+        cell_country_code: values?.cell_country_code
+          ? `+${String(values.cell_country_code).replace(/^\+/, "")}-`
+          : "",
         city: values?.city || "",
         address: values?.address || "",
         journey_type: journey?.journey_type,
@@ -562,8 +583,17 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
 
   const currentValidationSchema = validationSchema(
     isGSTMandatory,
-    isBirthdayRequired,
-    isPassportRequired
+    false,
+    false,
+    false,
+    isAirAsia,
+    isLCC,
+    false,
+    false,
+    isSpiceJet,
+    isSourceAirAsia,
+    isTrueJetAndZoomAir,
+    journey
   );
 
   useEffect(() => {
@@ -710,7 +740,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       handleBlur={handleBlur}
                       errors={errors}
                       formType="adult"
-                      isPassportRequired={isPassportRequired}
+                      // isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
                       touched={touched}
@@ -729,7 +759,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       handleBlur={handleBlur}
                       errors={errors}
                       formType="child"
-                      isPassportRequired={isPassportRequired}
+                      // isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
                       touched={touched}
@@ -747,7 +777,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                       handleBlur={handleBlur}
                       errors={errors}
                       formType="infant"
-                      isPassportRequired={isPassportRequired}
+                      // isPassportRequired={isPassportRequired}
                       values={values}
                       journey={journey}
                       touched={touched}
@@ -786,7 +816,9 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey }) => {
                   }}
                 >
                   {!isAuthenticated ? (
-                    <Card sx={{ mb: "20px", p: "20px", mx: "auto" ,width:"100%"}}>
+                    <Card
+                      sx={{ mb: "20px", p: "20px", mx: "auto", width: "100%" }}
+                    >
                       <UserVerifyForm />
                     </Card>
                   ) : (

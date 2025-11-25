@@ -114,7 +114,7 @@ const FlightDetails = () => {
         )
         .then((response) => {
           if (response?.data?.data) {
-              dispatch(setFareQuoteValidations(response?.data?.data[0]));
+              dispatch(setFareQuoteValidations(response?.data?.data[0]?.[0]));
             setFlightDetails(response?.data?.data);
             setIsLCC(response?.data?.data[0]?.Results?.IsLCC);
             setCommission(response?.data?.data[2]);
@@ -267,6 +267,7 @@ const FlightDetails = () => {
                             flightDetails={flightDetails}
                             myState="roundState"
                             journey={journey}
+                            isLCC={isLCC}
                           />
                         )}
                       </Card>

@@ -514,7 +514,7 @@ const MultiCityPassengerForm = ({
           validationSchema={validationSchema(
             isGSTMandatory,
             // isPassportRequired,
-            isBirthdayRequired,
+            // isBirthdayRequired,
             isNewPassportMandatory,
             isNewPanMandatory,
             isPassportFullDetailRequired,

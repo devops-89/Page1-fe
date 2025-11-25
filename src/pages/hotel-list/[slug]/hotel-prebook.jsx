@@ -44,7 +44,6 @@ import { useFormatCancellationPolicy } from "@/custom-hook/useFormatHotelCancell
 import { paymentController } from "@/api/paymentController";
 import { Formik, Form } from "formik";
 import RateConditionCard from "@/components/hotels/HomepageHotels/RateConditionCard";
-import { getRandomColor } from "@/custom-hook/getRandomColor";
 
 const HotelPreBookPage = () => {
   const router = useRouter();
@@ -64,21 +63,22 @@ const HotelPreBookPage = () => {
 
   // handling service fees calculation start using comission
 
-const percentage = Number(preBookResponse?.COMMISSION?.percentage);
-console.log("percentage:",percentage);
-const isFixed=preBookResponse?.COMMISSION?.commission_type===COMMISSION_TYPE.FIXED;
-let charge=0;
-if(isFixed){
-  charge=percentage;
-}
-else{
-  charge=(preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare*percentage)/100;
-}
+  const percentage = Number(preBookResponse?.COMMISSION?.percentage);
+  console.log("percentage:", percentage);
+  const isFixed =
+    preBookResponse?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
+  let charge = 0;
+  if (isFixed) {
+    charge = percentage;
+  } else {
+    charge =
+      (preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare * percentage) /
+      100;
+  }
 
-const serviceCharge=charge;
+  const serviceCharge = charge;
 
-
-  // handling services fees calculcation end 
+  // handling services fees calculcation end
 
   // helper to read flags (supports multiple naming patterns)
   const getFlag = (flagName) => {
@@ -1166,7 +1166,11 @@ const serviceCharge=charge;
                             </Typography>
 
                             <Typography
-                              sx={{ fontFamily: roboto.style, fontWeight: 400, fontSize : 14 }}
+                              sx={{
+                                fontFamily: roboto.style,
+                                fontWeight: 400,
+                                fontSize: 14,
+                              }}
                             >
                               ({roomCount} Room
                               {roomCount > 1 ? "s" : ""} × {nightCount} Night
@@ -1238,8 +1242,7 @@ const serviceCharge=charge;
                             <Typography
                               sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                             >
-                              ₹{" "}
-                              {serviceCharge?.toFixed(2)}
+                              ₹ {serviceCharge?.toFixed(2)}
                             </Typography>
                           </Grid2>
                         </Grid2>
@@ -1267,9 +1270,10 @@ const serviceCharge=charge;
                               sx={{ fontFamily: roboto.style, fontWeight: 800 }}
                             >
                               ₹{" "}
-                              {(preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare+serviceCharge).toFixed(
-                                2
-                              )}
+                              {(
+                                preBookResponse?.HotelResult?.[0]?.Rooms?.[0]
+                                  ?.TotalFare + serviceCharge
+                              ).toFixed(2)}
                             </Typography>
                           </Grid2>
                         </Grid2>
@@ -1341,7 +1345,7 @@ const serviceCharge=charge;
                               sx={{
                                 fontFamily: nunito.style,
                                 padding: "6px 16px",
-                                backgroundColor: getRandomColor(),
+                                backgroundColor: COLORS.SEMIGREY,
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "5px",
@@ -1433,7 +1437,7 @@ function CustomDialogFacilities({ data, open, handleClose }) {
               <Box
                 key={`${facility}-${index}`}
                 sx={{
-                  backgroundColor: getRandomColor(),
+                  backgroundColor: COLORS.SEMIGREY,
                   padding: "6px 12px",
                   borderRadius: "16px",
                   fontSize: "0.875rem",

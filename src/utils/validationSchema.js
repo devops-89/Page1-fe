@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { differenceInYears } from "date-fns";
-
+import { JOURNEY } from "@/utils/enum";
 import { phoneNumberRegex } from "./regex";
 
 const getAge = (dob) => {
@@ -125,7 +125,6 @@ export const passengerSchema = (
   isPassportShow,
   isPassportShowForAdultChild,
   isSpiceJet,
-  isSourceAirAsia,
   isTrueJetAndZoomAir,
   journey
 ) => {
@@ -171,7 +170,7 @@ export const passengerSchema = (
       ),
 
     date_of_birth: Yup.date().when([], {
-      is: () => isBirthdayRequired || isSourceAirAsia,
+      is: () => Boolean(isBirthdayRequired),
       then: (schema) => schema.required("Date of Birth is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
@@ -325,7 +324,6 @@ export const buildAddFormSchema = (isAirAsia, isLCC) =>
 
 export const validationSchema = (
   isGSTMandatory,
-  isBirthdayRequired,
   isNewPassportMandatory,
   isNewPanMandatory,
   isPassportFullDetailRequired,
@@ -339,17 +337,24 @@ export const validationSchema = (
   journey
 ) => {
   const addFormSchema = buildAddFormSchema(isAirAsia, isLCC);
+
+  const isInternational = Boolean(journey?.journey === JOURNEY.INTERNATIONAL);
+
+  const adultBirthdayRequired = Boolean(isSourceAirAsia || isInternational);
+
+  const childBirthdayRequired = true;
+  const infantBirthdayRequired = true;
+
   return Yup.object().shape({
     adult: Yup.array().of(
       passengerSchema(
         isNewPassportMandatory,
         isNewPanMandatory,
-        isBirthdayRequired,
+        adultBirthdayRequired,
         isPassportFullDetailRequired,
         isPassportShow,
         isPassportShowForAdultChild,
         isSpiceJet,
-        isSourceAirAsia,
         isTrueJetAndZoomAir,
         journey
       )
@@ -358,12 +363,11 @@ export const validationSchema = (
       passengerSchema(
         isNewPassportMandatory,
         isNewPanMandatory,
-        isBirthdayRequired,
+        childBirthdayRequired,
         isPassportFullDetailRequired,
         isPassportShow,
         isPassportShowForAdultChild,
         isSpiceJet,
-        false,
         isTrueJetAndZoomAir,
         journey
       )
@@ -372,12 +376,11 @@ export const validationSchema = (
       passengerSchema(
         isNewPassportMandatory,
         isNewPanMandatory,
-        isBirthdayRequired,
+        infantBirthdayRequired,
         isPassportFullDetailRequired,
         isPassportShow,
         false,
         isSpiceJet,
-        false,
         isTrueJetAndZoomAir,
         journey
       )
@@ -465,8 +468,8 @@ export const selfDriveValidationSchema = Yup.object({
 
 export const LeadPassengerValidation = (validationInfo) => {
   const nameRegex = new RegExp(
-    `^[a-zA-Z${validationInfo.SpaceAllowed ? "\\s" : ""}${
-      validationInfo.SpecialCharAllowed ? "!@#$%^&*()\\-+=.,'" : ""
+    `^[a-zA-Z${validationInfo?.SpaceAllowed ? "\\s" : ""}${
+      validationInfo?.SpecialCharAllowed ? "!@#$%^&*()\\-+=.,'" : ""
     }]+$`
   );
 
@@ -474,12 +477,12 @@ export const LeadPassengerValidation = (validationInfo) => {
     .required("Name is required")
     .matches(nameRegex, "Invalid characters in name")
     .min(
-      validationInfo.CharLimit ? validationInfo.PaxNameMinLength : 1,
-      `Minimum ${validationInfo.PaxNameMinLength} characters`
+      validationInfo?.CharLimit ? validationInfo.PaxNameMinLength : 1,
+      `Minimum ${validationInfo?.PaxNameMinLength} characters`
     )
     .max(
-      validationInfo.CharLimit ? validationInfo.PaxNameMaxLength : 100,
-      `Maximum ${validationInfo.PaxNameMaxLength} characters`
+      validationInfo?.CharLimit ? validationInfo.PaxNameMaxLength : 100,
+      `Maximum ${validationInfo?.PaxNameMaxLength} characters`
     );
 
   return Yup.object().shape({
@@ -576,7 +579,7 @@ export const LeadPassengerValidation = (validationInfo) => {
         "unique-names",
         "Duplicate passenger names not allowed",
         function (guests) {
-          if (validationInfo.SamePaxNameAllowed || !guests) return true;
+          if (validationInfo?.SamePaxNameAllowed || !guests) return true;
           const names = guests.map(
             (p) => `${p.firstName?.trim()} ${p.lastName?.trim()}`
           );

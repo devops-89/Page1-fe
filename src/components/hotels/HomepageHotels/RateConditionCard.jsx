@@ -92,7 +92,7 @@ const RateConditionCard = ({ preBookResponse }) => {
                       fontFamily: roboto.style,
                       fontWeight: 500,
                       fontSize: "0.95rem",
-                      color: COLORS.SECONDARY,
+                      color: COLORS.BLACK,
                       lineHeight: 1.6,
                     }}
                     dangerouslySetInnerHTML={{
@@ -159,7 +159,7 @@ const RateConditionCard = ({ preBookResponse }) => {
                   sx={{
                     fontFamily: roboto.style,
                     fontWeight: 500,
-                    color: COLORS.SECONDARY,
+                    color: COLORS.BLACK,
                     lineHeight: 1.6,
                   }}
                   dangerouslySetInnerHTML={{

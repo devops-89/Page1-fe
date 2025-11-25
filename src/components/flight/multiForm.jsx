@@ -665,7 +665,7 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                 <>
                   <Typography
                     sx={{
-                      fontSize: { lg: 15, md: 13, sm: 12, xs: 12 },
+                      fontSize: 15,
                       fontFamily: nunito.style,
                       color: COLORS.DARKGREY,
                       px: 1,

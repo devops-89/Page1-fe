@@ -36,7 +36,6 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { HOTEL_RATING, HOTEL_RATING_IN_WORDS } from "@/utils/enum";
 import Link from "next/link";
-import { getRandomColor } from "@/custom-hook/getRandomColor";
 import { hotelController } from "@/api/hotelController";
 import RoomImageSlider from "@/components/hotels/RoomImageSlider";
 
@@ -94,7 +93,7 @@ const HotelDetails = () => {
     fetchHotelDetail();
   }, [query.slug]);
 
-  const fallbackImage="/images/hotel/hotel-default.jpg";
+  const fallbackImage = "/images/hotel/hotel-default.jpg";
   const { mainImage, roomImages } = useUniqueHotelImages(hotelDetail);
   const [heroImage, setHeroImage] = useState(mainImage || fallbackImage);
   useEffect(() => {
@@ -103,7 +102,7 @@ const HotelDetails = () => {
 
   console.log("Hotels: ", hotels);
   console.log("selected Hotel Data:", selectedHotel);
-  console.log("Hotel Details: ",hotelDetail);
+  console.log("Hotel Details: ", hotelDetail);
   console.log("query slug for Hotel Detail: ", query.slug);
   console.log("query slug main image: ", mainImage);
   console.log("query slug rooms images: ", roomImages);
@@ -360,7 +359,7 @@ const HotelDetails = () => {
                         <Rating
                           name="hotel-rating"
                           readOnly
-                          value={hotelDetail?.HotelRating|| 5}
+                          value={hotelDetail?.HotelRating || 5}
                           size="small"
                         />
                       </Box>
@@ -561,7 +560,7 @@ const HotelDetails = () => {
                           sx={{
                             fontFamily: nunito.style,
                             padding: "6px 16px",
-                            backgroundColor: getRandomColor(),
+                            backgroundColor: COLORS.SEMIGREY,
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
@@ -579,7 +578,7 @@ const HotelDetails = () => {
                           sx={{
                             fontFamily: nunito.style,
                             padding: "6px 16px",
-                            backgroundColor: getRandomColor(),
+                            backgroundColor: COLORS.SEMIGREY,
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
@@ -597,7 +596,7 @@ const HotelDetails = () => {
                           sx={{
                             fontFamily: nunito.style,
                             padding: "6px 16px",
-                            backgroundColor: getRandomColor(),
+                            backgroundColor: COLORS.SEMIGREY,
                             display: "flex",
                             alignItems: "center",
                             gap: "5px",
@@ -1041,7 +1040,7 @@ function CustomDialogFacilities({ data, open, handleClose }) {
             <Box
               key={index}
               sx={{
-                backgroundColor: getRandomColor(),
+                backgroundColor: COLORS.SEMIGREY,
                 padding: "6px 12px",
                 borderRadius: "16px",
                 fontSize: "0.875rem",

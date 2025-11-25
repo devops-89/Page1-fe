@@ -26,9 +26,8 @@ const InternationalPassengerForm = ({
     (state) => state.USER.UserData.isAuthenticated
   );
 
-    // extracting the flightState from the redux persist
-    const flightState=useSelector((state)=>state.FlightPersist.FlightState);
-
+  // extracting the flightState from the redux persist
+  const flightState = useSelector((state) => state.FlightPersist.FlightState);
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -39,7 +38,7 @@ const InternationalPassengerForm = ({
   const [infantCount, setInfantCount] = useState(0);
   const [isPassportRequired, setIsPassportRequired] = useState(true);
   const [isGSTMandatory, setIsGSTMandatory] = useState(false);
-  const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
+  // const [isBirthdayRequired, setIsBirthdayRequired] = useState(false);
   // Extrating the flight Validation from the Redux start
 
   const newFlightValidations = useSelector(
@@ -204,9 +203,9 @@ const InternationalPassengerForm = ({
     );
     setIsGSTMandatory(results?.GSTAllowed && results?.IsGSTMandatory);
   }, [flightState]);
-  useEffect(() => {
-    setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
-  }, [journey?.journey]);
+  // useEffect(() => {
+  //   setIsBirthdayRequired(journey?.journey === JOURNEY.INTERNATIONAL);
+  // }, [journey?.journey]);
   const totalPassengers = adultCount + childCount + infantCount;
 
   // Define initialValues inside the component to be recalculated on each render
@@ -265,7 +264,7 @@ const InternationalPassengerForm = ({
     nationality: "In",
     email: "",
   };
-  console.log("is birthday required : ", isBirthdayRequired);
+  // console.log("is birthday required : ", isBirthdayRequired);
   const handleSubmit = async (values) => {
     const contactEmail = values.email;
     const phoneNumber = values.contact_no;
@@ -280,7 +279,9 @@ const InternationalPassengerForm = ({
       result_index: flightDetails?.[0]?.Results?.ResultIndex || null,
       trace_id: flightDetails?.[0]?.TraceId || null,
       ip_address: storedState ? storedState.ip_address || "" : "",
-      cell_country_code: values?.cell_country_code || "",
+      cell_country_code: values?.cell_country_code
+        ? `+${String(values.cell_country_code).replace(/^\+/, "")}-`
+        : "",
       country_code: values?.country_code || "",
       city: values?.city || "",
       contact_no: values?.contact_no || "",
@@ -348,9 +349,11 @@ const InternationalPassengerForm = ({
             email: contactEmail,
             contact_no: phoneNumber,
 
-            date_of_birth: isBirthdayRequired
-              ? passenger?.date_of_birth
-              : passenger?.date_of_birth || null,
+            date_of_birth:
+              //  isBirthdayRequired
+              //   ? passenger?.date_of_birth
+              //   :
+              passenger?.date_of_birth || null,
 
             gender: gender,
             pax_type: 1,
@@ -397,9 +400,11 @@ const InternationalPassengerForm = ({
             email: contactEmail,
             contact_no: phoneNumber,
 
-            date_of_birth: isBirthdayRequired
-              ? passenger?.date_of_birth
-              : passenger?.date_of_birth || null,
+            date_of_birth:
+              // isBirthdayRequired
+              //   ? passenger?.date_of_birth
+              //   :
+              passenger?.date_of_birth || null,
 
             gender: gender,
             pax_type: 2,
@@ -446,9 +451,11 @@ const InternationalPassengerForm = ({
             email: contactEmail,
             contact_no: phoneNumber,
 
-            date_of_birth: isBirthdayRequired
-              ? passenger?.date_of_birth
-              : passenger?.date_of_birth || null,
+            date_of_birth:
+              //  isBirthdayRequired
+              //   ? passenger?.date_of_birth
+              //   :
+              passenger?.date_of_birth || null,
 
             gender: gender,
             pax_type: 3,
@@ -473,7 +480,7 @@ const InternationalPassengerForm = ({
   const currentValidationSchema = validationSchema(
     isGSTMandatory,
     // isPassportRequired,
-    isBirthdayRequired,
+    // isBirthdayRequired,
     isNewPassportMandatory,
     isNewPanMandatory,
     isPassportFullDetailRequired,
