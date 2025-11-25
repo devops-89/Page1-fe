@@ -2,6 +2,7 @@ import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
 import TravellerSelector from "./hotels/travellerSelector";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { hotelController } from "@/api/hotelController";
 import { hotelslist } from "@/utils/hotelcitycodes";
 import { useDispatch } from "react-redux";
@@ -47,8 +48,20 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
   const [selectedNationality, setSelectedNationality] = useState(null);
   const [nationalityOptions, setNationalityOptions] = useState([]);
   const [nationalityLoading, setNationalityLoading] = useState(false);
-
+  const [inputValue, setInputValue] = useState("");
+  const [filteredOptions, setFilteredOptions] = useState([]);
+    const [debouncedValue, setDebouncedValue] = useState("");
   const navigatedRef = useRef(false);
+
+  // debounce the input that we want to send in query for city and hotel search
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(inputValue);
+        }, 400);
+
+        return () => clearTimeout(handler);
+    }, [inputValue]);
+
 
   // lock body scroll
   useEffect(() => {
@@ -80,7 +93,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
     setAnchorEl(e.currentTarget);
   };
 
-  const [inputValue, setInputValue] = useState("");
+
 
   // nationality list
   useEffect(() => {
@@ -124,18 +137,35 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
   }, [dispatch]);
 
   // city filter
-  const filteredOptions = useMemo(() => {
-    if (!inputValue) return hotelslist.slice(0, 20);
-    const q = inputValue.toLowerCase();
-    return hotelslist
-      .filter(
-        (item) =>
-          item.city_name?.toLowerCase().includes(q) ||
-          item.country_name?.toLowerCase().includes(q) ||
-          item.country_code?.toLowerCase().includes(q)
-      )
-      .slice(0, 100);
-  }, [inputValue]);
+  // const filteredOptions = useMemo(() => {
+  //   if (!inputValue) return hotelslist.slice(0, 20);
+  //   const q = inputValue.toLowerCase();
+  //   return hotelslist
+  //     .filter(
+  //       (item) =>
+  //         item.city_name?.toLowerCase().includes(q) ||
+  //         item.country_name?.toLowerCase().includes(q) ||
+  //         item.country_code?.toLowerCase().includes(q)
+  //     )
+  //     .slice(0, 100);
+  // }, [inputValue]);
+
+    useEffect(()=>{
+        // if(debouncedValue===undefined) return;
+
+       const fetchHotels=async ()=>{
+           try{
+               const response=await hotelController.searchCityHotelCodes(debouncedValue);
+
+              setFilteredOptions(response.data || []);
+           }
+           catch(error){
+               console.log("API Error:", error);
+           }
+       }
+
+       fetchHotels();
+    },[debouncedValue]);
 
   const totalAdults = paxRoom.reduce((s, r) => s + r.Adults, 0);
   const totalChildren = paxRoom.reduce((s, r) => s + r.Children, 0);
@@ -169,7 +199,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
     const payload = {
       CheckIn: checkIn.format("YYYY-MM-DD"),
       CheckOut: checkOut.format("YYYY-MM-DD"),
-      CityCodes: selectedCity.city_code,
+      CityCodes: selectedCity.code,
       GuestNationality: selectedNationality.country_code,
       EndUserIp: userIp,
       PaxRooms: paxRoom,
@@ -318,11 +348,9 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             inputValue={inputValue}
             onChange={(_, value) => setSelectedCity(value)}
             onInputChange={(_, value) => setInputValue(value)}
-            getOptionLabel={(option) =>
-              typeof option === "string" ? option : option?.city_name || ""
-            }
+            getOptionLabel={(option) => option?.name || ""}
             isOptionEqualToValue={(option, value) =>
-              option.city_code === value.city_code
+              option.code === value.code
             }
             renderInput={(params) => (
               <TextField
@@ -334,50 +362,42 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
                 }}
               />
             )}
-            renderOption={(props, option) => (
-              <Box component="li" {...props}>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  sx={{ width: "100%" }}
-                >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <ApartmentIcon sx={{ color: COLORS.PRIMARY }} />
-                    <Box>
-                      <Typography
-                        sx={{
-                          fontSize: 14,
-                          fontWeight: 800,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {option.city_name}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: 12,
-                          color: COLORS.DARKGREY,
-                          fontFamily: nunito.style,
-                        }}
-                      >
-                        {option.country_name}
-                      </Typography>
+            renderOption={(props, option) => {
+                return (
+                    <Box component="li" {...props}>
+                        <Stack
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="space-between"
+                            sx={{width: "100%"}}
+                        >
+                            <Stack direction="row" alignItems="center" spacing={1}>
+                                {/* CONDITIONAL ICON */}
+                                {option.type === "city" ? (
+                                    <LocationOnIcon sx={{ color: COLORS.PRIMARY }} />
+                                ) : (
+                                    <ApartmentIcon sx={{ color: COLORS.PRIMARY }} />
+                                )}
+                                <Box>
+                                    <Typography
+                                        sx={{
+                                            fontSize: 14,
+                                            fontWeight: 800,
+                                            fontFamily: nunito.style,
+                                        }}
+                                    >
+                                        {option.name}
+                                    </Typography>
+
+                                </Box>
+                            </Stack>
+
+                        </Stack>
                     </Box>
-                  </Stack>
-                  <Typography
-                    sx={{
-                      fontSize: 13,
-                      color: COLORS.DARKGREY,
-                      fontFamily: nunito.style,
-                      fontWeight: 600,
-                    }}
-                  >
-                    {option.country_code}
-                  </Typography>
-                </Stack>
-              </Box>
-            )}
+
+                )
+            }
+            }
           />
         </Grid2>
 

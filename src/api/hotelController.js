@@ -1,6 +1,15 @@
 import { hotelPublicApi, securedHotelApi } from "./config";
 
 export const hotelController = {
+    searchCityHotelCodes: async (query)=>{
+        try{
+            let result=await hotelPublicApi.get(`/hotel/searchCodes?q=${query}`);
+            return result;
+        }
+        catch(error){
+            throw error;
+        }
+    },
   searchHotel: async (data) => {
     try {
       let result = await hotelPublicApi.post("/hotel/search", data);
