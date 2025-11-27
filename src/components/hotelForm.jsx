@@ -7,7 +7,6 @@ import { hotelController } from "@/api/hotelController";
 import { hotelslist } from "@/utils/hotelcitycodes";
 import { useDispatch } from "react-redux";
 import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList";
-import ToastBar from "./toastBar";
 import { TOAST_STATUS } from "@/utils/enum";
 import { setToast } from "@/redux/reducers/toast";
 import { setHotelFormData } from "@/redux/reducers/hotel-reducers/HotelSearchData";
@@ -613,7 +612,6 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
         </Grid2>
       </Grid2>
 
-      <ToastBar />
     </Box>
   );
 };

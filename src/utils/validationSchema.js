@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { differenceInYears } from "date-fns";
 import { JOURNEY } from "@/utils/enum";
-import { phoneNumberRegex } from "./regex";
+// import { phoneNumberRegex } from "./regex";
 
 const getAge = (dob) => {
   if (!dob) return 0;
