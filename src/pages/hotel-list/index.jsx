@@ -1,5 +1,5 @@
 import InnerBanner from "@/components/innerBanner";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import banner from "@/banner/hotel.jpg";
 import { useSelector } from "react-redux";
 import {
@@ -20,8 +20,13 @@ import {
   useTheme,
   CircularProgress,
   Rating,
+  Select,
+  MenuItem,
+  FormControl,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
-
+import { useRouter } from "next/router";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
@@ -33,6 +38,8 @@ import { HOTEL_RATING } from "@/utils/enum";
 const PAGE_SIZE = 10;
 
 const HotelList = () => {
+  const { query } = useRouter();
+  const hotelCode = query.hotelCode;
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,13 +48,14 @@ const HotelList = () => {
   const [maxPrice, setMaxPrice] = useState(5000);
 
   const [searchTerm, setSearchTerm] = useState("");
-
+  console.log("hotel code is : ", hotelCode);
   // keep for any additional flags you may add later (e.g., "Budget")
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   // ⭐ star filter (default 2 stars)
   const [selectedStar, setSelectedStar] = useState(0);
-
+  const [mealFilter, setMealFilter] = useState("All");
+  const [refundableOnly, setRefundableOnly] = useState(false);
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
 
@@ -79,13 +87,19 @@ const HotelList = () => {
   };
 
   const toggleDrawer = (openState) => (event) => {
-    if (event?.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) return;
+    if (
+      event?.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    )
+      return;
     setOpen(openState);
   };
 
   const handleCheckboxChange = (label) => {
     setSelectedFilters((prev) =>
-      prev.includes(label) ? prev.filter((item) => item !== label) : [...prev, label]
+      prev.includes(label)
+        ? prev.filter((item) => item !== label)
+        : [...prev, label]
     );
     setPage(1);
   };
@@ -95,6 +109,8 @@ const HotelList = () => {
     setSelectedFilters([]);
     setPriceRange([minPrice, maxPrice]);
     setSelectedStar(0); // ⭐ back to 2 stars
+    setMealFilter("All");
+    setRefundableOnly(false);
     setPage(1);
   };
 
@@ -104,7 +120,9 @@ const HotelList = () => {
       : true;
 
     // optional: if you later add a "Budget" toggle somewhere
-    const budgetMatch = selectedFilters.includes("Budget") ? hotel?.price <= 1000 : true;
+    const budgetMatch = selectedFilters.includes("Budget")
+      ? hotel?.price <= 1000
+      : true;
 
     // ⭐ exact star match; change to >= if you want “at least N stars”
     const hotelStars = HOTEL_RATING[hotel?.HotelRating];
@@ -112,20 +130,65 @@ const HotelList = () => {
 
     const price = hotel?.Rooms?.[0]?.TotalFare ?? 0;
     const priceMatch = price >= priceRange[0] && price <= priceRange[1];
+    // NEW: meal type matching
+    // If no rooms or no MealType info, treat conservatively (allow unless filter is specific)
+    const rooms = Array.isArray(hotel?.Rooms) ? hotel.Rooms : [];
 
-    return nameMatch && budgetMatch && ratingMatch && priceMatch;
+    const normalizeMeal = (mt) =>
+      typeof mt === "string" ? mt.trim().toUpperCase() : "";
+
+    let mealMatch = true;
+    if (mealFilter === "WithMeal") {
+      // at least one room where MealType is present and not "ROOM_ONLY"
+      mealMatch =
+        rooms.findIndex(
+          (r) =>
+            normalizeMeal(r?.MealType) &&
+            normalizeMeal(r?.MealType) !== "ROOM_ONLY"
+        ) !== -1;
+    } else if (mealFilter === "RoomOnly") {
+      // at least one room where MealType === "ROOM_ONLY"
+      mealMatch =
+        rooms.findIndex((r) => normalizeMeal(r?.MealType) === "ROOM_ONLY") !==
+        -1;
+    } else {
+      mealMatch = true; // "All"
+    }
+    const refundableMatch = refundableOnly
+      ? rooms.findIndex((r) => r?.IsRefundable === true) !== -1
+      : true;
+
+    return (
+      nameMatch &&
+      budgetMatch &&
+      ratingMatch &&
+      priceMatch &&
+      mealMatch &&
+      refundableMatch
+    );
   });
+
+  // Find matched hotel from FULL hotels list (so deep link works regardless of filters)
+  const matchedHotel = useMemo(() => {
+    if (!hotelCode) return null;
+    return hotels.find(
+      (h) => String(h?.HotelCode ?? h?.hotelCode ?? "") === String(hotelCode)
+    );
+  }, [hotels, hotelCode]);
 
   const totalPages = Math.max(1, Math.ceil(filteredHotels.length / PAGE_SIZE));
   const startIndex = (page - 1) * PAGE_SIZE;
-  const currentHotels = filteredHotels.slice(startIndex, startIndex + PAGE_SIZE);
+  const currentHotels = filteredHotels.slice(
+    startIndex,
+    startIndex + PAGE_SIZE
+  );
 
   const theme = useTheme();
   const phone = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     setPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, mealFilter, refundableOnly]);
 
   return (
     <div>
@@ -136,7 +199,13 @@ const HotelList = () => {
           <Grid2 container spacing={3}>
             {/* Filters Section */}
             {phone ? (
-              <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%",
+                }}
+              >
                 <Button onClick={toggleDrawer(true)}>
                   <FilterAltIcon sx={{ fontSize: 30, color: COLORS.PRIMARY }} />
                 </Button>
@@ -156,6 +225,10 @@ const HotelList = () => {
                         selectedStar,
                         setSelectedStar,
                         setPage,
+                        mealFilter,
+                        setMealFilter,
+                        refundableOnly,
+                        setRefundableOnly,
                       }}
                     />
                   </Box>
@@ -177,6 +250,10 @@ const HotelList = () => {
                     selectedStar,
                     setSelectedStar,
                     setPage,
+                    mealFilter,
+                    setMealFilter,
+                    refundableOnly,
+                    setRefundableOnly,
                   }}
                 />
               </Grid2>
@@ -200,6 +277,50 @@ const HotelList = () => {
                 </Typography>
               ) : (
                 <>
+                  {hotelCode && matchedHotel ? (
+                    <>
+                      {/* <Typography sx={{ fontWeight: 800, fontSize: 18 }}>
+                        Featured Result
+                      </Typography> */}
+                      <Grid2 xs={12}>
+                        <HotelCard hotel={matchedHotel} highlight />
+                      </Grid2>
+
+                      <Box sx={{ mt: 2, mb: 1 }}>
+                        <Typography sx={{ fontWeight: 700, fontSize: 18 }}>
+                          Nearby Hotels
+                        </Typography>
+                      </Box>
+                    </>
+                  ) : hotelCode && !matchedHotel ? (
+                    // If hotelCode present but no match
+                    <Box
+                      sx={{
+                        p: 2,
+                        mb: 1,
+                        borderRadius: 1,
+                        bgcolor: "#fff3f0",
+                        border: "1px solid rgba(255,120,80,0.15)",
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: 700, fontFamily: roboto.style }}
+                      >
+                        No hotel found
+                      </Typography>
+                      <Typography variant="body2" sx={{ mt: 0.5 }}>
+                        Showing nearby hotels below.
+                      </Typography>
+                      <Box sx={{ mt: 1 }}>
+                        <Typography sx={{ fontWeight: 800, fontSize: 16 }}>
+                          Nearby Hotels
+                        </Typography>
+                      </Box>
+                    </Box>
+                  ) : null}
+
+                  {/* Render nearby / rest hotels (paginated) */}
                   {currentHotels.map((val, i) => (
                     <Grid2 xs={12} key={`${val?.HotelCode || i}-${i}`}>
                       <HotelCard hotel={val} />
@@ -242,6 +363,10 @@ const FilterCard = ({
   selectedStar,
   setSelectedStar,
   setPage,
+  mealFilter,
+  setMealFilter,
+  refundableOnly,
+  setRefundableOnly,
 }) => (
   <Card
     sx={{
@@ -258,7 +383,10 @@ const FilterCard = ({
   >
     <CardHeader
       title={
-        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }} variant="h5">
+        <Typography
+          sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+          variant="h5"
+        >
           Filters
         </Typography>
       }
@@ -310,7 +438,7 @@ const FilterCard = ({
         />
       </Box>
 
-      <Box mt={3}>
+      {/* <Box mt={3}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 600, fontFamily: roboto.style }}
@@ -328,10 +456,78 @@ const FilterCard = ({
               setPage(1);
             }}
           />
- 
         </Box>
+      </Box> */}
+      <Box mt={3}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+        >
+          Star Rating
+        </Typography>
+
+        <FormControl fullWidth size="small">
+          <Select
+            value={selectedStar}
+            onChange={(e) => {
+              // Select returns string for value; cast to number
+              const val = Number(e.target.value);
+              setSelectedStar(val);
+              setPage(1);
+            }}
+          >
+            <MenuItem value={0}>Select Rating</MenuItem>
+            <MenuItem value={1}>1 Star</MenuItem>
+            <MenuItem value={2}>2 Star</MenuItem>
+            <MenuItem value={3}>3 Star</MenuItem>
+            <MenuItem value={4}>4 Star</MenuItem>
+            <MenuItem value={5}>5 Star</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
 
+      {/* NEW: Meal Type dropdown */}
+      <Box mt={3}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+        >
+          Meal Type
+        </Typography>
+
+        <FormControl fullWidth size="small">
+          <Select
+            labelId="meal-filter-label"
+            value={mealFilter}
+            // label="Meal Type"
+            onChange={(e) => {
+              setMealFilter(e.target.value);
+              setPage(1);
+            }}
+          >
+            <MenuItem value="All">All</MenuItem>
+            <MenuItem value="WithMeal">
+              WithMeal (Breakfast / Dinner / etc.)
+            </MenuItem>
+            <MenuItem value="RoomOnly">RoomOnly</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <Box mt={2}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={refundableOnly}
+              onChange={(e) => {
+                setRefundableOnly(e.target.checked);
+                setPage(1);
+              }}
+              size="small"
+            />
+          }
+          label="Refundable Only"
+        />
+      </Box>
     </CardContent>
   </Card>
 );

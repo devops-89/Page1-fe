@@ -35,7 +35,7 @@ const HotelCard = ({ hotel }) => {
   const firstRoom = hotel?.Rooms?.[0] || {};
   const totalFare = firstRoom?.TotalFare ?? 0;
   const totalFareDisplay = totalFare.toFixed ? totalFare.toFixed(2) : totalFare;
-
+// const mealshow = hotel?.Rooms?.map((meal)=> )
   return (
     <Card sx={{ mb: 3, border: "2px solid white", fontFamily: nunito.style }}>
       <Grid container>

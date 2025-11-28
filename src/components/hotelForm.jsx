@@ -192,11 +192,15 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
     setAnchorEl(null);
     setUiLocked(true);
     navigatedRef.current = false;
-
+    const cityCodeString = selectedCity?.cityCode
+      ? String(selectedCity.cityCode)
+      : selectedCity?.hotelCode
+      ? String(selectedCity.hotelCode)
+      : "";
     const payload = {
       CheckIn: checkIn.format("YYYY-MM-DD"),
       CheckOut: checkOut.format("YYYY-MM-DD"),
-      CityCodes: selectedCity.code,
+      CityCodes: cityCodeString,
       GuestNationality: selectedNationality.country_code,
       EndUserIp: userIp,
       PaxRooms: paxRoom,
@@ -228,9 +232,25 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
       const list = response?.data?.data ?? [];
       if (Array.isArray(list) && list.length > 0) {
         dispatch(setHotelList(list));
-        router.push("/hotel-list").then((ok) => {
-          if (ok) navigatedRef.current = true;
-        });
+        // router.push("/hotel-list").then((ok) => {
+        //   if (ok) navigatedRef.current = true;
+        // });
+        if (selectedCity?.type === "hotel") {
+          const hotelId = String(
+            selectedCity.hotelCode || selectedCity.hotelCode
+          );
+          // router.push(`/hotel-list/${hotelId}`).then((ok) => {
+          //   if (ok) navigatedRef.current = true;
+          // });
+          router.push({
+            pathname: "/hotel-list",
+            query: { hotelCode: hotelId },
+          });
+        } else {
+          router.push("/hotel-list").then((ok) => {
+            if (ok) navigatedRef.current = true;
+          });
+        }
       } else {
         dispatch(
           setToast({
@@ -262,7 +282,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
   function handleCheckout(v) {
     setCheckOut(v);
   }
-
+  console.log("selected city : ", selectedCity);
   return (
     <Box sx={{ p: 2, position: "relative" }} aria-busy={uiLocked}>
       {/* Full-screen blur overlay + NewLoader (replaces Backdrop) */}
@@ -345,11 +365,21 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
           </Typography>
           <Autocomplete
             options={filteredOptions}
+            // value={selectedCity}
             inputValue={inputValue}
             onChange={(_, value) => setSelectedCity(value)}
             onInputChange={(_, value) => setInputValue(value)}
-            getOptionLabel={(option) => option?.name || ""}
-            isOptionEqualToValue={(option, value) => option.code === value.code}
+            // getOptionLabel={(option) => option?.name || ""}
+            getOptionLabel={(option) =>
+              option
+                ? option.type === "city"
+                  ? option.cityName || ""
+                  : option.hotelName || ""
+                : ""
+            }
+            isOptionEqualToValue={(option, value) =>
+              option.cityCode === value.cityCode
+            }
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -361,6 +391,8 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
               />
             )}
             renderOption={(props, option) => {
+              const label =
+                option.type === "city" ? option.cityName : option.hotelName;
               return (
                 <Box component="li" {...props}>
                   <Stack
@@ -384,7 +416,19 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
                             fontFamily: nunito.style,
                           }}
                         >
-                          {option.name}
+                          {label}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 800,
+                            fontFamily: nunito.style,
+                          }}
+                        >
+                          {option.countryName}
+                          {/* {option.type === "city"
+                            ? option.cityName
+                            : option.HotelName} */}
                         </Typography>
                       </Box>
                     </Stack>
