@@ -110,9 +110,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
 
   const handleCancel = () => {
     // Revert tempPaxRooms to the original paxRoom state
-    setPaxRoom([
-      { Adults: 1, Children: 0, ChildrenAges: [] },
-    ]);
+    setPaxRoom([{ Adults: 1, Children: 0, ChildrenAges: [] }]);
     setError({ errorStatus: false, errorMessage: "" });
     setValidationErrors(null);
     setAnchorEl(null);
@@ -150,7 +148,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
           m: 1,
           maxHeight: "160px",
           overflowY: "scroll",
-          position:"relative",
+          position: "relative",
           "::-webkit-scrollbar": {
             width: 5,
             borderRadius: 4,
@@ -164,11 +162,18 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
         }}
       >
         <Box sx={{ mb: 2 }}>
-          <Grid2 container spacing={2}>
+          <Grid2
+            container
+            spacing={2}
+            // sx={{ display: "flex", alignItems: "center" }}
+          >
             {/* Room Counter Grid - spans 12 on xs, centers content */}
-            <Grid2 size={{ xs: 12, sm: 12, md: 3, lg: 3 }} sx={{ height:'100%',position:'sticky', top:0}}>
+            <Grid2
+              size={{ xs: 6, md: 3 }}
+              sx={{ height: "100%", position: "sticky", top: 0 }}
+            >
               <TravellorCounter
-                disableButton={totalRooms>=4}
+                disableButton={totalRooms >= 4}
                 heading="Room"
                 value={totalRooms}
                 onIncrease={() => updateTravellerCount("room", "increase")}
@@ -176,14 +181,14 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
               />
             </Grid2>
 
-            <Grid2 size={{ xs: 9 }} container spacing={1}>
+            <Grid2 size={{ xs: 6, md: 9 }} container spacing={1}>
               {tempPaxRooms.map((room, roomIndex) => (
                 <Grid2
                   container
                   component={Paper}
                   key={roomIndex}
                   size={{ xs: 12 }}
-                  sx={{ p: 2, backgroundColor:COLORS.WHITE }}
+                  sx={{ p: 2, backgroundColor: COLORS.WHITE }}
                 >
                   <Grid2 size={{ xs: 12 }}>
                     <Typography
@@ -200,7 +205,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                   </Grid2>
                   <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                     <TravellorCounter
-                      disableButton={room.Adults>=2}
+                      disableButton={room.Adults >= 2}
                       heading="Adults"
                       value={room.Adults}
                       onIncrease={
@@ -215,7 +220,7 @@ const TravellerSelector = ({ setAnchorEl, paxRoom, setPaxRoom }) => {
                   </Grid2>
                   <Grid2 size={{ lg: 6, md: 6, sm: 6, xs: 12 }}>
                     <TravellorCounter
-                     disableButton={room.Children>=2}
+                      disableButton={room.Children >= 2}
                       heading="Children"
                       value={room.Children}
                       onIncrease={() =>

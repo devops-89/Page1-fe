@@ -2,7 +2,7 @@ import { COLORS } from "@/utils/colors";
 import { nunito, raleway } from "@/utils/fonts";
 import TravellerSelector from "./hotels/travellerSelector";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { hotelController } from "@/api/hotelController";
 import { hotelslist } from "@/utils/hotelcitycodes";
 import { useDispatch } from "react-redux";
@@ -19,7 +19,7 @@ import {
   CardActionArea,
   Grid2,
   Popover,
-  Portal, 
+  Portal,
   Stack,
   TextField,
   Typography,
@@ -49,18 +49,17 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
   const [nationalityLoading, setNationalityLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
-    const [debouncedValue, setDebouncedValue] = useState("");
+  const [debouncedValue, setDebouncedValue] = useState("");
   const navigatedRef = useRef(false);
 
   // debounce the input that we want to send in query for city and hotel search
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(inputValue);
-        }, 400);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(inputValue);
+    }, 400);
 
-        return () => clearTimeout(handler);
-    }, [inputValue]);
-
+    return () => clearTimeout(handler);
+  }, [inputValue]);
 
   // lock body scroll
   useEffect(() => {
@@ -91,8 +90,6 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
     if (uiLocked) return;
     setAnchorEl(e.currentTarget);
   };
-
-
 
   // nationality list
   useEffect(() => {
@@ -149,22 +146,23 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
   //     .slice(0, 100);
   // }, [inputValue]);
 
-    useEffect(()=>{
-        // if(debouncedValue===undefined) return;
+  useEffect(() => {
+    // if(debouncedValue===undefined) return;
 
-       const fetchHotels=async ()=>{
-           try{
-               const response=await hotelController.searchCityHotelCodes(debouncedValue);
+    const fetchHotels = async () => {
+      try {
+        const response = await hotelController.searchCityHotelCodes(
+          debouncedValue
+        );
 
-              setFilteredOptions(response.data || []);
-           }
-           catch(error){
-               console.log("API Error:", error);
-           }
-       }
+        setFilteredOptions(response.data || []);
+      } catch (error) {
+        console.log("API Error:", error);
+      }
+    };
 
-       fetchHotels();
-    },[debouncedValue]);
+    fetchHotels();
+  }, [debouncedValue]);
 
   const totalAdults = paxRoom.reduce((s, r) => s + r.Adults, 0);
   const totalChildren = paxRoom.reduce((s, r) => s + r.Children, 0);
@@ -293,7 +291,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
                   fontFamily: nunito.style,
                   fontWeight: 700,
                   color: "#FFF",
-                  fontSize : 20
+                  fontSize: 20,
                 }}
               >
                 Searching hotels…
@@ -314,21 +312,24 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
         sx={{
           display: "flex",
           alignItems: "stretch",
-          gap: { xs: 0.5, lg: 1 },
+          gap: { lg: 0.5 },
           pointerEvents: uiLocked ? "none" : "auto",
           userSelect: uiLocked ? "none" : "auto",
         }}
       >
         {/* city */}
         <Grid2
-          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2.5, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
+            background: COLORS.SEMIGREY,
+            borderTopLeftRadius: { xs: 12 },
+            borderBottomLeftRadius: { xs: 12 },
             overflow: "visible",
           }}
         >
@@ -348,9 +349,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             onChange={(_, value) => setSelectedCity(value)}
             onInputChange={(_, value) => setInputValue(value)}
             getOptionLabel={(option) => option?.name || ""}
-            isOptionEqualToValue={(option, value) =>
-              option.code === value.code
-            }
+            isOptionEqualToValue={(option, value) => option.code === value.code}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -362,54 +361,51 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
               />
             )}
             renderOption={(props, option) => {
-                return (
-                    <Box component="li" {...props}>
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                            sx={{width: "100%"}}
+              return (
+                <Box component="li" {...props}>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{ width: "100%" }}
+                  >
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      {/* CONDITIONAL ICON */}
+                      {option.type === "city" ? (
+                        <LocationOnIcon sx={{ color: COLORS.PRIMARY }} />
+                      ) : (
+                        <ApartmentIcon sx={{ color: COLORS.PRIMARY }} />
+                      )}
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 800,
+                            fontFamily: nunito.style,
+                          }}
                         >
-                            <Stack direction="row" alignItems="center" spacing={1}>
-                                {/* CONDITIONAL ICON */}
-                                {option.type === "city" ? (
-                                    <LocationOnIcon sx={{ color: COLORS.PRIMARY }} />
-                                ) : (
-                                    <ApartmentIcon sx={{ color: COLORS.PRIMARY }} />
-                                )}
-                                <Box>
-                                    <Typography
-                                        sx={{
-                                            fontSize: 14,
-                                            fontWeight: 800,
-                                            fontFamily: nunito.style,
-                                        }}
-                                    >
-                                        {option.name}
-                                    </Typography>
-
-                                </Box>
-                            </Stack>
-
-                        </Stack>
-                    </Box>
-
-                )
-            }
-            }
+                          {option.name}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Stack>
+                </Box>
+              );
+            }}
           />
         </Grid2>
 
         {/* check-in */}
         <Grid2
-          size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
+            background: COLORS.SEMIGREY,
             overflow: "visible",
           }}
         >
@@ -438,14 +434,15 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
 
         {/* check-out */}
         <Grid2
-          size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
+            background: COLORS.SEMIGREY,
             overflow: "visible",
           }}
         >
@@ -476,12 +473,13 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
         <Grid2
           size={{ lg: 2, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
+            background: COLORS.SEMIGREY,
             overflow: "visible",
           }}
         >
@@ -533,14 +531,15 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
 
         {/* travellers */}
         <Grid2
-          size={{ lg: 2.4, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2.1, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
+            background: COLORS.SEMIGREY,
             overflow: "visible",
           }}
         >
@@ -593,17 +592,23 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         {/* search button */}
-        <Grid2 size={{ lg: 12, md: 2.4, xs: 12, sm: 12 }} textAlign="center">
+        <Grid2 size={{ lg: 2, md: 2.4, xs: 12, sm: 12 }} textAlign="center">
           <Button
             disabled={uiLocked}
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
-              width: { lg: 150, md: 150, sm: 120, xs: 120 },
-              mt: { lg: 2, sm: 1, xs: 2 },
+              // width: { lg: 150, md: 150, sm: 120, xs: 120 },
+              width: "100%",
+              height: "100%",
+              // mt: { lg: 2, sm: 1, xs: 2 },
               cursor: uiLocked ? "not-allowed" : "pointer",
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
+              borderTopLeftRadius: { xs: 0 },
+              borderBottomLeftRadius: { xs: 0 },
+              borderTopRightRadius: { xs: 12 },
+              borderBottomRightRadius: { xs: 12 },
             }}
             onClick={handleSearch}
           >
@@ -611,7 +616,6 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
           </Button>
         </Grid2>
       </Grid2>
-
     </Box>
   );
 };

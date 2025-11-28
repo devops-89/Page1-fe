@@ -51,7 +51,7 @@ const FlightForm = ({ setUiLocked, uiLocked }) => {
   };
 
   return (
-    <Box sx={{ p: 1 }}>
+    <Box sx={{ p: 2 }}>
       <Stack
         direction={{ lg: "row", md: "row", xs: "column" }}
         alignItems={"center"}
@@ -111,7 +111,7 @@ const FlightForm = ({ setUiLocked, uiLocked }) => {
           sx={{
             fontSize: { lg: 15, md: 15, sm: 15, xs: 14 },
             fontFamily: raleway.style,
-            mr: 2,
+            mr: 1,
             mb: { xs: 1 },
             textAlign: "center",
           }}

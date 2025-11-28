@@ -14,7 +14,7 @@ import {
   Portal,
   Stack,
 } from "@mui/material";
-import { setFlightState,resetFlightState } from "@/redux/reducers/flightState";
+import { setFlightState, resetFlightState } from "@/redux/reducers/flightState";
 import { Grid2 } from "@mui/material";
 
 import { flightController } from "@/api/flightController";
@@ -149,16 +149,15 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
       .then((res) => res.json())
       .then((data) => {
         setState((s) => ({ ...s, ip_address: data.ip }));
-        localStorage.setItem("ip",data.ip);
-      }
-      ).catch((err) => {
+        localStorage.setItem("ip", data.ip);
+      })
+      .catch((err) => {
         console.error("Error fetching IP address:", err);
 
-         // Fallback to hardcoded IP
-      const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
-      setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
-      localStorage.setItem("ip", fallbackIp);
-
+        // Fallback to hardcoded IP
+        const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
+        setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
+        localStorage.setItem("ip", fallbackIp);
       });
   };
 
@@ -206,7 +205,7 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
       (key) =>
         state[key] === "" || state[key] === null || state[key] === undefined
     );
-
+ console.log("empty fields are : ", emptyFields);
     if (emptyFields.length > 0) {
       dispatch(
         setToast({
@@ -216,7 +215,6 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
         })
       );
     } else {
-
       // localStorage.setItem("state", JSON.stringify(state));
       // resetting the oneway flight state in the redux persist
       dispatch(resetFlightState());
@@ -285,21 +283,21 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
           display: "flex",
           alignItems: "stretch",
           overflow: "visible",
-          gap: { xs: 0.5, lg: 1 },
+          gap: { lg: 0.5 },
           pointerEvents: uiLocked ? "none" : "auto",
           userSelect: uiLocked ? "none" : "auto",
         }}
         spacing={2}
       >
         <Grid2
-          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2.6, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            background: COLORS.SEMIGREY,
+            borderTopLeftRadius: { xs: 12 },
+            borderBottomLeftRadius: { xs: 12 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
           }}
         >
@@ -316,6 +314,7 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
 
           <Autocomplete
             size="small"
+            //  popupIcon={null}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -409,14 +408,14 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 3, md: 2.4, xs: 12, sm: 6 }}
+          size={{ lg: 2.6, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            background: COLORS.SEMIGREY,
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
           }}
         >
@@ -433,6 +432,7 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
 
           <Autocomplete
             size="small"
+            // popupIcon={null}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -525,14 +525,14 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 3, xs: 12, sm: 6, md: 2.4 }}
+          size={{ lg: 2.6, xs: 12, sm: 6, md: 2.4 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            background: COLORS.SEMIGREY,
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
           }}
         >
@@ -576,15 +576,21 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 3, md: 2.4, xs: 12, sm: 6 }}
+          size={{ lg: 2.6, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            background: COLORS.SEMIGREY,
+            // borderTopLeftRadius: { xs: 6, sm: 4 },
+            // borderBottomLeftRadius: { xs: 6, sm: 4 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: 0,
+            px: 0,
           }}
         >
           <Typography
@@ -597,7 +603,19 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
           >
             Travellers and cabin class
           </Typography>
-          <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
+          <CardActionArea
+            sx={{
+              px: 2,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              gap: 0.25,
+              width: "100%",
+              minWidth: 0,
+            }}
+            onClick={openPopover}
+          >
             <Typography
               sx={{
                 fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
@@ -608,8 +626,23 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
             </Typography>
 
             <Typography
-              fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
-              fontFamily={nunito.style}
+              sx={{
+                fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
+                fontFamily: nunito.style,
+                // truncation rules
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "100%",
+                width: "100%",
+                minWidth: 0,
+              }}
+              // hover text
+              title={`${state.adult} adult${
+                state.child ? `, ${state.child} child` : ""
+              }${state.infant ? `, ${state.infant} infant` : ""}, ${
+                cabin_class?.label ?? ""
+              } Class`}
             >
               {state.adult} adult
               {state.child !== 0 && `, ${state.child} child`}
@@ -652,17 +685,24 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
           {/* popover end */}
         </Grid2>
 
-        <Grid2 size={{ lg: 12, md: 2.4, xs: 12, sm: 12 }} textAlign={"center"}>
+        <Grid2 size={{ lg: 2, md: 2.4, xs: 12, sm: 12 }}>
           <Button
             disabled={uiLocked}
             sx={{
               backgroundColor: COLORS.SECONDARY,
               color: COLORS.WHITE,
-              width: { lg: 150, md: 150, sm: 120, xs: 120 },
-              mt: { lg: 2, sm: 1, xs: 2 },
+              // width: { lg: 150, md: 150, sm: 120, xs: 120 },
+              width: "100%",
+              height: "100%",
+              // mt: { lg: 2, sm: 1, xs: 2 },
               cursor: uiLocked ? "not-allowed" : "pointer",
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
+              // borderRadius: "8px",
+              borderTopLeftRadius: { xs: 0 },
+              borderBottomLeftRadius: { xs: 0 },
+              borderTopRightRadius: { xs: 12 },
+              borderBottomRightRadius: { xs: 12 },
             }}
             onClick={submitHandler}
           >

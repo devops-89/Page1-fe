@@ -3,6 +3,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useUniqueHotelImages } from "@/custom-hook/useUniqueHotelImages";
+import { COMMISSION_TYPE } from "@/utils/enum";
 import {
   Box,
   Typography,
@@ -170,6 +171,21 @@ const HotelDetails = () => {
   const { total, roomCount, nightCount } = calculateBaseFare(
     selectedHotel?.Rooms?.[0]?.DayRates
   );
+
+  // handling service fees calculation start using comission
+
+  const percentage = Number(hotelDetail?.COMMISSION?.percentage);
+  console.log("percentage:", percentage);
+  const isFixed =
+    hotelDetail?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
+  let charge = 0;
+  if (isFixed) {
+    charge = percentage;
+  } else {
+    charge = (total * percentage) / 100;
+  }
+
+  const serviceCharge = charge;
 
   // ======================= facilities truncation logic end =======================================
 
@@ -538,7 +554,8 @@ const HotelDetails = () => {
                       ₹{" "}
                       {/* {selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2) ||
                         "0.00"} */}
-                      {(total / nightCount).toFixed(2) || "0.00"}
+                      {((total + serviceCharge) / nightCount).toFixed(2) ||
+                        "0.00"}{" "}
                     </Typography>
                     <Typography
                       variant="body2"

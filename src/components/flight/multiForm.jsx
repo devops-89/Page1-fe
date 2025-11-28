@@ -28,12 +28,11 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import ToastBar from "../toastBar";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import TravellerSelector from "./travellerSelector";
 import NewLoader from "../NewLoader";
-
+import { setFlightState, resetFlightState } from "@/redux/reducers/flightState";
 const Multiway = ({ setUiLocked, uiLocked }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -202,24 +201,19 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
-      .then((data) =>{
+      .then((data) => {
         setState((prevState) => ({ ...prevState, ip_address: data.ip }));
-        localStorage.setItem("ip",data.ip);
-      }
-       
-      )
+        localStorage.setItem("ip", data.ip);
+      })
       .catch((err) => {
         console.error("Error fetching IP address:", err);
 
-         // Fallback to hardcoded IP
-      const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
-      setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
-      localStorage.setItem("ip", fallbackIp);
-
+        // Fallback to hardcoded IP
+        const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
+        setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
+        localStorage.setItem("ip", fallbackIp);
       });
   };
-
-  
 
   const searchFlight = async (payload) => {
     // full-page loader ON
@@ -265,18 +259,24 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
     const emptyFields = state.multicity.reduce((acc, city, index) => {
       if (!city.origin) acc.push(`Origin for form ${index + 1}`);
       if (!city.destination) acc.push(`Destination for form ${index + 1}`);
-      if (!city.departure_date) acc.push(`Departure Date for form ${index + 1}`);
+      if (!city.departure_date)
+        acc.push(`Departure Date for form ${index + 1}`);
       return acc;
     }, []);
 
     // chronological date order check
-    for (let i = 1; i < forms.length; i++) {
-      if (forms[i].departure_date && forms[i - 1].departure_date) {
-        if (moment(forms[i].departure_date).isBefore(forms[i - 1].departure_date)) {
+    // top-first: ensure each form's date is NOT AFTER the one below it
+    for (let i = 0; i < forms.length - 1; i++) {
+      const topDate = forms[i].departure_date;
+      const belowDate = forms[i + 1].departure_date;
+      if (topDate && belowDate) {
+        // top must be same or before the one below (earliest -> latest top -> bottom)
+        if (moment(topDate).isAfter(belowDate)) {
           dispatch(
             setToast({
               open: true,
-              message: "Departure dates should be listed from earliest to latest.",
+              message:
+                "Departure dates should be listed from earliest to latest (top → bottom).",
               severity: TOAST_STATUS.ERROR,
             })
           );
@@ -381,25 +381,27 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
             justifyContent={"center"}
             key={index}
             sx={{
-              marginBottom: 2,
+              // marginBottom: 2,
               display: "flex",
-              alignItems: "center",
+              alignItems: "stretch",
               overflow: "visible",
-              justifyContent: "center",
-              gap: { xs: 0.5, lg: 1 },
+              // justifyContent: "center",
+              gap: { lg: 0.5 },
             }}
             spacing={2}
           >
             {/* From */}
             <Grid2
-              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
+              // size={{ xs: 2.6, sm: 6, md: 3, lg: 3 }}
+
+              size={{ lg: 2.6, xs: 12, sm: 6, md: 2.4 }}
               sx={{
-                border: "1px solid #D9D9D9",
-                background: "#F9F9F9",
-                borderTopLeftRadius: { xs: 6, sm: 4 },
-                borderBottomLeftRadius: { xs: 6, sm: 4 },
-                borderTopRightRadius: { xs: 6, sm: 4 },
-                borderBottomRightRadius: { xs: 6, sm: 4 },
+                // border: "1px solid #D9D9D9",
+                background: COLORS.SEMIGREY,
+                borderTopLeftRadius: { xs: 12 },
+                borderBottomLeftRadius: { xs: 12 },
+                // borderTopRightRadius: { xs: 6, sm: 4 },
+                // borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
               }}
             >
@@ -420,13 +422,17 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                   <TextField
                     {...params}
                     placeholder="Search.."
-                    sx={{ fieldset: { border: "none" }, input: { textAlign: "start" } }}
+                    sx={{
+                      fieldset: { border: "none" },
+                      input: { textAlign: "start" },
+                    }}
                   />
                 )}
                 onChange={(e, newValue) => originhandler(e, newValue, index)}
                 value={
-                  airportList.find((option) => option.iata_code === form.origin) ||
-                  null
+                  airportList.find(
+                    (option) => option.iata_code === form.origin
+                  ) || null
                 }
                 ListboxComponent={VirtualList}
                 loading={loading}
@@ -440,7 +446,10 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                   <Box {...props}>
                     <Grid2
                       container
-                      sx={{ width: "100%", borderBottom: `1px solid ${COLORS.SEMIGREY}` }}
+                      sx={{
+                        width: "100%",
+                        borderBottom: `1px solid ${COLORS.SEMIGREY}`,
+                      }}
                     >
                       <Grid2 size={{ xs: 0, sm: 2 }}>
                         <FlightTakeoffIcon
@@ -500,14 +509,15 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
 
             {/* To */}
             <Grid2
-              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
+              // size={{ xs: 2.6, sm: 6, md: 3, lg: 3 }}
+              size={{ lg: 2.6, md: 2.4, xs: 12, sm: 6 }}
               sx={{
-                border: "1px solid #D9D9D9",
-                background: "#F9F9F9",
-                borderTopLeftRadius: { xs: 6, sm: 4 },
-                borderBottomLeftRadius: { xs: 6, sm: 4 },
-                borderTopRightRadius: { xs: 6, sm: 4 },
-                borderBottomRightRadius: { xs: 6, sm: 4 },
+                // border: "1px solid #D9D9D9",
+                background: COLORS.SEMIGREY,
+                // borderTopLeftRadius: { xs: 6, sm: 4 },
+                // borderBottomLeftRadius: { xs: 6, sm: 4 },
+                // borderTopRightRadius: { xs: 6, sm: 4 },
+                // borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
                 position: "relative",
               }}
@@ -528,13 +538,19 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                   <TextField
                     {...params}
                     placeholder="Search.."
-                    sx={{ fieldset: { border: "none" }, input: { textAlign: "start" } }}
+                    sx={{
+                      fieldset: { border: "none" },
+                      input: { textAlign: "start" },
+                    }}
                   />
                 )}
-                onChange={(e, newValue) => destinationHandler(e, newValue, index)}
+                onChange={(e, newValue) =>
+                  destinationHandler(e, newValue, index)
+                }
                 value={
-                  airportList.find((option) => option.iata_code === form.destination) ||
-                  null
+                  airportList.find(
+                    (option) => option.iata_code === form.destination
+                  ) || null
                 }
                 ListboxComponent={VirtualList}
                 filterOptions={customFilter}
@@ -548,7 +564,10 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                   <Box {...props}>
                     <Grid2
                       container
-                      sx={{ width: "100%", borderBottom: `1px solid ${COLORS.SEMIGREY}` }}
+                      sx={{
+                        width: "100%",
+                        borderBottom: `1px solid ${COLORS.SEMIGREY}`,
+                      }}
                     >
                       <Grid2 size={{ xs: 0, sm: 2 }}>
                         <FlightLandIcon
@@ -608,14 +627,15 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
 
             {/* Departure */}
             <Grid2
-              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
+              // size={{ xs: 2.6, sm: 6, md: 3, lg: 3 }}
+              size={{ lg: 2.6, xs: 12, sm: 6, md: 2.4 }}
               sx={{
-                border: "1px solid #D9D9D9",
-                background: "#F9F9F9",
-                borderTopLeftRadius: { xs: 6, sm: 4 },
-                borderBottomLeftRadius: { xs: 6, sm: 4 },
-                borderTopRightRadius: { xs: 6, sm: 4 },
-                borderBottomRightRadius: { xs: 6, sm: 4 },
+                // border: "1px solid #D9D9D9",
+                background: COLORS.SEMIGREY,
+                // borderTopLeftRadius: { xs: 6, sm: 4 },
+                // borderBottomLeftRadius: { xs: 6, sm: 4 },
+                // borderTopRightRadius: { xs: 6, sm: 4 },
+                // borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
                 position: "relative",
               }}
@@ -649,16 +669,20 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
 
             {/* Travellers/Cabin (first row) or Remove (others) */}
             <Grid2
-              size={{ xs: 12, sm: 6, md: 3, lg: 3 }}
+              // size={{ xs: 2.6, sm: 6, md: 3, lg: 3 }}
+              size={{ lg: 2.6, md: 2.4, xs: 12, sm: 6 }}
               sx={{
-                border: "1px solid #D9D9D9",
-                background: "#F9F9F9",
-                borderTopLeftRadius: { xs: 6, sm: 4 },
-                borderBottomLeftRadius: { xs: 6, sm: 4 },
-                borderTopRightRadius: { xs: 6, sm: 4 },
-                borderBottomRightRadius: { xs: 6, sm: 4 },
+                // border: "1px solid #D9D9D9",
+                background: COLORS.SEMIGREY,
+                // borderTopLeftRadius: { xs: 6, sm: 4 },
+                // borderBottomLeftRadius: { xs: 6, sm: 4 },
+                // borderTopRightRadius: { xs: 6, sm: 4 },
+                // borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
                 position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               {index === 0 ? (
@@ -697,7 +721,7 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
               ) : (
                 <Box
                   sx={{
-                    pb: 2,
+                    // pb: 2,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -708,8 +732,8 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                     color="error"
                     onClick={() => removeForm(index)}
                     sx={{
-                      marginTop: 1,
-                      display: "block",
+                      // marginTop: 1,
+                      // display: "block",
                       marginX: "auto",
                       fontSize: { lg: 15, md: 14, sm: 10, xs: 10 },
                     }}
@@ -719,7 +743,32 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                 </Box>
               )}
             </Grid2>
-
+            {index === 0 && (
+              <Grid2
+                size={{ lg: 2, xs: 12, sm: 12, md: 12 }}
+                textAlign={"center"}
+              >
+                <Button
+                  sx={{
+                    backgroundColor: COLORS.SECONDARY,
+                    color: COLORS.WHITE,
+                    // width: { lg: 150, md: 150, sm: 120, xs: 120 },
+                    py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
+                    width: "100%",
+                    height: "100%",
+                    borderTopLeftRadius: { xs: 0 },
+                    borderBottomLeftRadius: { xs: 0 },
+                    borderTopRightRadius: { xs: 12 },
+                    borderBottomRightRadius: { xs: 12 },
+                    cursor: uiLocked ? "not-allowed" : "pointer",
+                  }}
+                  onClick={submitHandler}
+                  disabled={uiLocked}
+                >
+                  Search
+                </Button>
+              </Grid2>
+            )}
             {/* Add another flight button */}
             <Grid2 size={{ xs: 12 }}>
               {index === forms.length - 1 && forms.length < maxForms && (
@@ -746,23 +795,6 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
             </Grid2>
           </Grid2>
         ))}
-
-        {/* Search button (no inline spinner; uses full-page loader) */}
-        <Grid2 size={{ lg: 12, xs: 12, sm: 12, md: 12 }} textAlign={"center"}>
-          <Button
-            sx={{
-              backgroundColor: COLORS.SECONDARY,
-              color: COLORS.WHITE,
-              width: { lg: 150, md: 150, sm: 120, xs: 120 },
-              py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
-              cursor: uiLocked ? "not-allowed" : "pointer",
-            }}
-            onClick={submitHandler}
-            disabled={uiLocked}
-          >
-            Search
-          </Button>
-        </Grid2>
 
         {/* Travellers popover */}
         <Popover
@@ -792,8 +824,6 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
           />
         </Popover>
       </Box>
-
-      <ToastBar />
     </>
   );
 };

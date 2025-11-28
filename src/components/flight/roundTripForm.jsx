@@ -3,7 +3,7 @@ import { data } from "@/assests/data";
 import { COLORS } from "@/utils/colors";
 import { nunito } from "@/utils/fonts";
 import { useState, useEffect, useRef } from "react";
-import {setFlightState, resetFlightState} from "@/redux/reducers/flightState";
+import { setFlightState, resetFlightState } from "@/redux/reducers/flightState";
 import {
   Autocomplete,
   Box,
@@ -30,7 +30,6 @@ import { JOURNEY_TYPE, PREFERRED_TIME, TOAST_STATUS } from "@/utils/enum";
 import { flightController } from "@/api/flightController";
 import VirtualList from "./fixedSizeList";
 import { customFilter } from "@/utils/regex";
-import ToastBar from "../toastBar";
 import { useDispatch } from "react-redux";
 import { setToast } from "@/redux/reducers/toast";
 import { setFlightDetails } from "@/redux/reducers/flightInformation";
@@ -174,22 +173,19 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
-      .then((data) =>{
-      setState((s) => ({ ...s, ip_address: data.ip }));
-      localStorage.setItem("ip",data.ip);
-      } 
-    ).catch((err) => {
+      .then((data) => {
+        setState((s) => ({ ...s, ip_address: data.ip }));
+        localStorage.setItem("ip", data.ip);
+      })
+      .catch((err) => {
         console.error("Error fetching IP address:", err);
 
-         // Fallback to hardcoded IP
-      const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
-      setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
-      localStorage.setItem("ip", fallbackIp);
-
+        // Fallback to hardcoded IP
+        const fallbackIp = "157.49.10.4"; // Replace with your preferred fallback IP
+        setState((prevState) => ({ ...prevState, ip_address: fallbackIp }));
+        localStorage.setItem("ip", fallbackIp);
       });
-  }
-
-   
+  };
 
   const searchFlight = async () => {
     // full-page loader ON
@@ -320,21 +316,22 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
           display: "flex",
           alignItems: "stretch",
           overflow: "visible",
-          gap: { xs: 0.5, lg: 1 },
+          gap: { lg: 0.5 },
           pointerEvents: uiLocked ? "none" : "auto",
           userSelect: uiLocked ? "none" : "auto",
         }}
         spacing={2}
       >
         <Grid2
-          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
+          size={{ lg: 2, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            background: COLORS.SEMIGREY,
+            borderTopLeftRadius: { xs: 12 },
+            borderBottomLeftRadius: { xs: 12 },
+            // borderTopRightRadius: { xs: 6, sm: 4 },
+            // borderBottomRightRadius: { xs: 6, sm: 4 },
             overflow: "visible",
           }}
         >
@@ -440,14 +437,11 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
+          size={{ lg: 2, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            background: COLORS.SEMIGREY,
             overflow: "visible",
             position: "relative",
           }}
@@ -553,17 +547,13 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
+          size={{ lg: 2, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            background: COLORS.SEMIGREY,
             overflow: "visible",
             position: "relative",
-            borderRight: "none",
           }}
         >
           <Typography
@@ -593,14 +583,11 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
+          size={{ lg: 2, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            background: COLORS.SEMIGREY,
             overflow: "visible",
             position: "relative",
           }}
@@ -619,7 +606,9 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             <DatePicker
               sx={{ fieldset: { border: "none" } }}
               maxDate={moment().add(90, "days")}
-              minDate={departureDate ? moment(departureDate).add(1, "day") : moment()}
+              minDate={
+                departureDate ? moment(departureDate).add(1, "day") : moment()
+              }
               onChange={returnDateHandler}
               value={returnDate}
               format="DD/MM/YYYY"
@@ -632,16 +621,18 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 2.4, md: 2.4, xs: 12, sm: 6 }}
+          size={{ lg: 2.5, md: 2.4, xs: 12, sm: 6 }}
           sx={{
-            border: "1px solid #D9D9D9",
-            background: "#F9F9F9",
-            borderTopLeftRadius: { xs: 6, sm: 4 },
-            borderBottomLeftRadius: { xs: 6, sm: 4 },
-            borderTopRightRadius: { xs: 6, sm: 4 },
-            borderBottomRightRadius: { xs: 6, sm: 4 },
+            // border: "1px solid #D9D9D9",
+            // background: "#F9F9F9",
+            background: COLORS.SEMIGREY,
             overflow: "visible",
             position: "relative",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: 0,
+            px: 0,
           }}
         >
           <Typography
@@ -654,7 +645,19 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
           >
             Travellers and cabin class
           </Typography>
-          <CardActionArea sx={{ px: 2 }} onClick={openPopover}>
+          <CardActionArea
+            sx={{
+              px: 2,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              gap: 0.25,
+              width: "100%",
+              minWidth: 0,
+            }}
+            onClick={openPopover}
+          >
             <Typography
               sx={{
                 fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
@@ -665,8 +668,23 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             </Typography>
 
             <Typography
-              fontSize={{ lg: 14, md: 13, sm: 10, xs: 12 }}
-              fontFamily={nunito.style}
+              sx={{
+                fontSize: { lg: 14, md: 13, sm: 10, xs: 12 },
+                fontFamily: nunito.style,
+                // truncation rules
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "100%",
+                width: "100%",
+                minWidth: 0,
+              }}
+              // hover text
+              title={`${state.adult} adult${
+                state.child ? `, ${state.child} child` : ""
+              }${state.infant ? `, ${state.infant} infant` : ""}, ${
+                cabin_class?.label ?? ""
+              } Class`}
             >
               {state.adult} adult
               {state.child !== 0 && `, ${state.child} child`}
@@ -707,19 +725,26 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
         </Grid2>
 
         <Grid2
-          size={{ lg: 12, md: 12, xs: 12, sm: 12 }}
+          size={{ lg: 2, md: 12, xs: 12, sm: 12 }}
           textAlign={"center"}
-          mt={{ lg: 2 }}
+          // mt={{ lg: 2 }}
         >
           <Button
             disabled={uiLocked}
             sx={{
               color: COLORS.WHITE,
               backgroundColor: COLORS.SECONDARY,
-              width: { lg: 150, md: 150, sm: 120, xs: 120 },
+              // width: { lg: 150, md: 150, sm: 120, xs: 120 },
+              width: "100%",
+              height: "100%",
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
-              mt: { lg: 0, sm: 1, xs: 2 },
+              fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
+              // mt: { lg: 0, sm: 1, xs: 2 },
               cursor: uiLocked ? "not-allowed" : "pointer",
+              borderTopLeftRadius: { xs: 0 },
+              borderBottomLeftRadius: { xs: 0 },
+              borderTopRightRadius: { xs: 12 },
+              borderBottomRightRadius: { xs: 12 },
             }}
             onClick={submitHandler}
           >
@@ -727,7 +752,6 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
           </Button>
         </Grid2>
       </Grid2>
-      <ToastBar />
     </Box>
   );
 };
