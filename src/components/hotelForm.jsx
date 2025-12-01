@@ -52,7 +52,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [debouncedValue, setDebouncedValue] = useState("");
   const navigatedRef = useRef(false);
-
+  const [cityLoading, setCityLoading] = useState(false);
   // debounce the input that we want to send in query for city and hotel search
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -148,21 +148,28 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
   // }, [inputValue]);
 
   useEffect(() => {
-    // if(debouncedValue===undefined) return;
+    let mounted = true;
 
-    const fetchHotels = async () => {
+    async function fetchHotels() {
+      setCityLoading(true);
       try {
         const response = await hotelController.searchCityHotelCodes(
           debouncedValue
         );
-
+        if (!mounted) return;
         setFilteredOptions(response.data || []);
       } catch (error) {
         console.log("API Error:", error);
+        if (mounted) setFilteredOptions([]);
+      } finally {
+        if (mounted) setCityLoading(false);
       }
-    };
-
+    }
     fetchHotels();
+
+    return () => {
+      mounted = false;
+    };
   }, [debouncedValue]);
 
   const totalAdults = paxRoom.reduce((s, r) => s + r.Adults, 0);
@@ -387,6 +394,9 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             isOptionEqualToValue={(option, value) =>
               option.cityCode === value.cityCode
             }
+            loading={cityLoading}
+            loadingText="Loading..."
+            noOptionsText={cityLoading ? "Loading..." : "No options"}
             renderInput={(params) => (
               <TextField
                 {...params}

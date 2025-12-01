@@ -811,7 +811,7 @@ const FilterCard = ({
               gap: 1,
             }}
           >
-            {[3, 4, 5].map((s) => {
+            {[2, 3, 4, 5].map((s) => {
               const checked = selectedStars.includes(s);
               const count = starCounts?.[s] ?? 0;
               return (
@@ -1015,7 +1015,7 @@ const FilterCard = ({
             variant="h6"
             sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
           >
-            Smoking / Non-smoking
+            Smoking
           </Typography>
           <Box
             sx={{
