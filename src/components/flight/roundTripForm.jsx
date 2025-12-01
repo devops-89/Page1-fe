@@ -40,7 +40,8 @@ import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
 import { resetSeatDetails } from "@/redux/reducers/roundInternationalSeatsInformation";
 import { domesticBaggageReset } from "@/redux/reducers/roundDomesticBaggagesInformation";
 import { domesticMealReset } from "@/redux/reducers/roundDomesticMealsInformation";
-import NewLoader from "../NewLoader";
+// import NewLoader from "../NewLoader";
+import ReactLoading from "react-loading";
 
 const RoundTrip = ({ setUiLocked, uiLocked }) => {
   const router = useRouter();
@@ -290,7 +291,13 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             }}
           >
             <Stack alignItems="center" spacing={2}>
-              <NewLoader open />
+              {/* <NewLoader open /> */}
+              <ReactLoading
+                type="bars"
+                color={COLORS.PRIMARY}
+                height={50}
+                width={50}
+              />
               <Typography
                 role="status"
                 aria-live="assertive"

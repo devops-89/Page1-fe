@@ -36,8 +36,8 @@ import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
 import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
-import NewLoader from "../NewLoader";
-
+// import NewLoader from "../NewLoader";
+import ReactLoading from "react-loading";
 const OnewayForm = ({ setUiLocked, uiLocked }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -205,7 +205,7 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
       (key) =>
         state[key] === "" || state[key] === null || state[key] === undefined
     );
- console.log("empty fields are : ", emptyFields);
+    console.log("empty fields are : ", emptyFields);
     if (emptyFields.length > 0) {
       dispatch(
         setToast({
@@ -259,7 +259,13 @@ const OnewayForm = ({ setUiLocked, uiLocked }) => {
             }}
           >
             <Stack alignItems="center" spacing={2}>
-              <NewLoader open />
+              {/* <NewLoader open /> */}
+              <ReactLoading
+                type="bars"
+                color={COLORS.PRIMARY}
+                height={50}
+                width={50}
+              />
               <Typography
                 sx={{
                   fontFamily: nunito.style,

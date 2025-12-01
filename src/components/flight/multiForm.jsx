@@ -31,7 +31,8 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import TravellerSelector from "./travellerSelector";
-import NewLoader from "../NewLoader";
+// import NewLoader from "../NewLoader";
+import ReactLoading from "react-loading";
 import { setFlightState, resetFlightState } from "@/redux/reducers/flightState";
 const Multiway = ({ setUiLocked, uiLocked }) => {
   const router = useRouter();
@@ -347,7 +348,13 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
             }}
           >
             <Stack alignItems="center" spacing={2}>
-              <NewLoader open />
+              {/* <NewLoader open /> */}
+              <ReactLoading
+                type="bars"
+                color={COLORS.PRIMARY}
+                height={50}
+                width={50}
+              />
               <Typography
                 role="status"
                 aria-live="assertive"

@@ -41,7 +41,36 @@ const PRICE_BUCKETS = [
   { key: "b5", min: 15000, max: 30000, label: "₹15000 - ₹30000" },
   { key: "b6", min: 30000, max: null, label: "₹30000+" },
 ];
+// helper to parse room name string for bed type and smoking preference
+const parseRoomName = (nameStr = "") => {
+  const tokens = String(nameStr)
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
 
+  // bedType: try to find "king", "queen", "double", "single"
+  const bedToken = tokens.find((t) => /king|queen|double|single/i.test(t));
+  let bedType = "";
+  if (bedToken) {
+    const m = bedToken.match(/(king|queen|double|single)/i);
+    if (m) {
+      bedType = `${m[1][0].toUpperCase()}${m[1].slice(1).toLowerCase()} Bed`;
+    } else {
+      bedType = bedToken;
+    }
+  }
+
+  // smoking token: check for NonSmoking or Smoking
+  const smokingToken = tokens.find((t) =>
+    /nonsmoking|non-smoking|smoking/i.test(t)
+  );
+  let smoking = "";
+  if (smokingToken) {
+    smoking = /non/i.test(smokingToken) ? "NonSmoking" : "Smoking";
+  }
+
+  return { bedType, smoking };
+};
 const HotelList = () => {
   const { query } = useRouter();
   const hotelCode = query.hotelCode;
@@ -59,7 +88,9 @@ const HotelList = () => {
 
   const [selectedMealTypes, setSelectedMealTypes] = useState([]);
   const [selectedPriceBuckets, setSelectedPriceBuckets] = useState([]);
-
+  // bed type & smoking filters (multi)
+  const [selectedBedTypes, setSelectedBedTypes] = useState([]);
+  const [selectedSmokingPrefs, setSelectedSmokingPrefs] = useState([]);
   const [refundableOnly, setRefundableOnly] = useState(false);
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -116,6 +147,8 @@ const HotelList = () => {
     setSelectedStars([]);
     setSelectedMealTypes([]);
     setSelectedPriceBuckets([]);
+    setSelectedBedTypes([]);
+    setSelectedSmokingPrefs([]);
     setRefundableOnly(false);
     setPage(1);
   };
@@ -174,7 +207,43 @@ const HotelList = () => {
     });
     return counts;
   }, [hotels]);
+  const refundableCount = useMemo(() => {
+    let cnt = 0;
+    hotels.forEach((h) => {
+      const rooms = Array.isArray(h?.Rooms) ? h.Rooms : [];
+      const hasRefundable =
+        rooms.findIndex((r) => r?.IsRefundable === true) !== -1;
+      if (hasRefundable) cnt += 1;
+    });
+    return cnt;
+  }, [hotels]);
 
+  // compute bedType & smoking counts (per-hotel)
+  const { bedTypeCounts, smokingCounts } = useMemo(() => {
+    const bt = {};
+    const sc = {};
+
+    hotels.forEach((h) => {
+      const rooms = Array.isArray(h?.Rooms) ? h.Rooms : [];
+      const seenBed = new Set();
+      const seenSmoking = new Set();
+
+      rooms.forEach((r) => {
+        const names = Array.isArray(r?.Name) ? r.Name : [r?.Name];
+        names.forEach((nm) => {
+          if (!nm) return;
+          const { bedType, smoking } = parseRoomName(nm);
+          if (bedType) seenBed.add(bedType);
+          if (smoking) seenSmoking.add(smoking);
+        });
+      });
+
+      seenBed.forEach((val) => (bt[val] = (bt[val] || 0) + 1));
+      seenSmoking.forEach((val) => (sc[val] = (sc[val] || 0) + 1));
+    });
+
+    return { bedTypeCounts: bt, smokingCounts: sc };
+  }, [hotels]);
   const filteredHotels = hotels.filter((hotel) => {
     const nameMatch = searchTerm
       ? hotel?.HotelName?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -239,6 +308,29 @@ const HotelList = () => {
     const refundableMatch = refundableOnly
       ? rooms.findIndex((r) => r?.IsRefundable === true) !== -1
       : true;
+    let bedTypeMatch = true;
+    if (selectedBedTypes && selectedBedTypes.length > 0) {
+      bedTypeMatch = rooms.some((r) => {
+        const names = Array.isArray(r?.Name) ? r.Name : [r?.Name];
+        return names.some((nm) => {
+          if (!nm) return false;
+          const { bedType } = parseRoomName(nm);
+          return bedType && selectedBedTypes.includes(bedType);
+        });
+      });
+    }
+    // smoking match
+    let smokingMatch = true;
+    if (selectedSmokingPrefs && selectedSmokingPrefs.length > 0) {
+      smokingMatch = rooms.some((r) => {
+        const names = Array.isArray(r?.Name) ? r.Name : [r?.Name];
+        return names.some((nm) => {
+          if (!nm) return false;
+          const { smoking } = parseRoomName(nm);
+          return smoking && selectedSmokingPrefs.includes(smoking);
+        });
+      });
+    }
 
     return (
       nameMatch &&
@@ -246,7 +338,9 @@ const HotelList = () => {
       ratingMatch &&
       priceMatch &&
       mealMatch &&
-      refundableMatch
+      refundableMatch &&
+      bedTypeMatch &&
+      smokingMatch
     );
   });
 
@@ -270,7 +364,14 @@ const HotelList = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, selectedMealTypes, refundableOnly, selectedPriceBuckets]);
+  }, [
+    searchTerm,
+    selectedMealTypes,
+    refundableOnly,
+    selectedPriceBuckets,
+    selectedBedTypes,
+    selectedSmokingPrefs,
+  ]);
 
   return (
     <div>
@@ -313,8 +414,15 @@ const HotelList = () => {
                         selectedPriceBuckets,
                         setSelectedPriceBuckets,
                         priceCounts,
+                        selectedBedTypes,
+                        setSelectedBedTypes,
+                        bedTypeCounts,
+                        selectedSmokingPrefs,
+                        setSelectedSmokingPrefs,
+                        smokingCounts,
                         setPage,
                         refundableOnly,
+                        refundableCount,
                         setRefundableOnly,
                       }}
                     />
@@ -343,8 +451,15 @@ const HotelList = () => {
                     selectedPriceBuckets,
                     setSelectedPriceBuckets,
                     priceCounts,
+                    selectedBedTypes,
+                    setSelectedBedTypes,
+                    bedTypeCounts,
+                    selectedSmokingPrefs,
+                    setSelectedSmokingPrefs,
+                    smokingCounts,
                     setPage,
                     refundableOnly,
+                    refundableCount,
                     setRefundableOnly,
                   }}
                 />
@@ -461,64 +576,131 @@ const FilterCard = ({
   selectedPriceBuckets = [],
   setSelectedPriceBuckets,
   priceCounts = {},
+  selectedBedTypes = [],
+  setSelectedBedTypes,
+  bedTypeCounts = {},
+  selectedSmokingPrefs = [],
+  setSelectedSmokingPrefs,
+  smokingCounts = {},
   setPage,
   refundableOnly,
   setRefundableOnly,
-}) => (
-  <Card
-    sx={{
-      position: "sticky",
-      top: "75px",
-      overflowY: "scroll",
-      boxShadow: "0px 0px 3px 3px rgba(0,0,0,0.1)",
-      "::-webkit-scrollbar": { width: 5 },
-      "::-webkit-scrollbar-thumb": {
-        backgroundColor: "#A8A8A8",
-        borderRadius: 4,
-      },
-    }}
-  >
-    <CardHeader
-      title={
-        <Typography
-          sx={{ fontFamily: roboto.style, fontWeight: 700 }}
-          variant="h5"
+  refundableCount = {},
+}) => {
+  // helper to render checkbox lists
+  const renderCheckboxList = (
+    items,
+    selected,
+    onToggle,
+    countsMap,
+    labelFormatter
+  ) => {
+    return items.map((key) => {
+      const checked = selected.includes(key);
+      const count = countsMap?.[key] ?? 0;
+      return (
+        <Box
+          key={key}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            px: 1,
+          }}
         >
-          Filters
-        </Typography>
-      }
-      action={
-        <Button
-          variant="text"
-          color="primary"
-          size="small"
-          onClick={resetFilters}
-          sx={{ fontFamily: roboto.style, fontWeight: 700 }}
-        >
-          Reset
-        </Button>
-      }
-    />
-    <CardContent>
-      <Typography
-        variant="h6"
-        gutterBottom
-        sx={{ fontWeight: 600, fontFamily: roboto.style }}
-      >
-        Search by Hotel Name
-      </Typography>
-      <TextField
-        fullWidth
-        size="small"
-        placeholder="Search by Hotel Name"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        InputProps={{
-          startAdornment: <SearchIcon style={{ marginRight: "8px" }} />,
-        }}
-      />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checked}
+                onChange={() => {
+                  if (checked)
+                    onToggle((prev) => prev.filter((x) => x !== key));
+                  else onToggle((prev) => [...prev, key]);
+                  setPage(1);
+                }}
+                size="small"
+                sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+              />
+            }
+            label={labelFormatter ? labelFormatter(key) : key}
+            sx={{
+              mr: 0,
+              "& .MuiFormControlLabel-label": {
+                fontFamily: roboto.style,
+                fontWeight: 400,
+              },
+            }}
+          />
+          <Typography variant="body2" sx={{ color: "text.secondary", mr: 1 }}>
+            ({count})
+          </Typography>
+        </Box>
+      );
+    });
+  };
 
-      {/* <Box mt={3}>
+  const bedTypeKeys = Object.keys(bedTypeCounts).sort(
+    (a, b) => (bedTypeCounts[b] || 0) - (bedTypeCounts[a] || 0)
+  );
+  const smokingKeys = Object.keys(smokingCounts).sort(
+    (a, b) => (smokingCounts[b] || 0) - (smokingCounts[a] || 0)
+  );
+
+  return (
+    <Card
+      sx={{
+        position: "sticky",
+        top: "75px",
+        overflowY: "scroll",
+        boxShadow: "0px 0px 3px 3px rgba(0,0,0,0.1)",
+        "::-webkit-scrollbar": { width: 5 },
+        "::-webkit-scrollbar-thumb": {
+          backgroundColor: "#A8A8A8",
+          borderRadius: 4,
+        },
+      }}
+    >
+      <CardHeader
+        title={
+          <Typography
+            sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+            variant="h5"
+          >
+            Filters
+          </Typography>
+        }
+        action={
+          <Button
+            variant="text"
+            color="primary"
+            size="small"
+            onClick={resetFilters}
+            sx={{ fontFamily: roboto.style, fontWeight: 700 }}
+          >
+            Reset
+          </Button>
+        }
+      />
+      <CardContent>
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{ fontWeight: 600, fontFamily: roboto.style }}
+        >
+          Search by Hotel Name
+        </Typography>
+        <TextField
+          fullWidth
+          size="small"
+          placeholder="Search by Hotel Name"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: <SearchIcon style={{ marginRight: "8px" }} />,
+          }}
+        />
+
+        {/* <Box mt={3}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 600, fontFamily: roboto.style }}
@@ -534,159 +716,159 @@ const FilterCard = ({
           step={100}
         />
       </Box> */}
-      {/* Price buckets UI (checkbox list with counts) */}
-      <Box mt={3}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
-        >
-          Price per night
-        </Typography>
+        {/* Price buckets UI (checkbox list with counts) */}
+        <Box mt={3}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+          >
+            Price per night
+          </Typography>
 
-        <Box
-          sx={{
-            borderTop: "1px solid rgba(0,0,0,0.04)",
-            borderBottom: "1px solid rgba(0,0,0,0.04)",
-            mt: 1,
-            py: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-          }}
-        >
-          {PRICE_BUCKETS.map((b) => {
-            const checked = selectedPriceBuckets.includes(b.key);
-            const count = priceCounts?.[b.key] ?? 0;
-            return (
-              <Box
-                key={b.key}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  px: 1,
-                }}
-              >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={checked}
-                      onChange={() => {
-                        if (checked) {
-                          setSelectedPriceBuckets((prev) =>
-                            prev.filter((x) => x !== b.key)
-                          );
-                        } else {
-                          setSelectedPriceBuckets((prev) => {
-                            const next = [...prev, b.key];
-                            return next;
-                          });
-                        }
-                        setPage(1);
-                      }}
-                      size="small"
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
-                    />
-                  }
-                  label={b.label}
+          <Box
+            sx={{
+              borderTop: "1px solid rgba(0,0,0,0.04)",
+              borderBottom: "1px solid rgba(0,0,0,0.04)",
+              mt: 1,
+              py: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            {PRICE_BUCKETS.map((b) => {
+              const checked = selectedPriceBuckets.includes(b.key);
+              const count = priceCounts?.[b.key] ?? 0;
+              return (
+                <Box
+                  key={b.key}
                   sx={{
-                    mr: 0,
-                    "& .MuiFormControlLabel-label": {
-                      fontFamily: roboto.style,
-                      fontWeight: 400,
-                    },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    px: 1,
                   }}
-                />
-
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", mr: 1 }}
                 >
-                  ({count})
-                </Typography>
-              </Box>
-            );
-          })}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        onChange={() => {
+                          if (checked) {
+                            setSelectedPriceBuckets((prev) =>
+                              prev.filter((x) => x !== b.key)
+                            );
+                          } else {
+                            setSelectedPriceBuckets((prev) => {
+                              const next = [...prev, b.key];
+                              return next;
+                            });
+                          }
+                          setPage(1);
+                        }}
+                        size="small"
+                        sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+                      />
+                    }
+                    label={b.label}
+                    sx={{
+                      mr: 0,
+                      "& .MuiFormControlLabel-label": {
+                        fontFamily: roboto.style,
+                        fontWeight: 400,
+                      },
+                    }}
+                  />
+
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", mr: 1 }}
+                  >
+                    ({count})
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
-      </Box>
 
-      <Box mt={3}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
-        >
-          Star Category
-        </Typography>
+        <Box mt={3}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+          >
+            Star Category
+          </Typography>
 
-        <Box
-          sx={{
-            borderTop: "1px solid rgba(0,0,0,0.04)",
-            borderBottom: "1px solid rgba(0,0,0,0.04)",
-            mt: 1,
-            py: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-          }}
-        >
-          {[3, 4, 5].map((s) => {
-            const checked = selectedStars.includes(s);
-            const count = starCounts?.[s] ?? 0;
-            return (
-              <Box
-                key={`star-${s}`}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  px: 1,
-                }}
-              >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={checked}
-                      onChange={() => {
-                        if (checked) {
-                          setSelectedStars((prev) =>
-                            prev.filter((x) => x !== s)
-                          );
-                        } else {
-                          setSelectedStars((prev) => {
-                            const next = [...prev, s];
-                            return next.sort((a, b) => b - a);
-                          });
-                        }
-                        setPage(1);
-                      }}
-                      size="small"
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
-                    />
-                  }
-                  label={`${s} Star`}
+          <Box
+            sx={{
+              borderTop: "1px solid rgba(0,0,0,0.04)",
+              borderBottom: "1px solid rgba(0,0,0,0.04)",
+              mt: 1,
+              py: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            {[3, 4, 5].map((s) => {
+              const checked = selectedStars.includes(s);
+              const count = starCounts?.[s] ?? 0;
+              return (
+                <Box
+                  key={`star-${s}`}
                   sx={{
-                    mr: 0,
-                    "& .MuiFormControlLabel-label": {
-                      fontFamily: roboto.style,
-                      fontWeight: 400,
-                    },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    px: 1,
                   }}
-                />
-
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", mr: 1 }}
                 >
-                  ({count})
-                </Typography>
-              </Box>
-            );
-          })}
-        </Box>
-      </Box>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        onChange={() => {
+                          if (checked) {
+                            setSelectedStars((prev) =>
+                              prev.filter((x) => x !== s)
+                            );
+                          } else {
+                            setSelectedStars((prev) => {
+                              const next = [...prev, s];
+                              return next.sort((a, b) => b - a);
+                            });
+                          }
+                          setPage(1);
+                        }}
+                        size="small"
+                        sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+                      />
+                    }
+                    label={`${s} Star`}
+                    sx={{
+                      mr: 0,
+                      "& .MuiFormControlLabel-label": {
+                        fontFamily: roboto.style,
+                        fontWeight: 400,
+                      },
+                    }}
+                  />
 
-      {/* NEW: Meal Type dropdown */}
-      {/* <Box mt={3}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", mr: 1 }}
+                  >
+                    ({count})
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+
+        {/* NEW: Meal Type dropdown */}
+        {/* <Box mt={3}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
@@ -712,107 +894,224 @@ const FilterCard = ({
           </Select>
         </FormControl>
       </Box> */}
-      <Box mt={3}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
-        >
-          Meal Category
-        </Typography>
+        <Box mt={3}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+          >
+            Meal Category
+          </Typography>
 
-        <Box
-          sx={{
-            borderTop: "1px solid rgba(0,0,0,0.04)",
-            borderBottom: "1px solid rgba(0,0,0,0.04)",
-            mt: 1,
-            py: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-          }}
-        >
-          {[
-            { key: "WithMeal", label: "With Meal" },
-            { key: "RoomOnly", label: "Without Meal" },
-          ].map(({ key, label }) => {
-            const checked = selectedMealTypes.includes(key);
-            const count = mealCounts?.[key] ?? 0;
-            return (
-              <Box
-                key={`meal-${key}`}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  px: 1,
-                }}
-              >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={checked}
-                      onChange={() => {
-                        if (checked) {
-                          setSelectedMealTypes((prev) =>
-                            prev.filter((x) => x !== key)
-                          );
-                        } else {
-                          setSelectedMealTypes((prev) => {
-                            const next = [...prev, key];
-                            // keep deterministic order (optional)
-                            return next;
-                          });
-                        }
-                        setPage(1);
-                      }}
-                      size="small"
-                      sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
-                    />
-                  }
-                  label={label}
+          <Box
+            sx={{
+              borderTop: "1px solid rgba(0,0,0,0.04)",
+              borderBottom: "1px solid rgba(0,0,0,0.04)",
+              mt: 1,
+              py: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            {[
+              { key: "WithMeal", label: "With Meal" },
+              { key: "RoomOnly", label: "Without Meal" },
+            ].map(({ key, label }) => {
+              const checked = selectedMealTypes.includes(key);
+              const count = mealCounts?.[key] ?? 0;
+              return (
+                <Box
+                  key={`meal-${key}`}
                   sx={{
-                    mr: 0,
-                    "& .MuiFormControlLabel-label": {
-                      fontFamily: roboto.style,
-                      fontWeight: 400,
-                    },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    px: 1,
                   }}
-                />
-
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", mr: 1 }}
                 >
-                  ({count})
-                </Typography>
-              </Box>
-            );
-          })}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        onChange={() => {
+                          if (checked) {
+                            setSelectedMealTypes((prev) =>
+                              prev.filter((x) => x !== key)
+                            );
+                          } else {
+                            setSelectedMealTypes((prev) => {
+                              const next = [...prev, key];
+                              // keep deterministic order (optional)
+                              return next;
+                            });
+                          }
+                          setPage(1);
+                        }}
+                        size="small"
+                        sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+                      />
+                    }
+                    label={label}
+                    sx={{
+                      mr: 0,
+                      "& .MuiFormControlLabel-label": {
+                        fontFamily: roboto.style,
+                        fontWeight: 400,
+                      },
+                    }}
+                  />
+
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", mr: 1 }}
+                  >
+                    ({count})
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
-      </Box>
-      <Box mt={2}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
-        >
-          Refundable
-        </Typography>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={refundableOnly}
-              onChange={(e) => {
-                setRefundableOnly(e.target.checked);
-                setPage(1);
+        {/* Bed Type */}
+        <Box mt={3}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+          >
+            Bed Type
+          </Typography>
+          <Box
+            sx={{
+              borderTop: "1px solid rgba(0,0,0,0.04)",
+              borderBottom: "1px solid rgba(0,0,0,0.04)",
+              mt: 1,
+              py: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            {bedTypeKeys.length === 0 ? (
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", px: 1 }}
+              >
+                No bed type data
+              </Typography>
+            ) : (
+              renderCheckboxList(
+                bedTypeKeys,
+                selectedBedTypes,
+                setSelectedBedTypes,
+                bedTypeCounts
+              )
+            )}
+          </Box>
+        </Box>
+
+        {/* Smoking preference */}
+        <Box mt={3}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+          >
+            Smoking / Non-smoking
+          </Typography>
+          <Box
+            sx={{
+              borderTop: "1px solid rgba(0,0,0,0.04)",
+              borderBottom: "1px solid rgba(0,0,0,0.04)",
+              mt: 1,
+              py: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            {smokingKeys.length === 0 ? (
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", px: 1 }}
+              >
+                No smoking data
+              </Typography>
+            ) : (
+              renderCheckboxList(
+                smokingKeys,
+                selectedSmokingPrefs,
+                setSelectedSmokingPrefs,
+                smokingCounts,
+                (k) =>
+                  k === "NonSmoking"
+                    ? "Non-smoking"
+                    : k === "Smoking"
+                    ? "Smoking"
+                    : k
+              )
+            )}
+          </Box>
+        </Box>
+        {/* refundable */}
+        <Box mt={2}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+          >
+            Refundable
+          </Typography>
+
+          <Box
+            sx={{
+              borderTop: "1px solid rgba(0,0,0,0.04)",
+              borderBottom: "1px solid rgba(0,0,0,0.04)",
+              mt: 1,
+              py: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                px: 1,
               }}
-              size="small"
-            />
-          }
-          label="Refundable Only"
-        />
-      </Box>
-    </CardContent>
-  </Card>
-);
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={refundableOnly}
+                    onChange={(e) => {
+                      setRefundableOnly(e.target.checked);
+                      setPage(1);
+                    }}
+                    size="small"
+                    sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+                  />
+                }
+                label="Refundable Only"
+                sx={{
+                  mr: 0,
+                  "& .MuiFormControlLabel-label": {
+                    fontFamily: roboto.style,
+                    fontWeight: 400,
+                  },
+                }}
+              />
+              <Typography
+                variant="body2"
+                sx={{ color: "text.secondary", mr: 1 }}
+              >
+                ({refundableCount})
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default HotelList;

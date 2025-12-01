@@ -10,8 +10,9 @@ import { setHotelList } from "@/redux/reducers/hotel-reducers/HotelList";
 import { TOAST_STATUS } from "@/utils/enum";
 import { setToast } from "@/redux/reducers/toast";
 import { setHotelFormData } from "@/redux/reducers/hotel-reducers/HotelSearchData";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import NewLoader from "./NewLoader";
+import React, { useEffect, useRef, useState } from "react";
+// import NewLoader from "./NewLoader";
+import ReactLoading from "react-loading";
 import {
   Autocomplete,
   Box,
@@ -305,7 +306,13 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             }}
           >
             <Stack alignItems="center" spacing={2}>
-              <NewLoader open />
+              {/* <NewLoader open /> */}
+              <ReactLoading
+                type="bars"
+                color={COLORS.PRIMARY}
+                height={50}
+                width={50}
+              />
               <Typography
                 sx={{
                   fontFamily: nunito.style,
