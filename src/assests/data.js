@@ -1,5 +1,5 @@
-import banner1 from "@/banner/banner6.jpg";
-import banner2 from "@/banner/banner4.jpg";
+import banner1 from "@/banner/banner7.jpg";
+import banner2 from "@/banner/banner9.jpg";
 import flight from "@/services/flight.png";
 import hotels from "@/services/hotel.png";
 import helicopter from "@/services/helicopter.png";
