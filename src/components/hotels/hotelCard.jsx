@@ -99,9 +99,9 @@ const HotelCard = ({ hotel }) => {
         <Grid item xs={12} md={3}>
           <Box sx={{ p: 2, display: "flex", flexDirection: "column", justifyContent: "start", gap: 1 }}>
             <Stack direction="column" alignItems="flex-end" spacing={1}>
-              <Typography component="subtitle2" variant="h5" sx={{ color: "#1a237e", fontWeight: "bold" }}>
+              {/* <Typography component="subtitle2" variant="h5" sx={{ color: "#1a237e", fontWeight: "bold" }}>
                 {HOTEL_RATING_IN_WORDS[hotel?.HotelRating] ?? "N/A"}
-              </Typography>
+              </Typography> */}
 
               <Rating name="read-only" value={HOTEL_RATING[hotel?.HotelRating] ?? 5} readOnly />
 

@@ -19,10 +19,6 @@ import {
   useMediaQuery,
   useTheme,
   CircularProgress,
-  Rating,
-  Select,
-  MenuItem,
-  FormControl,
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
@@ -36,6 +32,15 @@ import { nunito, roboto } from "@/utils/fonts";
 import { HOTEL_RATING } from "@/utils/enum";
 
 const PAGE_SIZE = 10;
+const PRICE_BUCKETS = [
+  { key: "b0", min: 0, max: 3500, label: "₹0 - ₹3500" },
+  { key: "b1", min: 3500, max: 7000, label: "₹3500 - ₹7000" },
+  { key: "b2", min: 7000, max: 10500, label: "₹7000 - ₹10500" },
+  { key: "b3", min: 10500, max: 14000, label: "₹10500 - ₹14000" },
+  { key: "b4", min: 14000, max: 15000, label: "₹14000 - ₹15000" },
+  { key: "b5", min: 15000, max: 30000, label: "₹15000 - ₹30000" },
+  { key: "b6", min: 30000, max: null, label: "₹30000+" },
+];
 
 const HotelList = () => {
   const { query } = useRouter();
@@ -48,13 +53,13 @@ const HotelList = () => {
   const [maxPrice, setMaxPrice] = useState(5000);
 
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("hotel code is : ", hotelCode);
-  // keep for any additional flags you may add later (e.g., "Budget")
   const [selectedFilters, setSelectedFilters] = useState([]);
 
-  // ⭐ star filter (default 2 stars)
-  const [selectedStar, setSelectedStar] = useState(0);
-  const [mealFilter, setMealFilter] = useState("All");
+  const [selectedStars, setSelectedStars] = useState([]);
+
+  const [selectedMealTypes, setSelectedMealTypes] = useState([]);
+  const [selectedPriceBuckets, setSelectedPriceBuckets] = useState([]);
+
   const [refundableOnly, setRefundableOnly] = useState(false);
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -108,11 +113,67 @@ const HotelList = () => {
     setSearchTerm("");
     setSelectedFilters([]);
     setPriceRange([minPrice, maxPrice]);
-    setSelectedStar(0); // ⭐ back to 2 stars
-    setMealFilter("All");
+    setSelectedStars([]);
+    setSelectedMealTypes([]);
+    setSelectedPriceBuckets([]);
     setRefundableOnly(false);
     setPage(1);
   };
+
+  // compute star counts
+  const starCounts = useMemo(() => {
+    const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    hotels.forEach((h) => {
+      const s = HOTEL_RATING[h?.HotelRating];
+      if (s && counts[s] !== undefined) counts[s] += 1;
+    });
+    return counts;
+  }, [hotels]);
+
+  // compute meal type counts
+  const mealCounts = useMemo(() => {
+    // WithMeal = at least one room with MealType present and not ROOM_ONLY
+    // RoomOnly = at least one room with MealType === ROOM_ONLY
+    let withMeal = 0;
+    let roomOnly = 0;
+    hotels.forEach((h) => {
+      const rooms = Array.isArray(h?.Rooms) ? h.Rooms : [];
+      const hasWithMeal =
+        rooms.findIndex(
+          (r) =>
+            typeof r?.MealType === "string" &&
+            r.MealType.trim().toUpperCase() !== "ROOM_ONLY" &&
+            r.MealType.trim() !== ""
+        ) !== -1;
+      const hasRoomOnly =
+        rooms.findIndex(
+          (r) =>
+            typeof r?.MealType === "string" &&
+            r.MealType.trim().toUpperCase() === "ROOM_ONLY"
+        ) !== -1;
+      if (hasWithMeal) withMeal += 1;
+      if (hasRoomOnly) roomOnly += 1;
+    });
+    return { WithMeal: withMeal, RoomOnly: roomOnly };
+  }, [hotels]);
+
+  // compute counts for each price bucket from the full hotels list
+  const priceCounts = useMemo(() => {
+    const counts = PRICE_BUCKETS.reduce((acc, b) => {
+      acc[b.key] = 0;
+      return acc;
+    }, {});
+    hotels.forEach((h) => {
+      const price = Number(h?.Rooms?.[0]?.TotalFare ?? NaN);
+      if (!Number.isFinite(price)) return;
+      PRICE_BUCKETS.forEach((b) => {
+        const minOk = price >= b.min;
+        const maxOk = b.max === null ? true : price <= b.max;
+        if (minOk && maxOk) counts[b.key] += 1;
+      });
+    });
+    return counts;
+  }, [hotels]);
 
   const filteredHotels = hotels.filter((hotel) => {
     const nameMatch = searchTerm
@@ -124,35 +185,56 @@ const HotelList = () => {
       ? hotel?.price <= 1000
       : true;
 
-    // ⭐ exact star match; change to >= if you want “at least N stars”
+    //  exact star match; change to >= if you want “at least N stars”
     const hotelStars = HOTEL_RATING[hotel?.HotelRating];
-    const ratingMatch = selectedStar ? hotelStars === selectedStar : true;
+    const ratingMatch =
+      selectedStars && selectedStars.length > 0
+        ? selectedStars.includes(hotelStars)
+        : true;
 
-    const price = hotel?.Rooms?.[0]?.TotalFare ?? 0;
-    const priceMatch = price >= priceRange[0] && price <= priceRange[1];
-    // NEW: meal type matching
-    // If no rooms or no MealType info, treat conservatively (allow unless filter is specific)
+    const price = hotel?.Rooms?.[0]?.TotalFare ?? NaN;
+    let priceMatch = true;
+    if (selectedPriceBuckets && selectedPriceBuckets.length > 0) {
+      priceMatch = selectedPriceBuckets.some((key) => {
+        const bucket = PRICE_BUCKETS.find((b) => b.key === key);
+        if (!bucket) return false;
+        const minOk = Number.isFinite(price) ? price >= bucket.min : false;
+        const maxOk =
+          bucket.max === null
+            ? Number.isFinite(price)
+            : Number.isFinite(price)
+            ? price <= bucket.max
+            : false;
+        return minOk && maxOk;
+      });
+    } else {
+      priceMatch = true;
+    }
+    // NEW: meal type matching using selectedMealTypes (multi-select)
     const rooms = Array.isArray(hotel?.Rooms) ? hotel.Rooms : [];
-
     const normalizeMeal = (mt) =>
       typeof mt === "string" ? mt.trim().toUpperCase() : "";
 
+    // compute whether hotel has WithMeal and/or RoomOnly rooms
+    const hasWithMeal =
+      rooms.findIndex(
+        (r) =>
+          normalizeMeal(r?.MealType) &&
+          normalizeMeal(r?.MealType) !== "ROOM_ONLY"
+      ) !== -1;
+    const hasRoomOnly =
+      rooms.findIndex((r) => normalizeMeal(r?.MealType) === "ROOM_ONLY") !== -1;
+
     let mealMatch = true;
-    if (mealFilter === "WithMeal") {
-      // at least one room where MealType is present and not "ROOM_ONLY"
-      mealMatch =
-        rooms.findIndex(
-          (r) =>
-            normalizeMeal(r?.MealType) &&
-            normalizeMeal(r?.MealType) !== "ROOM_ONLY"
-        ) !== -1;
-    } else if (mealFilter === "RoomOnly") {
-      // at least one room where MealType === "ROOM_ONLY"
-      mealMatch =
-        rooms.findIndex((r) => normalizeMeal(r?.MealType) === "ROOM_ONLY") !==
-        -1;
+    if (selectedMealTypes && selectedMealTypes.length > 0) {
+      // If user selected any meal types, the hotel must match at least one selected type
+      mealMatch = selectedMealTypes.some((mt) => {
+        if (mt === "WithMeal") return hasWithMeal;
+        if (mt === "RoomOnly") return hasRoomOnly;
+        return false;
+      });
     } else {
-      mealMatch = true; // "All"
+      mealMatch = true; // no meal filter selected
     }
     const refundableMatch = refundableOnly
       ? rooms.findIndex((r) => r?.IsRefundable === true) !== -1
@@ -188,7 +270,7 @@ const HotelList = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, mealFilter, refundableOnly]);
+  }, [searchTerm, selectedMealTypes, refundableOnly, selectedPriceBuckets]);
 
   return (
     <div>
@@ -222,11 +304,16 @@ const HotelList = () => {
                         resetFilters,
                         minPrice,
                         maxPrice,
-                        selectedStar,
-                        setSelectedStar,
+                        selectedStars,
+                        setSelectedStars,
+                        starCounts,
+                        selectedMealTypes,
+                        setSelectedMealTypes,
+                        mealCounts,
+                        selectedPriceBuckets,
+                        setSelectedPriceBuckets,
+                        priceCounts,
                         setPage,
-                        mealFilter,
-                        setMealFilter,
                         refundableOnly,
                         setRefundableOnly,
                       }}
@@ -247,11 +334,16 @@ const HotelList = () => {
                     resetFilters,
                     minPrice,
                     maxPrice,
-                    selectedStar,
-                    setSelectedStar,
+                    selectedStars,
+                    setSelectedStars,
+                    starCounts,
+                    selectedMealTypes,
+                    setSelectedMealTypes,
+                    mealCounts,
+                    selectedPriceBuckets,
+                    setSelectedPriceBuckets,
+                    priceCounts,
                     setPage,
-                    mealFilter,
-                    setMealFilter,
                     refundableOnly,
                     setRefundableOnly,
                   }}
@@ -360,11 +452,16 @@ const FilterCard = ({
   resetFilters,
   minPrice,
   maxPrice,
-  selectedStar,
-  setSelectedStar,
+  selectedStars,
+  setSelectedStars,
+  starCounts = {},
+  selectedMealTypes,
+  setSelectedMealTypes,
+  mealCounts,
+  selectedPriceBuckets = [],
+  setSelectedPriceBuckets,
+  priceCounts = {},
   setPage,
-  mealFilter,
-  setMealFilter,
   refundableOnly,
   setRefundableOnly,
 }) => (
@@ -421,7 +518,7 @@ const FilterCard = ({
         }}
       />
 
-      <Box mt={3}>
+      {/* <Box mt={3}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 600, fontFamily: roboto.style }}
@@ -436,58 +533,160 @@ const FilterCard = ({
           max={maxPrice}
           step={100}
         />
-      </Box>
-
-      {/* <Box mt={3}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 600, fontFamily: roboto.style }}
-        >
-          Star Rating
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
-          <Rating
-            name="hotel-star-filter"
-            value={selectedStar}
-            max={5}
-            precision={1}
-            onChange={(_, value) => {
-              setSelectedStar(value);
-              setPage(1);
-            }}
-          />
-        </Box>
       </Box> */}
+      {/* Price buckets UI (checkbox list with counts) */}
       <Box mt={3}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
         >
-          Star Rating
+          Price per night
         </Typography>
 
-        <FormControl fullWidth size="small">
-          <Select
-            value={selectedStar}
-            onChange={(e) => {
-              // Select returns string for value; cast to number
-              const val = Number(e.target.value);
-              setSelectedStar(val);
-              setPage(1);
-            }}
-          >
-            <MenuItem value={0}>Select Rating</MenuItem>
-            <MenuItem value={1}>1 Star</MenuItem>
-            <MenuItem value={2}>2 Star</MenuItem>
-            <MenuItem value={3}>3 Star</MenuItem>
-            <MenuItem value={4}>4 Star</MenuItem>
-            <MenuItem value={5}>5 Star</MenuItem>
-          </Select>
-        </FormControl>
+        <Box
+          sx={{
+            borderTop: "1px solid rgba(0,0,0,0.04)",
+            borderBottom: "1px solid rgba(0,0,0,0.04)",
+            mt: 1,
+            py: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
+          {PRICE_BUCKETS.map((b) => {
+            const checked = selectedPriceBuckets.includes(b.key);
+            const count = priceCounts?.[b.key] ?? 0;
+            return (
+              <Box
+                key={b.key}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  px: 1,
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={checked}
+                      onChange={() => {
+                        if (checked) {
+                          setSelectedPriceBuckets((prev) =>
+                            prev.filter((x) => x !== b.key)
+                          );
+                        } else {
+                          setSelectedPriceBuckets((prev) => {
+                            const next = [...prev, b.key];
+                            return next;
+                          });
+                        }
+                        setPage(1);
+                      }}
+                      size="small"
+                      sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+                    />
+                  }
+                  label={b.label}
+                  sx={{
+                    mr: 0,
+                    "& .MuiFormControlLabel-label": {
+                      fontFamily: roboto.style,
+                      fontWeight: 400,
+                    },
+                  }}
+                />
+
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary", mr: 1 }}
+                >
+                  ({count})
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
+
+      <Box mt={3}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+        >
+          Star Category
+        </Typography>
+
+        <Box
+          sx={{
+            borderTop: "1px solid rgba(0,0,0,0.04)",
+            borderBottom: "1px solid rgba(0,0,0,0.04)",
+            mt: 1,
+            py: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
+          {[3, 4, 5].map((s) => {
+            const checked = selectedStars.includes(s);
+            const count = starCounts?.[s] ?? 0;
+            return (
+              <Box
+                key={`star-${s}`}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  px: 1,
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={checked}
+                      onChange={() => {
+                        if (checked) {
+                          setSelectedStars((prev) =>
+                            prev.filter((x) => x !== s)
+                          );
+                        } else {
+                          setSelectedStars((prev) => {
+                            const next = [...prev, s];
+                            return next.sort((a, b) => b - a);
+                          });
+                        }
+                        setPage(1);
+                      }}
+                      size="small"
+                      sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+                    />
+                  }
+                  label={`${s} Star`}
+                  sx={{
+                    mr: 0,
+                    "& .MuiFormControlLabel-label": {
+                      fontFamily: roboto.style,
+                      fontWeight: 400,
+                    },
+                  }}
+                />
+
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary", mr: 1 }}
+                >
+                  ({count})
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
 
       {/* NEW: Meal Type dropdown */}
-      <Box mt={3}>
+      {/* <Box mt={3}>
         <Typography
           variant="h6"
           sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
@@ -512,8 +711,92 @@ const FilterCard = ({
             <MenuItem value="RoomOnly">RoomOnly</MenuItem>
           </Select>
         </FormControl>
+      </Box> */}
+      <Box mt={3}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+        >
+          Meal Category
+        </Typography>
+
+        <Box
+          sx={{
+            borderTop: "1px solid rgba(0,0,0,0.04)",
+            borderBottom: "1px solid rgba(0,0,0,0.04)",
+            mt: 1,
+            py: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
+          {[
+            { key: "WithMeal", label: "With Meal" },
+            { key: "RoomOnly", label: "Without Meal" },
+          ].map(({ key, label }) => {
+            const checked = selectedMealTypes.includes(key);
+            const count = mealCounts?.[key] ?? 0;
+            return (
+              <Box
+                key={`meal-${key}`}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  px: 1,
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={checked}
+                      onChange={() => {
+                        if (checked) {
+                          setSelectedMealTypes((prev) =>
+                            prev.filter((x) => x !== key)
+                          );
+                        } else {
+                          setSelectedMealTypes((prev) => {
+                            const next = [...prev, key];
+                            // keep deterministic order (optional)
+                            return next;
+                          });
+                        }
+                        setPage(1);
+                      }}
+                      size="small"
+                      sx={{ "& .MuiSvgIcon-root": { fontSize: 18 } }}
+                    />
+                  }
+                  label={label}
+                  sx={{
+                    mr: 0,
+                    "& .MuiFormControlLabel-label": {
+                      fontFamily: roboto.style,
+                      fontWeight: 400,
+                    },
+                  }}
+                />
+
+                <Typography
+                  variant="body2"
+                  sx={{ color: "text.secondary", mr: 1 }}
+                >
+                  ({count})
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
       <Box mt={2}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontFamily: roboto.style, mb: 1 }}
+        >
+          Refundable
+        </Typography>
         <FormControlLabel
           control={
             <Checkbox
