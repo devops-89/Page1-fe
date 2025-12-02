@@ -162,33 +162,6 @@ export default function ProfileGeneral() {
           <ListItem>
             <ListItemText
               primary={
-                <Typography sx={{ fontWeight: 600 }}>User Type</Typography>
-              }
-              secondary={<Typography>{userType}</Typography>}
-            />
-          </ListItem>
-
-          <ListItem>
-            <ListItemText
-              primary={
-                <Typography sx={{ fontWeight: 600 }}>Reference ID</Typography>
-              }
-              secondary={<Typography>{referenceId}</Typography>}
-            />
-          </ListItem>
-
-          <ListItem>
-            <ListItemText
-              primary={
-                <Typography sx={{ fontWeight: 600 }}>Country Code</Typography>
-              }
-              secondary={<Typography>{countryCode}</Typography>}
-            />
-          </ListItem>
-
-          <ListItem>
-            <ListItemText
-              primary={
                 <Typography sx={{ fontWeight: 600 }}>
                   Account Created
                 </Typography>

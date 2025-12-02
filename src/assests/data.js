@@ -611,7 +611,7 @@ export const data = {
   ],
   popoverData: [
     {
-      label: "Dashboard",
+      label: "Profile",
       url: "/dashboard",
     },
     // {
