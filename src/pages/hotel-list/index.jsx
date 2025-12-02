@@ -1028,26 +1028,17 @@ const FilterCard = ({
               gap: 1,
             }}
           >
-            {smokingKeys.length === 0 ? (
-              <Typography
-                variant="body2"
-                sx={{ color: "text.secondary", px: 1 }}
-              >
-                No smoking data
-              </Typography>
-            ) : (
-              renderCheckboxList(
-                smokingKeys,
-                selectedSmokingPrefs,
-                setSelectedSmokingPrefs,
-                smokingCounts,
-                (k) =>
-                  k === "NonSmoking"
-                    ? "Non-smoking"
-                    : k === "Smoking"
-                    ? "Smoking"
-                    : k
-              )
+            {renderCheckboxList(
+              ["NonSmoking", "Smoking"],
+              selectedSmokingPrefs,
+              setSelectedSmokingPrefs,
+              smokingCounts,
+              (k) =>
+                k === "NonSmoking"
+                  ? "Non-smoking"
+                  : k === "Smoking"
+                  ? "Smoking"
+                  : k
             )}
           </Box>
         </Box>

@@ -62,6 +62,7 @@ const HotelDetails = () => {
   const [roomType, setRoomType] = React.useState("");
   const [selectedHotel, setSelectedHotel] = useState({});
   const [hotelDetail, setHotelDetail] = useState([]);
+  const [hotelPrice, setHotelPrice] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -74,15 +75,17 @@ const HotelDetails = () => {
         setLoading(true); // start loader
 
         let payload = {
-          hotelCode: query.slug,
-          // Language: "EN",
+          // hotelCode: query.slug,
+          Hotelcodes: query.slug,
+          Language: "EN",
         };
         let response = await hotelController.hotelDetail(payload);
         console.log("Hotel Details from api: ", response.data.data);
 
-        // if (response?.data?.Status?.Code === 200) {
-        setHotelDetail(response?.data.data);
-        // }
+        if (response?.data?.Status?.Code === 200) {
+          setHotelDetail(response?.data?.HotelDetails?.[0]);
+          setHotelPrice(response?.data);
+        }
       } catch (error) {
         console.log("Error in Fetching Hotel Details: ", error);
       } finally {
@@ -142,8 +145,8 @@ const HotelDetails = () => {
 
   const maxFacilitiesLength = 5;
 
-  const facilities = Array.isArray(hotelDetail?.hotelFacilities)
-    ? hotelDetail.hotelFacilities
+  const facilities = Array.isArray(hotelDetail?.HotelFacilities)
+    ? hotelDetail.HotelFacilities
     : [];
   console.log("facilities are : ", hotelDetail);
   const shouldTruncateFacilities = facilities.length > maxFacilitiesLength;
@@ -171,11 +174,11 @@ const HotelDetails = () => {
   const { total, roomCount, nightCount } = calculateBaseFare(
     selectedHotel?.Rooms?.[0]?.DayRates
   );
-
+  console.log("total ", total);
   // handling service fees calculation start using comission
 
-  const percentage = Number(hotelDetail?.COMMISSION?.percentage);
-  console.log("percentage:", percentage);
+  const percentage = Number(hotelPrice?.COMMISSION?.percentage);
+  console.log("percentage:", hotelPrice, percentage);
   const isFixed =
     hotelDetail?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
   let charge = 0;
@@ -351,7 +354,7 @@ const HotelDetails = () => {
                       }}
                     >
                       <LocalPhoneIcon sx={{ mr: 1, color: COLORS.PRIMARY }} />
-                      {hotelDetail?.phoneNumber || "Not Available"}
+                      {hotelDetail?.PhoneNumber || "Not Available"}
                     </Typography>
                   </Container>
                 </Grid2>
@@ -394,14 +397,14 @@ const HotelDetails = () => {
                         <Rating
                           name="hotel-rating"
                           readOnly
-                          value={hotelDetail?.hotelRating || 5}
+                          value={hotelDetail?.HotelRating || 5}
                           size="small"
                         />
                       </Box>
                     </Box>
                     {/* Subheader — check in/out */}
-                    {(hotelDetail?.checkInTime ||
-                      hotelDetail?.checkOutTime) && (
+                    {(hotelDetail?.CheckInTime ||
+                      hotelDetail?.CheckOutTime) && (
                       <Typography
                         variant="body2"
                         sx={{
@@ -410,13 +413,13 @@ const HotelDetails = () => {
                           mb: 1.5,
                         }}
                       >
-                        Check-in {hotelDetail?.checkInTime || "—"} • Check-out{" "}
-                        {hotelDetail?.checkOutTime || "—"}
+                        Check-in {hotelDetail?.CheckInTime || "—"} • Check-out{" "}
+                        {hotelDetail?.CheckOutTime || "—"}
                       </Typography>
                     )}
 
                     {/* Highlights */}
-                    {hotelDetail?.hotelFacilities && (
+                    {hotelDetail?.HotelFacilities && (
                       <>
                         <Box
                           sx={{
@@ -445,7 +448,7 @@ const HotelDetails = () => {
                         mb: 1.5,
                       }}
                     >
-                      {hotelDetail.hotelFacilities?.some((f) =>
+                      {hotelDetail.HotelFacilities?.some((f) =>
                         f.toLowerCase().includes("wifi")
                       ) && (
                         <Box
@@ -461,7 +464,7 @@ const HotelDetails = () => {
                           Free Wi-Fi
                         </Box>
                       )}
-                      {hotelDetail.hotelFacilities?.some((f) =>
+                      {hotelDetail.HotelFacilities?.some((f) =>
                         f.toLowerCase().includes("parking")
                       ) && (
                         <Box
@@ -477,7 +480,7 @@ const HotelDetails = () => {
                           Parking
                         </Box>
                       )}
-                      {hotelDetail.hotelFacilities?.some((f) =>
+                      {hotelDetail.HotelFacilities?.some((f) =>
                         f.toLowerCase().includes("pets")
                       ) && (
                         <Box
@@ -495,8 +498,8 @@ const HotelDetails = () => {
                       )}
                     </Box>
                     {/* Nearby Attractions (first 5) */}
-                    {hotelDetail?.attractions &&
-                      Object.values(hotelDetail.attractions).length > 0 && (
+                    {hotelDetail?.Attractions &&
+                      Object.values(hotelDetail.Attractions).length > 0 && (
                         <>
                           <Box
                             sx={{
@@ -515,7 +518,7 @@ const HotelDetails = () => {
                           >
                             Nearby attractions
                           </Typography>
-                          {Object.values(hotelDetail.attractions)
+                          {Object.values(hotelDetail.Attractions)
                             .slice(0, 5)
                             .map((att, i) => (
                               <Typography
