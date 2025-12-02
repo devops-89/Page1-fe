@@ -174,13 +174,11 @@ const HotelDetails = () => {
   const { total, roomCount, nightCount } = calculateBaseFare(
     selectedHotel?.Rooms?.[0]?.DayRates
   );
-  console.log("total ", total);
   // handling service fees calculation start using comission
 
   const percentage = Number(hotelPrice?.COMMISSION?.percentage);
-  console.log("percentage:", hotelPrice, percentage);
   const isFixed =
-    hotelDetail?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
+    hotelPrice?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
   let charge = 0;
   if (isFixed) {
     charge = percentage;
