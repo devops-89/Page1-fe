@@ -281,7 +281,8 @@ export default function PaymentStatus() {
   // Redux
   // const hotelSearchData = useSelector((state) => state?.HOTEL?.HotelSearchData);
   // const reduxIp = hotelSearchData?.userIp || "";
-  const reduxIp=localStorage.getItem("ip");
+  // const reduxIp=localStorage.getItem("ip");
+    const reduxIp = useSelector((state) => state?.FlightPersist?.FlightState?.ip_address);
 
   // State
   const [paymentData, setPaymentData] = useState(null);

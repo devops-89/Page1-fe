@@ -34,20 +34,22 @@ export default function MealSelection({
     return state?.Flight?.FlightValidation?.rules?.specialFare?.isMealMandatory;
   });
   // extracting the flight state from redux persist for one way
-  const flightState= useSelector((state)=> state?.FlightPersist?.FlightState);
+  const flightState = useSelector((state) => state?.FlightPersist?.FlightState);
 
-  console.log("mealData------------", mealData[0]);
-  const sortedAndNoMealFilteredMealData = mealSortingByPriceAndNoMealFilter(
-    mealData[0]
-  );
-  mealData[0] = [...sortedAndNoMealFilteredMealData];
+  console.log("mealData------------", mealData);
+  if (mealData[0] && isLCC) {
+    const sortedAndNoMealFilteredMealData = mealSortingByPriceAndNoMealFilter(
+      mealData[0]
+    );
+    mealData[0] = [...sortedAndNoMealFilteredMealData];
+  }
 
   useEffect(() => {
     function mealManadatoryLogic() {
       if (isMealMandatory) {
         // const storedState = localStorage.getItem("state");
         // extracting the one way flight state from redux presist
-        const storedState= flightState;
+        const storedState = flightState;
 
         if (storedState) {
           // use when extracting from localStorage
@@ -57,13 +59,22 @@ export default function MealSelection({
             child: storedState?.child || 0,
           };
           console.log("passenger Counts:", passengerCounts);
-
-          dispatch(
-            generateMealsForAllPassengers({
-              passengerCounts,
-             allMeals: mealData[0],
-            })
-          );
+          if (isLCC) {
+            dispatch(
+              generateMealsForAllPassengers({
+                passengerCounts,
+                allMeals: mealData[0],
+              })
+            );
+          }
+          else {
+            dispatch(
+              generateMealsForAllPassengers({
+                passengerCounts,
+                allMeals: mealData,
+              })
+            );
+          }
         }
       }
     }
@@ -189,6 +200,7 @@ export default function MealSelection({
                     filteredData[flightNumber]?.map((meal, mealIndex) => (
                       <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                         <MealCard
+                        isLCC ={isLCC}
                           meal={meal}
                           handleMealValue={() =>
                             handleMealClick(meal, flightNumber)
@@ -219,11 +231,12 @@ export default function MealSelection({
           </Swiper>
         ) : (
           <Grid2 container spacing={2}>
-            {mealData?.[0]?.FlightNumber ? (
-              sortedMealData?.map((meal, mealIndex) =>
+            {mealData?.[0]?.Code ? (
+              mealData?.map((meal, mealIndex) =>
                 meal?.Price != 0 ? (
                   <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                     <MealCard
+                    isLCC ={isLCC}
                       meal={meal}
                       handleMealValue={() =>
                         handleMealClick(meal, meal.FlightNumber)

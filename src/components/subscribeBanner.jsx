@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import subscribeBanner from "@/banner/subscribe-banner.jpg";
+import subscribeBanner from "@/banner/subscribee.jpg";
 import { nunito, raleway } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { Done } from "@mui/icons-material";
