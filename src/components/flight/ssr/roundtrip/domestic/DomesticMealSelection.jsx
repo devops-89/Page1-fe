@@ -20,6 +20,7 @@ import MealCard from "@/components/flight/mealCard";
 
 export default function DomesticMealSelection({
   mealData,
+  isLCC,
   passengerId,
   passengerType,
 }) {
@@ -27,7 +28,6 @@ export default function DomesticMealSelection({
   const [tabIndex, setTabIndex] = useState(0);
 
   // console.log("mealData-------------", mealData);
-
   // Create unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
 
@@ -190,6 +190,7 @@ export default function DomesticMealSelection({
                       (meal, mealIndex) => (
                         (meal?.Price!=0)?(  <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                           <MealCard
+                          isLCC={isLCC}
                             meal={meal}
                             handleMealValue={(meal) => {
                               // console.log("Meal Value is: ",meal,flightNumber,tabIndex);
@@ -259,6 +260,7 @@ export default function DomesticMealSelection({
                     filteredDataReturn[flightNumber]?.map((meal, mealIndex) => (
                       (meal?.Price!=0)?(  <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                         <MealCard
+                        isLCC={isLCC}
                           meal={meal}
                           handleMealValue={(meal) => {
                             // console.log("Meal Value is: ",meal,flightNumber,tabIndex);

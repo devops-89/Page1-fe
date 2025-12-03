@@ -233,7 +233,6 @@ export default function MealSelection({
           <Grid2 container spacing={2}>
             {mealData?.[0]?.Code ? (
               mealData?.map((meal, mealIndex) =>
-                meal?.Price != 0 ? (
                   <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                     <MealCard
                     isLCC ={isLCC}
@@ -250,7 +249,6 @@ export default function MealSelection({
                       }
                     />
                   </Grid2>
-                ) : null
               )
             ) : (
               <Grid2 size={{ xs: 12 }} sx={{ py: "20px" }}>
