@@ -33,9 +33,9 @@ import FlightLandIcon from "@mui/icons-material/FlightLand";
 import { resetSeatDetails } from "@/redux/reducers/seatsInformation";
 import { resetMealDetails } from "@/redux/reducers/mealsInformation";
 import { resetBaggageDetails } from "@/redux/reducers/baggagesInformation";
+import { setFlightState, resetFlightState } from "@/redux/reducers/flightState";
 
-
-const PersistOneWayForm = () =>  {
+const PersistOneWayForm = () => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [adultValue, setAdultValue] = useState(1);
@@ -79,19 +79,21 @@ const PersistOneWayForm = () =>  {
   const originhandler = (e, newValue) => {
     setOrigin(newValue);
     if (newValue) {
-      setState({
-        ...state,
-        origin: newValue.iata_code,
-      });
+      // setState({
+      //   ...state,
+      //   origin: newValue.iata_code,
+      // });
+      setState((prev) => ({ ...prev, origin: newValue.iata_code }));
     }
   };
   const destinationHandler = (e, newValue) => {
     setDestination(newValue);
     if (newValue) {
-      setState({
-        ...state,
-        destination: newValue.iata_code,
-      });
+      // setState({
+      //   ...state,
+      //   destination: newValue.iata_code,
+      // });
+      setState((prev) => ({ ...prev, destination: newValue.iata_code }));
     }
   };
 
@@ -99,10 +101,14 @@ const PersistOneWayForm = () =>  {
     setDepartureDate(newDate);
     const isValid = moment(newDate).isValid();
     if (isValid) {
-      setState({
-        ...state,
+      // setState({
+      //   ...state,
+      //   departure_date: moment(newDate._d).format("YYYY-MM-DD"),
+      // });
+      setState((prev) => ({
+        ...prev,
         departure_date: moment(newDate._d).format("YYYY-MM-DD"),
-      });
+      }));
     }
   };
 
@@ -124,18 +130,18 @@ const PersistOneWayForm = () =>  {
   };
 
   // extracting the flightState from one way redux persist
-  const flightState=useSelector((state)=>state.FlightPersist.FlightState);
-  
+  const flightState = useSelector((state) => state.FlightPersist.FlightState);
+
   const fetchApi = () => {
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
       .then((data) => setState({ ...state, ip_address: data.ip }));
   };
 
-  const searchFlight = () => {
+  const searchFlight = (payload) => {
     setButtonLoading(true);
     flightController
-      .searchFlight(state)
+      .searchFlight(payload)
       .then((res) => {
         let response = res.data.data;
         dispatch(setFlightDetails({ ...response }));
@@ -163,12 +169,30 @@ const PersistOneWayForm = () =>  {
     dispatch(resetSeatDetails());
     dispatch(resetMealDetails());
     dispatch(resetBaggageDetails());
-    const emptyFields = Object.keys(state).filter(
+
+    const mergedState = {
+      ...state,
+      origin: origin?.iata_code || state.origin || "",
+      destination: destination?.iata_code || state.destination || "",
+      departure_date:
+        departureDate && moment(departureDate).isValid()
+          ? moment(departureDate).format("YYYY-MM-DD")
+          : state.departure_date || "",
+    };
+
+    // const emptyFields = Object.keys(state).filter(
+    //   (key) =>
+    //     state[key] === "" || state[key] === null || state[key] === undefined
+    // );
+
+    const emptyFields = Object.keys(mergedState).filter(
       (key) =>
-        state[key] === "" || state[key] === null || state[key] === undefined
+        mergedState[key] === "" ||
+        mergedState[key] === null ||
+        mergedState[key] === undefined
     );
     // }
-
+    console.log("mergedState:", mergedState, "empty:", emptyFields);
     if (emptyFields.length > 0) {
       dispatch(
         setToast({
@@ -179,11 +203,11 @@ const PersistOneWayForm = () =>  {
       );
     } else {
       // localStorage.setItem("state", JSON.stringify(state));
-        // resetting the oneway flight state in the redux persist
-    dispatch(resetFlightState());
-    //  setting the oneway flight state in the redux persist
-    dispatch(setFlightState(state));
-      searchFlight();
+      // resetting the oneway flight state in the redux persist
+      dispatch(resetFlightState());
+      //  setting the oneway flight state in the redux persist
+      dispatch(setFlightState(mergedState));
+      searchFlight(mergedState);
     }
   };
 
@@ -201,12 +225,12 @@ const PersistOneWayForm = () =>  {
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
 
-//   setting the input filelds of the form with previous search
-useEffect(() => {
-  if (!loading && airportList.length) {
-    // const savedState = JSON.parse(localStorage.getItem("state") || "{}");
-    // setting the flightState from oneway redux persist
-    const savedState= flightState || {};
+  //   setting the input filelds of the form with previous search
+  useEffect(() => {
+    if (!loading && airportList.length) {
+      // const savedState = JSON.parse(localStorage.getItem("state") || "{}");
+      // setting the flightState from oneway redux persist
+      const savedState = flightState || {};
 
       if (savedState.origin) {
         const originAirport = airportList.find(

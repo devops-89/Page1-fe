@@ -393,7 +393,7 @@ const PassengerFields = ({
                     mealData={data?.MealDynamic}
                     isLCC={data?.isLCC}
                     passengerType={formType}
-                    specialFareForMeal={specialFareForMeal}
+                    // specialFareForMeal={specialFareForMeal}
                   />
                 )}
               </Grid2>
@@ -417,7 +417,7 @@ const PassengerFields = ({
                     mealData={data?.MealDynamic}
                     isLCC={data?.isLCC}
                     passengerType={formType}
-                    specialFareForMeal={specialFareForMeal}
+                    // specialFareForMeal={specialFareForMeal}
                   />
                 )}
               </Grid2>
@@ -440,7 +440,7 @@ const PassengerFields = ({
                     mealData={data?.MealDynamic}
                     isLCC={data?.isLCC}
                     passengerType={formType}
-                    specialFareForMeal={specialFareForMeal}
+                    // specialFareForMeal={specialFareForMeal}
                   />
                 )}
               </Grid2>

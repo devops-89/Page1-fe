@@ -8,7 +8,8 @@ import {
   useTheme,
   Grid2,
 } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+// import DashboardIcon from "@mui/icons-material/Dashboard";
+import Person2Icon from "@mui/icons-material/Person2";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import BusinessIcon from "@mui/icons-material/Business";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
@@ -138,24 +139,24 @@ const Dashboard = () => {
             >
               <Tab
                 {...a11yProps(0)}
-                icon={<DashboardIcon fontSize="medium" />}
+                icon={<Person2Icon fontSize="medium" />}
                 iconPosition="start"
-                label="Dashboard"
+                label="Profile"
               />
-              <Tab
+              {/* <Tab
                 {...a11yProps(1)}
                 icon={<LocalShippingIcon fontSize="medium" />}
                 iconPosition="start"
                 label="Package Order"
-              />
+              /> */}
               <Tab
-                {...a11yProps(2)}
+                {...a11yProps(1)}
                 icon={<FlightTakeoffIcon fontSize="small" />}
                 iconPosition="start"
                 label="Flight Booking"
               />
               <Tab
-                {...a11yProps(3)}
+                {...a11yProps(2)}
                 icon={<BusinessIcon fontSize="small" />}
                 iconPosition="start"
                 label="Hotel Booking"
@@ -169,13 +170,13 @@ const Dashboard = () => {
               <BookingGrid setValue={setValue} />
             </TabPanel>
 
-            <TabPanel value={value} index={1}>
+            {/* <TabPanel value={value} index={1}>
               <Package />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
+            </TabPanel> */}
+            <TabPanel value={value} index={1}>
               <Flight userId={userData?.id} />
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            <TabPanel value={value} index={2}>
               <Hotel userId={userData?.id} />
             </TabPanel>
           </Grid2>

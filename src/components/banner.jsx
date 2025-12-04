@@ -127,7 +127,7 @@ const Banner = () => {
           zIndex: 99,
           bottom: 0,
           left: "50%",
-          transform: { xs: "translate(-50%, -3%)" },
+          transform: { xs: "translate(-50%, -35%)" },
           width: "100%",
           maxWidth: "1200px",
           px: 2,

@@ -3,6 +3,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useUniqueHotelImages } from "@/custom-hook/useUniqueHotelImages";
+import { COMMISSION_TYPE } from "@/utils/enum";
 import {
   Box,
   Typography,
@@ -60,7 +61,8 @@ const HotelDetails = () => {
   const [open, setOpen] = React.useState(false);
   const [roomType, setRoomType] = React.useState("");
   const [selectedHotel, setSelectedHotel] = useState({});
-  const [hotelDetail, setHotelDetail] = useState({});
+  const [hotelDetail, setHotelDetail] = useState([]);
+  const [hotelPrice, setHotelPrice] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -73,15 +75,16 @@ const HotelDetails = () => {
         setLoading(true); // start loader
 
         let payload = {
+          // hotelCode: query.slug,
           Hotelcodes: query.slug,
           Language: "EN",
         };
-
         let response = await hotelController.hotelDetail(payload);
-        console.log("Hotel Details from api: ", response.data);
+        console.log("Hotel Details from api: ", response.data.data);
 
         if (response?.data?.Status?.Code === 200) {
           setHotelDetail(response?.data?.HotelDetails?.[0]);
+          setHotelPrice(response?.data);
         }
       } catch (error) {
         console.log("Error in Fetching Hotel Details: ", error);
@@ -92,7 +95,7 @@ const HotelDetails = () => {
 
     fetchHotelDetail();
   }, [query.slug]);
-
+  console.log("hotel detail are is : ", hotelDetail);
   const fallbackImage = "/images/hotel/hotel-default.jpg";
   const { mainImage, roomImages } = useUniqueHotelImages(hotelDetail);
   const [heroImage, setHeroImage] = useState(mainImage || fallbackImage);
@@ -145,12 +148,45 @@ const HotelDetails = () => {
   const facilities = Array.isArray(hotelDetail?.HotelFacilities)
     ? hotelDetail.HotelFacilities
     : [];
-
+  console.log("facilities are : ", hotelDetail);
   const shouldTruncateFacilities = facilities.length > maxFacilitiesLength;
 
   const displayedFacilities = shouldTruncateFacilities
     ? facilities.slice(0, maxFacilitiesLength)
     : facilities;
+
+  // calculate base fare
+  const calculateBaseFare = (dayRates = []) => {
+    let total = 0;
+    let roomCount = dayRates.length;
+    let nightCount = 0;
+
+    for (const room of dayRates) {
+      if (Array.isArray(room)) {
+        nightCount = Math.max(nightCount, room.length);
+        for (const night of room) {
+          total += night?.BasePrice || 0;
+        }
+      }
+    }
+    return { total, roomCount, nightCount };
+  };
+  const { total, roomCount, nightCount } = calculateBaseFare(
+    selectedHotel?.Rooms?.[0]?.DayRates
+  );
+  // handling service fees calculation start using comission
+
+  const percentage = Number(hotelPrice?.COMMISSION?.percentage);
+  const isFixed =
+    hotelPrice?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
+  let charge = 0;
+  if (isFixed) {
+    charge = percentage;
+  } else {
+    charge = (total * percentage) / 100;
+  }
+
+  const serviceCharge = charge;
 
   // ======================= facilities truncation logic end =======================================
 
@@ -364,7 +400,6 @@ const HotelDetails = () => {
                         />
                       </Box>
                     </Box>
-
                     {/* Subheader — check in/out */}
                     {(hotelDetail?.CheckInTime ||
                       hotelDetail?.CheckOutTime) && (
@@ -381,22 +416,28 @@ const HotelDetails = () => {
                       </Typography>
                     )}
 
-                    <Box
-                      sx={{ borderTop: `1px solid ${COLORS.GREY}`, my: 1.5 }}
-                    />
-
                     {/* Highlights */}
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        fontFamily: nunito.style,
-                        fontWeight: 700,
-                        mb: 1,
-                        fontSize: 18,
-                      }}
-                    >
-                      Highlights
-                    </Typography>
+                    {hotelDetail?.HotelFacilities && (
+                      <>
+                        <Box
+                          sx={{
+                            borderTop: `1px solid ${COLORS.GREY}`,
+                            my: 1.5,
+                          }}
+                        />
+                        <Typography
+                          variant="subtitle2"
+                          sx={{
+                            fontFamily: nunito.style,
+                            fontWeight: 700,
+                            mb: 1,
+                            fontSize: 18,
+                          }}
+                        >
+                          Highlights
+                        </Typography>
+                      </>
+                    )}
                     <Box
                       sx={{
                         display: "flex",
@@ -454,7 +495,6 @@ const HotelDetails = () => {
                         </Box>
                       )}
                     </Box>
-
                     {/* Nearby Attractions (first 5) */}
                     {hotelDetail?.Attractions &&
                       Object.values(hotelDetail.Attractions).length > 0 && (
@@ -492,7 +532,6 @@ const HotelDetails = () => {
                             ))}
                         </>
                       )}
-
                     {/* Price */}
                     <Box
                       sx={{ borderTop: `1px solid ${COLORS.GREY}`, my: 1.5 }}
@@ -514,8 +553,10 @@ const HotelDetails = () => {
                       sx={{ fontWeight: 800, fontFamily: nunito.style, mb: 1 }}
                     >
                       ₹{" "}
-                      {selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2) ||
-                        "0.00"}
+                      {/* {selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2) ||
+                        "0.00"} */}
+                      {((total + serviceCharge) / nightCount).toFixed(2) ||
+                        "0.00"}{" "}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -526,8 +567,12 @@ const HotelDetails = () => {
                       }}
                     >
                       ₹{" "}
-                      {selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2) ||
-                        "0.00"}{" "}
+                      {/* {selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2) ||
+                        "0.00"}{" "} */}
+                      {(
+                        selectedHotel?.Rooms?.[0]?.TotalTax / nightCount
+                      ).toFixed(2)}{" "}
+                      {""}
                       taxes & fees
                     </Typography>
                   </Box>

@@ -60,7 +60,24 @@ const HotelPreBookPage = () => {
   const [openFacilities, setOpenFacilities] = useState(false);
   const handleOpenFacilities = () => setOpenFacilities(true);
   const handleCloseFacilities = () => setOpenFacilities(false);
+  const calculateBaseFare = (dayRates = []) => {
+    let total = 0;
+    let roomCount = dayRates.length;
+    let nightCount = 0;
 
+    for (const room of dayRates) {
+      if (Array.isArray(room)) {
+        nightCount = Math.max(nightCount, room.length);
+        for (const night of room) {
+          total += night?.BasePrice || 0;
+        }
+      }
+    }
+    return { total, roomCount, nightCount };
+  };
+  const { total, roomCount, nightCount } = calculateBaseFare(
+    preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.DayRates
+  );
   // handling service fees calculation start using comission
 
   const percentage = Number(preBookResponse?.COMMISSION?.percentage);
@@ -71,9 +88,7 @@ const HotelPreBookPage = () => {
   if (isFixed) {
     charge = percentage;
   } else {
-    charge =
-      (preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare * percentage) /
-      100;
+    charge = (total * percentage) / 100;
   }
 
   const serviceCharge = charge;
@@ -316,24 +331,6 @@ const HotelPreBookPage = () => {
     setPassengers({ adult, child });
   }, [paxRoom]);
 
-  const calculateBaseFare = (dayRates = []) => {
-    let total = 0;
-    let roomCount = dayRates.length;
-    let nightCount = 0;
-
-    for (const room of dayRates) {
-      if (Array.isArray(room)) {
-        nightCount = Math.max(nightCount, room.length);
-        for (const night of room) {
-          total += night?.BasePrice || 0;
-        }
-      }
-    }
-    return { total, roomCount, nightCount };
-  };
-  const { total, roomCount, nightCount } = calculateBaseFare(
-    preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.DayRates
-  );
   // helper validators reused in onSubmit
   const isArrivalValid = (arrival) => {
     if (!arrival) return false;
@@ -1181,7 +1178,8 @@ const HotelPreBookPage = () => {
                             <Typography
                               sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                             >
-                              ₹ {total.toFixed(2)}
+                              {/* ₹ {total.toFixed(2)},{serviceCharge.toFixed(2)} */}
+                              {(total + serviceCharge).toFixed(2)}
                             </Typography>
                           </Grid2>
                         </Grid2>
@@ -1219,7 +1217,7 @@ const HotelPreBookPage = () => {
                         </Grid2>
                       </Box>
 
-                      <Box sx={{ mb: 2 }}>
+                      {/* <Box sx={{ mb: 2 }}>
                         <Grid2
                           container
                           justifyContent="space-between"
@@ -1246,7 +1244,7 @@ const HotelPreBookPage = () => {
                             </Typography>
                           </Grid2>
                         </Grid2>
-                      </Box>
+                      </Box> */}
 
                       <Divider sx={{ my: 2 }} />
 
