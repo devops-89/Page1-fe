@@ -264,66 +264,79 @@ const PersistRoundTripForm = () => {
   };
 
   //   setting the values dynamically to the search fields
-  useEffect(() => {
-    if (!loading && airportList.length) {
-      // const savedState=JSON.parse(localStorage.getItem("roundState") || "{}");
-      // setting the flight State of roundState from redux persist
-      const savedState = flightState || {};
 
-      // setting the origin object
-      if (savedState.origin) {
-        const originAirport = airportList.find(
-          (a) => a.iata_code === savedState.origin
-        );
+useEffect(() => {
+  if (!loading && airportList.length) {
+    const savedState = flightState || {};
 
-        if (originAirport) {
-          setOrigin(originAirport);
-          setState((prev) => ({ ...prev, origin: originAirport.iata_code }));
-        }
+    // 1️ Normalize source (root vs multicity[0])
+    let originCode = savedState.origin;
+    let destinationCode = savedState.destination;
+    let departureDateStr = savedState.departure_date;
+
+    if (
+      savedState.journey_type === JOURNEY_TYPE.MULTIWAY &&
+      Array.isArray(savedState.multicity) &&
+      savedState.multicity.length > 0
+    ) {
+      const firstLeg = savedState.multicity[0] || {};
+      originCode = firstLeg.origin || originCode;
+      destinationCode = firstLeg.destination || destinationCode;
+      departureDateStr = firstLeg.departure_date || departureDateStr;
+      // Note: no return_date in multiway → let user select manually in roundtrip
+    }
+
+    if (originCode) {
+      const originAirport = airportList.find(
+        (a) => a.iata_code === originCode
+      );
+      if (originAirport) {
+        setOrigin(originAirport);
+        setState((prev) => ({ ...prev, origin: originAirport.iata_code }));
       }
+    }
 
-      // setting the destination object
-      if (savedState.destination) {
-        const destinationAirport = airportList.find(
-          (a) => a.iata_code === savedState.destination
-        );
-
-        if (destinationAirport) {
-          setDestination(destinationAirport);
-          setState((prev) => ({
-            ...prev,
-            destination: destinationAirport.iata_code,
-          }));
-        }
-      }
-
-      // setting the departure date object
-      if (savedState.departure_date) {
-        setDepartureDate(moment(savedState.departure_date));
+    if (destinationCode) {
+      const destinationAirport = airportList.find(
+        (a) => a.iata_code === destinationCode
+      );
+      if (destinationAirport) {
+        setDestination(destinationAirport);
         setState((prev) => ({
           ...prev,
-          departure_date: savedState.departure_date,
-        }));
-      }
-
-      // setting the return_date object
-      if (savedState.return_date) {
-        setReturnDate(moment(savedState.return_date));
-        setState((prev) => ({ ...prev, return_date: savedState.return_date }));
-      }
-
-      if (savedState.adult !== undefined) setAdultValue(savedState.adult);
-      if (savedState.child !== undefined) setChildValue(savedState.child);
-      if (savedState.infant !== undefined) setInfantValue(savedState.infant);
-
-      if (savedState.cabin_class) {
-        setState((prev) => ({
-          ...prev,
-          cabin_class: savedState.cabin_class,
+          destination: destinationAirport.iata_code,
         }));
       }
     }
-  }, [loading, airportList]);
+
+    // 4️ Prefill Departure Date (from root or multicity[0])
+    if (departureDateStr) {
+      setDepartureDate(moment(departureDateStr));
+      setState((prev) => ({
+        ...prev,
+        departure_date: departureDateStr,
+      }));
+    }
+
+    // 5️ Prefill Return Date (only if it exists – multiway won't have it)
+    if (savedState.return_date) {
+      setReturnDate(moment(savedState.return_date));
+      setState((prev) => ({ ...prev, return_date: savedState.return_date }));
+    }
+
+    // 6️ Travellers + cabin class
+    if (savedState.adult !== undefined) setAdultValue(savedState.adult);
+    if (savedState.child !== undefined) setChildValue(savedState.child);
+    if (savedState.infant !== undefined) setInfantValue(savedState.infant);
+
+    if (savedState.cabin_class) {
+      setState((prev) => ({
+        ...prev,
+        cabin_class: savedState.cabin_class,
+      }));
+    }
+  }
+}, [loading, airportList, flightState]);
 
   return (
     <div>

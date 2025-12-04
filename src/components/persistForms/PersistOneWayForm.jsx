@@ -225,47 +225,63 @@ const PersistOneWayForm = () => {
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
 
-  //   setting the input filelds of the form with previous search
   useEffect(() => {
-    if (!loading && airportList.length) {
-      // const savedState = JSON.parse(localStorage.getItem("state") || "{}");
-      // setting the flightState from oneway redux persist
-      const savedState = flightState || {};
+  if (!loading && airportList.length) {
+    const savedState = flightState || {};
 
-      if (savedState.origin) {
-        const originAirport = airportList.find(
-          (a) => a.iata_code === savedState.origin
-        );
-        if (originAirport) {
-          setOrigin(originAirport);
-          setState((prev) => ({ ...prev, origin: originAirport.iata_code }));
-        }
+    let originCode = savedState.origin;
+    let destinationCode = savedState.destination;
+    let departureDateStr = savedState.departure_date;
+
+    // If current Redux state is MULTIWAY, use the first leg for prefill
+    if (
+      savedState.journey_type === JOURNEY_TYPE.MULTIWAY &&
+      Array.isArray(savedState.multicity) &&
+      savedState.multicity.length > 0
+    ) {
+      const firstLeg = savedState.multicity[0] || {};
+      originCode = firstLeg.origin || originCode;
+      destinationCode = firstLeg.destination || destinationCode;
+      departureDateStr = firstLeg.departure_date || departureDateStr;
+    }
+
+    if (originCode) {
+      const originAirport = airportList.find(
+        (a) => a.iata_code === originCode
+      );
+      if (originAirport) {
+        setOrigin(originAirport);
+        setState((prev) => ({ ...prev, origin: originAirport.iata_code }));
       }
+    }
 
-      if (savedState.destination) {
-        const destinationAirport = airportList.find(
-          (a) => a.iata_code === savedState.destination
-        );
-        if (destinationAirport) {
-          setDestination(destinationAirport);
-          setState((prev) => ({
-            ...prev,
-            destination: destinationAirport.iata_code,
-          }));
-        }
-      }
-
-      if (savedState.departure_date) {
-        setDepartureDate(moment(savedState.departure_date));
+    if (destinationCode) {
+      const destinationAirport = airportList.find(
+        (a) => a.iata_code === destinationCode
+      );
+      if (destinationAirport) {
+        setDestination(destinationAirport);
         setState((prev) => ({
           ...prev,
-          departure_date: savedState.departure_date,
+          destination: destinationAirport.iata_code,
         }));
       }
-
-      // Optional: Load adults/children/infants/cabin_class if needed
     }
-  }, [loading, airportList]);
+
+    if (departureDateStr) {
+      setDepartureDate(moment(departureDateStr));
+      setState((prev) => ({
+        ...prev,
+        departure_date: departureDateStr,
+      }));
+    }
+
+    if (savedState.adult !== undefined) setAdultValue(savedState.adult);
+    if (savedState.child !== undefined) setChildValue(savedState.child);
+    if (savedState.infant !== undefined) setInfantValue(savedState.infant);
+  }
+}, [loading, airportList, flightState]);
+
 
   return (
     <>

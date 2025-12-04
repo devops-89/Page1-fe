@@ -30,7 +30,7 @@ import ToastBar from "../toastBar";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import TravellerSelector from "../flight/travellerSelector";
-
+import { setFlightState, resetFlightState } from "@/redux/reducers/flightState";
 const PersistMultiForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -244,59 +244,61 @@ const PersistMultiForm = () => {
       });
   };
 
-  const submitHandler = () => {
-    const emptyFields = state.multicity.reduce((acc, city, index) => {
-      if (!city.origin) acc.push(`Origin for form ${index + 1}`);
-      if (!city.destination) acc.push(`Destination for form ${index + 1}`);
-      if (!city.departure_date)
-        acc.push(`Departure Date for form ${index + 1}`);
-      return acc;
-    }, []);
+const submitHandler = () => {
+  const emptyFields = state.multicity.reduce((acc, city, index) => {
+    if (!city.origin) acc.push(`Origin for form ${index + 1}`);
+    if (!city.destination) acc.push(`Destination for form ${index + 1}`);
+    if (!city.departure_date)
+      acc.push(`Departure Date for form ${index + 1}`);
+    return acc;
+  }, []);
 
-    for (let i = 1; i < forms.length; i++) {
-      if (forms[i].departure_date && forms[i - 1].departure_date) {
-        if (
-          moment(forms[i].departure_date).isBefore(forms[i - 1].departure_date)
-        ) {
-          dispatch(
-            setToast({
-              open: true,
-              message:
-                "Departure dates should be listed from earliest to latest.",
-              severity: TOAST_STATUS.ERROR,
-            })
-          );
-          return;
-        }
+  for (let i = 1; i < forms.length; i++) {
+    if (forms[i].departure_date && forms[i - 1].departure_date) {
+      if (
+        moment(forms[i].departure_date).isBefore(forms[i - 1].departure_date)
+      ) {
+        dispatch(
+          setToast({
+            open: true,
+            message: "Departure dates should be listed from earliest to latest.",
+            severity: TOAST_STATUS.ERROR,
+          })
+        );
+        return;
       }
     }
+  }
 
-    if (emptyFields.length > 0) {
-      dispatch(
-        setToast({
-          open: true,
-          message: `Please Enter the Required Fields`,
-          severity: TOAST_STATUS.ERROR,
-        })
-      );
-    } else {
-      // localStorage.setItem("multistate", JSON.stringify(state));
-        // resetting the oneway flight state in the redux persist
+  if (emptyFields.length > 0) {
+    dispatch(
+      setToast({
+        open: true,
+        message: `Please Enter the Required Fields`,
+        severity: TOAST_STATUS.ERROR,
+      })
+    );
+  } else {
+    const modifiedState = { ...state };
+
+    delete modifiedState.origin;
+    delete modifiedState.destination;
+    delete modifiedState.departure_date;
+    delete modifiedState.return_date;
+
+    modifiedState.multicity = modifiedState.multicity.map((city) => ({
+      ...city,
+      cabin_class: state.cabin_class,
+    }));
+
+    delete modifiedState.cabin_class;
+
     dispatch(resetFlightState());
-    //  setting the oneway flight state in the redux persist
-    dispatch(setFlightState(state));
-      const modifiedState = { ...state };
-      modifiedState.multicity = modifiedState.multicity.map((city) => {
-        const cityWithCabinClass = { ...city, cabin_class: state.cabin_class };
-        delete cityWithCabinClass.cabin_class_top_level;
-        return cityWithCabinClass;
-      });
+    dispatch(setFlightState(modifiedState));
 
-      delete modifiedState.cabin_class;
-
-      searchFlight(modifiedState);
-    }
-  };
+    searchFlight(modifiedState);
+  }
+};
 
   useEffect(() => {
     getAllAirport();
@@ -310,35 +312,102 @@ const PersistMultiForm = () => {
     setCabinClass(cabinClass);
   }, [state.cabin_class]);
 
-  useEffect(()=>{
-    if(!loading && airportList.length)
-    {
-        // const savedState=JSON.parse(localStorage.getItem("multistate") || "{}");
-        // setting the flightState of the multistate from redux persist
-        const savedState=flightState || {};
+useEffect(() => {
+  if (!loading && airportList.length) {
+    const savedState = flightState || {};
+    const savedIp = savedState.ip_address;
 
-        if(savedState){
-            setState(savedState);
+    if (
+      savedState &&
+      savedState.journey_type === JOURNEY_TYPE.MULTIWAY &&
+      Array.isArray(savedState.multicity) &&
+      savedState.multicity.length > 0
+    ) {
+      setState((prev) => ({
+        ...prev,
+        ...savedState,
+        ip_address: savedIp || prev.ip_address || "", 
+      }));
 
-           // set the forms array
-           const formArray=savedState.multicity.map((item)=>({
-                origin: item.origin || "",
-                destination: item.destination || "",
-                departure_date: item.departure_date ? moment(item.departure_date):null,
-                cabin_class:item.cabin_class || "1"
+      const formArray = savedState.multicity.map((item) => ({
+        origin: item.origin || "",
+        destination: item.destination || "",
+        departure_date: item.departure_date
+          ? moment(item.departure_date)
+          : null,
+        cabin_class: item.cabin_class || "1",
+      }));
 
-           }));
+      setForms(formArray);
 
-           setForms(formArray);
-
-        //    update travellers count
-        setAdultValue(savedState.adult || 1);
-        setChildValue(savedState.child || 0);
-        setInfantValue(savedState.infant || 0);
-        }
-
+      setAdultValue(savedState.adult || 1);
+      setChildValue(savedState.child || 0);
+      setInfantValue(savedState.infant || 0);
+      return;
     }
-  },[loading,airportList]);
+
+    // CASE 2: Last search was ONEWAY / ROUNDTRIP → prefill first seg
+    if (savedState && savedState.origin && savedState.destination) {
+      const firstLeg = {
+        origin: savedState.origin || "",
+        destination: savedState.destination || "",
+        departure_date: savedState.departure_date
+          ? moment(savedState.departure_date)
+          : null,
+        cabin_class: savedState.cabin_class || "1",
+      };
+
+      setState((prev) => ({
+        ...prev,
+        ...initialState,                   
+        journey_type: JOURNEY_TYPE.MULTIWAY,
+        ip_address: savedIp || prev.ip_address || "", 
+        adult: savedState.adult ?? prev.adult,
+        child: savedState.child ?? prev.child,
+        infant: savedState.infant ?? prev.infant,
+        cabin_class: savedState.cabin_class || prev.cabin_class,
+        multicity: [
+          {
+            origin: firstLeg.origin,
+            destination: firstLeg.destination,
+            departure_date: firstLeg.departure_date
+              ? firstLeg.departure_date.format("YYYY-MM-DD")
+              : "",
+            cabin_class: firstLeg.cabin_class,
+          },
+        ],
+      }));
+
+      setForms([firstLeg]);
+
+      setAdultValue(savedState.adult || 1);
+      setChildValue(savedState.child || 0);
+      setInfantValue(savedState.infant || 0);
+
+      return;
+    }
+
+    // CASE 3: No usable saved state → keep clean empty multi form
+    setState((prev) => ({
+      ...prev,
+      ...initialState,
+      ip_address: prev.ip_address || "", 
+    }));
+    setForms([
+      {
+        origin: "",
+        destination: "",
+        departure_date: null,
+        cabin_class: "1",
+      },
+    ]);
+    setAdultValue(1);
+    setChildValue(0);
+    setInfantValue(0);
+  }
+}, [loading, airportList, flightState]);
+
+
 
   return (
     <>
