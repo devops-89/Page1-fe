@@ -29,14 +29,14 @@ import PackageDialog from "./packageDialog";
 const PackageDetail = ({ data }) => {
   const formattedDate = data?.monthYear
     ? new Date(data?.monthYear).toLocaleDateString("en-IN", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        weekday: "long",
-      })
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    })
     : "N/A";
 
-    console.log("Package Details Data: ",data);
+  console.log("Package Details Data: ", data);
 
   return (
     <Grid container spacing={4} sx={{ padding: { xs: 2, md: 4 } }}>
@@ -70,7 +70,7 @@ const PackageDetail = ({ data }) => {
             <Typography
               variant="h4"
               fontWeight={600}
-              sx={{ fontFamily: roboto.style }}
+              sx={{ fontFamily: roboto.style, fontSize: { xs: 24, md: 34 } }}
             >
               {data?.package_name}
             </Typography>
@@ -88,15 +88,14 @@ const PackageDetail = ({ data }) => {
             </Box>
           </Box>
 
- {/* image="https://media.easemytrip.com/media/Deal/DL638572420063544393/SightSeeing/SightSeeing49Q4Do.jpg" */}
+          {/* image="https://media.easemytrip.com/media/Deal/DL638572420063544393/SightSeeing/SightSeeing49Q4Do.jpg" */}
           {/* Main Image */}
           <Card sx={{ mt: 3 }}>
             <CardMedia
               component="img"
-              height="300"
               image="https://media.easemytrip.com/media/Deal/DL638572420063544393/SightSeeing/SightSeeing49Q4Do.jpg"
               alt="Main Package"
-              sx={{ objectFit: "cover" }}
+              sx={{ objectFit: "cover", height: { xs: 200, md: 300 } }}
             />
           </Card>
 
@@ -184,20 +183,20 @@ const PackageDetail = ({ data }) => {
       <Grid item xs={12} lg={4} display="flex" flexDirection="column" gap={3}>
         {/* Price Info */}
         <Paper elevation={3} sx={{ p: 3, borderRadius: 1 }}>
-            {/* ⭐ Star Icons */}
-              <Box display="flex" alignItems="center" sx={{my:2}}>
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <StarIcon
-                    key={star}
-                    fontSize="small"
-                  
-                    sx={{
-                      color: data?.rating >= star ? "#f4c430" : "#ccc",
-                      fontSize:"28px"
-                    }}
-                  />
-                ))}
-              </Box>
+          {/* ⭐ Star Icons */}
+          <Box display="flex" alignItems="center" sx={{ my: 2 }}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <StarIcon
+                key={star}
+                fontSize="small"
+
+                sx={{
+                  color: data?.rating >= star ? "#f4c430" : "#ccc",
+                  fontSize: "28px"
+                }}
+              />
+            ))}
+          </Box>
           <Box sx={{ fontFamily: roboto.style }}>
             <Typography variant="h6">Price Info</Typography>
             <Typography sx={{ mt: 1 }}>
@@ -231,7 +230,7 @@ const PackageDetail = ({ data }) => {
                 <strong>Highlight:</strong> {data?.highlight || "N/A"}
               </Typography>
             </Box>
-           
+
           </Box>
         </Paper>
       </Grid>

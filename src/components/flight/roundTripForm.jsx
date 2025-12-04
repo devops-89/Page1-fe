@@ -320,7 +320,7 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
           pointerEvents: uiLocked ? "none" : "auto",
           userSelect: uiLocked ? "none" : "auto",
         }}
-        spacing={2}
+        spacing={{ xs: 1, md: 2 }}
       >
         <Grid2
           size={{ lg: 2, md: 2.4, xs: 12, sm: 6 }}
@@ -328,10 +328,9 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             // border: "1px solid #D9D9D9",
             // background: "#F9F9F9",
             background: COLORS.SEMIGREY,
-            borderTopLeftRadius: { xs: 12 },
-            borderBottomLeftRadius: { xs: 12 },
-            // borderTopRightRadius: { xs: 6, sm: 4 },
-            // borderBottomRightRadius: { xs: 6, sm: 4 },
+            borderRadius: { xs: 2, lg: 0 },
+            borderTopLeftRadius: { lg: 12 },
+            borderBottomLeftRadius: { lg: 12 },
             overflow: "visible",
           }}
         >
@@ -444,6 +443,7 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             background: COLORS.SEMIGREY,
             overflow: "visible",
             position: "relative",
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -554,6 +554,7 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             background: COLORS.SEMIGREY,
             overflow: "visible",
             position: "relative",
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -590,6 +591,7 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             background: COLORS.SEMIGREY,
             overflow: "visible",
             position: "relative",
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -633,6 +635,7 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
             justifyContent: "center",
             minWidth: 0,
             px: 0,
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -680,11 +683,9 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
                 minWidth: 0,
               }}
               // hover text
-              title={`${state.adult} adult${
-                state.child ? `, ${state.child} child` : ""
-              }${state.infant ? `, ${state.infant} infant` : ""}, ${
-                cabin_class?.label ?? ""
-              } Class`}
+              title={`${state.adult} adult${state.child ? `, ${state.child} child` : ""
+                }${state.infant ? `, ${state.infant} infant` : ""}, ${cabin_class?.label ?? ""
+                } Class`}
             >
               {state.adult} adult
               {state.child !== 0 && `, ${state.child} child`}
@@ -727,7 +728,7 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
         <Grid2
           size={{ lg: 2, md: 12, xs: 12, sm: 12 }}
           textAlign={"center"}
-          // mt={{ lg: 2 }}
+        // mt={{ lg: 2 }}
         >
           <Button
             disabled={uiLocked}
@@ -741,10 +742,9 @@ const RoundTrip = ({ setUiLocked, uiLocked }) => {
               fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
               // mt: { lg: 0, sm: 1, xs: 2 },
               cursor: uiLocked ? "not-allowed" : "pointer",
-              borderTopLeftRadius: { xs: 0 },
-              borderBottomLeftRadius: { xs: 0 },
-              borderTopRightRadius: { xs: 12 },
-              borderBottomRightRadius: { xs: 12 },
+              borderRadius: { xs: 2, lg: 0 },
+              borderTopRightRadius: { lg: 12 },
+              borderBottomRightRadius: { lg: 12 },
             }}
             onClick={submitHandler}
           >

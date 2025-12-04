@@ -51,7 +51,7 @@ const FlightForm = ({ setUiLocked, uiLocked }) => {
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: { xs: 1, md: 2 } }}>
       <Stack
         direction={{ lg: "row", md: "row", xs: "column" }}
         alignItems={"center"}

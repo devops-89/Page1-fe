@@ -9,7 +9,7 @@ const InnerBanner = ({ img, heading }) => {
       <Box
         sx={{
           backgroundImage: `url(${img})`,
-          height: 250,
+          height: { xs: 150, md: 250 },
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -28,7 +28,7 @@ const InnerBanner = ({ img, heading }) => {
             <Typography
               sx={{
                 textTransform: "capitalize",
-                fontSize: 30,
+                fontSize: { xs: 24, md: 30 },
                 fontFamily: nunito.style,
                 color: COLORS.WHITE,
                 fontWeight: 700,

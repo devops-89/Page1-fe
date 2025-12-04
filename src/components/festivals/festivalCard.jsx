@@ -51,7 +51,7 @@ const FestivalCard = ({
           <Typography
             sx={{
               color: COLORS.WHITE,
-              fontSize: {lg:55 ,sm:40} ,
+              fontSize: { xs: 24, sm: 40, lg: 55 },
               fontWeight: 600,
               fontFamily: raleway.style,
               textAlign: "center",

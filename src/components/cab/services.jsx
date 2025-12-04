@@ -35,11 +35,19 @@ const Services = () => {
         <Grid2 container mt={3}>
           {data.cabServices.map((val, i) => (
             <Grid2
-              size={{lg:3 , sm:6 , xs:12}}
+              size={{ lg: 3, sm: 6, xs: 12 }}
               textAlign={"center"}
               sx={{
-                borderRight:
-                  data.cabServices.length - 1 !== i && "1px dashed #d7d7d7",
+                borderRight: {
+                  lg: data.cabServices.length - 1 !== i && "1px dashed #d7d7d7",
+                  xs: "none",
+                },
+                borderBottom: {
+                  lg: "none",
+                  xs: data.cabServices.length - 1 !== i && "1px dashed #d7d7d7",
+                },
+                pb: { xs: 2, lg: 0 },
+                pt: { xs: 2, lg: 0 },
               }}
               key={i}
             >

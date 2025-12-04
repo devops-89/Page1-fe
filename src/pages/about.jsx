@@ -95,13 +95,17 @@ const About = () => {
             <Image src={topStars} />
           </Box>
           <Typography
-            sx={{ fontSize: 30, fontWeight: 700, fontFamily: nunito.style }}
+            sx={{
+              fontSize: { xs: 24, md: 30 },
+              fontWeight: 700,
+              fontFamily: nunito.style,
+            }}
           >
             Why Choose{" "}
             <Typography
               sx={{
                 color: COLORS.SECONDARY,
-                fontSize: 30,
+                fontSize: { xs: 24, md: 30 },
                 fontWeight: 700,
                 fontFamily: nunito.style,
               }}
@@ -142,12 +146,12 @@ const About = () => {
             width: "100%",
             height: "100%",
             zIndex: -9,
-            display:{lg:"block", md:"block", sm:"block" ,xs:"none" }
+            display: { lg: "block", md: "block", sm: "block", xs: "none" }
           }}
         >
           <Image
             src={aboutBg}
-            style={{width:'100%'}}
+            style={{ width: '100%' }}
           />
         </Box>
         <Grid2
@@ -155,7 +159,8 @@ const About = () => {
           sx={{
             position: "relative",
             width: "100%",
-            top: { lg: -10, md: -60, sm: -60, xs: -210 },
+            top: { lg: -10, md: -60, sm: -60, xs: -50 },
+            mt: { xs: -10, md: 0 }
           }}
         >
           <Grid2
@@ -168,10 +173,11 @@ const About = () => {
               p: 2,
               boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
               opacity: 0.9,
-              height: 130,
+              opacity: 0.9,
+              height: { lg: 130, xs: "auto" },
             }}
           >
-            <Grid2 container spacing={{ lg: 8, xs: 6 }}> 
+            <Grid2 container spacing={{ lg: 8, xs: 4 }} alignItems="center" justifyContent="center">
               {data.counterData.map((val, i) => (
                 <Grid2
                   size={{ lg: 3, md: 6, sm: 6, xs: 12 }}

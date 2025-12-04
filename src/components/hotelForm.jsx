@@ -195,8 +195,8 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
     const cityCodeString = selectedCity?.cityCode
       ? String(selectedCity.cityCode)
       : selectedCity?.hotelCode
-      ? String(selectedCity.hotelCode)
-      : "";
+        ? String(selectedCity.hotelCode)
+        : "";
     const payload = {
       CheckIn: checkIn.format("YYYY-MM-DD"),
       CheckOut: checkOut.format("YYYY-MM-DD"),
@@ -328,7 +328,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
       <Grid2
         container
         alignItems="center"
-        spacing={2}
+        spacing={{ xs: 1, md: 2 }}
         sx={{
           display: "flex",
           alignItems: "stretch",
@@ -348,8 +348,9 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             // borderTopRightRadius: { xs: 6, sm: 4 },
             // borderBottomRightRadius: { xs: 6, sm: 4 },
             background: COLORS.SEMIGREY,
-            borderTopLeftRadius: { xs: 12 },
-            borderBottomLeftRadius: { xs: 12 },
+            borderRadius: { xs: 2, lg: 0 },
+            borderTopLeftRadius: { lg: 12 },
+            borderBottomLeftRadius: { lg: 12 },
             overflow: "visible",
           }}
         >
@@ -451,6 +452,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             // borderBottomRightRadius: { xs: 6, sm: 4 },
             background: COLORS.SEMIGREY,
             overflow: "visible",
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -488,6 +490,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             // borderBottomRightRadius: { xs: 6, sm: 4 },
             background: COLORS.SEMIGREY,
             overflow: "visible",
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -525,6 +528,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             // borderBottomRightRadius: { xs: 6, sm: 4 },
             background: COLORS.SEMIGREY,
             overflow: "visible",
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -585,6 +589,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             // borderBottomRightRadius: { xs: 6, sm: 4 },
             background: COLORS.SEMIGREY,
             overflow: "visible",
+            borderRadius: { xs: 2, lg: 0 },
           }}
         >
           <Typography
@@ -605,9 +610,8 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
             <Typography fontSize={13} fontFamily={nunito.style}>
               {totalAdults} {totalAdults === 1 ? "Adult" : "Adults"}
               {totalChildren > 0
-                ? `, ${totalChildren} ${
-                    totalChildren === 1 ? "Child" : "Children"
-                  }`
+                ? `, ${totalChildren} ${totalChildren === 1 ? "Child" : "Children"
+                }`
                 : ""}
             </Typography>
           </CardActionArea>
@@ -647,12 +651,11 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
               height: "100%",
               // mt: { lg: 2, sm: 1, xs: 2 },
               cursor: uiLocked ? "not-allowed" : "pointer",
-              fontSize: { lg: 16, md: 16, sm: 16, xs: 10 },
+              fontSize: { lg: 16, md: 16, sm: 16, xs: 14 },
               py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
-              borderTopLeftRadius: { xs: 0 },
-              borderBottomLeftRadius: { xs: 0 },
-              borderTopRightRadius: { xs: 12 },
-              borderBottomRightRadius: { xs: 12 },
+              borderRadius: { xs: 2, lg: 0 },
+              borderTopRightRadius: { lg: 12 },
+              borderBottomRightRadius: { lg: 12 },
             }}
             onClick={handleSearch}
           >
