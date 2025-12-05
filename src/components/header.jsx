@@ -88,18 +88,36 @@ const Header = () => {
 
 
   return (
+    // <Box
+    //   sx={{
+    //     position: isScrolling ? "fixed" : "absolute",
+    //     width: "100%",
+    //     zIndex: 999,
+    //     backgroundColor: isScrolling ? COLORS.WHITE : COLORS.WHITEOVERLAY,
+    //     transition: "all 0.5s ease",
+    //     backdropFilter: isScrolling ? "blur(5px)" : "none",
+    //     boxShadow: isScrolling ? "0px 2px 10px rgba(0,0,0,0.1)" : "none",
+
+    //   }}
+
+    // >
     <Box
       sx={{
         position: isScrolling ? "fixed" : "absolute",
-        width: "100%",
+        // top: 14,
+        top: { xs: 8, sm: 12, md: 14 },
+        left: "50%",
+        transform: "translateX(-50%)",
+        // width: "80%",     
+        width: { xs: "95%", sm: "90%", md: "80%" },
         zIndex: 999,
-        backgroundColor: isScrolling ? COLORS.WHITE : COLORS.WHITEOVERLAY,
-        transition: "all 0.5s ease",
-        backdropFilter: isScrolling ? "blur(5px)" : "none",
-        boxShadow: isScrolling ? "0px 2px 10px rgba(0,0,0,0.1)" : "none",
-
+        backgroundColor: COLORS.WHITEOVERLAY,
+        backdropFilter: "blur(12px)",
+        transition: "0.4s ease",
+        // borderRadius: "50px",  
+        borderRadius: { xs: "20px", md: "50px" },
+        boxShadow: "0px 12px 40px rgba(0,0,0,0.15)",
       }}
-
     >
 
       <Container maxWidth='lg'>

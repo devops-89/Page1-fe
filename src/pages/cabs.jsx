@@ -45,7 +45,7 @@ const Cabs = () => {
               <Grid2 container spacing={{ lg: 3, xs: 1 }}>
                 {/* First Image */}
                 <Grid2
-                  size={{xs:12, sm:6}}
+                  size={{ xs: 12, sm: 6 }}
                   sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -55,7 +55,7 @@ const Cabs = () => {
                   <Box
                     sx={{
                       width: "100%",
-                      height: { lg: 600, xs: 280, sm:600 },
+                      height: { lg: 600, xs: 300, sm: 600 },
                       display: "flex",
                     }}
                   >
@@ -72,19 +72,20 @@ const Cabs = () => {
                 </Grid2>
 
                 <Grid2
-                 size={{xs:12, sm:6}}
+                  size={{ xs: 12, sm: 6 }}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    gap: { xs: 1, lg: 0 },
                   }}
                 >
                   <Box
                     sx={{
                       width: "100%",
-                      height: { lg: 300, xs: 300 }, // Half of the first image's height
-                      mb: 2,
+                      height: { lg: 300, xs: 200, sm: 300 }, // Half of the first image's height
+                      mb: { lg: 2, xs: 0 },
                     }}
                   >
                     <Image
@@ -100,7 +101,7 @@ const Cabs = () => {
                   <Box
                     sx={{
                       width: "100%",
-                      height: { lg: 300, xs: 300 }, // Half of the first image's height
+                      height: { lg: 300, xs: 200, sm: 300 }, // Half of the first image's height
                     }}
                   >
                     <Image
@@ -200,8 +201,8 @@ const Cabs = () => {
         <Box sx={{ pt: 5 }}>
           <Ensures />
         </Box>
-      </Box>
-    </div>
+      </Box >
+    </div >
   );
 };
 

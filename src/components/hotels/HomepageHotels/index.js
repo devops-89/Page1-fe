@@ -77,7 +77,7 @@ const Hotel = () => {
           </Button>
         </Stack>
 
-        <Grid2 container spacing={4} mt={3}>
+        <Grid2 container spacing={{ xs: 2, md: 4 }} mt={3}>
           {hotelsToShow.map((val, i) => (
             <Grid2 size={{ lg: 3, md: 6, sm: 6, xs: 12 }} key={i}>
               <HotelCard
