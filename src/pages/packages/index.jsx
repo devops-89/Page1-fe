@@ -29,8 +29,6 @@ const months = ["January", "June", "December"];
 const packagetypes = ["Domestic", "International"];
 const packagecategorys = ["Solo", "Couple", "Friends", "Family"];
 
-
-
 const Packages = () => {
   const [destination, setDestination] = useState(null);
   const [duration, setDuration] = useState(null);
@@ -38,9 +36,9 @@ const Packages = () => {
   const [packageType, setPackageType] = useState(null);
   const [packageCategory, setPackageCategory] = useState(null);
   const [submitBtnDisable, setSubmitBtnDisable] = useState(true);
-  
+
   // state for storing fetched package list
-  const [packageList,setPackageList]=useState([]);
+  const [packageList, setPackageList] = useState([]);
 
   useEffect(() => {
     if (destination && duration && month && packageType && packageCategory) {
@@ -79,18 +77,24 @@ const Packages = () => {
 
   // fetching all the packages
   useEffect(() => {
-  const fetchPackages = async () => {
-    try {
-      let response = await packageController.getPackageList(10, 1);
-      setPackageList(response.data.data.items);
-      console.log("Response from fetching all the packages:", response.data.data);
-    } catch (error) {
-      console.error("There is an error in fetching the package api list: ", error);
-    }
-  };
+    const fetchPackages = async () => {
+      try {
+        let response = await packageController.getPackageList(10, 1);
+        setPackageList(response.data.data.items);
+        console.log(
+          "Response from fetching all the packages:",
+          response.data.data
+        );
+      } catch (error) {
+        console.error(
+          "There is an error in fetching the package api list: ",
+          error
+        );
+      }
+    };
 
-  fetchPackages();
-}, []);
+    fetchPackages();
+  }, []);
 
   return (
     <div>
@@ -294,7 +298,7 @@ const Packages = () => {
                         backgroundColor: COLORS.SECONDARY,
                         width: 150,
                         p: 2,
-                        mt:{lg:0 , md:0 , xs:0 , xs:2}
+                        mt: { lg: 0, md: 0, xs: 2 },
                       }}
                     >
                       Search
@@ -304,12 +308,11 @@ const Packages = () => {
               </form>
             </Grid2>
           </Grid2>
-          <Container>
-
           <Stack
             direction={"row"}
             alignItems={"center"}
             justifyContent={"space-between"}
+            mt={2}
           >
             <Typography
               sx={{
@@ -322,31 +325,23 @@ const Packages = () => {
               {packageList?.length} tours found
             </Typography>
           </Stack>
-          </Container>
-
-        <Container>
-
-     
 
           <Grid2 container mt={4} spacing={3}>
             {packageList?.map((val, i) => (
-            
-             <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i} >
-                <Link  href={`/packages/${val?.id}/package-details`} passHref>
-                <Packagescard
-                  title={val.package_name}
-                  img={data?.toursData?.[i]?.img}
-                  location={val.package_destination}
-                  // rating={val.rating}
-                  price={val.package_price}
-                  duration={val.package_day}
-                /> 
+              <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
+                <Link href={`/packages/${val?.id}/package-details`} passHref>
+                  <Packagescard
+                    title={val.package_name}
+                    img={data?.toursData?.[i]?.img}
+                    location={val.package_destination}
+                    // rating={val.rating}
+                    price={val.package_price}
+                    duration={val.package_day}
+                  />
                 </Link>
               </Grid2>
-             
             ))}
           </Grid2>
-          </Container>
         </Container>
       </Box>
     </div>

@@ -395,7 +395,7 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
               // justifyContent: "center",
               gap: { lg: 0.5 },
             }}
-            spacing={2}
+            spacing={{ xs: 1, md: 2 }}
           >
             {/* From */}
             <Grid2
@@ -405,10 +405,9 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
               sx={{
                 // border: "1px solid #D9D9D9",
                 background: COLORS.SEMIGREY,
-                borderTopLeftRadius: { xs: 12 },
-                borderBottomLeftRadius: { xs: 12 },
-                // borderTopRightRadius: { xs: 6, sm: 4 },
-                // borderBottomRightRadius: { xs: 6, sm: 4 },
+                borderRadius: { xs: 2, lg: 0 },
+                borderTopLeftRadius: { lg: 12 },
+                borderBottomLeftRadius: { lg: 12 },
                 overflow: "visible",
               }}
             >
@@ -521,12 +520,9 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
               sx={{
                 // border: "1px solid #D9D9D9",
                 background: COLORS.SEMIGREY,
-                // borderTopLeftRadius: { xs: 6, sm: 4 },
-                // borderBottomLeftRadius: { xs: 6, sm: 4 },
-                // borderTopRightRadius: { xs: 6, sm: 4 },
-                // borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
                 position: "relative",
+                borderRadius: { xs: 2, lg: 0 },
               }}
             >
               <Typography
@@ -639,12 +635,9 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
               sx={{
                 // border: "1px solid #D9D9D9",
                 background: COLORS.SEMIGREY,
-                // borderTopLeftRadius: { xs: 6, sm: 4 },
-                // borderBottomLeftRadius: { xs: 6, sm: 4 },
-                // borderTopRightRadius: { xs: 6, sm: 4 },
-                // borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
                 position: "relative",
+                borderRadius: { xs: 2, lg: 0 },
               }}
             >
               <Typography
@@ -681,15 +674,12 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
               sx={{
                 // border: "1px solid #D9D9D9",
                 background: COLORS.SEMIGREY,
-                // borderTopLeftRadius: { xs: 6, sm: 4 },
-                // borderBottomLeftRadius: { xs: 6, sm: 4 },
-                // borderTopRightRadius: { xs: 6, sm: 4 },
-                // borderBottomRightRadius: { xs: 6, sm: 4 },
                 overflow: "visible",
                 position: "relative",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                borderRadius: { xs: 2, lg: 0 },
               }}
             >
               {index === 0 ? (
@@ -763,10 +753,9 @@ const Multiway = ({ setUiLocked, uiLocked }) => {
                     py: { lg: 1.5, md: 1.5, sm: 1, xs: 1 },
                     width: "100%",
                     height: "100%",
-                    borderTopLeftRadius: { xs: 0 },
-                    borderBottomLeftRadius: { xs: 0 },
-                    borderTopRightRadius: { xs: 12 },
-                    borderBottomRightRadius: { xs: 12 },
+                    borderRadius: { xs: 2, lg: 0 },
+                    borderTopRightRadius: { lg: 12 },
+                    borderBottomRightRadius: { lg: 12 },
                     cursor: uiLocked ? "not-allowed" : "pointer",
                   }}
                   onClick={submitHandler}

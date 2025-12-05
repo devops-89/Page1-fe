@@ -12,10 +12,10 @@ const Testimonials = () => {
     <div>
       <Box >
         <Grid2 container>
-          <Grid2 size={{lg:5 ,md:5,sm:12}} margin={"auto"}>
+          <Grid2 size={{ lg: 5, md: 5, sm: 12 }} margin={"auto"}>
             <Typography
               sx={{
-                fontSize: {lg:40,sm:35 ,xs:20},
+                fontSize: { lg: 40, sm: 35, xs: 20 },
                 textAlign: "center",
                 fontFamily: nunito.style,
                 color: COLORS.BLACK,
@@ -25,7 +25,7 @@ const Testimonials = () => {
               What’s Our{" "}
               <Typography
                 sx={{
-                  fontSize: {lg:40,sm:35 ,xs:20},
+                  fontSize: { lg: 40, sm: 35, xs: 20 },
                   textAlign: "center",
                   fontFamily: nunito.style,
                   color: COLORS.PRIMARY,
@@ -39,16 +39,16 @@ const Testimonials = () => {
               Says
             </Typography>
             <Container>
-            <Typography
-              sx={{
-                fontSize: {lg:15 ,sm:14 ,xs:12},
-                textAlign: "center",
-                fontFamily: nunito.style,
-              }}
-            >
-              Page1Travels, a tour operator specializing in dream destinations,
-              offers a variety of benefits for travellers.
-            </Typography>
+              <Typography
+                sx={{
+                  fontSize: { lg: 15, sm: 14, xs: 12 },
+                  textAlign: "center",
+                  fontFamily: nunito.style,
+                }}
+              >
+                Page1Travels, a tour operator specializing in dream destinations,
+                offers a variety of benefits for travellers.
+              </Typography>
 
             </Container>
           </Grid2>
@@ -64,6 +64,10 @@ const Testimonials = () => {
               delay: 5000,
             }}
             breakpoints={{
+              0: {
+                slidesPerView: 1,
+                spaceBetween: 10,
+              },
               640: {
                 slidesPerView: 2,
                 spaceBetween: 20,
@@ -77,7 +81,7 @@ const Testimonials = () => {
                 spaceBetween: 50,
               },
             }}
-           
+
             grabCursor
             centeredSlides={true}
           >

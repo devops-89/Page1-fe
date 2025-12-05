@@ -72,48 +72,48 @@ const Banner = () => {
               <Box
                 sx={{
                   backgroundColor: "#00000030",
-                  minHeight: "650px",
+                  minHeight: { xs: "400px", sm: "650px" },
                   display: "flex",
                   alignItems: "start",
                   justifyContent: "center",
                 }}
               >
-                {showHeroText && (
+                <Grid2
+                  container
+                  sx={{ mt: { xs: 15, sm: 12, md: 12, lg: 15 } }}
+                >
                   <Grid2
-                    container
-                    sx={{ mt: { xs: 10, sm: 12, md: 12, lg: 15 } }}
+                    size={10}
+                    margin="auto"
+                    className="animate__animated animate__bounceInLeft"
                   >
-                    <Grid2
-                      size={10}
-                      margin="auto"
-                      className="animate__animated animate__bounceInLeft"
+                    <Typography
+                      sx={{
+                        fontSize: { xs: 14, sm: 18 },
+                        color: COLORS.WHITE,
+                        fontWeight: 600,
+                        fontFamily: raleway.style,
+                        letterSpacing: 1.2,
+                        textAlign: "center",
+                        textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
+                      }}
                     >
-                      <Typography
-                        sx={{
-                          fontSize: 18,
-                          color: COLORS.WHITE,
-                          fontWeight: 600,
-                          fontFamily: raleway.style,
-                          letterSpacing: 1.2,
-                          textAlign: "center",
-                        }}
-                      >
-                        TOUR & TRAVEL
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: { xs: 20, sm: 30, md: 40, lg: 50 },
-                          color: COLORS.WHITE,
-                          textAlign: "center",
-                          fontFamily: raleway.style,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {val.title}
-                      </Typography>
-                    </Grid2>
+                      TOUR & TRAVEL
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: 28, sm: 30, md: 40, lg: 50 },
+                        color: COLORS.WHITE,
+                        textAlign: "center",
+                        fontFamily: raleway.style,
+                        fontWeight: 700,
+                        textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
+                      }}
+                    >
+                      {val.title}
+                    </Typography>
                   </Grid2>
-                )}
+                </Grid2>
               </Box>
             </Box>
           </SwiperSlide>
@@ -123,14 +123,15 @@ const Banner = () => {
       {/* Search  */}
       <Container
         sx={{
-          position: "absolute",
+          position: { xs: "relative", sm: "absolute" },
           zIndex: 99,
-          bottom: 0,
-          left: "50%",
-          transform: { xs: "translate(-50%, -35%)" },
+          bottom: { xs: "auto", sm: 0 },
+          left: { xs: "auto", sm: "50%" },
+          transform: { xs: "none", sm: "translate(-50%, -35%)" },
+          marginTop: { xs: -10, sm: 0 },
           width: "100%",
           maxWidth: "1200px",
-          px: 2,
+          px: { xs: 1, sm: 2 },
         }}
       >
         <Grid2 container>
@@ -197,7 +198,7 @@ const Banner = () => {
               <Divider />
               <Box>
                 <TabPanel value={value} index={0}>
-                  <FlightForm setUiLocked={setUiLocked} uiLocked={uiLocked}/>
+                  <FlightForm setUiLocked={setUiLocked} uiLocked={uiLocked} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <HotelForm setUiLocked={setUiLocked} uiLocked={uiLocked} />

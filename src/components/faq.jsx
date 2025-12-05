@@ -18,7 +18,7 @@ const Faq = () => {
       <Container>
         <Typography
           sx={{
-            fontSize: { lg: 35, sm: 33 },
+            fontSize: { xs: 24, sm: 33, lg: 35 },
             fontWeight: 700,
             fontFamily: nunito.style,
           }}

@@ -78,8 +78,8 @@ const Packagescard = ({ img, location, title, price, duration }) => {
                 sx={{
                   fontSize: 14,
                   fontFamily: nunito.style,
-                  textDecoration:"none",
-        
+                  textDecoration: "none",
+
                   color: COLORS.DARKGREY,
                   fontWeight: 600,
                 }}
@@ -95,10 +95,10 @@ const Packagescard = ({ img, location, title, price, duration }) => {
           </Stack>
           <Typography
             sx={{
-              fontSize: {lg:18},
+              fontSize: { xs: 16, lg: 18 },
               fontWeight: 700,
               mt: 1,
-               textDecoration:"none",
+              textDecoration: "none",
               fontFamily: nunito.style,
             }}
           >
@@ -111,7 +111,7 @@ const Packagescard = ({ img, location, title, price, duration }) => {
             readOnly
           /> */}
           {/* <Stack></Stack> */}
-          <Box sx={{ position: "absolute", bottom: 0, width: "85%" }}>
+          <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
             <Divider />
             <Stack
               direction={"row"}
@@ -122,9 +122,9 @@ const Packagescard = ({ img, location, title, price, duration }) => {
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <Typography
                   sx={{
-                    fontSize: 20,
+                    fontSize: { xs: 18, lg: 20 },
                     color: COLORS.BLACK,
-                     textDecoration:"none",
+                    textDecoration: "none",
                     fontFamily: nunito.style,
                     fontWeight: 800,
                   }}
@@ -140,7 +140,7 @@ const Packagescard = ({ img, location, title, price, duration }) => {
                 <Typography
                   sx={{
                     fontSize: 13,
-                     textDecoration:"none",
+                    textDecoration: "none",
                     color: COLORS.DARKGREY,
                     fontFamily: nunito.style,
                   }}

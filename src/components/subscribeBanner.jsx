@@ -33,10 +33,12 @@ const SubscribeBanner = () => {
       <Box
         sx={{
           backgroundImage: `url(${subscribeBanner.src})`,
-          height: "90vh",
-          backgroundPosition: "center",
+          height: { xs: "auto", md: "90vh" },
+          minHeight: { xs: "500px", md: "90vh" },
+          backgroundPosition: { xs: "70% center", md: "center" },
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
+          py: { xs: 4, md: 0 },
         }}
       >
         <Box
@@ -53,16 +55,16 @@ const SubscribeBanner = () => {
               <Grid2 size={{ lg: 6, md: 12, sm: 12, xs: 12 }}>
                 <Typography
                   sx={{
-                    fontSize: 17,
+                    fontSize: { xs: 14, sm: 17 },
                     fontFamily: nunito.style,
                     color: COLORS.PRIMARY,
                     letterSpacing: 2,
-                    mb: { lg: 3, sm: 2 },
+                    mb: { lg: 3, sm: 2, xs: 1 },
                   }}
                 >
                   MEGA OFFER
                 </Typography>
-                <Typography>
+                <Box>
                   <Typography
                     sx={{
                       fontSize: { lg: 40, sm: 40, xs: 30 },
@@ -76,20 +78,20 @@ const SubscribeBanner = () => {
                   </Typography>{" "}
                   <Typography
                     sx={{
-                      fontSize: { lg: 40, md: 30 },
+                      fontSize: { lg: 40, md: 30, xs: 24 },
                       fontFamily: nunito.style,
                       color: COLORS.WHITE,
                       fontWeight: 800,
-                      ml: 2,
+                      ml: { xs: 1, sm: 2 },
                     }}
                     component={"span"}
                   >
                     For Newlyweds
                   </Typography>
-                </Typography>
+                </Box>
                 <Typography
                   sx={{
-                    mt: { lg: 3, sm: 2 },
+                    mt: { lg: 3, sm: 2, xs: 2 },
                     fontSize: { lg: 20, xs: 15 },
                     color: COLORS.WHITE,
                     fontFamily: raleway.style,
@@ -110,7 +112,7 @@ const SubscribeBanner = () => {
                         primary={
                           <Typography
                             sx={{
-                              fontSize: { lg: 16, sm: 15 },
+                              fontSize: { lg: 16, sm: 15, xs: 14 },
                               color: COLORS.WHITE,
                               fontFamily: raleway.style,
                             }}
