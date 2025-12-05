@@ -570,6 +570,7 @@ const HotelPreBookPage = () => {
                 preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.PriceBreakUp?.[0]
                   ?.RoomRate || 0,
               tax: preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalTax || 0,
+                totalAmount:Number(preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare)+Number(serviceCharge),
               serviceFees:
                 preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.PriceBreakUp?.[0]
                   ?.AgentCommission || 0,
