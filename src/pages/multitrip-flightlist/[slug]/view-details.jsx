@@ -173,7 +173,7 @@ const FlightDetails = () => {
           <Grid2
             size={{ xs: "12" }}
             sx={{
-              textAlign: "center",
+
               width: "100%",
               padding: "50px",
               textAlign: "center",

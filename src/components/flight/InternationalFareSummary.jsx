@@ -75,6 +75,7 @@ const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
   const isFixed = commission?.commission_type === COMMISSION_TYPE.FIXED;
   const serviceFee = isFixed ? serviceFeeInFixed : serviceFeeInPercent;
   const grandTotal = publishedFare + serviceFee + extraTotal;
+  const convenienceCharge=Number(fareData.Fare.OtherCharges || 0)+Number(fareData.Fare.ServiceFee ||0)+Number(fareData.Fare.AdditionalTxnFeePub || 0);
 
   const smallScreen = useMediaQuery("(max-width:1199px)");
 
@@ -128,55 +129,40 @@ const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
 
       <List component="nav" sx={{ p: 0 }}>
         <ListItem sx={{ justifyContent: "space-between" }}>
-          <ListItemIcon><AddCircleIcon /></ListItemIcon>
+
           <ListItemText
             primary={<Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>Base Amount</Typography>}
           />
           <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>
-            ₹ {baseFare}
+            ₹ {(Number(baseFare)+Number(serviceFee)).toFixed(2)}
           </Typography>
         </ListItem>
       </List>
 
       <List component="nav" sx={{ p: 0 }}>
         <ListItem button onClick={toggleCollapse} sx={{ justifyContent: "space-between" }}>
-          <ListItemIcon>{open ? <RemoveCircleIcon /> : <AddCircleIcon />}</ListItemIcon>
+
           <ListItemText
             primary={<Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>Taxes and Surcharges</Typography>}
           />
           <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>
-            ₹ {fareData?.Fare?.Tax}
+            ₹ {Number(fareData?.Fare?.Tax).toFixed(2)}
           </Typography>
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List disablePadding>
-            {fareData?.Fare?.TaxBreakup?.map((tax, i) => (
-              <ListItem key={i} sx={{ justifyContent: "space-between", pl: 4 }}>
-                <Typography sx={{ fontFamily: roboto.style }}>{tax.key}</Typography>
-                <Typography sx={{ fontFamily: roboto.style }}>₹ {tax.value}</Typography>
-              </ListItem>
-            ))}
-          </List>
-        </Collapse>
+          <ListItem button onClick={toggleCollapse} sx={{ justifyContent: "space-between" }}>
+
+              <ListItemText
+                  primary={<Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>Convenience Fee</Typography>}
+              />
+              <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>
+                  ₹ {Number(convenienceCharge).toFixed(2)}
+              </Typography>
+          </ListItem>
+
       </List>
 
-      <List component="nav" sx={{ p: 0 }}>
-        <ListItem sx={{ justifyContent: "space-between" }}>
-          <ListItemIcon><AddCircleIcon /></ListItemIcon>
-          <ListItemText
-            primary={<Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>Discount</Typography>}
-          />
-          <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>
-            ₹ {fareData?.Fare?.Discount}
-          </Typography>
-        </ListItem>
-      </List>
 
-      <Divider sx={{ my: 1 }} />
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-        <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>Amount</Typography>
-        <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>₹ {publishedFare}</Typography>
-      </Box>
+
 
       {extraTotal > 0 && (
         <>
@@ -190,12 +176,7 @@ const InternationalFareSummary = ({ fareData, commission, toggleDrawer }) => {
         </>
       )}
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>Service Fee</Typography>
-        <Typography sx={{ fontWeight: 700, fontFamily: roboto.style }}>
-          ₹ {serviceFee.toFixed(2)}
-        </Typography>
-      </Box>
+
 
       <Divider sx={{ my: 1 }} />
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>

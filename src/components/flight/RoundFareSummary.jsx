@@ -79,6 +79,9 @@ const RoundFareSummary = ({ fareData, commission, toggleDrawer }) => {
     base_amount: (onwardFare.BaseFare || 0) + (returnFare.BaseFare || 0),
     tax: (onwardFare.Tax || 0) + (returnFare.Tax || 0),
     discount: (onwardFare.Discount || 0) + (returnFare.Discount || 0),
+      OtherCharges:(onwardFare.OtherCharges || 0) + (returnFare.OtherCharges || 0),
+      ServiceFee:(onwardFare.ServiceFee || 0) + (returnFare.ServiceFee || 0),
+      AdditionalTxnFeePub:(onwardFare.AdditionalTxnFeePub || 0) + (returnFare.AdditionalTxnFeePub || 0),
     publishFare: (onwardFare.PublishedFare || 0) + (returnFare.PublishedFare || 0),
     taxBreakup: (onwardFare.TaxBreakup || []).map((tax, i) => ({
       key: tax.key,
@@ -95,6 +98,8 @@ const RoundFareSummary = ({ fareData, commission, toggleDrawer }) => {
   const isFixed = commission?.commission_type === COMMISSION_TYPE.FIXED;
   const serviceFee = isFixed ? serviceFeeInFixed : serviceFeeInPercent;
   const grandTotal = publishedFare + serviceFee + extraTotal;
+    const convenienceCharge=Number(initialRoundFare.OtherCharges)+ Number(initialRoundFare.ServiceFee)+ Number(initialRoundFare.AdditionalTxnFeePub);
+
 
   useEffect(() => {
     const isValid =
@@ -138,43 +143,33 @@ const RoundFareSummary = ({ fareData, commission, toggleDrawer }) => {
 
       <List sx={{ p: 0 }}>
         <ListItem sx={{ justifyContent: "space-between" }}>
-          <ListItemIcon><AddCircleIcon /></ListItemIcon>
+
           <ListItemText primary="Base Amount" sx={{ fontFamily: roboto.style, fontWeight: 700 }} />
-          <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>₹ {baseFare}</Typography>
+          <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>₹ {(Number(baseFare)+Number(serviceFee)).toFixed(2)}</Typography>
         </ListItem>
       </List>
 
       <List sx={{ p: 0 }}>
         <ListItem button onClick={toggleCollapse} sx={{ justifyContent: "space-between" }}>
-          <ListItemIcon>{open ? <RemoveCircleIcon /> : <AddCircleIcon />}</ListItemIcon>
+
           <ListItemText primary="Taxes and Surcharges" sx={{ fontFamily: roboto.style, fontWeight: 700 }} />
-          <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>₹ {initialRoundFare.tax}</Typography>
+          <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>₹ {initialRoundFare.tax.toFixed(2)}</Typography>
         </ListItem>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List disablePadding>
-            {initialRoundFare.taxBreakup.map((tax, i) => (
-              <ListItem key={i} sx={{ justifyContent: "space-between", pl: 4 }}>
-                <Typography sx={{ fontFamily: roboto.style }}>{tax.key}</Typography>
-                <Typography sx={{ fontFamily: roboto.style }}>₹ {tax.value}</Typography>
-              </ListItem>
-            ))}
-          </List>
-        </Collapse>
-      </List>
 
-      <List sx={{ p: 0 }}>
-        <ListItem sx={{ justifyContent: "space-between" }}>
-          <ListItemIcon><AddCircleIcon /></ListItemIcon>
-          <ListItemText primary="Discount" sx={{ fontFamily: roboto.style, fontWeight: 700 }} />
-          <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>₹ {initialRoundFare.discount}</Typography>
-        </ListItem>
       </List>
+        <List sx={{ p: 0 }}>
+            <ListItem button onClick={toggleCollapse} sx={{ justifyContent: "space-between" }}>
 
-      <Divider sx={{ my: 1 }} />
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: "10px" }}>
-        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>Amount</Typography>
-        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>₹ {publishedFare}</Typography>
-      </Box>
+                <ListItemText primary="Convenience Fee" sx={{ fontFamily: roboto.style, fontWeight: 700 }} />
+                <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>₹ {convenienceCharge.toFixed(2)}</Typography>
+            </ListItem>
+
+        </List>
+
+
+
+
+
 
       {extraTotal > 0 && (
         <>
@@ -188,12 +183,7 @@ const RoundFareSummary = ({ fareData, commission, toggleDrawer }) => {
         </>
       )}
 
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>Service Fee</Typography>
-        <Typography sx={{ fontFamily: roboto.style, fontWeight: 700 }}>
-          ₹ {serviceFee.toFixed(2)}
-        </Typography>
-      </Box>
+
 
       <Divider sx={{ my: 1 }} />
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>

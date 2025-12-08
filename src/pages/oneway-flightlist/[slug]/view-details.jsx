@@ -189,7 +189,7 @@ const FlightDetails = () => {
               textAlign: "center",
               width: "100%",
               padding: "50px",
-              textAlign: "center",
+
             }}
           >
             <Image src={errorImage.src} alt="Image" width={200} height={200} />
@@ -355,7 +355,7 @@ const FlightDetails = () => {
                                       sx={{
                                         fontFamily: nunito.style,
                                         fontWeight: 600,
-                                        fontFamily: roboto.style,
+
                                       }}
                                     >
                                       {segment?.Airline?.AirlineName}{" "}
