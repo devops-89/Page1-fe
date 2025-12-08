@@ -95,6 +95,49 @@ const roundInternationalSeatsInformation = createSlice({
       }
     },
 
+    // auto-generate seats (outgoing / incoming)
+    generateSeatsForAllPassengers: (state, action) => {
+      const { airplaneId, passengerCounts, seatLayout, journeyType } =
+        action.payload;
+
+      const totalPassengers =
+        Number(passengerCounts?.adult || 0) +
+        Number(passengerCounts?.child || 0);
+
+      if (!seatLayout?.RowSeats || totalPassengers <= 0) return;
+
+      // collect all AVAILABLE seats in layout order
+      const availableSeats = [];
+      seatLayout.RowSeats.forEach((row) => {
+        row.Seats.forEach((seat) => {
+          if (seat.AvailablityType === 1) {
+            availableSeats.push(seat);
+          }
+        });
+      });
+
+      if (!availableSeats.length) return;
+
+      const seatsToAssign = availableSeats.slice(0, totalPassengers);
+
+      const targetSeats =
+        journeyType === "outgoing" ? state.outgoingSeats : state.incomingSeats;
+
+      let airplane = targetSeats.find((ap) => ap.id === airplaneId);
+      if (!airplane) {
+        airplane = { id: airplaneId, selectedSeats: [] };
+        targetSeats.push(airplane);
+      }
+      if (!airplane.selectedSeats) airplane.selectedSeats = [];
+
+      seatsToAssign.forEach((seat) => {
+        const exists = airplane.selectedSeats.some((s) => s.Code === seat.Code);
+        if (!exists) {
+          airplane.selectedSeats.push({ ...seat });
+        }
+      });
+    },
+
     resetSeatDetails: (state) => {
       state.outgoingSeats = [];
       state.incomingSeats = [];
@@ -102,5 +145,5 @@ const roundInternationalSeatsInformation = createSlice({
   },
 });
 
-export const { setSeatDetails, removeSeatDetails, resetSeatDetails } = roundInternationalSeatsInformation.actions
+export const { setSeatDetails, removeSeatDetails,generateSeatsForAllPassengers, resetSeatDetails } = roundInternationalSeatsInformation.actions
 export default roundInternationalSeatsInformation.reducer

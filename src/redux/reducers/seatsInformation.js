@@ -1,3 +1,4 @@
+// redux/reducers/seatsInformation.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -60,12 +61,54 @@ const seatsInformation = createSlice({
       }
     },
 
+    // 🔹 NEW: auto-generate seats when seat is mandatory
+    generateSeatsForAllPassengers: (state, action) => {
+      const { airplaneId, passengerCounts, seatLayout } = action.payload;
+
+      const totalPassengers =
+        Number(passengerCounts?.adult || 0) +
+        Number(passengerCounts?.child || 0);
+
+      if (!seatLayout?.RowSeats || totalPassengers <= 0) return;
+
+      // flatten all AVAILABLE seats (AvailablityType === 1) in layout order
+      const availableSeats = [];
+      seatLayout.RowSeats.forEach((row) => {
+        row.Seats.forEach((seat) => {
+          if (seat.AvailablityType === 1) {
+            availableSeats.push(seat);
+          }
+        });
+      });
+
+      if (!availableSeats.length) return;
+
+      const seatsToAssign = availableSeats.slice(0, totalPassengers);
+
+      // get/create airplane entry
+      let airplane = state.seats.find((ap) => ap.id === airplaneId);
+      if (!airplane) {
+        airplane = { id: airplaneId, selectedSeats: [] };
+        state.seats.push(airplane);
+      }
+      if (!airplane.selectedSeats) {
+        airplane.selectedSeats = [];
+      }
+
+      seatsToAssign.forEach((seat) => {
+        const exists = airplane.selectedSeats.some((s) => s.Code === seat.Code);
+        if (!exists) {
+          airplane.selectedSeats.push({ ...seat });
+        }
+      });
+    },
+
     resetSeatDetails: (state) => {
       state.seats = [];
     },
   },
 });
 
-export const { setSeatDetails, removeSeatDetails, resetSeatDetails } =
+export const { setSeatDetails, removeSeatDetails,generateSeatsForAllPassengers, resetSeatDetails } =
   seatsInformation.actions;
 export default seatsInformation.reducer;

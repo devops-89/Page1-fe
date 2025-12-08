@@ -156,7 +156,6 @@ const InternationalPassengerForm = ({
     .forEach((seat) => {
       childSeatsReturn.push(seat);
     });
-
   // console.log("selectedSeatsOutgoing------------------", selectedSeatsOutgoing)
   // console.log("selectedSeatsReturn------------------", selectedSeatsReturn)
   // console.log("transposedOutGoing------------------", transposedOutGoing)
@@ -631,6 +630,9 @@ const InternationalPassengerForm = ({
                     }}
                   >
                     <PassengerFields
+                     DepTime={
+                        flightDetails[0]?.Results?.Segments[1][0].Destination.ArrTime
+                      }
                       data={flightDetails[1]?.Response}
                       passenger={dataObj}
                       index={index}
@@ -657,6 +659,9 @@ const InternationalPassengerForm = ({
                 {values.child.map((dataObj, index) => (
                   <Box key={`child-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
+                     DepTime={
+                        flightDetails[0]?.Results?.Segments[1][0].Destination.ArrTime
+                      }
                       data={flightDetails[1]?.Response}
                       passenger={dataObj}
                       index={index}
@@ -683,6 +688,9 @@ const InternationalPassengerForm = ({
                 {values.infant.map((dataObj, index) => (
                   <Box key={`infant-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
+                     DepTime={
+                        flightDetails[0]?.Results?.Segments[1][0].Destination.ArrTime
+                      }
                       passenger={dataObj}
                       index={index}
                       handleChange={handleChange}

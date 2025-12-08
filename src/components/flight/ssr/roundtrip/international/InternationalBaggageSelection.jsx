@@ -80,6 +80,14 @@ export default function InternationalBaggageSelection({
   };
 
   //   console.log("baggageData-----------------", baggageData);
+  const sortByPrice = (list = []) => {
+    const filteredBaggage = (list || []).filter(
+      (b) => b.Code !== "NoBaggage"
+    );
+    return [...filteredBaggage].sort(
+      (a, b) => Number(a?.Price ?? 0) - Number(b?.Price ?? 0)
+    );
+  };
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -145,9 +153,8 @@ export default function InternationalBaggageSelection({
             </Typography>
             <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
               {baggageData?.[0][0]?.FlightNumber ? (
-                baggageData?.[0]?.map((baggage, baggageIndex) => {
+                sortByPrice(baggageData?.[0] || []).map((baggage, baggageIndex) => {
                   return (
-                    (baggage?.Price!=0)?(
                          <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
@@ -162,7 +169,6 @@ export default function InternationalBaggageSelection({
                         )}
                       />
                     </Grid2>
-                    ):(null)
                   
                   );
                 })
@@ -200,8 +206,7 @@ export default function InternationalBaggageSelection({
                   spacing={2}
                   sx={{ flexWrap: "wrap", mb: "10px" }}
                 >
-                  {baggageData?.[1]?.map((baggage, baggageIndex) => (
-                    (baggage?.Price!=0)?(
+                 {sortByPrice(baggageData?.[1] || []).map((baggage, baggageIndex) => (
                          <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
@@ -216,7 +221,6 @@ export default function InternationalBaggageSelection({
                         )}
                       />
                     </Grid2>
-                    ):(null)
                   
                   ))}
                 </Grid2>

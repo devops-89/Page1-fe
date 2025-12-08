@@ -33,6 +33,7 @@ const TITLE_LABEL = {
 };
 
 const PassengerFields = ({
+  lcc,
   touched,
   setFieldValue,
   DepTime,
@@ -391,7 +392,7 @@ const PassengerFields = ({
                   <DomesticMealSelection
                     passengerId={index}
                     mealData={data?.MealDynamic}
-                    isLCC={data?.isLCC}
+                    isLCC={lcc}
                     passengerType={formType}
                     // specialFareForMeal={specialFareForMeal}
                   />
