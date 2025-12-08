@@ -121,7 +121,7 @@ export const data = {
     {
       img: hotels,
       title: "Hotels",
-      url: "/hotel-list",
+      url: "/hotel",
     },
     {
       img: helicopter,
@@ -334,7 +334,7 @@ export const data = {
     },
     {
       label: "hotels",
-      url: "/hotel-list",
+      url: "/hotel",
     },
     {
       label: "Helicopter",
