@@ -18,7 +18,7 @@ import {
   generateMealsForAllPassengers,
 } from "@/redux/reducers/mealsInformation";
 import MealCard from "@/components/flight/mealCard";
-// import { mealSortingByPriceAndNoMealFilter } from "@/utils/utility-functions/mealUtility";
+import { mealSortingByPriceAndNoMealFilter } from "@/utils/utility-functions/mealUtility";
 export default function InternationalMealSelection({
   mealData,
   isLCC,
@@ -35,15 +35,12 @@ export default function InternationalMealSelection({
   const [tabIndex, setTabIndex] = useState(0);
   console.log("is meal mandatory ", isMealMandatory)
   console.log("mealData-------------", mealData);
-// let processedMealData = [...mealData];
 
-// if (isLCC && mealData[0]) {
-//   processedMealData[0] = mealSortingByPriceAndNoMealFilter(mealData[0]);
-// }
+ const outgoingMealsRaw = mealData?.[0] || [];
+  const returnMealsRaw = mealData?.[1] || [];
 
-// if (isLCC && mealData[1]) {
-//   processedMealData[1] = mealSortingByPriceAndNoMealFilter(mealData[1]);
-// }
+  const outgoingMeals = mealSortingByPriceAndNoMealFilter(outgoingMealsRaw);
+  const returnMeals = mealSortingByPriceAndNoMealFilter(returnMealsRaw);
   useEffect(() => {
     function mealManadatoryLogic() {
       if (isMealMandatory) {
@@ -60,8 +57,7 @@ export default function InternationalMealSelection({
           };
           console.log("passenger Counts:", passengerCounts);
           const allMeals = [
-            ...(mealData?.[0] || []),
-            ...(mealData?.[1] || []),
+            ...outgoingMeals, ...returnMeals
           ];
           dispatch(
             generateMealsForAllPassengers({
@@ -75,7 +71,7 @@ export default function InternationalMealSelection({
     }
 
     mealManadatoryLogic();
-  }, []);
+  }, [isMealMandatory, flightState, dispatch, outgoingMeals, returnMeals]);
 
   // Create unique passenger key
   const uniquePassengerKey = `${passengerType}-${passengerId}`;
@@ -134,7 +130,7 @@ export default function InternationalMealSelection({
   };
 
   if (isLCC) {
-    mealData?.[0]?.forEach((singleMeal) => {
+    outgoingMeals?.forEach((singleMeal) => {
       //   console.log("singleMeal----------------", singleMeal);
       if (!filteredDataOutgoing[singleMeal.FlightNumber]) {
         filteredDataOutgoing[singleMeal.FlightNumber] = [];
@@ -144,7 +140,7 @@ export default function InternationalMealSelection({
   }
 
   if (isLCC) {
-    mealData?.[1]?.forEach((singleMeal) => {
+    returnMeals?.forEach((singleMeal) => {
       // console.log("singleMeal----------------", singleMeal);
       if (!filteredDataReturn[singleMeal.FlightNumber]) {
         filteredDataReturn[singleMeal.FlightNumber] = [];
@@ -271,8 +267,8 @@ export default function InternationalMealSelection({
               </Swiper>
             ) : (
               <Grid2 container spacing={2}>
-                {mealData?.[0]?.Code ? (
-                  mealData?.map((meal, mealIndex) => (
+                {outgoingMeals?.[0]?.Code ? (
+                  outgoingMeals?.map((meal, mealIndex) => (
                       <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                         <MealCard
                           isLCC={isLCC}
@@ -393,8 +389,8 @@ export default function InternationalMealSelection({
               </Swiper>
             ) : (
               <Grid2 container spacing={2}>
-                {mealData?.[0]?.Code ? (
-                  mealData.map((meal, mealIndex) => (
+                {returnMeals?.[0]?.Code ? (
+                  returnMeals.map((meal, mealIndex) => (
                       <Grid2 size={{ xs: 12, lg: 6 }} key={mealIndex}>
                         <MealCard
                           isLCC={isLCC}

@@ -176,7 +176,8 @@ export default function BaggageSelection({
       <AccordionDetails sx={{ p: 1, overflowY: "auto", maxHeight: "240px" }}>
         {baggageData?.map((singleBaggage, baggageIndex) => {
           const flightNumber = singleBaggage?.[0]?.FlightNumber;
-          const sortedBaggage = [...singleBaggage].sort(
+          const filteredBaggage = singleBaggage.filter((b) => b.Code !== "NoBaggage");
+          const sortedBaggage = [...filteredBaggage].sort(
             (a, b) => Number(a.Price) - Number(b.Price)
           );
           return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Typography, Box, Stack } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setSeatDetails } from "@/redux/reducers/roundInternationalSeatsInformation";
+import { setSeatDetails,generateSeatsForAllPassengers } from "@/redux/reducers/roundInternationalSeatsInformation";
 import { COLORS } from "@/utils/colors.js";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
@@ -37,7 +37,10 @@ const SEAT_TYPE = {
 
 const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
 
-  
+   const isSeatMandatory = useSelector(
+      (state) =>
+        state.Flight?.FlightValidation?.rules?.specialFare?.isSeatMandatory
+    );
   // Use useSelector to directly access seats from Redux state
   const reservedSeats = useSelector((state) => {
     // console.log("hello",state.Flight.RoundInternationalSeatsInformation?.outgoingSeats)
@@ -94,7 +97,40 @@ const Seat = ({ extraDetails,planeIndex,tabIndex }) => {
     setColumns(columnLetters);
   }, [extraDetails]); 
 
+ // auto-select first seats when seat is mandatory
+  useEffect(() => {
+    if (
+      !isSeatMandatory ||
+      !extraDetails?.RowSeats ||
+      !maxPassengerCount ||
+      reservedSeats.length > 0 
+    ) {
+      return;
+    }
 
+    const passengerCounts = {
+      adult: maxPassengerCount?.adult || 0,
+      child: maxPassengerCount?.child || 0,
+      // infant usually no seat; add if needed
+    };
+
+    dispatch(
+      generateSeatsForAllPassengers({
+        airplaneId: planeIndex,
+        passengerCounts,
+        seatLayout: extraDetails,
+        journeyType: tabIndex === 0 ? "outgoing" : "incoming",
+      })
+    );
+  }, [
+    isSeatMandatory,
+    extraDetails,
+    maxPassengerCount,
+    reservedSeats.length,
+    dispatch,
+    planeIndex,
+    tabIndex,
+  ]);
   // No need for a useEffect to update reservedSeats based on Redux state 'value'
   // reservedSeats is now directly derived from Redux using useSelector
 

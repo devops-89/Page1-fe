@@ -87,7 +87,14 @@ export default function DomesticBaggageSelection({
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
   };
-
+  const sortByPrice = (list = []) => {
+    const filteredBaggage = (list || []).filter(
+      (b) => b.Code !== "NoBaggage"
+    );
+    return [...filteredBaggage].sort(
+      (a, b) => Number(a?.Price ?? 0) - Number(b?.Price ?? 0)
+    );
+  };
   return (
     <Accordion sx={{ mb: "10px" }}>
       <AccordionSummary
@@ -152,9 +159,9 @@ export default function DomesticBaggageSelection({
 
             <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
               {baggageData?.[0][0]?.FlightNumber ? (
-                baggageData?.[0]?.map((baggage, baggageIndex) => {
+                sortByPrice(baggageData?.[0] || []).map((baggage, baggageIndex) => {
                   return (
-                    (baggage?.Price!=0)?(  <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
+                    <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
                         handleBaggageValue={(baggage) => {
@@ -173,7 +180,7 @@ export default function DomesticBaggageSelection({
                             b.baggage.Code === baggage?.Code
                         )}
                       />
-                    </Grid2>):(null)
+                    </Grid2>
                   
                   );
                 })
@@ -208,9 +215,8 @@ export default function DomesticBaggageSelection({
             )}
             <Grid2 container spacing={2} sx={{ flexWrap: "wrap", mb: "10px" }}>
               {baggageData?.[1][0]?.FlightNumber ? (
-                baggageData?.[1]?.map((baggage, baggageIndex) => {
+                sortByPrice(baggageData?.[1] || []).map((baggage, baggageIndex) => {
                   return (
-                    (baggage?.Price!=0)?(
                        <Grid2 size={{ lg: 6, xs: 12 }} key={baggageIndex}>
                       <BaggageCard
                         baggage={baggage}
@@ -231,7 +237,6 @@ export default function DomesticBaggageSelection({
                         )}
                       />
                     </Grid2>
-                    ):(null)
                    
                   );
                 })

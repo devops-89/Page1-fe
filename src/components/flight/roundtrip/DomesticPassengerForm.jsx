@@ -733,6 +733,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                     }}
                   >
                     <PassengerFields
+                      lcc={flightDetails?.[0]?.[1]?.isLCC}
                       data={customMealAndBaggage}
                       passenger={dataObj}
                       index={index}
@@ -752,6 +753,7 @@ const DomesticPassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
                 {values.child.map((dataObj, index) => (
                   <Box key={`child-${index}`} sx={{ mb: "10px" }}>
                     <PassengerFields
+                     lcc={flightDetails?.[0]?.[1]?.isLCC}
                       data={customMealAndBaggage}
                       passenger={dataObj}
                       index={index}
