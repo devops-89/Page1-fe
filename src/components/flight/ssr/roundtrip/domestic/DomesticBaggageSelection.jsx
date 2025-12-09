@@ -88,8 +88,9 @@ export default function DomesticBaggageSelection({
     setTabIndex(newIndex);
   };
   const sortByPrice = (list = []) => {
+    console.log("list is ", list)
     const filteredBaggage = (list || []).filter(
-      (b) => b.Code !== "NoBaggage"
+      (b) => b?.Code !== "NoBaggage"
     );
     return [...filteredBaggage].sort(
       (a, b) => Number(a?.Price ?? 0) - Number(b?.Price ?? 0)

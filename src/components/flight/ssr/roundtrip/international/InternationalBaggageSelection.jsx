@@ -82,7 +82,7 @@ export default function InternationalBaggageSelection({
   //   console.log("baggageData-----------------", baggageData);
   const sortByPrice = (list = []) => {
     const filteredBaggage = (list || []).filter(
-      (b) => b.Code !== "NoBaggage"
+      (b) => b?.Code !== "NoBaggage"
     );
     return [...filteredBaggage].sort(
       (a, b) => Number(a?.Price ?? 0) - Number(b?.Price ?? 0)

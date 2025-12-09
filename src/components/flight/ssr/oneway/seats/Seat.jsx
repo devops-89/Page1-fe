@@ -12,20 +12,20 @@ import { nunito } from "@/utils/fonts";
 import { setToast } from "@/redux/reducers/toast";
 import { TOAST_STATUS } from "@/utils/enum";
 import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
-
+import ClearIcon from '@mui/icons-material/Clear';
 // Define SeatColors and AvailablityStatus as constants outside the component for better organization
 const SeatColors = {
   0: "gray",
-  1: "#0096FF",
-  3: "orange",
-  4: "red",
+  1: "#2D6CDF",
+  3: "#A3A9B3",
+  // 4: "red",
 };
 
 const AvailablityStatus = {
   0: "Not Set",
   1: "Available",
   3: "Reserved",
-  4: "Blocked",
+  // 4: "Blocked",
   5: "Empty Space",
 };
 
