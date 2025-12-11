@@ -270,10 +270,6 @@ const FareSummary = ({ fareData, commission, toggleDrawer }) => {
           </ListItem>
       </List>
 
-
-
-
-
       {/* Extra charges */}
       {anyExtrasSelected && (
         <>

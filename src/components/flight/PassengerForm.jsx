@@ -494,6 +494,7 @@ const PassengerForm = ({ flightDetails, myState, journey, isLCC }) => {
   };
 
   useEffect(() => {
+      console.log("payload for lcc and non lcc oneway:",payload);
     if (payload.trace_id) {
       const bookingPromise = flightDetails?.[0]?.Results?.IsLCC
         ? flightController.oneWayBookingLLC(payload)
