@@ -154,27 +154,9 @@ const HotelDetails = () => {
   const displayedFacilities = shouldTruncateFacilities
     ? facilities.slice(0, maxFacilitiesLength)
     : facilities;
+  // total fare
+  const TotalFare = (selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2)) - (selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2));
 
-  // calculate base fare
-  const calculateBaseFare = (dayRates = []) => {
-    let total = 0;
-    let roomCount = dayRates.length;
-    let nightCount = 0;
-
-    for (const room of dayRates) {
-      if (Array.isArray(room)) {
-        nightCount = Math.max(nightCount, room.length);
-        for (const night of room) {
-          total += night?.BasePrice || 0;
-        }
-      }
-    }
-    return { total, roomCount, nightCount };
-  };
-  const { total, roomCount, nightCount } = calculateBaseFare(
-    selectedHotel?.Rooms?.[0]?.DayRates
-  );
-  // handling service fees calculation start using comission
 
   const percentage = Number(hotelPrice?.COMMISSION?.percentage);
   const isFixed =
@@ -183,11 +165,11 @@ const HotelDetails = () => {
   if (isFixed) {
     charge = percentage;
   } else {
-    charge = (total * percentage) / 100;
+    charge = (TotalFare * percentage) / 100;
   }
 
   const serviceCharge = charge;
-
+  
   // ======================= facilities truncation logic end =======================================
 
   return (
@@ -403,18 +385,18 @@ const HotelDetails = () => {
                     {/* Subheader — check in/out */}
                     {(hotelDetail?.CheckInTime ||
                       hotelDetail?.CheckOutTime) && (
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontFamily: nunito.style,
-                          color: COLORS.SECONDARY,
-                          mb: 1.5,
-                        }}
-                      >
-                        Check-in {hotelDetail?.CheckInTime || "—"} • Check-out{" "}
-                        {hotelDetail?.CheckOutTime || "—"}
-                      </Typography>
-                    )}
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontFamily: nunito.style,
+                            color: COLORS.SECONDARY,
+                            mb: 1.5,
+                          }}
+                        >
+                          Check-in {hotelDetail?.CheckInTime || "—"} • Check-out{" "}
+                          {hotelDetail?.CheckOutTime || "—"}
+                        </Typography>
+                      )}
 
                     {/* Highlights */}
                     {hotelDetail?.HotelFacilities && (
@@ -449,51 +431,51 @@ const HotelDetails = () => {
                       {hotelDetail.HotelFacilities?.some((f) =>
                         f.toLowerCase().includes("wifi")
                       ) && (
-                        <Box
-                          sx={{
-                            px: 1.5,
-                            py: 0.5,
-                            borderRadius: "999px",
-                            backgroundColor: COLORS.LIGHTBLUE,
-                            fontSize: 13,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Free Wi-Fi
-                        </Box>
-                      )}
+                          <Box
+                            sx={{
+                              px: 1.5,
+                              py: 0.5,
+                              borderRadius: "999px",
+                              backgroundColor: COLORS.LIGHTBLUE,
+                              fontSize: 13,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            Free Wi-Fi
+                          </Box>
+                        )}
                       {hotelDetail.HotelFacilities?.some((f) =>
                         f.toLowerCase().includes("parking")
                       ) && (
-                        <Box
-                          sx={{
-                            px: 1.5,
-                            py: 0.5,
-                            borderRadius: "999px",
-                            backgroundColor: COLORS.LIGHTBLUE,
-                            fontSize: 13,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Parking
-                        </Box>
-                      )}
+                          <Box
+                            sx={{
+                              px: 1.5,
+                              py: 0.5,
+                              borderRadius: "999px",
+                              backgroundColor: COLORS.LIGHTBLUE,
+                              fontSize: 13,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            Parking
+                          </Box>
+                        )}
                       {hotelDetail.HotelFacilities?.some((f) =>
                         f.toLowerCase().includes("pets")
                       ) && (
-                        <Box
-                          sx={{
-                            px: 1.5,
-                            py: 0.5,
-                            borderRadius: "999px",
-                            backgroundColor: COLORS.LIGHTBLUE,
-                            fontSize: 13,
-                            fontFamily: nunito.style,
-                          }}
-                        >
-                          Pets allowed
-                        </Box>
-                      )}
+                          <Box
+                            sx={{
+                              px: 1.5,
+                              py: 0.5,
+                              borderRadius: "999px",
+                              backgroundColor: COLORS.LIGHTBLUE,
+                              fontSize: 13,
+                              fontFamily: nunito.style,
+                            }}
+                          >
+                            Pets allowed
+                          </Box>
+                        )}
                     </Box>
                     {/* Nearby Attractions (first 5) */}
                     {hotelDetail?.Attractions &&
@@ -546,7 +528,7 @@ const HotelDetails = () => {
                         fontSize: 18,
                       }}
                     >
-                      Per night :
+                      Starting From :
                     </Typography>
                     <Typography
                       variant="h4"
@@ -555,8 +537,9 @@ const HotelDetails = () => {
                       ₹{" "}
                       {/* {selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2) ||
                         "0.00"} */}
-                      {((total + serviceCharge) / nightCount).toFixed(2) ||
-                        "0.00"}{" "}
+                      {/* {((total + serviceCharge) / nightCount).toFixed(2) ||
+                        "0.00"}{" "} */}
+                      {TotalFare + serviceCharge}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -570,7 +553,7 @@ const HotelDetails = () => {
                       {/* {selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2) ||
                         "0.00"}{" "} */}
                       {(
-                        selectedHotel?.Rooms?.[0]?.TotalTax / nightCount
+                        selectedHotel?.Rooms?.[0]?.TotalTax
                       ).toFixed(2)}{" "}
                       {""}
                       taxes & fees
@@ -891,8 +874,7 @@ const HotelDetails = () => {
                             }}
                           >
                             ₹{" "}
-                            {selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2) ||
-                              0}
+                            {TotalFare + serviceCharge}
                             +
                           </Typography>
                           <Typography
@@ -911,7 +893,7 @@ const HotelDetails = () => {
                           {/* Day Rates */}
                           {room.DayRates?.[0]?.length > 0 && (
                             <Box mt={2}>
-                              <Typography
+                              {/* <Typography
                                 variant="body2"
                                 sx={{
                                   fontWeight: 500,
@@ -930,7 +912,7 @@ const HotelDetails = () => {
                                 {room?.DayRates?.[0]?.[0]?.BasePrice?.toFixed(
                                   2
                                 ) || 0}
-                              </Typography>
+                              </Typography> */}
                               <Button
                                 onClick={() =>
                                   router.push(

@@ -10,17 +10,18 @@ import SecurityIcon from "@mui/icons-material/Security";
 import { COLORS } from "@/utils/colors";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
+import HotelForm from "@/components/hotelForm";
 
-const FLight = () => {
-    const [uiLocked, setUiLocked] = useState(false);
+const Hotel = () => {
+   const [uiLocked, setUiLocked] = useState(false);
   return (
     <>
-      <InnerBanner img={banner.src} heading={"Search Flight"} />
+      <InnerBanner img={banner.src} heading={"Search Hotel"} />
       <Box sx={{ pt: { lg: 10, md: 5 } }}>
         <Container>
           <Card sx={{ boxShadow: "0px 0px 10px 2px rgb(0,0,0,0.20)", p: 2 }}>
-            <Typography sx={{ fontSize: 18 }}> Search Flight</Typography>
-            <FlightForm setUiLocked={setUiLocked} uiLocked={uiLocked}/>
+            <Typography sx={{ fontSize: 18 }}> Search Hotel</Typography>
+            <HotelForm setUiLocked={setUiLocked} uiLocked={uiLocked}/>
           </Card>
         </Container>
         <Box sx={{ pt: { lg: 10, md: 5 } }}>
@@ -75,4 +76,4 @@ const FLight = () => {
   );
 };
 
-export default FLight;
+export default Hotel;

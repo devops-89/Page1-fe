@@ -7,7 +7,7 @@ import chalk from "chalk";
 import moment from "moment";
 import { FlightTakeoff } from "@mui/icons-material";
 import AirlineSeatReclineExtraIcon from '@mui/icons-material/AirlineSeatReclineExtra';
-
+import ClearIcon from '@mui/icons-material/Clear';
 import {roboto} from "@/utils/fonts";
 const SeatDetail = ({extraDetails,planeIndex}) => {
 
@@ -141,7 +141,8 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
               mb:'10px'
             }}
           >
-            <AirlineSeatReclineExtraIcon sx={{color:COLORS.PRIMARY}}/>
+            <AirlineSeatReclineExtraIcon sx={{color:"#A3A9B3"}}/>
+            {/* <ClearIcon sx={{color:"#A3A9B3"}}/> */}
           </Box>
           <Typography variant="body1" sx={{textAlign:"center", ffontFamily:roboto.style,fontSize:{lg:16 , xs:13}}}>Reserved</Typography>
         </Box>
@@ -180,11 +181,11 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
              
             }}
           >
-            <AirlineSeatReclineExtraIcon sx={{color:COLORS.SECONDARY}}/>
+            <AirlineSeatReclineExtraIcon sx={{color:"#2D6CDF"}}/>
           </Box>
           <Typography variant="body1" sx={{textAlign:"center", fontFamily:roboto.style,fontSize:{lg:16 , xs:13}}}>Available</Typography>
         </Box>
-        <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
+        {/* <Box sx={{ display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
           <Box
             sx={{
               width: "20px",
@@ -202,7 +203,7 @@ const SeatDetail = ({extraDetails,planeIndex}) => {
              <AirlineSeatReclineExtraIcon sx={{color:COLORS.RED}}/>
           </Box>
           <Typography variant="body1" sx={{textAlign:"center", fontFamily:roboto.style ,fontSize:{lg:16 , xs:13}}}>Blocked</Typography>
-        </Box>
+        </Box> */}
       </Stack>
     </Box>
   );
