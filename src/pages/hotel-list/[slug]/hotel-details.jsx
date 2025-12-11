@@ -539,7 +539,7 @@ const HotelDetails = () => {
                         "0.00"} */}
                       {/* {((total + serviceCharge) / nightCount).toFixed(2) ||
                         "0.00"}{" "} */}
-                      {TotalFare + serviceCharge}
+                      {Number(TotalFare + serviceCharge).toFixed(2)}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -874,8 +874,8 @@ const HotelDetails = () => {
                             }}
                           >
                             ₹{" "}
-                            {TotalFare + serviceCharge}
-                            +
+                            {Number(TotalFare + serviceCharge).toFixed(2)}
+
                           </Typography>
                           <Typography
                             variant="body2"

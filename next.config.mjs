@@ -8,10 +8,14 @@ const nextConfig = {
   ],
   images:{
     remotePatterns:[
-      {
-        hostname:"dev.page1travels.com",
-        protocol:"https",
-      }
+        {
+            protocol: "https",
+            hostname: "cdn.tektravels.com",
+        },
+        {
+            protocol: "https",
+            hostname: "dev.page1travels.com",
+        }
     ]
   }
 };
