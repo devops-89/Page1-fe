@@ -24,16 +24,18 @@ import { dashboardController } from "@/api/dashboardController";
 import CancelHotelDialog from "./CancelHotelDialog";
 import { hotelController } from "@/api/hotelController";
 import { useSelector } from "react-redux";
+import {useRouter} from "next/router";
 const columns = [
-  { key: "journey", label: "Hotel Name" },
-  { key: "journey_type", label: "Room Type" },
-  { key: "amount", label: "Price" },
-  { key: "updated_at", label: "Check In" },
-  { key: "flightDate", label: "Check Out" },
-  { key: "status", label: "Status" },
-  { key: "pdf_url", label: "Invoice" },
-  { key: "cancellation", label: "Cancel Booking" },
+    { key: "journey", label: "Hotel Name" },
+    { key: "journey_type", label: "Room Type" },
+    { key: "amount", label: "Price" },
+    { key: "updated_at", label: "Check In" },
+    { key: "flightDate", label: "Check Out" },
+    { key: "status", label: "Status" },
+    { key: "cancellation", label: "Cancel Booking" },
+    { key: "action", label: "Action" }, // 👈 NEW
 ];
+
 
 const Hotel = ({ userId }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,6 +49,9 @@ const Hotel = ({ userId }) => {
   const Ip_address = useSelector(
     (state) => state?.HOTEL?.HotelSearchData?.userIp
   );
+
+  const router=useRouter();
+
   useEffect(() => {
     const delay = setTimeout(() => {
       setDebouncedSearch(searchTerm);
@@ -356,28 +361,7 @@ const Hotel = ({ userId }) => {
                       textOverflow: "ellipsis",
                     };
 
-                    if (col.key === "pdf_url") {
-                      return (
-                        <TableCell key={col.key} align="center" sx={commonSx}>
-                          {row.pdf_url ? (
-                            <a
-                              href={row.pdf_url}
-                              target="_self"
-                              rel="noopener noreferrer"
-                              style={{
-                                color: COLORS.SECONDARY,
-                                textDecoration: "underline",
-                              }}
-                              download
-                            >
-                              Download
-                            </a>
-                          ) : (
-                            "--"
-                          )}
-                        </TableCell>
-                      );
-                    }
+
 
                     if (col.key === "cancellation") {
                       return (
@@ -412,7 +396,37 @@ const Hotel = ({ userId }) => {
                       );
                     }
 
-                    return (
+                      if (col.key === "action") {
+                          return (
+                              <TableCell key={col.key} align="center" sx={commonSx}>
+                                  {row.status === "COMPLETED" ? (
+                                      <Button
+                                          variant="outlined"
+                                          size="small"
+                                          onClick={() =>
+                                              router.push(`/dashboard/hotels/${row.order_id}`)
+                                          }
+                                          sx={{
+                                              textTransform: "none",
+                                              fontWeight: 700,
+                                              borderColor: COLORS.PRIMARY,
+                                              color: COLORS.PRIMARY,
+                                              "&:hover": {
+                                                  backgroundColor: `${COLORS.PRIMARY}15`,
+                                              },
+                                          }}
+                                      >
+                                          View Details
+                                      </Button>
+                                  ) : (
+                                      "--"
+                                  )}
+                              </TableCell>
+                          );
+                      }
+
+
+                      return (
                       <TableCell key={col.key} align="center" sx={commonSx}>
                         {col.key === "status"
                           ? row.status

@@ -21,6 +21,7 @@ import { nunito } from "@/utils/fonts";
 import { COLORS } from "@/utils/colors";
 import { dashboardController } from "@/api/dashboardController";
 import moment from "moment";
+import {useRouter} from "next/router";
 import { Cancel } from "@mui/icons-material";
 import CancelDialog from "./CancelDialog";
 
@@ -31,8 +32,8 @@ const columns = [
   { key: "updated_at", label: "Order Time" },
   { key: "flightDate", label: "Flight Date" },
   { key: "status", label: "Status" },
-  { key: "pdf_url", label: "Ticket" },
-  { key: "cancellation", label: "Cancel Ticket" },
+  { key: "action", label: "Action" },
+
 ];
 
 const Flight = ({ userId }) => {
@@ -43,6 +44,7 @@ const Flight = ({ userId }) => {
   const [loading, setLoading] = useState(true);
   const [fetchedData, setFetchedData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const router=useRouter();
 
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -240,49 +242,39 @@ const Flight = ({ userId }) => {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      {col.key === "updated_at" || col.key === "flightDate" ? (
-                        moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
-                      ) : col.key === "cancellation" ? (
-                        (() => {
-                          let parsedResponse = null;
-                          try {
-                            parsedResponse = row.success_response
-                              ? JSON.parse(row.success_response)
-                              : null;
-                          } catch (err) {
-                            parsedResponse = null;
-                          }
-
-                          const bookingId =
-                            parsedResponse?.Response?.Response?.BookingId ||
-                            parsedResponse?.BookingId;
-
-                          return row.status === "COMPLETED" && bookingId ? (
-                            <CancelDialog bookingId={bookingId} />
-                          ) : (
-                            "--"
-                          );
-                        })()
-                      ) : col.key === "pdf_url" ? (
-                        row["pdf_url"] ? (
-                          <a
-                            href={row["pdf_url"]}
-                            target="_self"
-                            rel="noopener noreferrer"
-                            style={{
-                              color: COLORS.SECONDARY,
-                              textDecoration: "underline",
-                            }}
-                            download
-                          >
-                            Download
-                          </a>
+                        {col.key === "action" ? (
+                            row.status === "COMPLETED" ? (
+                                <button
+                                    style={{
+                                        padding: "5px 12px",
+                                        backgroundColor: COLORS.PRIMARY,
+                                        color: "#fff",
+                                        borderRadius: "6px",
+                                        border: "none",
+                                        cursor: "pointer",
+                                        fontWeight: 600,
+                                    }}
+                                    onClick={() => router.push(`/dashboard/flights/${row?.order_id}`)}
+                                >
+                                    Details
+                                </button>
+                            ) : (
+                                <Typography
+                                    sx={{
+                                        fontSize: 13,
+                                        color: "#999",
+                                        fontFamily: nunito.style,
+                                        fontWeight: 600,
+                                    }}
+                                >
+                                    —
+                                </Typography>
+                            )
+                        ) : col.key === "updated_at" || col.key === "flightDate" ? (
+                            moment(row[col.key]).format("DD MMM YYYY, hh:mm A")
                         ) : (
-                          "--"
-                        )
-                      ) : (
-                        row[col.key]
-                      )}
+                            row[col.key]
+                        )}
                     </TableCell>
                   ))}
                 </TableRow>

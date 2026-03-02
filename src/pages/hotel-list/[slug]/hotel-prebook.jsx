@@ -81,17 +81,23 @@ const HotelPreBookPage = () => {
   // handling service fees calculation start using comission
 
   const percentage = Number(preBookResponse?.COMMISSION?.percentage);
-  console.log("percentage:", percentage);
-  const isFixed =
-    preBookResponse?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
-  let charge = 0;
-  if (isFixed) {
-    charge = percentage;
-  } else {
-    charge = (total * percentage) / 100;
-  }
+const isFixed =
+  preBookResponse?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
 
-  const serviceCharge = charge;
+let charge = 0;
+
+const totalFare =
+  preBookResponse?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare || 0;
+
+if (isFixed) {
+  charge = percentage;
+} else {
+  charge = (totalFare * percentage) / 100;
+}
+
+const serviceCharge = charge;
+
+  console.log("Service Charge:",serviceCharge);
 
   // handling services fees calculcation end
 
@@ -1180,7 +1186,7 @@ const HotelPreBookPage = () => {
                               sx={{ fontFamily: roboto.style, fontWeight: 700 }}
                             >
                               {/* ₹ {total.toFixed(2)},{serviceCharge.toFixed(2)} */}
-                              {(total + serviceCharge).toFixed(2)}
+                              {(totalFare + serviceCharge).toFixed(2)}
                             </Typography>
                           </Grid2>
                         </Grid2>

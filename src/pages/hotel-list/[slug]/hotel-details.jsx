@@ -144,7 +144,7 @@ const HotelDetails = () => {
   const handleCloseFacilities = () => setOpenFacilities(false);
 
   const maxFacilitiesLength = 5;
-
+console.log("hotelDetail:",hotelDetail);
   const facilities = Array.isArray(hotelDetail?.HotelFacilities)
     ? hotelDetail.HotelFacilities
     : [];
@@ -155,22 +155,51 @@ const HotelDetails = () => {
     ? facilities.slice(0, maxFacilitiesLength)
     : facilities;
   // total fare
-  const TotalFare = (selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2)) - (selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2));
+  // const TotalFare = (selectedHotel?.Rooms?.[0]?.TotalFare?.toFixed(2)) - (selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2));
+  // // const TotalFare = Number(selectedHotel?.Rooms?.[0]?.TotalFare || 0);
 
 
-  const percentage = Number(hotelPrice?.COMMISSION?.percentage);
-  const isFixed =
-    hotelPrice?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
-  let charge = 0;
-  if (isFixed) {
-    charge = percentage;
-  } else {
-    charge = (TotalFare * percentage) / 100;
-  }
+  // const percentage = Number(hotelPrice?.COMMISSION?.percentage);
+  // const isFixed =
+  //   hotelPrice?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
+  // let charge = 0;
+  // if (isFixed) {
+  //   charge = percentage;
+  // } else {
+  //   charge = (TotalFare * percentage) / 100;
+  // }
 
-  const serviceCharge = charge;
+  // const serviceCharge = charge;
+  // console.log("service charge: ",serviceCharge);
   
   // ======================= facilities truncation logic end =======================================
+
+  const calculateRoomPrice = (room) => {
+  const totalFare = Number(room?.TotalFare || 0);
+  const totalTax = Number(room?.TotalTax || 0);
+
+  const percentage = Number(hotelPrice?.COMMISSION?.percentage || 0);
+  const isFixed =
+    hotelPrice?.COMMISSION?.commission_type === COMMISSION_TYPE.FIXED;
+
+  let serviceCharge = 0;
+
+  if (isFixed) {
+    serviceCharge = percentage;
+  } else {
+    serviceCharge = (totalFare * percentage) / 100;
+  }
+
+  console.log("Hotel Detail Service charge:",serviceCharge);
+  const finalAmount = totalFare + serviceCharge;
+
+  return {
+    totalFare,
+    totalTax,
+    serviceCharge,
+    finalAmount,
+  };
+};
 
   return (
     <Grid2 container sx={{ bgcolor: COLORS.SEMIGREY }}>
@@ -539,7 +568,9 @@ const HotelDetails = () => {
                         "0.00"} */}
                       {/* {((total + serviceCharge) / nightCount).toFixed(2) ||
                         "0.00"}{" "} */}
-                      {Number(TotalFare + serviceCharge).toFixed(2)}
+                      {selectedHotel?.Rooms?.length > 0
+  ? calculateRoomPrice(selectedHotel.Rooms[0]).finalAmount.toFixed(2)
+  : "0.00"}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -552,9 +583,9 @@ const HotelDetails = () => {
                       ₹{" "}
                       {/* {selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2) ||
                         "0.00"}{" "} */}
-                      {(
-                        selectedHotel?.Rooms?.[0]?.TotalTax
-                      ).toFixed(2)}{" "}
+                     {selectedHotel?.Rooms?.length > 0
+  ? calculateRoomPrice(selectedHotel.Rooms[0]).totalTax.toFixed(2)
+  : "0.00"}{" "}
                       {""}
                       taxes & fees
                     </Typography>
@@ -671,7 +702,9 @@ const HotelDetails = () => {
                 py: "30px",
               }}
             >
+              
               {selectedHotel?.Rooms?.map((room, index) => {
+                const price = calculateRoomPrice(room);
                 return (
                   <Grid2 key={index} container sx={{ mb: 4 }}>
                     <Grid2
@@ -873,22 +906,19 @@ const HotelDetails = () => {
                               mb: "5px",
                             }}
                           >
-                            ₹{" "}
-                            {Number(TotalFare + serviceCharge).toFixed(2)}
+                           
+                            ₹ {price.finalAmount.toFixed(2)}
 
                           </Typography>
                           <Typography
-                            variant="body2"
-                            sx={{
-                              color: COLORS.DARKGREY,
-                              fontFamily: nunito.style,
-                            }}
-                          >
-                            ₹{" "}
-                            {selectedHotel?.Rooms?.[0]?.TotalTax?.toFixed(2) ||
-                              0}{" "}
-                            taxes & fees
-                          </Typography>
+                                   variant="body2"
+                                   sx={{
+                                     color: COLORS.DARKGREY,
+                                     fontFamily: nunito.style,
+                                   }}
+                                 >
+                                   ₹ {price.totalTax.toFixed(2)} taxes & fees
+                                 </Typography>
 
                           {/* Day Rates */}
                           {room.DayRates?.[0]?.length > 0 && (
