@@ -237,6 +237,7 @@ const HotelForm = ({ setUiLocked, uiLocked }) => {
 
     try {
       const response = await hotelController.searchHotel(payload);
+      console.log("hotel-list:",response);
       const list = response?.data?.data ?? [];
       if (Array.isArray(list) && list.length > 0) {
         dispatch(setHotelList(list));

@@ -15,12 +15,14 @@ import { Wifi, Pool, Restaurant, LocalParking } from "@mui/icons-material";
 import { nunito } from "@/utils/fonts";
 import Link from "next/link";
 import useRandomHotel from "@/custom-hook/useRandomHotel";
-import { HOTEL_RATING, HOTEL_RATING_IN_WORDS } from "@/utils/enum";
+import { COMMISSION_TYPE, HOTEL_RATING, HOTEL_RATING_IN_WORDS } from "@/utils/enum";
 
 const HotelCard = ({ hotel }) => {
   const hotelImage = useRandomHotel();
 
   const attractionsHTML = hotel?.Attractions?.[0] || "";
+
+  console.log("hotel card data:", hotel);
 
   // Extract first two attractions safely
   const getFirstTwoAttractions = (html) => {
@@ -33,8 +35,24 @@ const HotelCard = ({ hotel }) => {
 
   // Safely get room info
   const firstRoom = hotel?.Rooms?.[0] || {};
-  const totalFare = firstRoom?.TotalFare ?? 0;
+  const totalFare = Number(firstRoom?.TotalFare || 0);
+  const totalTax= Number(firstRoom?.TotalTax || 0);
   const totalFareDisplay = totalFare.toFixed ? totalFare.toFixed(2) : totalFare;
+  const percentage= Number(hotel?.commission?.percentage || 0);
+  const isFixed= hotel?.commission?.commission_type === COMMISSION_TYPE.FIXED;
+
+  let serviceCharge=0;
+
+   if (isFixed) {
+    serviceCharge = percentage;
+  } else {
+    serviceCharge = (totalFare * percentage) / 100;
+  }
+
+  const finalAmount = totalFare + serviceCharge;
+
+
+  
 // const mealshow = hotel?.Rooms?.map((meal)=> )
   return (
     <Card sx={{ mb: 3, border: "2px solid white", fontFamily: nunito.style }}>
@@ -110,7 +128,7 @@ const HotelCard = ({ hotel }) => {
               </Typography>
 
               <Typography variant="h5" sx={{ fontWeight: 700, textAlign: "right" }}>
-                ₹ {totalFareDisplay}
+                ₹ {finalAmount}
               </Typography>
 
               <Link href={`/hotel-list/${hotel?.HotelCode}/hotel-details`} style={{ textDecoration: "none" }}>
