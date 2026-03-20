@@ -100,6 +100,7 @@ const SsrBlock = ({ ssr }) => (
 const FlightDetail = ({ id }) => {
     const [loading, setLoading] = useState(true);
     const [itinerary, setItinerary] = useState(null);
+    const [commission,setCommission]=useState(0);
     const reduxIp = useSelector(
         (state) => state?.FlightPersist?.FlightState?.ip_address
     );
@@ -115,6 +116,7 @@ const FlightDetail = ({ id }) => {
                     order_id: id,
                 });
                 const detailData = response?.data?.data?.bookingDetails?.Response;
+                setCommission(response?.data?.data?.commission || 0);
                 setItinerary({
                     ...detailData?.FlightItinerary,
                     bookingStatus: response?.data?.data?.bookingStatus,
@@ -217,7 +219,10 @@ const FlightDetail = ({ id }) => {
                         Fare Summary
                     </Typography>
                     <Typography sx={{ fontFamily: nunito.style, fontWeight: 700, fontSize: 22, color: COLORS.PRIMARY }}>
-                        ₹ {itinerary?.InvoiceAmount}
+                       ₹{(
+  (Number(itinerary?.Fare?.PublishedFare) || 0) +
+  commission
+).toFixed(2)}
                     </Typography>
                     <Typography sx={{ fontFamily: nunito.style, color: "#777" }}>
                         Invoice No: {itinerary?.InvoiceNo}
